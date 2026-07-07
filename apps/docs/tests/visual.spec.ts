@@ -36,6 +36,12 @@ const PAGES = [
   'segmented',
   'tabs',
   'modal',
+  'popover',
+  'sidebar',
+  'toolbar',
+  'pageheader',
+  'footer',
+  'emptystate',
 ];
 
 const THEME_LABEL = { light: 'Light', dark: 'Dark' } as const;

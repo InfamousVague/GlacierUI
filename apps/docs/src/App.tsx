@@ -37,6 +37,12 @@ import { SelectPage } from './pages/SelectPage.tsx';
 import { SegmentedPage } from './pages/SegmentedPage.tsx';
 import { TabsPage } from './pages/TabsPage.tsx';
 import { ModalPage } from './pages/ModalPage.tsx';
+import { PopoverPage } from './pages/PopoverPage.tsx';
+import { SidebarPage } from './pages/SidebarPage.tsx';
+import { ToolbarPage } from './pages/ToolbarPage.tsx';
+import { PageHeaderPage } from './pages/PageHeaderPage.tsx';
+import { FooterPage } from './pages/FooterPage.tsx';
+import { EmptyStatePage } from './pages/EmptyStatePage.tsx';
 
 const PAGES = {
   overview: { title: 'Overview', group: 'Start', el: <OverviewPage /> },
@@ -74,11 +80,17 @@ const PAGES = {
   segmented: { title: 'Segmented Control', group: 'Molecules', el: <SegmentedPage /> },
   tabs: { title: 'Tabs', group: 'Molecules', el: <TabsPage /> },
   modal: { title: 'Modal', group: 'Organisms', el: <ModalPage /> },
+  popover: { title: 'Popover', group: 'Organisms', el: <PopoverPage /> },
+  sidebar: { title: 'Sidebar', group: 'Structures', el: <SidebarPage /> },
+  toolbar: { title: 'Toolbar', group: 'Structures', el: <ToolbarPage /> },
+  pageheader: { title: 'Page Header', group: 'Structures', el: <PageHeaderPage /> },
+  footer: { title: 'Footer', group: 'Structures', el: <FooterPage /> },
+  emptystate: { title: 'Empty State', group: 'Structures', el: <EmptyStatePage /> },
 } as const;
 
 type PageId = keyof typeof PAGES;
 
-const GROUPS = ['Start', 'Foundations', 'Atoms', 'Molecules', 'Organisms'] as const;
+const GROUPS = ['Start', 'Foundations', 'Atoms', 'Molecules', 'Organisms', 'Structures'] as const;
 
 function pageFromHash(): PageId {
   const hash = window.location.hash.replace('#/', '');
