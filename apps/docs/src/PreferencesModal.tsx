@@ -1,4 +1,4 @@
-import { accentOptions, accentSteps } from '@perfect/tokens';
+import { accentOptions, accentSteps, type SansFont, type MonoFont } from '@perfect/tokens';
 import { Button, Divider, Label, Modal, SegmentedControl, Slider, Text } from '@perfect/react';
 
 export interface Preferences {
@@ -6,6 +6,8 @@ export interface Preferences {
   density: 'comfortable' | 'compact';
   layout: 'floating' | 'full';
   accent: string;
+  font: SansFont;
+  mono: MonoFont;
   radiusScale: number;
 }
 
@@ -14,8 +16,21 @@ export const DEFAULT_PREFERENCES: Preferences = {
   density: 'comfortable',
   layout: 'floating',
   accent: accentOptions[0]!.name,
+  font: 'inter',
+  mono: 'jetbrains',
   radiusScale: 1,
 };
+
+const SANS_OPTIONS: Array<{ value: SansFont; label: string }> = [
+  { value: 'inter', label: 'Inter' },
+  { value: 'noto', label: 'Noto Sans' },
+  { value: 'plex', label: 'IBM Plex' },
+];
+
+const MONO_OPTIONS: Array<{ value: MonoFont; label: string }> = [
+  { value: 'jetbrains', label: 'JetBrains' },
+  { value: 'plex', label: 'IBM Plex' },
+];
 
 interface PreferencesModalProps {
   open: boolean;
@@ -109,6 +124,34 @@ export function PreferencesModal({ open, onClose, preferences, onChange }: Prefe
             />
           ))}
         </div>
+      </div>
+      <Divider />
+      <div className="prefsSection">
+        <Label>Typeface</Label>
+        <SegmentedControl
+          aria-label="Typeface"
+          fullWidth
+          value={preferences.font}
+          onValueChange={(value) => onChange({ font: value as SansFont })}
+          options={SANS_OPTIONS}
+        />
+        <Text size="xs" tone="subtle">
+          The interface sans. All three are bundled and cover a wide range of scripts.
+        </Text>
+      </div>
+      <Divider />
+      <div className="prefsSection">
+        <Label>Monospace</Label>
+        <SegmentedControl
+          aria-label="Monospace"
+          fullWidth
+          value={preferences.mono}
+          onValueChange={(value) => onChange({ mono: value as MonoFont })}
+          options={MONO_OPTIONS}
+        />
+        <Text size="xs" tone="subtle">
+          Used for code, values, and measurements.
+        </Text>
       </div>
       <Divider />
       <div className="prefsSection">

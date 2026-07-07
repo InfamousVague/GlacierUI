@@ -10,7 +10,7 @@
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { accentOptions, accentDecls, rampDecls } from './color.ts';
-import { typographyDecls } from './type.ts';
+import { typographyDecls, sansFonts, monoFonts, sansFontDecls, monoFontDecls, type SansFont, type MonoFont } from './type.ts';
 import { spacingDecls } from './space.ts';
 import { radiusDecls } from './radius.ts';
 import { motionDecls, reducedMotionDecls } from './motion.ts';
@@ -89,6 +89,16 @@ for (const option of accentOptions.slice(1)) {
     '}',
     '',
   );
+}
+
+out.push('/* Pickable fonts — data-font swaps the sans family (default inter is the :root value) */', '');
+for (const name of Object.keys(sansFonts).slice(1) as SansFont[]) {
+  out.push(`[data-font='${name}'] {`, ...lines(sansFontDecls(name), '  '), '}', '');
+}
+
+out.push('/* Pickable mono — data-mono swaps the mono family (default jetbrains is the :root value) */', '');
+for (const name of Object.keys(monoFonts).slice(1) as MonoFont[]) {
+  out.push(`[data-mono='${name}'] {`, ...lines(monoFontDecls(name), '  '), '}', '');
 }
 
 out.push('/* Compact density — data-density="compact" */', '');

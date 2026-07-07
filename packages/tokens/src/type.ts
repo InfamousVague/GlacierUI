@@ -43,9 +43,34 @@ export const typeScale: TypeStep[] = NAMES.map((name, i) => {
   };
 });
 
+// System fallbacks appended to every bundled family, so text still renders
+// before the webfont loads and for scripts a family does not cover.
+const SYSTEM_SANS = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif";
+const SYSTEM_MONO = "ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace";
+
+/**
+ * Switchable sans families, bundled via Fontsource (see css/fonts.css). The
+ * first key is the default and matches the base --perfect-font-sans, so its
+ * [data-font] selector would be a no-op and is not emitted.
+ */
+export const sansFonts = {
+  inter: `'Inter Variable', ${SYSTEM_SANS}`,
+  noto: `'Noto Sans Variable', ${SYSTEM_SANS}`,
+  plex: `'IBM Plex Sans', ${SYSTEM_SANS}`,
+} as const;
+
+/** Switchable mono families; the first key is the default mono. */
+export const monoFonts = {
+  jetbrains: `'JetBrains Mono Variable', ${SYSTEM_MONO}`,
+  plex: `'IBM Plex Mono', ${SYSTEM_MONO}`,
+} as const;
+
+export type SansFont = keyof typeof sansFonts;
+export type MonoFont = keyof typeof monoFonts;
+
 export const fontFamilies = {
-  sans: "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif",
-  mono: "ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace",
+  sans: sansFonts.inter,
+  mono: monoFonts.jetbrains,
 } as const;
 
 export const fontWeights = {
@@ -72,4 +97,14 @@ export function typographyDecls(): Array<[string, string]> {
     );
   }
   return decls;
+}
+
+/** Override just the sans family, for a [data-font='name'] block. */
+export function sansFontDecls(name: SansFont): Array<[string, string]> {
+  return [['font-sans', sansFonts[name]]];
+}
+
+/** Override just the mono family, for a [data-mono='name'] block. */
+export function monoFontDecls(name: MonoFont): Array<[string, string]> {
+  return [['font-mono', monoFonts[name]]];
 }

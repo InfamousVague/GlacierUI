@@ -119,6 +119,8 @@ function loadPreferences(): Preferences {
       density: saved.density === 'compact' ? 'compact' : 'comfortable',
       layout: saved.layout === 'full' ? 'full' : 'floating',
       accent: accentValid ? saved.accent! : DEFAULT_PREFERENCES.accent,
+      font: saved.font === 'noto' || saved.font === 'plex' ? saved.font : 'inter',
+      mono: saved.mono === 'plex' ? 'plex' : 'jetbrains',
       radiusScale:
         typeof saved.radiusScale === 'number' && saved.radiusScale >= 0 && saved.radiusScale <= 2
           ? saved.radiusScale
@@ -154,13 +156,21 @@ export function App() {
 
   useEffect(() => {
     const root = document.documentElement;
-    const { theme, density, layout, accent, radiusScale } = preferences;
+    const { theme, density, layout, accent, font, mono, radiusScale } = preferences;
 
     if (theme === 'system') root.removeAttribute('data-theme');
     else root.setAttribute('data-theme', theme);
 
     if (density === 'comfortable') root.removeAttribute('data-density');
     else root.setAttribute('data-density', density);
+
+    // fonts: the default typeface (inter) and mono (jetbrains) are the :root
+    // values, so no attribute is set for them, matching accent/theme/density
+    if (font === DEFAULT_PREFERENCES.font) root.removeAttribute('data-font');
+    else root.setAttribute('data-font', font);
+
+    if (mono === DEFAULT_PREFERENCES.mono) root.removeAttribute('data-mono');
+    else root.setAttribute('data-mono', mono);
 
     // a common layout mode, like theme and density: floating is the default,
     // full pins the chrome to the edges
