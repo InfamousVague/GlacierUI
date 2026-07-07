@@ -1,0 +1,49 @@
+.root {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.svg {
+  display: block;
+  transform: rotate(-90deg);
+}
+
+.track {
+  fill: none;
+  stroke: var(--perfect-segment-track);
+}
+
+.arc {
+  fill: none;
+  stroke: var(--perfect-accent-solid);
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--perfect-duration-normal) var(--perfect-ease-out);
+}
+
+.arc.success { stroke: var(--perfect-success-solid); }
+.arc.warning { stroke: var(--perfect-warning-solid); }
+.arc.danger { stroke: var(--perfect-danger-solid); }
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--perfect-text);
+}
+
+.value {
+  font-size: var(--perfect-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--perfect-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arc {
+    transition: none;
+  }
+}
