@@ -35,13 +35,20 @@ export function Text({
   ...rest
 }: TextProps) {
   if (skeleton) {
+    // Hold the full line box (leading x font size), not just 1em, so swapping a
+    // skeleton for real text never shifts. The bar itself stays a thin 1em,
+    // centered in the line.
     return (
-      <Skeleton
-        variant="text"
-        width="14ch"
+      <span
         className={className}
-        style={{ fontSize: `var(--perfect-font-size-${size})` }}
-      />
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          height: `calc(var(--perfect-leading-${size}) * var(--perfect-font-size-${size}))`,
+        }}
+      >
+        <Skeleton variant="text" width="14ch" style={{ fontSize: `var(--perfect-font-size-${size})` }} />
+      </span>
     );
   }
   const Component: ElementType = as;

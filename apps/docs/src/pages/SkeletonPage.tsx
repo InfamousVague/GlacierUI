@@ -52,35 +52,25 @@ export function SkeletonPage() {
         description="Skeletons hold the exact space of the loaded state. Toggle this demo and watch nothing move."
         code={`const [loaded, setLoaded] = useState(false);
 
+// Each component's own skeleton prop holds its exact geometry, so one structure
+// covers both states and nothing shifts on load.
 <Card style={{ width: '18rem' }}>
-  {loaded ? (
-    <>
-      <Text weight="semibold">Quarterly report</Text>
-      <Text size="sm" tone="muted">Ready to review and share.</Text>
-    </>
-  ) : (
-    <Stack gap={2}>
-      <Skeleton variant="text" width="10ch" />
-      <Skeleton variant="text" width="100%" />
-    </Stack>
-  )}
+  <Stack gap={2}>
+    <Text weight="semibold" skeleton={!loaded}>Quarterly report</Text>
+    <Text size="sm" tone="muted" skeleton={!loaded}>Ready to review and share.</Text>
+  </Stack>
 </Card>`}
       >
         <Stack gap={4}>
           <Card style={{ width: '18rem' }}>
-            {loaded ? (
-              <>
-                <Text weight="semibold">Quarterly report</Text>
-                <Text size="sm" tone="muted">
-                  Ready to review and share.
-                </Text>
-              </>
-            ) : (
-              <Stack gap={2}>
-                <Skeleton variant="text" width="10ch" />
-                <Skeleton variant="text" width="100%" />
-              </Stack>
-            )}
+            <Stack gap={2}>
+              <Text weight="semibold" skeleton={!loaded}>
+                Quarterly report
+              </Text>
+              <Text size="sm" tone="muted" skeleton={!loaded}>
+                Ready to review and share.
+              </Text>
+            </Stack>
           </Card>
           <div>
             <Button size="sm" variant="soft" onClick={() => setLoaded((v) => !v)}>
