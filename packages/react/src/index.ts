@@ -11,3 +11,6 @@ export { Button, type ButtonProps, type ButtonVariant, type ControlSize } from '
 export { IconButton, type IconButtonProps } from './atoms/Button/IconButton.tsx';
 export { Input, type InputProps } from './atoms/Input/Input.tsx';
 export { Field, type FieldProps } from './molecules/Field/Field.tsx';
+export { Checkbox, type CheckboxProps } from './atoms/Selection/Checkbox.tsx';
+export { Radio, type RadioProps } from './atoms/Selection/Radio.tsx';
+export { Switch, type SwitchProps } from './atoms/Selection/Switch.tsx';

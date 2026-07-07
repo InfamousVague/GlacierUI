@@ -1,0 +1,146 @@
+.control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--perfect-space-2);
+  font-family: var(--perfect-font-sans);
+  font-size: var(--perfect-font-size-sm);
+  color: var(--perfect-text);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.control.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nativeInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* shared indicator base */
+.box,
+.dot,
+.track {
+  flex: none;
+  border: var(--perfect-hairline) solid var(--perfect-border-strong);
+  transition:
+    background-color var(--perfect-duration-fast) var(--perfect-ease-out),
+    border-color var(--perfect-duration-fast) var(--perfect-ease-out);
+}
+
+.nativeInput:focus-visible + .box,
+.nativeInput:focus-visible + .dot,
+.nativeInput:focus-visible + .track {
+  outline: 2px solid var(--perfect-focus-ring);
+  outline-offset: 2px;
+}
+
+/* checkbox */
+.box {
+  display: grid;
+  place-items: center;
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: var(--perfect-radius-sm);
+  background: var(--perfect-surface);
+  color: var(--perfect-accent-contrast);
+}
+
+.box[data-checked] {
+  background: var(--perfect-accent-solid);
+  border-color: var(--perfect-accent-solid);
+}
+
+.box svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  display: block;
+}
+
+/* radio */
+.dot {
+  display: grid;
+  place-items: center;
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: var(--perfect-radius-full);
+  background: var(--perfect-surface);
+}
+
+.dot[data-checked] {
+  border-color: var(--perfect-accent-solid);
+}
+
+.dotInner {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--perfect-radius-full);
+  background: var(--perfect-accent-solid);
+}
+
+/* uncontrolled radios: dot driven by the hidden input's state */
+.dotCss {
+  transform: scale(0);
+  opacity: 0;
+  transition:
+    transform var(--perfect-duration-fast) var(--perfect-ease-spring),
+    opacity var(--perfect-duration-fast) var(--perfect-ease-out);
+}
+
+.nativeInput:checked + .dot {
+  border-color: var(--perfect-accent-solid);
+}
+
+.nativeInput:checked + .dot .dotCss {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* switch: Apple proportions, 44x26 at 16px root (sm is 36x20).
+   No border here: the shared rule's hairline would eat into the thumb's
+   travel under border-box and push the thumb a pixel past the edge. */
+.track {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 2.75rem;
+  height: 1.625rem;
+  padding: 0.125rem;
+  border-radius: var(--perfect-radius-full);
+  background: var(--perfect-border);
+  border: none;
+}
+
+.trackSm {
+  width: 2.25rem;
+  height: 1.25rem;
+}
+
+.track[data-checked] {
+  background: var(--perfect-accent-solid);
+}
+
+.thumb {
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: var(--perfect-radius-full);
+  background: oklch(0.995 0 0);
+  box-shadow:
+    inset 0 1px 0 var(--perfect-glass-highlight),
+    var(--perfect-shadow-2);
+}
+
+.thumbSm {
+  width: 1rem;
+  height: 1rem;
+}
