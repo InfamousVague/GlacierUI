@@ -1,27 +1,49 @@
-import type { ComponentProps, ElementType, ReactNode } from 'react';
+import { createContext, useContext, useId, type ComponentProps, type ElementType, type ReactNode } from 'react';
+import { motion, useReducedMotion, type Transition } from 'motion/react';
+import { Spring, springTransition } from '@perfect/motion';
 import { cx } from '../../internal/cx.ts';
 import styles from './Sidebar.module.css';
+
+// Shared with SidebarItem so the active pill is one layout element that slides
+// between items, even across sections. null when an item is used outside a
+// Sidebar, where the pill is static.
+interface SidebarContextValue {
+  layoutId: string;
+  transition: Transition;
+}
+const SidebarContext = createContext<SidebarContextValue | null>(null);
 
 export interface SidebarProps extends Omit<ComponentProps<'div'>, 'title'> {
   /** Pinned region at the top, for a brand or a search field. */
   header?: ReactNode;
   /** Pinned region at the bottom, for a profile or settings link. */
   footer?: ReactNode;
+  /** Spring preset for the active pill as it slides between items. */
+  spring?: Spring;
   children?: ReactNode;
 }
 
 /**
  * The bones of a side navigation: an optional pinned header, a scrollable body
  * of sections, and an optional pinned footer. Drop it into AppShell's sidebar
- * slot and fill it with SidebarSection and SidebarItem.
+ * slot and fill it with SidebarSection and SidebarItem. The active pill slides
+ * between items with the chosen spring.
  */
-export function Sidebar({ header, footer, className, children, ...rest }: SidebarProps) {
+export function Sidebar({ header, footer, spring = Spring.Smooth, className, children, ...rest }: SidebarProps) {
+  const id = useId();
+  const reduce = useReducedMotion();
+  const context: SidebarContextValue = {
+    layoutId: `${id}-active`,
+    transition: reduce ? { duration: 0 } : springTransition(spring),
+  };
   return (
-    <div className={cx(styles.sidebar, className)} {...rest}>
-      {header && <div className={cx(styles.region, styles.regionBordered)}>{header}</div>}
-      <div className={styles.body}>{children}</div>
-      {footer && <div className={cx(styles.region, styles.footer)}>{footer}</div>}
-    </div>
+    <SidebarContext.Provider value={context}>
+      <div className={cx(styles.sidebar, className)} {...rest}>
+        {header && <div className={cx(styles.region, styles.regionBordered)}>{header}</div>}
+        <div className={styles.body}>{children}</div>
+        {footer && <div className={cx(styles.region, styles.footer)}>{footer}</div>}
+      </div>
+    </SidebarContext.Provider>
   );
 }
 
@@ -69,6 +91,7 @@ export function SidebarItem({
 }: SidebarItemProps) {
   const Component: ElementType = as ?? 'button';
   const extra = Component === 'button' ? { type: 'button' as const, disabled } : {};
+  const context = useContext(SidebarContext);
   return (
     <Component
       className={cx(styles.item, className)}
@@ -78,6 +101,17 @@ export function SidebarItem({
       {...extra}
       {...rest}
     >
+      {active &&
+        (context ? (
+          <motion.span
+            className={styles.indicator}
+            layoutId={context.layoutId}
+            transition={context.transition}
+            aria-hidden="true"
+          />
+        ) : (
+          <span className={styles.indicator} aria-hidden="true" />
+        ))}
       {icon && (
         <span className={styles.itemIcon} aria-hidden="true">
           {icon}

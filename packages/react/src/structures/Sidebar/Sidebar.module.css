@@ -56,6 +56,7 @@
 }
 
 .item {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--perfect-space-2);
@@ -87,14 +88,31 @@
 }
 
 .item[data-active] {
-  background: var(--perfect-accent-soft);
   color: var(--perfect-accent-text);
   font-weight: var(--perfect-font-weight-medium);
+}
+
+/* the active pill: one layout element that slides between items. It sits behind
+   the row content, which is lifted above it. */
+.indicator {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--perfect-accent-soft);
+  border-radius: var(--perfect-radius-md);
 }
 
 .item[aria-disabled='true'] {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* lift the row content above the sliding pill */
+.itemIcon,
+.itemLabel,
+.itemTrailing {
+  position: relative;
+  z-index: 1;
 }
 
 .itemIcon {
