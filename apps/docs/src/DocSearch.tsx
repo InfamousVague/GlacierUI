@@ -130,7 +130,7 @@ export function DocSearch({ items, onSelect }: DocSearchProps) {
         aria-controls={listId}
         aria-activedescendant={open && results[active] ? `${listId}-${active}` : undefined}
         aria-label="Search documentation"
-        shortcut={<Kbd>⌘K</Kbd>}
+        shortcut={<Kbd glass>⌘K</Kbd>}
       />
       {open &&
         rect &&
