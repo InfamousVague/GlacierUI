@@ -1,5 +1,50 @@
 import { Box, CounterBadge, Sidebar, SidebarItem, SidebarSection } from '@perfect/react';
+import type { ReactNode } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+
+// A mock app window so each example shows the sidebar at its real width beside a
+// content pane, filling the demo instead of floating in a narrow card.
+function Frame({ children }: { children: ReactNode }) {
+  const bar = (width: string) => (
+    <div
+      style={{
+        width,
+        height: '0.6rem',
+        borderRadius: 'var(--perfect-radius-full)',
+        background: 'var(--perfect-surface-sunken)',
+      }}
+    />
+  );
+  return (
+    <Box border radius="lg" width="full" style={{ height: '20rem', overflow: 'hidden', display: 'flex' }}>
+      <div
+        style={{
+          width: '15rem',
+          flex: 'none',
+          borderRight: 'var(--perfect-hairline) solid var(--perfect-border-subtle)',
+        }}
+      >
+        {children}
+      </div>
+      <div
+        aria-hidden="true"
+        style={{
+          flex: 1,
+          minWidth: 0,
+          padding: 'var(--perfect-space-6)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--perfect-space-4)',
+        }}
+      >
+        <div style={{ width: '38%', height: '0.9rem', borderRadius: 'var(--perfect-radius-full)', background: 'var(--perfect-surface-sunken)' }} />
+        {bar('86%')}
+        {bar('72%')}
+        {bar('80%')}
+      </div>
+    </Box>
+  );
+}
 
 const homeIcon = (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -54,22 +99,20 @@ export function SidebarPage() {
       <Example
         title="Basic"
         description="Group items with SidebarSection and give each SidebarItem an icon and a label. Mark the current location with active."
-        code={`import { Box, Sidebar, SidebarItem, SidebarSection } from '@perfect/react';
+        code={`import { Sidebar, SidebarItem, SidebarSection } from '@perfect/react';
 
-<Box height="full" radius="lg" border style={{ height: '20rem', width: '15rem' }}>
-  <Sidebar>
-    <SidebarSection title="Workspace">
-      <SidebarItem icon={homeIcon} active>Home</SidebarItem>
-      <SidebarItem icon={inboxIcon}>Inbox</SidebarItem>
-      <SidebarItem icon={usersIcon}>People</SidebarItem>
-    </SidebarSection>
-    <SidebarSection title="Insights">
-      <SidebarItem icon={chartIcon}>Reports</SidebarItem>
-    </SidebarSection>
-  </Sidebar>
-</Box>`}
+<Sidebar>
+  <SidebarSection title="Workspace">
+    <SidebarItem icon={homeIcon} active>Home</SidebarItem>
+    <SidebarItem icon={inboxIcon}>Inbox</SidebarItem>
+    <SidebarItem icon={usersIcon}>People</SidebarItem>
+  </SidebarSection>
+  <SidebarSection title="Insights">
+    <SidebarItem icon={chartIcon}>Reports</SidebarItem>
+  </SidebarSection>
+</Sidebar>`}
       >
-        <Box radius="lg" border style={{ height: '20rem', width: '15rem' }}>
+        <Frame>
           <Sidebar>
             <SidebarSection title="Workspace">
               <SidebarItem icon={homeIcon} active>
@@ -82,7 +125,7 @@ export function SidebarPage() {
               <SidebarItem icon={chartIcon}>Reports</SidebarItem>
             </SidebarSection>
           </Sidebar>
-        </Box>
+        </Frame>
       </Example>
 
       <Example
@@ -94,7 +137,7 @@ export function SidebarPage() {
   Inbox
 </SidebarItem>`}
       >
-        <Box radius="lg" border style={{ height: '20rem', width: '15rem' }}>
+        <Frame>
           <Sidebar>
             <SidebarSection title="Workspace">
               <SidebarItem icon={homeIcon}>Home</SidebarItem>
@@ -106,7 +149,7 @@ export function SidebarPage() {
               </SidebarItem>
             </SidebarSection>
           </Sidebar>
-        </Box>
+        </Frame>
       </Example>
 
       <Example
@@ -122,7 +165,7 @@ export function SidebarPage() {
   </SidebarSection>
 </Sidebar>`}
       >
-        <Box radius="lg" border style={{ height: '20rem', width: '15rem' }}>
+        <Frame>
           <Sidebar
             header={<div style={{ fontWeight: 700, fontSize: '1.125rem' }}>Perfect</div>}
             footer={<SidebarItem icon={settingsIcon}>Settings</SidebarItem>}
@@ -136,7 +179,7 @@ export function SidebarPage() {
               <SidebarItem icon={chartIcon}>Reports</SidebarItem>
             </SidebarSection>
           </Sidebar>
-        </Box>
+        </Frame>
       </Example>
 
       <Example
@@ -145,7 +188,7 @@ export function SidebarPage() {
         code={`<SidebarItem as="a" href="/reports" icon={chartIcon}>Reports</SidebarItem>
 <SidebarItem icon={usersIcon} disabled>People</SidebarItem>`}
       >
-        <Box radius="lg" border style={{ height: '20rem', width: '15rem' }}>
+        <Frame>
           <Sidebar>
             <SidebarSection title="Insights">
               <SidebarItem as="a" href="#reports" icon={chartIcon} active>
@@ -159,7 +202,7 @@ export function SidebarPage() {
               </SidebarItem>
             </SidebarSection>
           </Sidebar>
-        </Box>
+        </Frame>
       </Example>
 
       <h2>Props</h2>
