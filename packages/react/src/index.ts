@@ -18,3 +18,4 @@ export { Card, type CardProps, type CardVariant, type Elevation } from './atoms/
 export { Surface, type SurfaceProps, type SurfaceLevel } from './atoms/Surface/Surface.tsx';
 export { Pill, type PillProps, type PillTone, type PillVariant } from './atoms/Pill/Pill.tsx';
 export { Divider, type DividerProps } from './atoms/Divider/Divider.tsx';
+export { Slider, type SliderProps } from './atoms/Slider/Slider.tsx';
