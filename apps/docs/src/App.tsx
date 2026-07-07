@@ -9,6 +9,7 @@ import { TypographyPage } from './pages/TypographyPage.tsx';
 import { SpacingPage } from './pages/SpacingPage.tsx';
 import { ShapePage } from './pages/ShapePage.tsx';
 import { MotionPage } from './pages/MotionPage.tsx';
+import { SpecPage } from './pages/SpecPage.tsx';
 import { ButtonPage } from './pages/ButtonPage.tsx';
 import { TextPage } from './pages/TextPage.tsx';
 import { PillPage } from './pages/PillPage.tsx';
@@ -49,6 +50,7 @@ const PAGES = {
   layout: { title: 'Layout', group: 'Foundations', el: <LayoutPage /> },
   shape: { title: 'Shape & Elevation', group: 'Foundations', el: <ShapePage /> },
   motion: { title: 'Motion', group: 'Foundations', el: <MotionPage /> },
+  spec: { title: 'Specification', group: 'Foundations', el: <SpecPage /> },
   button: { title: 'Button', group: 'Atoms', el: <ButtonPage /> },
   text: { title: 'Text & Headings', group: 'Atoms', el: <TextPage /> },
   pill: { title: 'Pill', group: 'Atoms', el: <PillPage /> },

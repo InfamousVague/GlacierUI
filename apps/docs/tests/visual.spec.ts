@@ -8,6 +8,7 @@ const PAGES = [
   'layout',
   'shape',
   'motion',
+  'spec',
   'button',
   'text',
   'pill',
