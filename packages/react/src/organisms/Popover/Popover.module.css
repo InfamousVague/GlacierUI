@@ -1,0 +1,23 @@
+.panel {
+  min-width: 12rem;
+  max-width: min(24rem, calc(100vw - 2rem));
+  padding: var(--perfect-space-3);
+  border: var(--perfect-hairline) solid var(--perfect-glass-border);
+  border-radius: var(--perfect-radius-lg);
+  background: var(--perfect-glass-thick);
+  backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
+  box-shadow:
+    inset 0 1px 0 var(--perfect-glass-highlight),
+    var(--perfect-shadow-4);
+  color: var(--perfect-text);
+  font-family: var(--perfect-font-sans);
+}
+
+.panel:focus-visible {
+  outline: none;
+}
+
+.triggerWrap {
+  display: contents;
+}
