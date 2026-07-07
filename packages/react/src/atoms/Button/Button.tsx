@@ -1,13 +1,16 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Speed, Ease, transition } from '@perfect/motion';
+import { buttonVariants, controlSizes } from '@perfect/spec';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Spinner } from '../Progress/Spinner.tsx';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Button.module.css';
 
-export type ButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost' | 'glass' | 'danger';
-export type ControlSize = 'sm' | 'md' | 'lg';
+// The allowed values come from the spec, so the type cannot drift from the
+// contract. See @perfect/spec/components/button.
+export type ButtonVariant = (typeof buttonVariants)[number];
+export type ControlSize = (typeof controlSizes)[number];
 
 const SKELETON_WIDTHS: Record<ControlSize, string> = { sm: '5rem', md: '6.5rem', lg: '8rem' };
 

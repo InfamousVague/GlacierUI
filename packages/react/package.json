@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@perfect/motion": "*",
+    "@perfect/spec": "*",
     "@perfect/tokens": "*",
     "motion": "^12.23.0"
   },

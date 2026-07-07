@@ -1,10 +1,12 @@
+import { pillVariants, type Tone } from '@perfect/spec';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Pill.module.css';
 
-export type PillTone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger' | 'info';
-export type PillVariant = 'soft' | 'solid' | 'outline';
+// Tone and the variant list come from the spec so they stay in lockstep.
+export type PillTone = Tone;
+export type PillVariant = (typeof pillVariants)[number];
 
 const SKELETON_GEOMETRY: Record<'sm' | 'md', { width: string; height: string }> = {
   sm: { width: '3.5rem', height: '1.375rem' },

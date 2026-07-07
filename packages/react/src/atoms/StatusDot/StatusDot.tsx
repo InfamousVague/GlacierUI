@@ -1,9 +1,11 @@
+import { type Tone } from '@perfect/spec';
 import type { ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './StatusDot.module.css';
 
-export type StatusDotTone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger' | 'info';
+// The tone family is the shared vocabulary from the spec.
+export type StatusDotTone = Tone;
 
 /** Diameter per size, mirroring the .sm/.md rules in the CSS. */
 const SIZE_REM: Record<'sm' | 'md', string> = {
