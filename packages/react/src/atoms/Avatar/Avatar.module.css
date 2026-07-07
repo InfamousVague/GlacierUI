@@ -1,0 +1,59 @@
+.avatar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--perfect-surface-sunken);
+  font-family: var(--perfect-font-sans);
+  font-weight: var(--perfect-font-weight-semibold);
+  line-height: 1;
+  user-select: none;
+}
+
+.circle {
+  border-radius: var(--perfect-radius-full);
+}
+
+.rounded {
+  border-radius: var(--perfect-radius-md);
+}
+
+.sm {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: var(--perfect-font-size-xs);
+}
+
+.md {
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: var(--perfect-font-size-sm);
+}
+
+.lg {
+  width: 3rem;
+  height: 3rem;
+  font-size: var(--perfect-font-size-md);
+}
+
+.xl {
+  width: 4rem;
+  height: 4rem;
+  font-size: var(--perfect-font-size-lg);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.initials {
+  background: var(--perfect-accent-soft);
+  color: var(--perfect-accent-text);
+}
+
+.placeholder {
+  background: var(--perfect-surface-sunken);
+}
