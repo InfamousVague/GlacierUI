@@ -1,6 +1,7 @@
 import { Box, Button, ProgressBar, Row, Stack, Text } from '@perfect/react';
 import { useEffect, useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 export function ProgressBarPage() {
   return (
@@ -10,6 +11,10 @@ export function ProgressBarPage() {
         Shows how far a known task has gotten. When the duration is unknown, use the indeterminate
         sweep, or reach for Spinner. For a level rather than progress, use Meter.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="progress-bar" />
 
       <h2>Examples</h2>
 

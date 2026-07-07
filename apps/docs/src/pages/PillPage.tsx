@@ -1,5 +1,6 @@
 import { Pill, Row, Stack, Text } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 export function PillPage() {
   return (
@@ -9,6 +10,10 @@ export function PillPage() {
         A small inline badge for statuses, counts, and categories. Pills are read-only. For anything
         the user can activate, use a Button.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="pill" />
 
       <h2>Examples</h2>
 

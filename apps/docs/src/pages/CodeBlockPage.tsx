@@ -1,5 +1,6 @@
 import { Box, CodeBlock, Stack } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 const sample = `import { Button } from '@perfect/react';
 
@@ -16,6 +17,10 @@ export function CodeBlockPage() {
         surface, with an optional header for a filename and language label. It ships no syntax
         highlighter, so it stays dependency-light.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="code-block" />
 
       <h2>Examples</h2>
 

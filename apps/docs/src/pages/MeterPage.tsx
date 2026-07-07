@@ -1,5 +1,6 @@
 import { Field, Input, Meter, Stack, Text } from '@perfect/react';
 import { useState } from 'react';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 function scorePassword(password: string): number {
@@ -19,6 +20,10 @@ export function MeterPage() {
         A segmented level indicator, a health bar for how good or full something currently is, such
         as password strength or remaining quota. For how far along a task is, use ProgressBar.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="meter" />
 
       <h2>Examples</h2>
 

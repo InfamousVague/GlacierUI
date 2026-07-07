@@ -1,6 +1,7 @@
 import { Field, Stack, Textarea } from '@perfect/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 export function TextareaPage() {
   const [bio, setBio] = useState('');
@@ -12,6 +13,10 @@ export function TextareaPage() {
         A multi-line text input that mirrors Input's surface, hairline border, and focus ring. It
         grows on demand and can be resized vertically.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="textarea" />
 
       <h2>Examples</h2>
 

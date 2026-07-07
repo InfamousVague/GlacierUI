@@ -1,4 +1,5 @@
 import { Button, Divider, Row, Stack, Text } from '@perfect/react';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function DividerPage() {
@@ -9,6 +10,10 @@ export function DividerPage() {
         A hairline break between groups of content, horizontally, vertically, or with a centered
         label. Reach for it only when spacing alone does not separate two groups clearly enough.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="divider" />
 
       <h2>Examples</h2>
 

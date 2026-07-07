@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card, Checkbox, Radio, Row, Stack, Switch } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 export function SelectionPage() {
   const [subscribed, setSubscribed] = useState(true);
@@ -12,6 +13,12 @@ export function SelectionPage() {
         Checkbox, Radio, and Switch are the three standard selection controls. Each one wraps a
         native input, so forms, focus, and keyboard behavior come from the platform.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="checkbox" />
+      <ComponentBlueprint specId="radio" />
+      <ComponentBlueprint specId="switch" />
 
       <h2>Examples</h2>
 

@@ -1,4 +1,5 @@
-import type { Measure, SizeSpec } from '@perfect/spec';
+import { getSpec, type Measure, type SizeSpec } from '@perfect/spec';
+import type { ReactElement } from 'react';
 
 /**
  * A blueprint-style illustration of a component's box: a schematic drawing with
@@ -161,6 +162,40 @@ function BoxBlueprint({ size, dimensions }: BlueprintProps) {
   );
 }
 
+/** Bar blueprint for thin line atoms (divider, progress bar, sparkline): thickness + radius. */
+function BarBlueprint({ size, dimensions }: BlueprintProps) {
+  const BX = 70;
+  const BW = 260;
+  const BY = 66;
+  const BH = 20;
+  const thickness = fmt(size.thickness);
+  const radius = fmt(size.radius) ?? fmt(dimensions?.radius);
+  const gap = fmt(size.gap) ?? fmt(dimensions?.gap);
+  const border = fmt(size.border) ?? fmt(dimensions?.border);
+  const rr = radius === 'radius-full' || radius === '9999px' ? BH / 2 : radius ? 6 : 3;
+  return (
+    <svg viewBox="0 0 400 150" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} size`}>
+      <Defs />
+      <rect x={0} y={0} width={400} height={150} fill="url(#bpGrid)" />
+      <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      {thickness && <VDim x={BX - 22} y1={BY} y2={BY + BH} label={thickness} />}
+      <HDim x1={BX} x2={BX + BW} y={BY - 24} label="width: auto" />
+      {radius && (
+        <>
+          <path d={`M ${BX + BW - rr} ${BY} A ${rr} ${rr} 0 0 1 ${BX + BW} ${BY + rr}`} fill="none" stroke={C.line} strokeWidth={1.5} />
+          <text x={392} y={BY - 10} textAnchor="end" className="bpLabel">
+            radius: {radius}
+          </text>
+        </>
+      )}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <text x={200} y={132} textAnchor="middle" className="bpLabel bpMuted">
+        {[border && `border: ${border}`, gap && `gap: ${gap}`].filter(Boolean).join('   ·   ')}
+      </text>
+    </svg>
+  );
+}
+
 function Defs() {
   return (
     <defs>
@@ -172,10 +207,33 @@ function Defs() {
 }
 
 export function Blueprint({ size, dimensions }: BlueprintProps) {
-  const isCircle = Boolean(size.diameter) && !size.height;
+  if (size.diameter && !size.height) return withFrame(<CircleBlueprint size={size} />);
+  if (size.thickness && !size.height && !size.diameter) return withFrame(<BarBlueprint size={size} dimensions={dimensions} />);
+  return withFrame(<BoxBlueprint size={size} dimensions={dimensions} />);
+}
+
+const withFrame = (svg: ReactElement) => <div className="bpFrame">{svg}</div>;
+
+/**
+ * Looks a component up by spec id and draws a blueprint per declared size, or a
+ * single one from its fixed dimensions when it has no sizes. Drop it into a
+ * doc page to inspect that atom's exact geometry.
+ */
+export function ComponentBlueprint({ specId }: { specId: string }) {
+  const spec = getSpec(specId);
+  if (!spec) return null;
+  const sizes = spec.sizes ?? [];
+  const items: readonly SizeSpec[] =
+    sizes.length > 0
+      ? sizes
+      : [{ name: spec.element ? `<${spec.element}>` : spec.name, ...(spec.dimensions ?? {}) } as SizeSpec];
   return (
-    <div className="bpFrame">
-      {isCircle ? <CircleBlueprint size={size} /> : <BoxBlueprint size={size} dimensions={dimensions} />}
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--perfect-space-4)' }}>
+      {items.map((s) => (
+        <div key={s.name} style={{ flex: '1 1 18rem', minWidth: '16rem', maxWidth: '32rem' }}>
+          <Blueprint size={s} dimensions={spec.dimensions} />
+        </div>
+      ))}
     </div>
   );
 }

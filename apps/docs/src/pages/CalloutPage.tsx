@@ -1,4 +1,5 @@
 import { Box, Callout, Stack } from '@perfect/react';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function CalloutPage() {
@@ -9,6 +10,10 @@ export function CalloutPage() {
         An admonition box for notes, tips, and warnings. A Callout draws the eye to a short aside
         without pulling the reader out of the flow, tinting its surface and border by tone.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="callout" />
 
       <h2>Examples</h2>
 

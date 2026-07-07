@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, IconButton, Row, Stack } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 const plusIcon = (
   <svg
@@ -27,6 +28,10 @@ export function ButtonPage() {
         Buttons trigger actions. Use <code>Button</code> for labeled actions and{' '}
         <code>IconButton</code> for compact, icon-only controls such as toolbars and card corners.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="button" />
 
       <h2>Examples</h2>
 

@@ -1,5 +1,6 @@
 import { Button, Card, IconButton, Skeleton, Stack, Text } from '@perfect/react';
 import { useState } from 'react';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function SkeletonPage() {
@@ -13,6 +14,10 @@ export function SkeletonPage() {
         prop that renders through it with the component's exact geometry, so layouts never shift
         when content arrives.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="skeleton" />
 
       <h2>Examples</h2>
 

@@ -1,4 +1,5 @@
 import { Row, Sparkline, Text } from '@perfect/react';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 const REVENUE = [12, 18, 9, 22, 17, 28, 24, 31];
@@ -13,6 +14,10 @@ export function SparklinePage() {
         number to show shape at a glance, such as a metric's recent history. For a single level use
         Meter, and for task progress use ProgressBar.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="sparkline" />
 
       <h2>Examples</h2>
 

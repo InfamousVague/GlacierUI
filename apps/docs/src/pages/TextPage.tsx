@@ -1,5 +1,6 @@
 import { Text, Heading, Label, Link, Kbd, Input, Stack } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 export function TextPage() {
   return (
@@ -10,6 +11,11 @@ export function TextPage() {
         <code>Heading</code> cover body copy and titles, while <code>Label</code>,{' '}
         <code>Link</code>, and <code>Kbd</code> handle form captions, anchors, and keyboard keys.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="text" />
+      <ComponentBlueprint specId="heading" />
 
       <h2>Examples</h2>
 

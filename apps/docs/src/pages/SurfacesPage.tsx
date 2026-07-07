@@ -1,4 +1,5 @@
 import { Card, Row, Stack, Surface } from '@perfect/react';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 const label: React.CSSProperties = {
@@ -16,6 +17,11 @@ export function SurfacesPage() {
         interaction, and a glass material. Surface is a plain background layer that maps directly
         to the surface tokens.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="card" />
+      <ComponentBlueprint specId="surface" />
 
       <h2>Examples</h2>
 

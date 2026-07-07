@@ -1,5 +1,6 @@
 import { Box, Kbd, SearchField, Stack } from '@perfect/react';
 import { useState } from 'react';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function SearchFieldPage() {
@@ -12,6 +13,10 @@ export function SearchFieldPage() {
         A search input with a leading magnifier, a clear button that appears once there is a value,
         and an optional slot for a keyboard shortcut hint.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="search-field" />
 
       <h2>Examples</h2>
 

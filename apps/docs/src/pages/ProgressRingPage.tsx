@@ -1,6 +1,7 @@
 import { Button, ProgressRing, Row, Text } from '@perfect/react';
 import { useEffect, useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 export function ProgressRingPage() {
   return (
@@ -11,6 +12,10 @@ export function ProgressRingPage() {
         toolbars where a linear bar would not fit. For linear progress use ProgressBar, and for a
         static level use Meter.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="progress-ring" />
 
       <h2>Examples</h2>
 

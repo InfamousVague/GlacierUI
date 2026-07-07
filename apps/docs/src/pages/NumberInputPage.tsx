@@ -1,6 +1,7 @@
 import { Field, NumberInput, Row, Stack, Text } from '@perfect/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 export function NumberInputPage() {
   const [quantity, setQuantity] = useState(1);
@@ -13,6 +14,10 @@ export function NumberInputPage() {
         plus button, wrapped in one bordered group at control height. Results clamp to the bounds and
         the step buttons disable at the ends.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="number-input" />
 
       <h2>Examples</h2>
 

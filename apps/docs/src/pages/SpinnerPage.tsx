@@ -1,5 +1,6 @@
 import { Button, Row, Spinner, Text } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 export function SpinnerPage() {
   return (
@@ -9,6 +10,10 @@ export function SpinnerPage() {
         An indeterminate loading indicator for short waits. When progress is measurable, use a
         Progress Bar instead. Button uses a Spinner for its own loading state.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="spinner" />
 
       <h2>Examples</h2>
 

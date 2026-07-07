@@ -1,5 +1,6 @@
 import { Avatar, Row } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 export function AvatarPage() {
   return (
@@ -9,6 +10,10 @@ export function AvatarPage() {
         A compact representation of a person or entity. Shows an image when one is available and
         falls back to initials, so a row of people never collapses into empty squares.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="avatar" />
 
       <h2>Examples</h2>
 

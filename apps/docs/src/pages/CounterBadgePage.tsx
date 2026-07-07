@@ -1,5 +1,6 @@
 import { CounterBadge, Row } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 export function CounterBadgePage() {
   return (
@@ -10,6 +11,10 @@ export function CounterBadgePage() {
         with contrast text, pill-shaped so single digits stay circular, tabular figures so the width
         does not jitter as the count changes.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="counter-badge" />
 
       <h2>Examples</h2>
 

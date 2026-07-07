@@ -1,5 +1,6 @@
 import { SegmentedBar, Stack, Text } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 export function SegmentedBarPage() {
   return (
@@ -10,6 +11,10 @@ export function SegmentedBarPage() {
         parts such as a storage or budget split. Unlike Meter, which is discrete equal pips for a
         level, SegmentedBar shows a continuous composition.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="segmented-bar" />
 
       <h2>Examples</h2>
 

@@ -1,4 +1,5 @@
 import { Row, Stack, StatusDot, Text } from '@perfect/react';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function StatusDotPage() {
@@ -9,6 +10,10 @@ export function StatusDotPage() {
         A tiny colored dot for run, connection, and sync states. It reads at a glance next to a
         label, and can pulse to signal a live or in-progress state.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="status-dot" />
 
       <h2>Examples</h2>
 

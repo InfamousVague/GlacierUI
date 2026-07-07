@@ -1,5 +1,6 @@
 import { Box, Field, Slider, Stack, Text } from '@perfect/react';
 import { useState } from 'react';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function SliderPage() {
@@ -13,6 +14,10 @@ export function SliderPage() {
         A styled native range input with a filled leading track and an iOS-style thumb. The
         Preferences dialog uses it for corner rounding.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="slider" />
 
       <h2>Examples</h2>
 

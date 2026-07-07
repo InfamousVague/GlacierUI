@@ -1,5 +1,6 @@
 import { Field, Input, Text, Toggle } from '@perfect/react';
 import { useState } from 'react';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 const EyeIcon = (
@@ -37,6 +38,10 @@ export function TogglePage() {
         A press-state button for stateful actions like password reveal, view modes, and formatting
         controls. Toggle answers "is this mode active". For an on or off setting, use Switch.
       </p>
+
+      <h2>Anatomy</h2>
+      <p>An inspection with the exact spec measurements labelled on the box.</p>
+      <ComponentBlueprint specId="toggle" />
 
       <h2>Examples</h2>
 
