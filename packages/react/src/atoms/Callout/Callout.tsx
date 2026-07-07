@@ -1,9 +1,11 @@
+import { calloutTones } from '@perfect/spec';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Callout.module.css';
 
-export type CalloutTone = 'note' | 'info' | 'success' | 'warning' | 'danger';
+// Derived from the spec so the tone union cannot drift.
+export type CalloutTone = (typeof calloutTones)[number];
 
 export interface CalloutProps extends Omit<ComponentProps<'div'>, 'title'> {
   tone?: CalloutTone;

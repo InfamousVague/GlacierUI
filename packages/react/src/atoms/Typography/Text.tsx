@@ -1,16 +1,21 @@
+import { textElements, textSizes, textTones, textWeights } from '@perfect/spec';
 import type { ComponentProps, ElementType, ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Typography.module.css';
 
-export type TextTone = 'default' | 'muted' | 'subtle' | 'accent' | 'danger' | 'success' | 'warning';
+// Derived from the spec so the unions cannot drift.
+export type TextTone = (typeof textTones)[number];
+export type TextSize = (typeof textSizes)[number];
+export type TextElement = (typeof textElements)[number];
+export type TextWeight = (typeof textWeights)[number];
 
 export interface TextProps extends Omit<ComponentProps<'p'>, 'children'> {
   /** Rendered element. Defaults to a paragraph. */
-  as?: 'p' | 'span' | 'div' | 'strong' | 'em' | 'small';
-  size?: 'xs' | 'sm' | 'md' | 'lg';
+  as?: TextElement;
+  size?: TextSize;
   tone?: TextTone;
-  weight?: 'regular' | 'medium' | 'semibold' | 'bold';
+  weight?: TextWeight;
   /** Monospace with tabular numerals, for values and measurements. */
   mono?: boolean;
   /** Renders a placeholder with the component's exact geometry. */

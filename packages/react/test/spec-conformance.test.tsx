@@ -2,14 +2,19 @@ import { describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
 import {
   buttonSpec,
+  cardElevations,
+  cardSpec,
+  cardVariants,
   dividerSpec,
   pillSpec,
+  segmentedBarSizes,
+  segmentedBarTones,
   specs,
   statusDotSpec,
   validateSpec,
   type ComponentSpec,
 } from '@perfect/spec';
-import { Button, Divider, Pill, StatusDot } from '../src/index.ts';
+import { Button, Card, Divider, Pill, SegmentedBar, StatusDot } from '../src/index.ts';
 
 /**
  * The spec is the contract; these tests hold the React kit to it. If a
@@ -87,5 +92,31 @@ describe('React matches its spec', () => {
     expect(orientations.length).toBeGreaterThan(0);
     for (const orientation of orientations)
       expect(() => render(<Divider orientation={orientation as never} />)).not.toThrow();
+  });
+
+  it('Card covers every spec variant and elevation, and defaults agree', () => {
+    for (const variant of cardVariants)
+      for (const elevation of cardElevations)
+        expect(() =>
+          render(
+            <Card variant={variant} elevation={elevation}>
+              Body
+            </Card>,
+          ),
+        ).not.toThrow();
+
+    const bare = render(<Card>Body</Card>).container.innerHTML;
+    const explicit = render(
+      <Card variant={cardSpec.defaults!.variant as never} elevation={cardSpec.defaults!.elevation as never}>
+        Body
+      </Card>,
+    ).container.innerHTML;
+    expect(bare).toBe(explicit);
+  });
+
+  it('SegmentedBar covers every spec tone and size', () => {
+    for (const tone of segmentedBarTones)
+      for (const size of segmentedBarSizes)
+        expect(() => render(<SegmentedBar size={size} data={[{ value: 1, tone }]} />)).not.toThrow();
   });
 });

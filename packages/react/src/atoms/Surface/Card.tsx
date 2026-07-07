@@ -1,13 +1,15 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Speed, Ease, transition } from '@perfect/motion';
+import { cardElevations, cardVariants } from '@perfect/spec';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Surface.module.css';
 
-export type Elevation = 0 | 1 | 2 | 3 | 4 | 5;
+// Derived from the spec so the union cannot drift from the contract.
+export type Elevation = (typeof cardElevations)[number];
 
-export type CardVariant = 'solid' | 'glass';
+export type CardVariant = (typeof cardVariants)[number];
 
 export interface CardProps extends Omit<ComponentProps<typeof motion.div>, 'children'> {
   elevation?: Elevation;

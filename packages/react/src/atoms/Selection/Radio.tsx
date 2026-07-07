@@ -12,7 +12,7 @@ export interface RadioProps extends Omit<ComponentProps<'input'>, 'type'> {
 }
 
 /** Uncontrolled-friendly: group radios by `name` as usual. */
-export function Radio({ label, disabled, skeleton = false, className, ...rest }: RadioProps) {
+export function Radio({ label, disabled = false, skeleton = false, className, ...rest }: RadioProps) {
   if (skeleton) {
     return (
       <span className={cx(styles.control, className)}>

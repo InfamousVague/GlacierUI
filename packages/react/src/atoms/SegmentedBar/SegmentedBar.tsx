@@ -1,9 +1,12 @@
+import { segmentedBarSizes, segmentedBarTones } from '@perfect/spec';
 import type { ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './SegmentedBar.module.css';
 
-export type SegmentedBarTone = 'accent' | 'success' | 'warning' | 'danger' | 'neutral';
+// Derived from the spec so the tone and size unions cannot drift.
+export type SegmentedBarTone = (typeof segmentedBarTones)[number];
+export type SegmentedBarSize = (typeof segmentedBarSizes)[number];
 
 export interface SegmentedBarSegment {
   value: number;
@@ -15,7 +18,7 @@ export interface SegmentedBarProps extends ComponentProps<'div'> {
   /** Slices sized by proportion of the total. Zero-value slices are omitted. */
   data: SegmentedBarSegment[];
   /** Bar thickness: sm 0.375rem, md 0.625rem. */
-  size?: 'sm' | 'md';
+  size?: SegmentedBarSize;
   /** Round the bar ends with a full radius. */
   rounded?: boolean;
   /** Renders a placeholder with the component's exact geometry. */

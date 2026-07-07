@@ -1,10 +1,12 @@
+import { avatarShapes, avatarSizes } from '@perfect/spec';
 import { useState, type ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Avatar.module.css';
 
-export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
-export type AvatarShape = 'circle' | 'rounded';
+// Derived from the spec so the size and shape unions cannot drift.
+export type AvatarSize = (typeof avatarSizes)[number];
+export type AvatarShape = (typeof avatarShapes)[number];
 
 /** Diameter per size, mirroring the .sm/.md/.lg/.xl rules in the CSS. */
 const SIZE_REM: Record<AvatarSize, string> = {

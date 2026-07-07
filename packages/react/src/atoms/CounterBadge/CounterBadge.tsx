@@ -1,9 +1,11 @@
+import { counterBadgeTones } from '@perfect/spec';
 import type { ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './CounterBadge.module.css';
 
-export type CounterBadgeTone = 'danger' | 'accent' | 'neutral' | 'success';
+// Derived from the spec so the tone union cannot drift.
+export type CounterBadgeTone = (typeof counterBadgeTones)[number];
 
 export interface CounterBadgeProps extends Omit<ComponentProps<'span'>, 'children'> {
   count: number;

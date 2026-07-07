@@ -27,3 +27,5 @@
 .slice.success { background: var(--perfect-success-solid); }
 .slice.warning { background: var(--perfect-warning-solid); }
 .slice.danger { background: var(--perfect-danger-solid); }
+/* neutral paints the track color, indistinct from the empty remainder */
+.slice.neutral { background: var(--perfect-segment-track); }

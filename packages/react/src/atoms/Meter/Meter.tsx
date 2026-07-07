@@ -1,9 +1,11 @@
+import { meterTones } from '@perfect/spec';
 import type { ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Meter.module.css';
 
-export type MeterTone = 'auto' | 'accent' | 'success' | 'warning' | 'danger';
+// Derived from the spec so the tone union cannot drift.
+export type MeterTone = (typeof meterTones)[number];
 
 /** Segment heights per size, mirroring .sm .segment and .md .segment in the CSS. */
 const SKELETON_SEGMENT_HEIGHTS = { sm: '0.25rem', md: '0.375rem' } as const;
