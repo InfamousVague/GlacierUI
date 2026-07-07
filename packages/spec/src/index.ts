@@ -43,6 +43,7 @@ export * from './components/switch.ts';
 export * from './components/text.ts';
 export * from './components/textarea.ts';
 export * from './components/toggle.ts';
+export * from './components/toolbar.ts';
 
 import type { ComponentSpec } from './schema.ts';
 import { avatarSpec } from './components/avatar.ts';
@@ -77,6 +78,7 @@ import { switchSpec } from './components/switch.ts';
 import { textSpec } from './components/text.ts';
 import { textareaSpec } from './components/textarea.ts';
 import { toggleSpec } from './components/toggle.ts';
+import { toolbarSpec } from './components/toolbar.ts';
 
 /** Bump when the schema shape changes in a breaking way. */
 export const SPEC_VERSION = '0.1.0';
@@ -121,6 +123,8 @@ export const specs: ComponentSpec[] = [
   cardSpec,
   surfaceSpec,
   dividerSpec,
+  // structures
+  toolbarSpec,
 ];
 
 /** Specs keyed by id for O(1) lookup. */

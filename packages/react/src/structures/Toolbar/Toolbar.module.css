@@ -3,7 +3,8 @@
   align-items: center;
   gap: var(--perfect-space-3);
   min-width: 0;
-  padding: var(--perfect-space-3) var(--perfect-space-5);
+  /* even padding on every side, matched to the spec's dimensions */
+  padding: var(--perfect-space-2);
   font-family: var(--perfect-font-sans);
 }
 

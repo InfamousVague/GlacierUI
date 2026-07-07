@@ -26,7 +26,7 @@
   display: flex;
   align-items: center;
   gap: var(--perfect-space-3);
-  padding: var(--perfect-space-1) var(--perfect-space-4);
+  padding: var(--perfect-space-2);
   border-bottom: var(--perfect-hairline) solid var(--perfect-glass-border);
   background: var(--perfect-glass-thin);
   backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
