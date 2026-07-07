@@ -1,4 +1,4 @@
-import { Card, Surface } from '@perfect/react';
+import { Card, Row, Stack, Surface } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 const label: React.CSSProperties = {
@@ -24,14 +24,14 @@ export function SurfacesPage() {
         description="Six elevation levels are available. Levels 0 through 3 cover most layouts: 0 sits flat, 1 is the default, 2 and 3 separate floating content from the page."
         code={`import { Card } from '@perfect/react';
 
-<div className="row">
+<Row gap={4}>
   <Card elevation={0}>Elevation 0</Card>
   <Card elevation={1}>Elevation 1</Card>
   <Card elevation={2}>Elevation 2</Card>
   <Card elevation={3}>Elevation 3</Card>
-</div>`}
+</Row>`}
       >
-        <div className="row">
+        <Row gap={4}>
           {([0, 1, 2, 3] as const).map((level) => (
             <div key={level}>
               <Card elevation={level} style={{ width: '9rem', padding: '1.25rem' }}>
@@ -40,7 +40,7 @@ export function SurfacesPage() {
               <code style={label}>elevation={level}</code>
             </div>
           ))}
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -110,7 +110,7 @@ export function SurfacesPage() {
 <Surface level={2}>Raised</Surface>
 <Surface level="sunken">Sunken well</Surface>`}
       >
-        <div className="stack" style={{ width: '100%', maxWidth: '22rem' }}>
+        <Stack gap={4} style={{ width: '100%', maxWidth: '22rem' }}>
           {([0, 1, 2, 'sunken'] as const).map((level) => (
             <Surface
               key={String(level)}
@@ -124,7 +124,7 @@ export function SurfacesPage() {
               <code>level={typeof level === 'string' ? `"${level}"` : `{${level}}`}</code>
             </Surface>
           ))}
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -137,7 +137,7 @@ export function SurfacesPage() {
 </Card>
 <Surface skeleton />`}
       >
-        <div className="row" style={{ alignItems: 'stretch' }}>
+        <Row gap={4} align="stretch">
           <div style={{ width: '16rem' }}>
             <Card skeleton elevation={1} />
           </div>
@@ -147,7 +147,7 @@ export function SurfacesPage() {
               Updated 2 hours ago
             </p>
           </Card>
-        </div>
+        </Row>
         <div style={{ width: '100%', maxWidth: '22rem' }}>
           <Surface skeleton />
         </div>

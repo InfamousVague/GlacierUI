@@ -1,4 +1,4 @@
-import { Field, Slider, Text } from '@perfect/react';
+import { Box, Field, Slider, Stack, Text } from '@perfect/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -23,9 +23,9 @@ export function SliderPage() {
 
 <Slider aria-label="Brightness" defaultValue={60} />`}
       >
-        <div style={{ width: '18rem' }}>
+        <Box style={{ width: '18rem' }}>
           <Slider aria-label="Brightness" defaultValue={60} />
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -36,9 +36,9 @@ export function SliderPage() {
 <Slider aria-label="Volume" value={volume} onValueChange={setVolume} />
 <Text as="span" size="sm" tone="muted" mono>{volume}%</Text>`}
       >
-        <div style={{ width: '18rem' }}>
+        <Box style={{ width: '18rem' }}>
           <Slider aria-label="Volume" value={volume} onValueChange={setVolume} />
-        </div>
+        </Box>
         <Text as="span" size="sm" tone="muted" mono>
           {volume}%
         </Text>
@@ -52,9 +52,9 @@ export function SliderPage() {
 <Slider aria-label="Radius scale" min={0} max={2} step={0.05} value={scale} onValueChange={setScale} />
 <Text as="span" size="sm" mono>{scale.toFixed(2)}x</Text>`}
       >
-        <div style={{ width: '18rem' }}>
+        <Box style={{ width: '18rem' }}>
           <Slider aria-label="Radius scale" min={0} max={2} step={0.05} value={scale} onValueChange={setScale} />
-        </div>
+        </Box>
         <Text as="span" size="sm" mono>
           {scale.toFixed(2)}x
         </Text>
@@ -67,20 +67,20 @@ export function SliderPage() {
   <Slider min={0} max={2} step={0.1} defaultValue={1} />
 </Field>`}
       >
-        <div style={{ width: '18rem' }}>
+        <Box style={{ width: '18rem' }}>
           <Field label="Animation speed" hint="Applies to every kit transition.">
             <Slider min={0} max={2} step={0.1} defaultValue={1} />
           </Field>
-        </div>
+        </Box>
       </Example>
 
       <Example
         title="Disabled"
         code={`<Slider aria-label="Locked" defaultValue={30} disabled />`}
       >
-        <div style={{ width: '18rem' }}>
+        <Box style={{ width: '18rem' }}>
           <Slider aria-label="Locked" defaultValue={30} disabled />
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -89,10 +89,10 @@ export function SliderPage() {
         code={`<Slider skeleton />
 <Slider aria-label="Brightness" defaultValue={60} />`}
       >
-        <div className="stack" style={{ width: '18rem' }}>
+        <Stack gap={4} style={{ width: '18rem' }}>
           <Slider skeleton />
           <Slider aria-label="Brightness" defaultValue={60} />
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

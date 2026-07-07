@@ -1,4 +1,4 @@
-import { SegmentedBar, Text } from '@perfect/react';
+import { SegmentedBar, Stack, Text } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function SegmentedBarPage() {
@@ -27,7 +27,7 @@ export function SegmentedBarPage() {
   ]}
 />`}
       >
-        <div className="stack" style={{ width: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <SegmentedBar
             aria-label="Storage by type"
             data={[
@@ -39,7 +39,7 @@ export function SegmentedBarPage() {
           <Text size="xs" tone="subtle">
             80 of 100 GB used
           </Text>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -53,7 +53,7 @@ export function SegmentedBarPage() {
   ]}
 />`}
       >
-        <div className="stack" style={{ width: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <SegmentedBar
             aria-label="Budget spent"
             data={[
@@ -61,7 +61,7 @@ export function SegmentedBarPage() {
               { value: 40, tone: 'neutral', label: 'Remaining' },
             ]}
           />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -70,7 +70,7 @@ export function SegmentedBarPage() {
         code={`<SegmentedBar aria-label="Small" size="sm" data={data} />
 <SegmentedBar aria-label="Square" rounded={false} data={data} />`}
       >
-        <div className="stack" style={{ width: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <SegmentedBar
             aria-label="Small breakdown"
             size="sm"
@@ -89,7 +89,7 @@ export function SegmentedBarPage() {
               { value: 20, tone: 'danger' },
             ]}
           />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -98,10 +98,10 @@ export function SegmentedBarPage() {
         code={`<SegmentedBar skeleton data={[]} />
 <SegmentedBar skeleton size="sm" data={[]} />`}
       >
-        <div className="stack" style={{ width: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <SegmentedBar skeleton data={[]} />
           <SegmentedBar skeleton size="sm" data={[]} />
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

@@ -1,4 +1,4 @@
-import { Pill, Text } from '@perfect/react';
+import { Pill, Row, Stack, Text } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function PillPage() {
@@ -31,14 +31,14 @@ export function PillPage() {
 <Pill tone="danger">Danger</Pill>
 <Pill tone="info">Info</Pill>`}
       >
-        <div className="row">
+        <Row gap={4} wrap>
           <Pill>Neutral</Pill>
           <Pill tone="accent">Accent</Pill>
           <Pill tone="success">Success</Pill>
           <Pill tone="warning">Warning</Pill>
           <Pill tone="danger">Danger</Pill>
           <Pill tone="info">Info</Pill>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -58,8 +58,8 @@ export function PillPage() {
 <Pill tone="danger" variant="solid">Solid</Pill>
 <Pill tone="danger" variant="outline">Outline</Pill>`}
       >
-        <div className="stack">
-          <div className="row">
+        <Stack gap={4}>
+          <Row gap={4} wrap>
             <Pill tone="accent" variant="soft">
               Soft
             </Pill>
@@ -69,8 +69,8 @@ export function PillPage() {
             <Pill tone="accent" variant="outline">
               Outline
             </Pill>
-          </div>
-          <div className="row">
+          </Row>
+          <Row gap={4} wrap>
             <Pill tone="danger" variant="soft">
               Soft
             </Pill>
@@ -80,8 +80,8 @@ export function PillPage() {
             <Pill tone="danger" variant="outline">
               Outline
             </Pill>
-          </div>
-        </div>
+          </Row>
+        </Stack>
       </Example>
 
       <Example
@@ -96,7 +96,7 @@ export function PillPage() {
 <Pill size="md" tone="info">md</Pill>
 <Pill size="sm" tone="accent" variant="solid">3 new</Pill>`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4} wrap>
           <Pill size="sm" tone="info">
             sm
           </Pill>
@@ -106,7 +106,7 @@ export function PillPage() {
           <Pill size="sm" tone="accent" variant="solid">
             3 new
           </Pill>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -117,14 +117,14 @@ export function PillPage() {
             The pill label carries the meaning, so the row stays readable without color.
           </>
         }
-        code={`<div className="row" style={{ alignItems: 'center' }}>
+        code={`<Row gap={4} wrap>
   <Text as="span" weight="medium">api-server</Text>
   <Pill tone="success" size="sm">Build passing</Pill>
   <Text as="span" size="sm" tone="muted">Deployed 4 minutes ago</Text>
-</div>`}
+</Row>`}
       >
-        <div className="stack">
-          <div className="row" style={{ alignItems: 'center' }}>
+        <Stack gap={4}>
+          <Row gap={4} wrap>
             <Text as="span" weight="medium">
               api-server
             </Text>
@@ -134,8 +134,8 @@ export function PillPage() {
             <Text as="span" size="sm" tone="muted">
               Deployed 4 minutes ago
             </Text>
-          </div>
-          <div className="row" style={{ alignItems: 'center' }}>
+          </Row>
+          <Row gap={4} wrap>
             <Text as="span" weight="medium">
               worker-queue
             </Text>
@@ -145,8 +145,8 @@ export function PillPage() {
             <Text as="span" size="sm" tone="muted">
               Retrying 3 jobs
             </Text>
-          </div>
-        </div>
+          </Row>
+        </Stack>
       </Example>
 
       <Example
@@ -163,14 +163,14 @@ export function PillPage() {
 <Pill skeleton />
 <Pill tone="info">In review</Pill>`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4} wrap>
           <Pill skeleton size="sm" />
           <Pill size="sm" tone="success">
             Build passing
           </Pill>
           <Pill skeleton />
           <Pill tone="info">In review</Pill>
-        </div>
+        </Row>
       </Example>
 
       <h2>Props</h2>

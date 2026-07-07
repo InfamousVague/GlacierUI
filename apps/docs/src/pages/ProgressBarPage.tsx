@@ -1,4 +1,4 @@
-import { Button, ProgressBar, Text } from '@perfect/react';
+import { Box, Button, ProgressBar, Row, Stack, Text } from '@perfect/react';
 import { useEffect, useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -28,9 +28,9 @@ export function ProgressBarPage() {
         description="Set indeterminate (or omit value) when the duration is unknown. The bar sweeps until you switch it to a value."
         code={`<ProgressBar aria-label="Preparing" indeterminate />`}
       >
-        <div style={{ width: '20rem' }}>
+        <Box maxWidth="xs" width="full">
           <ProgressBar aria-label="Preparing" indeterminate />
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -41,12 +41,12 @@ export function ProgressBarPage() {
 <ProgressBar aria-label="Warning" value={45} tone="warning" />
 <ProgressBar aria-label="Danger" value={15} tone="danger" />`}
       >
-        <div className="stack" style={{ width: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <ProgressBar aria-label="Accent" value={70} size="sm" />
           <ProgressBar aria-label="Success" value={100} tone="success" />
           <ProgressBar aria-label="Warning" value={45} tone="warning" />
           <ProgressBar aria-label="Danger" value={15} tone="danger" />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -54,12 +54,12 @@ export function ProgressBarPage() {
         description="max recalibrates the range, which suits lesson or wizard steps."
         code={`<ProgressBar aria-label="Lesson 3 of 4" value={3} max={4} />`}
       >
-        <div className="stack" style={{ width: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <ProgressBar aria-label="Lesson 3 of 4" value={3} max={4} />
           <Text size="sm" tone="muted">
             Lesson 3 of 4
           </Text>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -69,11 +69,11 @@ export function ProgressBarPage() {
 <ProgressBar aria-label="Course progress" value={65} />
 <ProgressBar skeleton size="sm" />`}
       >
-        <div className="stack" style={{ width: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <ProgressBar skeleton />
           <ProgressBar aria-label="Course progress" value={65} />
           <ProgressBar skeleton size="sm" />
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>
@@ -122,16 +122,16 @@ function LiveProgress() {
   }, [value]);
 
   return (
-    <div className="stack" style={{ width: '20rem' }}>
+    <Stack gap={4} maxWidth="xs" width="full">
       <ProgressBar aria-label="Course progress" value={value} />
-      <div className="row">
+      <Row gap={4} wrap>
         <Button size="sm" variant="soft" onClick={() => setValue((v) => Math.min(v + 15, 100))}>
           Advance
         </Button>
         <Text as="span" size="sm" tone="muted">
           {value}%
         </Text>
-      </div>
-    </div>
+      </Row>
+    </Stack>
   );
 }

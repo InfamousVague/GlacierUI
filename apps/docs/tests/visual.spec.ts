@@ -5,6 +5,7 @@ const PAGES = [
   'colors',
   'typography',
   'spacing',
+  'layout',
   'shape',
   'motion',
   'button',

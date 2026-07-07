@@ -1,4 +1,4 @@
-import { Button, Spinner, Text } from '@perfect/react';
+import { Button, Row, Spinner, Text } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function SpinnerPage() {
@@ -21,11 +21,11 @@ export function SpinnerPage() {
 <Spinner size="md" />
 <Spinner size="lg" />`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4}>
           <Spinner size="sm" aria-label="Loading small" />
           <Spinner size="md" aria-label="Loading medium" />
           <Spinner size="lg" aria-label="Loading large" />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -35,13 +35,13 @@ export function SpinnerPage() {
 <Spinner tone="accent" />
 <Text tone="danger"><Spinner tone="inherit" size="sm" /> Retrying</Text>`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4}>
           <Spinner tone="subtle" aria-label="Loading" />
           <Spinner tone="accent" aria-label="Loading" />
           <Text as="span" tone="danger">
             <Spinner tone="inherit" size="sm" aria-label="" /> Retrying
           </Text>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -63,11 +63,11 @@ export function SpinnerPage() {
 <Spinner skeleton size="md" />
 <Spinner skeleton size="lg" />`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4}>
           <Spinner skeleton size="sm" />
           <Spinner skeleton size="md" />
           <Spinner skeleton size="lg" />
-        </div>
+        </Row>
       </Example>
 
       <h2>Props</h2>

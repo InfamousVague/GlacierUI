@@ -1,4 +1,4 @@
-import { CodeBlock } from '@perfect/react';
+import { Box, CodeBlock, Stack } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 const sample = `import { Button } from '@perfect/react';
@@ -31,9 +31,9 @@ export function CodeBlockPage() {
 
 <CodeBlock filename="Save.tsx" language="tsx" code={source} />`}
       >
-        <div style={{ width: '100%', maxWidth: '34rem' }}>
+        <Box style={{ width: '100%', maxWidth: '34rem' }}>
           <CodeBlock filename="Save.tsx" language="tsx" code={sample} />
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -47,9 +47,9 @@ export function CodeBlockPage() {
         }
         code={`<CodeBlock code="npm install @perfect/react" />`}
       >
-        <div style={{ width: '100%', maxWidth: '34rem' }}>
+        <Box style={{ width: '100%', maxWidth: '34rem' }}>
           <CodeBlock code="npm install @perfect/react" />
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -62,9 +62,9 @@ export function CodeBlockPage() {
         }
         code={`<CodeBlock showCopy={false} code="GET /v1/status  200 OK" />`}
       >
-        <div style={{ width: '100%', maxWidth: '34rem' }}>
+        <Box style={{ width: '100%', maxWidth: '34rem' }}>
           <CodeBlock showCopy={false} code="GET /v1/status  200 OK" />
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -78,10 +78,10 @@ export function CodeBlockPage() {
         code={`<CodeBlock skeleton code="" />
 <CodeBlock filename="Save.tsx" language="tsx" code={source} />`}
       >
-        <div className="stack" style={{ width: '100%', maxWidth: '34rem' }}>
+        <Stack gap={4} style={{ width: '100%', maxWidth: '34rem' }}>
           <CodeBlock skeleton code="" />
           <CodeBlock filename="Save.tsx" language="tsx" code={sample} />
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

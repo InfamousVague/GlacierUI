@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SegmentedControl } from '@perfect/react';
+import { Box, Row, SegmentedControl, Stack } from '@perfect/react';
 import { Spring } from '@perfect/motion';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -57,7 +57,7 @@ export function SegmentedPage() {
         }
         code={`const [view, setView] = useState('week');
 
-<div className="row">
+<Row gap={4} wrap>
   <SegmentedControl
     aria-label="Calendar view"
     value={view}
@@ -69,9 +69,9 @@ export function SegmentedPage() {
     ]}
   />
   <span>Showing the {view} view</span>
-</div>`}
+</Row>`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4} wrap>
           <SegmentedControl
             aria-label="Calendar view"
             value={view}
@@ -83,7 +83,7 @@ export function SegmentedPage() {
             ]}
           />
           <span>Showing the {view} view</span>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -102,7 +102,7 @@ export function SegmentedPage() {
 <SegmentedControl spring={Spring.Smooth} aria-label="Smooth demo" options={options} />
 <SegmentedControl spring={Spring.Bouncy} aria-label="Bouncy demo" options={options} />`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           {(
             [
               ['Snappy', Spring.Snappy],
@@ -110,7 +110,7 @@ export function SegmentedPage() {
               ['Bouncy', Spring.Bouncy],
             ] as const
           ).map(([name, preset]) => (
-            <div key={name} className="row" style={{ alignItems: 'center' }}>
+            <Row key={name} gap={4} wrap>
               <span style={{ width: '4.5rem' }}>{name}</span>
               <SegmentedControl
                 aria-label={`${name} spring demo`}
@@ -121,9 +121,9 @@ export function SegmentedPage() {
                   { value: 'three', label: 'Three' },
                 ]}
               />
-            </div>
+            </Row>
           ))}
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -138,7 +138,7 @@ export function SegmentedPage() {
 <SegmentedControl size="md" aria-label="Medium" options={options} />
 <SegmentedControl size="lg" aria-label="Large" options={options} />`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           {(['sm', 'md', 'lg'] as const).map((size) => (
             <div key={size}>
               <SegmentedControl
@@ -151,7 +151,7 @@ export function SegmentedPage() {
               />
             </div>
           ))}
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -174,7 +174,7 @@ export function SegmentedPage() {
   />
 </div>`}
       >
-        <div style={{ maxWidth: 320, width: '100%' }}>
+        <Box width="full" style={{ maxWidth: 320 }}>
           <SegmentedControl
             fullWidth
             aria-label="Playback source"
@@ -184,7 +184,7 @@ export function SegmentedPage() {
               { value: 'search', label: 'Search' },
             ]}
           />
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -234,7 +234,7 @@ export function SegmentedPage() {
   ]}
 />`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <SegmentedControl
             skeleton
             aria-label="Chart range"
@@ -252,7 +252,7 @@ export function SegmentedPage() {
               { value: 'month', label: 'Month' },
             ]}
           />
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

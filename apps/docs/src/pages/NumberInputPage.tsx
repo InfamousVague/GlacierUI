@@ -1,4 +1,4 @@
-import { Field, NumberInput, Text } from '@perfect/react';
+import { Field, NumberInput, Row, Stack, Text } from '@perfect/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -55,11 +55,11 @@ export function NumberInputPage() {
 <NumberInput aria-label="Medium" size="md" defaultValue={1} />
 <NumberInput aria-label="Large" size="lg" defaultValue={1} />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '0.75rem' }}>
+        <Row gap={3} wrap>
           <NumberInput aria-label="Small" size="sm" defaultValue={1} />
           <NumberInput aria-label="Medium" size="md" defaultValue={1} />
           <NumberInput aria-label="Large" size="lg" defaultValue={1} />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -80,10 +80,10 @@ export function NumberInputPage() {
         code={`<NumberInput skeleton />
 <NumberInput aria-label="Quantity" defaultValue={1} />`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <NumberInput skeleton />
           <NumberInput aria-label="Quantity" defaultValue={1} />
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

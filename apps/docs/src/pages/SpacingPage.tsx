@@ -1,4 +1,5 @@
 import { SPACE_STEPS, space } from '@perfect/tokens';
+import { Box, Row } from '@perfect/react';
 
 export function SpacingPage() {
   return (
@@ -48,8 +49,8 @@ export function SpacingPage() {
         Controls of the same size share heights and horizontal rhythm, so mixed rows line up
         without manual adjustment:
       </p>
-      <div className="demo">
-        <div className="row">
+      <Box padding={8} background="glass" radius="xl" border>
+        <Row gap={4} wrap>
           <div
             style={{
               height: 'var(--perfect-control-height-md)',
@@ -88,8 +89,8 @@ export function SpacingPage() {
           >
             1:1
           </div>
-        </div>
-      </div>
+        </Row>
+      </Box>
     </>
   );
 }

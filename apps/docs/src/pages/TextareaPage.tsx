@@ -1,4 +1,4 @@
-import { Field, Textarea } from '@perfect/react';
+import { Field, Stack, Textarea } from '@perfect/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -34,11 +34,11 @@ export function TextareaPage() {
 <Textarea aria-label="Medium" size="md" placeholder="Medium" />
 <Textarea aria-label="Large" size="lg" placeholder="Large" />`}
       >
-        <div className="stack" style={{ width: '22rem' }}>
+        <Stack gap={4} style={{ width: '22rem' }}>
           <Textarea aria-label="Small" size="sm" placeholder="Small" />
           <Textarea aria-label="Medium" size="md" placeholder="Medium" />
           <Textarea aria-label="Large" size="lg" placeholder="Large" />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -83,10 +83,10 @@ export function TextareaPage() {
         code={`<Textarea skeleton />
 <Textarea aria-label="Message" placeholder="Write a message" />`}
       >
-        <div className="stack" style={{ width: '22rem' }}>
+        <Stack gap={4} style={{ width: '22rem' }}>
           <Textarea skeleton />
           <Textarea aria-label="Message" placeholder="Write a message" />
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

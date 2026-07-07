@@ -1,8 +1,9 @@
 import { accentOptions } from '@perfect/tokens';
-import { Button } from '@perfect/react';
+import { AppShell, Button, Container, Row, Spacer, Stack } from '@perfect/react';
 import { useEffect, useState } from 'react';
 import { DEFAULT_PREFERENCES, PreferencesModal, type Preferences } from './PreferencesModal.tsx';
 import { OverviewPage } from './pages/OverviewPage.tsx';
+import { LayoutPage } from './pages/LayoutPage.tsx';
 import { ColorsPage } from './pages/ColorsPage.tsx';
 import { TypographyPage } from './pages/TypographyPage.tsx';
 import { SpacingPage } from './pages/SpacingPage.tsx';
@@ -42,6 +43,7 @@ const PAGES = {
   colors: { title: 'Colors & Tints', group: 'Foundations', el: <ColorsPage /> },
   typography: { title: 'Typography', group: 'Foundations', el: <TypographyPage /> },
   spacing: { title: 'Spacing', group: 'Foundations', el: <SpacingPage /> },
+  layout: { title: 'Layout', group: 'Foundations', el: <LayoutPage /> },
   shape: { title: 'Shape & Elevation', group: 'Foundations', el: <ShapePage /> },
   motion: { title: 'Motion', group: 'Foundations', el: <MotionPage /> },
   button: { title: 'Button', group: 'Atoms', el: <ButtonPage /> },
@@ -145,50 +147,59 @@ export function App() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences));
   }, [preferences]);
 
+  const sidebar = (
+    <Stack as="nav" padding={4} gap={5}>
+      <h1 className="brand">
+        Perfect
+        <small>design system</small>
+      </h1>
+      {GROUPS.map((group) => (
+        <Stack key={group} gap={1} aria-label={group}>
+          <div className="navGroupTitle">{group}</div>
+          {(Object.entries(PAGES) as Array<[PageId, (typeof PAGES)[PageId]]>)
+            .filter(([, p]) => p.group === group)
+            .map(([id, p]) => (
+              <button
+                key={id}
+                className="navItem"
+                data-active={page === id || undefined}
+                onClick={() => {
+                  window.location.hash = `#/${id}`;
+                  setPage(id);
+                }}
+              >
+                {p.title}
+              </button>
+            ))}
+        </Stack>
+      ))}
+    </Stack>
+  );
+
+  const header = (
+    <Row width="full" gap={4}>
+      <Spacer />
+      <span className="accentDot" aria-hidden="true" />
+      <Button variant="glass" size="md" onClick={() => setPreferencesOpen(true)}>
+        {GearIcon}
+        Preferences
+      </Button>
+    </Row>
+  );
+
   return (
-    <div className="shell">
-      <aside className="sidebar">
-        <h1 className="brand">
-          Perfect
-          <small>design system</small>
-        </h1>
-        {GROUPS.map((group) => (
-          <nav className="navGroup" key={group} aria-label={group}>
-            <div className="navGroupTitle">{group}</div>
-            {(Object.entries(PAGES) as Array<[PageId, (typeof PAGES)[PageId]]>)
-              .filter(([, p]) => p.group === group)
-              .map(([id, p]) => (
-                <button
-                  key={id}
-                  className="navItem"
-                  data-active={page === id || undefined}
-                  onClick={() => {
-                    window.location.hash = `#/${id}`;
-                    setPage(id);
-                  }}
-                >
-                  {p.title}
-                </button>
-              ))}
-          </nav>
-        ))}
-      </aside>
-      <div className="main">
-        <header className="topbar">
-          <span className="accentDot" aria-hidden="true" />
-          <Button variant="glass" size="md" onClick={() => setPreferencesOpen(true)}>
-            {GearIcon}
-            Preferences
-          </Button>
-        </header>
-        <main className="content">{PAGES[page].el}</main>
-      </div>
+    <>
+      <AppShell sidebar={sidebar} header={header} sidebarLabel="Documentation sections">
+        <Container size="xl" paddingY={8} as="main" className="content">
+          {PAGES[page].el}
+        </Container>
+      </AppShell>
       <PreferencesModal
         open={preferencesOpen}
         onClose={() => setPreferencesOpen(false)}
         preferences={preferences}
         onChange={(patch) => setPreferences((current) => ({ ...current, ...patch }))}
       />
-    </div>
+    </>
   );
 }

@@ -24,29 +24,15 @@ body::before {
     radial-gradient(46rem 46rem at 62% 112%, oklch(0.7 0.11 305 / 0.11), transparent 62%);
 }
 
-.shell {
-  display: grid;
-  grid-template-columns: 15rem 1fr;
-  min-height: 100vh;
-}
-
-.sidebar {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
-  padding: var(--perfect-space-6) var(--perfect-space-4);
-  border-right: var(--perfect-hairline) solid var(--perfect-glass-border);
-  background: var(--perfect-glass-regular);
-  backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
-}
+/* The app frame is the AppShell organism; these are only the nav skin and
+   prose styling. All layout flow comes from the layout primitives, and gap
+   owns every gap, so nothing here sets a margin. */
 
 .brand {
   font-size: var(--perfect-font-size-lg);
   font-weight: var(--perfect-font-weight-bold);
   letter-spacing: var(--perfect-tracking-lg);
-  margin: 0 0 var(--perfect-space-6);
+  margin: 0;
   padding-inline: var(--perfect-space-3);
 }
 
@@ -57,10 +43,6 @@ body::before {
   color: var(--perfect-text-subtle);
 }
 
-.navGroup {
-  margin-bottom: var(--perfect-space-5);
-}
-
 .navGroupTitle {
   font-size: var(--perfect-font-size-xs);
   font-weight: var(--perfect-font-weight-semibold);
@@ -68,7 +50,6 @@ body::before {
   letter-spacing: 0.06em;
   color: var(--perfect-text-subtle);
   padding-inline: var(--perfect-space-3);
-  margin-bottom: var(--perfect-space-2);
 }
 
 .navItem {
@@ -76,7 +57,6 @@ body::before {
   width: 100%;
   text-align: left;
   padding: var(--perfect-space-2) var(--perfect-space-3);
-  margin-bottom: 0.125rem;
   border: none;
   border-radius: var(--perfect-radius-md);
   background: transparent;
@@ -87,10 +67,6 @@ body::before {
   transition:
     background-color var(--perfect-duration-fast) var(--perfect-ease-out),
     color var(--perfect-duration-fast) var(--perfect-ease-out);
-}
-
-.navItem:last-child {
-  margin-bottom: 0;
 }
 
 .navItem:hover {
@@ -104,29 +80,7 @@ body::before {
   font-weight: var(--perfect-font-weight-medium);
 }
 
-.main {
-  min-width: 0;
-}
-
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--perfect-space-4);
-  padding: var(--perfect-space-3) var(--perfect-space-6);
-  border-bottom: var(--perfect-hairline) solid var(--perfect-glass-border);
-  background: var(--perfect-glass-thin);
-  backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
-}
-
-.content {
-  padding: var(--perfect-space-8) var(--perfect-space-10);
-  max-width: 68rem;
-}
+/* .content is a prose marker only; the Container primitive owns width and padding. */
 
 .content h1 {
   font-size: var(--perfect-font-size-3xl);
@@ -173,30 +127,6 @@ code {
   padding: 0.1em 0.35em;
 }
 
-/* shared demo blocks */
-.row {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--perfect-space-4);
-}
-
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: var(--perfect-space-4);
-}
-
-.demo {
-  border: var(--perfect-hairline) solid var(--perfect-glass-border);
-  border-radius: var(--perfect-radius-xl);
-  background: var(--perfect-glass-regular);
-  backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
-  box-shadow: inset 0 1px 0 var(--perfect-glass-highlight);
-  padding: var(--perfect-space-8);
-}
-
 /* component docs: examples, code, props */
 .example {
   margin-block: var(--perfect-space-6) var(--perfect-space-10);
@@ -213,18 +143,15 @@ code {
   max-width: 46rem;
 }
 
+/* flow (flex, gap, padding) is owned by the Row primitive; this keeps only the
+   joined-surface skin so the demo box docks onto the code block below it. */
 .exampleDemo {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--perfect-space-4);
   border: var(--perfect-hairline) solid var(--perfect-glass-border);
   border-radius: var(--perfect-radius-xl) var(--perfect-radius-xl) 0 0;
   background: var(--perfect-glass-regular);
   backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
   -webkit-backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
   box-shadow: inset 0 1px 0 var(--perfect-glass-highlight);
-  padding: var(--perfect-space-8);
 }
 
 .codeBlock {

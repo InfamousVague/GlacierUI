@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, IconButton } from '@perfect/react';
+import { Button, IconButton, Row, Stack } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 const plusIcon = (
@@ -48,14 +48,14 @@ export function ButtonPage() {
 <Button variant="glass">Glass</Button>
 <Button variant="danger">Danger</Button>`}
       >
-        <div className="row">
+        <Row gap={4} wrap>
           <Button>Solid</Button>
           <Button variant="soft">Soft</Button>
           <Button variant="outline">Outline</Button>
           <Button variant="ghost">Ghost</Button>
           <Button variant="glass">Glass</Button>
           <Button variant="danger">Danger</Button>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -70,11 +70,11 @@ export function ButtonPage() {
 <Button size="md">Medium</Button>
 <Button size="lg">Large</Button>`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4} wrap>
           <Button size="sm">Small</Button>
           <Button size="md">Medium</Button>
           <Button size="lg">Large</Button>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -100,7 +100,7 @@ export function ButtonPage() {
 <Button loading>Loading</Button>
 <Button disabled>Disabled</Button>`}
       >
-        <div className="row">
+        <Row gap={4} wrap>
           <Button
             loading={saving}
             onClick={() => {
@@ -112,7 +112,7 @@ export function ButtonPage() {
           </Button>
           <Button loading>Loading</Button>
           <Button disabled>Disabled</Button>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -128,12 +128,12 @@ export function ButtonPage() {
   Sign in instead
 </Button>`}
       >
-        <div className="stack" style={{ maxWidth: 320, width: '100%' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <Button fullWidth>Create account</Button>
           <Button variant="soft" fullWidth>
             Sign in instead
           </Button>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -157,7 +157,7 @@ export function ButtonPage() {
 <IconButton aria-label="Add item" variant="outline" size="sm">{plus}</IconButton>
 <IconButton aria-label="Add item" variant="soft" size="lg">{plus}</IconButton>`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4} wrap>
           <IconButton aria-label="Add item">{plusIcon}</IconButton>
           <IconButton aria-label="Add item" variant="solid">
             {plusIcon}
@@ -168,7 +168,7 @@ export function ButtonPage() {
           <IconButton aria-label="Add item" variant="soft" size="lg">
             {plusIcon}
           </IconButton>
-        </div>
+        </Row>
       </Example>
 
       <Example

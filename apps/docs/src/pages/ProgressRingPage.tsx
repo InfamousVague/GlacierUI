@@ -1,4 +1,4 @@
-import { Button, ProgressRing, Text } from '@perfect/react';
+import { Button, ProgressRing, Row, Text } from '@perfect/react';
 import { useEffect, useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -40,12 +40,12 @@ export function ProgressRingPage() {
 <ProgressRing aria-label="Warning" value={45} tone="warning" size={80} thickness={8} />
 <ProgressRing aria-label="Danger" value={20} tone="danger" size={32} thickness={3} />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '1rem' }}>
+        <Row gap={4} wrap>
           <ProgressRing aria-label="Accent" value={70} />
           <ProgressRing aria-label="Success" value={100} tone="success" size={64} />
           <ProgressRing aria-label="Warning" value={45} tone="warning" size={80} thickness={8} />
           <ProgressRing aria-label="Danger" value={20} tone="danger" size={32} thickness={3} />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -72,10 +72,10 @@ export function ProgressRingPage() {
         code={`<ProgressRing skeleton value={0} />
 <ProgressRing aria-label="Sync progress" value={64} showValue />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '1rem' }}>
+        <Row gap={4} wrap>
           <ProgressRing skeleton value={0} />
           <ProgressRing aria-label="Sync progress" value={64} showValue />
-        </div>
+        </Row>
       </Example>
 
       <h2>Props</h2>
@@ -131,13 +131,13 @@ function LiveRing() {
   }, [value]);
 
   return (
-    <div className="row" style={{ alignItems: 'center', gap: '1rem' }}>
+    <Row gap={4} wrap>
       <ProgressRing aria-label="Sync progress" value={value} showValue />
-      <div className="row">
+      <Row gap={4} wrap>
         <Button size="sm" variant="soft" onClick={() => setValue((v) => Math.min(v + 15, 100))}>
           Advance
         </Button>
-      </div>
-    </div>
+      </Row>
+    </Row>
   );
 }

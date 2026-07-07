@@ -1,4 +1,4 @@
-import { Button, Card, IconButton, Skeleton, Text } from '@perfect/react';
+import { Button, Card, IconButton, Skeleton, Stack, Text } from '@perfect/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -54,14 +54,14 @@ export function SkeletonPage() {
       <Text size="sm" tone="muted">Ready to review and share.</Text>
     </>
   ) : (
-    <div className="stack" style={{ gap: 'var(--perfect-space-2)' }}>
+    <Stack gap={2}>
       <Skeleton variant="text" width="10ch" />
       <Skeleton variant="text" width="100%" />
-    </div>
+    </Stack>
   )}
 </Card>`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <Card style={{ width: '18rem' }}>
             {loaded ? (
               <>
@@ -71,10 +71,10 @@ export function SkeletonPage() {
                 </Text>
               </>
             ) : (
-              <div className="stack" style={{ gap: 'var(--perfect-space-2)' }}>
+              <Stack gap={2}>
                 <Skeleton variant="text" width="10ch" />
                 <Skeleton variant="text" width="100%" />
-              </div>
+              </Stack>
             )}
           </Card>
           <div>
@@ -82,7 +82,7 @@ export function SkeletonPage() {
               {loaded ? 'Show skeleton' : 'Load content'}
             </Button>
           </div>
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

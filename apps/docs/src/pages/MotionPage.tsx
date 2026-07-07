@@ -1,6 +1,6 @@
 import { Motion, Speed, Ease, Spring, motionProps, press, lift, springTransition } from '@perfect/motion';
 import { durations } from '@perfect/tokens';
-import { Select } from '@perfect/react';
+import { Select, Row, Stack } from '@perfect/react';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 
@@ -32,7 +32,7 @@ export function MotionPage() {
       </p>
 
       <h2>Entrances & exits</h2>
-      <div className="row" style={{ marginBottom: 'var(--perfect-space-5)' }}>
+      <Row gap={4} wrap style={{ marginBottom: 'var(--perfect-space-5)' }}>
         <span className="topbarControl">
           Speed{' '}
           <Select
@@ -59,8 +59,8 @@ export function MotionPage() {
         <button className="select" onClick={() => setReplay((n) => n + 1)} style={{ cursor: 'pointer' }}>
           Replay all
         </button>
-      </div>
-      <div className="row">
+      </Row>
+      <Row gap={4} wrap>
         {ENTRANCES.map((kind) => (
           <div key={kind} style={{ textAlign: 'center' }}>
             <div
@@ -94,10 +94,10 @@ export function MotionPage() {
             <code>Motion.{enumKey(kind)}</code>
           </div>
         ))}
-      </div>
+      </Row>
 
       <h2>Attention</h2>
-      <div className="row">
+      <Row gap={4} wrap>
         {ATTENTION.map((kind) => (
           <div key={kind} style={{ textAlign: 'center' }}>
             <div
@@ -130,7 +130,7 @@ export function MotionPage() {
             <code>Motion.{enumKey(kind)}</code>
           </div>
         ))}
-      </div>
+      </Row>
 
       <h2>Springs</h2>
       <SpringsDemo />
@@ -140,7 +140,7 @@ export function MotionPage() {
         <code>press</code> and <code>lift</code> are spreadable gesture presets. Every kit control
         uses the same feedback.
       </p>
-      <div className="row">
+      <Row gap={4} wrap>
         <motion.button
           {...press}
           className="select"
@@ -160,7 +160,7 @@ export function MotionPage() {
         >
           hover me
         </motion.div>
-      </div>
+      </Row>
     </>
   );
 }
@@ -182,9 +182,9 @@ function SpringsDemo() {
         Physics springs for interruptible motion: thumbs, reordering, layout moves. Build one with{' '}
         <code>springTransition(Spring.Snappy)</code>. The segmented control and switch use these.
       </p>
-      <div className="stack" style={{ maxWidth: '30rem' }}>
+      <Stack gap={4} maxWidth="sm">
         {presets.map(({ preset, name }) => (
-          <div key={name} className="row">
+          <Row gap={4} wrap key={name}>
             <code style={{ width: '9.5rem', flex: 'none' }}>{name}</code>
             <div
               style={{
@@ -206,14 +206,14 @@ function SpringsDemo() {
                 }}
               />
             </div>
-          </div>
+          </Row>
         ))}
         <div>
           <button className="select" style={{ cursor: 'pointer' }} onClick={() => setSide((s) => !s)}>
             Toggle
           </button>
         </div>
-      </div>
+      </Stack>
     </>
   );
 }

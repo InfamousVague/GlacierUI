@@ -1,4 +1,4 @@
-import { Button, Field, Input } from '@perfect/react';
+import { Button, Field, Input, Row, Stack } from '@perfect/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -26,11 +26,11 @@ export function FieldPage() {
   <Input type="email" placeholder="you@example.com" />
 </Field>`}
       >
-        <div className="stack" style={{ maxWidth: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <Field label="Email" hint="Used for receipts and account recovery.">
             <Input type="email" placeholder="you@example.com" />
           </Field>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -53,7 +53,7 @@ const [error, setError] = useState<string | null>(null);
   Validate
 </Button>`}
       >
-        <div className="stack" style={{ maxWidth: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <Field label="Username" hint="Letters and numbers only." error={usernameError}>
             <Input
               value={username}
@@ -64,12 +64,12 @@ const [error, setError] = useState<string | null>(null);
               }}
             />
           </Field>
-          <div className="row">
+          <Row gap={4} wrap>
             <Button onClick={() => setUsernameError(username ? null : 'Username is required.')}>
               Validate
             </Button>
-          </div>
-        </div>
+          </Row>
+        </Stack>
       </Example>
 
       <Example
@@ -79,11 +79,11 @@ const [error, setError] = useState<string | null>(null);
   <Input required autoComplete="name" />
 </Field>`}
       >
-        <div className="stack" style={{ maxWidth: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <Field label="Full name" required>
             <Input required autoComplete="name" />
           </Field>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -99,7 +99,7 @@ const [error, setError] = useState<string | null>(null);
   <Input size="lg" placeholder="lg" />
 </Field>`}
       >
-        <div className="stack" style={{ maxWidth: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <Field label="Small">
             <Input size="sm" placeholder="sm" />
           </Field>
@@ -109,7 +109,7 @@ const [error, setError] = useState<string | null>(null);
           <Field label="Large">
             <Input size="lg" placeholder="lg" />
           </Field>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -119,11 +119,11 @@ const [error, setError] = useState<string | null>(null);
   <Input disabled value="Pro (annual)" readOnly />
 </Field>`}
       >
-        <div className="stack" style={{ maxWidth: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <Field label="Plan" hint="Contact support to change your plan.">
             <Input disabled value="Pro (annual)" readOnly />
           </Field>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -132,10 +132,10 @@ const [error, setError] = useState<string | null>(null);
         code={`<label htmlFor="doc-search">Search</label>
 <Input id="doc-search" type="search" placeholder="Search docs" />`}
       >
-        <div className="stack" style={{ maxWidth: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <label htmlFor="doc-search">Search</label>
           <Input id="doc-search" type="search" placeholder="Search docs" />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -148,14 +148,14 @@ const [error, setError] = useState<string | null>(null);
   <Input type="email" placeholder="you@example.com" />
 </Field>`}
       >
-        <div className="stack" style={{ maxWidth: '20rem' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <Field skeleton label="Email" hint="Used for receipts and account recovery.">
             <Input skeleton />
           </Field>
           <Field label="Email" hint="Used for receipts and account recovery.">
             <Input type="email" placeholder="you@example.com" />
           </Field>
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

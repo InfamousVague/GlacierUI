@@ -1,4 +1,5 @@
 import { typeScale, TYPE_RATIO_MIN, TYPE_RATIO_MAX } from '@perfect/tokens';
+import { Stack } from '@perfect/react';
 
 export function TypographyPage() {
   return (
@@ -47,7 +48,7 @@ export function TypographyPage() {
       </table>
 
       <h2>Weights & families</h2>
-      <div className="demo stack">
+      <Stack gap={4} padding={8} background="glass" radius="xl" border>
         <span style={{ fontWeight: 'var(--perfect-font-weight-regular)' }}>
           Regular 400 for body text and long-form reading
         </span>
@@ -63,7 +64,7 @@ export function TypographyPage() {
         <span style={{ fontFamily: 'var(--perfect-font-mono)' }}>
           Mono for code, tokens, and tabular data
         </span>
-      </div>
+      </Stack>
     </>
   );
 }

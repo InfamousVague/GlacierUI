@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
+import { Row } from '@perfect/react';
 import { createCssVariablesTheme, createHighlighter, type Highlighter } from 'shiki';
 
 /**
@@ -94,7 +95,9 @@ export function Example({ title, description, code, children }: ExampleProps) {
     <section className="example">
       {title && <h3 className="exampleTitle">{title}</h3>}
       {description && <p className="exampleDescription">{description}</p>}
-      <div className="exampleDemo">{children}</div>
+      <Row wrap gap={4} padding={8} className="exampleDemo">
+        {children}
+      </Row>
       <CodeBlock code={code} />
     </section>
   );

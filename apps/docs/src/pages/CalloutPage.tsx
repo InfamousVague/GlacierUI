@@ -1,4 +1,4 @@
-import { Callout } from '@perfect/react';
+import { Box, Callout, Stack } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function CalloutPage() {
@@ -29,7 +29,7 @@ export function CalloutPage() {
 <Callout tone="warning" title="Warning">This will overwrite existing data.</Callout>
 <Callout tone="danger" title="Danger">This action cannot be undone.</Callout>`}
       >
-        <div className="stack" style={{ width: '100%', maxWidth: '34rem' }}>
+        <Stack gap={4} style={{ width: '100%', maxWidth: '34rem' }}>
           <Callout title="Note">A neutral aside on the default surface.</Callout>
           <Callout tone="info" title="Info">
             Extra context that is good to know.
@@ -43,7 +43,7 @@ export function CalloutPage() {
           <Callout tone="danger" title="Danger">
             This action cannot be undone.
           </Callout>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -58,11 +58,11 @@ export function CalloutPage() {
   Press <kbd>⌘K</kbd> anywhere to open the command palette.
 </Callout>`}
       >
-        <div style={{ width: '100%', maxWidth: '34rem' }}>
+        <Box style={{ width: '100%', maxWidth: '34rem' }}>
           <Callout tone="info" title="Keyboard shortcut" icon={<span aria-hidden>💡</span>}>
             Press the command key with K anywhere to open the command palette.
           </Callout>
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -70,9 +70,9 @@ export function CalloutPage() {
         description="The title is optional. Omit it for a single line of guidance where a heading would add noise."
         code={`<Callout tone="success">Everything is up to date.</Callout>`}
       >
-        <div style={{ width: '100%', maxWidth: '34rem' }}>
+        <Box style={{ width: '100%', maxWidth: '34rem' }}>
           <Callout tone="success">Everything is up to date.</Callout>
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -86,12 +86,12 @@ export function CalloutPage() {
         code={`<Callout skeleton />
 <Callout tone="info" title="Info">Loaded content.</Callout>`}
       >
-        <div className="stack" style={{ width: '100%', maxWidth: '34rem' }}>
+        <Stack gap={4} style={{ width: '100%', maxWidth: '34rem' }}>
           <Callout skeleton />
           <Callout tone="info" title="Info">
             Loaded content.
           </Callout>
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

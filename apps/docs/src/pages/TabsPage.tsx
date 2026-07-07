@@ -1,5 +1,5 @@
 import { Spring } from '@perfect/motion';
-import { Pill, Tabs, Text } from '@perfect/react';
+import { Pill, Stack, Tabs, Text } from '@perfect/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -112,7 +112,7 @@ export function TabsPage() {
   ]}
 />`}
       >
-        <div className="stack" style={{ width: '100%', maxWidth: '28rem' }}>
+        <Stack gap={4} style={{ width: '100%', maxWidth: '28rem' }}>
           <Tabs
             aria-label="Profile"
             value={section}
@@ -125,7 +125,7 @@ export function TabsPage() {
           <Text size="xs" tone="subtle">
             Active: <Text as="span" size="xs" mono>{section}</Text>
           </Text>
-        </div>
+        </Stack>
       </Example>
 
       <Example

@@ -1,4 +1,4 @@
-import { Button, Divider, Text } from '@perfect/react';
+import { Button, Divider, Row, Stack, Text } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function DividerPage() {
@@ -26,11 +26,11 @@ export function DividerPage() {
 <Divider />
 <Text tone="muted">Override any token per theme with a CSS custom property.</Text>`}
       >
-        <div className="stack" style={{ maxWidth: 420, width: '100%' }}>
+        <Stack gap={4} style={{ maxWidth: 420, width: '100%' }}>
           <Text>Tokens are generated from the OKLCH ramps at build time.</Text>
           <Divider />
           <Text tone="muted">Override any token per theme with a CSS custom property.</Text>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -41,19 +41,19 @@ export function DividerPage() {
             paths in forms such as an "or" between sign up and sign in.
           </>
         }
-        code={`<div className="stack" style={{ maxWidth: 280 }}>
+        code={`<Stack gap={4} style={{ maxWidth: 280 }}>
   <Button fullWidth>Create account</Button>
   <Divider label="or" />
   <Button variant="soft" fullWidth>Sign in</Button>
-</div>`}
+</Stack>`}
       >
-        <div className="stack" style={{ maxWidth: 280, width: '100%' }}>
+        <Stack gap={4} style={{ maxWidth: 280, width: '100%' }}>
           <Button fullWidth>Create account</Button>
           <Divider label="or" />
           <Button variant="soft" fullWidth>
             Sign in
           </Button>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -64,15 +64,15 @@ export function DividerPage() {
             the row height.
           </>
         }
-        code={`<div className="row" style={{ alignItems: 'center' }}>
+        code={`<Row gap={4}>
   <Text as="span" size="sm">Docs</Text>
   <Divider orientation="vertical" />
   <Text as="span" size="sm">Changelog</Text>
   <Divider orientation="vertical" />
   <Text as="span" size="sm">Support</Text>
-</div>`}
+</Row>`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4} wrap>
           <Text as="span" size="sm">
             Docs
           </Text>
@@ -84,7 +84,7 @@ export function DividerPage() {
           <Text as="span" size="sm">
             Support
           </Text>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -92,11 +92,11 @@ export function DividerPage() {
         description="A skeleton Divider keeps the same hairline geometry, so surrounding blocks do not shift while content loads."
         code={`<Divider skeleton />`}
       >
-        <div className="stack" style={{ maxWidth: 420, width: '100%' }}>
+        <Stack gap={4} style={{ maxWidth: 420, width: '100%' }}>
           <Text>Loading section</Text>
           <Divider skeleton />
           <Text tone="muted">More to come</Text>
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

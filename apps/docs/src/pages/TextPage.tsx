@@ -1,4 +1,4 @@
-import { Text, Heading, Label, Link, Kbd, Input } from '@perfect/react';
+import { Text, Heading, Label, Link, Kbd, Input, Stack } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function TextPage() {
@@ -33,7 +33,7 @@ export function TextPage() {
 <Text tone="success">Success tone for confirmations.</Text>
 <Text tone="warning">Warning tone for cautions.</Text>`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <Text size="lg">Large body text for intros.</Text>
           <Text>Default body text at the base size.</Text>
           <Text size="sm" tone="muted">
@@ -46,7 +46,7 @@ export function TextPage() {
           <Text tone="danger">Danger tone for errors.</Text>
           <Text tone="success">Success tone for confirmations.</Text>
           <Text tone="warning">Warning tone for cautions.</Text>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -62,14 +62,14 @@ export function TextPage() {
 <Text weight="semibold">Semibold suits inline labels.</Text>
 <Text as="strong" weight="bold">Bold renders a strong element here.</Text>`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <Text weight="regular">Regular is the default weight.</Text>
           <Text weight="medium">Medium adds gentle emphasis.</Text>
           <Text weight="semibold">Semibold suits inline labels.</Text>
           <Text as="strong" weight="bold">
             Bold renders a strong element here.
           </Text>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -87,14 +87,14 @@ export function TextPage() {
 <Heading level={5}>Heading five</Heading>
 <Heading level={6}>Heading six eyebrow</Heading>`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <Heading level={1}>Heading one</Heading>
           <Heading level={2}>Heading two</Heading>
           <Heading level={3}>Heading three</Heading>
           <Heading level={4}>Heading four</Heading>
           <Heading level={5}>Heading five</Heading>
           <Heading level={6}>Heading six eyebrow</Heading>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -112,14 +112,14 @@ export function TextPage() {
   An h3 styled as an eyebrow
 </Heading>`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <Heading level={3} visualLevel={1}>
             An h3 that displays at h1 size
           </Heading>
           <Heading level={3} visualLevel={6}>
             An h3 styled as an eyebrow
           </Heading>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -135,12 +135,12 @@ export function TextPage() {
 </Label>
 <Input id="email" type="email" placeholder="you@example.com" />`}
       >
-        <div className="stack" style={{ maxWidth: 320, width: '100%' }}>
+        <Stack gap={4} maxWidth="xs" width="full">
           <Label htmlFor="email" required>
             Email address
           </Label>
           <Input id="email" type="email" placeholder="you@example.com" />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -159,7 +159,7 @@ export function TextPage() {
   Undo with <Kbd>Cmd</Kbd> <Kbd>Z</Kbd> at any time.
 </Text>`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <Text>
             Read the <Link href="#">release notes</Link>, then press <Kbd>Cmd</Kbd> <Kbd>K</Kbd> to
             open the command palette.
@@ -167,7 +167,7 @@ export function TextPage() {
           <Text size="sm" tone="muted">
             Undo with <Kbd>Cmd</Kbd> <Kbd>Z</Kbd> at any time.
           </Text>
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -189,7 +189,7 @@ export function TextPage() {
   Press <Kbd skeleton /> or read the <Link skeleton />.
 </Text>`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <Heading level={3} skeleton />
           <Heading level={3}>Release notes</Heading>
           <Text skeleton />
@@ -199,7 +199,7 @@ export function TextPage() {
           <Text>
             Press <Kbd skeleton /> or read the <Link skeleton />.
           </Text>
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

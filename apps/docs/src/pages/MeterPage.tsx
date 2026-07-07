@@ -1,4 +1,4 @@
-import { Field, Input, Meter, Text } from '@perfect/react';
+import { Field, Input, Meter, Stack, Text } from '@perfect/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -31,11 +31,11 @@ export function MeterPage() {
 <Meter aria-label="Strength" value={2} />
 <Meter aria-label="Strength" value={4} />`}
       >
-        <div className="stack" style={{ width: '16rem' }}>
+        <Stack gap={4} style={{ width: '16rem' }}>
           <Meter aria-label="Strength one of four" value={1} />
           <Meter aria-label="Strength two of four" value={2} />
           <Meter aria-label="Strength four of four" value={4} />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -44,10 +44,10 @@ export function MeterPage() {
         code={`<Meter aria-label="Storage used" value={35} max={100} segments={10} tone="accent" />
 <Meter aria-label="Battery" value={90} max={100} segments={5} tone="success" size="sm" />`}
       >
-        <div className="stack" style={{ width: '16rem' }}>
+        <Stack gap={4} style={{ width: '16rem' }}>
           <Meter aria-label="Storage used" value={35} max={100} segments={10} tone="accent" />
           <Meter aria-label="Battery" value={90} max={100} segments={5} tone="success" size="sm" />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -70,11 +70,11 @@ const score = scorePassword(password);
         code={`<Meter skeleton value={0} />
 <Meter skeleton value={0} segments={10} size="sm" />`}
       >
-        <div className="stack" style={{ width: '16rem' }}>
+        <Stack gap={4} style={{ width: '16rem' }}>
           <Meter aria-label="Strength two of four" value={2} />
           <Meter skeleton value={0} />
           <Meter skeleton value={0} segments={10} size="sm" />
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>
@@ -115,7 +115,7 @@ function PasswordStrengthDemo() {
   const [password, setPassword] = useState('');
   const score = scorePassword(password);
   return (
-    <div className="stack" style={{ width: '20rem' }}>
+    <Stack gap={4} style={{ width: '20rem' }}>
       <Field label="Password" hint="Use at least 8 characters.">
         <Input
           type="password"
@@ -127,6 +127,6 @@ function PasswordStrengthDemo() {
       <Text size="xs" tone="subtle">
         Strength: <Text as="span" size="xs" mono>{score}/4</Text>
       </Text>
-    </div>
+    </Stack>
   );
 }

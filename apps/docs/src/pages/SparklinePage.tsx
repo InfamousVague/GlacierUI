@@ -1,4 +1,4 @@
-import { Sparkline, Text } from '@perfect/react';
+import { Row, Sparkline, Text } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 const REVENUE = [12, 18, 9, 22, 17, 28, 24, 31];
@@ -23,12 +23,12 @@ export function SparklinePage() {
 
 <Sparkline aria-label="Weekly revenue" data={[12, 18, 9, 22, 17, 28, 24, 31]} />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '0.75rem' }}>
+        <Row gap={3}>
           <Sparkline aria-label="Weekly revenue" data={REVENUE} />
           <Text size="sm" mono>
             +31
           </Text>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -47,12 +47,12 @@ export function SparklinePage() {
 <Sparkline aria-label="Warning" data={data} tone="warning" />
 <Sparkline aria-label="Danger" data={data} tone="danger" variant="bar" />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+        <Row gap={4} wrap>
           <Sparkline aria-label="Accent trend" data={REVENUE} />
           <Sparkline aria-label="Success trend" data={REVENUE} tone="success" />
           <Sparkline aria-label="Warning trend" data={REVENUE} tone="warning" />
           <Sparkline aria-label="Danger trend" data={REVENUE} tone="danger" variant="bar" />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -61,10 +61,10 @@ export function SparklinePage() {
         code={`<Sparkline aria-label="No data yet" data={[]} />
 <Sparkline aria-label="One reading" data={[5]} />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '1rem' }}>
+        <Row gap={4}>
           <Sparkline aria-label="No data yet" data={[]} />
           <Sparkline aria-label="One reading" data={[5]} />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -73,11 +73,11 @@ export function SparklinePage() {
         code={`<Sparkline skeleton data={[]} />
 <Sparkline skeleton data={[]} variant="bar" width={140} />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '1rem' }}>
+        <Row gap={4}>
           <Sparkline aria-label="Weekly revenue" data={REVENUE} />
           <Sparkline skeleton data={[]} />
           <Sparkline skeleton data={[]} width={140} />
-        </div>
+        </Row>
       </Example>
 
       <h2>Props</h2>

@@ -1,5 +1,5 @@
 import { radii, SCALED_RADII, type RadiusStep } from '@perfect/tokens';
-import { Slider, Text } from '@perfect/react';
+import { Slider, Text, Row } from '@perfect/react';
 import { useState } from 'react';
 
 const ELEVATIONS = [0, 1, 2, 3, 4, 5];
@@ -17,7 +17,7 @@ export function ShapePage() {
       </p>
 
       <h2>Radius ramp</h2>
-      <div className="row" style={{ marginBottom: 'var(--perfect-space-5)' }}>
+      <Row gap={4} wrap style={{ marginBottom: 'var(--perfect-space-5)' }}>
         <Text as="span" size="sm" tone="muted">
           radius-scale:
         </Text>
@@ -34,12 +34,12 @@ export function ShapePage() {
             onValueChange={setScale}
           />
         </div>
-      </div>
+      </Row>
       <p>
         Drag to preview the ramp at another scale. The Preferences dialog in the top bar sets the
         real knob for the whole site.
       </p>
-      <div className="row">
+      <Row gap={4} wrap>
         {(Object.keys(radii) as RadiusStep[]).map((name) => (
           <div key={name} style={{ textAlign: 'center' }}>
             <div
@@ -58,14 +58,14 @@ export function ShapePage() {
             <code>{name}</code>
           </div>
         ))}
-      </div>
+      </Row>
 
       <h2>Elevation</h2>
       <p>
         Six shadow levels, tuned separately per theme. Dark mode uses stronger shadows and lighter
         surface steps to show elevation.
       </p>
-      <div className="row">
+      <Row gap={4} wrap>
         {ELEVATIONS.map((level) => (
           <div
             key={level}
@@ -83,7 +83,7 @@ export function ShapePage() {
             <code>shadow-{level}</code>
           </div>
         ))}
-      </div>
+      </Row>
     </>
   );
 }

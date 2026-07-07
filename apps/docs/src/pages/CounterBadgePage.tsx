@@ -1,4 +1,4 @@
-import { CounterBadge } from '@perfect/react';
+import { CounterBadge, Row } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function CounterBadgePage() {
@@ -21,10 +21,10 @@ export function CounterBadgePage() {
 <CounterBadge count={3} />
 <CounterBadge count={12} />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '0.75rem' }}>
+        <Row gap={3} wrap>
           <CounterBadge count={3} />
           <CounterBadge count={12} />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -33,10 +33,10 @@ export function CounterBadgePage() {
         code={`<CounterBadge count={128} />
 <CounterBadge count={12} max={9} />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '0.75rem' }}>
+        <Row gap={3} wrap>
           <CounterBadge count={128} />
           <CounterBadge count={12} max={9} />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -47,12 +47,12 @@ export function CounterBadgePage() {
 <CounterBadge count={5} tone="neutral" />
 <CounterBadge count={5} tone="success" />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '0.75rem' }}>
+        <Row gap={3} wrap>
           <CounterBadge count={5} tone="danger" />
           <CounterBadge count={5} tone="accent" />
           <CounterBadge count={5} tone="neutral" />
           <CounterBadge count={5} tone="success" />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -61,10 +61,10 @@ export function CounterBadgePage() {
         code={`<CounterBadge count={0} dot aria-label="Unread messages" />
 <CounterBadge count={0} dot tone="accent" aria-label="New activity" />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '0.75rem' }}>
+        <Row gap={3} wrap>
           <CounterBadge count={0} dot aria-label="Unread messages" />
           <CounterBadge count={0} dot tone="accent" aria-label="New activity" />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -73,10 +73,10 @@ export function CounterBadgePage() {
         code={`<CounterBadge count={0} skeleton />
 <CounterBadge count={5} />`}
       >
-        <div className="row" style={{ alignItems: 'center', gap: '0.75rem' }}>
+        <Row gap={3} wrap>
           <CounterBadge count={0} skeleton />
           <CounterBadge count={5} />
-        </div>
+        </Row>
       </Example>
 
       <h2>Props</h2>

@@ -1,5 +1,5 @@
 import { ramps, rampSteps, type Theme } from '@perfect/tokens';
-import { Select, Text } from '@perfect/react';
+import { Select, Text, Row, Stack } from '@perfect/react';
 import { useState } from 'react';
 
 const STEP_ROLES = [
@@ -53,7 +53,7 @@ export function ColorsPage() {
       </p>
 
       <h2>Ramps</h2>
-      <div className="row" style={{ marginBottom: 'var(--perfect-space-4)' }}>
+      <Row gap={4} wrap style={{ marginBottom: 'var(--perfect-space-4)' }}>
         <Text as="span" tone="muted">
           Preview ramp values for:
         </Text>
@@ -67,8 +67,8 @@ export function ColorsPage() {
             { value: 'dark', label: 'Dark theme' },
           ]}
         />
-      </div>
-      <div className="stack">
+      </Row>
+      <Stack gap={4}>
         <div className="swatchGrid" aria-hidden="true">
           <span />
           {STEP_ROLES.map((role, i) => (
@@ -86,7 +86,7 @@ export function ColorsPage() {
             ))}
           </div>
         ))}
-      </div>
+      </Stack>
 
       <h2>Semantic layer</h2>
       <p>

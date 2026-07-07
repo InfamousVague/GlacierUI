@@ -1,4 +1,4 @@
-import { StatusDot, Text } from '@perfect/react';
+import { Row, Stack, StatusDot, Text } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function StatusDotPage() {
@@ -30,14 +30,14 @@ export function StatusDotPage() {
 <StatusDot tone="danger" />
 <StatusDot tone="info" />`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4}>
           <StatusDot />
           <StatusDot tone="accent" />
           <StatusDot tone="success" />
           <StatusDot tone="warning" />
           <StatusDot tone="danger" />
           <StatusDot tone="info" />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -51,10 +51,10 @@ export function StatusDotPage() {
         code={`<StatusDot tone="success" pulse />
 <StatusDot tone="info" pulse />`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4}>
           <StatusDot tone="success" pulse />
           <StatusDot tone="info" pulse />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -68,10 +68,10 @@ export function StatusDotPage() {
         code={`<StatusDot size="sm" tone="success" />
 <StatusDot size="md" tone="success" />`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4}>
           <StatusDot size="sm" tone="success" />
           <StatusDot size="md" tone="success" />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -82,25 +82,25 @@ export function StatusDotPage() {
             is announced; keep the visible text for sighted users.
           </>
         }
-        code={`<div className="row" style={{ alignItems: 'center' }}>
+        code={`<Row gap={4}>
   <StatusDot tone="success" pulse label="Running" />
   <Text as="span" weight="medium">api-server</Text>
-</div>`}
+</Row>`}
       >
-        <div className="stack">
-          <div className="row" style={{ alignItems: 'center' }}>
+        <Stack gap={4}>
+          <Row gap={4}>
             <StatusDot tone="success" pulse label="Running" />
             <Text as="span" weight="medium">
               api-server
             </Text>
-          </div>
-          <div className="row" style={{ alignItems: 'center' }}>
+          </Row>
+          <Row gap={4}>
             <StatusDot tone="danger" label="Down" />
             <Text as="span" weight="medium">
               worker-queue
             </Text>
-          </div>
-        </div>
+          </Row>
+        </Stack>
       </Example>
 
       <Example
@@ -114,10 +114,10 @@ export function StatusDotPage() {
         code={`<StatusDot skeleton size="sm" />
 <StatusDot skeleton />`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4}>
           <StatusDot skeleton size="sm" />
           <StatusDot skeleton />
-        </div>
+        </Row>
       </Example>
 
       <h2>Props</h2>

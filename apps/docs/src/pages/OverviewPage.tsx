@@ -1,4 +1,4 @@
-import { Button, Card } from '@perfect/react';
+import { Button, Card, Row, Stack } from '@perfect/react';
 
 export function OverviewPage() {
   return (
@@ -10,7 +10,7 @@ export function OverviewPage() {
       </p>
 
       <h2>Principles</h2>
-      <div className="stack">
+      <Stack gap={4}>
         <Card>
           <strong>One spacing scale.</strong>
           <p>
@@ -35,7 +35,7 @@ export function OverviewPage() {
             same duration and easing tokens the CSS uses.
           </p>
         </Card>
-      </div>
+      </Stack>
 
       <h2>Packages</h2>
       <ul>
@@ -55,12 +55,12 @@ export function OverviewPage() {
       </ul>
 
       <h2>Try it</h2>
-      <div className="row">
+      <Row gap={4} wrap>
         <Button onClick={() => (window.location.hash = '#/button')}>Browse components</Button>
         <Button variant="outline" onClick={() => (window.location.hash = '#/colors')}>
           See the tokens
         </Button>
-      </div>
+      </Row>
     </>
   );
 }

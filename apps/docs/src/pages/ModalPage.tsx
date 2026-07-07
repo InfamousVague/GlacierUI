@@ -1,4 +1,4 @@
-import { Button, Field, Input, Modal, Text } from '@perfect/react';
+import { Button, Field, Input, Modal, Row, Text } from '@perfect/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -40,7 +40,7 @@ const [open, setOpen] = useState(false);
   </Text>
 </Modal>`}
       >
-        <div className="row">
+        <Row gap={4} wrap>
           <Button onClick={() => setBasicOpen(true)}>Release notes</Button>
           <Modal
             open={basicOpen}
@@ -54,7 +54,7 @@ const [open, setOpen] = useState(false);
               dedicated hover step.
             </Text>
           </Modal>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -75,7 +75,7 @@ const [open, setOpen] = useState(false);
   <Text>The size prop only changes the panel width.</Text>
 </Modal>`}
       >
-        <div className="row">
+        <Row gap={4} wrap>
           <Button onClick={() => setSizeOpen('sm')}>Small</Button>
           <Button onClick={() => setSizeOpen('md')}>Medium</Button>
           <Button onClick={() => setSizeOpen('lg')}>Large</Button>
@@ -88,7 +88,7 @@ const [open, setOpen] = useState(false);
           >
             <Text>The size prop only changes the panel width.</Text>
           </Modal>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -115,7 +115,7 @@ const [name, setName] = useState('Perfect UI Kit');
   </Field>
 </Modal>`}
       >
-        <div className="row">
+        <Row gap={4} wrap>
           <Button onClick={() => setFormOpen(true)}>Rename project</Button>
           <Modal
             open={formOpen}
@@ -135,7 +135,7 @@ const [name, setName] = useState('Perfect UI Kit');
               <Input value={projectName} onChange={(e) => setProjectName(e.target.value)} />
             </Field>
           </Modal>
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -158,7 +158,7 @@ const [name, setName] = useState('Perfect UI Kit');
   }
 />`}
       >
-        <div className="row">
+        <Row gap={4} wrap>
           <Button variant="danger" onClick={() => setConfirmOpen(true)}>
             Delete workspace
           </Button>
@@ -179,7 +179,7 @@ const [name, setName] = useState('Perfect UI Kit');
               </>
             }
           />
-        </div>
+        </Row>
       </Example>
 
       <h2>Props</h2>

@@ -1,4 +1,4 @@
-import { Kbd, SearchField } from '@perfect/react';
+import { Box, Kbd, SearchField, Stack } from '@perfect/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -22,9 +22,9 @@ export function SearchFieldPage() {
 
 <SearchField aria-label="Search" />`}
       >
-        <div style={{ width: '22rem' }}>
+        <Box style={{ width: '22rem' }}>
           <SearchField aria-label="Search" />
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -34,9 +34,9 @@ export function SearchFieldPage() {
 
 <SearchField aria-label="Search" value={query} onValueChange={setQuery} />`}
       >
-        <div style={{ width: '22rem' }}>
+        <Box style={{ width: '22rem' }}>
           <SearchField aria-label="Search" value={query} onValueChange={setQuery} />
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -44,9 +44,9 @@ export function SearchFieldPage() {
         description="Pass a shortcut node, such as a Kbd, to hint at the key that focuses the field."
         code={`<SearchField aria-label="Search" shortcut={<Kbd>/</Kbd>} />`}
       >
-        <div style={{ width: '22rem' }}>
+        <Box style={{ width: '22rem' }}>
           <SearchField aria-label="Search" shortcut={<Kbd>/</Kbd>} />
-        </div>
+        </Box>
       </Example>
 
       <Example
@@ -56,11 +56,11 @@ export function SearchFieldPage() {
 <SearchField aria-label="Medium" size="md" />
 <SearchField aria-label="Large" size="lg" />`}
       >
-        <div className="stack" style={{ width: '22rem' }}>
+        <Stack gap={4} style={{ width: '22rem' }}>
           <SearchField aria-label="Small" size="sm" />
           <SearchField aria-label="Medium" size="md" />
           <SearchField aria-label="Large" size="lg" />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -69,10 +69,10 @@ export function SearchFieldPage() {
         code={`<SearchField skeleton />
 <SearchField aria-label="Search" />`}
       >
-        <div className="stack" style={{ width: '22rem' }}>
+        <Stack gap={4} style={{ width: '22rem' }}>
           <SearchField skeleton />
           <SearchField aria-label="Search" />
-        </div>
+        </Stack>
       </Example>
 
       <h2>Props</h2>

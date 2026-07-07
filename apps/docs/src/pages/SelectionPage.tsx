@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Checkbox, Radio, Switch } from '@perfect/react';
+import { Card, Checkbox, Radio, Row, Stack, Switch } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function SelectionPage() {
@@ -25,12 +25,12 @@ export function SelectionPage() {
 <Checkbox label="Disabled" disabled />
 <Checkbox label="Disabled and checked" defaultChecked disabled />`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <Checkbox label="Unchecked" />
           <Checkbox label="Checked by default" defaultChecked />
           <Checkbox label="Disabled" disabled />
           <Checkbox label="Disabled and checked" defaultChecked disabled />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -45,30 +45,30 @@ export function SelectionPage() {
 />
 <p>{subscribed ? 'Subscribed' : 'Not subscribed'}</p>`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <Checkbox
             label="Email me release notes"
             checked={subscribed}
             onCheckedChange={setSubscribed}
           />
           <p>{subscribed ? 'Subscribed' : 'Not subscribed'}</p>
-        </div>
+        </Stack>
       </Example>
 
       <Example
         title="Radio group"
         description="Radios group by their name attribute, exactly like native radios. Wrap the set in an element with role radiogroup and an aria-label so assistive technology announces it as one group."
-        code={`<div role="radiogroup" aria-label="Billing plan" className="stack">
+        code={`<Stack gap={4} role="radiogroup" aria-label="Billing plan">
   <Radio name="plan" value="hobby" label="Hobby" defaultChecked />
   <Radio name="plan" value="pro" label="Pro" />
   <Radio name="plan" value="team" label="Team" />
-</div>`}
+</Stack>`}
       >
-        <div role="radiogroup" aria-label="Billing plan" className="stack">
+        <Stack gap={4} role="radiogroup" aria-label="Billing plan">
           <Radio name="plan" value="hobby" label="Hobby" defaultChecked />
           <Radio name="plan" value="pro" label="Pro" />
           <Radio name="plan" value="team" label="Team" />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -78,11 +78,11 @@ export function SelectionPage() {
 <Switch label="Bluetooth" />
 <Switch label="Airplane mode" disabled />`}
       >
-        <div className="stack">
+        <Stack gap={4}>
           <Switch label="Wi-Fi" defaultChecked />
           <Switch label="Bluetooth" />
           <Switch label="Airplane mode" disabled />
-        </div>
+        </Stack>
       </Example>
 
       <Example
@@ -119,18 +119,10 @@ export function SelectionPage() {
             { name: 'Sound effects', on: true },
             { name: 'Analytics', on: false },
           ].map((setting) => (
-            <div
-              key={setting.name}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '2rem',
-              }}
-            >
+            <Row key={setting.name} gap={8} justify="between">
               <span>{setting.name}</span>
               <Switch aria-label={setting.name} defaultChecked={setting.on} />
-            </div>
+            </Row>
           ))}
         </Card>
       </Example>
@@ -142,18 +134,18 @@ export function SelectionPage() {
 <Radio skeleton label="Hobby" />
 <Switch skeleton label="Wi-Fi" />`}
       >
-        <div className="row" style={{ gap: '3rem' }}>
-          <div className="stack">
+        <Row gap={12} wrap>
+          <Stack gap={4}>
             <Checkbox label="Email me release notes" defaultChecked />
             <Radio name="skeleton-demo" label="Hobby" defaultChecked />
             <Switch label="Wi-Fi" defaultChecked />
-          </div>
-          <div className="stack">
+          </Stack>
+          <Stack gap={4}>
             <Checkbox skeleton label="Email me release notes" />
             <Radio skeleton label="Hobby" />
             <Switch skeleton label="Wi-Fi" />
-          </div>
-        </div>
+          </Stack>
+        </Row>
       </Example>
 
       <h2>Props</h2>

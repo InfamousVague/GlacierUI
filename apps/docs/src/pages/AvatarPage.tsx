@@ -1,4 +1,4 @@
-import { Avatar } from '@perfect/react';
+import { Avatar, Row } from '@perfect/react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 export function AvatarPage() {
@@ -27,11 +27,11 @@ export function AvatarPage() {
 <Avatar name="Ada Lovelace" />
 <Avatar name="Grace Hopper" />`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4} wrap>
           <Avatar name="Ada Lovelace" />
           <Avatar name="Grace Hopper" />
           <Avatar name="Katherine Johnson" />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -48,12 +48,12 @@ export function AvatarPage() {
 <Avatar size="lg" name="Ada Lovelace" />
 <Avatar size="xl" name="Ada Lovelace" />`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4} wrap>
           <Avatar size="sm" name="Ada Lovelace" />
           <Avatar size="md" name="Ada Lovelace" />
           <Avatar size="lg" name="Ada Lovelace" />
           <Avatar size="xl" name="Ada Lovelace" />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -67,10 +67,10 @@ export function AvatarPage() {
         code={`<Avatar shape="circle" name="Ada Lovelace" />
 <Avatar shape="rounded" name="Perfect Team" />`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4} wrap>
           <Avatar shape="circle" name="Ada Lovelace" />
           <Avatar shape="rounded" name="Perfect Team" />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -84,10 +84,10 @@ export function AvatarPage() {
         code={`<Avatar />
 <Avatar shape="rounded" />`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4} wrap>
           <Avatar />
           <Avatar shape="rounded" />
-        </div>
+        </Row>
       </Example>
 
       <Example
@@ -103,12 +103,12 @@ export function AvatarPage() {
 <Avatar skeleton size="lg" />
 <Avatar skeleton shape="rounded" size="lg" />`}
       >
-        <div className="row" style={{ alignItems: 'center' }}>
+        <Row gap={4} wrap>
           <Avatar skeleton size="sm" />
           <Avatar skeleton />
           <Avatar skeleton size="lg" />
           <Avatar skeleton shape="rounded" size="lg" />
-        </div>
+        </Row>
       </Example>
 
       <h2>Props</h2>
