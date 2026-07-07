@@ -24,3 +24,16 @@ export const SCALED_RADII: RadiusStep[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 
 /** Default corner treatment for interactive controls (buttons, segments). */
 export const CONTROL_RADIUS = 'var(--perfect-radius-full)';
+
+// ---- CSS emission ----------------------------------------------------------
+
+/** The scale knob, the radius ramp (scaled steps ride the knob), and the control radius. */
+export function radiusDecls(): Array<[string, string]> {
+  const decls: Array<[string, string]> = [['radius-scale', '1']];
+  for (const [name, value] of Object.entries(radii)) {
+    const scaled = SCALED_RADII.includes(name as RadiusStep);
+    decls.push([`radius-${name}`, scaled ? `calc(${value} * var(--perfect-radius-scale))` : value]);
+  }
+  decls.push(['control-radius', CONTROL_RADIUS]);
+  return decls;
+}

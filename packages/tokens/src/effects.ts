@@ -39,3 +39,18 @@ export const glassTokens: Record<Theme, Record<string, string>> = {
     'glass-highlight': 'oklch(1 0 0 / 0.1)',
   },
 };
+
+// ---- CSS emission ----------------------------------------------------------
+
+/** The hairline, blur radii, and glass saturation (theme-agnostic). */
+export function effectsDecls(): Array<[string, string]> {
+  const decls: Array<[string, string]> = [['hairline', HAIRLINE]];
+  for (const [name, value] of Object.entries(blurs)) decls.push([`blur-${name}`, value]);
+  decls.push(['glass-saturate', GLASS_SATURATE]);
+  return decls;
+}
+
+/** The glass material backgrounds, borders, and highlight for one theme. */
+export function glassDecls(theme: Theme): Array<[string, string]> {
+  return Object.entries(glassTokens[theme]);
+}

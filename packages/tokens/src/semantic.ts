@@ -4,7 +4,7 @@
  * only true surfaces need per-theme overrides.
  */
 
-import { WHITE, BLACK_TEXT } from './color.ts';
+import { WHITE, BLACK_TEXT, type Theme } from './color.ts';
 
 const g = (n: number) => `var(--perfect-gray-${n})`;
 const a = (n: number) => `var(--perfect-accent-${n})`;
@@ -79,4 +79,21 @@ export function statusTokens(): Record<string, string> {
     out[`${role}-contrast`] = contrast;
   }
   return out;
+}
+
+// ---- CSS emission ----------------------------------------------------------
+
+/** The theme-agnostic semantic aliases components consume. */
+export function semanticDecls(): Array<[string, string]> {
+  return Object.entries(semantic);
+}
+
+/** The status aliases (danger / success / warning / info) derived from ramps. */
+export function statusDecls(): Array<[string, string]> {
+  return Object.entries(statusTokens());
+}
+
+/** Per-theme surface overrides, layered on top of the semantic aliases. */
+export function themeOverrideDecls(theme: Theme): Array<[string, string]> {
+  return Object.entries(themeOverrides[theme]);
 }

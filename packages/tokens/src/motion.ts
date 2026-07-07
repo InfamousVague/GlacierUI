@@ -24,3 +24,18 @@ export type EaseRole = keyof typeof easings;
 
 export const cssEase = (name: EaseRole): string =>
   `cubic-bezier(${easings[name].join(', ')})`;
+
+// ---- CSS emission ----------------------------------------------------------
+
+/** Durations and easing curves, named by role. */
+export function motionDecls(): Array<[string, string]> {
+  const decls: Array<[string, string]> = [];
+  for (const [name, ms] of Object.entries(durations)) decls.push([`duration-${name}`, `${ms}ms`]);
+  for (const name of Object.keys(easings)) decls.push([`ease-${name}`, cssEase(name as EaseRole)]);
+  return decls;
+}
+
+/** Under prefers-reduced-motion, collapse every duration to near-zero. */
+export function reducedMotionDecls(): Array<[string, string]> {
+  return Object.keys(durations).map((name) => [`duration-${name}`, '0.01ms'] as [string, string]);
+}

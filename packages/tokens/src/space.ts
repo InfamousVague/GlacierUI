@@ -40,3 +40,18 @@ export type SpaceStep = (typeof SPACE_STEPS)[number];
 export const space: Record<SpaceStep, FluidValue> = Object.fromEntries(
   SPACE_STEPS.map((n) => [n, fluid(n * 0.25, n * 0.3125)]),
 ) as Record<SpaceStep, FluidValue>;
+
+// ---- CSS emission ----------------------------------------------------------
+
+/**
+ * The space scale, each step multiplied by the density knob so padding and
+ * gaps breathe with data-density. space-px stays a true pixel.
+ */
+export function spacingDecls(): Array<[string, string]> {
+  const decls: Array<[string, string]> = SPACE_STEPS.map((n) => [
+    `space-${n}`,
+    `calc(${space[n].clamp} * var(--perfect-density-scale))`,
+  ]);
+  decls.push(['space-px', '1px']);
+  return decls;
+}

@@ -25,3 +25,10 @@ export const shadows: Record<Theme, string[]> = {
     `0 16px 32px -12px ${ink(0.6)}, 0 32px 64px -12px ${ink(0.45)}`,
   ],
 };
+
+// ---- CSS emission ----------------------------------------------------------
+
+/** The six `shadow-<n>` levels for one theme. */
+export function shadowDecls(theme: Theme): Array<[string, string]> {
+  return shadows[theme].map((s, i) => [`shadow-${i}`, s] as [string, string]);
+}

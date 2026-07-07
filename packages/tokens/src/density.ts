@@ -25,3 +25,14 @@ export const densityScale: Record<Density, number> = {
   comfortable: 1.1,
   compact: 0.8,
 };
+
+// ---- CSS emission ----------------------------------------------------------
+
+/** Control heights and the space multiplier for one density mode. */
+export function densityDecls(mode: Density): Array<[string, string]> {
+  const decls: Array<[string, string]> = Object.entries(controlHeights[mode]).map(
+    ([size, h]) => [`control-height-${size}`, h],
+  );
+  decls.push(['density-scale', String(densityScale[mode])]);
+  return decls;
+}

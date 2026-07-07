@@ -54,3 +54,22 @@ export const fontWeights = {
   semibold: 600,
   bold: 700,
 } as const;
+
+// ---- CSS emission ----------------------------------------------------------
+
+/** Font families, weights, and the fluid size / leading / tracking per step. */
+export function typographyDecls(): Array<[string, string]> {
+  const decls: Array<[string, string]> = [
+    ['font-sans', fontFamilies.sans],
+    ['font-mono', fontFamilies.mono],
+  ];
+  for (const [name, weight] of Object.entries(fontWeights)) decls.push([`font-weight-${name}`, String(weight)]);
+  for (const step of typeScale) {
+    decls.push(
+      [`font-size-${step.name}`, step.size.clamp],
+      [`leading-${step.name}`, String(step.lineHeight)],
+      [`tracking-${step.name}`, step.tracking],
+    );
+  }
+  return decls;
+}

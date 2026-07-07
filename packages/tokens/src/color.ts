@@ -98,3 +98,17 @@ export function rampSteps(def: RampDef, theme: Theme): string[] {
 
 export const WHITE = 'oklch(0.995 0 0)';
 export const BLACK_TEXT = 'oklch(0.22 0.015 260)';
+
+// ---- CSS emission ----------------------------------------------------------
+
+/** Every ramp's 12 steps as `<ramp>-<n>` declarations for one theme. */
+export function rampDecls(theme: Theme): Array<[string, string]> {
+  return ramps.flatMap((ramp) =>
+    rampSteps(ramp, theme).map((color, i) => [`${ramp.name}-${i + 1}`, color] as [string, string]),
+  );
+}
+
+/** The 12 `accent-<n>` declarations for one pickable accent option. */
+export function accentDecls(option: AccentOption, theme: Theme): Array<[string, string]> {
+  return accentSteps(option, theme).map((color, i) => [`accent-${i + 1}`, color] as [string, string]);
+}

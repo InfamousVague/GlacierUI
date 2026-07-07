@@ -26,3 +26,14 @@ export const breakpoints = {
 } as const;
 
 export type Breakpoint = keyof typeof breakpoints;
+
+// ---- CSS emission ----------------------------------------------------------
+
+/** Container max-widths and the informational breakpoint tokens. */
+export function layoutDecls(): Array<[string, string]> {
+  const decls: Array<[string, string]> = Object.entries(containers).map(
+    ([name, value]) => [`container-${name}`, value],
+  );
+  for (const [name, px] of Object.entries(breakpoints)) decls.push([`breakpoint-${name}`, `${px}px`]);
+  return decls;
+}

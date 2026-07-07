@@ -2,6 +2,8 @@
 
 :root {
   color-scheme: light;
+
+  /* Typography */
   --perfect-font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --perfect-font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace;
   --perfect-font-weight-regular: 400;
@@ -35,7 +37,8 @@
   --perfect-font-size-5xl: clamp(2.986rem, 2.6424rem + 1.7178vw, 4.2915rem);
   --perfect-leading-5xl: 1.1;
   --perfect-tracking-5xl: -0.02em;
-  --perfect-density-scale: 1.1;
+
+  /* Spacing */
   --perfect-space-0: calc(0rem * var(--perfect-density-scale));
   --perfect-space-1: calc(clamp(0.25rem, 0.2336rem + 0.0822vw, 0.3125rem) * var(--perfect-density-scale));
   --perfect-space-2: calc(clamp(0.5rem, 0.4671rem + 0.1645vw, 0.625rem) * var(--perfect-density-scale));
@@ -50,7 +53,8 @@
   --perfect-space-20: calc(clamp(5rem, 4.6711rem + 1.6447vw, 6.25rem) * var(--perfect-density-scale));
   --perfect-space-24: calc(clamp(6rem, 5.6053rem + 1.9737vw, 7.5rem) * var(--perfect-density-scale));
   --perfect-space-px: 1px;
-  --perfect-hairline: 1px;
+
+  /* Radius */
   --perfect-radius-scale: 1;
   --perfect-radius-none: 0px;
   --perfect-radius-xs: calc(0.1875rem * var(--perfect-radius-scale));
@@ -60,6 +64,9 @@
   --perfect-radius-xl: calc(1.375rem * var(--perfect-radius-scale));
   --perfect-radius-2xl: calc(1.75rem * var(--perfect-radius-scale));
   --perfect-radius-full: 9999px;
+  --perfect-control-radius: var(--perfect-radius-full);
+
+  /* Motion */
   --perfect-duration-instant: 75ms;
   --perfect-duration-fast: 150ms;
   --perfect-duration-normal: 250ms;
@@ -69,14 +76,21 @@
   --perfect-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --perfect-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --perfect-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Density & control sizing */
   --perfect-control-height-sm: 2.25rem;
   --perfect-control-height-md: 2.75rem;
   --perfect-control-height-lg: 3.25rem;
-  --perfect-control-radius: var(--perfect-radius-full);
+  --perfect-density-scale: 1.1;
+
+  /* Effects — blur, glass, hairline */
+  --perfect-hairline: 1px;
   --perfect-blur-sm: 10px;
   --perfect-blur-md: 20px;
   --perfect-blur-lg: 32px;
   --perfect-glass-saturate: 1.8;
+
+  /* Layout — containers & breakpoints */
   --perfect-container-xs: 20rem;
   --perfect-container-sm: 30rem;
   --perfect-container-md: 42rem;
@@ -88,6 +102,8 @@
   --perfect-breakpoint-md: 768px;
   --perfect-breakpoint-lg: 1024px;
   --perfect-breakpoint-xl: 1280px;
+
+  /* Color ramps */
   --perfect-gray-1: oklch(0.993 0.0007 260);
   --perfect-gray-2: oklch(0.981 0.0014 260);
   --perfect-gray-3: oklch(0.96 0.003 260);
@@ -184,17 +200,23 @@
   --perfect-teal-10: oklch(0.578 0.12 190);
   --perfect-teal-11: oklch(0.498 0.102 190);
   --perfect-teal-12: oklch(0.303 0.066 190);
+
+  /* Elevation */
   --perfect-shadow-0: none;
   --perfect-shadow-1: 0 1px 2px -1px oklch(0.2 0.02 260 / 0.08), 0 1px 3px oklch(0.2 0.02 260 / 0.06);
   --perfect-shadow-2: 0 2px 4px -2px oklch(0.2 0.02 260 / 0.1), 0 4px 8px -2px oklch(0.2 0.02 260 / 0.06);
   --perfect-shadow-3: 0 4px 8px -4px oklch(0.2 0.02 260 / 0.12), 0 8px 16px -4px oklch(0.2 0.02 260 / 0.08);
   --perfect-shadow-4: 0 8px 16px -8px oklch(0.2 0.02 260 / 0.14), 0 16px 32px -8px oklch(0.2 0.02 260 / 0.1);
   --perfect-shadow-5: 0 16px 32px -12px oklch(0.2 0.02 260 / 0.18), 0 32px 64px -12px oklch(0.2 0.02 260 / 0.12);
+
+  /* Glass materials */
   --perfect-glass-thin: oklch(0.985 0.004 260 / 0.45);
   --perfect-glass-regular: oklch(0.985 0.004 260 / 0.65);
   --perfect-glass-thick: oklch(0.985 0.004 260 / 0.82);
   --perfect-glass-border: oklch(0.3 0.01 260 / 0.1);
   --perfect-glass-highlight: oklch(1 0 0 / 0.75);
+
+  /* Semantic aliases */
   --perfect-bg: var(--perfect-gray-1);
   --perfect-surface: oklch(0.995 0 0);
   --perfect-surface-raised: oklch(0.995 0 0);
@@ -220,6 +242,8 @@
   --perfect-focus-ring: var(--perfect-accent-8);
   --perfect-segment-track: oklch(0.93 0.005 260 / 0.65);
   --perfect-segment-thumb: oklch(0.995 0 0);
+
+  /* Status aliases */
   --perfect-danger-solid: var(--perfect-red-9);
   --perfect-danger-solid-hover: var(--perfect-red-10);
   --perfect-danger-soft: var(--perfect-red-3);
@@ -244,10 +268,15 @@
   --perfect-info-border: var(--perfect-blue-7);
   --perfect-info-text: var(--perfect-blue-11);
   --perfect-info-contrast: oklch(0.995 0 0);
+
 }
+
+/* Dark theme — data-theme="dark", or prefers-color-scheme with no explicit light */
 
 [data-theme='dark'] {
   color-scheme: dark;
+
+  /* Color ramps */
   --perfect-gray-1: oklch(0.14 0.0017 260);
   --perfect-gray-2: oklch(0.17 0.0024 260);
   --perfect-gray-3: oklch(0.21 0.0038 260);
@@ -344,28 +373,37 @@
   --perfect-teal-10: oklch(0.7 0.1296 190);
   --perfect-teal-11: oklch(0.805 0.102 190);
   --perfect-teal-12: oklch(0.935 0.0504 190);
+
+  /* Elevation */
   --perfect-shadow-0: none;
   --perfect-shadow-1: 0 1px 2px -1px oklch(0.2 0.02 260 / 0.4), 0 1px 3px oklch(0.2 0.02 260 / 0.3);
   --perfect-shadow-2: 0 2px 4px -2px oklch(0.2 0.02 260 / 0.45), 0 4px 8px -2px oklch(0.2 0.02 260 / 0.3);
   --perfect-shadow-3: 0 4px 8px -4px oklch(0.2 0.02 260 / 0.5), 0 8px 16px -4px oklch(0.2 0.02 260 / 0.35);
   --perfect-shadow-4: 0 8px 16px -8px oklch(0.2 0.02 260 / 0.55), 0 16px 32px -8px oklch(0.2 0.02 260 / 0.4);
   --perfect-shadow-5: 0 16px 32px -12px oklch(0.2 0.02 260 / 0.6), 0 32px 64px -12px oklch(0.2 0.02 260 / 0.45);
+
+  /* Glass materials */
   --perfect-glass-thin: oklch(0.23 0.008 260 / 0.4);
   --perfect-glass-regular: oklch(0.23 0.008 260 / 0.6);
   --perfect-glass-thick: oklch(0.2 0.008 260 / 0.85);
   --perfect-glass-border: oklch(1 0 0 / 0.09);
   --perfect-glass-highlight: oklch(1 0 0 / 0.1);
+
+  /* Theme surfaces */
   --perfect-surface: var(--perfect-gray-2);
   --perfect-surface-raised: var(--perfect-gray-3);
   --perfect-surface-sunken: oklch(0.115 0.008 260);
   --perfect-overlay: oklch(0.07 0.01 260 / 0.65);
   --perfect-segment-track: oklch(0.26 0.008 260 / 0.55);
   --perfect-segment-thumb: oklch(0.48 0.012 260);
+
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     color-scheme: dark;
+
+    /* Color ramps */
     --perfect-gray-1: oklch(0.14 0.0017 260);
     --perfect-gray-2: oklch(0.17 0.0024 260);
     --perfect-gray-3: oklch(0.21 0.0038 260);
@@ -462,25 +500,34 @@
     --perfect-teal-10: oklch(0.7 0.1296 190);
     --perfect-teal-11: oklch(0.805 0.102 190);
     --perfect-teal-12: oklch(0.935 0.0504 190);
+
+    /* Elevation */
     --perfect-shadow-0: none;
     --perfect-shadow-1: 0 1px 2px -1px oklch(0.2 0.02 260 / 0.4), 0 1px 3px oklch(0.2 0.02 260 / 0.3);
     --perfect-shadow-2: 0 2px 4px -2px oklch(0.2 0.02 260 / 0.45), 0 4px 8px -2px oklch(0.2 0.02 260 / 0.3);
     --perfect-shadow-3: 0 4px 8px -4px oklch(0.2 0.02 260 / 0.5), 0 8px 16px -4px oklch(0.2 0.02 260 / 0.35);
     --perfect-shadow-4: 0 8px 16px -8px oklch(0.2 0.02 260 / 0.55), 0 16px 32px -8px oklch(0.2 0.02 260 / 0.4);
     --perfect-shadow-5: 0 16px 32px -12px oklch(0.2 0.02 260 / 0.6), 0 32px 64px -12px oklch(0.2 0.02 260 / 0.45);
+
+    /* Glass materials */
     --perfect-glass-thin: oklch(0.23 0.008 260 / 0.4);
     --perfect-glass-regular: oklch(0.23 0.008 260 / 0.6);
     --perfect-glass-thick: oklch(0.2 0.008 260 / 0.85);
     --perfect-glass-border: oklch(1 0 0 / 0.09);
     --perfect-glass-highlight: oklch(1 0 0 / 0.1);
+
+    /* Theme surfaces */
     --perfect-surface: var(--perfect-gray-2);
     --perfect-surface-raised: var(--perfect-gray-3);
     --perfect-surface-sunken: oklch(0.115 0.008 260);
     --perfect-overlay: oklch(0.07 0.01 260 / 0.65);
     --perfect-segment-track: oklch(0.26 0.008 260 / 0.55);
     --perfect-segment-thumb: oklch(0.48 0.012 260);
+
   }
 }
+
+/* Pickable accents — data-accent="name" swaps the accent ramp */
 
 [data-accent='indigo'] {
   --perfect-accent-1: oklch(0.993 0.0114 277);
@@ -811,12 +858,16 @@
   }
 }
 
+/* Compact density — data-density="compact" */
+
 [data-density='compact'] {
   --perfect-control-height-sm: 1.875rem;
   --perfect-control-height-md: 2.25rem;
   --perfect-control-height-lg: 2.75rem;
   --perfect-density-scale: 0.8;
 }
+
+/* Reduced motion */
 
 @media (prefers-reduced-motion: reduce) {
   :root {
@@ -827,3 +878,4 @@
     --perfect-duration-slower: 0.01ms;
   }
 }
+
