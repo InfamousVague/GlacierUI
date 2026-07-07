@@ -22,7 +22,7 @@ export interface StepsProps extends Omit<ComponentProps<'div'>, 'children'> {
   /** Semantic color family for completed and current dots. */
   tone?: StepsTone;
   /** Compact size step; sets dot diameter and gap. */
-  size?: 'sm' | 'md';
+  size?: StepsSize;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
 }
