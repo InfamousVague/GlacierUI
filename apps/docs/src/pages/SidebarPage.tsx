@@ -1,5 +1,6 @@
-import { Box, CounterBadge, Sidebar, SidebarItem, SidebarSection } from '@perfect/react';
-import type { ReactNode } from 'react';
+import { Box, CounterBadge, SegmentedControl, Sidebar, SidebarItem, SidebarSection, Stack } from '@perfect/react';
+import { Spring } from '@perfect/motion';
+import { useState, type ReactNode } from 'react';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
 // A mock app window so each example shows the sidebar at its real width beside a
@@ -84,6 +85,47 @@ const settingsIcon = (
   </svg>
 );
 
+// Interactive: click items to slide the pill, and switch the spring style.
+function SlideDemo() {
+  const [active, setActive] = useState('home');
+  const [spring, setSpring] = useState<Spring>(Spring.Smooth);
+  return (
+    <Stack gap={4} align="start">
+      <SegmentedControl
+        size="sm"
+        aria-label="Animation style"
+        value={spring}
+        onValueChange={(value) => setSpring(value as Spring)}
+        options={[
+          { value: Spring.Smooth, label: 'Smooth' },
+          { value: Spring.Snappy, label: 'Snappy' },
+          { value: Spring.Bouncy, label: 'Bounce' },
+        ]}
+      />
+      <Frame>
+        <Sidebar spring={spring}>
+          <SidebarSection title="Workspace">
+            <SidebarItem icon={homeIcon} active={active === 'home'} onClick={() => setActive('home')}>
+              Home
+            </SidebarItem>
+            <SidebarItem icon={inboxIcon} active={active === 'inbox'} onClick={() => setActive('inbox')}>
+              Inbox
+            </SidebarItem>
+            <SidebarItem icon={usersIcon} active={active === 'people'} onClick={() => setActive('people')}>
+              People
+            </SidebarItem>
+          </SidebarSection>
+          <SidebarSection title="Insights">
+            <SidebarItem icon={chartIcon} active={active === 'reports'} onClick={() => setActive('reports')}>
+              Reports
+            </SidebarItem>
+          </SidebarSection>
+        </Sidebar>
+      </Frame>
+    </Stack>
+  );
+}
+
 export function SidebarPage() {
   return (
     <>
@@ -126,6 +168,23 @@ export function SidebarPage() {
             </SidebarSection>
           </Sidebar>
         </Frame>
+      </Example>
+
+      <Example
+        title="Sliding active pill"
+        description="The active pill is one layout element that slides between items as the active one changes, even across sections. Choose the spring: smooth, snappy, or bounce. Click the items to move it."
+        code={`import { Sidebar, SidebarItem, SidebarSection } from '@perfect/react';
+import { Spring } from '@perfect/motion';
+
+<Sidebar spring={Spring.Bouncy}>
+  <SidebarSection title="Workspace">
+    <SidebarItem icon={homeIcon} active={active === 'home'} onClick={() => setActive('home')}>Home</SidebarItem>
+    <SidebarItem icon={inboxIcon} active={active === 'inbox'} onClick={() => setActive('inbox')}>Inbox</SidebarItem>
+    <SidebarItem icon={usersIcon} active={active === 'people'} onClick={() => setActive('people')}>People</SidebarItem>
+  </SidebarSection>
+</Sidebar>`}
+      >
+        <SlideDemo />
       </Example>
 
       <Example
@@ -212,6 +271,7 @@ export function SidebarPage() {
         props={[
           { name: 'header', type: 'ReactNode', description: 'Pinned region at the top, for a brand mark or a search field.' },
           { name: 'footer', type: 'ReactNode', description: 'Pinned region at the bottom, for a profile or settings link.' },
+          { name: 'spring', type: 'Spring', default: 'Spring.Smooth', description: 'Spring preset for the active pill as it slides between items.' },
           { name: 'children', type: 'ReactNode', description: 'The scrollable body, usually one or more SidebarSection.' },
         ]}
       />
