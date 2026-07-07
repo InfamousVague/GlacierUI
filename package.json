@@ -7,7 +7,8 @@
     "apps/*"
   ],
   "scripts": {
-    "gen": "npm run gen -w @perfect/tokens",
+    "gen": "npm run gen -w @perfect/tokens && npm run gen -w @perfect/spec",
+    "gen:spec": "npm run gen -w @perfect/spec",
     "dev": "npm run dev -w @perfect/docs",
     "build:docs": "npm run build -w @perfect/docs",
     "test": "vitest run",

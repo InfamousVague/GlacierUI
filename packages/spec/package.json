@@ -1,0 +1,16 @@
+{
+  "name": "@perfect/spec",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./dist/spec.json": "./dist/spec.json",
+    "./dist/schema.json": "./dist/schema.json"
+  },
+  "scripts": {
+    "gen": "node src/generate.ts"
+  },
+  "dependencies": {
+    "@perfect/tokens": "*"
+  }
+}
