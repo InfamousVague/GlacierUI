@@ -1,0 +1,20 @@
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--perfect-radius-full);
+  background: var(--perfect-surface-sunken);
+  color: var(--perfect-text-subtle);
+}
+
+.icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: block;
+}
+
+.text {
+  text-align: center;
+}

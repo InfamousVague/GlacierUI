@@ -1,0 +1,112 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  font-family: var(--perfect-font-sans);
+}
+
+.region {
+  flex: none;
+  padding: var(--perfect-space-4);
+}
+
+.regionBordered {
+  border-block-end: var(--perfect-hairline) solid var(--perfect-border-subtle);
+}
+
+.footer {
+  border-block-start: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  margin-block-start: auto;
+}
+
+.body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--perfect-space-5);
+  padding: var(--perfect-space-4);
+}
+
+.sectionTitle {
+  padding-inline: var(--perfect-space-3);
+  margin-block-end: var(--perfect-space-2);
+  font-size: var(--perfect-font-size-xs);
+  font-weight: var(--perfect-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--perfect-text-subtle);
+}
+
+.sectionItems {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--perfect-space-2);
+  width: 100%;
+  text-align: left;
+  padding: var(--perfect-space-2) var(--perfect-space-3);
+  border: none;
+  border-radius: var(--perfect-radius-md);
+  background: transparent;
+  color: var(--perfect-text-muted);
+  font: inherit;
+  font-size: var(--perfect-font-size-sm);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--perfect-duration-fast) var(--perfect-ease-out),
+    color var(--perfect-duration-fast) var(--perfect-ease-out);
+}
+
+.item:hover:not([aria-disabled='true']) {
+  background: var(--perfect-hover);
+  color: var(--perfect-text);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--perfect-focus-ring);
+  outline-offset: -2px;
+}
+
+.item[data-active] {
+  background: var(--perfect-accent-soft);
+  color: var(--perfect-accent-text);
+  font-weight: var(--perfect-font-weight-medium);
+}
+
+.item[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.itemIcon {
+  flex: none;
+  display: inline-flex;
+  width: 1.125rem;
+  height: 1.125rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.itemLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemTrailing {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+}

@@ -61,6 +61,22 @@ export type {
   ContainerSize,
 } from './layout/types.ts';
 
+// structures
+export {
+  Sidebar,
+  SidebarSection,
+  SidebarItem,
+  type SidebarProps,
+  type SidebarSectionProps,
+  type SidebarItemProps,
+} from './structures/Sidebar/Sidebar.tsx';
+export { Toolbar, type ToolbarProps } from './structures/Toolbar/Toolbar.tsx';
+export { PageHeader, type PageHeaderProps } from './structures/PageHeader/PageHeader.tsx';
+export { Footer, FooterColumn, type FooterProps, type FooterColumnProps } from './structures/Footer/Footer.tsx';
+export { EmptyState, type EmptyStateProps } from './structures/EmptyState/EmptyState.tsx';
+
 // organisms
 export { Modal, type ModalProps } from './organisms/Modal/Modal.tsx';
 export { AppShell, type AppShellProps } from './organisms/AppShell/AppShell.tsx';
+export { Popover, type PopoverProps } from './organisms/Popover/Popover.tsx';
+export type { Placement } from './internal/useAnchoredPosition.ts';
