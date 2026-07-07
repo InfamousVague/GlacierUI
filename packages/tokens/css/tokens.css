@@ -76,6 +76,17 @@
   --perfect-blur-md: 20px;
   --perfect-blur-lg: 32px;
   --perfect-glass-saturate: 1.8;
+  --perfect-container-xs: 20rem;
+  --perfect-container-sm: 30rem;
+  --perfect-container-md: 42rem;
+  --perfect-container-lg: 60rem;
+  --perfect-container-xl: 75rem;
+  --perfect-container-prose: 68ch;
+  --perfect-container-full: 100%;
+  --perfect-breakpoint-sm: 640px;
+  --perfect-breakpoint-md: 768px;
+  --perfect-breakpoint-lg: 1024px;
+  --perfect-breakpoint-xl: 1280px;
   --perfect-gray-1: oklch(0.993 0.0007 260);
   --perfect-gray-2: oklch(0.981 0.0014 260);
   --perfect-gray-3: oklch(0.96 0.003 260);

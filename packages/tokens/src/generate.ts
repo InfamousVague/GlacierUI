@@ -13,6 +13,7 @@ import { durations, easings, cssEase, type EaseRole } from './motion.ts';
 import { controlHeights } from './density.ts';
 import { semantic, themeOverrides, statusTokens } from './semantic.ts';
 import { blurs, glassTokens, GLASS_SATURATE, HAIRLINE } from './effects.ts';
+import { containers, breakpoints } from './layout.ts';
 
 const P = '--perfect';
 const lines: string[] = [];
@@ -74,6 +75,9 @@ decl('control-radius', 'var(--perfect-radius-full)');
 
 for (const [name, value] of Object.entries(blurs)) decl(`blur-${name}`, value);
 decl('glass-saturate', GLASS_SATURATE);
+
+for (const [name, value] of Object.entries(containers)) decl(`container-${name}`, value);
+for (const [name, px] of Object.entries(breakpoints)) decl(`breakpoint-${name}`, `${px}px`);
 
 rampDecls('light');
 shadowDecls('light');

@@ -6,4 +6,5 @@ export * from './effects.ts';
 export * from './elevation.ts';
 export * from './motion.ts';
 export * from './density.ts';
+export * from './layout.ts';
 export * from './semantic.ts';
