@@ -1,0 +1,77 @@
+.codeBlock {
+  display: grid;
+  border: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  border-radius: var(--perfect-radius-lg);
+  background: var(--perfect-surface-sunken);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--perfect-space-3);
+  padding: var(--perfect-space-2) var(--perfect-space-3);
+  border-bottom: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  font-family: var(--perfect-font-sans);
+  font-size: var(--perfect-font-size-xs);
+  color: var(--perfect-text-secondary);
+}
+
+.meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--perfect-space-2);
+  min-width: 0;
+}
+
+.filename {
+  font-family: var(--perfect-font-mono);
+  color: var(--perfect-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.language {
+  font-family: var(--perfect-font-mono);
+  color: var(--perfect-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.copy {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  border: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  border-radius: var(--perfect-radius-sm);
+  padding: var(--perfect-space-1) var(--perfect-space-2);
+  background: transparent;
+  color: var(--perfect-text-secondary);
+  font-family: var(--perfect-font-sans);
+  font-size: var(--perfect-font-size-xs);
+  cursor: pointer;
+  transition: background var(--perfect-duration-fast) var(--perfect-ease-out);
+}
+
+.copy:hover {
+  background: var(--perfect-hover);
+}
+
+.pre {
+  margin: 0;
+  padding: var(--perfect-space-4);
+  overflow-x: auto;
+  font-family: var(--perfect-font-mono);
+  font-size: var(--perfect-font-size-xs);
+  line-height: var(--perfect-line-height-relaxed);
+  color: var(--perfect-text);
+  tab-size: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy {
+    transition: none;
+  }
+}
