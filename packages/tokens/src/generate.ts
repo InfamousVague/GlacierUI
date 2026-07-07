@@ -10,7 +10,7 @@ import { typeScale, fontFamilies, fontWeights } from './type.ts';
 import { radii, SCALED_RADII, type RadiusStep } from './radius.ts';
 import { shadows } from './elevation.ts';
 import { durations, easings, cssEase, type EaseRole } from './motion.ts';
-import { controlHeights } from './density.ts';
+import { controlHeights, densityScale } from './density.ts';
 import { semantic, themeOverrides, statusTokens } from './semantic.ts';
 import { blurs, glassTokens, GLASS_SATURATE, HAIRLINE } from './effects.ts';
 import { containers, breakpoints } from './layout.ts';
@@ -57,7 +57,10 @@ for (const step of typeScale) {
   decl(`tracking-${step.name}`, step.tracking);
 }
 
-for (const n of SPACE_STEPS) decl(`space-${n}`, space[n].clamp);
+// the space scale rides the density knob, so padding and gaps built on it
+// tighten or open up with data-density. space-px stays a true pixel.
+decl('density-scale', String(densityScale.comfortable));
+for (const n of SPACE_STEPS) decl(`space-${n}`, `calc(${space[n].clamp} * var(${P}-density-scale))`);
 decl('space-px', '1px');
 decl('hairline', HAIRLINE);
 
@@ -115,6 +118,7 @@ for (const option of accentOptions.slice(1)) {
 // ---- density ---------------------------------------------------------------
 lines.push("[data-density='compact'] {");
 for (const [size, h] of Object.entries(controlHeights.compact)) decl(`control-height-${size}`, h);
+decl('density-scale', String(densityScale.compact));
 lines.push('}', '');
 
 // ---- reduced motion --------------------------------------------------------

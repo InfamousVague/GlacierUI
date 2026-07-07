@@ -35,19 +35,20 @@
   --perfect-font-size-5xl: clamp(2.986rem, 2.6424rem + 1.7178vw, 4.2915rem);
   --perfect-leading-5xl: 1.1;
   --perfect-tracking-5xl: -0.02em;
-  --perfect-space-0: 0rem;
-  --perfect-space-1: clamp(0.25rem, 0.2336rem + 0.0822vw, 0.3125rem);
-  --perfect-space-2: clamp(0.5rem, 0.4671rem + 0.1645vw, 0.625rem);
-  --perfect-space-3: clamp(0.75rem, 0.7007rem + 0.2467vw, 0.9375rem);
-  --perfect-space-4: clamp(1rem, 0.9342rem + 0.3289vw, 1.25rem);
-  --perfect-space-5: clamp(1.25rem, 1.1678rem + 0.4112vw, 1.5625rem);
-  --perfect-space-6: clamp(1.5rem, 1.4013rem + 0.4934vw, 1.875rem);
-  --perfect-space-8: clamp(2rem, 1.8684rem + 0.6579vw, 2.5rem);
-  --perfect-space-10: clamp(2.5rem, 2.3355rem + 0.8224vw, 3.125rem);
-  --perfect-space-12: clamp(3rem, 2.8026rem + 0.9868vw, 3.75rem);
-  --perfect-space-16: clamp(4rem, 3.7368rem + 1.3158vw, 5rem);
-  --perfect-space-20: clamp(5rem, 4.6711rem + 1.6447vw, 6.25rem);
-  --perfect-space-24: clamp(6rem, 5.6053rem + 1.9737vw, 7.5rem);
+  --perfect-density-scale: 1.1;
+  --perfect-space-0: calc(0rem * var(--perfect-density-scale));
+  --perfect-space-1: calc(clamp(0.25rem, 0.2336rem + 0.0822vw, 0.3125rem) * var(--perfect-density-scale));
+  --perfect-space-2: calc(clamp(0.5rem, 0.4671rem + 0.1645vw, 0.625rem) * var(--perfect-density-scale));
+  --perfect-space-3: calc(clamp(0.75rem, 0.7007rem + 0.2467vw, 0.9375rem) * var(--perfect-density-scale));
+  --perfect-space-4: calc(clamp(1rem, 0.9342rem + 0.3289vw, 1.25rem) * var(--perfect-density-scale));
+  --perfect-space-5: calc(clamp(1.25rem, 1.1678rem + 0.4112vw, 1.5625rem) * var(--perfect-density-scale));
+  --perfect-space-6: calc(clamp(1.5rem, 1.4013rem + 0.4934vw, 1.875rem) * var(--perfect-density-scale));
+  --perfect-space-8: calc(clamp(2rem, 1.8684rem + 0.6579vw, 2.5rem) * var(--perfect-density-scale));
+  --perfect-space-10: calc(clamp(2.5rem, 2.3355rem + 0.8224vw, 3.125rem) * var(--perfect-density-scale));
+  --perfect-space-12: calc(clamp(3rem, 2.8026rem + 0.9868vw, 3.75rem) * var(--perfect-density-scale));
+  --perfect-space-16: calc(clamp(4rem, 3.7368rem + 1.3158vw, 5rem) * var(--perfect-density-scale));
+  --perfect-space-20: calc(clamp(5rem, 4.6711rem + 1.6447vw, 6.25rem) * var(--perfect-density-scale));
+  --perfect-space-24: calc(clamp(6rem, 5.6053rem + 1.9737vw, 7.5rem) * var(--perfect-density-scale));
   --perfect-space-px: 1px;
   --perfect-hairline: 1px;
   --perfect-radius-scale: 1;
@@ -814,6 +815,7 @@
   --perfect-control-height-sm: 1.875rem;
   --perfect-control-height-md: 2.25rem;
   --perfect-control-height-lg: 2.75rem;
+  --perfect-density-scale: 0.8;
 }
 
 @media (prefers-reduced-motion: reduce) {
