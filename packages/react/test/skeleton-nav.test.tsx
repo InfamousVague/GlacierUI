@@ -16,25 +16,23 @@ const TABS = [
 ];
 
 describe('SegmentedControl skeleton', () => {
-  it('replaces the radiogroup with a silent capsule at the control height', () => {
+  it('replaces the radiogroup with silent per-option chips that reserve the real width', () => {
     const { container } = render(
       <SegmentedControl skeleton aria-label="Range" size="lg" options={OPTIONS} />,
     );
     expect(screen.queryByRole('radiogroup')).toBeNull();
     expect(screen.queryByRole('radio')).toBeNull();
-    const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
-    expect(skeleton.style.width).toBe('16rem');
-    expect(skeleton.style.height).toBe('var(--perfect-control-height-lg)');
-    expect(skeleton.style.borderRadius).toBe('var(--perfect-control-radius)');
+    // one shimmer chip per option, so the track keeps its intrinsic width
+    expect(container.querySelectorAll('[data-skeleton]')).toHaveLength(OPTIONS.length);
+    const root = container.firstElementChild as HTMLElement;
+    expect(root.getAttribute('aria-hidden')).toBe('true');
   });
 
-  it('stretches with fullWidth', () => {
+  it('renders a chip per option when fullWidth', () => {
     const { container } = render(
       <SegmentedControl skeleton fullWidth aria-label="Range" options={OPTIONS} />,
     );
-    const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
-    expect(skeleton.style.width).toBe('100%');
-    expect(skeleton.style.height).toBe('var(--perfect-control-height-md)');
+    expect(container.querySelectorAll('[data-skeleton]')).toHaveLength(OPTIONS.length);
   });
 });
 

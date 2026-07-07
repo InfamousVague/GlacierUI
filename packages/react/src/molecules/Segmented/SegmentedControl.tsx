@@ -55,13 +55,22 @@ export function SegmentedControl({
   const [selected, setSelected] = useControlled(value, fallback);
 
   if (skeleton) {
+    // Render the real track with each label reserving its width, so the
+    // placeholder matches the live control's intrinsic size exactly.
     return (
-      <Skeleton
-        width={fullWidth ? '100%' : '16rem'}
-        height={`var(--perfect-control-height-${size})`}
-        radius="var(--perfect-control-radius)"
-        className={className}
-      />
+      <div
+        aria-hidden="true"
+        className={cx(styles.root, styles[size], fullWidth && styles.fullWidth, className)}
+      >
+        {options.map((option, index) => (
+          <span key={index} className={styles.segment}>
+            <span className={styles.label} style={{ color: 'transparent' }}>
+              {option.label}
+            </span>
+            <Skeleton radius="var(--perfect-radius-full)" className={styles.segmentSkeleton} />
+          </span>
+        ))}
+      </div>
     );
   }
 

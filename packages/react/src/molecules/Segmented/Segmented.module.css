@@ -56,6 +56,15 @@
     var(--perfect-shadow-2);
 }
 
+/* skeleton chip inside each segment; the transparent label sets segment width */
+.segmentSkeleton {
+  position: absolute;
+  top: 22%;
+  bottom: 22%;
+  left: var(--perfect-space-2);
+  right: var(--perfect-space-2);
+}
+
 .label {
   position: relative;
   z-index: 1;
