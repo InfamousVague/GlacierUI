@@ -34,7 +34,7 @@ export interface SidebarSectionProps extends Omit<ComponentProps<'div'>, 'title'
 /** A titled group of sidebar items. */
 export function SidebarSection({ title, className, children, ...rest }: SidebarSectionProps) {
   return (
-    <div className={className} {...rest}>
+    <div className={cx(styles.section, className)} {...rest}>
       {title && <div className={styles.sectionTitle}>{title}</div>}
       <div className={styles.sectionItems}>{children}</div>
     </div>
