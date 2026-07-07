@@ -1,25 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import axe from 'axe-core';
-import {
-  Button,
-  EmptyState,
-  Footer,
-  FooterColumn,
-  Link,
-  PageHeader,
-  Sidebar,
-  SidebarItem,
-  SidebarSection,
-  Toolbar,
-} from '../src/index.ts';
+import { Button, Sidebar, SidebarItem, SidebarSection, Toolbar } from '../src/index.ts';
 
-// heading-order is a page-level concern; these structures are tested in isolation
-// and the composite mixes their heading levels on purpose.
+// region is a page-level landmark concern and these structures are tested in
+// isolation, so the landmark rules do not apply here.
 const AXE_RULES = {
   region: { enabled: false },
   'page-has-heading-one': { enabled: false },
-  'heading-order': { enabled: false },
 };
 
 describe('Sidebar', () => {
@@ -64,55 +52,19 @@ describe('Toolbar', () => {
     expect(screen.getByText('Title')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'New' })).toBeInTheDocument();
   });
-});
-
-describe('PageHeader', () => {
-  it('renders the title as a heading with description and actions', () => {
-    render(
-      <PageHeader
-        title="Projects"
-        description="Everything in one place"
-        actions={<Button>New project</Button>}
-      />,
-    );
-    expect(screen.getByRole('heading', { name: 'Projects' })).toBeInTheDocument();
-    expect(screen.getByText('Everything in one place')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'New project' })).toBeInTheDocument();
-  });
-});
-
-describe('Footer and EmptyState', () => {
-  it('Footer renders a footer landmark with columns and a bottom bar', () => {
-    render(
-      <Footer bottom={<span>© 2026</span>}>
-        <FooterColumn title="Product">
-          <Link href="#">Pricing</Link>
-        </FooterColumn>
-      </Footer>,
-    );
-    expect(screen.getByRole('contentinfo')).toBeInTheDocument();
-    expect(screen.getByText('Product')).toBeInTheDocument();
-    expect(screen.getByText('© 2026')).toBeInTheDocument();
-  });
-
-  it('EmptyState renders a heading, description, and action', () => {
-    render(
-      <EmptyState title="No messages" description="You are all caught up" action={<Button>Compose</Button>} />,
-    );
-    expect(screen.getByRole('heading', { name: 'No messages' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Compose' })).toBeInTheDocument();
-  });
 
   it('has no axe violations', async () => {
     const { container } = render(
       <>
-        <PageHeader title="Projects" description="d" actions={<Button>New</Button>} />
-        <EmptyState title="Empty" description="Nothing here" action={<Button>Add</Button>} />
-        <Footer bottom={<span>© 2026</span>}>
-          <FooterColumn title="Product">
-            <Link href="#">Pricing</Link>
-          </FooterColumn>
-        </Footer>
+        <Sidebar header={<div>Brand</div>}>
+          <SidebarSection title="Main">
+            <SidebarItem active>Home</SidebarItem>
+            <SidebarItem>Inbox</SidebarItem>
+          </SidebarSection>
+        </Sidebar>
+        <Toolbar start={<span>menu</span>} end={<Button size="sm">New</Button>}>
+          <span>Title</span>
+        </Toolbar>
       </>,
     );
     expect((await axe.run(container, { rules: AXE_RULES })).violations).toEqual([]);

@@ -71,9 +71,6 @@ export {
   type SidebarItemProps,
 } from './structures/Sidebar/Sidebar.tsx';
 export { Toolbar, type ToolbarProps } from './structures/Toolbar/Toolbar.tsx';
-export { PageHeader, type PageHeaderProps } from './structures/PageHeader/PageHeader.tsx';
-export { Footer, FooterColumn, type FooterProps, type FooterColumnProps } from './structures/Footer/Footer.tsx';
-export { EmptyState, type EmptyStateProps } from './structures/EmptyState/EmptyState.tsx';
 
 // organisms
 export { Modal, type ModalProps } from './organisms/Modal/Modal.tsx';

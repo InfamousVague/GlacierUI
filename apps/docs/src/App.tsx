@@ -40,9 +40,6 @@ import { ModalPage } from './pages/ModalPage.tsx';
 import { PopoverPage } from './pages/PopoverPage.tsx';
 import { SidebarPage } from './pages/SidebarPage.tsx';
 import { ToolbarPage } from './pages/ToolbarPage.tsx';
-import { PageHeaderPage } from './pages/PageHeaderPage.tsx';
-import { FooterPage } from './pages/FooterPage.tsx';
-import { EmptyStatePage } from './pages/EmptyStatePage.tsx';
 
 const PAGES = {
   overview: { title: 'Overview', group: 'Start', el: <OverviewPage /> },
@@ -83,9 +80,6 @@ const PAGES = {
   popover: { title: 'Popover', group: 'Organisms', el: <PopoverPage /> },
   sidebar: { title: 'Sidebar', group: 'Structures', el: <SidebarPage /> },
   toolbar: { title: 'Toolbar', group: 'Structures', el: <ToolbarPage /> },
-  pageheader: { title: 'Page Header', group: 'Structures', el: <PageHeaderPage /> },
-  footer: { title: 'Footer', group: 'Structures', el: <FooterPage /> },
-  emptystate: { title: 'Empty State', group: 'Structures', el: <EmptyStatePage /> },
 } as const;
 
 type PageId = keyof typeof PAGES;

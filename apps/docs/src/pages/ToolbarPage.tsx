@@ -184,8 +184,7 @@ export function ToolbarPage() {
       <ul>
         <li>
           Reach for Toolbar when you need a bar: a full-width strip with leading and trailing
-          controls. Reach for PageHeader when you need a title block with a heading, description, and
-          optional actions stacked above the page body.
+          controls.
         </li>
         <li>
           Keep the primary action last in <code>end</code> so it sits at the trailing edge, and
@@ -196,8 +195,7 @@ export function ToolbarPage() {
           while content scrolls under its glass background.
         </li>
         <li>
-          Put a single title or a compact control in the middle. For a full title block with
-          supporting text, use PageHeader instead.
+          Put a single title or a compact control in the middle.
         </li>
       </ul>
     </>
