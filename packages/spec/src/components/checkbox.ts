@@ -20,8 +20,9 @@ export const checkboxSpec: ComponentSpec = {
     { name: 'onCheckedChange', type: 'handler', description: 'Fires with the next checked value on change.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Dims the control and blocks interaction.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
   ],
-  defaults: { defaultChecked: false, skeleton: false },
+  defaults: { defaultChecked: false, skeleton: false, glass: false },
   dimensions: { radius: token('radius-sm'), gap: token('space-2'), border: token('hairline'), size: '1.375rem', iconSize: '0.875rem' },
   states: [
     { name: 'checked', description: 'Box fills with the accent and shows the check.', tokens: { background: token('accent-solid'), border: token('accent-solid'), check: token('accent-contrast') } },

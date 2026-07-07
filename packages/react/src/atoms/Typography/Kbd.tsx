@@ -6,10 +6,12 @@ import styles from './Typography.module.css';
 export interface KbdProps extends Omit<ComponentProps<'kbd'>, 'children'> {
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
   children?: ReactNode;
 }
 
-export function Kbd({ skeleton = false, className, children, ...rest }: KbdProps) {
+export function Kbd({ skeleton = false, glass = false, className, children, ...rest }: KbdProps) {
   if (skeleton) {
     return (
       <Skeleton
@@ -21,7 +23,7 @@ export function Kbd({ skeleton = false, className, children, ...rest }: KbdProps
     );
   }
   return (
-    <kbd className={cx(styles.kbd, className)} {...rest}>
+    <kbd className={cx(styles.kbd, glass && styles.glass, className)} {...rest}>
       {children}
     </kbd>
   );

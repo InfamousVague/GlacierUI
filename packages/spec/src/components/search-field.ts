@@ -22,13 +22,14 @@ export const searchFieldSpec: ComponentSpec = {
     { name: 'size', type: 'enum', values: controlSizes, default: 'md', description: 'Control size step.' },
     { name: 'shortcut', type: 'node', description: 'Right-aligned slot for a keyboard shortcut hint.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
   ],
   sizes: [
     controlSize('sm', { paddingInline: token('space-8') }),
     controlSize('md', { paddingInline: token('space-8') }),
     controlSize('lg', { paddingInline: token('space-10') }),
   ],
-  defaults: { defaultValue: '', placeholder: 'Search', size: 'md', skeleton: false },
+  defaults: { defaultValue: '', placeholder: 'Search', size: 'md', skeleton: false, glass: false },
   dimensions: { radius: token('radius-lg'), border: token('hairline') },
   states: [
     { name: 'hover', description: 'Border strengthens when not focused or disabled.', tokens: { border: token('border-strong') } },

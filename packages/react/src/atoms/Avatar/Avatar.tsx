@@ -25,6 +25,8 @@ export interface AvatarProps extends Omit<ComponentProps<'span'>, 'children'> {
   shape?: AvatarShape;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
 }
 
 function initialsOf(name: string): string {
@@ -44,6 +46,7 @@ export function Avatar({
   size = 'md',
   shape = 'circle',
   skeleton = false,
+  glass = false,
   className,
   ...rest
 }: AvatarProps) {
@@ -82,11 +85,17 @@ export function Avatar({
 
   if (initials) {
     return (
-      <span className={cx(rootClass, styles.initials)} {...rest}>
+      <span className={cx(rootClass, styles.initials, glass && styles.glass)} {...rest}>
         <span aria-label={name}>{initials}</span>
       </span>
     );
   }
 
-  return <span className={cx(rootClass, styles.placeholder)} aria-hidden="true" {...rest} />;
+  return (
+    <span
+      className={cx(rootClass, styles.placeholder, glass && styles.glass)}
+      aria-hidden="true"
+      {...rest}
+    />
+  );
 }

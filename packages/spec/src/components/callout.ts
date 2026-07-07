@@ -21,6 +21,7 @@ export const calloutSpec: ComponentSpec = {
     { name: 'title', type: 'node', description: 'Bold heading above the body.' },
     { name: 'icon', type: 'node', description: 'Leading glyph.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
     { name: 'children', type: 'node', description: 'Callout body content.' },
   ],
   tones: [
@@ -30,7 +31,7 @@ export const calloutSpec: ComponentSpec = {
     { name: 'warning', description: 'Caution states, rendered as an alert.', tokens: { background: token('warning-soft'), border: token('warning-border'), title: token('warning-text') } },
     { name: 'danger', description: 'Errors and destructive states, rendered as an alert.', tokens: { background: token('danger-soft'), border: token('danger-border'), title: token('danger-text') } },
   ],
-  defaults: { tone: 'note', skeleton: false },
+  defaults: { tone: 'note', skeleton: false, glass: false },
   dimensions: {
     radius: token('radius-lg'),
     gap: token('space-3'),

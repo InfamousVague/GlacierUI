@@ -16,6 +16,8 @@ export interface SearchFieldProps
   shortcut?: ReactNode;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
 }
 
 export function SearchField({
@@ -26,6 +28,7 @@ export function SearchField({
   size = 'md',
   shortcut,
   skeleton = false,
+  glass = false,
   className,
   id,
   ...rest
@@ -45,7 +48,7 @@ export function SearchField({
   }
 
   return (
-    <div className={cx(styles.wrap, styles[size], className)}>
+    <div className={cx(styles.wrap, styles[size], glass && styles.glass, className)}>
       <svg
         className={styles.icon}
         aria-hidden="true"

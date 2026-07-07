@@ -12,6 +12,8 @@ export interface CodeBlockProps extends Omit<ComponentProps<'div'>, 'children'> 
   showCopy?: boolean;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
 }
 
 function copyText(text: string): Promise<void> {
@@ -38,6 +40,7 @@ export function CodeBlock({
   filename,
   showCopy = true,
   skeleton = false,
+  glass = false,
   className,
   ...rest
 }: CodeBlockProps) {
@@ -54,7 +57,7 @@ export function CodeBlock({
   }
   const showHeader = showCopy || filename != null || language != null;
   return (
-    <div className={cx(styles.codeBlock, className)} {...rest}>
+    <div className={cx(styles.codeBlock, glass && styles.glass, className)} {...rest}>
       {showHeader && (
         <div className={styles.header}>
           <span className={styles.meta}>

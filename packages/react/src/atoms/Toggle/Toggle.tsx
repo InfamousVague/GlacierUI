@@ -18,6 +18,8 @@ export interface ToggleProps extends Omit<ComponentProps<typeof motion.button>, 
   iconOnly?: boolean;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
   /** Required when the content is icon-only. */
   'aria-label'?: string;
   children?: ReactNode;
@@ -35,6 +37,7 @@ export function Toggle({
   size = 'md',
   iconOnly = false,
   skeleton = false,
+  glass = false,
   disabled,
   className,
   children,
@@ -57,7 +60,7 @@ export function Toggle({
     <motion.button
       type="button"
       aria-pressed={isPressed}
-      className={cx(styles.toggle, styles[size], iconOnly && styles.iconOnly, className)}
+      className={cx(styles.toggle, styles[size], iconOnly && styles.iconOnly, glass && styles.glass, className)}
       disabled={disabled}
       whileTap={reduce || disabled ? undefined : { scale: 0.94 }}
       transition={transition(Speed.Fast, Ease.Out)}

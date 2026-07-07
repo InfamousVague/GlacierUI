@@ -12,11 +12,14 @@ export interface TextareaProps extends Omit<ComponentProps<'textarea'>, 'size'> 
   size?: TextareaSize;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
 }
 
 export function Textarea({
   size = 'md',
   skeleton = false,
+  glass = false,
   className,
   id,
   ...rest
@@ -37,7 +40,7 @@ export function Textarea({
       id={id ?? field?.id}
       aria-describedby={field?.describedBy}
       aria-invalid={field?.invalid || undefined}
-      className={cx(styles.textarea, styles[size], className)}
+      className={cx(styles.textarea, styles[size], glass && styles.glass, className)}
       {...rest}
     />
   );

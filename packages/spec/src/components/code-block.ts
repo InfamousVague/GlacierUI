@@ -21,8 +21,9 @@ export const codeBlockSpec: ComponentSpec = {
     { name: 'filename', type: 'string', description: 'Filename shown in the header.' },
     { name: 'showCopy', type: 'boolean', default: true, description: 'Shows the copy button in the header.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
   ],
-  defaults: { showCopy: true, skeleton: false },
+  defaults: { showCopy: true, skeleton: false, glass: false },
   dimensions: {
     radius: token('radius-lg'),
     gap: token('space-3'),

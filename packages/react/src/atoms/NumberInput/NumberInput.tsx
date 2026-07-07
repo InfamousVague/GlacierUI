@@ -18,6 +18,8 @@ export interface NumberInputProps
   disabled?: boolean;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
   'aria-label'?: string;
 }
 
@@ -37,6 +39,7 @@ export function NumberInput({
   size = 'md',
   disabled = false,
   skeleton = false,
+  glass = false,
   className,
   id,
   'aria-label': ariaLabel,
@@ -73,7 +76,7 @@ export function NumberInput({
   const atMax = max !== undefined && current >= max;
 
   return (
-    <div className={cx(styles.group, styles[size], disabled && styles.disabled, className)}>
+    <div className={cx(styles.group, styles[size], glass && styles.glass, disabled && styles.disabled, className)}>
       <button
         type="button"
         aria-label="Decrease"

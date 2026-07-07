@@ -19,6 +19,8 @@ export interface PillProps extends Omit<ComponentProps<'span'>, 'children'> {
   size?: 'sm' | 'md';
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
   children?: ReactNode;
 }
 
@@ -27,6 +29,7 @@ export function Pill({
   variant = 'soft',
   size = 'md',
   skeleton = false,
+  glass = false,
   className,
   children,
   ...rest
@@ -42,7 +45,7 @@ export function Pill({
     );
   }
   return (
-    <span className={cx(styles.pill, styles[variant], styles[tone], styles[size], className)} {...rest}>
+    <span className={cx(styles.pill, styles[variant], styles[tone], styles[size], glass && styles.glass, className)} {...rest}>
       {children}
     </span>
   );

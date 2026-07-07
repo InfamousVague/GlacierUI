@@ -17,8 +17,9 @@ export const radioSpec: ComponentSpec = {
     { name: 'checked', type: 'boolean', description: 'Controlled selected state; when set, the dot pop is animated.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Dims the control and blocks interaction.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
   ],
-  defaults: { disabled: false, skeleton: false },
+  defaults: { disabled: false, skeleton: false, glass: false },
   dimensions: {
     diameter: '1.375rem',
     dotSize: '0.5rem',

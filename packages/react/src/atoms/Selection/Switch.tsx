@@ -15,6 +15,8 @@ export interface SwitchProps
   size?: 'sm' | 'md';
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
 }
 
 /** Thumb travel in px per size: track width - thumb - both padding edges. */
@@ -32,6 +34,7 @@ export function Switch({
   disabled,
   size = 'md',
   skeleton = false,
+  glass = false,
   className,
   ...rest
 }: SwitchProps) {
@@ -64,7 +67,7 @@ export function Switch({
         {...rest}
       />
       <span
-        className={cx(styles.track, size === 'sm' && styles.trackSm)}
+        className={cx(styles.track, size === 'sm' && styles.trackSm, glass && styles.glass)}
         data-checked={isChecked || undefined}
         aria-hidden="true"
       >

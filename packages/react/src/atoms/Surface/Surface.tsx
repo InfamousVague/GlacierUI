@@ -10,16 +10,18 @@ export interface SurfaceProps extends ComponentProps<'div'> {
   level?: SurfaceLevel;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
 }
 
-export function Surface({ level = 1, skeleton = false, className, children, ...rest }: SurfaceProps) {
+export function Surface({ level = 1, skeleton = false, glass = false, className, children, ...rest }: SurfaceProps) {
   if (skeleton) {
     return (
       <Skeleton width="100%" height="6rem" radius="var(--perfect-radius-lg)" className={className} />
     );
   }
   return (
-    <div className={cx(styles.surface, className)} data-level={level} {...rest}>
+    <div className={cx(styles.surface, glass && styles.glass, className)} data-level={level} {...rest}>
       {children}
     </div>
   );

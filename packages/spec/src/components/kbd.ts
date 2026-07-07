@@ -11,9 +11,10 @@ export const kbdSpec: ComponentSpec = {
   anatomy: [{ name: 'label', description: 'The key text or shortcut, kept to one line.', required: true }],
   props: [
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
     { name: 'children', type: 'node', required: true, description: 'Key label or shortcut text.' },
   ],
-  defaults: { skeleton: false },
+  defaults: { skeleton: false, glass: false },
   dimensions: {
     radius: token('radius-sm'),
     border: token('hairline'),

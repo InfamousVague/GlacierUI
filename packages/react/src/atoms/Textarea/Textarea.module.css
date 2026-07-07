@@ -58,3 +58,12 @@
   padding-inline: var(--perfect-space-5);
   font-size: var(--perfect-font-size-md);
 }
+
+.glass {
+  background: var(--perfect-glass-regular);
+  border-color: var(--perfect-glass-border);
+  color: var(--perfect-text);
+  backdrop-filter: blur(var(--perfect-blur-sm)) saturate(var(--perfect-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--perfect-blur-sm)) saturate(var(--perfect-glass-saturate));
+  box-shadow: inset 0 1px 0 var(--perfect-glass-highlight);
+}

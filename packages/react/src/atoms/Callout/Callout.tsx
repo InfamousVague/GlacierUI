@@ -13,6 +13,8 @@ export interface CalloutProps extends Omit<ComponentProps<'div'>, 'title'> {
   icon?: ReactNode;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
   children?: ReactNode;
 }
 
@@ -21,6 +23,7 @@ export function Callout({
   title,
   icon,
   skeleton = false,
+  glass = false,
   className,
   children,
   ...rest
@@ -39,7 +42,7 @@ export function Callout({
   return (
     <div
       role={alert ? 'alert' : 'note'}
-      className={cx(styles.callout, styles[tone], className)}
+      className={cx(styles.callout, styles[tone], glass && styles.glass, className)}
       {...rest}
     >
       {icon != null && <span className={styles.icon}>{icon}</span>}

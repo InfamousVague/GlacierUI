@@ -135,3 +135,19 @@
 .lg .icon {
   left: var(--perfect-space-4);
 }
+
+/* Frosted glass material on the field surface; the input's solid background
+   is dropped so the wrapper's material shows through. */
+.glass {
+  background: var(--perfect-glass-regular);
+  border-color: var(--perfect-glass-border);
+  color: var(--perfect-text);
+  backdrop-filter: blur(var(--perfect-blur-sm)) saturate(var(--perfect-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--perfect-blur-sm)) saturate(var(--perfect-glass-saturate));
+  box-shadow: inset 0 1px 0 var(--perfect-glass-highlight);
+}
+
+.glass .input {
+  background: transparent;
+  border-color: var(--perfect-glass-border);
+}

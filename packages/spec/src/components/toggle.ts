@@ -16,6 +16,7 @@ export const toggleSpec: ComponentSpec = {
     { name: 'size', type: 'enum', values: controlSizes, default: 'md', description: 'Control size step.' },
     { name: 'iconOnly', type: 'boolean', default: false, description: 'Square icon-only layout, like IconButton.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
     { name: 'disabled', type: 'boolean', description: 'Dims the toggle and blocks interaction.' },
     { name: 'aria-label', type: 'string', description: 'Required when the content is icon-only.' },
     { name: 'children', type: 'node', description: 'Toggle label or icon content.' },
@@ -25,7 +26,7 @@ export const toggleSpec: ComponentSpec = {
     controlSize('md', { paddingInline: token('space-4') }),
     controlSize('lg', { paddingInline: token('space-5') }),
   ],
-  defaults: { defaultPressed: false, size: 'md', iconOnly: false, skeleton: false },
+  defaults: { defaultPressed: false, size: 'md', iconOnly: false, skeleton: false, glass: false },
   dimensions: { radius: token('control-radius'), gap: token('space-2'), border: token('hairline') },
   states: [
     { name: 'hover', description: 'Unpressed lifts to the hover background and full-strength text.', tokens: { background: token('hover'), text: token('text') } },

@@ -19,6 +19,7 @@ export const counterBadgeSpec: ComponentSpec = {
     { name: 'dot', type: 'boolean', default: false, description: 'Renders a small dot with no number, for presence or attention.' },
     { name: 'size', type: 'enum', values: compactSizes, default: 'md', description: 'Compact size step.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
     { name: 'aria-label', type: 'string', description: 'Overrides the status label; defaults to `${count} items`, or `New activity` in dot mode.' },
   ],
   tones: [
@@ -31,7 +32,7 @@ export const counterBadgeSpec: ComponentSpec = {
     { name: 'sm', height: '1rem', paddingInline: token('space-1'), fontSize: token('font-size-xs'), diameter: '0.5rem' },
     { name: 'md', height: '1.25rem', paddingInline: token('space-2'), fontSize: token('font-size-xs'), diameter: '0.625rem' },
   ],
-  defaults: { max: 99, tone: 'danger', dot: false, size: 'md', skeleton: false },
+  defaults: { max: 99, tone: 'danger', dot: false, size: 'md', skeleton: false, glass: false },
   dimensions: { radius: token('radius-full') },
   tokens: [
     'radius-full', 'font-sans', 'font-weight-semibold', 'space-1', 'space-2', 'font-size-xs',

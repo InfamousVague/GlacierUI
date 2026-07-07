@@ -20,6 +20,7 @@ export const surfaceSpec: ComponentSpec = {
       description: '0 = app background, 1 = surface, 2 = raised, sunken = inset well.',
     },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
     { name: 'children', type: 'node', description: 'Surface content.' },
   ],
   variants: [
@@ -28,7 +29,7 @@ export const surfaceSpec: ComponentSpec = {
     { name: '2', description: 'Raised surface for layered content.', tokens: { background: token('surface-raised') } },
     { name: 'sunken', description: 'Inset well recessed below the surface.', tokens: { background: token('surface-sunken') } },
   ],
-  defaults: { level: '1', skeleton: false },
+  defaults: { level: '1', skeleton: false, glass: false },
   tokens: ['font-sans', 'text', 'bg', 'surface', 'surface-raised', 'surface-sunken', 'radius-lg'],
   a11y: {
     focusable: false,

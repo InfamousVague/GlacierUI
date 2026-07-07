@@ -45,3 +45,13 @@
 .outline.warning { border-color: var(--perfect-warning-border); color: var(--perfect-warning-text); }
 .outline.danger { border-color: var(--perfect-danger-border); color: var(--perfect-danger-text); }
 .outline.info { border-color: var(--perfect-info-border); color: var(--perfect-info-text); }
+
+/* glass — overrides the variant/tone background */
+.glass {
+  background: var(--perfect-glass-regular);
+  border-color: var(--perfect-glass-border);
+  color: var(--perfect-text);
+  backdrop-filter: blur(var(--perfect-blur-sm)) saturate(var(--perfect-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--perfect-blur-sm)) saturate(var(--perfect-glass-saturate));
+  box-shadow: inset 0 1px 0 var(--perfect-glass-highlight);
+}

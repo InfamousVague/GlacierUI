@@ -23,6 +23,7 @@ export const numberInputSpec: ComponentSpec = {
     { name: 'size', type: 'enum', values: controlSizes, default: 'md', description: 'Control size step.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Dims the group and blocks interaction.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
     { name: 'aria-label', type: 'string', description: 'Accessible label for the number input.' },
   ],
   sizes: [
@@ -30,7 +31,7 @@ export const numberInputSpec: ComponentSpec = {
     controlSize('md', { paddingInline: token('space-3') }),
     controlSize('lg', { paddingInline: token('space-4') }),
   ],
-  defaults: { defaultValue: 0, step: 1, size: 'md', disabled: false, skeleton: false },
+  defaults: { defaultValue: 0, step: 1, size: 'md', disabled: false, skeleton: false, glass: false },
   dimensions: { radius: token('radius-lg'), border: token('hairline') },
   states: [
     { name: 'hover', description: 'Border strengthens to border-strong when not focused or disabled.', tokens: { border: token('border-strong') } },

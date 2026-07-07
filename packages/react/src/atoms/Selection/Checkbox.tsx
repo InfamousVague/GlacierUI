@@ -14,6 +14,8 @@ export interface CheckboxProps
   onCheckedChange?: (checked: boolean) => void;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
 }
 
 export function Checkbox({
@@ -23,6 +25,7 @@ export function Checkbox({
   onCheckedChange,
   disabled,
   skeleton = false,
+  glass = false,
   className,
   ...rest
 }: CheckboxProps) {
@@ -49,7 +52,11 @@ export function Checkbox({
         }}
         {...rest}
       />
-      <span className={styles.box} data-checked={isChecked || undefined} aria-hidden="true">
+      <span
+        className={cx(styles.box, glass && styles.glass)}
+        data-checked={isChecked || undefined}
+        aria-hidden="true"
+      >
         <svg viewBox="0 0 12 12" fill="none">
           <motion.path
             d="M2.5 6.5 L5 8.75 L9.5 3.5"

@@ -16,6 +16,7 @@ export const pillSpec: ComponentSpec = {
     { name: 'variant', type: 'enum', values: pillVariants, default: 'soft', description: 'Fill treatment.' },
     { name: 'size', type: 'enum', values: compactSizes, default: 'md', description: 'Compact size step.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
     { name: 'children', type: 'node', required: true, description: 'Pill label.' },
   ],
   variants: [
@@ -28,7 +29,7 @@ export const pillSpec: ComponentSpec = {
     { name: 'sm', height: '1.375rem', paddingInline: token('space-2'), fontSize: token('font-size-xs') },
     { name: 'md', height: '1.75rem', paddingInline: token('space-3'), fontSize: token('font-size-sm') },
   ],
-  defaults: { tone: 'neutral', variant: 'soft', size: 'md', skeleton: false },
+  defaults: { tone: 'neutral', variant: 'soft', size: 'md', skeleton: false, glass: false },
   dimensions: { radius: token('radius-full'), gap: token('space-1'), border: token('hairline') },
   tokens: [
     'space-1', 'space-2', 'space-3', 'radius-full', 'hairline', 'font-family-sans', 'font-weight-medium',

@@ -24,12 +24,13 @@ export const switchSpec: ComponentSpec = {
     { name: 'disabled', type: 'boolean', default: false, description: 'Dims the switch and blocks interaction.' },
     { name: 'size', type: 'enum', values: switchSizes, default: 'md', description: 'Compact size step.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
   ],
   sizes: [
     { name: 'sm', diameter: '1rem', height: '1.25rem' },
     { name: 'md', diameter: '1.375rem', height: '1.625rem' },
   ],
-  defaults: { defaultChecked: false, disabled: false, size: 'md', skeleton: false },
+  defaults: { defaultChecked: false, disabled: false, size: 'md', skeleton: false, glass: false },
   dimensions: {
     radius: token('radius-full'),
     gap: token('space-2'),

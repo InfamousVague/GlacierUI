@@ -14,6 +14,7 @@ export const textareaSpec: ComponentSpec = {
   props: [
     { name: 'size', type: 'enum', values: controlSizes, default: 'md', description: 'Size step; sets inline padding and font size.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Dims the field and blocks input (native textarea attribute).' },
     { name: 'id', type: 'string', description: 'Field id; falls back to the id from the surrounding Field.' },
     { name: 'className', type: 'string', description: 'Extra class names merged onto the textarea.' },
@@ -23,7 +24,7 @@ export const textareaSpec: ComponentSpec = {
     { name: 'md', paddingBlock: token('space-3'), paddingInline: token('space-4'), fontSize: token('font-size-sm') },
     { name: 'lg', paddingBlock: token('space-3'), paddingInline: token('space-5'), fontSize: token('font-size-md') },
   ],
-  defaults: { size: 'md', skeleton: false, disabled: false },
+  defaults: { size: 'md', skeleton: false, glass: false, disabled: false },
   dimensions: { radius: token('radius-lg'), border: token('hairline'), minHeight: '5rem' },
   states: [
     { name: 'hover', description: 'Border strengthens when not focused or disabled.', tokens: { border: token('border-strong') } },

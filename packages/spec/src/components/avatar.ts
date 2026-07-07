@@ -26,6 +26,7 @@ export const avatarSpec: ComponentSpec = {
     { name: 'size', type: 'enum', values: avatarSizes, default: 'md', description: 'Size step.' },
     { name: 'shape', type: 'enum', values: avatarShapes, default: 'circle', description: 'Circle or rounded-square.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
   ],
   sizes: [
     { name: 'sm', diameter: '1.75rem', fontSize: token('font-size-xs') },
@@ -33,7 +34,7 @@ export const avatarSpec: ComponentSpec = {
     { name: 'lg', diameter: '3rem', fontSize: token('font-size-md') },
     { name: 'xl', diameter: '4rem', fontSize: token('font-size-lg') },
   ],
-  defaults: { size: 'md', shape: 'circle', skeleton: false },
+  defaults: { size: 'md', shape: 'circle', skeleton: false, glass: false },
   dimensions: { radius: token('radius-full') },
   states: [
     { name: 'image', description: 'src present and not errored; renders the img.' },

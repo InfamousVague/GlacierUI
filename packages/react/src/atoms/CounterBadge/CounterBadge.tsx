@@ -17,6 +17,8 @@ export interface CounterBadgeProps extends Omit<ComponentProps<'span'>, 'childre
   size?: 'sm' | 'md';
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material instead of a solid surface. */
+  glass?: boolean;
   'aria-label'?: string;
 }
 
@@ -32,6 +34,7 @@ export function CounterBadge({
   dot = false,
   size = 'md',
   skeleton = false,
+  glass = false,
   className,
   'aria-label': ariaLabel,
   ...rest
@@ -45,7 +48,7 @@ export function CounterBadge({
       <span
         role="status"
         aria-label={ariaLabel ?? 'New activity'}
-        className={cx(styles.badge, styles.dot, styles[tone], styles[size], className)}
+        className={cx(styles.badge, styles.dot, styles[tone], styles[size], glass && styles.glass, className)}
         {...rest}
       />
     );
@@ -59,7 +62,7 @@ export function CounterBadge({
     <span
       role="status"
       aria-label={ariaLabel ?? `${count} items`}
-      className={cx(styles.badge, styles[tone], styles[size], className)}
+      className={cx(styles.badge, styles[tone], styles[size], glass && styles.glass, className)}
       {...rest}
     >
       <span aria-hidden="true">{label}</span>
