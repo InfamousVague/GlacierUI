@@ -1,5 +1,5 @@
 import { accentOptions } from '@perfect/tokens';
-import { AppShell, Button, Container, Row, Spacer, Stack } from '@perfect/react';
+import { AppShell, Button, Container, Row, Sidebar, SidebarItem, SidebarSection, Spacer } from '@perfect/react';
 import { useEffect, useState } from 'react';
 import { DEFAULT_PREFERENCES, PreferencesModal, type Preferences } from './PreferencesModal.tsx';
 import { OverviewPage } from './pages/OverviewPage.tsx';
@@ -148,32 +148,33 @@ export function App() {
   }, [preferences]);
 
   const sidebar = (
-    <Stack as="nav" padding={4} gap={5}>
-      <h1 className="brand">
-        Perfect
-        <small>design system</small>
-      </h1>
+    <Sidebar
+      header={
+        <h1 className="brand">
+          Perfect
+          <small>design system</small>
+        </h1>
+      }
+    >
       {GROUPS.map((group) => (
-        <Stack key={group} gap={1} aria-label={group}>
-          <div className="navGroupTitle">{group}</div>
+        <SidebarSection key={group} title={group}>
           {(Object.entries(PAGES) as Array<[PageId, (typeof PAGES)[PageId]]>)
             .filter(([, p]) => p.group === group)
             .map(([id, p]) => (
-              <button
+              <SidebarItem
                 key={id}
-                className="navItem"
-                data-active={page === id || undefined}
+                active={page === id}
                 onClick={() => {
                   window.location.hash = `#/${id}`;
                   setPage(id);
                 }}
               >
                 {p.title}
-              </button>
+              </SidebarItem>
             ))}
-        </Stack>
+        </SidebarSection>
       ))}
-    </Stack>
+    </Sidebar>
   );
 
   const header = (
