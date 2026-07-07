@@ -1,0 +1,37 @@
+.meter {
+  display: flex;
+  align-items: center;
+  gap: var(--perfect-space-1);
+  width: 100%;
+}
+
+.segment {
+  flex: 1;
+  border-radius: var(--perfect-radius-full);
+  background: var(--perfect-segment-track);
+  transition: background-color var(--perfect-duration-normal) var(--perfect-ease-out);
+}
+
+.sm .segment {
+  height: 0.25rem;
+}
+
+.md .segment {
+  height: 0.375rem;
+}
+
+.segment[data-filled] {
+  background: var(--perfect-accent-solid);
+}
+
+.danger .segment[data-filled] {
+  background: var(--perfect-danger-solid);
+}
+
+.warning .segment[data-filled] {
+  background: var(--perfect-warning-solid);
+}
+
+.success .segment[data-filled] {
+  background: var(--perfect-success-solid);
+}
