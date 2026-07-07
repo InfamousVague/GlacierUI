@@ -8,6 +8,10 @@
   font-family: var(--perfect-font-sans);
   font-weight: var(--perfect-font-weight-medium);
   line-height: 1;
+  /* trim the font's leading so the label sits on its true optical center
+     rather than a hair high; a no-op where text-box is unsupported */
+  text-box-trim: trim-both;
+  text-box-edge: cap alphabetic;
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
