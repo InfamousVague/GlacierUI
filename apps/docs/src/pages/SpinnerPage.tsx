@@ -38,13 +38,21 @@ export function SpinnerPage() {
         description="subtle is the default. accent uses the accent ramp; inherit takes the surrounding text color, which is how Button tints it."
         code={`<Spinner tone="subtle" />
 <Spinner tone="accent" />
-<Text tone="danger"><Spinner tone="inherit" size="sm" /> Retrying</Text>`}
+{/* a flex group centers the spinner with the label */}
+<Text tone="danger" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+  <Spinner tone="inherit" size="sm" /> Retrying
+</Text>`}
       >
         <Row gap={4}>
           <Spinner tone="subtle" aria-label="Loading" />
           <Spinner tone="accent" aria-label="Loading" />
-          <Text as="span" tone="danger">
-            <Spinner tone="inherit" size="sm" aria-label="" /> Retrying
+          <Text
+            as="span"
+            tone="danger"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--perfect-space-2)' }}
+          >
+            <Spinner tone="inherit" size="sm" aria-label="" />
+            Retrying
           </Text>
         </Row>
       </Example>
