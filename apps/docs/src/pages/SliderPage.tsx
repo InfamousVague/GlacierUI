@@ -1,0 +1,131 @@
+import { Field, Slider, Text } from '@perfect/react';
+import { useState } from 'react';
+import { Example, PropsTable } from '../docs-ui.tsx';
+
+export function SliderPage() {
+  const [volume, setVolume] = useState(40);
+  const [scale, setScale] = useState(1);
+
+  return (
+    <>
+      <h1>Slider</h1>
+      <p className="lede">
+        A styled native range input with a filled leading track and an iOS-style thumb. The
+        Preferences dialog uses it for corner rounding.
+      </p>
+
+      <h2>Examples</h2>
+
+      <Example
+        title="Basic"
+        description="A range from min to max. The filled track follows the value."
+        code={`import { Slider } from '@perfect/react';
+
+<Slider aria-label="Brightness" defaultValue={60} />`}
+      >
+        <div style={{ width: '18rem' }}>
+          <Slider aria-label="Brightness" defaultValue={60} />
+        </div>
+      </Example>
+
+      <Example
+        title="Controlled with a value readout"
+        description="Drive it with state through value and onValueChange. Use mono Text for the readout so digits do not shift."
+        code={`const [volume, setVolume] = useState(40);
+
+<Slider aria-label="Volume" value={volume} onValueChange={setVolume} />
+<Text as="span" size="sm" tone="muted" mono>{volume}%</Text>`}
+      >
+        <div style={{ width: '18rem' }}>
+          <Slider aria-label="Volume" value={volume} onValueChange={setVolume} />
+        </div>
+        <Text as="span" size="sm" tone="muted" mono>
+          {volume}%
+        </Text>
+      </Example>
+
+      <Example
+        title="Steps and bounds"
+        description="min, max, and step map straight to the native attributes. Arrow keys nudge by one step."
+        code={`const [scale, setScale] = useState(1);
+
+<Slider aria-label="Radius scale" min={0} max={2} step={0.05} value={scale} onValueChange={setScale} />
+<Text as="span" size="sm" mono>{scale.toFixed(2)}x</Text>`}
+      >
+        <div style={{ width: '18rem' }}>
+          <Slider aria-label="Radius scale" min={0} max={2} step={0.05} value={scale} onValueChange={setScale} />
+        </div>
+        <Text as="span" size="sm" mono>
+          {scale.toFixed(2)}x
+        </Text>
+      </Example>
+
+      <Example
+        title="In a Field"
+        description="Inside a Field the slider picks up the label and hint wiring."
+        code={`<Field label="Animation speed" hint="Applies to every kit transition.">
+  <Slider min={0} max={2} step={0.1} defaultValue={1} />
+</Field>`}
+      >
+        <div style={{ width: '18rem' }}>
+          <Field label="Animation speed" hint="Applies to every kit transition.">
+            <Slider min={0} max={2} step={0.1} defaultValue={1} />
+          </Field>
+        </div>
+      </Example>
+
+      <Example
+        title="Disabled"
+        code={`<Slider aria-label="Locked" defaultValue={30} disabled />`}
+      >
+        <div style={{ width: '18rem' }}>
+          <Slider aria-label="Locked" defaultValue={30} disabled />
+        </div>
+      </Example>
+
+      <Example
+        title="Skeleton"
+        description="Set skeleton while the backing value loads. The placeholder is the full-width track shape, so the control does not shift when the real slider arrives."
+        code={`<Slider skeleton />
+<Slider aria-label="Brightness" defaultValue={60} />`}
+      >
+        <div className="stack" style={{ width: '18rem' }}>
+          <Slider skeleton />
+          <Slider aria-label="Brightness" defaultValue={60} />
+        </div>
+      </Example>
+
+      <h2>Props</h2>
+      <PropsTable
+        props={[
+          { name: 'value', type: 'number', description: 'Controlled value.' },
+          { name: 'defaultValue', type: 'number', default: 'min', description: 'Initial value for uncontrolled usage.' },
+          { name: 'min', type: 'number', default: '0', description: 'Lower bound.' },
+          { name: 'max', type: 'number', default: '100', description: 'Upper bound.' },
+          { name: 'step', type: 'number', default: '1', description: 'Increment for drags and arrow keys.' },
+          { name: 'onValueChange', type: '(value: number) => void', description: 'Called with the numeric value on every change.' },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: "Renders a placeholder with the component's exact geometry." },
+          { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the control.' },
+          { name: 'aria-label', type: 'string', description: 'Accessible name. Not needed inside a Field with a label.' },
+        ]}
+      />
+
+      <h2>Accessibility</h2>
+      <ul>
+        <li>
+          Renders a native <code>input type="range"</code>, so it exposes the slider role, value,
+          and bounds without extra wiring.
+        </li>
+        <li>Arrow keys nudge by step; Home and End jump to the bounds; Page Up and Page Down take larger steps.</li>
+        <li>Inside a Field the input inherits the label and hint ids.</li>
+      </ul>
+
+      <h2>Usage</h2>
+      <ul>
+        <li>Show the current value next to the slider, in mono Text, whenever precision matters.</li>
+        <li>Use a Select or number input instead when exact entry is the common case.</li>
+        <li>Keep ranges short; a 0 to 2 scale with 0.05 steps beats a 0 to 200 scale with unit steps.</li>
+      </ul>
+    </>
+  );
+}
