@@ -129,19 +129,16 @@ function BoxBlueprint({ size, dimensions }: BlueprintProps) {
         </>
       )}
 
-      {/* radius callout at the top-right corner */}
+      {/* radius: an arc traced on the top-right corner, labelled above it */}
       {radius && (
         <>
-          <path d={`M ${BX + BW - rr} ${BY} A ${rr} ${rr} 0 0 1 ${BX + BW} ${BY + rr}`} fill="none" stroke={C.line} strokeWidth={1.5} />
-          <line
-            x1={BX + BW - rr * 0.3}
-            y1={BY + rr * 0.3}
-            x2={BX + BW + 14}
-            y2={BY - 12}
+          <path
+            d={`M ${BX + BW - rr} ${BY} A ${rr} ${rr} 0 0 1 ${BX + BW} ${BY + rr}`}
+            fill="none"
             stroke={C.line}
-            strokeWidth={1}
+            strokeWidth={1.5}
           />
-          <text x={392} y={BY - 14} textAnchor="end" className="bpLabel">
+          <text x={392} y={BY - 12} textAnchor="end" className="bpLabel">
             radius: {radius}
           </text>
         </>
@@ -162,8 +159,19 @@ function Defs() {
       <pattern id="bpGrid" width="16" height="16" patternUnits="userSpaceOnUse">
         <circle cx={1} cy={1} r={0.75} fill={C.grid} />
       </pattern>
-      <marker id="bpArrow" markerWidth="7" markerHeight="7" refX="3.5" refY="3.5" orient="auto">
-        <path d="M1 1 L6 3.5 L1 6" fill="none" stroke={C.line} strokeWidth={1} />
+      {/* auto-start-reverse flips the start marker so both arrowheads point
+          outward toward the witness lines; refX sits at the tip so it lands on
+          the line endpoint. */}
+      <marker
+        id="bpArrow"
+        markerWidth="9"
+        markerHeight="9"
+        refX="7"
+        refY="4"
+        orient="auto-start-reverse"
+        markerUnits="userSpaceOnUse"
+      >
+        <path d="M0.5 1 L7 4 L0.5 7 Z" fill={C.line} />
       </marker>
     </defs>
   );
