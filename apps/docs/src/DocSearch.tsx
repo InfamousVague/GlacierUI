@@ -116,6 +116,7 @@ export function DocSearch({ items, onSelect }: DocSearchProps) {
   return (
     <div className="docSearch" ref={wrapRef}>
       <SearchField
+        glass
         value={query}
         onValueChange={(value) => {
           setQuery(value);
