@@ -210,6 +210,53 @@ code {
   corner-shape: superellipse(4);
 }
 
+/* spec catalog outline: a grouped, scannable index of chips */
+.specNavHeading {
+  font-size: var(--perfect-font-size-xs);
+  font-weight: var(--perfect-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--perfect-text-subtle);
+  margin-bottom: var(--perfect-space-2);
+}
+
+.specNavHeading span {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.6;
+}
+
+.specChip {
+  padding: var(--perfect-space-1) var(--perfect-space-3);
+  border: var(--perfect-hairline) solid var(--perfect-border);
+  border-radius: var(--perfect-radius-full);
+  background: var(--perfect-surface);
+  color: var(--perfect-text-muted);
+  font: inherit;
+  font-size: var(--perfect-font-size-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--perfect-duration-fast) var(--perfect-ease-out),
+    color var(--perfect-duration-fast) var(--perfect-ease-out),
+    border-color var(--perfect-duration-fast) var(--perfect-ease-out);
+}
+
+.specChip:hover {
+  border-color: var(--perfect-border-strong);
+  color: var(--perfect-text);
+}
+
+.specChip[data-active] {
+  background: var(--perfect-accent-soft);
+  border-color: var(--perfect-accent-border);
+  color: var(--perfect-accent-text);
+  font-weight: var(--perfect-font-weight-medium);
+}
+
+.specChip:focus-visible {
+  outline: 2px solid var(--perfect-focus-ring);
+  outline-offset: 2px;
+}
+
 .stepHead {
   display: flex;
   flex-direction: column;

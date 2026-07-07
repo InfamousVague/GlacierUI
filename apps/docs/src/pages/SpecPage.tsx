@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { SPEC_VERSION, cssValue, specs, type ComponentSpec, type Measure, type SizeSpec } from '@perfect/spec';
-import { Pill, Row, Select, Stack } from '@perfect/react';
+import { Pill, Row, Stack } from '@perfect/react';
 import { CodeBlock } from '../docs-ui.tsx';
 import { Blueprint } from '../Blueprint.tsx';
 
@@ -205,6 +205,49 @@ function SpecView({ spec }: { spec: ComponentSpec }) {
   );
 }
 
+const CATEGORY_ORDER = ['atom', 'molecule', 'organism', 'structure', 'layout'] as const;
+const CATEGORY_LABEL: Record<string, string> = {
+  atom: 'Atoms',
+  molecule: 'Molecules',
+  organism: 'Organisms',
+  structure: 'Structures',
+  layout: 'Layout',
+};
+
+// A grouped outline of every spec, so the whole catalog is scannable at a glance
+// and one tap jumps to a component.
+function SpecNav({ activeId, onSelect }: { activeId: string; onSelect: (id: string) => void }) {
+  return (
+    <Stack gap={4} aria-label="Spec catalog" as="nav">
+      {CATEGORY_ORDER.map((category) => {
+        const group = specs.filter((s) => s.category === category);
+        if (group.length === 0) return null;
+        return (
+          <div key={category}>
+            <div className="specNavHeading">
+              {CATEGORY_LABEL[category]} <span>{group.length}</span>
+            </div>
+            <Row gap={2} wrap>
+              {group.map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  className="specChip"
+                  data-active={s.id === activeId || undefined}
+                  aria-pressed={s.id === activeId}
+                  onClick={() => onSelect(s.id)}
+                >
+                  {s.name}
+                </button>
+              ))}
+            </Row>
+          </div>
+        );
+      })}
+    </Stack>
+  );
+}
+
 export function SpecPage() {
   const [id, setId] = useState(specs[0]!.id);
   const spec = specs.find((s) => s.id === id) ?? specs[0]!;
@@ -246,13 +289,8 @@ export function SpecPage() {
       </p>
 
       <h2>Browse a spec</h2>
-      <Stack gap={5}>
-        <Select
-          aria-label="Component"
-          value={id}
-          onValueChange={setId}
-          options={specs.map((s) => ({ value: s.id, label: s.name }))}
-        />
+      <Stack gap={6}>
+        <SpecNav activeId={id} onSelect={setId} />
         <SpecView spec={spec} />
       </Stack>
     </>
