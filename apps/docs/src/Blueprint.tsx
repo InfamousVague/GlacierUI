@@ -12,6 +12,8 @@ interface BlueprintProps {
   size: SizeSpec;
   /** Size-independent measurements (radius, border, gap) from spec.dimensions. */
   dimensions?: Record<string, Measure | undefined>;
+  /** Anatomy slot names, so the box can show leading/trailing icon slots. */
+  slots?: readonly string[];
 }
 
 // A measure for a label: "$space-4" -> "space-4", a raw value stays as-is.
@@ -89,7 +91,7 @@ function CircleBlueprint({ size }: { size: SizeSpec }) {
 }
 
 /** Box blueprint for padded rounded atoms (button, input, pill, callout). */
-function BoxBlueprint({ size, dimensions }: BlueprintProps) {
+function BoxBlueprint({ size, dimensions, slots }: BlueprintProps) {
   // schematic geometry (not to scale; labels carry the exact values)
   const BX = 118;
   const BW = 176;
@@ -117,6 +119,20 @@ function BoxBlueprint({ size, dimensions }: BlueprintProps) {
       {/* the content box (inside the padding) */}
       {(pIn || pBl) > 0 && (
         <rect x={BX + pIn} y={BY + pBl} width={BW - pIn * 2} height={BH - pBl * 2} rx={Math.max(rr - 6, 2)} fill="none" stroke={C.content} strokeWidth={1} strokeDasharray="2 2" />
+      )}
+
+      {/* optional leading / trailing icon slots, drawn where the spec declares them */}
+      {slots?.includes('leadingIcon') && (
+        <>
+          <rect x={BX + 12} y={BY + BH / 2 - 8} width={16} height={16} rx={4} fill="none" stroke={C.line} strokeWidth={1.25} strokeDasharray="2 2" />
+          <circle cx={BX + 20} cy={BY + BH / 2} r={2.5} fill={C.line} />
+        </>
+      )}
+      {slots?.includes('trailingIcon') && (
+        <>
+          <rect x={BX + BW - 28} y={BY + BH / 2 - 8} width={16} height={16} rx={4} fill="none" stroke={C.line} strokeWidth={1.25} strokeDasharray="2 2" />
+          <circle cx={BX + BW - 20} cy={BY + BH / 2} r={2.5} fill={C.line} />
+        </>
       )}
 
       {/* height on the left */}
@@ -207,10 +223,10 @@ function Defs() {
   );
 }
 
-export function Blueprint({ size, dimensions }: BlueprintProps) {
+export function Blueprint({ size, dimensions, slots }: BlueprintProps) {
   if (size.diameter && !size.height) return withFrame(<CircleBlueprint size={size} />);
   if (size.thickness && !size.height && !size.diameter) return withFrame(<BarBlueprint size={size} dimensions={dimensions} />);
-  return withFrame(<BoxBlueprint size={size} dimensions={dimensions} />);
+  return withFrame(<BoxBlueprint size={size} dimensions={dimensions} slots={slots} />);
 }
 
 const withFrame = (svg: ReactElement) => <div className="bpFrame">{svg}</div>;
@@ -252,7 +268,7 @@ export function ComponentBlueprint({ specId }: { specId: string }) {
           )}
         </div>
       )}
-      <Blueprint size={active} dimensions={spec.dimensions} />
+      <Blueprint size={active} dimensions={spec.dimensions} slots={spec.anatomy?.map((a) => a.name)} />
     </div>
   );
 }
