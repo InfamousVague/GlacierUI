@@ -1,0 +1,31 @@
+{
+  "name": "perfect",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "gen": "npm run gen -w @perfect/tokens",
+    "dev": "npm run dev -w @perfect/docs",
+    "build:docs": "npm run build -w @perfect/docs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:visual": "npm run test:visual -w @perfect/docs"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.0",
+    "@types/node": "^26.1.0",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "axe-core": "^4.10.0",
+    "jsdom": "^26.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}
