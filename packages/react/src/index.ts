@@ -20,6 +20,17 @@ export { Slider, type SliderProps } from './atoms/Slider/Slider.tsx';
 export { Skeleton, type SkeletonProps } from './atoms/Skeleton/Skeleton.tsx';
 export { Toggle, type ToggleProps } from './atoms/Toggle/Toggle.tsx';
 export { Meter, type MeterProps, type MeterTone } from './atoms/Meter/Meter.tsx';
+export { Textarea, type TextareaProps } from './atoms/Textarea/Textarea.tsx';
+export { SearchField, type SearchFieldProps } from './atoms/SearchField/SearchField.tsx';
+export { NumberInput, type NumberInputProps } from './atoms/NumberInput/NumberInput.tsx';
+export { ProgressRing, type ProgressRingProps } from './atoms/ProgressRing/ProgressRing.tsx';
+export { Avatar, type AvatarProps } from './atoms/Avatar/Avatar.tsx';
+export { StatusDot, type StatusDotProps } from './atoms/StatusDot/StatusDot.tsx';
+export { CounterBadge, type CounterBadgeProps } from './atoms/CounterBadge/CounterBadge.tsx';
+export { Callout, type CalloutProps, type CalloutTone } from './atoms/Callout/Callout.tsx';
+export { CodeBlock, type CodeBlockProps } from './atoms/CodeBlock/CodeBlock.tsx';
+export { Sparkline, type SparklineProps } from './atoms/Sparkline/Sparkline.tsx';
+export { SegmentedBar, type SegmentedBarProps } from './atoms/SegmentedBar/SegmentedBar.tsx';
 
 // molecules
 export { Field, type FieldProps } from './molecules/Field/Field.tsx';

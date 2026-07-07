@@ -11,14 +11,25 @@ import { MotionPage } from './pages/MotionPage.tsx';
 import { ButtonPage } from './pages/ButtonPage.tsx';
 import { TextPage } from './pages/TextPage.tsx';
 import { PillPage } from './pages/PillPage.tsx';
+import { CounterBadgePage } from './pages/CounterBadgePage.tsx';
+import { StatusDotPage } from './pages/StatusDotPage.tsx';
+import { AvatarPage } from './pages/AvatarPage.tsx';
 import { DividerPage } from './pages/DividerPage.tsx';
-import { ProgressBarPage } from './pages/ProgressBarPage.tsx';
-import { SpinnerPage } from './pages/SpinnerPage.tsx';
+import { CalloutPage } from './pages/CalloutPage.tsx';
+import { CodeBlockPage } from './pages/CodeBlockPage.tsx';
 import { SelectionPage } from './pages/SelectionPage.tsx';
+import { TextareaPage } from './pages/TextareaPage.tsx';
+import { SearchFieldPage } from './pages/SearchFieldPage.tsx';
+import { NumberInputPage } from './pages/NumberInputPage.tsx';
 import { SkeletonPage } from './pages/SkeletonPage.tsx';
 import { SliderPage } from './pages/SliderPage.tsx';
 import { TogglePage } from './pages/TogglePage.tsx';
 import { MeterPage } from './pages/MeterPage.tsx';
+import { ProgressBarPage } from './pages/ProgressBarPage.tsx';
+import { SpinnerPage } from './pages/SpinnerPage.tsx';
+import { ProgressRingPage } from './pages/ProgressRingPage.tsx';
+import { SparklinePage } from './pages/SparklinePage.tsx';
+import { SegmentedBarPage } from './pages/SegmentedBarPage.tsx';
 import { SurfacesPage } from './pages/SurfacesPage.tsx';
 import { FieldPage } from './pages/FieldPage.tsx';
 import { SelectPage } from './pages/SelectPage.tsx';
@@ -36,14 +47,25 @@ const PAGES = {
   button: { title: 'Button', group: 'Atoms', el: <ButtonPage /> },
   text: { title: 'Text & Headings', group: 'Atoms', el: <TextPage /> },
   pill: { title: 'Pill', group: 'Atoms', el: <PillPage /> },
+  counterbadge: { title: 'Counter Badge', group: 'Atoms', el: <CounterBadgePage /> },
+  statusdot: { title: 'Status Dot', group: 'Atoms', el: <StatusDotPage /> },
+  avatar: { title: 'Avatar', group: 'Atoms', el: <AvatarPage /> },
   divider: { title: 'Divider', group: 'Atoms', el: <DividerPage /> },
-  progress: { title: 'Progress Bar', group: 'Atoms', el: <ProgressBarPage /> },
-  spinner: { title: 'Spinner', group: 'Atoms', el: <SpinnerPage /> },
+  callout: { title: 'Callout', group: 'Atoms', el: <CalloutPage /> },
+  codeblock: { title: 'Code Block', group: 'Atoms', el: <CodeBlockPage /> },
   selection: { title: 'Selection', group: 'Atoms', el: <SelectionPage /> },
-  skeleton: { title: 'Skeleton', group: 'Atoms', el: <SkeletonPage /> },
+  textarea: { title: 'Textarea', group: 'Atoms', el: <TextareaPage /> },
+  searchfield: { title: 'Search Field', group: 'Atoms', el: <SearchFieldPage /> },
+  numberinput: { title: 'Number Input', group: 'Atoms', el: <NumberInputPage /> },
   slider: { title: 'Slider', group: 'Atoms', el: <SliderPage /> },
   toggle: { title: 'Toggle', group: 'Atoms', el: <TogglePage /> },
   meter: { title: 'Meter', group: 'Atoms', el: <MeterPage /> },
+  progress: { title: 'Progress Bar', group: 'Atoms', el: <ProgressBarPage /> },
+  spinner: { title: 'Spinner', group: 'Atoms', el: <SpinnerPage /> },
+  progressring: { title: 'Progress Ring', group: 'Atoms', el: <ProgressRingPage /> },
+  sparkline: { title: 'Sparkline', group: 'Atoms', el: <SparklinePage /> },
+  segmentedbar: { title: 'Segmented Bar', group: 'Atoms', el: <SegmentedBarPage /> },
+  skeleton: { title: 'Skeleton', group: 'Atoms', el: <SkeletonPage /> },
   surfaces: { title: 'Card & Surface', group: 'Atoms', el: <SurfacesPage /> },
   field: { title: 'Field & Input', group: 'Molecules', el: <FieldPage /> },
   select: { title: 'Select', group: 'Molecules', el: <SelectPage /> },
