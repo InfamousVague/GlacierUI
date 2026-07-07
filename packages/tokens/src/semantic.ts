@@ -46,6 +46,10 @@ export const semantic: Record<string, string> = {
   // segmented control
   'segment-track': 'oklch(0.93 0.005 260 / 0.65)',
   'segment-thumb': 'oklch(0.995 0 0)',
+
+  // slider: a bright physical knob that pops on the track in both themes,
+  // kept separate from segment-thumb (which stays a subtle pill behind text)
+  'slider-thumb': 'oklch(0.995 0 0)',
 };
 
 export const themeOverrides: Record<'light' | 'dark', Record<string, string>> = {
@@ -57,6 +61,7 @@ export const themeOverrides: Record<'light' | 'dark', Record<string, string>> = 
     overlay: 'oklch(0.07 0.01 260 / 0.65)',
     'segment-track': 'oklch(0.26 0.008 260 / 0.55)',
     'segment-thumb': 'oklch(0.58 0.014 260)',
+    'slider-thumb': 'oklch(0.92 0.006 260)',
   },
 };
 

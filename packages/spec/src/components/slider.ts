@@ -35,7 +35,7 @@ export const sliderSpec: ComponentSpec = {
     { name: 'disabled', description: 'Halved opacity and not-allowed cursor.' },
   ],
   tokens: [
-    'radius-full', 'accent-solid', 'accent-soft', 'segment-track', 'segment-thumb',
+    'radius-full', 'accent-solid', 'accent-soft', 'segment-track', 'slider-thumb',
     'glass-highlight', 'shadow-2', 'focus-ring', 'duration-fast', 'ease-spring',
   ],
   a11y: {

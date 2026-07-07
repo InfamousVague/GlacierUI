@@ -242,6 +242,7 @@
   --perfect-focus-ring: var(--perfect-accent-8);
   --perfect-segment-track: oklch(0.93 0.005 260 / 0.65);
   --perfect-segment-thumb: oklch(0.995 0 0);
+  --perfect-slider-thumb: oklch(0.995 0 0);
 
   /* Status aliases */
   --perfect-danger-solid: var(--perfect-red-9);
@@ -396,6 +397,7 @@
   --perfect-overlay: oklch(0.07 0.01 260 / 0.65);
   --perfect-segment-track: oklch(0.26 0.008 260 / 0.55);
   --perfect-segment-thumb: oklch(0.58 0.014 260);
+  --perfect-slider-thumb: oklch(0.92 0.006 260);
 
 }
 
@@ -523,6 +525,7 @@
     --perfect-overlay: oklch(0.07 0.01 260 / 0.65);
     --perfect-segment-track: oklch(0.26 0.008 260 / 0.55);
     --perfect-segment-thumb: oklch(0.58 0.014 260);
+    --perfect-slider-thumb: oklch(0.92 0.006 260);
 
   }
 }
