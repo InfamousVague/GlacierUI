@@ -27,3 +27,4 @@ export {
   type SegmentedControlProps,
   type SegmentedOption,
 } from './molecules/Segmented/SegmentedControl.tsx';
+export { Tabs, type TabsProps, type TabItem } from './molecules/Tabs/Tabs.tsx';
