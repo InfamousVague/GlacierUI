@@ -45,6 +45,16 @@ import {
   Textarea,
   Toggle,
   Toolbar,
+  Field,
+  Select,
+  SegmentedControl,
+  Tabs,
+  Modal,
+  Popover,
+  AppShell,
+  Sidebar,
+  SidebarSection,
+  SidebarItem,
 } from '../src/index.ts';
 import type { ReactElement } from 'react';
 
@@ -132,6 +142,31 @@ const RENDER: Record<string, Renderer> = {
   textarea: (o) => <Textarea size={o.size as never} />,
   toggle: (o) => <Toggle size={o.size as never}>Bold</Toggle>,
   toolbar: () => <Toolbar end={<span>Actions</span>}>Title</Toolbar>,
+  // molecules, organisms, and the sidebar structure: required props baked in
+  field: () => (
+    <Field label="Email">
+      <input aria-label="Email" />
+    </Field>
+  ),
+  select: (o) => <Select size={o.size as never} options={[{ value: 'a', label: 'A' }]} />,
+  'segmented-control': (o) => (
+    <SegmentedControl size={o.size as never} value="a" options={[{ value: 'a', label: 'A' }]} />
+  ),
+  tabs: () => <Tabs tabs={[{ value: 'a', label: 'A', content: 'Panel' }]} />,
+  modal: (o) => (
+    <Modal open={false} onClose={() => {}} size={o.size as never}>
+      Body
+    </Modal>
+  ),
+  popover: () => <Popover trigger={<button type="button">Open</button>}>Content</Popover>,
+  'app-shell': () => <AppShell sidebar={<div>Nav</div>}>Body</AppShell>,
+  sidebar: () => (
+    <Sidebar>
+      <SidebarSection title="Main">
+        <SidebarItem>Home</SidebarItem>
+      </SidebarSection>
+    </Sidebar>
+  ),
 };
 
 describe('React renders every spec variant, tone, and size', () => {
