@@ -1,0 +1,24 @@
+.svg {
+  display: block;
+  overflow: visible;
+}
+
+.line {
+  fill: none;
+  stroke: var(--perfect-accent-solid);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.line.success { stroke: var(--perfect-success-solid); }
+.line.warning { stroke: var(--perfect-warning-solid); }
+.line.danger { stroke: var(--perfect-danger-solid); }
+
+.bar {
+  fill: var(--perfect-accent-solid);
+}
+
+.bar.success { fill: var(--perfect-success-solid); }
+.bar.warning { fill: var(--perfect-warning-solid); }
+.bar.danger { fill: var(--perfect-danger-solid); }
