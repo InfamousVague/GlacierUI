@@ -395,7 +395,7 @@
   --perfect-surface-sunken: oklch(0.115 0.008 260);
   --perfect-overlay: oklch(0.07 0.01 260 / 0.65);
   --perfect-segment-track: oklch(0.26 0.008 260 / 0.55);
-  --perfect-segment-thumb: oklch(0.48 0.012 260);
+  --perfect-segment-thumb: oklch(0.58 0.014 260);
 
 }
 
@@ -522,7 +522,7 @@
     --perfect-surface-sunken: oklch(0.115 0.008 260);
     --perfect-overlay: oklch(0.07 0.01 260 / 0.65);
     --perfect-segment-track: oklch(0.26 0.008 260 / 0.55);
-    --perfect-segment-thumb: oklch(0.48 0.012 260);
+    --perfect-segment-thumb: oklch(0.58 0.014 260);
 
   }
 }

@@ -56,7 +56,7 @@ export const themeOverrides: Record<'light' | 'dark', Record<string, string>> = 
     'surface-sunken': 'oklch(0.115 0.008 260)',
     overlay: 'oklch(0.07 0.01 260 / 0.65)',
     'segment-track': 'oklch(0.26 0.008 260 / 0.55)',
-    'segment-thumb': 'oklch(0.48 0.012 260)',
+    'segment-thumb': 'oklch(0.58 0.014 260)',
   },
 };
 
