@@ -59,6 +59,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  /* the trigger sets line-height: 1 to keep the chevron tight; give the value
+     room so overflow: hidden does not clip glyph tops or descenders */
+  line-height: var(--perfect-leading-sm);
+  padding-block: 1px;
 }
 
 .trigger[data-placeholder] .value {
