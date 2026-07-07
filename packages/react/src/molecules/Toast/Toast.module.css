@@ -1,0 +1,111 @@
+.viewport {
+  position: fixed;
+  inset-block-end: var(--perfect-space-6);
+  inset-inline: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  padding-inline: var(--perfect-space-4);
+  pointer-events: none;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: var(--perfect-space-3);
+  max-width: 28rem;
+  border: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  border-radius: var(--perfect-radius-full);
+  padding: var(--perfect-space-3) var(--perfect-space-5);
+  background: var(--perfect-surface-raised);
+  box-shadow: var(--perfect-shadow-4);
+  color: var(--perfect-text);
+  font-family: var(--perfect-font-sans);
+  font-size: var(--perfect-font-size-sm);
+  line-height: var(--perfect-line-height-normal);
+  font-weight: var(--perfect-font-weight-medium);
+  text-align: start;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+}
+
+.message {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.dismiss {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-inline-start: var(--perfect-space-2);
+  padding: 0;
+  border: 0;
+  border-radius: var(--perfect-radius-full);
+  background: transparent;
+  color: currentColor;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.dismiss:hover {
+  opacity: 1;
+}
+
+.dismiss:focus-visible {
+  outline: var(--perfect-hairline) solid currentColor;
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+/* neutral maps to a raised, low-emphasis surface (the default) */
+.neutral {
+  background: var(--perfect-surface-raised);
+  border-color: var(--perfect-border-subtle);
+  color: var(--perfect-text);
+}
+
+.info {
+  background: var(--perfect-info-soft);
+  border-color: var(--perfect-info-border);
+  color: var(--perfect-info-text);
+}
+
+.success {
+  background: var(--perfect-success-soft);
+  border-color: var(--perfect-success-border);
+  color: var(--perfect-success-text);
+}
+
+.warning {
+  background: var(--perfect-warning-soft);
+  border-color: var(--perfect-warning-border);
+  color: var(--perfect-warning-text);
+}
+
+.danger {
+  background: var(--perfect-danger-soft);
+  border-color: var(--perfect-danger-border);
+  color: var(--perfect-danger-text);
+}
+
+/* glass overrides the tone background with the frosted material */
+.glass {
+  background: var(--perfect-glass-regular);
+  border-color: var(--perfect-glass-border);
+  color: var(--perfect-text);
+  backdrop-filter: blur(var(--perfect-blur-sm)) saturate(var(--perfect-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--perfect-blur-sm)) saturate(var(--perfect-glass-saturate));
+  box-shadow:
+    inset 0 1px 0 var(--perfect-glass-highlight),
+    var(--perfect-shadow-4);
+}

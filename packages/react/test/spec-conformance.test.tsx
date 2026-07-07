@@ -13,6 +13,7 @@ import {
 } from '@perfect/spec';
 import {
   Avatar,
+  Banner,
   Button,
   Callout,
   Card,
@@ -20,6 +21,7 @@ import {
   CodeBlock,
   CounterBadge,
   Divider,
+  EmptyState,
   Heading,
   IconButton,
   Input,
@@ -32,19 +34,22 @@ import {
   ProgressBar,
   ProgressRing,
   Radio,
+  RadioCard,
   SearchField,
   SegmentedBar,
   Skeleton,
   Slider,
-  Sparkline,
   Spinner,
   StatusDot,
+  Steps,
   Surface,
   Switch,
   Text,
   Textarea,
+  Toast,
   Toggle,
   Toolbar,
+  Tooltip,
   Field,
   Select,
   SegmentedControl,
@@ -98,6 +103,7 @@ const RENDER: Record<string, Renderer> = {
     </Button>
   ),
   callout: (o) => <Callout tone={o.tone as never}>Note</Callout>,
+  banner: (o) => <Banner tone={o.tone as never}>Heads up</Banner>,
   card: (o) => <Card variant={o.variant as never}>Body</Card>,
   checkbox: () => <Checkbox />,
   'code-block': () => <CodeBlock code="const x = 1;" />,
@@ -123,14 +129,16 @@ const RENDER: Record<string, Renderer> = {
   'progress-bar': (o) => <ProgressBar tone={o.tone as never} size={o.size as never} value={50} />,
   'progress-ring': (o) => <ProgressRing tone={o.tone as never} value={50} />,
   radio: () => <Radio />,
+  'radio-card': () => <RadioCard title="Option" description="A choice" />,
   'search-field': (o) => <SearchField size={o.size as never} />,
   'segmented-bar': (o) => (
     <SegmentedBar size={o.size as never} data={[{ value: 1, tone: o.tone as never }]} />
   ),
   skeleton: (o) => <Skeleton variant={o.variant as never} />,
   slider: () => <Slider value={50} />,
-  sparkline: (o) => <Sparkline variant={o.variant as never} tone={o.tone as never} data={[1, 2, 3]} />,
   spinner: (o) => <Spinner tone={o.tone as never} size={o.size as never} />,
+  steps: (o) => <Steps tone={o.tone as never} size={o.size as never} count={3} active={1} />,
+  'empty-state': () => <EmptyState title="Nothing here" description="No items yet." />,
   'status-dot': (o) => <StatusDot tone={o.tone as never} size={o.size as never} />,
   surface: () => <Surface>Body</Surface>,
   switch: (o) => <Switch size={o.size as never} />,
@@ -153,6 +161,12 @@ const RENDER: Record<string, Renderer> = {
     <SegmentedControl size={o.size as never} value="a" options={[{ value: 'a', label: 'A' }]} />
   ),
   tabs: () => <Tabs tabs={[{ value: 'a', label: 'A', content: 'Panel' }]} />,
+  tooltip: () => (
+    <Tooltip content="Tip">
+      <button type="button">Go</button>
+    </Tooltip>
+  ),
+  toast: (o) => <Toast tone={o.tone as never} message="Saved" />,
   modal: (o) => (
     <Modal open={false} onClose={() => {}} size={o.size as never}>
       Body

@@ -14,7 +14,12 @@ interface BlueprintProps {
   dimensions?: Record<string, Measure | undefined>;
   /** Anatomy slot names, so the box can show leading/trailing icon slots. */
   slots?: readonly string[];
+  /** Force the figure kind; 'ring' for stroked circles, 'slider' for the rail. */
+  shape?: 'ring' | 'slider';
 }
+
+/** Spec ids whose circular figure is a stroked ring (track + arc), not a disc. */
+const RING_IDS = new Set(['progress-ring', 'spinner']);
 
 // A measure for a label: "$space-4" -> "space-4", a raw value stays as-is.
 const fmt = (m?: Measure): string | undefined => (m ? (m.startsWith('$') ? m.slice(1) : m) : undefined);
@@ -90,7 +95,101 @@ function CircleBlueprint({ size }: { size: SizeSpec }) {
   );
 }
 
+// A point on a circle, with 0° at 12 o'clock and angles going clockwise.
+function polar(cx: number, cy: number, r: number, deg: number): [number, number] {
+  const rad = ((deg - 90) * Math.PI) / 180;
+  return [cx + r * Math.cos(rad), cy + r * Math.sin(rad)];
+}
+
+// An SVG arc path sweeping clockwise from startDeg to endDeg at radius r.
+function arcPath(cx: number, cy: number, r: number, startDeg: number, endDeg: number): string {
+  const [x0, y0] = polar(cx, cy, r, startDeg);
+  const [x1, y1] = polar(cx, cy, r, endDeg);
+  const large = endDeg - startDeg > 180 ? 1 : 0;
+  return `M ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1}`;
+}
+
+/**
+ * Ring blueprint for stroked circular atoms (progress ring, spinner): the real
+ * ring band with a toned arc drawn over it — the skeletal shape of the actual
+ * component — dimensioned with its diameter and stroke thickness.
+ */
+function RingBlueprint({ size }: { size: SizeSpec }) {
+  const cx = 200;
+  const cy = 114;
+  const R = 50; // outer radius (schematic; the label carries the real value)
+  const t = 18; // schematic stroke-band width
+  const rMid = R - t / 2;
+  const rInner = R - t;
+  const diameter = fmt(size.diameter);
+  const thickness = fmt(size.thickness) ?? fmt(size.border);
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} size`}>
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+
+      {/* the track band: a stroked circle as wide as the ring thickness */}
+      <circle cx={cx} cy={cy} r={rMid} fill="none" stroke={C.fill} strokeWidth={t} />
+      {/* the toned arc, drawn over the track the way the component fills */}
+      <path d={arcPath(cx, cy, rMid, 0, 245)} fill="none" stroke={C.line} strokeWidth={t} strokeLinecap="round" opacity={0.9} />
+      {/* band edges, dashed, so the skeletal ring reads as an outline too */}
+      <circle cx={cx} cy={cy} r={R} fill="none" stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <circle cx={cx} cy={cy} r={rInner} fill="none" stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+
+      {/* diameter across the top */}
+      <HDim x1={cx - R} x2={cx + R} y={cy - R - 20} label={`⌀ ${diameter ?? 'auto'}`} />
+      {/* thickness measured across the band at 9 o'clock, clear of the arc */}
+      {thickness && <HDim x1={cx - R} x2={cx - rInner} y={cy} label={thickness} />}
+
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <text x={200} y={198} textAnchor="middle" className="bpLabel bpMuted">radius: full</text>
+    </svg>
+  );
+}
+
 /** Box blueprint for padded rounded atoms (button, input, pill, callout). */
+/**
+ * Slider blueprint: the thin rail with its filled leading portion and the round
+ * thumb riding on it, dimensioned with the thumb diameter and track height.
+ */
+function SliderBlueprint({ size, dimensions }: BlueprintProps) {
+  const trackH = fmt(dimensions?.trackHeight);
+  const thumbDia = fmt(dimensions?.thumbDiameter);
+  const radius = fmt(size.radius) ?? fmt(dimensions?.radius);
+
+  // schematic geometry (not to scale; the labels carry the real values)
+  const TX = 72;
+  const TW = 256;
+  const TY = 104;
+  const TH = 16; // rail thickness
+  const fillX = TX + TW * 0.42; // the value position, where the thumb sits
+  const thumbR = 26;
+
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the slider">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+
+      {/* the rail */}
+      <rect x={TX} y={TY - TH / 2} width={TW} height={TH} rx={TH / 2} fill={C.fill} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      {/* the filled leading portion, up to the value */}
+      <rect x={TX} y={TY - TH / 2} width={fillX - TX} height={TH} rx={TH / 2} fill={C.content} />
+      {/* the thumb */}
+      <circle cx={fillX} cy={TY} r={thumbR} fill={C.fill} stroke={C.line} strokeWidth={1.75} strokeDasharray="5 3" />
+
+      {/* width across the rail */}
+      <HDim x1={TX} x2={TX + TW} y={TY - thumbR - 18} label="width: auto" />
+      {/* the thumb diameter, below the thumb */}
+      {thumbDia && <HDim x1={fillX - thumbR} x2={fillX + thumbR} y={TY + thumbR + 20} label={`⌀ ${thumbDia}`} above={false} />}
+
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <text x={200} y={190} textAnchor="middle" className="bpLabel bpMuted">
+        {[trackH && `track: ${trackH}`, radius && `radius: ${radius}`].filter(Boolean).join('   ·   ')}
+      </text>
+    </svg>
+  );
+}
+
 function BoxBlueprint({ size, dimensions, slots }: BlueprintProps) {
   // schematic geometry (not to scale; labels carry the exact values)
   const BX = 118;
@@ -105,9 +204,19 @@ function BoxBlueprint({ size, dimensions, slots }: BlueprintProps) {
   const gap = fmt(size.gap) ?? fmt(dimensions?.gap);
   const font = fmt(size.fontSize);
 
-  const pIn = padIn ? 30 : 0; // schematic inset for the padding gap
-  const pBl = padBl ? 16 : 0;
-  const rr = radius === 'radius-full' || radius === '9999px' ? BH / 2 : radius ? 14 : 6;
+  const pIn = padIn ? 34 : 0; // schematic inset for the inline padding frame
+  const pBl = padBl ? 18 : 0; // schematic inset for the block padding frame
+  const pill = radius === 'radius-full' || radius === '9999px' || radius === 'control-radius';
+  const rr = pill ? BH / 2 : radius ? 14 : 6;
+  // The content box: inset horizontally by the inline padding. A single-line
+  // control (button, input, pill) carries no block padding — its label is one
+  // line centered by line-height — so draw the content as a centered line with
+  // the leading above and below, not a box that fills the full height.
+  const singleLine = !padBl && !!padIn;
+  const cw = BW - pIn * 2;
+  const ch = singleLine ? 30 : BH - pBl * 2;
+  const cy0 = singleLine ? BY + (BH - ch) / 2 : BY + pBl;
+  const crx = Math.max(Math.min(rr, ch / 2) - 5, 3);
 
   return (
     <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} size`}>
@@ -116,9 +225,22 @@ function BoxBlueprint({ size, dimensions, slots }: BlueprintProps) {
 
       {/* the component box */}
       <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={border ? 2 : 1.25} strokeDasharray="5 3" />
-      {/* the content box (inside the padding) */}
+      {/* the content box: the area left inside the padding. It carries its own
+          fill so the padding reads as the frame around it on every padded side,
+          not only where a dimension line happens to sit. */}
       {(pIn || pBl) > 0 && (
-        <rect x={BX + pIn} y={BY + pBl} width={BW - pIn * 2} height={BH - pBl * 2} rx={Math.max(rr - 6, 2)} fill="none" stroke={C.content} strokeWidth={1} strokeDasharray="2 2" />
+        <rect
+          x={BX + pIn}
+          y={cy0}
+          width={cw}
+          height={ch}
+          rx={crx}
+          fill={C.content}
+          fillOpacity={0.28}
+          stroke={C.text}
+          strokeWidth={1}
+          strokeDasharray="3 2"
+        />
       )}
 
       {/* optional leading / trailing icon slots, drawn where the spec declares them */}
@@ -140,20 +262,10 @@ function BoxBlueprint({ size, dimensions, slots }: BlueprintProps) {
       {/* width span on top (content-sized, but the box width is shown) */}
       <HDim x1={BX} x2={BX + BW} y={BY - 26} label={`width: auto`} />
 
-      {/* padding-inline: a callout across the left padding gap */}
-      {padIn && (
-        <>
-          <rect x={BX} y={BY} width={pIn} height={BH} fill={C.content} opacity={0.14} />
-          <HDim x1={BX} x2={BX + pIn} y={BY + BH + 16} label={padIn} above={false} />
-        </>
-      )}
-      {/* padding-block: a callout down the top padding gap */}
-      {padBl && (
-        <>
-          <rect x={BX} y={BY} width={BW} height={pBl} fill={C.content} opacity={0.1} />
-          <VDim x={BX + BW + 30} y1={BY} y2={BY + pBl} label={padBl} left={false} />
-        </>
-      )}
+      {/* padding-inline: measured across the left gap; the right gap is symmetric */}
+      {padIn && <HDim x1={BX} x2={BX + pIn} y={BY + BH + 16} label={padIn} above={false} />}
+      {/* padding-block: measured across the top gap; the bottom gap is symmetric */}
+      {padBl && <VDim x={BX + BW + 30} y1={BY} y2={BY + pBl} label={padBl} left={false} />}
 
       {/* radius: an arc traced on the top-right corner, labelled above it */}
       {radius && (
@@ -179,7 +291,7 @@ function BoxBlueprint({ size, dimensions, slots }: BlueprintProps) {
   );
 }
 
-/** Bar blueprint for thin line atoms (divider, progress bar, sparkline): thickness + radius. */
+/** Bar blueprint for thin line atoms (divider, progress bar): thickness + radius. */
 function BarBlueprint({ size, dimensions }: BlueprintProps) {
   const BX = 70;
   const BW = 260;
@@ -223,7 +335,9 @@ function Defs() {
   );
 }
 
-export function Blueprint({ size, dimensions, slots }: BlueprintProps) {
+export function Blueprint({ size, dimensions, slots, shape }: BlueprintProps) {
+  if (shape === 'ring') return withFrame(<RingBlueprint size={size} />);
+  if (shape === 'slider') return withFrame(<SliderBlueprint size={size} dimensions={dimensions} />);
   if (size.diameter && !size.height) return withFrame(<CircleBlueprint size={size} />);
   if (size.thickness && !size.height && !size.diameter) return withFrame(<BarBlueprint size={size} dimensions={dimensions} />);
   return withFrame(<BoxBlueprint size={size} dimensions={dimensions} slots={slots} />);
@@ -239,11 +353,17 @@ const withFrame = (svg: ReactElement) => <div className="bpFrame">{svg}</div>;
 export function ComponentBlueprint({ specId }: { specId: string }) {
   const spec = getSpec(specId);
   const sizes = spec?.sizes ?? [];
+  // Ring-type atoms (progress ring) carry their geometry on numeric props, not
+  // in sizes/dimensions, so synthesize one item from the size/thickness props.
+  const sizeProp = spec?.props?.find((p) => p.name === 'size' && p.type === 'number');
+  const thickProp = spec?.props?.find((p) => p.name === 'thickness' && p.type === 'number');
   const items: readonly SizeSpec[] = !spec
     ? []
     : sizes.length > 0
       ? sizes
-      : [{ name: spec.element ? `<${spec.element}>` : spec.name, ...(spec.dimensions ?? {}) } as SizeSpec];
+      : sizeProp && thickProp
+        ? [{ name: `${sizeProp.default}px`, diameter: `${sizeProp.default}px`, thickness: `${thickProp.default}px` } as SizeSpec]
+        : [{ name: spec.element ? `<${spec.element}>` : spec.name, ...(spec.dimensions ?? {}) } as SizeSpec];
   const [name, setName] = useState(items[0]?.name ?? '');
   if (!spec) return null;
   const active = items.find((s) => s.name === name) ?? items[0];
@@ -268,7 +388,12 @@ export function ComponentBlueprint({ specId }: { specId: string }) {
           )}
         </div>
       )}
-      <Blueprint size={active} dimensions={spec.dimensions} slots={spec.anatomy?.map((a) => a.name)} />
+      <Blueprint
+        size={active}
+        dimensions={spec.dimensions}
+        slots={spec.anatomy?.map((a) => a.name)}
+        shape={RING_IDS.has(spec.id) ? 'ring' : spec.id === 'slider' ? 'slider' : undefined}
+      />
     </div>
   );
 }

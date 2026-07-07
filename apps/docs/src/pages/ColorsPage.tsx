@@ -40,8 +40,20 @@ const SEMANTIC_TOKENS = [
   'info-solid',
 ];
 
+/** The theme applied to <html> right now: data-theme, or the system setting. */
+function currentTheme(): Theme {
+  if (typeof document !== 'undefined') {
+    const attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'light' || attr === 'dark') return attr;
+  }
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light';
+}
+
 export function ColorsPage() {
-  const [theme, setTheme] = useState<Theme>('light');
+  // default the ramp preview to the theme in use; the Select still overrides it
+  const [theme, setTheme] = useState<Theme>(currentTheme);
 
   return (
     <>

@@ -28,7 +28,7 @@ describe('accent options', () => {
 
   it('keeps the first option as the built-in default matching the accent ramp', () => {
     const first = accentOptions[0]!;
-    expect(first.name).toBe('green');
+    expect(first.name).toBe('blue');
     const accentRamp = ramps.find((r) => r.name === 'accent')!;
     expect(first.hue).toBe(accentRamp.hue);
     expect(first.chroma).toBe(accentRamp.chroma);

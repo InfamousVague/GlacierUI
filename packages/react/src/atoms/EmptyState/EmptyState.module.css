@@ -1,0 +1,49 @@
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--perfect-space-4);
+  padding: var(--perfect-space-8) var(--perfect-space-6);
+  font-family: var(--perfect-font-sans);
+  color: var(--perfect-text-secondary);
+}
+
+/* the muted round disc that frames the icon */
+.disc {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  border-radius: var(--perfect-radius-full);
+  background: var(--perfect-surface-sunken);
+  color: var(--perfect-text-secondary);
+  font-size: var(--perfect-font-size-2xl);
+  line-height: 1;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--perfect-font-size-lg);
+  font-weight: var(--perfect-font-weight-semibold);
+  line-height: var(--perfect-line-height-normal);
+  color: var(--perfect-text);
+}
+
+.description {
+  margin: 0;
+  max-width: 28rem;
+  font-size: var(--perfect-font-size-sm);
+  line-height: var(--perfect-line-height-relaxed);
+  color: var(--perfect-text-secondary);
+}
+
+/* pull the action a touch closer to the disc rhythm than the default gap */
+.action {
+  display: flex;
+  gap: var(--perfect-space-3);
+  margin-top: var(--perfect-space-2);
+}

@@ -25,7 +25,7 @@ export interface RampDef {
 
 export const ramps: RampDef[] = [
   { name: 'gray', hue: 260, chroma: 0.012, contrast: 'white' },
-  { name: 'accent', hue: 150, chroma: 0.15, contrast: 'white' },
+  { name: 'accent', hue: 240, chroma: 0.16, contrast: 'white' },
   { name: 'red', hue: 25, chroma: 0.19, contrast: 'white' },
   { name: 'amber', hue: 75, chroma: 0.15, contrast: 'black' },
   { name: 'green', hue: 150, chroma: 0.14, contrast: 'white' },
@@ -46,22 +46,32 @@ export interface AccentOption {
   label: string;
   hue: number;
   chroma: number;
+  /** Text color that sits on the accent-9 solid, from the source ramp. */
+  contrast: 'white' | 'black';
 }
 
-export const accentOptions: AccentOption[] = [
-  { name: 'green', label: 'Green', hue: 150, chroma: 0.15 },
-  { name: 'indigo', label: 'Indigo', hue: 277, chroma: 0.19 },
-  { name: 'purple', label: 'Purple', hue: 305, chroma: 0.18 },
-  { name: 'pink', label: 'Pink', hue: 350, chroma: 0.17 },
-  { name: 'red', label: 'Red', hue: 25, chroma: 0.19 },
-  { name: 'orange', label: 'Orange', hue: 55, chroma: 0.17 },
-  { name: 'teal', label: 'Teal', hue: 190, chroma: 0.12 },
-  { name: 'graphite', label: 'Graphite', hue: 260, chroma: 0.02 },
+// Each pickable accent borrows its hue and chroma from a kit ramp, so the picker
+// can never drift from the palette the kit actually ships. The default 'blue'
+// mirrors the base accent ramp, so choosing it is a no-op override.
+const ACCENT_SOURCES: Array<{ name: string; label: string; ramp: string }> = [
+  { name: 'blue', label: 'Blue', ramp: 'accent' },
+  { name: 'green', label: 'Green', ramp: 'green' },
+  { name: 'purple', label: 'Purple', ramp: 'purple' },
+  { name: 'teal', label: 'Teal', ramp: 'teal' },
+  { name: 'amber', label: 'Amber', ramp: 'amber' },
+  { name: 'red', label: 'Red', ramp: 'red' },
+  { name: 'graphite', label: 'Graphite', ramp: 'gray' },
 ];
+
+export const accentOptions: AccentOption[] = ACCENT_SOURCES.map(({ name, label, ramp }) => {
+  const def = ramps.find((r) => r.name === ramp);
+  if (!def) throw new Error(`accent option "${name}" references unknown ramp "${ramp}"`);
+  return { name, label, hue: def.hue, chroma: def.chroma, contrast: def.contrast };
+});
 
 /** The 12 accent steps for an option in the given theme. */
 export function accentSteps(option: AccentOption, theme: Theme): string[] {
-  return rampSteps({ name: 'accent', hue: option.hue, chroma: option.chroma, contrast: 'white' }, theme);
+  return rampSteps({ name: 'accent', hue: option.hue, chroma: option.chroma, contrast: option.contrast }, theme);
 }
 
 // Lightness curve per step. Light runs bright→dark, dark runs dark→bright, so
@@ -110,5 +120,9 @@ export function rampDecls(theme: Theme): Array<[string, string]> {
 
 /** The 12 `accent-<n>` declarations for one pickable accent option. */
 export function accentDecls(option: AccentOption, theme: Theme): Array<[string, string]> {
-  return accentSteps(option, theme).map((color, i) => [`accent-${i + 1}`, color] as [string, string]);
+  const steps = accentSteps(option, theme).map((color, i) => [`accent-${i + 1}`, color] as [string, string]);
+  // carry the ramp's on-solid text color too, so light accents (amber, teal)
+  // flip accent-contrast to dark text instead of the base white.
+  const contrast = option.contrast === 'black' ? BLACK_TEXT : WHITE;
+  return [...steps, ['accent-contrast', contrast]];
 }
