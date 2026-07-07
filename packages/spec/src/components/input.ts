@@ -11,8 +11,15 @@ export const inputSpec: ComponentSpec = {
   status: 'stable',
   summary: 'A single-line text field in three control sizes, wired to the surrounding Field for id, description, and validity.',
   element: 'input',
+  anatomy: [
+    { name: 'leadingIcon', description: 'Optional icon or adornment pinned to the leading edge.' },
+    { name: 'input', description: 'The text field itself.', required: true },
+    { name: 'trailingIcon', description: 'Optional icon or adornment pinned to the trailing edge.' },
+  ],
   props: [
     { name: 'size', type: 'enum', values: controlSizes, default: 'md', description: 'Control size step.' },
+    { name: 'leadingIcon', type: 'node', description: 'Icon or adornment pinned to the leading edge; the text pads clear of it.' },
+    { name: 'trailingIcon', type: 'node', description: 'Icon or adornment pinned to the trailing edge, such as a clear button.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
     { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Dims the field and blocks input (native input attribute).' },

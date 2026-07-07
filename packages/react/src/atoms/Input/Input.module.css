@@ -49,6 +49,47 @@
   box-shadow: inset 0 1px 0 var(--perfect-glass-highlight);
 }
 
+/* leading / trailing icon slots: the icon is pinned, the text pads clear of it */
+.wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.leadingIcon,
+.trailingIcon {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--perfect-text-subtle);
+}
+
+.leadingIcon {
+  left: var(--perfect-space-3);
+  pointer-events: none;
+}
+
+.trailingIcon {
+  right: var(--perfect-space-3);
+}
+
+.input[data-leading] {
+  padding-left: var(--perfect-space-8);
+}
+.input[data-trailing] {
+  padding-right: var(--perfect-space-8);
+}
+.lg[data-leading] {
+  padding-left: var(--perfect-space-10);
+}
+.lg[data-trailing] {
+  padding-right: var(--perfect-space-10);
+}
+
 .sm {
   height: var(--perfect-control-height-sm);
   padding-inline: var(--perfect-space-3);
