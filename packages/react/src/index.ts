@@ -7,3 +7,5 @@ export { Heading, type HeadingProps } from './atoms/Typography/Heading.tsx';
 export { Label, type LabelProps } from './atoms/Typography/Label.tsx';
 export { Link, type LinkProps } from './atoms/Typography/Link.tsx';
 export { Kbd, type KbdProps } from './atoms/Typography/Kbd.tsx';
+export { Button, type ButtonProps, type ButtonVariant, type ControlSize } from './atoms/Button/Button.tsx';
+export { IconButton, type IconButtonProps } from './atoms/Button/IconButton.tsx';
