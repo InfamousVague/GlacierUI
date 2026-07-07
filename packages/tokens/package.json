@@ -1,0 +1,12 @@
+{
+  "name": "@perfect/tokens",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./css/tokens.css": "./css/tokens.css"
+  },
+  "scripts": {
+    "gen": "node src/generate.ts"
+  }
+}
