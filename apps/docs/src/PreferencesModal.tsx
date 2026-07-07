@@ -4,6 +4,7 @@ import { Button, Divider, Label, Modal, SegmentedControl, Slider, Text } from '@
 export interface Preferences {
   theme: 'system' | 'light' | 'dark';
   density: 'comfortable' | 'compact';
+  layout: 'floating' | 'full';
   accent: string;
   radiusScale: number;
 }
@@ -11,6 +12,7 @@ export interface Preferences {
 export const DEFAULT_PREFERENCES: Preferences = {
   theme: 'system',
   density: 'comfortable',
+  layout: 'floating',
   accent: accentOptions[0]!.name,
   radiusScale: 1,
 };
@@ -69,6 +71,24 @@ export function PreferencesModal({ open, onClose, preferences, onChange }: Prefe
             { value: 'compact', label: 'Compact' },
           ]}
         />
+      </div>
+      <Divider />
+      <div className="prefsSection">
+        <Label>Layout</Label>
+        <SegmentedControl
+          aria-label="Layout"
+          fullWidth
+          value={preferences.layout}
+          onValueChange={(value) => onChange({ layout: value as Preferences['layout'] })}
+          options={[
+            { value: 'floating', label: 'Floating' },
+            { value: 'full', label: 'Full' },
+          ]}
+        />
+        <Text size="xs" tone="subtle">
+          Floating detaches the sidebar and toolbar into cards; full pins them to the edges. Applies
+          on wide screens; narrow screens use the drawer either way.
+        </Text>
       </div>
       <Divider />
       <div className="prefsSection">

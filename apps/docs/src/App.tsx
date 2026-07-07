@@ -2,6 +2,7 @@ import { accentOptions } from '@perfect/tokens';
 import { AppShell, Button, Container, Row, Sidebar, SidebarItem, SidebarSection, Spacer } from '@perfect/react';
 import { useEffect, useState } from 'react';
 import { DEFAULT_PREFERENCES, PreferencesModal, type Preferences } from './PreferencesModal.tsx';
+import { DocSearch } from './DocSearch.tsx';
 import { OverviewPage } from './pages/OverviewPage.tsx';
 import { LayoutPage } from './pages/LayoutPage.tsx';
 import { ColorsPage } from './pages/ColorsPage.tsx';
@@ -88,6 +89,10 @@ type PageId = keyof typeof PAGES;
 
 const GROUPS = ['Start', 'Foundations', 'Atoms', 'Molecules', 'Organisms', 'Structures'] as const;
 
+const SEARCH_ITEMS = (Object.entries(PAGES) as Array<[PageId, (typeof PAGES)[PageId]]>).map(
+  ([id, p]) => ({ id, title: p.title, group: p.group }),
+);
+
 function pageFromHash(): PageId {
   const hash = window.location.hash.replace('#/', '');
   return hash in PAGES ? (hash as PageId) : 'overview';
@@ -102,6 +107,7 @@ function loadPreferences(): Preferences {
     return {
       theme: saved.theme === 'light' || saved.theme === 'dark' ? saved.theme : 'system',
       density: saved.density === 'compact' ? 'compact' : 'comfortable',
+      layout: saved.layout === 'full' ? 'full' : 'floating',
       accent: accentValid ? saved.accent! : DEFAULT_PREFERENCES.accent,
       radiusScale:
         typeof saved.radiusScale === 'number' && saved.radiusScale >= 0 && saved.radiusScale <= 2
@@ -138,13 +144,18 @@ export function App() {
 
   useEffect(() => {
     const root = document.documentElement;
-    const { theme, density, accent, radiusScale } = preferences;
+    const { theme, density, layout, accent, radiusScale } = preferences;
 
     if (theme === 'system') root.removeAttribute('data-theme');
     else root.setAttribute('data-theme', theme);
 
     if (density === 'comfortable') root.removeAttribute('data-density');
     else root.setAttribute('data-density', density);
+
+    // a common layout mode, like theme and density: floating is the default,
+    // full pins the chrome to the edges
+    if (layout === 'floating') root.removeAttribute('data-layout');
+    else root.setAttribute('data-layout', layout);
 
     if (accent === DEFAULT_PREFERENCES.accent) root.removeAttribute('data-accent');
     else root.setAttribute('data-accent', accent);
@@ -187,6 +198,13 @@ export function App() {
 
   const header = (
     <Row width="full" gap={4}>
+      <DocSearch
+        items={SEARCH_ITEMS}
+        onSelect={(id) => {
+          window.location.hash = `#/${id}`;
+          setPage(id as PageId);
+        }}
+      />
       <Spacer />
       <span className="accentDot" aria-hidden="true" />
       <Button variant="glass" size="md" onClick={() => setPreferencesOpen(true)}>
@@ -198,7 +216,12 @@ export function App() {
 
   return (
     <>
-      <AppShell floating sidebar={sidebar} header={header} sidebarLabel="Documentation sections">
+      <AppShell
+        floating={preferences.layout === 'floating'}
+        sidebar={sidebar}
+        header={header}
+        sidebarLabel="Documentation sections"
+      >
         <Container size="xl" paddingY={8} as="main" className="content">
           {PAGES[page].el}
         </Container>
