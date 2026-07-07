@@ -20,6 +20,8 @@
 
 .slice {
   height: 100%;
+  /* a micro radius so each segment reads as its own piece, not a hard rectangle */
+  border-radius: 2px;
   background: var(--perfect-segment-track);
 }
 

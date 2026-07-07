@@ -37,7 +37,7 @@ export const segmentedBarSpec: ComponentSpec = {
     { name: 'md', height: '0.625rem' },
   ],
   defaults: { size: 'md', rounded: true, skeleton: false },
-  dimensions: { radius: token('radius-full'), gap: token('space-1') },
+  dimensions: { radius: token('radius-full'), gap: token('space-1'), sliceRadius: '2px' },
   states: [
     { name: 'empty', description: 'The uncovered remainder of the track paints the segment-track color.', tokens: { background: token('segment-track') } },
   ],
