@@ -1,7 +1,7 @@
 .bar {
   display: flex;
   width: 100%;
-  gap: var(--perfect-hairline);
+  gap: var(--perfect-space-1);
   overflow: hidden;
   background: var(--perfect-segment-track);
 }
