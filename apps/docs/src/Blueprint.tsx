@@ -25,32 +25,40 @@ const C = {
   faint: 'var(--perfect-text-subtle)',
 };
 
-// A horizontal dimension line from x1 to x2 at y, with end ticks and a label.
+// A horizontal dimension line from x1 to x2 at y: a solid line spanning the
+// full width, with witness ticks and outward chevron arrowheads at each end.
 function HDim({ x1, x2, y, label, above = true }: { x1: number; x2: number; y: number; label: string; above?: boolean }) {
   const mid = (x1 + x2) / 2;
+  const A = 6;
   return (
-    <g>
-      <line x1={x1} y1={y - 4} x2={x1} y2={y + 4} stroke={C.line} strokeWidth={1} />
-      <line x1={x2} y1={y - 4} x2={x2} y2={y + 4} stroke={C.line} strokeWidth={1} />
-      <line x1={x1} y1={y} x2={x2} y2={y} stroke={C.line} strokeWidth={1} markerStart="url(#bpArrow)" markerEnd="url(#bpArrow)" />
-      <text x={mid} y={above ? y - 6 : y + 13} textAnchor="middle" className="bpLabel">
+    <g stroke={C.line} strokeWidth={1.25} fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <line x1={x1} y1={y - 4} x2={x1} y2={y + 4} strokeWidth={1} />
+      <line x1={x2} y1={y - 4} x2={x2} y2={y + 4} strokeWidth={1} />
+      <line x1={x1} y1={y} x2={x2} y2={y} />
+      <polyline points={`${x1 + A},${y - 3.5} ${x1},${y} ${x1 + A},${y + 3.5}`} />
+      <polyline points={`${x2 - A},${y - 3.5} ${x2},${y} ${x2 - A},${y + 3.5}`} />
+      <text x={mid} y={above ? y - 6 : y + 13} textAnchor="middle" className="bpLabel" stroke="none">
         {label}
       </text>
     </g>
   );
 }
 
-// A vertical dimension line from y1 to y2 at x, with a label rotated to read
-// along the line so long token names never overflow horizontally.
+// A vertical dimension line from y1 to y2 at x: one solid line with outward
+// chevron arrowheads, and a label rotated to read along it so long token names
+// never overflow horizontally.
 function VDim({ x, y1, y2, label, left = true }: { x: number; y1: number; y2: number; label: string; left?: boolean }) {
   const mid = (y1 + y2) / 2;
-  const lx = left ? x - 9 : x + 9;
+  const lx = left ? x - 10 : x + 10;
+  const A = 6;
   return (
-    <g>
-      <line x1={x - 4} y1={y1} x2={x + 4} y2={y1} stroke={C.line} strokeWidth={1} />
-      <line x1={x - 4} y1={y2} x2={x + 4} y2={y2} stroke={C.line} strokeWidth={1} />
-      <line x1={x} y1={y1} x2={x} y2={y2} stroke={C.line} strokeWidth={1} markerStart="url(#bpArrow)" markerEnd="url(#bpArrow)" />
-      <text x={lx} y={mid} textAnchor="middle" dominantBaseline="middle" transform={`rotate(-90 ${lx} ${mid})`} className="bpLabel">
+    <g stroke={C.line} strokeWidth={1.25} fill="none" strokeLinecap="round" strokeLinejoin="round">
+      <line x1={x - 4} y1={y1} x2={x + 4} y2={y1} strokeWidth={1} />
+      <line x1={x - 4} y1={y2} x2={x + 4} y2={y2} strokeWidth={1} />
+      <line x1={x} y1={y1} x2={x} y2={y2} />
+      <polyline points={`${x - 3.5},${y1 + A} ${x},${y1} ${x + 3.5},${y1 + A}`} />
+      <polyline points={`${x - 3.5},${y2 - A} ${x},${y2} ${x + 3.5},${y2 - A}`} />
+      <text x={lx} y={mid} textAnchor="middle" dominantBaseline="middle" transform={`rotate(-90 ${lx} ${mid})`} className="bpLabel" stroke="none">
         {label}
       </text>
     </g>
@@ -159,20 +167,6 @@ function Defs() {
       <pattern id="bpGrid" width="16" height="16" patternUnits="userSpaceOnUse">
         <circle cx={1} cy={1} r={0.75} fill={C.grid} />
       </pattern>
-      {/* auto-start-reverse flips the start marker so both arrowheads point
-          outward toward the witness lines; refX sits at the tip so it lands on
-          the line endpoint. */}
-      <marker
-        id="bpArrow"
-        markerWidth="9"
-        markerHeight="9"
-        refX="7"
-        refY="4"
-        orient="auto-start-reverse"
-        markerUnits="userSpaceOnUse"
-      >
-        <path d="M0.5 1 L7 4 L0.5 7 Z" fill={C.line} />
-      </marker>
     </defs>
   );
 }
