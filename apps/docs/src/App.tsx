@@ -196,7 +196,7 @@ export function App() {
 
   return (
     <>
-      <AppShell sidebar={sidebar} header={header} sidebarLabel="Documentation sections">
+      <AppShell floating sidebar={sidebar} header={header} sidebarLabel="Documentation sections">
         <Container size="xl" paddingY={8} as="main" className="content">
           {PAGES[page].el}
         </Container>
