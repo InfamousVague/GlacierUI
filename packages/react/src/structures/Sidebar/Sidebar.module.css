@@ -77,7 +77,9 @@
     color var(--perfect-duration-fast) var(--perfect-ease-out);
 }
 
-.item:hover:not([aria-disabled='true']) {
+/* the active item shows the pill, not the hover wash, so it never flashes gray
+   as the sliding pill passes over it */
+.item:hover:not([aria-disabled='true']):not([data-active]) {
   background: var(--perfect-hover);
   color: var(--perfect-text);
 }
@@ -88,6 +90,9 @@
 }
 
 .item[data-active] {
+  /* raised so the sliding pill always paints above sibling items and their
+     hover wash, never behind them */
+  z-index: 1;
   color: var(--perfect-accent-text);
   font-weight: var(--perfect-font-weight-medium);
 }

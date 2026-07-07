@@ -29,7 +29,7 @@ export interface SidebarProps extends Omit<ComponentProps<'div'>, 'title'> {
  * slot and fill it with SidebarSection and SidebarItem. The active pill slides
  * between items with the chosen spring.
  */
-export function Sidebar({ header, footer, spring = Spring.Smooth, className, children, ...rest }: SidebarProps) {
+export function Sidebar({ header, footer, spring = Spring.Snappy, className, children, ...rest }: SidebarProps) {
   const id = useId();
   const reduce = useReducedMotion();
   const context: SidebarContextValue = {

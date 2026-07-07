@@ -88,7 +88,7 @@ const settingsIcon = (
 // Interactive: click items to slide the pill, and switch the spring style.
 function SlideDemo() {
   const [active, setActive] = useState('home');
-  const [spring, setSpring] = useState<Spring>(Spring.Smooth);
+  const [spring, setSpring] = useState<Spring>(Spring.Snappy);
   return (
     <Stack gap={4} align="start">
       <SegmentedControl
@@ -271,7 +271,7 @@ import { Spring } from '@perfect/motion';
         props={[
           { name: 'header', type: 'ReactNode', description: 'Pinned region at the top, for a brand mark or a search field.' },
           { name: 'footer', type: 'ReactNode', description: 'Pinned region at the bottom, for a profile or settings link.' },
-          { name: 'spring', type: 'Spring', default: 'Spring.Smooth', description: 'Spring preset for the active pill as it slides between items.' },
+          { name: 'spring', type: 'Spring', default: 'Spring.Snappy', description: 'Spring preset for the active pill as it slides between items.' },
           { name: 'children', type: 'ReactNode', description: 'The scrollable body, usually one or more SidebarSection.' },
         ]}
       />
