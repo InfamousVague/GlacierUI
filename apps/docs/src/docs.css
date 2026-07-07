@@ -393,6 +393,40 @@ code {
   font-size: var(--perfect-font-size-sm);
 }
 
+/* blueprint illustrations: a technical drawing of a component's box, labelled
+   with the exact spec measurements, in a blue engineering-drawing palette. */
+.bpFrame {
+  border: var(--perfect-hairline) solid var(--perfect-blue-6);
+  border-radius: var(--perfect-radius-lg);
+  background: var(--perfect-blue-1);
+  overflow: hidden;
+}
+
+.bpSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.bpLabel {
+  fill: var(--perfect-blue-11);
+  font-family: var(--perfect-font-mono);
+  font-size: 11px;
+}
+
+.bpMuted {
+  fill: var(--perfect-text-subtle);
+}
+
+.bpTitle {
+  fill: var(--perfect-blue-11);
+  font-family: var(--perfect-font-mono);
+  font-size: 12px;
+  font-weight: var(--perfect-font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .select {
   height: var(--perfect-control-height-sm);
   border: var(--perfect-hairline) solid var(--perfect-border);

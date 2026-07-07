@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { SPEC_VERSION, cssValue, specs, type ComponentSpec, type Measure, type SizeSpec } from '@perfect/spec';
 import { Pill, Row, Select, Stack } from '@perfect/react';
 import { CodeBlock } from '../docs-ui.tsx';
+import { Blueprint } from '../Blueprint.tsx';
 
 // Render a measurement as its token reference plus what it resolves to.
 function MeasureCell({ value }: { value?: Measure }) {
@@ -87,6 +88,20 @@ function SpecView({ spec }: { spec: ComponentSpec }) {
           </table>
         </div>
       </div>
+
+      {sizeCols.length > 0 && (
+        <div>
+          <h3>Anatomy</h3>
+          <p>An inspection of each size, with the exact spec measurements labelled on the box.</p>
+          <Row gap={4} wrap>
+            {sizeCols.map((s) => (
+              <div key={s.name} style={{ flex: '1 1 18rem', minWidth: '16rem' }}>
+                <Blueprint size={s} dimensions={spec.dimensions} />
+              </div>
+            ))}
+          </Row>
+        </div>
+      )}
 
       {usedRows.length > 0 && (
         <div>
