@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { SPEC_VERSION, cssValue, specs, type ComponentSpec, type Measure, type SizeSpec } from '@perfect/spec';
-import { Pill, Row, Select, Stack } from '@perfect/react';
+import { Pill, Row, Stack } from '@perfect/react';
 import { CodeBlock } from '../docs-ui.tsx';
-import { Blueprint } from '../Blueprint.tsx';
+import { ComponentBlueprint } from '../Blueprint.tsx';
 
 // Render a measurement as its token reference plus what it resolves to.
 function MeasureCell({ value }: { value?: Measure }) {
@@ -31,30 +31,6 @@ const SIZE_ROWS: { key: keyof SizeSpec; label: string }[] = [
   { key: 'thickness', label: 'thickness' },
   { key: 'border', label: 'border' },
 ];
-
-// The anatomy inspector: one full-width blueprint, with a size picker above it
-// when the component has more than one size.
-function Anatomy({ sizes, dimensions }: { sizes: readonly SizeSpec[]; dimensions?: ComponentSpec['dimensions'] }) {
-  const [name, setName] = useState(sizes[0]!.name);
-  const active = sizes.find((s) => s.name === name) ?? sizes[0]!;
-  return (
-    <div>
-      <h3>Anatomy</h3>
-      <p>An inspection of the box, with the exact spec measurements labelled on it.</p>
-      {sizes.length > 1 && (
-        <div style={{ maxWidth: '10rem', marginBottom: 'var(--perfect-space-4)' }}>
-          <Select
-            aria-label="Blueprint size"
-            value={name}
-            onValueChange={setName}
-            options={sizes.map((s) => ({ value: s.name, label: s.name }))}
-          />
-        </div>
-      )}
-      <Blueprint size={active} dimensions={dimensions} />
-    </div>
-  );
-}
 
 function SpecView({ spec }: { spec: ComponentSpec }) {
   const sizeCols = spec.sizes ?? [];
@@ -113,7 +89,13 @@ function SpecView({ spec }: { spec: ComponentSpec }) {
         </div>
       </div>
 
-      {sizeCols.length > 0 && <Anatomy key={spec.id} sizes={sizeCols} dimensions={spec.dimensions} />}
+      {(sizeCols.length > 0 || spec.dimensions) && (
+        <div>
+          <h3>Anatomy</h3>
+          <p>An inspection with the exact spec measurements labelled on the box.</p>
+          <ComponentBlueprint key={spec.id} specId={spec.id} />
+        </div>
+      )}
 
       {usedRows.length > 0 && (
         <div>

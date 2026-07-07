@@ -1,5 +1,6 @@
 import { getSpec, type Measure, type SizeSpec } from '@perfect/spec';
-import type { ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
+import { SegmentedControl, Select } from '@perfect/react';
 
 /**
  * A blueprint-style illustration of a component's box: a schematic drawing with
@@ -221,19 +222,37 @@ const withFrame = (svg: ReactElement) => <div className="bpFrame">{svg}</div>;
  */
 export function ComponentBlueprint({ specId }: { specId: string }) {
   const spec = getSpec(specId);
-  if (!spec) return null;
-  const sizes = spec.sizes ?? [];
-  const items: readonly SizeSpec[] =
-    sizes.length > 0
+  const sizes = spec?.sizes ?? [];
+  const items: readonly SizeSpec[] = !spec
+    ? []
+    : sizes.length > 0
       ? sizes
       : [{ name: spec.element ? `<${spec.element}>` : spec.name, ...(spec.dimensions ?? {}) } as SizeSpec];
+  const [name, setName] = useState(items[0]?.name ?? '');
+  if (!spec) return null;
+  const active = items.find((s) => s.name === name) ?? items[0];
+  if (!active) return null;
+  const options = items.map((s) => ({ value: s.name, label: s.name }));
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--perfect-space-4)' }}>
-      {items.map((s) => (
-        <div key={s.name} style={{ flex: '1 1 18rem', minWidth: '16rem', maxWidth: '32rem' }}>
-          <Blueprint size={s} dimensions={spec.dimensions} />
+    <div>
+      {items.length > 1 && (
+        <div style={{ marginBottom: 'var(--perfect-space-4)' }}>
+          {items.length <= 4 ? (
+            <SegmentedControl
+              size="sm"
+              aria-label="Blueprint size"
+              value={name}
+              onValueChange={setName}
+              options={options}
+            />
+          ) : (
+            <div style={{ maxWidth: '12rem' }}>
+              <Select aria-label="Blueprint size" value={name} onValueChange={setName} options={options} />
+            </div>
+          )}
         </div>
-      ))}
+      )}
+      <Blueprint size={active} dimensions={spec.dimensions} />
     </div>
   );
 }
