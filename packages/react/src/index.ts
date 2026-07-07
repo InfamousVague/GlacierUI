@@ -14,3 +14,5 @@ export { Field, type FieldProps } from './molecules/Field/Field.tsx';
 export { Checkbox, type CheckboxProps } from './atoms/Selection/Checkbox.tsx';
 export { Radio, type RadioProps } from './atoms/Selection/Radio.tsx';
 export { Switch, type SwitchProps } from './atoms/Selection/Switch.tsx';
+export { Card, type CardProps, type CardVariant, type Elevation } from './atoms/Surface/Card.tsx';
+export { Surface, type SurfaceProps, type SurfaceLevel } from './atoms/Surface/Surface.tsx';
