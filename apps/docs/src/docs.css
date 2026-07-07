@@ -203,6 +203,13 @@ code {
   border: var(--perfect-hairline) solid var(--perfect-border-subtle);
 }
 
+/* squircle shape: border-radius sets the corner size, corner-shape bends it
+   into a superellipse for continuous, iOS-style corners. Browsers without
+   corner-shape fall back to a plain rounded rectangle. */
+.squircle {
+  corner-shape: superellipse(4);
+}
+
 .stepHead {
   display: flex;
   flex-direction: column;

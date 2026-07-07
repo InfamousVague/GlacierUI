@@ -58,7 +58,25 @@ export function ShapePage() {
             <code>{name}</code>
           </div>
         ))}
+        <div style={{ textAlign: 'center' }}>
+          <div
+            className="squircle"
+            style={{
+              width: '5rem',
+              height: '5rem',
+              background: 'var(--perfect-accent-soft)',
+              border: 'var(--perfect-hairline) solid var(--perfect-accent-border)',
+              borderRadius: `calc(${radii['2xl']} * ${scale})`,
+            }}
+          />
+          <code>squircle</code>
+        </div>
       </Row>
+      <p>
+        The <code>squircle</code> keeps the same radius but bends the corner into a superellipse
+        with <code>corner-shape</code>, for the continuous curve iOS and macOS use. Browsers without{' '}
+        <code>corner-shape</code> fall back to a plain rounded corner.
+      </p>
 
       <h2>Elevation</h2>
       <p>
