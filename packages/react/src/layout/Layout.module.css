@@ -1,0 +1,191 @@
+/*
+ * The layout system. Every spacing value comes from the space scale, all
+ * rhythm is owned by gap (there are no margins), and min-width is zero by
+ * default so flex and grid children never overflow their container. Build a
+ * UI from these primitives and it cannot drift off the system.
+ *
+ * Responsive space props (padding, gap, columns) are driven by inline custom
+ * properties named --pl-<edge>-<breakpoint>. This file resolves them into the
+ * applied --pl-<edge> value with a base-to-xl fallback cascade, so only the
+ * breakpoints a component actually sets take effect.
+ */
+
+.box {
+  box-sizing: border-box;
+  min-width: 0;
+
+  --pl-pt: var(--pl-pt-base, 0px);
+  --pl-pr: var(--pl-pr-base, 0px);
+  --pl-pb: var(--pl-pb-base, 0px);
+  --pl-pl: var(--pl-pl-base, 0px);
+  --pl-gap: var(--pl-gap-base, 0px);
+  --pl-cols: var(--pl-cols-base, 1);
+
+  padding: var(--pl-pt) var(--pl-pr) var(--pl-pb) var(--pl-pl);
+}
+
+@media (min-width: 640px) {
+  .box {
+    --pl-pt: var(--pl-pt-sm, var(--pl-pt-base, 0px));
+    --pl-pr: var(--pl-pr-sm, var(--pl-pr-base, 0px));
+    --pl-pb: var(--pl-pb-sm, var(--pl-pb-base, 0px));
+    --pl-pl: var(--pl-pl-sm, var(--pl-pl-base, 0px));
+    --pl-gap: var(--pl-gap-sm, var(--pl-gap-base, 0px));
+    --pl-cols: var(--pl-cols-sm, var(--pl-cols-base, 1));
+  }
+}
+
+@media (min-width: 768px) {
+  .box {
+    --pl-pt: var(--pl-pt-md, var(--pl-pt-sm, var(--pl-pt-base, 0px)));
+    --pl-pr: var(--pl-pr-md, var(--pl-pr-sm, var(--pl-pr-base, 0px)));
+    --pl-pb: var(--pl-pb-md, var(--pl-pb-sm, var(--pl-pb-base, 0px)));
+    --pl-pl: var(--pl-pl-md, var(--pl-pl-sm, var(--pl-pl-base, 0px)));
+    --pl-gap: var(--pl-gap-md, var(--pl-gap-sm, var(--pl-gap-base, 0px)));
+    --pl-cols: var(--pl-cols-md, var(--pl-cols-sm, var(--pl-cols-base, 1)));
+  }
+}
+
+@media (min-width: 1024px) {
+  .box {
+    --pl-pt: var(--pl-pt-lg, var(--pl-pt-md, var(--pl-pt-sm, var(--pl-pt-base, 0px))));
+    --pl-pr: var(--pl-pr-lg, var(--pl-pr-md, var(--pl-pr-sm, var(--pl-pr-base, 0px))));
+    --pl-pb: var(--pl-pb-lg, var(--pl-pb-md, var(--pl-pb-sm, var(--pl-pb-base, 0px))));
+    --pl-pl: var(--pl-pl-lg, var(--pl-pl-md, var(--pl-pl-sm, var(--pl-pl-base, 0px))));
+    --pl-gap: var(--pl-gap-lg, var(--pl-gap-md, var(--pl-gap-sm, var(--pl-gap-base, 0px))));
+    --pl-cols: var(--pl-cols-lg, var(--pl-cols-md, var(--pl-cols-sm, var(--pl-cols-base, 1))));
+  }
+}
+
+@media (min-width: 1280px) {
+  .box {
+    --pl-pt: var(--pl-pt-xl, var(--pl-pt-lg, var(--pl-pt-md, var(--pl-pt-sm, var(--pl-pt-base, 0px)))));
+    --pl-pr: var(--pl-pr-xl, var(--pl-pr-lg, var(--pl-pr-md, var(--pl-pr-sm, var(--pl-pr-base, 0px)))));
+    --pl-pb: var(--pl-pb-xl, var(--pl-pb-lg, var(--pl-pb-md, var(--pl-pb-sm, var(--pl-pb-base, 0px)))));
+    --pl-pl: var(--pl-pl-xl, var(--pl-pl-lg, var(--pl-pl-md, var(--pl-pl-sm, var(--pl-pl-base, 0px)))));
+    --pl-gap: var(--pl-gap-xl, var(--pl-gap-lg, var(--pl-gap-md, var(--pl-gap-sm, var(--pl-gap-base, 0px)))));
+    --pl-cols: var(--pl-cols-xl, var(--pl-cols-lg, var(--pl-cols-md, var(--pl-cols-sm, var(--pl-cols-base, 1)))));
+  }
+}
+
+/* ---- flow primitives ---- */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pl-gap);
+  align-items: stretch;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--pl-gap);
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.row[data-wrap] {
+  flex-wrap: wrap;
+}
+
+.grid {
+  display: grid;
+  gap: var(--pl-gap);
+  grid-template-columns: repeat(var(--pl-cols), minmax(0, 1fr));
+}
+
+.grid[data-autofit] {
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--pl-min, 16rem), 100%), 1fr));
+}
+
+.center {
+  display: grid;
+  place-items: center;
+}
+
+.spacer {
+  flex: 1 1 0%;
+  align-self: stretch;
+}
+
+.container {
+  width: 100%;
+  margin-inline: auto;
+}
+
+/* ---- alignment (flex and grid) ---- */
+.box[data-align='start'] { align-items: start; }
+.box[data-align='center'] { align-items: center; }
+.box[data-align='end'] { align-items: end; }
+.box[data-align='stretch'] { align-items: stretch; }
+.box[data-align='baseline'] { align-items: baseline; }
+
+.box[data-justify='start'] { justify-content: start; }
+.box[data-justify='center'] { justify-content: center; }
+.box[data-justify='end'] { justify-content: end; }
+.box[data-justify='between'] { justify-content: space-between; }
+.box[data-justify='around'] { justify-content: space-around; }
+.box[data-justify='evenly'] { justify-content: space-evenly; }
+
+.box[data-self='start'] { align-self: start; }
+.box[data-self='center'] { align-self: center; }
+.box[data-self='end'] { align-self: end; }
+.box[data-self='stretch'] { align-self: stretch; }
+.box[data-self='baseline'] { align-self: baseline; }
+
+/* ---- surface ---- */
+.box[data-bg='bg'] { background: var(--perfect-bg); }
+.box[data-bg='surface'] { background: var(--perfect-surface); }
+.box[data-bg='surfaceRaised'] { background: var(--perfect-surface-raised); }
+.box[data-bg='surfaceSunken'] { background: var(--perfect-surface-sunken); }
+.box[data-bg='accent'] { background: var(--perfect-accent-solid); color: var(--perfect-accent-contrast); }
+.box[data-bg='accentSoft'] { background: var(--perfect-accent-soft); color: var(--perfect-accent-text); }
+.box[data-bg='transparent'] { background: transparent; }
+.box[data-bg='glass'] {
+  background: var(--perfect-glass-regular);
+  backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
+}
+
+.box[data-radius='none'] { border-radius: var(--perfect-radius-none); }
+.box[data-radius='xs'] { border-radius: var(--perfect-radius-xs); }
+.box[data-radius='sm'] { border-radius: var(--perfect-radius-sm); }
+.box[data-radius='md'] { border-radius: var(--perfect-radius-md); }
+.box[data-radius='lg'] { border-radius: var(--perfect-radius-lg); }
+.box[data-radius='xl'] { border-radius: var(--perfect-radius-xl); }
+.box[data-radius='2xl'] { border-radius: var(--perfect-radius-2xl); }
+.box[data-radius='full'] { border-radius: var(--perfect-radius-full); }
+
+.box[data-border] { border: var(--perfect-hairline) solid var(--perfect-border-subtle); }
+.box[data-border='default'] { border-color: var(--perfect-border); }
+.box[data-border='subtle'] { border-color: var(--perfect-border-subtle); }
+.box[data-border='strong'] { border-color: var(--perfect-border-strong); }
+.box[data-border='accent'] { border-color: var(--perfect-accent-border); }
+
+.box[data-elevation='0'] { box-shadow: var(--perfect-shadow-0); }
+.box[data-elevation='1'] { box-shadow: var(--perfect-shadow-1); }
+.box[data-elevation='2'] { box-shadow: var(--perfect-shadow-2); }
+.box[data-elevation='3'] { box-shadow: var(--perfect-shadow-3); }
+.box[data-elevation='4'] { box-shadow: var(--perfect-shadow-4); }
+.box[data-elevation='5'] { box-shadow: var(--perfect-shadow-5); }
+
+/* ---- sizing ---- */
+.box[data-w='full'] { width: 100%; }
+.box[data-w='auto'] { width: auto; }
+.box[data-w='fit'] { width: fit-content; }
+
+.box[data-maxw='xs'] { max-width: var(--perfect-container-xs); }
+.box[data-maxw='sm'] { max-width: var(--perfect-container-sm); }
+.box[data-maxw='md'] { max-width: var(--perfect-container-md); }
+.box[data-maxw='lg'] { max-width: var(--perfect-container-lg); }
+.box[data-maxw='xl'] { max-width: var(--perfect-container-xl); }
+.box[data-maxw='prose'] { max-width: var(--perfect-container-prose); }
+.box[data-maxw='full'] { max-width: 100%; }
+
+.box[data-h='full'] { height: 100%; }
+.box[data-h='auto'] { height: auto; }
+.box[data-h='screen'] { min-height: 100vh; }
+
+/* ---- flex child ---- */
+.box[data-grow] { flex-grow: 1; }
+.box[data-shrink] { flex-shrink: 1; }
