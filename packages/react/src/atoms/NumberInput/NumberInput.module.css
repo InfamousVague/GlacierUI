@@ -1,0 +1,125 @@
+.group {
+  display: inline-flex;
+  align-items: stretch;
+  border: var(--perfect-hairline) solid var(--perfect-border);
+  border-radius: var(--perfect-radius-lg);
+  background: var(--perfect-surface);
+  color: var(--perfect-text);
+  font-family: var(--perfect-font-sans);
+  transition:
+    border-color var(--perfect-duration-fast) var(--perfect-ease-out),
+    box-shadow var(--perfect-duration-fast) var(--perfect-ease-out);
+}
+
+.group:hover:not(.disabled):not(:focus-within) {
+  border-color: var(--perfect-border-strong);
+}
+
+.group:focus-within {
+  border-color: var(--perfect-focus-ring);
+  box-shadow: 0 0 0 3px var(--perfect-accent-soft);
+}
+
+.group.disabled {
+  opacity: 0.5;
+  background: var(--perfect-surface-sunken);
+}
+
+.step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--perfect-text-muted);
+  cursor: pointer;
+  font-family: var(--perfect-font-sans);
+  line-height: 1;
+  transition: background-color var(--perfect-duration-fast) var(--perfect-ease-out);
+}
+
+.step:hover:not(:disabled) {
+  background: var(--perfect-hover);
+  color: var(--perfect-text);
+}
+
+.step:disabled {
+  cursor: not-allowed;
+  color: var(--perfect-text-subtle);
+}
+
+.step:first-child {
+  border-start-start-radius: var(--perfect-radius-lg);
+  border-end-start-radius: var(--perfect-radius-lg);
+}
+
+.step:last-child {
+  border-start-end-radius: var(--perfect-radius-lg);
+  border-end-end-radius: var(--perfect-radius-lg);
+}
+
+.input {
+  width: 100%;
+  min-width: 0;
+  border: none;
+  border-inline: var(--perfect-hairline) solid var(--perfect-border);
+  background: transparent;
+  color: var(--perfect-text);
+  font-family: var(--perfect-font-sans);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.input[type='number'] {
+  appearance: textfield;
+}
+
+.sm {
+  height: var(--perfect-control-height-sm);
+  font-size: var(--perfect-font-size-xs);
+}
+.sm .step {
+  width: var(--perfect-control-height-sm);
+  font-size: var(--perfect-font-size-md);
+}
+.sm .input {
+  padding-inline: var(--perfect-space-2);
+}
+
+.md {
+  height: var(--perfect-control-height-md);
+  font-size: var(--perfect-font-size-sm);
+}
+.md .step {
+  width: var(--perfect-control-height-md);
+  font-size: var(--perfect-font-size-lg);
+}
+.md .input {
+  padding-inline: var(--perfect-space-3);
+}
+
+.lg {
+  height: var(--perfect-control-height-lg);
+  font-size: var(--perfect-font-size-md);
+}
+.lg .step {
+  width: var(--perfect-control-height-lg);
+  font-size: var(--perfect-font-size-xl);
+}
+.lg .input {
+  padding-inline: var(--perfect-space-4);
+}
