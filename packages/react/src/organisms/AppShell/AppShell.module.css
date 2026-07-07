@@ -119,6 +119,27 @@
     box-shadow: var(--perfect-shadow-3);
     overflow: hidden;
   }
+
+  /* the top bar floats too, so the whole chrome reads as detached panels: a
+     rounded toolbar with the same gutter, sitting to the right of the sidebar
+     card and clear of the top and right edges */
+  .shell[data-floating] .header {
+    top: var(--perfect-space-4);
+    margin: var(--perfect-space-4) var(--perfect-space-4) 0 0;
+    border: var(--perfect-hairline) solid var(--perfect-glass-border);
+    border-radius: var(--perfect-radius-xl);
+    box-shadow: var(--perfect-shadow-3);
+  }
+
+  /* an empty floating header would just be a stray bar; hide it and let the
+     content start at the top gutter instead */
+  .shell[data-floating] .header[data-empty] {
+    display: none;
+  }
+
+  .shell[data-floating] .header[data-empty] + .content {
+    padding-top: var(--perfect-space-4);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
