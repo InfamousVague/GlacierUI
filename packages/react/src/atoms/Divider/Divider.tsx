@@ -1,10 +1,14 @@
+import { dividerOrientations } from '@perfect/spec';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Divider.module.css';
 
+// Derived from the spec so the orientation union cannot drift.
+export type DividerOrientation = (typeof dividerOrientations)[number];
+
 export interface DividerProps extends Omit<ComponentProps<'hr'>, 'children'> {
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: DividerOrientation;
   /** Optional centered label; renders a div separator instead of an hr. */
   label?: ReactNode;
   /** Renders a placeholder with the component's exact geometry. */

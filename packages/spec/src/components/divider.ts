@@ -1,6 +1,9 @@
 import type { ComponentSpec } from '../schema.ts';
 import { token } from '../vocab.ts';
 
+/** Orientations, exported so the React kit derives its union from here. */
+export const dividerOrientations = ['horizontal', 'vertical'] as const;
+
 export const dividerSpec: ComponentSpec = {
   name: 'Divider',
   id: 'divider',
@@ -10,7 +13,7 @@ export const dividerSpec: ComponentSpec = {
   element: 'hr',
   anatomy: [{ name: 'label', description: 'Optional centered text; switches the rule to a labelled separator.' }],
   props: [
-    { name: 'orientation', type: 'enum', values: ['horizontal', 'vertical'], default: 'horizontal', description: 'Rule direction.' },
+    { name: 'orientation', type: 'enum', values: dividerOrientations, default: 'horizontal', description: 'Rule direction.' },
     { name: 'label', type: 'node', description: 'Centered label; renders a div separator with a rule on each side.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
   ],

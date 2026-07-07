@@ -1,12 +1,17 @@
+import { controlSizes, spinnerTones } from '@perfect/spec';
 import type { ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Progress.module.css';
 
+// Derived from the spec so the unions cannot drift.
+export type SpinnerSize = (typeof controlSizes)[number];
+export type SpinnerTone = (typeof spinnerTones)[number];
+
 export interface SpinnerProps extends ComponentProps<'span'> {
   /** sm tracks the surrounding font size (1em); md and lg are fixed. */
-  size?: 'sm' | 'md' | 'lg';
-  tone?: 'subtle' | 'accent' | 'inherit';
+  size?: SpinnerSize;
+  tone?: SpinnerTone;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
   /** Accessible name. Pass an empty string when a parent already announces loading. */

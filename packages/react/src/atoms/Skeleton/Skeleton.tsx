@@ -1,10 +1,14 @@
+import { skeletonVariants } from '@perfect/spec';
 import type { ComponentProps, CSSProperties } from 'react';
 import { cx } from '../../internal/cx.ts';
 import styles from './Skeleton.module.css';
 
+// Derived from the spec so the variant union cannot drift.
+export type SkeletonVariant = (typeof skeletonVariants)[number];
+
 export interface SkeletonProps extends ComponentProps<'span'> {
   /** text is a 1em line, rect a rounded block, circle a disc. */
-  variant?: 'text' | 'rect' | 'circle';
+  variant?: SkeletonVariant;
   width?: string | number;
   height?: string | number;
   /** Corner radius override, e.g. var(--perfect-control-radius). */

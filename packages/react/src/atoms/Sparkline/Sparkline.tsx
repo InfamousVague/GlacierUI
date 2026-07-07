@@ -1,16 +1,21 @@
+import { sparklineTones, sparklineVariants } from '@perfect/spec';
 import type { ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Sparkline.module.css';
 
+// Derived from the spec so the unions cannot drift.
+export type SparklineVariant = (typeof sparklineVariants)[number];
+export type SparklineTone = (typeof sparklineTones)[number];
+
 export interface SparklineProps extends ComponentProps<'svg'> {
   /** The series to plot. Empty or single-point data renders gracefully. */
   data: number[];
   /** line draws a polyline; bar draws evenly spaced columns. */
-  variant?: 'line' | 'bar';
+  variant?: SparklineVariant;
   width?: number;
   height?: number;
-  tone?: 'accent' | 'success' | 'warning' | 'danger';
+  tone?: SparklineTone;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
   /** Accessible name for the chart. */

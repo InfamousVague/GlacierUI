@@ -1,11 +1,15 @@
+import { textareaSizes } from '@perfect/spec';
 import type { ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useField } from '../../internal/FieldContext.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Textarea.module.css';
 
+// Derived from the spec so the size union cannot drift.
+export type TextareaSize = (typeof textareaSizes)[number];
+
 export interface TextareaProps extends Omit<ComponentProps<'textarea'>, 'size'> {
-  size?: 'sm' | 'md' | 'lg';
+  size?: TextareaSize;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
 }

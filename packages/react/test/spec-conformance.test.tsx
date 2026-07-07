@@ -7,19 +7,53 @@ import {
   cardVariants,
   dividerSpec,
   pillSpec,
-  segmentedBarSizes,
-  segmentedBarTones,
   specs,
-  statusDotSpec,
   validateSpec,
   type ComponentSpec,
 } from '@perfect/spec';
-import { Button, Card, Divider, Pill, SegmentedBar, StatusDot } from '../src/index.ts';
+import {
+  Avatar,
+  Button,
+  Callout,
+  Card,
+  Checkbox,
+  CodeBlock,
+  CounterBadge,
+  Divider,
+  Heading,
+  IconButton,
+  Input,
+  Kbd,
+  Label,
+  Link,
+  Meter,
+  NumberInput,
+  Pill,
+  ProgressBar,
+  ProgressRing,
+  Radio,
+  SearchField,
+  SegmentedBar,
+  Skeleton,
+  Slider,
+  Sparkline,
+  Spinner,
+  StatusDot,
+  Surface,
+  Switch,
+  Text,
+  Textarea,
+  Toggle,
+  Toolbar,
+} from '../src/index.ts';
+import type { ReactElement } from 'react';
 
 /**
- * The spec is the contract; these tests hold the React kit to it. If a
- * component gains a variant, drops a size, or changes a default without the
- * spec moving too (or the reverse), one of these fails.
+ * The spec is the contract; these tests hold the React kit to it. Every
+ * component's enums are derived from its spec, so the types cannot drift at
+ * compile time. This suite adds the runtime half: it renders every component
+ * across every variant, tone, and size the spec declares, and checks that a
+ * few representative defaults agree.
  */
 
 describe('spec catalog', () => {
@@ -39,17 +73,84 @@ function combos(spec: ComponentSpec): { variant?: string; tone?: string; size?: 
   return out;
 }
 
-describe('React matches its spec', () => {
-  it('Button covers every spec variant and size, and defaults agree', () => {
-    for (const { variant, size } of combos(buttonSpec))
-      expect(() =>
-        render(
-          <Button variant={variant as never} size={size as never}>
-            Go
-          </Button>,
-        ),
-      ).not.toThrow();
+type Combo = { variant?: string; tone?: string; size?: string };
+type Renderer = (o: Combo) => ReactElement;
 
+// One renderer per component: required props baked in, the spec's variant /
+// tone / size threaded to the real prop. Heading and Surface render bare
+// because the spec expresses their level enum as strings while React uses
+// ergonomic numbers, so a size/variant sweep would not be meaningful.
+const RENDER: Record<string, Renderer> = {
+  avatar: (o) => <Avatar size={o.size as never} name="Ada Lovelace" />,
+  button: (o) => (
+    <Button variant={o.variant as never} size={o.size as never}>
+      Go
+    </Button>
+  ),
+  callout: (o) => <Callout tone={o.tone as never}>Note</Callout>,
+  card: (o) => <Card variant={o.variant as never}>Body</Card>,
+  checkbox: () => <Checkbox />,
+  'code-block': () => <CodeBlock code="const x = 1;" />,
+  'counter-badge': (o) => <CounterBadge tone={o.tone as never} size={o.size as never} count={3} />,
+  divider: () => <Divider />,
+  heading: () => <Heading>Title</Heading>,
+  'icon-button': (o) => (
+    <IconButton variant={o.variant as never} size={o.size as never} aria-label="Star">
+      <span />
+    </IconButton>
+  ),
+  input: (o) => <Input size={o.size as never} />,
+  kbd: () => <Kbd>K</Kbd>,
+  label: () => <Label>Email</Label>,
+  link: () => <Link href="#">Docs</Link>,
+  meter: (o) => <Meter tone={o.tone as never} size={o.size as never} value={50} />,
+  'number-input': (o) => <NumberInput size={o.size as never} />,
+  pill: (o) => (
+    <Pill variant={o.variant as never} tone={o.tone as never} size={o.size as never}>
+      Tag
+    </Pill>
+  ),
+  'progress-bar': (o) => <ProgressBar tone={o.tone as never} size={o.size as never} value={50} />,
+  'progress-ring': (o) => <ProgressRing tone={o.tone as never} value={50} />,
+  radio: () => <Radio />,
+  'search-field': (o) => <SearchField size={o.size as never} />,
+  'segmented-bar': (o) => (
+    <SegmentedBar size={o.size as never} data={[{ value: 1, tone: o.tone as never }]} />
+  ),
+  skeleton: (o) => <Skeleton variant={o.variant as never} />,
+  slider: () => <Slider value={50} />,
+  sparkline: (o) => <Sparkline variant={o.variant as never} tone={o.tone as never} data={[1, 2, 3]} />,
+  spinner: (o) => <Spinner tone={o.tone as never} size={o.size as never} />,
+  'status-dot': (o) => <StatusDot tone={o.tone as never} size={o.size as never} />,
+  surface: () => <Surface>Body</Surface>,
+  switch: (o) => <Switch size={o.size as never} />,
+  text: (o) => (
+    <Text tone={o.tone as never} size={o.size as never}>
+      Body
+    </Text>
+  ),
+  textarea: (o) => <Textarea size={o.size as never} />,
+  toggle: (o) => <Toggle size={o.size as never}>Bold</Toggle>,
+  toolbar: () => <Toolbar end={<span>Actions</span>}>Title</Toolbar>,
+};
+
+describe('React renders every spec variant, tone, and size', () => {
+  it('has a renderer for every catalogued spec', () => {
+    expect(specs.filter((s) => !RENDER[s.id]).map((s) => s.id)).toEqual([]);
+  });
+
+  for (const spec of specs) {
+    const renderer = RENDER[spec.id];
+    if (!renderer) continue;
+    it(`${spec.name} renders every declared combination`, () => {
+      for (const combo of combos(spec))
+        expect(() => render(renderer(combo))).not.toThrow();
+    });
+  }
+});
+
+describe('defaults agree', () => {
+  it('Button: bare render equals the spec defaults', () => {
     const bare = render(<Button>Go</Button>).container.innerHTML;
     const explicit = render(
       <Button variant={buttonSpec.defaults!.variant as never} size={buttonSpec.defaults!.size as never}>
@@ -59,16 +160,7 @@ describe('React matches its spec', () => {
     expect(bare).toBe(explicit);
   });
 
-  it('Pill covers every spec variant, tone, and size, and defaults agree', () => {
-    for (const { variant, tone, size } of combos(pillSpec))
-      expect(() =>
-        render(
-          <Pill variant={variant as never} tone={tone as never} size={size as never}>
-            Tag
-          </Pill>,
-        ),
-      ).not.toThrow();
-
+  it('Pill: bare render equals the spec defaults', () => {
     const bare = render(<Pill>Tag</Pill>).container.innerHTML;
     const explicit = render(
       <Pill
@@ -82,19 +174,19 @@ describe('React matches its spec', () => {
     expect(bare).toBe(explicit);
   });
 
-  it('StatusDot covers every spec tone and size', () => {
-    for (const { tone, size } of combos(statusDotSpec))
-      expect(() => render(<StatusDot tone={tone as never} size={size as never} />)).not.toThrow();
+  it('Card: bare render equals the spec defaults', () => {
+    const bare = render(<Card>Body</Card>).container.innerHTML;
+    const explicit = render(
+      <Card variant={cardSpec.defaults!.variant as never} elevation={cardSpec.defaults!.elevation as never}>
+        Body
+      </Card>,
+    ).container.innerHTML;
+    expect(bare).toBe(explicit);
   });
+});
 
-  it('Divider covers every orientation from its spec', () => {
-    const orientations = dividerSpec.props.find((p) => p.name === 'orientation')?.values ?? [];
-    expect(orientations.length).toBeGreaterThan(0);
-    for (const orientation of orientations)
-      expect(() => render(<Divider orientation={orientation as never} />)).not.toThrow();
-  });
-
-  it('Card covers every spec variant and elevation, and defaults agree', () => {
+describe('enum props beyond variant/tone/size', () => {
+  it('Card covers every elevation', () => {
     for (const variant of cardVariants)
       for (const elevation of cardElevations)
         expect(() =>
@@ -104,19 +196,12 @@ describe('React matches its spec', () => {
             </Card>,
           ),
         ).not.toThrow();
-
-    const bare = render(<Card>Body</Card>).container.innerHTML;
-    const explicit = render(
-      <Card variant={cardSpec.defaults!.variant as never} elevation={cardSpec.defaults!.elevation as never}>
-        Body
-      </Card>,
-    ).container.innerHTML;
-    expect(bare).toBe(explicit);
   });
 
-  it('SegmentedBar covers every spec tone and size', () => {
-    for (const tone of segmentedBarTones)
-      for (const size of segmentedBarSizes)
-        expect(() => render(<SegmentedBar size={size} data={[{ value: 1, tone }]} />)).not.toThrow();
+  it('Divider covers every orientation from its spec', () => {
+    const orientations = dividerSpec.props.find((p) => p.name === 'orientation')?.values ?? [];
+    expect(orientations.length).toBeGreaterThan(0);
+    for (const orientation of orientations)
+      expect(() => render(<Divider orientation={orientation as never} />)).not.toThrow();
   });
 });

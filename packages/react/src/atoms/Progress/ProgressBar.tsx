@@ -1,15 +1,20 @@
+import { progressBarSizes, progressBarTones } from '@perfect/spec';
 import type { ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Progress.module.css';
+
+// Derived from the spec so the unions cannot drift.
+export type ProgressBarSize = (typeof progressBarSizes)[number];
+export type ProgressBarTone = (typeof progressBarTones)[number];
 
 export interface ProgressBarProps extends ComponentProps<'div'> {
   /** 0 to max. Omit (or set indeterminate) for an unknown duration. */
   value?: number;
   max?: number;
   indeterminate?: boolean;
-  size?: 'sm' | 'md';
-  tone?: 'accent' | 'success' | 'warning' | 'danger';
+  size?: ProgressBarSize;
+  tone?: ProgressBarTone;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
   /** Accessible name for the bar. */

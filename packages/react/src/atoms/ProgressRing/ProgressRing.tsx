@@ -1,7 +1,11 @@
+import { progressRingTones } from '@perfect/spec';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './ProgressRing.module.css';
+
+// Derived from the spec so the tone union cannot drift.
+export type ProgressRingTone = (typeof progressRingTones)[number];
 
 export interface ProgressRingProps extends ComponentProps<'div'> {
   /** 0 to max. Clamped into range. */
@@ -11,7 +15,7 @@ export interface ProgressRingProps extends ComponentProps<'div'> {
   size?: number;
   /** Stroke width of the track and arc in pixels. */
   thickness?: number;
-  tone?: 'accent' | 'success' | 'warning' | 'danger';
+  tone?: ProgressRingTone;
   /** Centered content. Takes priority over showValue. */
   label?: ReactNode;
   /** With no label, render the rounded percentage in the center. */
