@@ -139,8 +139,10 @@
 /* Frosted glass material on the field surface; the input's solid background
    is dropped so the wrapper's material shows through. */
 .glass {
+  /* the material sits on the wrapper, so it must round to match the input it
+     sits behind — otherwise its square corners poke past the rounded field */
+  border-radius: var(--perfect-radius-lg);
   background: var(--perfect-glass-regular);
-  border-color: var(--perfect-glass-border);
   color: var(--perfect-text);
   backdrop-filter: blur(var(--perfect-blur-sm)) saturate(var(--perfect-glass-saturate));
   -webkit-backdrop-filter: blur(var(--perfect-blur-sm)) saturate(var(--perfect-glass-saturate));

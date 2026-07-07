@@ -385,6 +385,14 @@ code {
   max-width: 22rem;
 }
 
+/* the search already sits inside the blurred glass toolbar, so drop the field's
+   own backdrop blur to avoid a nested double-blur; its translucent tint reads
+   as glass over the toolbar behind it. */
+.docSearch > div {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 .docSearchResults {
   z-index: 100;
   margin: 0;
