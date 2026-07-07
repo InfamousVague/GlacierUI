@@ -102,6 +102,23 @@
   .header[data-empty] {
     display: none;
   }
+
+  /* floating variant: the sidebar detaches into a rounded card with a gutter
+     on every side, floating in place as the main column scrolls past it */
+  .shell[data-floating] {
+    grid-template-columns: calc(var(--shell-sidebar) + var(--perfect-space-4) * 2) 1fr;
+  }
+
+  .shell[data-floating] .sidebar {
+    top: var(--perfect-space-4);
+    height: calc(100vh - var(--perfect-space-4) * 2);
+    margin: var(--perfect-space-4);
+    border: var(--perfect-hairline) solid var(--perfect-glass-border);
+    border-radius: var(--perfect-radius-xl);
+    background: var(--perfect-surface);
+    box-shadow: var(--perfect-shadow-3);
+    overflow: hidden;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

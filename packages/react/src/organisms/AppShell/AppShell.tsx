@@ -12,6 +12,8 @@ export interface AppShellProps {
   sidebarWidth?: string;
   /** Accessible name for the sidebar landmark. */
   sidebarLabel?: string;
+  /** Detach the desktop sidebar into a floating, rounded card with a gutter. */
+  floating?: boolean;
   children?: ReactNode;
 }
 
@@ -32,6 +34,7 @@ export function AppShell({
   header,
   sidebarWidth = '16rem',
   sidebarLabel = 'Navigation',
+  floating = false,
   children,
 }: AppShellProps) {
   const [open, setOpen] = useState(false);
@@ -50,7 +53,11 @@ export function AppShell({
   };
 
   return (
-    <div className={styles.shell} style={{ '--shell-sidebar': sidebarWidth } as CSSProperties}>
+    <div
+      className={styles.shell}
+      data-floating={floating ? '' : undefined}
+      style={{ '--shell-sidebar': sidebarWidth } as CSSProperties}
+    >
       <aside
         aria-label={sidebarLabel}
         className={styles.sidebar}
