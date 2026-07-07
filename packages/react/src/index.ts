@@ -16,3 +16,5 @@ export { Radio, type RadioProps } from './atoms/Selection/Radio.tsx';
 export { Switch, type SwitchProps } from './atoms/Selection/Switch.tsx';
 export { Card, type CardProps, type CardVariant, type Elevation } from './atoms/Surface/Card.tsx';
 export { Surface, type SurfaceProps, type SurfaceLevel } from './atoms/Surface/Surface.tsx';
+export { Pill, type PillProps, type PillTone, type PillVariant } from './atoms/Pill/Pill.tsx';
+export { Divider, type DividerProps } from './atoms/Divider/Divider.tsx';
