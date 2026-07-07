@@ -21,3 +21,4 @@ export { Divider, type DividerProps } from './atoms/Divider/Divider.tsx';
 export { Slider, type SliderProps } from './atoms/Slider/Slider.tsx';
 export { Toggle, type ToggleProps } from './atoms/Toggle/Toggle.tsx';
 export { Meter, type MeterProps, type MeterTone } from './atoms/Meter/Meter.tsx';
+export { Select, type SelectProps, type SelectOption } from './molecules/Select/Select.tsx';

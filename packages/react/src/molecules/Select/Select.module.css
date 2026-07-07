@@ -1,0 +1,148 @@
+.root {
+  position: relative;
+  display: inline-block;
+  font-family: var(--perfect-font-sans);
+}
+
+.fullWidth {
+  display: block;
+  width: 100%;
+}
+
+.fullWidth .trigger {
+  width: 100%;
+}
+
+/* trigger: same metrics as Input so mixed form rows line up */
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--perfect-space-3);
+  border: var(--perfect-hairline) solid var(--perfect-border);
+  border-radius: var(--perfect-radius-lg);
+  background: var(--perfect-surface);
+  color: var(--perfect-text);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color var(--perfect-duration-fast) var(--perfect-ease-out),
+    box-shadow var(--perfect-duration-fast) var(--perfect-ease-out),
+    background-color var(--perfect-duration-fast) var(--perfect-ease-out);
+}
+
+.trigger:hover:not(:disabled) {
+  border-color: var(--perfect-border-strong);
+}
+
+.trigger:focus-visible,
+.trigger[aria-expanded='true'] {
+  outline: none;
+  border-color: var(--perfect-focus-ring);
+  box-shadow: 0 0 0 3px var(--perfect-accent-soft);
+}
+
+.trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--perfect-surface-sunken);
+}
+
+.trigger[aria-invalid='true'] {
+  border-color: var(--perfect-danger-border);
+}
+
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trigger[data-placeholder] .value {
+  color: var(--perfect-text-subtle);
+}
+
+.chevrons {
+  flex: none;
+  color: var(--perfect-text-subtle);
+  display: block;
+}
+
+/* sizes match Input */
+.sm {
+  height: var(--perfect-control-height-sm);
+  padding-inline: var(--perfect-space-3);
+  font-size: var(--perfect-font-size-xs);
+}
+.md {
+  height: var(--perfect-control-height-md);
+  padding-inline: var(--perfect-space-4);
+  font-size: var(--perfect-font-size-sm);
+}
+.lg {
+  height: var(--perfect-control-height-lg);
+  padding-inline: var(--perfect-space-5);
+  font-size: var(--perfect-font-size-md);
+}
+
+/* dropdown: glass panel; position, size bounds, and origin are set inline
+   by the anchoring logic since the menu portals to document.body */
+.menu {
+  overflow-y: auto;
+  margin: 0;
+  padding: var(--perfect-space-1);
+  list-style: none;
+  border: var(--perfect-hairline) solid var(--perfect-glass-border);
+  border-radius: var(--perfect-radius-lg);
+  background: var(--perfect-glass-thick);
+  backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
+  box-shadow:
+    inset 0 1px 0 var(--perfect-glass-highlight),
+    var(--perfect-shadow-4);
+  font-family: var(--perfect-font-sans);
+}
+
+.menu:focus-visible {
+  outline: none;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: var(--perfect-space-1);
+  padding: var(--perfect-space-2) var(--perfect-space-3) var(--perfect-space-2) var(--perfect-space-2);
+  border-radius: var(--perfect-radius-md);
+  color: var(--perfect-text);
+  font-size: var(--perfect-font-size-sm);
+  line-height: var(--perfect-leading-sm);
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* the portaled menu carries its own size class */
+.menuSm .option {
+  font-size: var(--perfect-font-size-xs);
+}
+
+.option[data-active] {
+  background: var(--perfect-accent-solid);
+  color: var(--perfect-accent-contrast);
+}
+
+.option[data-disabled] {
+  color: var(--perfect-text-disabled);
+  cursor: not-allowed;
+}
+
+.check {
+  flex: none;
+  width: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
