@@ -14,6 +14,20 @@
   box-sizing: border-box;
   min-width: 0;
 
+  /* These inputs are written per box as inline styles by resolveBox. Reset them
+     to the guaranteed-invalid value here so a nested box can never inherit an
+     ancestor's padding, gap, columns, or min child width. Inline values still
+     win by specificity, and `initial` reads as unset so the fallback cascade
+     below (and in the media queries) keeps working. */
+  --pl-pt-base: initial; --pl-pr-base: initial; --pl-pb-base: initial; --pl-pl-base: initial;
+  --pl-pt-sm: initial; --pl-pr-sm: initial; --pl-pb-sm: initial; --pl-pl-sm: initial;
+  --pl-pt-md: initial; --pl-pr-md: initial; --pl-pb-md: initial; --pl-pl-md: initial;
+  --pl-pt-lg: initial; --pl-pr-lg: initial; --pl-pb-lg: initial; --pl-pl-lg: initial;
+  --pl-pt-xl: initial; --pl-pr-xl: initial; --pl-pb-xl: initial; --pl-pl-xl: initial;
+  --pl-gap-base: initial; --pl-gap-sm: initial; --pl-gap-md: initial; --pl-gap-lg: initial; --pl-gap-xl: initial;
+  --pl-cols-base: initial; --pl-cols-sm: initial; --pl-cols-md: initial; --pl-cols-lg: initial; --pl-cols-xl: initial;
+  --pl-min: initial;
+
   --pl-pt: var(--pl-pt-base, 0px);
   --pl-pr: var(--pl-pr-base, 0px);
   --pl-pb: var(--pl-pb-base, 0px);
