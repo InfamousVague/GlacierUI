@@ -1,0 +1,58 @@
+.skeleton {
+  display: inline-block;
+  flex: none;
+  background-color: var(--perfect-hover);
+  /* The highlight is fixed to the viewport, so one shimmer wave sweeps across
+     every skeleton on screen at the same size and rate. Small and large
+     placeholders reveal the same passing band instead of scaling their own. */
+  background-image: linear-gradient(
+    100deg,
+    var(--perfect-hover) 0%,
+    var(--perfect-active) 50%,
+    var(--perfect-hover) 100%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 45vw 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+.text {
+  height: 1em;
+  border-radius: var(--perfect-radius-sm);
+  vertical-align: middle;
+}
+
+.rect {
+  border-radius: var(--perfect-radius-md);
+}
+
+.circle {
+  border-radius: var(--perfect-radius-full);
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -45vw 0;
+  }
+  to {
+    background-position: 145vw 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    background: var(--perfect-hover);
+    animation: skeletonPulse 1.6s ease-in-out infinite;
+  }
+
+  @keyframes skeletonPulse {
+    0%,
+    100% {
+      opacity: 0.55;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+}
