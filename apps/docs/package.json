@@ -1,5 +1,5 @@
 {
-  "name": "@perfect/docs",
+  "name": "@glacier/docs",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -10,9 +10,10 @@
     "test:visual": "playwright test"
   },
   "dependencies": {
-    "@perfect/motion": "*",
-    "@perfect/react": "*",
-    "@perfect/tokens": "*",
+    "@glacier/icons": "*",
+    "@glacier/motion": "*",
+    "@glacier/react": "*",
+    "@glacier/tokens": "*",
     "motion": "^12.23.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

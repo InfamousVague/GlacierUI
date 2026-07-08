@@ -4,11 +4,11 @@
 
 body {
   margin: 0;
-  background: var(--perfect-bg);
-  color: var(--perfect-text);
-  font-family: var(--perfect-font-sans);
-  font-size: var(--perfect-font-size-md);
-  line-height: var(--perfect-leading-md);
+  background: var(--glacier-bg);
+  color: var(--glacier-text);
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-md);
+  line-height: var(--glacier-leading-md);
 }
 
 /* ambient color wash so glass materials have something to blur */
@@ -29,178 +29,149 @@ body::before {
    owns every gap, so nothing here sets a margin. */
 
 .brand {
-  font-size: var(--perfect-font-size-lg);
-  font-weight: var(--perfect-font-weight-bold);
-  letter-spacing: var(--perfect-tracking-lg);
+  font-size: var(--glacier-font-size-lg);
+  font-weight: var(--glacier-font-weight-bold);
+  letter-spacing: var(--glacier-tracking-lg);
   margin: 0;
-  padding-inline: var(--perfect-space-3);
+  padding-inline: var(--glacier-space-3);
 }
 
 .brand small {
   display: block;
-  font-size: var(--perfect-font-size-xs);
-  font-weight: var(--perfect-font-weight-regular);
-  color: var(--perfect-text-subtle);
+  font-size: var(--glacier-font-size-xs);
+  font-weight: var(--glacier-font-weight-regular);
+  color: var(--glacier-text-subtle);
 }
 
 /* The sidebar nav is the Sidebar structure; only the brand keeps custom type. */
 
 /* .content is a prose marker only; the Container primitive owns width and padding. */
 
+/* Prose chrome renders through the kit's Heading/Text components now, so they
+   own type (size, weight, color). These rules keep only the page's vertical
+   rhythm — the margins between title, lede, and sections. */
 .content h1 {
-  font-size: var(--perfect-font-size-3xl);
-  line-height: var(--perfect-leading-3xl);
-  letter-spacing: var(--perfect-tracking-3xl);
-  margin: 0 0 var(--perfect-space-2);
+  margin: 0 0 var(--glacier-space-2);
 }
 
 .content h2 {
-  font-size: var(--perfect-font-size-xl);
-  line-height: var(--perfect-leading-xl);
-  margin: var(--perfect-space-10) 0 var(--perfect-space-4);
+  margin: var(--glacier-space-10) 0 var(--glacier-space-4);
 }
 
 .content h2:first-of-type {
-  margin-top: var(--perfect-space-8);
+  margin-top: var(--glacier-space-8);
 }
 
 .content h3 {
-  font-size: var(--perfect-font-size-lg);
-  line-height: var(--perfect-leading-lg);
-  margin: var(--perfect-space-6) 0 var(--perfect-space-3);
+  margin: var(--glacier-space-6) 0 var(--glacier-space-3);
 }
 
 .lede {
-  color: var(--perfect-text-muted);
-  font-size: var(--perfect-font-size-lg);
-  line-height: var(--perfect-leading-lg);
   margin: 0;
   max-width: 46rem;
 }
 
 .content p,
 .content li {
-  color: var(--perfect-text-muted);
+  color: var(--glacier-text-muted);
 }
 
 code {
-  font-family: var(--perfect-font-mono);
+  font-family: var(--glacier-font-mono);
   font-size: 0.85em;
-  background: var(--perfect-surface-sunken);
-  border: var(--perfect-hairline) solid var(--perfect-border-subtle);
-  border-radius: var(--perfect-radius-sm);
+  background: var(--glacier-surface-sunken);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-sm);
   padding: 0.1em 0.35em;
 }
 
 /* component docs: examples, code, props */
 .example {
-  margin-block: var(--perfect-space-6) var(--perfect-space-10);
+  margin-block: var(--glacier-space-6) var(--glacier-space-10);
 }
 
 .exampleTitle {
-  font-size: var(--perfect-font-size-lg);
-  line-height: var(--perfect-leading-lg);
-  margin: 0 0 var(--perfect-space-2);
+  font-size: var(--glacier-font-size-lg);
+  line-height: var(--glacier-leading-lg);
+  margin: 0 0 var(--glacier-space-2);
 }
 
 .exampleDescription {
-  margin: 0 0 var(--perfect-space-4);
+  margin: 0 0 var(--glacier-space-4);
   max-width: 46rem;
 }
 
 /* flow (flex, gap, padding) is owned by the Row primitive; this keeps only the
    joined-surface skin so the demo box docks onto the code block below it. */
 .exampleDemo {
-  border: var(--perfect-hairline) solid var(--perfect-glass-border);
-  border-radius: var(--perfect-radius-xl) var(--perfect-radius-xl) 0 0;
-  background: var(--perfect-glass-regular);
-  backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
-  box-shadow: inset 0 1px 0 var(--perfect-glass-highlight);
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-radius: var(--glacier-radius-xl) var(--glacier-radius-xl) 0 0;
+  background: var(--glacier-glass-regular);
+  backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 1px 0 var(--glacier-glass-highlight);
 }
 
-.codeBlock {
-  position: relative;
-  border: var(--perfect-hairline) solid var(--perfect-glass-border);
-  border-top: none;
-  border-radius: 0 0 var(--perfect-radius-xl) var(--perfect-radius-xl);
-  background: var(--perfect-surface-sunken);
-  overflow: hidden;
-
-  /* shiki token colors, driven by the kit's ramps so they flip with the theme */
-  --shiki-foreground: var(--perfect-text);
+/* Shiki token colors, driven by the kit's ramps so highlighting flips with the
+   theme. Examples now render through the kit's CodeBlock, so these cascade down
+   from the docs content into the highlighted markup it wraps. */
+.content {
+  --shiki-foreground: var(--glacier-text);
   --shiki-background: transparent;
-  --shiki-token-keyword: var(--perfect-purple-11);
-  --shiki-token-string: var(--perfect-green-11);
-  --shiki-token-string-expression: var(--perfect-green-11);
-  --shiki-token-constant: var(--perfect-blue-11);
-  --shiki-token-function: var(--perfect-accent-11);
-  --shiki-token-parameter: var(--perfect-amber-11);
-  --shiki-token-comment: var(--perfect-text-subtle);
-  --shiki-token-punctuation: var(--perfect-text-muted);
-  --shiki-token-link: var(--perfect-blue-11);
-}
-
-.codeBlock pre {
-  margin: 0;
-  padding: var(--perfect-space-5) var(--perfect-space-6);
-  overflow-x: auto;
-  font-family: var(--perfect-font-mono);
-  font-size: var(--perfect-font-size-xs);
-  line-height: 1.7;
-  color: var(--perfect-text-muted);
-}
-
-.codeBlock pre code {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: inherit;
+  --shiki-token-keyword: var(--glacier-purple-11);
+  --shiki-token-string: var(--glacier-green-11);
+  --shiki-token-string-expression: var(--glacier-green-11);
+  --shiki-token-constant: var(--glacier-blue-11);
+  --shiki-token-function: var(--glacier-accent-11);
+  --shiki-token-parameter: var(--glacier-amber-11);
+  --shiki-token-comment: var(--glacier-text-subtle);
+  --shiki-token-punctuation: var(--glacier-text-muted);
+  --shiki-token-link: var(--glacier-blue-11);
 }
 
 .copyButton {
   position: absolute;
-  top: var(--perfect-space-3);
-  right: var(--perfect-space-3);
+  top: var(--glacier-space-3);
+  right: var(--glacier-space-3);
   z-index: 1;
   height: 1.75rem;
-  padding-inline: var(--perfect-space-3);
-  border: var(--perfect-hairline) solid var(--perfect-glass-border);
-  border-radius: var(--perfect-radius-full);
-  background: var(--perfect-glass-regular);
-  backdrop-filter: blur(var(--perfect-blur-sm));
-  -webkit-backdrop-filter: blur(var(--perfect-blur-sm));
-  color: var(--perfect-text-muted);
+  padding-inline: var(--glacier-space-3);
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-glass-regular);
+  backdrop-filter: blur(var(--glacier-blur-sm));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm));
+  color: var(--glacier-text-muted);
   font: inherit;
-  font-size: var(--perfect-font-size-xs);
+  font-size: var(--glacier-font-size-xs);
   cursor: pointer;
   transition:
-    color var(--perfect-duration-fast) var(--perfect-ease-out),
-    background-color var(--perfect-duration-fast) var(--perfect-ease-out);
+    color var(--glacier-duration-fast) var(--glacier-ease-out),
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out);
 }
 
 .copyButton:hover {
-  color: var(--perfect-text);
-  background: var(--perfect-glass-thick);
+  color: var(--glacier-text);
+  background: var(--glacier-glass-thick);
 }
 
 .propsTableWrap {
   overflow-x: auto;
-  margin-block: var(--perfect-space-4);
+  margin-block: var(--glacier-space-4);
 }
 
 .swatchGrid {
   display: grid;
   grid-template-columns: 6rem repeat(12, 1fr);
-  gap: var(--perfect-space-1);
+  gap: var(--glacier-space-1);
   align-items: center;
-  font-size: var(--perfect-font-size-xs);
+  font-size: var(--glacier-font-size-xs);
 }
 
 .swatch {
   aspect-ratio: 1 / 0.75;
-  border-radius: var(--perfect-radius-sm);
-  border: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  border-radius: var(--glacier-radius-sm);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
 }
 
 /* squircle shape: border-radius sets the corner size, corner-shape bends it
@@ -212,12 +183,12 @@ code {
 
 /* spec catalog outline: a grouped, scannable index of chips */
 .specNavHeading {
-  font-size: var(--perfect-font-size-xs);
-  font-weight: var(--perfect-font-weight-semibold);
+  font-size: var(--glacier-font-size-xs);
+  font-weight: var(--glacier-font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--perfect-text-subtle);
-  margin-bottom: var(--perfect-space-2);
+  color: var(--glacier-text-subtle);
+  margin-bottom: var(--glacier-space-2);
 }
 
 .specNavHeading span {
@@ -226,80 +197,80 @@ code {
 }
 
 .specChip {
-  padding: var(--perfect-space-1) var(--perfect-space-3);
-  border: var(--perfect-hairline) solid var(--perfect-border);
-  border-radius: var(--perfect-radius-full);
-  background: var(--perfect-surface);
-  color: var(--perfect-text-muted);
+  padding: var(--glacier-space-1) var(--glacier-space-3);
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-surface);
+  color: var(--glacier-text-muted);
   font: inherit;
-  font-size: var(--perfect-font-size-sm);
+  font-size: var(--glacier-font-size-sm);
   cursor: pointer;
   transition:
-    background-color var(--perfect-duration-fast) var(--perfect-ease-out),
-    color var(--perfect-duration-fast) var(--perfect-ease-out),
-    border-color var(--perfect-duration-fast) var(--perfect-ease-out);
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out),
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out);
 }
 
 .specChip:hover {
-  border-color: var(--perfect-border-strong);
-  color: var(--perfect-text);
+  border-color: var(--glacier-border-strong);
+  color: var(--glacier-text);
 }
 
 .specChip[data-active] {
-  background: var(--perfect-accent-soft);
-  border-color: var(--perfect-accent-border);
-  color: var(--perfect-accent-text);
-  font-weight: var(--perfect-font-weight-medium);
+  background: var(--glacier-accent-soft);
+  border-color: var(--glacier-accent-border);
+  color: var(--glacier-accent-text);
+  font-weight: var(--glacier-font-weight-medium);
 }
 
 .specChip:focus-visible {
-  outline: 2px solid var(--perfect-focus-ring);
+  outline: 2px solid var(--glacier-focus-ring);
   outline-offset: 2px;
 }
 
 .stepHead {
   display: flex;
   flex-direction: column;
-  gap: var(--perfect-space-1);
-  padding-bottom: var(--perfect-space-1);
+  gap: var(--glacier-space-1);
+  padding-bottom: var(--glacier-space-1);
 }
 
 .stepHead strong {
-  font-weight: var(--perfect-font-weight-semibold);
-  color: var(--perfect-text-muted);
+  font-weight: var(--glacier-font-weight-semibold);
+  color: var(--glacier-text-muted);
   font-variant-numeric: tabular-nums;
 }
 
 .stepHead small {
   font-size: 0.6875rem;
   line-height: 1.2;
-  color: var(--perfect-text-subtle);
+  color: var(--glacier-text-subtle);
 }
 
 .rampName {
-  font-family: var(--perfect-font-mono);
-  font-size: var(--perfect-font-size-xs);
-  color: var(--perfect-text-muted);
+  font-family: var(--glacier-font-mono);
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-muted);
 }
 
 .tokenTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: var(--perfect-font-size-sm);
+  font-size: var(--glacier-font-size-sm);
 }
 
 .tokenTable th,
 .tokenTable td {
   text-align: left;
-  padding: var(--perfect-space-2) var(--perfect-space-3);
-  border-bottom: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  padding: var(--glacier-space-2) var(--glacier-space-3);
+  border-bottom: var(--glacier-hairline) solid var(--glacier-border-subtle);
   vertical-align: middle;
 }
 
 .tokenTable th {
-  color: var(--perfect-text-subtle);
-  font-weight: var(--perfect-font-weight-medium);
-  font-size: var(--perfect-font-size-xs);
+  color: var(--glacier-text-subtle);
+  font-weight: var(--glacier-font-weight-medium);
+  font-size: var(--glacier-font-size-xs);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -307,28 +278,28 @@ code {
 .topbarControl {
   display: inline-flex;
   align-items: center;
-  gap: var(--perfect-space-2);
-  font-size: var(--perfect-font-size-sm);
-  color: var(--perfect-text-muted);
+  gap: var(--glacier-space-2);
+  font-size: var(--glacier-font-size-sm);
+  color: var(--glacier-text-muted);
 }
 
 /* preferences modal */
 .prefsBody {
   display: flex;
   flex-direction: column;
-  gap: var(--perfect-space-6);
+  gap: var(--glacier-space-6);
 }
 
 .prefsSection {
   display: flex;
   flex-direction: column;
-  gap: var(--perfect-space-3);
+  gap: var(--glacier-space-3);
 }
 
 .accentSwatches {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--perfect-space-3);
+  gap: var(--glacier-space-3);
 }
 
 .accentSwatch {
@@ -336,10 +307,10 @@ code {
   height: 1.75rem;
   padding: 0;
   border: none;
-  border-radius: var(--perfect-radius-full);
+  border-radius: var(--glacier-radius-full);
   cursor: pointer;
-  box-shadow: inset 0 1px 0 var(--perfect-glass-highlight);
-  transition: transform var(--perfect-duration-fast) var(--perfect-ease-spring);
+  box-shadow: inset 0 1px 0 var(--glacier-glass-highlight);
+  transition: transform var(--glacier-duration-fast) var(--glacier-ease-spring);
 }
 
 .accentSwatch:hover {
@@ -348,19 +319,19 @@ code {
 
 .accentSwatch[data-selected] {
   box-shadow:
-    0 0 0 2px var(--perfect-surface),
-    0 0 0 4px var(--perfect-focus-ring);
+    0 0 0 2px var(--glacier-surface),
+    0 0 0 4px var(--glacier-focus-ring);
 }
 
 .accentSwatch:focus-visible {
-  outline: 2px solid var(--perfect-focus-ring);
+  outline: 2px solid var(--glacier-focus-ring);
   outline-offset: 2px;
 }
 
 .prefsRange {
   display: flex;
   align-items: center;
-  gap: var(--perfect-space-4);
+  gap: var(--glacier-space-4);
 }
 
 .prefsRange input[type='range'] {
@@ -371,10 +342,25 @@ code {
   width: 0.875rem;
   height: 0.875rem;
   flex: none;
-  border-radius: var(--perfect-radius-full);
-  background: var(--perfect-accent-solid);
-  box-shadow: inset 0 1px 0 var(--perfect-glass-highlight);
-  transition: background-color var(--perfect-duration-fast) var(--perfect-ease-out);
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-accent-solid);
+  box-shadow: inset 0 1px 0 var(--glacier-glass-highlight);
+  transition: background-color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+/* the top-bar language switcher: keep the Select compact instead of stretching */
+.langSelect {
+  flex: none;
+  width: 8.5rem;
+}
+
+/* the switcher's glass trigger sits inside the already-blurred glass toolbar, so
+   drop its own backdrop blur to avoid a nested double-blur; the translucent glass
+   tint still reads over the toolbar. (The portaled menu is outside, unaffected.) */
+.langSelect,
+.langSelect * {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 /* toolbar search (DocSearch): the field sits in the header, the results list
@@ -397,64 +383,71 @@ code {
 .docSearchResults {
   z-index: 100;
   margin: 0;
-  padding: var(--perfect-space-1);
+  padding: var(--glacier-space-1);
   list-style: none;
   max-height: 22rem;
   overflow-y: auto;
-  border: var(--perfect-hairline) solid var(--perfect-glass-border);
-  border-radius: var(--perfect-radius-lg);
-  background: var(--perfect-glass-thick);
-  backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-glass-thick);
+  backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
   box-shadow:
-    inset 0 1px 0 var(--perfect-glass-highlight),
-    var(--perfect-shadow-4);
+    inset 0 1px 0 var(--glacier-glass-highlight),
+    var(--glacier-shadow-4);
 }
 
 .docSearchItem {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--perfect-space-3);
+  gap: var(--glacier-space-3);
   width: 100%;
-  padding: var(--perfect-space-2) var(--perfect-space-3);
+  padding: var(--glacier-space-2) var(--glacier-space-3);
   border: none;
-  border-radius: var(--perfect-radius-md);
+  border-radius: var(--glacier-radius-md);
   background: transparent;
-  color: var(--perfect-text);
+  color: var(--glacier-text);
   font: inherit;
-  font-size: var(--perfect-font-size-sm);
+  font-size: var(--glacier-font-size-sm);
   text-align: left;
   cursor: pointer;
 }
 
 .docSearchItem[data-active] {
-  background: var(--perfect-accent-soft);
-  color: var(--perfect-accent-text);
+  background: var(--glacier-accent-soft);
+  color: var(--glacier-accent-text);
 }
 
 .docSearchGroup {
   flex: none;
-  font-size: var(--perfect-font-size-xs);
-  color: var(--perfect-text-subtle);
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-subtle);
 }
 
 .docSearchItem[data-active] .docSearchGroup {
-  color: var(--perfect-accent-text);
+  color: var(--glacier-accent-text);
 }
 
 .docSearchEmpty {
-  padding: var(--perfect-space-3);
-  color: var(--perfect-text-subtle);
-  font-size: var(--perfect-font-size-sm);
+  padding: var(--glacier-space-3);
+  color: var(--glacier-text-subtle);
+  font-size: var(--glacier-font-size-sm);
 }
 
 /* blueprint illustrations: a technical drawing of a component's box, labelled
    with the exact spec measurements, in a blue engineering-drawing palette. */
+/* a blueprint block joins the prose rhythm like .example, so consecutive
+   blueprints (e.g. Text then Heading) keep a clear gap rather than colliding. */
+.blueprint {
+  margin-block: var(--glacier-space-6) var(--glacier-space-8);
+}
+
 .bpFrame {
-  border: var(--perfect-hairline) solid var(--perfect-blue-6);
-  border-radius: var(--perfect-radius-lg);
-  background: var(--perfect-blue-1);
+  width: 100%;
+  border: var(--glacier-hairline) solid var(--glacier-blue-6);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-blue-1);
   overflow: hidden;
 }
 
@@ -465,31 +458,201 @@ code {
 }
 
 .bpLabel {
-  fill: var(--perfect-blue-11);
-  font-family: var(--perfect-font-mono);
+  fill: var(--glacier-blue-11);
+  font-family: var(--glacier-font-mono);
   font-size: 8.5px;
 }
 
 .bpMuted {
-  fill: var(--perfect-text-subtle);
+  fill: var(--glacier-text-subtle);
 }
 
 .bpTitle {
-  fill: var(--perfect-blue-11);
-  font-family: var(--perfect-font-mono);
+  fill: var(--glacier-blue-11);
+  font-family: var(--glacier-font-mono);
   font-size: 9.5px;
-  font-weight: var(--perfect-font-weight-semibold);
+  font-weight: var(--glacier-font-weight-semibold);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
+/* Overview: infinite blueprint gallery ---------------------------------- */
+.bpGallery {
+  margin-block: var(--glacier-space-4) var(--glacier-space-8);
+}
+
+.bpGalleryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--glacier-space-4);
+}
+
+.bpGalleryCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-2);
+  padding: var(--glacier-space-3);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface);
+  color: var(--glacier-text);
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity var(--glacier-duration-slow, 0.5s) var(--glacier-ease-out),
+    transform var(--glacier-duration-slow, 0.5s) var(--glacier-ease-out),
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    box-shadow var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.bpGalleryCard.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.bpGalleryCard:hover {
+  border-color: var(--glacier-border-strong);
+  box-shadow: var(--glacier-shadow-4);
+}
+
+.bpGalleryCard:focus-visible {
+  outline: none;
+  border-color: var(--glacier-focus-ring);
+  box-shadow: 0 0 0 3px var(--glacier-accent-soft);
+}
+
+.bpGalleryFigure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  overflow: hidden;
+  border-radius: var(--glacier-radius-md);
+}
+
+/* The blueprint renders its own framed SVG; drop its page margin and let the
+   figure box scale it down to a consistent thumbnail. */
+.bpGalleryFigure .blueprint {
+  margin: 0;
+  width: 100%;
+}
+
+.bpGalleryFigure .bpFrame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.bpGalleryFigure .bpSvg {
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.bpGalleryTitle {
+  font-weight: var(--glacier-font-weight-medium, 500);
+  font-size: var(--glacier-font-size-sm, 0.875rem);
+  color: var(--glacier-text);
+}
+
+.bpGallerySentinel {
+  height: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bpGalleryCard {
+    opacity: 1;
+    transform: none;
+    transition:
+      border-color var(--glacier-duration-fast) var(--glacier-ease-out),
+      box-shadow var(--glacier-duration-fast) var(--glacier-ease-out);
+  }
+}
+
 .select {
-  height: var(--perfect-control-height-sm);
-  border: var(--perfect-hairline) solid var(--perfect-border);
-  border-radius: var(--perfect-radius-md);
-  background: var(--perfect-surface);
-  color: var(--perfect-text);
+  height: var(--glacier-control-height-sm);
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-md);
+  background: var(--glacier-surface);
+  color: var(--glacier-text);
   font: inherit;
-  font-size: var(--perfect-font-size-xs);
-  padding-inline: var(--perfect-space-2);
+  font-size: var(--glacier-font-size-xs);
+  padding-inline: var(--glacier-space-2);
+}
+
+/* icon gallery */
+.iconSearch {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  max-width: 24rem;
+  margin-block: var(--glacier-space-6) var(--glacier-space-5);
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  gap: var(--glacier-space-2);
+}
+
+.iconTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  padding: var(--glacier-space-4) var(--glacier-space-2);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface);
+  color: var(--glacier-text);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.iconTile:hover {
+  border-color: var(--glacier-border-strong);
+  background: var(--glacier-surface-sunken);
+}
+
+.iconTile:focus-visible {
+  outline: none;
+  border-color: var(--glacier-focus-ring);
+  box-shadow: 0 0 0 3px var(--glacier-accent-soft);
+}
+
+.iconTile[data-copied] {
+  border-color: var(--glacier-accent-border);
+  color: var(--glacier-accent-text);
+}
+
+.iconTileGlyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.75rem;
+  color: var(--glacier-text);
+}
+
+.iconTile[data-copied] .iconTileGlyph {
+  color: var(--glacier-accent-text);
+}
+
+.iconTileName {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--glacier-font-mono);
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-subtle);
+}
+
+.iconTile[data-copied] .iconTileName {
+  color: var(--glacier-accent-text);
 }

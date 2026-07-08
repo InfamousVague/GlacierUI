@@ -1,6 +1,7 @@
-import { Kbd, SearchField } from '@perfect/react';
+import { Kbd, SearchField, useT } from '@glacier/react';
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
+import { m } from './i18n.ts';
 
 export interface DocSearchItem {
   id: string;
@@ -21,6 +22,7 @@ const MAX_RESULTS = 8;
  * highlight, Enter opens, Escape closes, and Cmd/Ctrl+K focuses the field.
  */
 export function DocSearch({ items, onSelect }: DocSearchProps) {
+  const t = useT();
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
@@ -124,12 +126,12 @@ export function DocSearch({ items, onSelect }: DocSearchProps) {
         }}
         onFocus={() => setOpen(true)}
         onKeyDown={onKeyDown}
-        placeholder="Search docs"
+        placeholder={t(m.searchPlaceholder)}
         role="combobox"
         aria-expanded={open}
         aria-controls={listId}
         aria-activedescendant={open && results[active] ? `${listId}-${active}` : undefined}
-        aria-label="Search documentation"
+        aria-label={t(m.searchLabel)}
         shortcut={<Kbd glass>⌘K</Kbd>}
       />
       {open &&
@@ -139,7 +141,7 @@ export function DocSearch({ items, onSelect }: DocSearchProps) {
             className="docSearchResults"
             id={listId}
             role="listbox"
-            aria-label="Documentation pages"
+            aria-label={t(m.searchPagesLabel)}
             data-docsearch-list=""
             style={{ position: 'fixed', top: rect.top, left: rect.left, width: rect.width }}
           >
@@ -165,7 +167,7 @@ export function DocSearch({ items, onSelect }: DocSearchProps) {
             ))}
             {results.length === 0 && (
               <li className="docSearchEmpty" role="presentation">
-                No matches
+                {t(m.noMatches)}
               </li>
             )}
           </ul>,

@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { Row } from '@perfect/react';
+import { CodeBlock, Row, type CodeBlockProps } from '@glacier/react';
 import { createCssVariablesTheme, createHighlighter, type Highlighter } from 'shiki';
 
 /**
@@ -9,8 +9,8 @@ import { createCssVariablesTheme, createHighlighter, type Highlighter } from 'sh
 
 // Shiki with a CSS-variables theme: token colors are defined in docs.css from
 // the kit's own ramps, so highlighting follows the light/dark theme for free.
-const perfectTheme = createCssVariablesTheme({
-  name: 'perfect',
+const glacierTheme = createCssVariablesTheme({
+  name: 'glacier',
   variablePrefix: '--shiki-',
   fontStyle: true,
 });
@@ -18,7 +18,7 @@ const perfectTheme = createCssVariablesTheme({
 let highlighterPromise: Promise<Highlighter> | null = null;
 
 function getHighlighter(): Promise<Highlighter> {
-  highlighterPromise ??= createHighlighter({ themes: [perfectTheme], langs: ['tsx'] });
+  highlighterPromise ??= createHighlighter({ themes: [glacierTheme], langs: ['tsx'] });
   return highlighterPromise;
 }
 
@@ -27,7 +27,7 @@ function useHighlighted(code: string): string | null {
   useEffect(() => {
     let alive = true;
     getHighlighter().then((h) => {
-      if (alive) setHtml(h.codeToHtml(code, { lang: 'tsx', theme: 'perfect' }));
+      if (alive) setHtml(h.codeToHtml(code, { lang: 'tsx', theme: 'glacier' }));
     });
     return () => {
       alive = false;
@@ -36,49 +36,18 @@ function useHighlighted(code: string): string | null {
   return html;
 }
 
-function copyText(text: string): Promise<void> {
-  if (navigator.clipboard?.writeText) {
-    return navigator.clipboard.writeText(text).catch(() => copyViaTextarea(text));
-  }
-  return Promise.resolve(copyViaTextarea(text));
-}
-
-function copyViaTextarea(text: string): void {
-  const el = document.createElement('textarea');
-  el.value = text;
-  el.style.position = 'fixed';
-  el.style.opacity = '0';
-  document.body.appendChild(el);
-  el.select();
-  document.execCommand('copy');
-  el.remove();
-}
-
-export function CodeBlock({ code }: { code: string }) {
-  const [copied, setCopied] = useState(false);
+/**
+ * A syntax-highlighted code block. Highlights with Shiki, then renders through
+ * the kit's own CodeBlock so the docs dogfood the real component: the kit owns
+ * the frame, header, copy button, and line-number gutter; the app supplies the
+ * highlighted markup. Falls back to plain text until the highlighter loads.
+ */
+export function HighlightedCode({ code, ...props }: Omit<CodeBlockProps, 'children'>) {
   const html = useHighlighted(code);
   return (
-    <div className="codeBlock">
-      <button
-        type="button"
-        className="copyButton"
-        onClick={() => {
-          copyText(code).then(() => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1500);
-          });
-        }}
-      >
-        {copied ? 'Copied' : 'Copy'}
-      </button>
-      {html ? (
-        <div dangerouslySetInnerHTML={{ __html: html }} />
-      ) : (
-        <pre>
-          <code>{code}</code>
-        </pre>
-      )}
-    </div>
+    <CodeBlock code={code} {...props}>
+      {html != null ? <div dangerouslySetInnerHTML={{ __html: html }} /> : undefined}
+    </CodeBlock>
   );
 }
 
@@ -98,7 +67,7 @@ export function Example({ title, description, code, children }: ExampleProps) {
       <Row wrap gap={4} padding={8} className="exampleDemo">
         {children}
       </Row>
-      <CodeBlock code={code} />
+      <HighlightedCode code={code} language="tsx" lineNumbers attached />
     </section>
   );
 }

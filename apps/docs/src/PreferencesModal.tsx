@@ -1,5 +1,6 @@
-import { accentOptions, accentSteps, type SansFont, type MonoFont } from '@perfect/tokens';
-import { Button, Divider, Label, Modal, SegmentedControl, Slider, Text } from '@perfect/react';
+import { accentOptions, accentSteps, type SansFont, type MonoFont } from '@glacier/tokens';
+import { Button, Divider, Label, Modal, SegmentedControl, Slider, Text, useT, Size, TextTone, Variant } from '@glacier/react';
+import { m } from './i18n.ts';
 
 export interface Preferences {
   theme: 'system' | 'light' | 'dark';
@@ -9,6 +10,8 @@ export interface Preferences {
   font: SansFont;
   mono: MonoFont;
   radiusScale: number;
+  /** Backdrop-blur multiplier for every glass surface. */
+  frostedness: number;
 }
 
 export const DEFAULT_PREFERENCES: Preferences = {
@@ -19,6 +22,7 @@ export const DEFAULT_PREFERENCES: Preferences = {
   font: 'inter',
   mono: 'jetbrains',
   radiusScale: 1,
+  frostedness: 1,
 };
 
 const SANS_OPTIONS: Array<{ value: SansFont; label: string }> = [
@@ -40,75 +44,75 @@ interface PreferencesModalProps {
 }
 
 export function PreferencesModal({ open, onClose, preferences, onChange }: PreferencesModalProps) {
+  const t = useT();
   return (
     <Modal
       open={open}
       onClose={onClose}
-      title="Preferences"
-      description="Everything here drives design tokens, so changes apply to the whole kit at once."
-      size="md"
+      title={t(m.preferences)}
+      description={t(m.prefsDescription)}
+      size={Size.Medium}
       footer={
         <>
-          <Button variant="ghost" size="lg" onClick={() => onChange(DEFAULT_PREFERENCES)}>
-            Reset
+          <Button variant={Variant.Ghost} size={Size.Large} onClick={() => onChange(DEFAULT_PREFERENCES)}>
+            {t(m.reset)}
           </Button>
-          <Button size="lg" onClick={onClose}>
-            Done
+          <Button size={Size.Large} onClick={onClose}>
+            {t(m.done)}
           </Button>
         </>
       }
     >
       <div className="prefsBody">
       <div className="prefsSection">
-        <Label>Theme</Label>
+        <Label>{t(m.theme)}</Label>
         <SegmentedControl
-          aria-label="Theme"
+          aria-label={t(m.theme)}
           fullWidth
           value={preferences.theme}
           onValueChange={(value) => onChange({ theme: value as Preferences['theme'] })}
           options={[
-            { value: 'system', label: 'System' },
-            { value: 'light', label: 'Light' },
-            { value: 'dark', label: 'Dark' },
+            { value: 'system', label: t(m.system) },
+            { value: 'light', label: t(m.light) },
+            { value: 'dark', label: t(m.dark) },
           ]}
         />
       </div>
       <Divider />
       <div className="prefsSection">
-        <Label>Density</Label>
+        <Label>{t(m.density)}</Label>
         <SegmentedControl
-          aria-label="Density"
+          aria-label={t(m.density)}
           fullWidth
           value={preferences.density}
           onValueChange={(value) => onChange({ density: value as Preferences['density'] })}
           options={[
-            { value: 'comfortable', label: 'Comfortable' },
-            { value: 'compact', label: 'Compact' },
+            { value: 'comfortable', label: t(m.comfortable) },
+            { value: 'compact', label: t(m.compact) },
           ]}
         />
       </div>
       <Divider />
       <div className="prefsSection">
-        <Label>Layout</Label>
+        <Label>{t(m.layout)}</Label>
         <SegmentedControl
-          aria-label="Layout"
+          aria-label={t(m.layout)}
           fullWidth
           value={preferences.layout}
           onValueChange={(value) => onChange({ layout: value as Preferences['layout'] })}
           options={[
-            { value: 'floating', label: 'Floating' },
-            { value: 'full', label: 'Full' },
+            { value: 'floating', label: t(m.floating) },
+            { value: 'full', label: t(m.full) },
           ]}
         />
-        <Text size="xs" tone="subtle">
-          Floating detaches the sidebar and toolbar into cards; full pins them to the edges. Applies
-          on wide screens; narrow screens use the drawer either way.
+        <Text size={Size.XSmall} tone={TextTone.Subtle}>
+          {t(m.layoutHelp)}
         </Text>
       </div>
       <Divider />
       <div className="prefsSection">
-        <Label>Accent</Label>
-        <div className="accentSwatches" role="radiogroup" aria-label="Accent color">
+        <Label>{t(m.accent)}</Label>
+        <div className="accentSwatches" role="radiogroup" aria-label={t(m.accentColor)}>
           {accentOptions.map((option) => (
             <button
               key={option.name}
@@ -127,35 +131,35 @@ export function PreferencesModal({ open, onClose, preferences, onChange }: Prefe
       </div>
       <Divider />
       <div className="prefsSection">
-        <Label>Typeface</Label>
+        <Label>{t(m.typeface)}</Label>
         <SegmentedControl
-          aria-label="Typeface"
+          aria-label={t(m.typeface)}
           fullWidth
           value={preferences.font}
           onValueChange={(value) => onChange({ font: value as SansFont })}
           options={SANS_OPTIONS}
         />
-        <Text size="xs" tone="subtle">
-          The interface sans. All three are bundled and cover a wide range of scripts.
+        <Text size={Size.XSmall} tone={TextTone.Subtle}>
+          {t(m.typefaceHelp)}
         </Text>
       </div>
       <Divider />
       <div className="prefsSection">
-        <Label>Monospace</Label>
+        <Label>{t(m.monospace)}</Label>
         <SegmentedControl
-          aria-label="Monospace"
+          aria-label={t(m.monospace)}
           fullWidth
           value={preferences.mono}
           onValueChange={(value) => onChange({ mono: value as MonoFont })}
           options={MONO_OPTIONS}
         />
-        <Text size="xs" tone="subtle">
-          Used for code, values, and measurements.
+        <Text size={Size.XSmall} tone={TextTone.Subtle}>
+          {t(m.monospaceHelp)}
         </Text>
       </div>
       <Divider />
       <div className="prefsSection">
-        <Label htmlFor="prefs-radius">Corner rounding</Label>
+        <Label htmlFor="prefs-radius">{t(m.cornerRounding)}</Label>
         <div className="prefsRange">
           <Slider
             id="prefs-radius"
@@ -165,12 +169,32 @@ export function PreferencesModal({ open, onClose, preferences, onChange }: Prefe
             value={preferences.radiusScale}
             onValueChange={(radiusScale) => onChange({ radiusScale })}
           />
-          <Text as="span" size="sm" tone="muted" mono>
+          <Text as="span" size={Size.Small} tone={TextTone.Muted} mono>
             {preferences.radiusScale.toFixed(2)}×
           </Text>
         </div>
-        <Text size="xs" tone="subtle">
-          Scales every radius token except none and full.
+        <Text size={Size.XSmall} tone={TextTone.Subtle}>
+          {t(m.cornerRoundingHelp)}
+        </Text>
+      </div>
+      <Divider />
+      <div className="prefsSection">
+        <Label htmlFor="prefs-frost">{t(m.frostedness)}</Label>
+        <div className="prefsRange">
+          <Slider
+            id="prefs-frost"
+            min={0}
+            max={2}
+            step={0.05}
+            value={preferences.frostedness}
+            onValueChange={(frostedness) => onChange({ frostedness })}
+          />
+          <Text as="span" size={Size.Small} tone={TextTone.Muted} mono>
+            {preferences.frostedness.toFixed(2)}×
+          </Text>
+        </div>
+        <Text size={Size.XSmall} tone={TextTone.Subtle}>
+          {t(m.frostednessHelp)}
         </Text>
       </div>
       </div>

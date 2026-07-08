@@ -1,66 +1,57 @@
-import { Button, Card, Row, Stack } from '@perfect/react';
+import { Button, Card, Row, Stack, useT, Heading, Text, Size, TextTone, Variant } from '@glacier/react';
+import { m } from '../i18n.ts';
+import { BlueprintGallery } from '../BlueprintGallery.tsx';
 
 export function OverviewPage() {
+  const t = useT();
   return (
     <>
-      <h1>Perfect</h1>
-      <p className="lede">
-        A token-first React kit. Every margin, padding, and control height comes from one shared
-        scale, so components always line up.
-      </p>
+      <Heading level={1}>Perfect</Heading>
+      <Text size={Size.Large} tone={TextTone.Muted} className="lede">{t(m.ovLede)}</Text>
 
-      <h2>Principles</h2>
+      <Heading level={2}>{t(m.ovPrinciples)}</Heading>
       <Stack gap={4}>
         <Card>
-          <strong>One spacing scale.</strong>
-          <p>
-            All spatial values come from <code>--perfect-space-*</code>, all control heights from{' '}
-            <code>--perfect-control-height-*</code>. Elements that sit next to each other share
-            the same tokens, so they stay aligned.
-          </p>
+          <strong>{t(m.ovP1Title)}</strong>
+          <Text tone={TextTone.Muted}>{t(m.ovP1Body)}</Text>
         </Card>
         <Card>
-          <strong>Semantic color, OKLCH underneath.</strong>
-          <p>
-            Components only consume aliases like <code>--perfect-surface</code> and{' '}
-            <code>--perfect-accent-solid</code>. The 12-step OKLCH ramps underneath swap between
-            light and dark, and components never need to know.
-          </p>
+          <strong>{t(m.ovP2Title)}</strong>
+          <Text tone={TextTone.Muted}>{t(m.ovP2Body)}</Text>
         </Card>
         <Card>
-          <strong>Motion comes from enums.</strong>
-          <p>
-            Micro-animations are picked from enums like <code>Motion.ScaleIn</code>,{' '}
-            <code>Speed.Fast</code>, and <code>Ease.Spring</code>, backed by framer-motion and the
-            same duration and easing tokens the CSS uses.
-          </p>
+          <strong>{t(m.ovP3Title)}</strong>
+          <Text tone={TextTone.Muted}>{t(m.ovP3Body)}</Text>
         </Card>
       </Stack>
 
-      <h2>Packages</h2>
+      <Heading level={2}>{t(m.ovPackages)}</Heading>
       <ul>
         <li>
-          <code>@perfect/tokens</code>: token source of truth in TypeScript, plus the generated{' '}
-          <code>tokens.css</code>
+          <code>@glacier/tokens</code>: {t(m.ovPkgTokens)}
         </li>
         <li>
-          <code>@perfect/motion</code>: Motion, Speed, and Ease enums with framer-motion presets
+          <code>@glacier/motion</code>: {t(m.ovPkgMotion)}
         </li>
         <li>
-          <code>@perfect/react</code>: components, styled with CSS Modules over semantic tokens
+          <code>@glacier/react</code>: {t(m.ovPkgReact)}
         </li>
         <li>
-          <code>@perfect/icons</code>: reserved for the icon set
+          <code>@glacier/icons</code>: {t(m.ovPkgIcons)}
         </li>
       </ul>
 
-      <h2>Try it</h2>
+      <Heading level={2}>{t(m.ovTryIt)}</Heading>
       <Row gap={4} wrap>
-        <Button onClick={() => (window.location.hash = '#/button')}>Browse components</Button>
-        <Button variant="outline" onClick={() => (window.location.hash = '#/colors')}>
-          See the tokens
+        <Button onClick={() => (window.location.hash = '#/atoms/button')}>{t(m.ovBrowse)}</Button>
+        <Button variant={Variant.Outline} onClick={() => (window.location.hash = '#/foundations/colors')}>
+          {t(m.ovSeeTokens)}
         </Button>
       </Row>
+
+      <Heading level={2}>{t(m.ovBlueprints)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.ovBlueprintsBody)}</Text>
+      <BlueprintGallery />
     </>
   );
 }

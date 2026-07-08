@@ -1,0 +1,154 @@
+import { Box, Kbd, SearchField, Stack, Heading, Text, Size, TextTone } from '@glacier/react';
+import { useState } from 'react';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { Example, PropsTable } from '../../docs-ui.tsx';
+
+export function SearchFieldPage() {
+  const [query, setQuery] = useState('');
+
+  return (
+    <>
+      <Heading level={1}>SearchField</Heading>
+      <Text size={Size.Large} tone={TextTone.Muted} className="lede">
+        A search input with a leading magnifier, a clear button that appears once there is a value,
+        and an optional slot for a keyboard shortcut hint.
+      </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+      <ComponentBlueprint specId="search-field" />
+
+      <Heading level={2}>Examples</Heading>
+
+      <Example
+        title="Basic"
+        description="A search box with the default placeholder. Type to reveal the clear button."
+        code={`import { SearchField } from '@glacier/react';
+
+<SearchField aria-label="Search" />`}
+      >
+        <Box style={{ width: '22rem' }}>
+          <SearchField aria-label="Search" />
+        </Box>
+      </Example>
+
+      <Example
+        title="Controlled"
+        description="Drive it with value and onValueChange. Clearing reports an empty string."
+        code={`const [query, setQuery] = useState('');
+
+<SearchField aria-label="Search" value={query} onValueChange={setQuery} />`}
+      >
+        <Box style={{ width: '22rem' }}>
+          <SearchField aria-label="Search" value={query} onValueChange={setQuery} />
+        </Box>
+      </Example>
+
+      <Example
+        title="With a shortcut hint"
+        description="Pass a shortcut node, such as a Kbd, to hint at the key that focuses the field."
+        code={`<SearchField aria-label="Search" shortcut={<Kbd>/</Kbd>} />`}
+      >
+        <Box style={{ width: '22rem' }}>
+          <SearchField aria-label="Search" shortcut={<Kbd>/</Kbd>} />
+        </Box>
+      </Example>
+
+      <Example
+        title="Sizes"
+        description="size scales the height and font-size to sm, md, or lg."
+        code={`<SearchField aria-label="Small" size={Size.Small} />
+<SearchField aria-label="Medium" size={Size.Medium} />
+<SearchField aria-label="Large" size={Size.Large} />`}
+      >
+        <Stack gap={4} style={{ width: '22rem' }}>
+          <SearchField aria-label="Small" size={Size.Small} />
+          <SearchField aria-label="Medium" size={Size.Medium} />
+          <SearchField aria-label="Large" size={Size.Large} />
+        </Stack>
+      </Example>
+
+      <Example
+        title="Skeleton"
+        description="Set skeleton while results load. The placeholder is the full control shape, so the field does not shift when the real input arrives."
+        code={`<SearchField skeleton />
+<SearchField aria-label="Search" />`}
+      >
+        <Stack gap={4} style={{ width: '22rem' }}>
+          <SearchField skeleton />
+          <SearchField aria-label="Search" />
+        </Stack>
+      </Example>
+
+      <Heading level={2}>Props</Heading>
+      <PropsTable
+        props={[
+          { name: 'value', type: 'string', description: 'Controlled value.' },
+          {
+            name: 'defaultValue',
+            type: 'string',
+            default: "''",
+            description: 'Initial value for uncontrolled usage.',
+          },
+          {
+            name: 'onValueChange',
+            type: '(value: string) => void',
+            description: 'Called with the current text on every change, and with an empty string when cleared.',
+          },
+          {
+            name: 'placeholder',
+            type: 'string',
+            default: "'Search'",
+            description: 'Placeholder text.',
+          },
+          {
+            name: 'size',
+            type: "'sm' | 'md' | 'lg'",
+            default: "'md'",
+            description: 'Scales the height and font-size.',
+          },
+          {
+            name: 'shortcut',
+            type: 'ReactNode',
+            description: 'Right-aligned slot for a keyboard shortcut hint, e.g. a Kbd.',
+          },
+          {
+            name: 'skeleton',
+            type: 'boolean',
+            default: 'false',
+            description: "Renders a placeholder with the component's exact geometry.",
+          },
+          {
+            name: 'aria-label',
+            type: 'string',
+            description: 'Accessible name. Not needed inside a Field with a label.',
+          },
+        ]}
+      />
+
+      <Heading level={2}>Accessibility</Heading>
+      <ul>
+        <li>
+          Renders a native <code>input type="search"</code>, so it exposes the searchbox role. The
+          native clear affordance is hidden in favor of the styled clear button.
+        </li>
+        <li>
+          The clear button carries an <code>aria-label</code> of "Clear search" and only mounts when
+          there is a value to clear.
+        </li>
+        <li>The magnifier is decorative and marked aria-hidden.</li>
+        <li>
+          Give it an <code>aria-label</code> when used on its own, or wrap it in a Field with a
+          visible label.
+        </li>
+      </ul>
+
+      <Heading level={2}>Usage</Heading>
+      <ul>
+        <li>Use it for filtering a list or querying results, not for arbitrary short text.</li>
+        <li>Add a shortcut hint when a keyboard accelerator focuses the field.</li>
+        <li>Read onValueChange to filter as the user types, and treat the empty string as cleared.</li>
+      </ul>
+    </>
+  );
+}

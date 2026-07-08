@@ -1,0 +1,292 @@
+import { useState } from 'react';
+import { SPEC_VERSION, cssValue, specs, type ComponentSpec, type Measure, type SizeSpec } from '@glacier/spec';
+import { Pill, Row, Stack, Heading, Text, Size, TextTone, Tone, Variant } from '@glacier/react';
+import { HighlightedCode } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
+
+// Render a measurement as its token reference plus what it resolves to.
+function MeasureCell({ value }: { value?: Measure }) {
+  if (!value) return <span style={{ color: 'var(--glacier-text-subtle)' }}>-</span>;
+  const isToken = value.startsWith('$');
+  return (
+    <span>
+      <code>{value}</code>
+      {isToken && (
+        <span style={{ color: 'var(--glacier-text-subtle)', marginLeft: 'var(--glacier-space-2)' }}>
+          {cssValue(value)}
+        </span>
+      )}
+    </span>
+  );
+}
+
+const SIZE_ROWS: { key: keyof SizeSpec; label: string }[] = [
+  { key: 'height', label: 'height' },
+  { key: 'diameter', label: 'diameter' },
+  { key: 'paddingInline', label: 'padding-inline' },
+  { key: 'paddingBlock', label: 'padding-block' },
+  { key: 'gap', label: 'gap' },
+  { key: 'fontSize', label: 'font-size' },
+  { key: 'radius', label: 'radius' },
+  { key: 'thickness', label: 'thickness' },
+  { key: 'border', label: 'border' },
+];
+
+function SpecView({ spec }: { spec: ComponentSpec }) {
+  const sizeCols = spec.sizes ?? [];
+  const usedRows = SIZE_ROWS.filter((row) => sizeCols.some((s) => s[row.key]));
+  return (
+    <Stack gap={6}>
+      <Text style={{ margin: 0 }}>
+        <strong>{spec.name}</strong> {spec.summary}
+      </Text>
+      <Row gap={3} wrap>
+        <Pill tone={Tone.Accent} variant={Variant.Soft} size={Size.Small}>
+          {spec.category}
+        </Pill>
+        <Pill tone={spec.status === 'stable' ? 'success' : 'warning'} variant={Variant.Soft} size={Size.Small}>
+          {spec.status}
+        </Pill>
+        {spec.element && (
+          <Pill tone={Tone.Neutral} variant={Variant.Outline} size={Size.Small}>
+            &lt;{spec.element}&gt;
+          </Pill>
+        )}
+      </Row>
+
+      <div>
+        <Heading level={3}>Props</Heading>
+        <div className="propsTableWrap">
+          <table className="tokenTable">
+            <thead>
+              <tr>
+                <th>Prop</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {spec.props.map((prop) => (
+                <tr key={prop.name}>
+                  <td>
+                    <code>{prop.name}</code>
+                    {prop.required && <span style={{ color: 'var(--glacier-danger-text)' }}> *</span>}
+                  </td>
+                  <td>
+                    {prop.type === 'enum' ? (
+                      <code>{prop.values?.join(' | ')}</code>
+                    ) : (
+                      <code>{prop.type}</code>
+                    )}
+                  </td>
+                  <td>{prop.default !== undefined ? <code>{String(prop.default)}</code> : '-'}</td>
+                  <td>{prop.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {(sizeCols.length > 0 || spec.dimensions) && (
+        <div>
+          <Heading level={3}>Anatomy</Heading>
+          <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+          <ComponentBlueprint key={spec.id} specId={spec.id} />
+        </div>
+      )}
+
+      {usedRows.length > 0 && (
+        <div>
+          <Heading level={3}>Measurements</Heading>
+          <Text tone={TextTone.Muted}>Every value is a unit of the shared token scale, so any framework builds the same box.</Text>
+          <div className="propsTableWrap">
+            <table className="tokenTable">
+              <thead>
+                <tr>
+                  <th></th>
+                  {sizeCols.map((s) => (
+                    <th key={s.name}>{s.name}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {usedRows.map((row) => (
+                  <tr key={String(row.key)}>
+                    <td>
+                      <code>{row.label}</code>
+                    </td>
+                    {sizeCols.map((s) => (
+                      <td key={s.name}>
+                        <MeasureCell value={s[row.key] as Measure | undefined} />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {spec.dimensions && (
+        <div>
+          <Heading level={3}>Fixed dimensions</Heading>
+          <div className="propsTableWrap">
+            <table className="tokenTable">
+              <tbody>
+                {Object.entries(spec.dimensions).map(([key, value]) => (
+                  <tr key={key}>
+                    <td>
+                      <code>{key}</code>
+                    </td>
+                    <td>
+                      <MeasureCell value={value} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {spec.variants && (
+        <div>
+          <Heading level={3}>Variants</Heading>
+          <Stack gap={2}>
+            {spec.variants.map((v) => (
+              <div key={v.name}>
+                <code>{v.name}</code> <span style={{ color: 'var(--glacier-text-muted)' }}>{v.description}</span>
+              </div>
+            ))}
+          </Stack>
+        </div>
+      )}
+
+      {spec.tones && (
+        <div>
+          <Heading level={3}>Tones</Heading>
+          <Row gap={3} wrap>
+            {spec.tones.map((t) => (
+              <Pill key={t.name} tone={t.name as never} variant={Variant.Soft} size={Size.Small}>
+                {t.name}
+              </Pill>
+            ))}
+          </Row>
+        </div>
+      )}
+
+      <div>
+        <Heading level={3}>Tokens consumed</Heading>
+        <Row gap={2} wrap>
+          {(spec.tokens ?? []).map((t) => (
+            <code key={t}>{t}</code>
+          ))}
+        </Row>
+      </div>
+
+      <div>
+        <Heading level={3}>Generated JSON</Heading>
+        <Text tone={TextTone.Muted}>
+          This is the language-agnostic artifact at{' '}
+          <code>packages/spec/dist/components/{spec.id}.json</code>, read by any framework binding.
+        </Text>
+        <HighlightedCode code={JSON.stringify(spec, null, 2)} />
+      </div>
+    </Stack>
+  );
+}
+
+const CATEGORY_ORDER = ['atom', 'molecule', 'organism', 'structure', 'layout'] as const;
+const CATEGORY_LABEL: Record<string, string> = {
+  atom: 'Atoms',
+  molecule: 'Molecules',
+  organism: 'Organisms',
+  structure: 'Structures',
+  layout: 'Layout',
+};
+
+// A grouped outline of every spec, so the whole catalog is scannable at a glance
+// and one tap jumps to a component.
+function SpecNav({ activeId, onSelect }: { activeId: string; onSelect: (id: string) => void }) {
+  return (
+    <Stack gap={4} aria-label="Spec catalog" as="nav">
+      {CATEGORY_ORDER.map((category) => {
+        const group = specs.filter((s) => s.category === category);
+        if (group.length === 0) return null;
+        return (
+          <div key={category}>
+            <div className="specNavHeading">
+              {CATEGORY_LABEL[category]} <span>{group.length}</span>
+            </div>
+            <Row gap={2} wrap>
+              {group.map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  className="specChip"
+                  data-active={s.id === activeId || undefined}
+                  aria-pressed={s.id === activeId}
+                  onClick={() => onSelect(s.id)}
+                >
+                  {s.name}
+                </button>
+              ))}
+            </Row>
+          </div>
+        );
+      })}
+    </Stack>
+  );
+}
+
+export function SpecPage() {
+  const [id, setId] = useState(specs[0]!.id);
+  const spec = specs.find((s) => s.id === id) ?? specs[0]!;
+
+  return (
+    <>
+      <Heading level={1}>Specification</Heading>
+      <Text size={Size.Large} tone={TextTone.Muted} className="lede">
+        Every component has a language-agnostic specification: a single contract that describes its
+        API, its variants, and its measurements in units of the shared token scale rather than raw
+        pixels. React, or a future Angular or Rust kit, reads the same spec and builds the same
+        component.
+      </Text>
+
+      <Heading level={2}>How it works</Heading>
+      <ul>
+        <li>
+          Specs are authored in TypeScript in <code>@glacier/spec</code> for type safety, then
+          generated to JSON. The JSON, plus a JSON Schema, is what non-JavaScript consumers read.
+        </li>
+        <li>
+          Measurements are token references like <code>$space-5</code> or <code>$control-height-md</code>,
+          which resolve against the token catalog. A spec never hardcodes a pixel it could name.
+        </li>
+        <li>
+          Shared vocabulary lives once in the spec package: the size steps, the tones, and the
+          mapping from a control size to its height and font size. The React kit imports these
+          instead of redeclaring them.
+        </li>
+        <li>
+          The React kit is held to its spec by a conformance test. Add a variant or change a default
+          in one place without the other and the test fails, so the two never drift.
+        </li>
+      </ul>
+      <Text tone={TextTone.Muted}>
+        Schema version <code>{SPEC_VERSION}</code>. The full catalog is at{' '}
+        <code>packages/spec/dist/spec.json</code> and the schema at{' '}
+        <code>packages/spec/dist/schema.json</code>.
+      </Text>
+
+      <Heading level={2}>Browse a spec</Heading>
+      <Stack gap={6}>
+        <SpecNav activeId={id} onSelect={setId} />
+        <SpecView spec={spec} />
+      </Stack>
+    </>
+  );
+}
