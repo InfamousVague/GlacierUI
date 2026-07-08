@@ -79,6 +79,7 @@ export function statusTokens(): Record<string, string> {
     out[`${role}-solid`] = `var(--perfect-${ramp}-9)`;
     out[`${role}-solid-hover`] = `var(--perfect-${ramp}-10)`;
     out[`${role}-soft`] = `var(--perfect-${ramp}-3)`;
+    out[`${role}-soft-hover`] = `var(--perfect-${ramp}-4)`;
     out[`${role}-border`] = `var(--perfect-${ramp}-7)`;
     out[`${role}-text`] = `var(--perfect-${ramp}-11)`;
     out[`${role}-contrast`] = contrast;
