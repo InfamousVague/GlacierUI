@@ -19,14 +19,16 @@ export const sliderSpec: ComponentSpec = {
     { name: 'max', type: 'number', default: 100, description: 'Upper bound.' },
     { name: 'step', type: 'number', default: 1, description: 'Increment between stops.' },
     { name: 'onValueChange', type: 'handler', description: 'Called with the new number as the user drags or keys.' },
+    { name: 'orientation', type: 'enum', values: ['horizontal', 'vertical'], default: 'horizontal', description: 'Vertical stands the rail up and fills bottom-to-top; set the length with the --slider-length custom property.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Dims the slider and blocks interaction.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
   ],
-  defaults: { min: 0, max: 100, step: 1, disabled: false, skeleton: false },
+  defaults: { min: 0, max: 100, step: 1, orientation: 'horizontal', disabled: false, skeleton: false },
   dimensions: {
     height: '1.375rem',
     trackHeight: '0.375rem',
     thumbDiameter: '1.25rem',
+    verticalLength: '8rem',
     radius: token('radius-full'),
   },
   states: [
@@ -50,6 +52,7 @@ export const sliderSpec: ComponentSpec = {
     notes: [
       'Native range semantics: screen readers announce the value, min, and max.',
       'Reads its id and aria-describedby from a surrounding Field when present.',
+      'orientation="vertical" sets aria-orientation and fills from the bottom up; Arrow Up/Down still nudge the value.',
     ],
   },
   motion: {

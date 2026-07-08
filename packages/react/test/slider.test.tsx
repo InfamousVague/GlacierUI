@@ -35,8 +35,25 @@ describe('Slider', () => {
     expect(slider.style.getPropertyValue('--slider-fill')).toBe('25%');
   });
 
+  it('marks the vertical orientation and still reports changes', () => {
+    let latest: number | null = null;
+    render(
+      <Slider aria-label="Volume" orientation="vertical" defaultValue={20} onValueChange={(v) => (latest = v)} />,
+    );
+    const slider = screen.getByRole('slider', { name: 'Volume' });
+    expect(slider).toHaveAttribute('aria-orientation', 'vertical');
+    fireEvent.change(slider, { target: { value: '80' } });
+    expect(latest).toBe(80);
+    expect(slider.style.getPropertyValue('--slider-fill')).toBe('80%');
+  });
+
   it('has no axe violations', async () => {
     const { container } = render(<Slider aria-label="Volume" defaultValue={30} />);
+    expect((await axe.run(container, { rules: AXE_RULES })).violations).toEqual([]);
+  });
+
+  it('has no axe violations when vertical', async () => {
+    const { container } = render(<Slider aria-label="Volume" orientation="vertical" defaultValue={30} />);
     expect((await axe.run(container, { rules: AXE_RULES })).violations).toEqual([]);
   });
 });

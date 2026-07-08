@@ -1,5 +1,5 @@
 import { Box, Field, Slider, Stack, Text } from '@perfect/react';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { ComponentBlueprint } from '../Blueprint.tsx';
 import { Example, PropsTable } from '../docs-ui.tsx';
 
@@ -47,6 +47,31 @@ export function SliderPage() {
         <Text as="span" size="sm" tone="muted" mono>
           {volume}%
         </Text>
+      </Example>
+
+      <Example
+        title="Vertical"
+        description={'orientation="vertical" stands the rail up and fills from the bottom, for volume-style controls. Set the height with the --slider-length custom property.'}
+        code={`<Slider
+  aria-label="Volume"
+  orientation="vertical"
+  value={volume}
+  onValueChange={setVolume}
+  style={{ '--slider-length': '10rem' }}
+/>`}
+      >
+        <Box style={{ display: 'flex', alignItems: 'flex-end', gap: 'var(--perfect-space-4)' }}>
+          <Slider
+            aria-label="Volume"
+            orientation="vertical"
+            value={volume}
+            onValueChange={setVolume}
+            style={{ '--slider-length': '10rem' } as CSSProperties}
+          />
+          <Text as="span" size="sm" tone="muted" mono>
+            {volume}%
+          </Text>
+        </Box>
       </Example>
 
       <Example

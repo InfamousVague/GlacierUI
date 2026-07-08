@@ -14,6 +14,29 @@
   cursor: not-allowed;
 }
 
+/* Vertical orientation: rotate the horizontal control -90° inside a sized
+   wrapper so the rail, fill, and thumb styles are reused as-is. The fill grows
+   from the bottom (min) upward — natural for volume. Track length is the
+   --slider-length custom property; the wrapper width is the thumb diameter. */
+.vertical {
+  --slider-length: 8rem;
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  width: 1.375rem;
+  height: var(--slider-length);
+  vertical-align: middle;
+}
+
+.vertical .slider {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--slider-length);
+  height: 1.375rem;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
 /* track */
 .slider::-webkit-slider-runnable-track {
   height: 0.375rem;
