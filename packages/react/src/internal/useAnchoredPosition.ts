@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, type CSSProperties, type RefObject } from 'react';
+import { useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from 'react';
 
 export type Side = 'top' | 'bottom' | 'left' | 'right';
 export type Alignment = 'start' | 'center' | 'end';
@@ -92,27 +92,53 @@ export function useAnchoredPosition(
   floatingRef: RefObject<HTMLElement | null>,
   options: AnchorOptions = {},
 ): { style: CSSProperties; placement: Placement } | null {
-  const [result, setResult] = useState<Computed | null>(null);
+  // React state carries only the side-dependent bits (transform origin +
+  // placement for arrows / data-placement). The scroll-tracked geometry —
+  // top/left/min-width — is written straight to the node so it never has to
+  // wait for a React commit.
+  const [result, setResult] = useState<{ style: CSSProperties; placement: Placement } | null>(null);
   const placement = options.placement ?? 'bottom-start';
   const offset = options.offset ?? 8;
   const padding = options.padding ?? 8;
   const matchWidth = options.matchWidth ?? false;
+  const lastPlacement = useRef<Placement | null>(null);
 
   useLayoutEffect(() => {
     if (!open) {
       setResult(null);
+      lastPlacement.current = null;
       return;
     }
+    lastPlacement.current = null; // force a fresh commit on (re)open
+
     const update = () => {
       const trigger = triggerRef.current?.getBoundingClientRect();
-      if (!trigger) return;
       const floatingEl = floatingRef.current;
-      const size = floatingEl
-        ? { width: floatingEl.offsetWidth, height: floatingEl.offsetHeight }
-        : { width: 0, height: 0 };
+      if (!trigger || !floatingEl) return;
+      const size = { width: floatingEl.offsetWidth, height: floatingEl.offsetHeight };
       const next = compute(trigger, size, { placement, offset, padding });
-      if (matchWidth) next.style.minWidth = Math.round(trigger.width);
-      setResult(next);
+
+      // Write the position straight to the DOM so a fixed panel tracks its
+      // anchor in the same scroll frame. Routing this through React state left
+      // the panel one commit behind the trigger — the scroll lag. top/left are
+      // deliberately NOT in the React style below, so a re-render never reverts
+      // to a stale position.
+      floatingEl.style.position = 'fixed';
+      floatingEl.style.top = `${next.style.top as number}px`;
+      floatingEl.style.left = `${next.style.left as number}px`;
+      floatingEl.style.zIndex = '200';
+      floatingEl.style.transformOrigin = String(next.style.transformOrigin);
+      if (matchWidth) floatingEl.style.minWidth = `${Math.round(trigger.width)}px`;
+
+      // Re-render only when the resolved side flips, so arrows / data-placement
+      // can follow — not on every scroll frame.
+      if (next.placement !== lastPlacement.current) {
+        lastPlacement.current = next.placement;
+        setResult({
+          placement: next.placement,
+          style: { position: 'fixed', zIndex: 200, transformOrigin: next.style.transformOrigin },
+        });
+      }
     };
 
     update();
