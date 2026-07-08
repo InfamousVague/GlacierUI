@@ -27,8 +27,8 @@ export const badgeSpec: ComponentSpec = {
   ],
   tones: toneSpecs(badgeTones),
   sizes: [
-    { name: 'sm', height: '1.25rem', paddingInline: token('space-2'), fontSize: token('font-size-xs') },
-    { name: 'md', height: '1.5rem', paddingInline: token('space-2'), fontSize: token('font-size-xs') },
+    { name: 'sm', height: token('size-md'), paddingInline: token('space-2'), fontSize: token('font-size-xs') },
+    { name: 'md', height: token('size-lg'), paddingInline: token('space-2'), fontSize: token('font-size-xs') },
   ],
   defaults: { tone: 'neutral', variant: 'soft', size: 'md' },
   dimensions: { radius: token('radius-full') },

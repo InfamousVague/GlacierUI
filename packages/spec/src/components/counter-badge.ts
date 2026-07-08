@@ -29,8 +29,8 @@ export const counterBadgeSpec: ComponentSpec = {
     { name: 'success', description: 'Positive or complete states.', tokens: { background: token('success-solid'), text: token('success-contrast') } },
   ],
   sizes: [
-    { name: 'sm', height: '1rem', paddingInline: token('space-1'), fontSize: token('font-size-xs'), diameter: '0.5rem' },
-    { name: 'md', height: '1.25rem', paddingInline: token('space-2'), fontSize: token('font-size-xs'), diameter: '0.625rem' },
+    { name: 'sm', height: token('size-sm'), paddingInline: token('space-1'), fontSize: token('font-size-xs'), diameter: token('size-2xs') },
+    { name: 'md', height: token('size-md'), paddingInline: token('space-2'), fontSize: token('font-size-xs'), diameter: token('size-xs') },
   ],
   defaults: { max: 99, tone: 'danger', dot: false, size: 'md', skeleton: false, glass: false },
   dimensions: { radius: token('radius-full') },

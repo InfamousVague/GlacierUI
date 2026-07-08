@@ -66,6 +66,17 @@
   --perfect-radius-full: 9999px;
   --perfect-control-radius: var(--perfect-radius-full);
 
+  /* Size scale */
+  --perfect-size-2xs: 0.5rem;
+  --perfect-size-xs: 0.625rem;
+  --perfect-size-sm: 1rem;
+  --perfect-size-md: 1.25rem;
+  --perfect-size-lg: 1.5rem;
+  --perfect-size-xl: 1.75rem;
+  --perfect-size-2xl: 2.25rem;
+  --perfect-size-3xl: 3rem;
+  --perfect-size-4xl: 4rem;
+
   /* Motion */
   --perfect-duration-instant: 75ms;
   --perfect-duration-fast: 150ms;

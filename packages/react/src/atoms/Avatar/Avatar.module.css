@@ -20,26 +20,26 @@
 }
 
 .sm {
-  width: 1.75rem;
-  height: 1.75rem;
+  width: var(--perfect-size-xl);
+  height: var(--perfect-size-xl);
   font-size: var(--perfect-font-size-xs);
 }
 
 .md {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: var(--perfect-size-2xl);
+  height: var(--perfect-size-2xl);
   font-size: var(--perfect-font-size-sm);
 }
 
 .lg {
-  width: 3rem;
-  height: 3rem;
+  width: var(--perfect-size-3xl);
+  height: var(--perfect-size-3xl);
   font-size: var(--perfect-font-size-md);
 }
 
 .xl {
-  width: 4rem;
-  height: 4rem;
+  width: var(--perfect-size-4xl);
+  height: var(--perfect-size-4xl);
   font-size: var(--perfect-font-size-lg);
 }
 

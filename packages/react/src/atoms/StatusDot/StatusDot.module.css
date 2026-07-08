@@ -7,13 +7,13 @@
 }
 
 .sm {
-  width: 0.5rem;
-  height: 0.5rem;
+  width: var(--perfect-size-2xs);
+  height: var(--perfect-size-2xs);
 }
 
 .md {
-  width: 0.625rem;
-  height: 0.625rem;
+  width: var(--perfect-size-xs);
+  height: var(--perfect-size-xs);
 }
 
 .neutral {

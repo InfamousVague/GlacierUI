@@ -7,7 +7,7 @@
   gap: var(--perfect-space-4);
   padding: var(--perfect-space-8) var(--perfect-space-6);
   font-family: var(--perfect-font-sans);
-  color: var(--perfect-text-secondary);
+  color: var(--perfect-text-muted);
 }
 
 /* the muted round disc that frames the icon */
@@ -16,11 +16,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 4rem;
-  height: 4rem;
+  width: var(--perfect-size-4xl);
+  height: var(--perfect-size-4xl);
   border-radius: var(--perfect-radius-full);
   background: var(--perfect-surface-sunken);
-  color: var(--perfect-text-secondary);
+  color: var(--perfect-text-muted);
   font-size: var(--perfect-font-size-2xl);
   line-height: 1;
 }
@@ -29,7 +29,7 @@
   margin: 0;
   font-size: var(--perfect-font-size-lg);
   font-weight: var(--perfect-font-weight-semibold);
-  line-height: var(--perfect-line-height-normal);
+  line-height: var(--perfect-leading-md);
   color: var(--perfect-text);
 }
 
@@ -37,8 +37,8 @@
   margin: 0;
   max-width: 28rem;
   font-size: var(--perfect-font-size-sm);
-  line-height: var(--perfect-line-height-relaxed);
-  color: var(--perfect-text-secondary);
+  line-height: var(--perfect-leading-md);
+  color: var(--perfect-text-muted);
 }
 
 /* pull the action a touch closer to the disc rhythm than the default gap */

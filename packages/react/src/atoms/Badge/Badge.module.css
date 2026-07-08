@@ -10,13 +10,13 @@
 }
 
 .sm {
-  height: 1.25rem;
+  height: var(--perfect-size-md);
   padding-inline: var(--perfect-space-2);
   font-size: var(--perfect-font-size-xs);
 }
 
 .md {
-  height: 1.5rem;
+  height: var(--perfect-size-lg);
   padding-inline: var(--perfect-space-2);
   font-size: var(--perfect-font-size-xs);
 }

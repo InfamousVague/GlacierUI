@@ -17,8 +17,8 @@ export const statusDotSpec: ComponentSpec = {
   ],
   tones: toneSpecs(),
   sizes: [
-    { name: 'sm', diameter: '0.5rem' },
-    { name: 'md', diameter: '0.625rem' },
+    { name: 'sm', diameter: token('size-2xs') },
+    { name: 'md', diameter: token('size-xs') },
   ],
   defaults: { tone: 'neutral', size: 'md', pulse: false, skeleton: false },
   dimensions: { radius: token('radius-full') },

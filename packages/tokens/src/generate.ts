@@ -13,6 +13,7 @@ import { accentOptions, accentDecls, rampDecls } from './color.ts';
 import { typographyDecls, sansFonts, monoFonts, sansFontDecls, monoFontDecls, type SansFont, type MonoFont } from './type.ts';
 import { spacingDecls } from './space.ts';
 import { radiusDecls } from './radius.ts';
+import { sizeDecls } from './size.ts';
 import { motionDecls, reducedMotionDecls } from './motion.ts';
 import { densityDecls } from './density.ts';
 import { effectsDecls, glassDecls } from './effects.ts';
@@ -38,6 +39,7 @@ const rootSections: Array<{ title: string; decls: Decl[] }> = [
   { title: 'Typography', decls: typographyDecls() },
   { title: 'Spacing', decls: spacingDecls() },
   { title: 'Radius', decls: radiusDecls() },
+  { title: 'Size scale', decls: sizeDecls() },
   { title: 'Motion', decls: motionDecls() },
   { title: 'Density & control sizing', decls: densityDecls('comfortable') },
   { title: 'Effects — blur, glass, hairline', decls: effectsDecls() },

@@ -24,7 +24,7 @@ export const spinnerSpec: ComponentSpec = {
   ],
   sizes: [
     { name: 'sm', diameter: '1em', border: '2px' },
-    { name: 'md', diameter: '1.25rem', border: '2px' },
+    { name: 'md', diameter: token('size-md'), border: '2px' },
     { name: 'lg', diameter: '1.875rem', border: '3px' },
   ],
   defaults: { size: 'md', tone: 'subtle', skeleton: false, 'aria-label': 'Loading' },

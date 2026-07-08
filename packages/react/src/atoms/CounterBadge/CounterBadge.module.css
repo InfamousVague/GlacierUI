@@ -11,15 +11,15 @@
 }
 
 .sm {
-  height: 1rem;
-  min-width: 1rem;
+  height: var(--perfect-size-sm);
+  min-width: var(--perfect-size-sm);
   padding-inline: var(--perfect-space-1);
   font-size: var(--perfect-font-size-xs);
 }
 
 .md {
-  height: 1.25rem;
-  min-width: 1.25rem;
+  height: var(--perfect-size-md);
+  min-width: var(--perfect-size-md);
   padding-inline: var(--perfect-space-2);
   font-size: var(--perfect-font-size-xs);
 }
@@ -28,14 +28,14 @@
   padding: 0;
 }
 .dot.sm {
-  height: 0.5rem;
-  min-width: 0.5rem;
-  width: 0.5rem;
+  height: var(--perfect-size-2xs);
+  min-width: var(--perfect-size-2xs);
+  width: var(--perfect-size-2xs);
 }
 .dot.md {
-  height: 0.625rem;
-  min-width: 0.625rem;
-  width: 0.625rem;
+  height: var(--perfect-size-xs);
+  min-width: var(--perfect-size-xs);
+  width: var(--perfect-size-xs);
 }
 
 .danger {
