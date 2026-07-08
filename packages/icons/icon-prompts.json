@@ -1,0 +1,850 @@
+[
+  {
+    "name": "alarm-clock",
+    "prompt": "A single round clock face with two hands, two small bells angled on top, and two short splayed legs at the bottom, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "alert-triangle",
+    "prompt": "A single upward triangle with rounded corners containing a centered vertical exclamation stroke and a dot below it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "align-justify",
+    "prompt": "A single four full-width evenly spaced horizontal lines stacked and reaching both edges, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "app-window",
+    "prompt": "A single rounded rectangle window frame with a top title bar and two small dots at its upper left, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "arrow-down-to-line",
+    "prompt": "A single downward arrow with a triangular head resting just above a short horizontal baseline, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "arrow-down-up",
+    "prompt": "A single two parallel vertical arrows side by side, the left one pointing down and the right one pointing up, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "arrow-left",
+    "prompt": "A single horizontal shaft with a single triangular arrowhead pointing to the left, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "arrow-left-right",
+    "prompt": "A single one horizontal shaft with a triangular arrowhead at each end pointing left and right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "arrow-right",
+    "prompt": "A single horizontal shaft with a single triangular arrowhead pointing to the right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "arrow-up-down",
+    "prompt": "A single one vertical shaft with a triangular arrowhead at each end pointing up and down, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "atom",
+    "prompt": "A single small central dot with three overlapping elliptical orbit rings crossing around it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "award",
+    "prompt": "A single round medallion disc with a star notch and two ribbon tails trailing down from its base, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "badge-check",
+    "prompt": "A single scalloped starburst badge outline with a check mark centered inside it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "bar-chart-2",
+    "prompt": "A single three vertical bars of increasing height rising from a shared baseline, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "binary",
+    "prompt": "A single two small rounded rectangles arranged as digit outlines, one above the other, suggesting ones and zeros, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "bird",
+    "prompt": "A single simplified perched bird in profile with a rounded body, pointed beak, small eye dot, and swept tail, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "blocks",
+    "prompt": "A single one small square nested at the corner of a larger L-shaped block, forming stacked building blocks, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "book",
+    "prompt": "A single upright closed book with a rounded spine on the left and a vertical page line near the fore-edge, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "book-check",
+    "prompt": "A single upright closed book with a small check mark centered on the cover, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "book-headphones",
+    "prompt": "A single upright closed book with a headphone band arcing over the top and ear cups on each side, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "book-open",
+    "prompt": "A single open book viewed from above with two facing pages fanning up from a central spine, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "book-open-check",
+    "prompt": "A single open book with two facing pages and a small check mark centered above the spine, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "book-open-text",
+    "prompt": "A single open book with two facing pages, each page carrying two short horizontal text lines, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "box",
+    "prompt": "A single closed cube drawn in isometric view with a Y-seam on the top face showing the lid folds, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "boxes",
+    "prompt": "A single three isometric cubes clustered together, two on the bottom and one nested above between them, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "braces",
+    "prompt": "A single a pair of curly brace symbols facing each other with a small gap between them, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "brain",
+    "prompt": "A single rounded brain silhouette split down the middle with a few curved fold lines on each side, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "briefcase",
+    "prompt": "A single rectangular briefcase body with a rounded top handle and a horizontal seam line across the middle, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "bug",
+    "prompt": "A single rounded oval beetle body with a small head, a center dividing line, and three short legs curving out from each side, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "calculator",
+    "prompt": "A single upright rounded rectangle device with a thin display bar at the top and a grid of small square buttons below, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "camera",
+    "prompt": "A single rounded rectangular camera body with a small bump on top and one centered round lens circle, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "check",
+    "prompt": "A single single check mark, a short stroke rising into a longer stroke, with rounded ends, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "check-circle",
+    "prompt": "A single thin circle enclosing a centered check mark with rounded ends, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "chevron-down",
+    "prompt": "A single downward-pointing angle bracket, a single wide V, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "chevron-left",
+    "prompt": "A single leftward-pointing angle bracket, a single wide sideways V opening to the right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "chevron-right",
+    "prompt": "A single rightward-pointing angle bracket, a single wide sideways V opening to the left, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "chevron-up",
+    "prompt": "A single upward-pointing angle bracket, a single wide inverted V, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "circle",
+    "prompt": "A single single thin perfectly round circle outline, empty inside, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "circle-check",
+    "prompt": "A single thin circle enclosing a centered check mark with rounded ends, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "circle-dashed",
+    "prompt": "A single round ring made of several evenly spaced short curved dashes forming a dashed circle, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "circle-help",
+    "prompt": "A single thin circle enclosing a centered question mark with a rounded curve and a dot below, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "circle-slash",
+    "prompt": "A single thin circle crossed by a single diagonal slash line running from lower-left to upper-right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "circle-user-round",
+    "prompt": "A single thin circle enclosing a small centered head-and-shoulders bust, a round head above rounded shoulders, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "circle-x",
+    "prompt": "A single thin circle enclosing a centered X made of two crossing strokes with rounded ends, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "clipboard-paste",
+    "prompt": "A single clipboard with a small clip tab at the top and a page emerging from its lower edge, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "clock",
+    "prompt": "A single round clock face with two straight hands meeting at the center, pointing up and to the right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "cloud-download",
+    "prompt": "A single rounded cloud outline with a downward arrow, a vertical shaft and triangular head, beneath it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "cloud-upload",
+    "prompt": "A single rounded cloud outline with an upward arrow, a vertical shaft and triangular head, beneath it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "code",
+    "prompt": "A single pair of angle brackets, a left-pointing bracket on the left and a right-pointing bracket on the right, spaced apart, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "code-2",
+    "prompt": "A single pair of angle brackets with a single forward slash between them, forming the </> markup mark, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "cog",
+    "prompt": "A single round gear with several evenly spaced squared teeth around the rim and a small hollow circle at the center, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "coins",
+    "prompt": "A single two overlapping round coins, one slightly behind and above the other, each a thin circle with a small inner arc, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "columns-2",
+    "prompt": "A single rounded rectangle divided into two equal vertical columns by one central line, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "combine",
+    "prompt": "A single two small rounded squares whose corners overlap in the center, one upper-left and one lower-right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "command",
+    "prompt": "A single looped command key symbol, a square outline with a small open loop curling out from each of its four corners, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "compass",
+    "prompt": "A single round compass with a thin outer ring and a slim diamond-shaped needle pointing to the upper right, a small center dot, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "copy",
+    "prompt": "A single two identical rounded rectangles overlapping, one behind the other and offset to the upper right, suggesting duplicated pages, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "corner-down-left",
+    "prompt": "A single an angled path that starts at the top going down then turns left, ending in a leftward triangular arrowhead, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "cpu",
+    "prompt": "A single rounded square chip with a smaller inner square, and short pin lines protruding evenly from all four sides, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "crown",
+    "prompt": "A single simple crown with three peaks each topped by a small round dot, resting on a straight base band, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "database",
+    "prompt": "A single vertical stack of three shallow ellipse cylinders, the top a full oval and curved lines marking each layer below, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "download",
+    "prompt": "A single downward-pointing arrow with a triangular head, above a short horizontal tray line forming an open shallow bracket, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "download-cloud",
+    "prompt": "A single rounded cloud outline with a short downward arrow and triangular head descending below its base, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "dumbbell",
+    "prompt": "A single horizontal bar with two round-plated weights at each end, a small grip mark at the center of the bar, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "equal",
+    "prompt": "A single two short parallel horizontal lines stacked evenly with a gap between them, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "external-link",
+    "prompt": "A single open-cornered square with a small arrow pointing to the upper right, its head breaking outside the top-right corner, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "eye",
+    "prompt": "A single almond-shaped eye outline with a small round pupil circle centered inside, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "factory",
+    "prompt": "A single building with a sawtooth stepped roofline, two tall chimneys on the left, and a couple of small square windows, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "feather",
+    "prompt": "A single single slim quill feather angled diagonally, with a central shaft and short parallel barb lines along one side, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-box",
+    "prompt": "A single upright document with a folded top-right corner and a small 3D cube outline centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-braces",
+    "prompt": "A single upright document with a folded top-right corner and a pair of curly braces { } centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-code",
+    "prompt": "A single upright document with a folded top-right corner and a pair of angle brackets </> centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-code-2",
+    "prompt": "A single upright document with a folded top-right corner and a pair of facing angle brackets < > with a slash between them centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-cog",
+    "prompt": "A single upright document with a folded top-right corner and a small cog wheel with radiating teeth centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-edit",
+    "prompt": "A single upright document with a folded top-right corner and a small angled pencil centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-image",
+    "prompt": "A single upright document with a folded top-right corner and a small picture mark, a round sun above a diagonal mountain line, centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-json",
+    "prompt": "A single upright document with a folded top-right corner and a pair of curly braces { } enclosing a small dot centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-key",
+    "prompt": "A single upright document with a folded top-right corner and a small key, a round bow with a short toothed shaft, centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-lock",
+    "prompt": "A single upright document with a folded top-right corner and a small closed padlock, a rounded shackle above a rectangular body, centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-plus",
+    "prompt": "A single upright document with a folded top-right corner and a small plus sign centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-terminal",
+    "prompt": "A single upright document with a folded top-right corner and a command prompt mark, a small chevron '>' beside a short underscore line, centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "file-text",
+    "prompt": "A single upright document with a folded top-right corner and four short horizontal text lines centered on the page, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "filter",
+    "prompt": "A single funnel shape, wide open at the top and tapering to a short narrow stem at the bottom, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "flame",
+    "prompt": "A single single teardrop flame with a rounded body curling to a soft point at the top, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "flask-conical",
+    "prompt": "A single conical laboratory flask with a narrow straight neck, a wide triangular base, and a small liquid level line inside, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "folder",
+    "prompt": "A single closed folder with a raised tab on the top-left edge, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "folder-open",
+    "prompt": "A single folder with its front flap opened outward, the inner pocket angled forward from the back panel, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "folder-plus",
+    "prompt": "A single closed folder with a raised tab and a small plus sign centered on its face, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "folder-tree",
+    "prompt": "A single closed folder at the upper left with a short branching connector line leading down to two smaller stacked items, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "frown",
+    "prompt": "A single round face circle with two dot eyes and a downturned frowning mouth arc, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "fuel",
+    "prompt": "A single upright fuel pump with a rounded rectangular body, a display line, and a hose nozzle curving off one side, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "function-square",
+    "prompt": "A single rounded square outline enclosing a lowercase italic function symbol resembling a tall looped f, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "gauge",
+    "prompt": "A single semicircular speedometer dial with tick marks and a needle pointing to the upper right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "gem",
+    "prompt": "A single faceted diamond gemstone with a flat top table and angled facet lines converging to a point at the bottom, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "git-branch",
+    "prompt": "A single two vertical track lines joined by a curving branch, with small round nodes at the line ends, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "git-commit",
+    "prompt": "A single one horizontal line running left to right with a single small circle node centered on it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "globe",
+    "prompt": "A single circle with one vertical meridian curve and two horizontal latitude lines forming a wireframe world, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "globe-2",
+    "prompt": "A single circle crossed by curved meridian and latitude lines, tilted so the grid wraps to one side like a rotated world, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "graduation-cap",
+    "prompt": "A single flat square mortarboard cap seen at an angle with a small tassel dangling from one corner, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "grid-2x2",
+    "prompt": "A single square divided into two rows and two columns forming four equal cells, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "grid-3x3",
+    "prompt": "A single square divided into three rows and three columns forming nine equal cells, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "hammer",
+    "prompt": "A single claw hammer with a rectangular head at the top and a straight handle angling down to one side, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "hand",
+    "prompt": "A single open raised palm with four fingers together and a thumb extended to the side, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "hash",
+    "prompt": "A single number sign with two vertical strokes crossed by two horizontal strokes, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "heart",
+    "prompt": "A single symmetric heart outline with two rounded lobes at the top meeting at a point at the bottom, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "help-circle",
+    "prompt": "A single thin circle enclosing a question mark with a dot beneath it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "hourglass",
+    "prompt": "A single hourglass with a narrow pinched waist, a horizontal bar across the top and bottom, and sand suggested in the two bulbs, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "image",
+    "prompt": "A single rounded square frame containing a small circle in the upper corner and a triangular mountain line across the lower half, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "infinity",
+    "prompt": "A single sideways figure-eight formed by two interlocking loops that cross in the middle, a continuous unbroken line, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "info",
+    "prompt": "A single thin circle enclosing a lowercase information mark, a single dot above a short vertical stroke centered inside, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "key",
+    "prompt": "A single key with a round ring head and a short toothed shaft ending in two small teeth at the lower-right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "keyboard",
+    "prompt": "A single wide rounded rectangle keyboard outline with a grid of small square keys and one long spacebar key along the bottom row, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "languages",
+    "prompt": "A single letter-shaped translation glyph, a capital A beside a stylized non-Latin character with a small arrow curving between them, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "layers",
+    "prompt": "A single stack of three offset diamond-shaped plates layered one above another, seen at a slight angle, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "layout-grid",
+    "prompt": "A single square divided into four equal cells, a two-by-two grid of rounded rectangles, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "layout-panel-left",
+    "prompt": "A single rectangle split into a narrow left column and a wider right area divided into two stacked cells, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "layout-panel-top",
+    "prompt": "A single rectangle split into a full-width top bar and a lower area divided into two side-by-side cells, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "leaf",
+    "prompt": "A single single leaf with a pointed tip and a central vein curving from stem to tip, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "library",
+    "prompt": "A single row of three upright books standing side by side, one tilted at a slight angle, on a short shelf line, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "library-big",
+    "prompt": "A single tall bookcase outline with two shelves holding several upright books and one tilted book, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "lightbulb",
+    "prompt": "A single rounded light bulb with a small filament loop inside and two short base lines at the bottom, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "link",
+    "prompt": "A single two interlocking rounded chain links crossing diagonally at the center, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "link-2",
+    "prompt": "A single two rounded chain-link half-loops joined by a short straight horizontal bar between them, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "list",
+    "prompt": "A single three evenly spaced horizontal lines each preceded by a small dot bullet at the left, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "list-checks",
+    "prompt": "A single two horizontal lines each preceded by a small checkmark on the left, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "list-ordered",
+    "prompt": "A single three horizontal lines each preceded by a small numeral on the left, stacked as an ordered list, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "list-tree",
+    "prompt": "A single top horizontal line with two indented lines below it connected by short right-angle branch connectors, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "loader",
+    "prompt": "A single ring of short radiating spokes arranged around a center point, evenly spaced like a spinner, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "lock",
+    "prompt": "A single closed padlock with a rounded rectangular body and a fixed semicircular shackle on top, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "log-in",
+    "prompt": "A single rounded door-frame bracket with a rightward arrow pointing in through the opening, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "log-out",
+    "prompt": "A single rounded door-frame bracket with a rightward arrow pointing out away from the opening, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "medal",
+    "prompt": "A single round medal disc with a small star centered inside and two ribbon strips extending up from its top, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "megaphone",
+    "prompt": "A single cone-shaped megaphone bullhorn pointing to the upper-right with a small handle and short sound lines at its mouth, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "memory-stick",
+    "prompt": "A single upright RAM memory module, a wide rectangle with a small notch on the bottom edge and several short pin lines along the base, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "monitor",
+    "prompt": "A single rounded rectangular computer monitor screen on a short central stand with a small base foot, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "moon",
+    "prompt": "A single crescent moon shaped as a single curved sliver, the inner and outer arcs meeting at two rounded points, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "mouse-pointer-2",
+    "prompt": "A single solid triangular cursor arrow tilted slightly, one sharp tip at the upper-left and a small notched tail, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "mouse-pointer-click",
+    "prompt": "A single triangular cursor arrow with three short radiating click-spark lines fanning out from its upper-right corner, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "network",
+    "prompt": "A single three small rounded nodes, one on top and two below, joined by short straight connector lines into a linked cluster, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "package",
+    "prompt": "A single closed cardboard box drawn in isometric view with a seam line across the top and a short strip of tape down the front, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "package-plus",
+    "prompt": "A single isometric cardboard box with a top seam and a small plus sign at its upper right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "palette",
+    "prompt": "A single rounded artist's palette with a thumb hole and four small dots of paint arranged along its upper edge, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "panel-left-close",
+    "prompt": "A single rounded rectangle frame with a vertical divider near the left edge and a left-pointing angle bracket in the wider right area, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "panel-left-open",
+    "prompt": "A single rounded rectangle frame with a vertical divider near the left edge and a right-pointing angle bracket in the wider right area, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "parentheses",
+    "prompt": "A single one opening round bracket on the left and one closing round bracket on the right, curving toward each other, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "pause",
+    "prompt": "A single two identical short vertical rounded bars standing side by side with a small gap between them, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "pen",
+    "prompt": "A single fountain pen drawn as a slim diagonal body tapering to a nib at the lower-left, with a small split point, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "pencil",
+    "prompt": "A single pencil drawn diagonally with a pointed writing tip at the lower-left and a flat squared end at the upper-right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "pencil-line",
+    "prompt": "A single diagonal pencil with a pointed tip at the lower-left, above a short horizontal underline running beneath it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "play",
+    "prompt": "A single single rightward-pointing triangle with softly rounded corners, its flat side on the left, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "plug",
+    "prompt": "A single electrical plug body with two straight prongs at the top and a short cord curving down from the bottom, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "plug-zap",
+    "prompt": "A single electrical plug with two top prongs and a small lightning bolt centered on its body, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "plus",
+    "prompt": "A single one horizontal and one vertical bar of equal length crossing at the center to form a symmetric plus sign, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "puzzle",
+    "prompt": "A single single square jigsaw-puzzle piece with one rounded knob tab on one side and a matching notch on the adjacent side, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "qr-code",
+    "prompt": "A single square outline containing three small corner squares and a scatter of tiny square modules, like a scan code, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "quote",
+    "prompt": "A single two pairs of rounded closing quotation marks, each a comma-like curl, sitting side by side near the top, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "radio",
+    "prompt": "A single central round dot emitting two curved concentric signal arcs on each side, like a broadcasting transmitter, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "refresh-cw",
+    "prompt": "A single two curved arrows forming a near-complete clockwise circle, each with a small triangular arrowhead at its open end, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "repeat",
+    "prompt": "A single rounded rectangular loop made of two arrows chasing each other, one arrowhead pointing right along the top run, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "rocket",
+    "prompt": "A single upright rocket with a rounded nose, two side fins at the base, a round porthole, and a small flame beneath, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "rotate-ccw",
+    "prompt": "A single single curved arrow sweeping counter-clockwise around most of a circle, its triangular arrowhead pointing up-left at the open gap, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "route",
+    "prompt": "A single winding path between a small circle node at the lower-left and a square node at the upper-right, joined by a bending dashed-free line with a turn, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "rows-3",
+    "prompt": "A single stack of three identical horizontal rectangular bars, one above another with equal gaps, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "search",
+    "prompt": "A single magnifying glass with a round lens and a short handle angled to the lower-right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "send",
+    "prompt": "A single paper plane pointing to the upper-right, a simple triangular dart with a center crease line, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "server",
+    "prompt": "A single two stacked identical rounded rectangular racks, each with a small dot indicator on its left side, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "settings",
+    "prompt": "A single toothed cog wheel with a round hollow hub at its center, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "settings-2",
+    "prompt": "A single two horizontal slider rails, each with a round adjuster knob at a different position, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "shield",
+    "prompt": "A single rounded heraldic shield with a flat top and a pointed lower tip, plain and empty, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "shuffle",
+    "prompt": "A single two arrows crossing over each other between two pairs of endpoints, each ending in a triangular arrowhead on the right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "sigma",
+    "prompt": "A single summation sigma symbol, an angular E-like zigzag with an open right side, top and bottom bars meeting a pointed middle, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "signature",
+    "prompt": "A single flowing looped handwritten scribble line resting on a short horizontal baseline, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "sliders",
+    "prompt": "A single three vertical slider rails, each with a small round knob at a different height, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "smartphone",
+    "prompt": "A single upright rounded-rectangle phone with a thin screen outline and a small dot below it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "snowflake",
+    "prompt": "A single six-armed snowflake, three crossing lines through a center with small forked branches on each arm, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "sparkles",
+    "prompt": "A single one large four-point sparkle with two smaller sparkles beside it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "square-terminal",
+    "prompt": "A single rounded square outline containing a small '>' prompt chevron and a short horizontal command line beside it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "star",
+    "prompt": "A single single five-pointed star with evenly spaced points, hollow outline, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "sun",
+    "prompt": "A single small central circle surrounded by eight short straight rays pointing outward, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "swords",
+    "prompt": "A single two crossed swords forming an X, each with a blade, crossguard, and short handle, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "target",
+    "prompt": "A single three concentric circles with a small dot at the exact center, a bullseye, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "terminal",
+    "prompt": "A single small '>' prompt chevron followed by a short horizontal command line, no surrounding box, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "test-tube",
+    "prompt": "A single tilted narrow test tube with a rounded bottom, a small liquid line inside, and a lip at the open top, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "text-cursor-input",
+    "prompt": "A single an I-beam text cursor with top and bottom serifs standing beside a short blinking vertical line, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "timer",
+    "prompt": "A single round stopwatch with a small top button and a straight hand pointing to the upper area from the center, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "toggle-left",
+    "prompt": "A single horizontal pill-shaped switch track with a round knob resting at the left end, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "train-track",
+    "prompt": "A single two long parallel rails crossed by several evenly spaced short perpendicular sleeper ties, in perspective, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "trash",
+    "prompt": "A single rubbish bin with a flat lid, a small top handle, and a plain body, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "trash-2",
+    "prompt": "A single rubbish bin with a lifted lid, a small top handle, and two short vertical lines on the body, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "tree-pine",
+    "prompt": "A single tall coniferous pine tree drawn as two or three stacked triangular tiers with a short straight trunk at the base, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "triangle",
+    "prompt": "A single single upward-pointing equilateral triangle outline with softly rounded corners, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "triangle-alert",
+    "prompt": "A single upward-pointing triangle with rounded corners enclosing a vertical exclamation stroke above a dot, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "trophy",
+    "prompt": "A single winner's cup with a rounded bowl, two side handles, a short stem, and a wide flat base, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "type",
+    "prompt": "A single a capital letter T formed by a horizontal top bar over a centered vertical stem, sitting on a short baseline, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "upload",
+    "prompt": "A single an upward arrow rising out of an open horizontal tray, with a short shaft and triangular arrowhead pointing up, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "user",
+    "prompt": "A single rounded head-and-shoulders bust, a circle above a wide curved shoulder line, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "user-check",
+    "prompt": "A single rounded head-and-shoulders bust with a small check mark at the upper right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "user-minus",
+    "prompt": "A single rounded head-and-shoulders bust with a small horizontal minus sign at the upper right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "user-plus",
+    "prompt": "A single rounded head-and-shoulders bust with a small plus sign at the upper right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "user-round-cog",
+    "prompt": "A single circular head above a curved shoulder arc with a small toothed cog gear at the upper right, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "users",
+    "prompt": "A single two overlapping rounded head-and-shoulders busts, one slightly behind and offset from the other, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "vibrate",
+    "prompt": "A single upright rounded phone handset with short motion lines radiating from each side, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "vibrate-off",
+    "prompt": "A single upright rounded phone handset with short motion lines at the sides crossed by one diagonal slash, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "volume-2",
+    "prompt": "A single small loudspeaker cone facing right with two nested curved sound-wave arcs beside it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "volume-x",
+    "prompt": "A single small loudspeaker cone facing right with a small X mark beside it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "vote",
+    "prompt": "A single an open hand dropping a folded ballot slip bearing a check mark into a slotted box, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "wand",
+    "prompt": "A single a slender diagonal magic wand with a four-point sparkle at its tip, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "watch",
+    "prompt": "A single round wristwatch face with two clock hands and a short strap band above and below it, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "workflow",
+    "prompt": "A single two small rounded rectangles connected by an elbowed line, showing a branching node-to-node process flow, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "wrench",
+    "prompt": "A single a spanner with an open C-shaped jaw at one end and a straight angled handle, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "x",
+    "prompt": "A single two straight strokes crossing at the center to form an X, with rounded ends, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  },
+  {
+    "name": "zap",
+    "prompt": "A single a single jagged lightning bolt drawn as one zig-zag streak, drawn as one minimalist line icon. Pure solid black (#000000) lines on a pure white (#ffffff) background - no other colours, no fills, no shading, no gradients, no shadows, no background shapes, no text or letters. Uniform medium stroke weight with softly rounded caps and rounded corners, geometric and friendly. Centred on a 24×24 grid with even padding, minimal detail, clearly legible at 16px. Flat vector line art, crisp high-contrast edges, exactly one icon."
+  }
+]

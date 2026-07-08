@@ -1,8 +1,11 @@
 {
-  "name": "@perfect/icons",
+  "name": "@glacier/icons",
   "version": "0.1.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "lucide-react": "^1.23.0"
   }
 }
