@@ -1,5 +1,5 @@
 {
-  "name": "perfect",
+  "name": "glacier-ui",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -7,13 +7,13 @@
     "apps/*"
   ],
   "scripts": {
-    "gen": "npm run gen -w @perfect/tokens && npm run gen -w @perfect/spec",
-    "gen:spec": "npm run gen -w @perfect/spec",
-    "dev": "npm run dev -w @perfect/docs",
-    "build:docs": "npm run build -w @perfect/docs",
+    "gen": "npm run gen -w @glacier/tokens && npm run gen -w @glacier/spec",
+    "gen:spec": "npm run gen -w @glacier/spec",
+    "dev": "npm run dev -w @glacier/docs",
+    "build:docs": "npm run build -w @glacier/docs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:visual": "npm run test:visual -w @perfect/docs",
+    "test:visual": "npm run test:visual -w @glacier/docs",
     "lint": "eslint packages/react/src"
   },
   "devDependencies": {

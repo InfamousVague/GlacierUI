@@ -1,4 +1,4 @@
-# Perfect
+# GlacierUI
 
 A token-first React UI kit. Every margin, padding, and control height comes from one shared
 scale, so everything lines up by construction. The visual language follows modern Apple design:
@@ -8,10 +8,10 @@ generous padding, capsule controls, and translucent glass materials.
 
 | Package | What it is |
 | --- | --- |
-| `@perfect/tokens` | Source of truth: OKLCH 12-step color ramps + semantic layer, glass materials + blur, fluid space scale, modular type scale, radius ramp, elevation, motion tokens, density. TypeScript in, `css/tokens.css` out. |
-| `@perfect/motion` | The micro-animation vocabulary as real TS enums (`Motion`, `Speed`, `Ease`, `Spring`) with framer-motion presets (`motionProps`, `springTransition`, `press`, `lift`). |
-| `@perfect/react` | React 19 components styled with CSS Modules over semantic tokens only, organized by atomic design. Atoms: Button, IconButton, Input, Checkbox, Radio, Switch, Card, Surface, Text, Heading, Label, Link, Kbd, Pill, Divider. Molecules: Field, Select, SegmentedControl. Organisms: Modal. |
-| `@perfect/icons` | Reserved for the icon set. |
+| `@glacier/tokens` | Source of truth: OKLCH 12-step color ramps + semantic layer, glass materials + blur, fluid space scale, modular type scale, radius ramp, elevation, motion tokens, density. TypeScript in, `css/tokens.css` out. |
+| `@glacier/motion` | The micro-animation vocabulary as real TS enums (`Motion`, `Speed`, `Ease`, `Spring`) with framer-motion presets (`motionProps`, `springTransition`, `press`, `lift`). |
+| `@glacier/react` | React 19 components styled with CSS Modules over semantic tokens only, organized by atomic design. Atoms: Button, IconButton, Input, Checkbox, Radio, Switch, Card, Surface, Text, Heading, Label, Link, Kbd, Pill, Divider. Molecules: Field, Select, SegmentedControl. Organisms: Modal. |
+| `@glacier/icons` | Reserved for the icon set. |
 | `apps/docs` | Custom Vite docs app: live token galleries, motion playground, per-component documentation with copy-paste examples and props tables, theme + density toggles. |
 
 ## Commands
@@ -24,13 +24,13 @@ npm test             # vitest: token math + component behavior + axe checks
 npm run test:visual  # playwright screenshot regression (needs: npx playwright install chromium)
 ```
 
-## Rules that keep it perfect
+## Rules that keep it consistent
 
 1. **No raw values in components.** Every color, size, radius, duration comes from a
-   `--perfect-*` token. If a value isn't a token, it doesn't ship.
+   `--glacier-*` token. If a value isn't a token, it doesn't ship.
 2. **Components consume the semantic layer**, never ramp steps. Themes flip underneath.
 3. **Spatial values come off the space scale.** Control heights come from
-   `--perfect-control-height-*` so mixed rows always align.
+   `--glacier-control-height-*` so mixed rows always align.
 4. **Motion is enum-only.** Pick from `Motion`/`Speed`/`Ease`/`Spring`; never hand-roll a duration.
 5. **Edit tokens in TypeScript** (`packages/tokens/src`), then `npm run gen`. Never edit
    `tokens.css` by hand.
@@ -42,5 +42,5 @@ npm run test:visual  # playwright screenshot regression (needs: npx playwright i
 
 - `data-theme="light" | "dark"` on `<html>` (defaults to `prefers-color-scheme`)
 - `data-density="compact"` for dense UIs
-- `--perfect-radius-scale` to sharpen/soften every corner globally
-- Accent is the `accent` ramp in `packages/tokens/src/color.ts` — retune once, everything follows.
+- `--glacier-radius-scale` to sharpen/soften every corner globally
+- Accent is the `accent` ramp in `packages/tokens/src/color.ts` - retune once, everything follows.
