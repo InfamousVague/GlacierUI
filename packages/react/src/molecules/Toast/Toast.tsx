@@ -175,6 +175,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             {current && (
               <motion.div
                 key={current.id}
+                className={styles.item}
                 initial={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={reduce ? { opacity: 0 } : { opacity: 0, y: 12 }}

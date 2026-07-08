@@ -1,12 +1,22 @@
 .viewport {
   position: fixed;
-  inset-block-end: var(--perfect-space-6);
-  inset-inline: 0;
+  inset: 0;
   z-index: 200;
-  display: flex;
-  justify-content: center;
-  padding-inline: var(--perfect-space-4);
   pointer-events: none;
+}
+
+/* Each toast is absolutely centered at the bottom, so concurrent toasts — an
+   outgoing one still animating out while the next arrives — stack in the same
+   spot and cross-fade in place, instead of lining up in a flex row where the
+   faded-but-still-laid-out exiting toasts shove the live one sideways. Auto
+   margins center it without a transform, leaving the Y translate to Motion. */
+.item {
+  position: absolute;
+  inset-block-end: var(--perfect-space-6);
+  inset-inline: var(--perfect-space-4);
+  margin-inline: auto;
+  width: fit-content;
+  max-width: 28rem;
 }
 
 .pill {
