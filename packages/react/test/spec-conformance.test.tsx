@@ -10,7 +10,7 @@ import {
   specs,
   validateSpec,
   type ComponentSpec,
-} from '@perfect/spec';
+} from '@glacier/spec';
 import {
   Avatar,
   Banner,
@@ -58,10 +58,11 @@ import {
   Popover,
   Menu,
   MenuItem,
-  Badge,
   StatTile,
   DeviceFrame,
   FilterChip,
+  Image,
+  Rating,
   ScrollArea,
   Carousel,
   Heatmap,
@@ -201,11 +202,6 @@ const RENDER: Record<string, Renderer> = {
       </SidebarSection>
     </Sidebar>
   ),
-  badge: (o) => (
-    <Badge tone={o.tone as never} variant={o.variant as never} size={o.size as never}>
-      Label
-    </Badge>
-  ),
   'stat-tile': () => <StatTile value="12,480" label="Total users" />,
   'device-frame': () => (
     <DeviceFrame aria-label="Preview">
@@ -213,6 +209,8 @@ const RENDER: Record<string, Renderer> = {
     </DeviceFrame>
   ),
   'filter-chip': () => <FilterChip count={3}>Open</FilterChip>,
+  image: () => <Image src="/cover.jpg" alt="Cover" aspectRatio="2 / 3" />,
+  rating: (o) => <Rating size={o.size as never} value={3} aria-label="Rating" />,
   'scroll-area': () => <ScrollArea maxHeight={100}>Scrollable content</ScrollArea>,
   carousel: () => (
     <Carousel aria-label="Featured">

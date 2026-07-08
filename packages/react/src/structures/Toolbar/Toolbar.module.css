@@ -1,11 +1,11 @@
 .toolbar {
   display: flex;
   align-items: center;
-  gap: var(--perfect-space-3);
+  gap: var(--glacier-space-3);
   min-width: 0;
   /* even padding on every side, matched to the spec's dimensions */
-  padding: var(--perfect-space-2);
-  font-family: var(--perfect-font-sans);
+  padding: var(--glacier-space-2);
+  font-family: var(--glacier-font-sans);
 }
 
 .toolbar[data-sticky] {
@@ -15,13 +15,13 @@
 }
 
 .toolbar[data-border] {
-  border-block-end: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  border-block-end: var(--glacier-hairline) solid var(--glacier-border-subtle);
 }
 
 .toolbar[data-surface] {
-  background: var(--perfect-glass-thin);
-  backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--perfect-blur-md)) saturate(var(--perfect-glass-saturate));
+  background: var(--glacier-glass-thin);
+  backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
 }
 
 .content {
@@ -29,12 +29,12 @@
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: var(--perfect-space-2);
+  gap: var(--glacier-space-2);
 }
 
 .slot {
   flex: none;
   display: inline-flex;
   align-items: center;
-  gap: var(--perfect-space-2);
+  gap: var(--glacier-space-2);
 }

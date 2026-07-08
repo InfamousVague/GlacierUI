@@ -1,9 +1,10 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { Motion, Speed, motionProps } from '@perfect/motion';
+import { SkeletonVariant } from '@glacier/spec';
+import { Motion, Speed, motionProps } from '@glacier/motion';
 import { useId, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { FieldContext } from '../../internal/FieldContext.ts';
-import { Skeleton } from '../../atoms/Skeleton/Skeleton.tsx';
+import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
 import styles from './Field.module.css';
 
 export interface FieldProps {
@@ -29,12 +30,12 @@ export function Field({ label, hint, error, required, skeleton = false, classNam
       <div className={cx(styles.field, className)}>
         {label && (
           <span className={styles.label}>
-            <Skeleton variant="text" width="5rem" />
+            <Skeleton variant={SkeletonVariant.Text} width="5rem" />
           </span>
         )}
         {children}
         <div className={styles.meta}>
-          {hint && <Skeleton variant="text" width="9rem" />}
+          {hint && <Skeleton variant={SkeletonVariant.Text} width="9rem" />}
         </div>
       </div>
     );

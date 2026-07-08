@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react';
-import type { SpaceStep } from '@perfect/tokens';
+import type { SpaceStep } from '@glacier/tokens';
 import type { BoxStyleProps, FlowProps, Responsive } from './types.ts';
 
 const BREAKPOINTS = ['base', 'sm', 'md', 'lg', 'xl'] as const;
 
-const spaceToken = (step: SpaceStep): string => `var(--perfect-space-${step})`;
+const spaceToken = (step: SpaceStep): string => `var(--glacier-space-${step})`;
 
 /** Emit the per-breakpoint custom properties for a responsive space value. */
 function assignSpace(

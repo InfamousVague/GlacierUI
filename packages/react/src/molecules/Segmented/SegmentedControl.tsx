@@ -1,10 +1,10 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Spring, springTransition } from '@perfect/motion';
+import { Spring, springTransition } from '@glacier/motion';
 import { useId, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
-import type { ControlSize } from '../../atoms/Button/Button.tsx';
-import { Skeleton } from '../../atoms/Skeleton/Skeleton.tsx';
+import type { ControlSize } from '../../atoms/inputs/Button/Button.tsx';
+import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
 import styles from './Segmented.module.css';
 
 export interface SegmentedOption {
@@ -31,7 +31,7 @@ export interface SegmentedControlProps {
 }
 
 /**
- * A segmented toggle in the style of the iOS segmented control. The selected
+ * A segmented toggle. The selected
  * thumb is a shared framer-motion layout element, so it springs between
  * segments instead of jumping. Arrow keys move the selection (native radio
  * behavior), and the thumb follows.
@@ -67,7 +67,7 @@ export function SegmentedControl({
             <span className={styles.label} style={{ color: 'transparent' }}>
               {option.label}
             </span>
-            <Skeleton radius="var(--perfect-radius-full)" className={styles.segmentSkeleton} />
+            <Skeleton radius="var(--glacier-radius-full)" className={styles.segmentSkeleton} />
           </span>
         ))}
       </div>

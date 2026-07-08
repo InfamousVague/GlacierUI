@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Spring, springTransition } from '@perfect/motion';
+import { Spring, springTransition } from '@glacier/motion';
 import { useId, useRef, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';

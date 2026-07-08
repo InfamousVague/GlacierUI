@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Size } from '@glacier/react';
 import { render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { Box, Center, Container, Grid, Row, Spacer, Stack } from '../src/index.ts';
@@ -14,14 +15,14 @@ describe('Stack', () => {
       </Stack>,
     );
     const el = screen.getByTestId('s');
-    expect(el.style.getPropertyValue('--pl-gap-base')).toBe('var(--perfect-space-6)');
+    expect(el.style.getPropertyValue('--pl-gap-base')).toBe('var(--glacier-space-6)');
   });
 
   it('emits per-breakpoint variables for a responsive gap', () => {
     render(<Stack gap={{ base: 2, md: 6 }} data-testid="s" />);
     const el = screen.getByTestId('s');
-    expect(el.style.getPropertyValue('--pl-gap-base')).toBe('var(--perfect-space-2)');
-    expect(el.style.getPropertyValue('--pl-gap-md')).toBe('var(--perfect-space-6)');
+    expect(el.style.getPropertyValue('--pl-gap-base')).toBe('var(--glacier-space-2)');
+    expect(el.style.getPropertyValue('--pl-gap-md')).toBe('var(--glacier-space-6)');
     expect(el.style.getPropertyValue('--pl-gap-sm')).toBe('');
   });
 
@@ -39,18 +40,18 @@ describe('Box padding', () => {
   it('resolves padding to all four edge variables', () => {
     render(<Box padding={4} data-testid="b" />);
     const el = screen.getByTestId('b');
-    expect(el.style.getPropertyValue('--pl-pt-base')).toBe('var(--perfect-space-4)');
-    expect(el.style.getPropertyValue('--pl-pr-base')).toBe('var(--perfect-space-4)');
-    expect(el.style.getPropertyValue('--pl-pb-base')).toBe('var(--perfect-space-4)');
-    expect(el.style.getPropertyValue('--pl-pl-base')).toBe('var(--perfect-space-4)');
+    expect(el.style.getPropertyValue('--pl-pt-base')).toBe('var(--glacier-space-4)');
+    expect(el.style.getPropertyValue('--pl-pr-base')).toBe('var(--glacier-space-4)');
+    expect(el.style.getPropertyValue('--pl-pb-base')).toBe('var(--glacier-space-4)');
+    expect(el.style.getPropertyValue('--pl-pl-base')).toBe('var(--glacier-space-4)');
   });
 
   it('lets a more specific padding prop win per edge', () => {
     render(<Box padding={2} paddingX={8} data-testid="b" />);
     const el = screen.getByTestId('b');
-    expect(el.style.getPropertyValue('--pl-pl-base')).toBe('var(--perfect-space-8)');
-    expect(el.style.getPropertyValue('--pl-pr-base')).toBe('var(--perfect-space-8)');
-    expect(el.style.getPropertyValue('--pl-pt-base')).toBe('var(--perfect-space-2)');
+    expect(el.style.getPropertyValue('--pl-pl-base')).toBe('var(--glacier-space-8)');
+    expect(el.style.getPropertyValue('--pl-pr-base')).toBe('var(--glacier-space-8)');
+    expect(el.style.getPropertyValue('--pl-pt-base')).toBe('var(--glacier-space-2)');
   });
 
   it('renders a custom element via as', () => {
@@ -84,11 +85,11 @@ describe('Grid', () => {
 
 describe('Container, Row, Center, Spacer', () => {
   it('Container caps width to a container token and centers', () => {
-    render(<Container size="md" data-testid="c">x</Container>);
+    render(<Container size={Size.Medium} data-testid="c">x</Container>);
     const el = screen.getByTestId('c');
     expect(el.getAttribute('data-maxw')).toBe('md');
     // default responsive gutters when none are given
-    expect(el.style.getPropertyValue('--pl-pl-base')).toBe('var(--perfect-space-4)');
+    expect(el.style.getPropertyValue('--pl-pl-base')).toBe('var(--glacier-space-4)');
   });
 
   it('Row wraps when asked', () => {

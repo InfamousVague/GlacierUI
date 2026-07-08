@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Size } from '@glacier/react';
 import { render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { Checkbox, Meter, Radio, Switch, Toggle } from '../src/index.ts';
@@ -14,7 +15,7 @@ describe('selection skeleton states', () => {
     const box = skeletons[0] as HTMLElement;
     expect(box.style.width).toBe('1.375rem');
     expect(box.style.height).toBe('1.375rem');
-    expect(box.style.borderRadius).toBe('var(--perfect-radius-sm)');
+    expect(box.style.borderRadius).toBe('var(--glacier-radius-sm)');
     const line = skeletons[1] as HTMLElement;
     expect(line.style.width).toBe('6rem');
   });
@@ -41,11 +42,11 @@ describe('selection skeleton states', () => {
     const track = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(track.style.width).toBe('2.75rem');
     expect(track.style.height).toBe('1.625rem');
-    expect(track.style.borderRadius).toBe('var(--perfect-radius-full)');
+    expect(track.style.borderRadius).toBe('var(--glacier-radius-full)');
   });
 
   it('Switch skeleton shrinks to the sm track and adds a label line', () => {
-    const { container } = render(<Switch skeleton size="sm" label="Wi-Fi" />);
+    const { container } = render(<Switch skeleton size={Size.Small} label="Wi-Fi" />);
     const skeletons = container.querySelectorAll('[data-skeleton]');
     expect(skeletons).toHaveLength(2);
     const track = skeletons[0] as HTMLElement;
@@ -54,30 +55,30 @@ describe('selection skeleton states', () => {
   });
 
   it('Toggle skeleton mirrors the control height per size', () => {
-    const { container } = render(<Toggle skeleton size="lg" />);
+    const { container } = render(<Toggle skeleton size={Size.Large} />);
     expect(screen.queryByRole('button')).toBeNull();
     const bar = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(bar.style.width).toBe('6.5rem');
-    expect(bar.style.height).toBe('var(--perfect-control-height-lg)');
-    expect(bar.style.borderRadius).toBe('var(--perfect-control-radius)');
+    expect(bar.style.height).toBe('var(--glacier-control-height-lg)');
+    expect(bar.style.borderRadius).toBe('var(--glacier-control-radius)');
   });
 
   it('Toggle skeleton is square when iconOnly', () => {
-    const { container } = render(<Toggle skeleton iconOnly size="sm" aria-label="Grid view" />);
+    const { container } = render(<Toggle skeleton iconOnly size={Size.Small} aria-label="Grid view" />);
     expect(screen.queryByRole('button')).toBeNull();
     const square = container.querySelector('[data-skeleton]') as HTMLElement;
-    expect(square.style.width).toBe('var(--perfect-control-height-sm)');
+    expect(square.style.width).toBe('var(--glacier-control-height-sm)');
     expect(square.style.width).toBe(square.style.height);
   });
 
   it('Meter skeleton renders one pip per segment with no meter role', () => {
-    const { container } = render(<Meter skeleton value={0} segments={6} size="sm" />);
+    const { container } = render(<Meter skeleton value={0} segments={6} size={Size.Small} />);
     expect(screen.queryByRole('meter')).toBeNull();
     const pips = container.querySelectorAll('[data-skeleton]');
     expect(pips).toHaveLength(6);
     const pip = pips[0] as HTMLElement;
     expect(pip.style.height).toBe('0.25rem');
-    expect(pip.style.borderRadius).toBe('var(--perfect-radius-full)');
+    expect(pip.style.borderRadius).toBe('var(--glacier-radius-full)');
     expect(pip.style.flexGrow).toBe('1');
   });
 

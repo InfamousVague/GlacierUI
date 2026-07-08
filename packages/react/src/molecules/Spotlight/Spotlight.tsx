@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@perfect/motion';
+import { Size, TextTone, Variant } from '@glacier/spec';
+import { Speed, Ease, transition } from '@glacier/motion';
 import {
   useEffect,
   useId,
@@ -14,10 +15,10 @@ import { cx } from '../../internal/cx.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
 import { useAnchoredPosition, type Placement } from '../../internal/useAnchoredPosition.ts';
-import { Button } from '../../atoms/Button/Button.tsx';
-import { IconButton } from '../../atoms/Button/IconButton.tsx';
-import { Heading } from '../../atoms/Typography/Heading.tsx';
-import { Text } from '../../atoms/Typography/Text.tsx';
+import { Button } from '../../atoms/inputs/Button/Button.tsx';
+import { IconButton } from '../../atoms/inputs/Button/IconButton.tsx';
+import { Heading } from '../../atoms/display/Typography/Heading.tsx';
+import { Text } from '../../atoms/display/Typography/Text.tsx';
 import styles from './Spotlight.module.css';
 
 const CloseIcon = (
@@ -61,8 +62,8 @@ interface Rect {
 
 /**
  * A guided-tour step. A dimmed, full-screen backdrop with a highlighted cutout
- * punched around a target element, plus a callout — anchored to the target with
- * the shared overlay engine — carrying a title, body, step count, and
+ * punched around a target element, plus a callout - anchored to the target with
+ * the shared overlay engine - carrying a title, body, step count, and
  * Back / Next / Close controls. The callout is a role="dialog" that traps focus,
  * closes on Escape or a backdrop press, and tracks the target on scroll and
  * resize so the cutout stays glued to it.
@@ -205,7 +206,7 @@ export function Spotlight({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={reduce ? { duration: 0 } : transition(Speed.Fast, Ease.Out)}
       >
-        <IconButton aria-label={t(kitMessages.closeTour)} size="sm" className={styles.close} onClick={onClose}>
+        <IconButton aria-label={t(kitMessages.closeTour)} size={Size.Small} className={styles.close} onClick={onClose}>
           {CloseIcon}
         </IconButton>
         {title && (
@@ -214,7 +215,7 @@ export function Spotlight({
           </Heading>
         )}
         {description && (
-          <Text tone="muted" size="sm" id={descriptionId} className={styles.description}>
+          <Text tone={TextTone.Muted} size={Size.Small} id={descriptionId} className={styles.description}>
             {description}
           </Text>
         )}
@@ -226,12 +227,12 @@ export function Spotlight({
           )}
           <div className={styles.actions}>
             {onBack && (
-              <Button variant="ghost" size="sm" onClick={onBack}>
+              <Button variant={Variant.Ghost} size={Size.Small} onClick={onBack}>
                 {t(kitMessages.back)}
               </Button>
             )}
             {onNext && (
-              <Button variant="solid" size="sm" onClick={onNext}>
+              <Button variant={Variant.Solid} size={Size.Small} onClick={onNext}>
                 {total != null && step === total ? t(kitMessages.done) : t(kitMessages.next)}
               </Button>
             )}

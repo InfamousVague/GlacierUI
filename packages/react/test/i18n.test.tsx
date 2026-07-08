@@ -10,7 +10,13 @@ import {
 } from '../src/i18n/index.ts';
 
 const t = defineMessages({
-  greeting: { en: 'Hello, {name}' },
+  greeting: {
+    en: 'Hello, {name}',
+    es: 'Hola, {name}',
+    fr: 'Bonjour, {name}',
+    de: 'Hallo, {name}',
+    ja: 'こんにちは、{name}',
+  },
 });
 
 function Greeting({ name }: { name: string }) {

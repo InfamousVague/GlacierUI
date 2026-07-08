@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@perfect/motion';
+import { Speed, Ease, transition } from '@glacier/motion';
 import {
   cloneElement,
   useEffect,

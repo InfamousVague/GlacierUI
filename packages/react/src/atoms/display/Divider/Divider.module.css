@@ -1,0 +1,33 @@
+.horizontal {
+  border: none;
+  margin: 0;
+  width: 100%;
+  height: var(--glacier-hairline);
+  background: var(--glacier-border-subtle);
+}
+
+.vertical {
+  border: none;
+  margin: 0;
+  width: var(--glacier-hairline);
+  align-self: stretch;
+  background: var(--glacier-border-subtle);
+}
+
+.labeled {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  width: 100%;
+  color: var(--glacier-text-subtle);
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-xs);
+}
+
+.labeled::before,
+.labeled::after {
+  content: '';
+  flex: 1;
+  height: var(--glacier-hairline);
+  background: var(--glacier-border-subtle);
+}

@@ -1,34 +1,34 @@
 .heatmap {
   display: inline-flex;
   flex-direction: column;
-  gap: var(--perfect-space-2);
-  font-family: var(--perfect-font-sans);
-  color: var(--perfect-text-subtle);
+  gap: var(--glacier-space-2);
+  font-family: var(--glacier-font-sans);
+  color: var(--glacier-text-subtle);
 }
 
 .grid {
   display: flex;
-  gap: var(--perfect-space-1);
+  gap: var(--glacier-space-1);
 }
 
 .column {
   display: flex;
   flex-direction: column;
-  gap: var(--perfect-space-1);
+  gap: var(--glacier-space-1);
 }
 
 /*
  * Each cell paints an accent overlay on the sunken track. Its intensity is the
  * cell's level as a fraction of the top level, expressed as the overlay's
- * alpha — so any number of levels ramps smoothly and level 0 shows bare track.
+ * alpha - so any number of levels ramps smoothly and level 0 shows bare track.
  */
 .cell {
   position: relative;
-  width: var(--perfect-space-4);
-  height: var(--perfect-space-4);
-  border-radius: var(--perfect-radius-xs);
-  background-color: var(--perfect-surface-sunken);
-  border: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  width: var(--glacier-space-4);
+  height: var(--glacier-space-4);
+  border-radius: var(--glacier-radius-xs);
+  background-color: var(--glacier-surface-sunken);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
   --alpha: calc(var(--level, 0) / var(--steps, 1));
 }
 
@@ -37,13 +37,13 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: var(--perfect-accent-9);
+  background: var(--glacier-accent-9);
   opacity: var(--alpha);
 }
 
 /* A filled cell reads as its own tile: firm up its edge as it saturates. */
 .cell[data-level]:not([data-level='0']) {
-  border-color: var(--perfect-accent-border);
+  border-color: var(--glacier-accent-border);
 }
 
 .srOnly {
@@ -61,23 +61,23 @@
 .legend {
   display: flex;
   align-items: center;
-  gap: var(--perfect-space-1);
+  gap: var(--glacier-space-1);
   align-self: flex-end;
-  font-size: var(--perfect-font-size-xs);
-  line-height: var(--perfect-leading-xs);
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-xs);
 }
 
 .legendText {
-  color: var(--perfect-text-subtle);
+  color: var(--glacier-text-subtle);
 }
 
 .swatch {
   position: relative;
-  width: var(--perfect-space-3);
-  height: var(--perfect-space-3);
-  border-radius: var(--perfect-radius-xs);
-  background-color: var(--perfect-surface-sunken);
-  border: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  width: var(--glacier-space-3);
+  height: var(--glacier-space-3);
+  border-radius: var(--glacier-radius-xs);
+  background-color: var(--glacier-surface-sunken);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
   --alpha: calc(var(--level, 0) / var(--steps, 1));
 }
 
@@ -86,10 +86,10 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: var(--perfect-accent-9);
+  background: var(--glacier-accent-9);
   opacity: var(--alpha);
 }
 
 .swatch[data-level]:not([data-level='0']) {
-  border-color: var(--perfect-accent-border);
+  border-color: var(--glacier-accent-border);
 }

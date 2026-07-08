@@ -1,11 +1,11 @@
 .root {
   position: relative;
   /* The fade width at each edge; sits on the space scale. */
-  --scroll-fade: var(--perfect-space-6);
+  --scroll-fade: var(--glacier-space-6);
   min-height: 0;
   min-width: 0;
-  font-family: var(--perfect-font-sans);
-  color: var(--perfect-text);
+  font-family: var(--glacier-font-sans);
+  color: var(--glacier-text);
 }
 
 /* The scrolling viewport. A CSS mask, driven by the root's data-fade-*
@@ -17,13 +17,13 @@
   --mask-start: transparent 0;
   --mask-end: #000 0;
   scrollbar-width: thin;
-  scrollbar-color: var(--perfect-border-strong) transparent;
+  scrollbar-color: var(--glacier-border-strong) transparent;
 }
 
 .viewport:focus-visible {
-  outline: 2px solid var(--perfect-focus-ring);
+  outline: 2px solid var(--glacier-focus-ring);
   outline-offset: -2px;
-  border-radius: var(--perfect-radius-sm);
+  border-radius: var(--glacier-radius-sm);
 }
 
 .vertical .viewport {
@@ -70,8 +70,8 @@
 
 /* --- WebKit scrollbar (thin, themed) --------------------------------------- */
 .viewport::-webkit-scrollbar {
-  width: var(--perfect-space-2);
-  height: var(--perfect-space-2);
+  width: var(--glacier-space-2);
+  height: var(--glacier-space-2);
 }
 
 .viewport::-webkit-scrollbar-track {
@@ -79,12 +79,12 @@
 }
 
 .viewport::-webkit-scrollbar-thumb {
-  background: var(--perfect-border);
-  border-radius: var(--perfect-radius-full);
+  background: var(--glacier-border);
+  border-radius: var(--glacier-radius-full);
 }
 
 .viewport::-webkit-scrollbar-thumb:hover {
-  background: var(--perfect-border-strong);
+  background: var(--glacier-border-strong);
 }
 
 .viewport::-webkit-scrollbar-corner {

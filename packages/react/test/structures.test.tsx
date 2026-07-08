@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Size } from '@glacier/react';
 import { render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { Button, Sidebar, SidebarItem, SidebarSection, Toolbar } from '../src/index.ts';
@@ -44,7 +45,7 @@ describe('Sidebar', () => {
 describe('Toolbar', () => {
   it('renders start, middle, and end regions', () => {
     render(
-      <Toolbar start={<span>menu</span>} end={<Button size="sm">New</Button>}>
+      <Toolbar start={<span>menu</span>} end={<Button size={Size.Small}>New</Button>}>
         <span>Title</span>
       </Toolbar>,
     );
@@ -62,7 +63,7 @@ describe('Toolbar', () => {
             <SidebarItem>Inbox</SidebarItem>
           </SidebarSection>
         </Sidebar>
-        <Toolbar start={<span>menu</span>} end={<Button size="sm">New</Button>}>
+        <Toolbar start={<span>menu</span>} end={<Button size={Size.Small}>New</Button>}>
           <span>Title</span>
         </Toolbar>
       </>,

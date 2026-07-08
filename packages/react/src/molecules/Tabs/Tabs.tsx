@@ -1,9 +1,10 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Spring, springTransition, Speed, Ease, transition } from '@perfect/motion';
+import { SkeletonVariant } from '@glacier/spec';
+import { Spring, springTransition, Speed, Ease, transition } from '@glacier/motion';
 import { useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
-import { Skeleton } from '../../atoms/Skeleton/Skeleton.tsx';
+import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
 import styles from './Tabs.module.css';
 
 export interface TabItem {
@@ -64,16 +65,16 @@ export function Tabs({
                 display: 'inline-flex',
                 justifyContent: 'center',
                 flex: fullWidth ? 1 : undefined,
-                padding: 'var(--perfect-space-3) var(--perfect-space-4)',
+                padding: 'var(--glacier-space-3) var(--glacier-space-4)',
               }}
             >
-              <Skeleton variant="text" width="4rem" />
+              <Skeleton variant={SkeletonVariant.Text} width="4rem" />
             </span>
           ))}
         </div>
-        <div className={styles.panel} style={{ display: 'grid', gap: 'var(--perfect-space-2)' }}>
-          <Skeleton variant="text" width="100%" />
-          <Skeleton variant="text" width="70%" />
+        <div className={styles.panel} style={{ display: 'grid', gap: 'var(--glacier-space-2)' }}>
+          <Skeleton variant={SkeletonVariant.Text} width="100%" />
+          <Skeleton variant={SkeletonVariant.Text} width="70%" />
         </div>
       </div>
     );

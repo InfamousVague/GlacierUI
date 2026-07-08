@@ -46,7 +46,7 @@ const round = (value: number): number => Math.round(value * 1e4) / 1e4;
 
 /**
  * A container that splits into two panes with a draggable divider. It hosts
- * exactly two children — a start pane and an end pane — and sizes the start pane
+ * exactly two children - a start pane and an end pane - and sizes the start pane
  * by a ratio of the container. The divider is a `role="separator"` handle:
  * drag it with a pointer, nudge it with the arrow keys, or double-click to reset.
  * The ratio is controlled-or-uncontrolled, so a consumer can persist it.

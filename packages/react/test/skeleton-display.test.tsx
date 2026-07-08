@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Size } from '@glacier/react';
 import { render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { Card, ProgressBar, Slider, Spinner, Surface } from '../src/index.ts';
@@ -12,11 +13,11 @@ describe('display skeleton states', () => {
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton.style.width).toBe('100%');
     expect(skeleton.style.height).toBe('0.625rem');
-    expect(skeleton.style.borderRadius).toBe('var(--perfect-radius-full)');
+    expect(skeleton.style.borderRadius).toBe('var(--glacier-radius-full)');
   });
 
   it('ProgressBar skeleton follows the sm track height', () => {
-    const { container } = render(<ProgressBar skeleton size="sm" />);
+    const { container } = render(<ProgressBar skeleton size={Size.Small} />);
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton.style.height).toBe('0.375rem');
   });
@@ -43,7 +44,7 @@ describe('display skeleton states', () => {
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton.style.width).toBe('100%');
     expect(skeleton.style.height).toBe('0.375rem');
-    expect(skeleton.style.borderRadius).toBe('var(--perfect-radius-full)');
+    expect(skeleton.style.borderRadius).toBe('var(--glacier-radius-full)');
   });
 
   it('Card skeleton keeps the card chrome and stacks three text lines', () => {
@@ -64,7 +65,7 @@ describe('display skeleton states', () => {
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton.style.width).toBe('100%');
     expect(skeleton.style.height).toBe('6rem');
-    expect(skeleton.style.borderRadius).toBe('var(--perfect-radius-lg)');
+    expect(skeleton.style.borderRadius).toBe('var(--glacier-radius-lg)');
   });
 
   it('has no axe violations', async () => {

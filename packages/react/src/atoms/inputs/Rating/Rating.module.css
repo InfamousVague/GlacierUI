@@ -1,0 +1,81 @@
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1em;
+  color: var(--glacier-warning-solid);
+  line-height: 0;
+}
+
+.sm { font-size: 0.9375rem; }
+.md { font-size: 1.125rem; }
+.lg { font-size: 1.5rem; }
+
+.disabled { opacity: 0.5; }
+
+.star {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+  transition: transform var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.star:active {
+  transform: scale(0.9);
+}
+
+.rating.disabled .star,
+.readonly .star {
+  cursor: default;
+}
+
+/* the native radio is the real control; we hide it and drive the star visuals */
+.input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.input:focus-visible + .cell {
+  outline: 2px solid var(--glacier-accent-solid);
+  outline-offset: 2px;
+  border-radius: var(--glacier-radius-sm);
+}
+
+.cell {
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+
+.starBase,
+.starFill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  display: block;
+  width: 1em;
+  height: 1em;
+}
+
+.starBase {
+  fill: none;
+  stroke: var(--glacier-border-strong);
+}
+
+.starFill {
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.fillWrap {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  overflow: hidden;
+  height: 1em;
+}

@@ -1,5 +1,6 @@
 import type { ComponentProps, ElementType, ReactNode } from 'react';
 import { cx } from '../internal/cx.ts';
+import { asPolymorphic } from '../internal/poly.ts';
 import { resolveBox, splitBoxProps } from './resolve.ts';
 import type { BoxStyleProps } from './types.ts';
 import styles from './Layout.module.css';
@@ -18,7 +19,7 @@ export interface BoxProps extends BoxStyleProps, Omit<ComponentProps<'div'>, 'co
 export function Box({ as, className, style, children, ...props }: BoxProps) {
   const { box, rest } = splitBoxProps(props);
   const resolved = resolveBox(box);
-  const Component: ElementType = as ?? 'div';
+  const Component = asPolymorphic(as, 'div');
   return (
     <Component
       className={cx(styles.box, className)}

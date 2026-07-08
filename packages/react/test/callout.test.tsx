@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Tone } from '@glacier/react';
 import { render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { Callout } from '../src/index.ts';
@@ -14,7 +15,7 @@ describe('Callout', () => {
 
   it('exposes role alert for the danger tone', () => {
     render(
-      <Callout tone="danger" title="Stop">
+      <Callout tone={Tone.Danger} title="Stop">
         This action cannot be undone.
       </Callout>,
     );
@@ -22,7 +23,7 @@ describe('Callout', () => {
   });
 
   it('exposes role note for the note tone', () => {
-    render(<Callout tone="note">A neutral aside.</Callout>);
+    render(<Callout tone={Tone.Note}>A neutral aside.</Callout>);
     expect(screen.getByRole('note')).toBeInTheDocument();
   });
 
@@ -33,7 +34,7 @@ describe('Callout', () => {
 
   it('has no axe violations', async () => {
     const { container } = render(
-      <Callout tone="info" title="Note">
+      <Callout tone={Tone.Info} title="Note">
         A helpful note.
       </Callout>,
     );

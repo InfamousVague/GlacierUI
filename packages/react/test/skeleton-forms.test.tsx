@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Size } from '@glacier/react';
 import { render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { Field, Input, Select } from '../src/index.ts';
@@ -12,12 +13,12 @@ const OPTIONS = [
 
 describe('form skeleton states', () => {
   it('Input skeleton replaces the textbox with a full-width placeholder at the control height', () => {
-    const { container } = render(<Input skeleton size="lg" />);
+    const { container } = render(<Input skeleton size={Size.Large} />);
     expect(screen.queryByRole('textbox')).toBeNull();
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton.style.width).toBe('100%');
-    expect(skeleton.style.height).toBe('var(--perfect-control-height-lg)');
-    expect(skeleton.style.borderRadius).toBe('var(--perfect-radius-lg)');
+    expect(skeleton.style.height).toBe('var(--glacier-control-height-lg)');
+    expect(skeleton.style.borderRadius).toBe('var(--glacier-radius-lg)');
   });
 
   it('Field skeleton swaps the label and hint for text lines around its children', () => {
@@ -45,13 +46,13 @@ describe('form skeleton states', () => {
   });
 
   it('Select skeleton replaces the trigger with a silent placeholder', () => {
-    const { container } = render(<Select skeleton options={OPTIONS} size="sm" />);
+    const { container } = render(<Select skeleton options={OPTIONS} size={Size.Small} />);
     expect(screen.queryByRole('button')).toBeNull();
     expect(screen.queryByRole('listbox')).toBeNull();
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton.style.width).toBe('11rem');
-    expect(skeleton.style.height).toBe('var(--perfect-control-height-sm)');
-    expect(skeleton.style.borderRadius).toBe('var(--perfect-radius-lg)');
+    expect(skeleton.style.height).toBe('var(--glacier-control-height-sm)');
+    expect(skeleton.style.borderRadius).toBe('var(--glacier-radius-lg)');
   });
 
   it('Select skeleton stretches with fullWidth', () => {

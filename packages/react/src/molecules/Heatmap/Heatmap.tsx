@@ -56,7 +56,7 @@ function toColumns(data: HeatmapData, rows: number): Cell[][] {
     }
     return columns;
   }
-  // number[][] — treat each inner array as a row, transpose into columns.
+  // number[][] - treat each inner array as a row, transpose into columns.
   const grid = data as number[][];
   const width = grid.reduce((max, row) => Math.max(max, row.length), 0);
   const columns: Cell[][] = [];
@@ -80,8 +80,8 @@ function levelOf(value: number, max: number, levels: number): number {
 }
 
 /**
- * A GitHub-contribution-style intensity grid. Values — a 2D array or a flat
- * list of `{ date, value }` — are bucketed onto an accent ramp: level 0 reads
+ * A GitHub-contribution-style intensity grid. Values - a 2D array or a flat
+ * list of `{ date, value }` - are bucketed onto an accent ramp: level 0 reads
  * as an empty track, higher levels step up in accent saturation. Each cell
  * carries a title so its value is legible to pointer and screen-reader users,
  * and an optional legend spells out the less→more scale.

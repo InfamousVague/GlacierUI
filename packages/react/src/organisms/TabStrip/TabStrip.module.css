@@ -1,17 +1,17 @@
 .strip {
   display: flex;
-  gap: var(--perfect-space-1);
+  gap: var(--glacier-space-1);
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
-  border-bottom: var(--perfect-hairline) solid var(--perfect-border-subtle);
-  font-family: var(--perfect-font-sans);
+  border-bottom: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  font-family: var(--glacier-font-sans);
   scrollbar-width: thin;
-  scrollbar-color: var(--perfect-border-strong) transparent;
+  scrollbar-color: var(--glacier-border-strong) transparent;
 }
 
 .strip::-webkit-scrollbar {
-  height: var(--perfect-space-2);
+  height: var(--glacier-space-2);
 }
 
 .strip::-webkit-scrollbar-track {
@@ -19,12 +19,12 @@
 }
 
 .strip::-webkit-scrollbar-thumb {
-  background: var(--perfect-border);
-  border-radius: var(--perfect-radius-full);
+  background: var(--glacier-border);
+  border-radius: var(--glacier-radius-full);
 }
 
 .strip::-webkit-scrollbar-thumb:hover {
-  background: var(--perfect-border-strong);
+  background: var(--glacier-border-strong);
 }
 
 .tab {
@@ -32,35 +32,35 @@
   display: inline-flex;
   flex: none;
   align-items: center;
-  gap: var(--perfect-space-2);
-  padding: var(--perfect-space-2) var(--perfect-space-2) var(--perfect-space-2) var(--perfect-space-3);
+  gap: var(--glacier-space-2);
+  padding: var(--glacier-space-2) var(--glacier-space-2) var(--glacier-space-2) var(--glacier-space-3);
   border: 0;
-  border-radius: var(--perfect-radius-md) var(--perfect-radius-md) 0 0;
+  border-radius: var(--glacier-radius-md) var(--glacier-radius-md) 0 0;
   background: transparent;
-  color: var(--perfect-text-muted);
+  color: var(--glacier-text-muted);
   font-family: inherit;
-  font-size: var(--perfect-font-size-sm);
-  font-weight: var(--perfect-font-weight-medium);
+  font-size: var(--glacier-font-size-sm);
+  font-weight: var(--glacier-font-weight-medium);
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  transition: color var(--perfect-duration-fast) var(--perfect-ease-out),
-    background-color var(--perfect-duration-fast) var(--perfect-ease-out);
+  transition: color var(--glacier-duration-fast) var(--glacier-ease-out),
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out);
 }
 
 .tab:hover {
-  color: var(--perfect-text);
-  background: var(--perfect-hover);
+  color: var(--glacier-text);
+  background: var(--glacier-hover);
 }
 
 .tab[aria-selected='true'] {
-  color: var(--perfect-text);
+  color: var(--glacier-text);
 }
 
 .tab:focus-visible {
-  outline: 2px solid var(--perfect-focus-ring);
+  outline: 2px solid var(--glacier-focus-ring);
   outline-offset: -2px;
 }
 
@@ -71,11 +71,11 @@
   justify-content: center;
   width: 1em;
   height: 1em;
-  color: var(--perfect-text-subtle);
+  color: var(--glacier-text-subtle);
 }
 
 .tab[aria-selected='true'] .icon {
-  color: var(--perfect-text-muted);
+  color: var(--glacier-text-muted);
 }
 
 .label {
@@ -92,29 +92,29 @@
   justify-content: center;
   width: 1.25rem;
   height: 1.25rem;
-  margin-inline-start: var(--perfect-space-1);
+  margin-inline-start: var(--glacier-space-1);
   padding: 0;
   border: 0;
-  border-radius: var(--perfect-radius-sm);
+  border-radius: var(--glacier-radius-sm);
   background: transparent;
-  color: var(--perfect-text-subtle);
+  color: var(--glacier-text-subtle);
   cursor: pointer;
-  transition: color var(--perfect-duration-fast) var(--perfect-ease-out),
-    background-color var(--perfect-duration-fast) var(--perfect-ease-out);
+  transition: color var(--glacier-duration-fast) var(--glacier-ease-out),
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out);
 }
 
 .close:hover {
-  color: var(--perfect-text);
-  background: var(--perfect-active);
+  color: var(--glacier-text);
+  background: var(--glacier-active);
 }
 
 /* the springing underline; sits on the strip's hairline */
 .indicator {
   position: absolute;
-  left: var(--perfect-space-2);
-  right: var(--perfect-space-2);
-  bottom: calc(-1 * var(--perfect-hairline));
+  left: var(--glacier-space-2);
+  right: var(--glacier-space-2);
+  bottom: calc(-1 * var(--glacier-hairline));
   height: 2px;
-  border-radius: var(--perfect-radius-full);
-  background: var(--perfect-accent-solid);
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-accent-solid);
 }

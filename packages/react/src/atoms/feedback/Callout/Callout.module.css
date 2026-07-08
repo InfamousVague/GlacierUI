@@ -1,0 +1,95 @@
+.callout {
+  display: flex;
+  gap: var(--glacier-space-3);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-lg);
+  padding: var(--glacier-space-4) var(--glacier-space-5);
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-sm);
+  line-height: var(--glacier-leading-md);
+  color: var(--glacier-text-muted);
+}
+
+.icon {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  line-height: var(--glacier-leading-md);
+}
+
+.body {
+  display: grid;
+  gap: var(--glacier-space-1);
+  min-width: 0;
+}
+
+.title {
+  font-weight: var(--glacier-font-weight-semibold);
+  color: var(--glacier-text);
+}
+
+/* note maps to a neutral, sunken surface */
+.note {
+  background: var(--glacier-surface-sunken);
+  border-color: var(--glacier-border-subtle);
+}
+.note .title {
+  color: var(--glacier-text);
+}
+.note .icon {
+  color: var(--glacier-text-muted);
+}
+
+.info {
+  background: var(--glacier-info-soft);
+  border-color: var(--glacier-info-border);
+}
+.info .title {
+  color: var(--glacier-info-text);
+}
+.info .icon {
+  color: var(--glacier-info-text);
+}
+
+.success {
+  background: var(--glacier-success-soft);
+  border-color: var(--glacier-success-border);
+}
+.success .title {
+  color: var(--glacier-success-text);
+}
+.success .icon {
+  color: var(--glacier-success-text);
+}
+
+.warning {
+  background: var(--glacier-warning-soft);
+  border-color: var(--glacier-warning-border);
+}
+.warning .title {
+  color: var(--glacier-warning-text);
+}
+.warning .icon {
+  color: var(--glacier-warning-text);
+}
+
+.danger {
+  background: var(--glacier-danger-soft);
+  border-color: var(--glacier-danger-border);
+}
+.danger .title {
+  color: var(--glacier-danger-text);
+}
+.danger .icon {
+  color: var(--glacier-danger-text);
+}
+
+/* glass overrides the tone background with the frosted material */
+.glass {
+  background: var(--glacier-glass-regular);
+  border-color: var(--glacier-glass-border);
+  color: var(--glacier-text);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 1px 0 var(--glacier-glass-highlight);
+}

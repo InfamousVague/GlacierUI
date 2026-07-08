@@ -1,0 +1,37 @@
+.meter {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-1);
+  width: 100%;
+}
+
+.segment {
+  flex: 1;
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-segment-track);
+  transition: background-color var(--glacier-duration-normal) var(--glacier-ease-out);
+}
+
+.sm .segment {
+  height: 0.25rem;
+}
+
+.md .segment {
+  height: 0.375rem;
+}
+
+.segment[data-filled] {
+  background: var(--glacier-accent-solid);
+}
+
+.danger .segment[data-filled] {
+  background: var(--glacier-danger-solid);
+}
+
+.warning .segment[data-filled] {
+  background: var(--glacier-warning-solid);
+}
+
+.success .segment[data-filled] {
+  background: var(--glacier-success-solid);
+}

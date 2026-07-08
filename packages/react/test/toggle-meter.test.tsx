@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Tone } from '@glacier/react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import axe from 'axe-core';
 import { Meter, Toggle } from '../src/index.ts';
@@ -63,7 +64,7 @@ describe('Meter', () => {
 
   it('respects an explicit tone and a decoupled max', () => {
     const { container } = render(
-      <Meter aria-label="Quota" value={50} max={100} segments={5} tone="accent" />,
+      <Meter aria-label="Quota" value={50} max={100} segments={5} tone={Tone.Accent} />,
     );
     expect(screen.getByRole('meter')).toHaveAttribute('aria-valuemax', '100');
     // 50/100 across 5 segments rounds to 3 filled

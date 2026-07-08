@@ -93,8 +93,8 @@ export function useAnchoredPosition(
   options: AnchorOptions = {},
 ): { style: CSSProperties; placement: Placement } | null {
   // React state carries only the side-dependent bits (transform origin +
-  // placement for arrows / data-placement). The scroll-tracked geometry —
-  // top/left/min-width — is written straight to the node so it never has to
+  // placement for arrows / data-placement). The scroll-tracked geometry -
+  // top/left/min-width - is written straight to the node so it never has to
   // wait for a React commit.
   const [result, setResult] = useState<{ style: CSSProperties; placement: Placement } | null>(null);
   const placement = options.placement ?? 'bottom-start';
@@ -120,7 +120,7 @@ export function useAnchoredPosition(
 
       // Write the position straight to the DOM so a fixed panel tracks its
       // anchor in the same scroll frame. Routing this through React state left
-      // the panel one commit behind the trigger — the scroll lag. top/left are
+      // the panel one commit behind the trigger - the scroll lag. top/left are
       // deliberately NOT in the React style below, so a re-render never reverts
       // to a stale position.
       floatingEl.style.position = 'fixed';
@@ -131,7 +131,7 @@ export function useAnchoredPosition(
       if (matchWidth) floatingEl.style.minWidth = `${Math.round(trigger.width)}px`;
 
       // Re-render only when the resolved side flips, so arrows / data-placement
-      // can follow — not on every scroll frame.
+      // can follow - not on every scroll frame.
       if (next.placement !== lastPlacement.current) {
         lastPlacement.current = next.placement;
         setResult({

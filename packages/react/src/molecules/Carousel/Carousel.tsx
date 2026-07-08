@@ -7,10 +7,11 @@ import {
   type ReactNode,
   type WheelEvent,
 } from 'react';
+import { Variant } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
-import { IconButton } from '../../atoms/Button/IconButton.tsx';
+import { IconButton } from '../../atoms/inputs/Button/IconButton.tsx';
 import styles from './Carousel.module.css';
 
 const chevronLeft = (
@@ -29,7 +30,7 @@ export interface CarouselProps {
   children?: ReactNode;
   /** Shows prev/next controls that appear when the strip overflows. */
   showControls?: boolean;
-  /** Space between cards; any CSS length or a `var(--perfect-space-*)`. */
+  /** Space between cards; any CSS length or a `var(--glacier-space-*)`. */
   gap?: string;
   /** Accessible label for the scrollable region. */
   'aria-label'?: string;
@@ -39,13 +40,13 @@ export interface CarouselProps {
 /**
  * A horizontal snap-scroll strip that hosts arbitrary card children. It uses
  * CSS scroll-snap for tidy per-card stops, converts vertical wheel gestures to
- * horizontal scroll, and — when `showControls` is set — renders prev/next
+ * horizontal scroll, and - when `showControls` is set - renders prev/next
  * IconButtons that appear only while the strip overflows, disabling at each end.
  */
 export function Carousel({
   children,
   showControls = false,
-  gap = 'var(--perfect-space-4)',
+  gap = 'var(--glacier-space-4)',
   className,
   ...rest
 }: CarouselProps) {
@@ -103,7 +104,7 @@ export function Carousel({
     <div className={cx(styles.root, className)} style={style}>
       {showControls && (
         <IconButton
-          variant="soft"
+          variant={Variant.Soft}
           aria-label={t(kitMessages.previous)}
           className={cx(styles.control, styles.prev)}
           data-hidden={!overflowing || undefined}
@@ -127,7 +128,7 @@ export function Carousel({
       </div>
       {showControls && (
         <IconButton
-          variant="soft"
+          variant={Variant.Soft}
           aria-label={t(kitMessages.next)}
           className={cx(styles.control, styles.next)}
           data-hidden={!overflowing || undefined}

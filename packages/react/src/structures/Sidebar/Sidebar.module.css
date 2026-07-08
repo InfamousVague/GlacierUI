@@ -5,21 +5,21 @@
   width: 100%;
   height: 100%;
   min-height: 0;
-  font-family: var(--perfect-font-sans);
+  font-family: var(--glacier-font-sans);
 }
 
 .region {
   flex: none;
   width: 100%;
-  padding: var(--perfect-space-4);
+  padding: var(--glacier-space-4);
 }
 
 .regionBordered {
-  border-block-end: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  border-block-end: var(--glacier-hairline) solid var(--glacier-border-subtle);
 }
 
 .footer {
-  border-block-start: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  border-block-start: var(--glacier-hairline) solid var(--glacier-border-subtle);
   margin-block-start: auto;
 }
 
@@ -31,8 +31,8 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--perfect-space-5);
-  padding: var(--perfect-space-4);
+  gap: var(--glacier-space-5);
+  padding: var(--glacier-space-4);
 }
 
 .section {
@@ -40,13 +40,13 @@
 }
 
 .sectionTitle {
-  padding-inline: var(--perfect-space-3);
-  margin-block-end: var(--perfect-space-2);
-  font-size: var(--perfect-font-size-xs);
-  font-weight: var(--perfect-font-weight-semibold);
+  padding-inline: var(--glacier-space-3);
+  margin-block-end: var(--glacier-space-2);
+  font-size: var(--glacier-font-size-xs);
+  font-weight: var(--glacier-font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--perfect-text-subtle);
+  color: var(--glacier-text-subtle);
 }
 
 .sectionItems {
@@ -59,33 +59,33 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: var(--perfect-space-2);
+  gap: var(--glacier-space-2);
   width: 100%;
   text-align: left;
-  padding: var(--perfect-space-2) var(--perfect-space-3);
+  padding: var(--glacier-space-2) var(--glacier-space-3);
   border: none;
-  border-radius: var(--perfect-radius-md);
+  border-radius: var(--glacier-radius-md);
   background: transparent;
-  color: var(--perfect-text-muted);
+  color: var(--glacier-text-muted);
   font: inherit;
-  font-size: var(--perfect-font-size-sm);
+  font-size: var(--glacier-font-size-sm);
   line-height: 1.2;
   text-decoration: none;
   cursor: pointer;
   transition:
-    background-color var(--perfect-duration-fast) var(--perfect-ease-out),
-    color var(--perfect-duration-fast) var(--perfect-ease-out);
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out);
 }
 
 /* the active item shows the pill, not the hover wash, so it never flashes gray
    as the sliding pill passes over it */
 .item:hover:not([aria-disabled='true']):not([data-active]) {
-  background: var(--perfect-hover);
-  color: var(--perfect-text);
+  background: var(--glacier-hover);
+  color: var(--glacier-text);
 }
 
 .item:focus-visible {
-  outline: 2px solid var(--perfect-focus-ring);
+  outline: 2px solid var(--glacier-focus-ring);
   outline-offset: -2px;
 }
 
@@ -93,8 +93,8 @@
   /* raised so the sliding pill always paints above sibling items and their
      hover wash, never behind them */
   z-index: 1;
-  color: var(--perfect-accent-text);
-  font-weight: var(--perfect-font-weight-medium);
+  color: var(--glacier-accent-text);
+  font-weight: var(--glacier-font-weight-medium);
 }
 
 /* the active pill: one layout element that slides between items. It sits behind
@@ -103,8 +103,8 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: var(--perfect-accent-soft);
-  border-radius: var(--perfect-radius-md);
+  background: var(--glacier-accent-soft);
+  border-radius: var(--glacier-radius-md);
 }
 
 .item[aria-disabled='true'] {

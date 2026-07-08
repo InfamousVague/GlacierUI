@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Size } from '@glacier/react';
 import { render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { SegmentedControl, Tabs } from '../src/index.ts';
@@ -18,7 +19,7 @@ const TABS = [
 describe('SegmentedControl skeleton', () => {
   it('replaces the radiogroup with silent per-option chips that reserve the real width', () => {
     const { container } = render(
-      <SegmentedControl skeleton aria-label="Range" size="lg" options={OPTIONS} />,
+      <SegmentedControl skeleton aria-label="Range" size={Size.Large} options={OPTIONS} />,
     );
     expect(screen.queryByRole('radiogroup')).toBeNull();
     expect(screen.queryByRole('radio')).toBeNull();
@@ -58,7 +59,7 @@ describe('Tabs skeleton', () => {
   it('keeps the tab padding rhythm around each list line', () => {
     const { container } = render(<Tabs skeleton tabs={TABS} />);
     const line = container.querySelector('[data-skeleton]')?.parentElement as HTMLElement;
-    expect(line.style.padding).toBe('var(--perfect-space-3) var(--perfect-space-4)');
+    expect(line.style.padding).toBe('var(--glacier-space-3) var(--glacier-space-4)');
   });
 
   it('has no axe violations', async () => {

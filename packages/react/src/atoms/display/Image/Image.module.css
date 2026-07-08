@@ -1,0 +1,47 @@
+.frame {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  width: 100%;
+  background: var(--glacier-surface-sunken);
+  isolation: isolate;
+}
+
+.img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* object-fit is set inline from the `fit` prop */
+  opacity: 0;
+  transition: opacity var(--glacier-duration-normal) var(--glacier-ease-out);
+}
+
+/* fade the image in once it has decoded */
+.frame[data-status='loaded'] .img {
+  opacity: 1;
+}
+
+/* the loading skeleton sits over the frame until the image decodes */
+.pending {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--glacier-text-subtle);
+}
+
+.radius-none { border-radius: var(--glacier-radius-none); }
+.radius-sm { border-radius: var(--glacier-radius-sm); }
+.radius-md { border-radius: var(--glacier-radius-md); }
+.radius-lg { border-radius: var(--glacier-radius-lg); }
+.radius-xl { border-radius: var(--glacier-radius-xl); }
+.radius-2xl { border-radius: var(--glacier-radius-2xl); }
+.radius-full { border-radius: var(--glacier-radius-full); }

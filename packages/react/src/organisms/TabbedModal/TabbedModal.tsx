@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@perfect/motion';
+import { Size } from '@glacier/spec';
+import { Speed, Ease, transition } from '@glacier/motion';
 import { useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
@@ -38,8 +39,8 @@ export interface TabbedModalProps {
 
 /**
  * A settings-style dialog: a fixed left nav rail of sections and a scrollable
- * right pane showing the active one. It composes the kit's Modal — inheriting
- * its portal, focus trap, scroll lock, and dismiss behaviour — and lays a
+ * right pane showing the active one. It composes the kit's Modal - inheriting
+ * its portal, focus trap, scroll lock, and dismiss behaviour - and lays a
  * vertical WAI-ARIA tablist beside a role="tabpanel". Arrow Up/Down move and
  * activate the rail (wrapping, skipping disabled), Home and End jump to the ends.
  */
@@ -93,7 +94,7 @@ export function TabbedModal({
   }
 
   return (
-    <Modal open={open} onClose={onClose} title={title} size="lg">
+    <Modal open={open} onClose={onClose} title={title} size={Size.Large}>
       <div className={cx(styles.layout, className)}>
         <div
           role="tablist"

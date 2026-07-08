@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Size, TextTone, Tone, Variant } from '@glacier/react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import axe from 'axe-core';
 import { Button, Divider, Heading, Kbd, Label, Link, Modal, Pill, Text } from '../src/index.ts';
@@ -8,7 +9,7 @@ const AXE_RULES = { region: { enabled: false }, 'page-has-heading-one': { enable
 describe('typography atoms', () => {
   it('Text renders the requested element, size, and tone', () => {
     render(
-      <Text as="span" size="sm" tone="muted" data-testid="t">
+      <Text as="span" size={Size.Small} tone={TextTone.Muted} data-testid="t">
         Body copy
       </Text>,
     );
@@ -52,7 +53,7 @@ describe('typography atoms', () => {
 describe('Pill and Divider', () => {
   it('Pill renders tones and variants', () => {
     render(
-      <Pill tone="success" variant="solid">
+      <Pill tone={Tone.Success} variant={Variant.Solid}>
         Active
       </Pill>,
     );

@@ -17,7 +17,7 @@
  * locale is added here, every message in the codebase fails to compile until it
  * is translated. Rename or add to this tuple to choose the languages.
  */
-export const locales = ['en'] as const;
+export const locales = ['en', 'es', 'fr', 'de', 'ja'] as const;
 
 export type Locale = (typeof locales)[number];
 

@@ -1,0 +1,155 @@
+.wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.icon {
+  position: absolute;
+  left: var(--glacier-space-3);
+  width: 1em;
+  height: 1em;
+  color: var(--glacier-text-subtle);
+  pointer-events: none;
+}
+
+.input {
+  width: 100%;
+  height: var(--glacier-control-height-md);
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface);
+  color: var(--glacier-text);
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-sm);
+  appearance: none;
+  transition:
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    box-shadow var(--glacier-duration-fast) var(--glacier-ease-out),
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.input::placeholder {
+  color: var(--glacier-text-subtle);
+}
+
+.input::-webkit-search-cancel-button,
+.input::-webkit-search-decoration {
+  appearance: none;
+}
+
+.input:hover:not(:disabled):not(:focus) {
+  border-color: var(--glacier-border-strong);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--glacier-focus-ring);
+  box-shadow: 0 0 0 3px var(--glacier-accent-soft);
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--glacier-surface-sunken);
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--glacier-danger-border);
+}
+
+.input[aria-invalid='true']:focus {
+  border-color: var(--glacier-danger-solid);
+  box-shadow: 0 0 0 3px var(--glacier-danger-soft);
+}
+
+.clear {
+  position: absolute;
+  right: var(--glacier-space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  padding: 0;
+  border: none;
+  border-radius: var(--glacier-radius-full);
+  background: transparent;
+  color: var(--glacier-text-subtle);
+  cursor: pointer;
+  transition:
+    color var(--glacier-duration-fast) var(--glacier-ease-out),
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.clear svg {
+  width: 0.85em;
+  height: 0.85em;
+}
+
+.clear:hover {
+  color: var(--glacier-text);
+  background: var(--glacier-surface-sunken);
+}
+
+.clear:focus-visible {
+  outline: none;
+  color: var(--glacier-text);
+  box-shadow: 0 0 0 3px var(--glacier-accent-soft);
+}
+
+.shortcut {
+  position: absolute;
+  right: var(--glacier-space-3);
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+/* Size variants: icon inset, control height, font-size, and the input's
+   left / right padding so text never runs under the icon or the trailing slot. */
+.sm .icon {
+  left: var(--glacier-space-3);
+}
+.sm .input {
+  height: var(--glacier-control-height-sm);
+  font-size: var(--glacier-font-size-xs);
+  padding-left: var(--glacier-space-8);
+  padding-right: var(--glacier-space-8);
+}
+
+.md .input {
+  height: var(--glacier-control-height-md);
+  font-size: var(--glacier-font-size-sm);
+  padding-left: var(--glacier-space-8);
+  padding-right: var(--glacier-space-8);
+}
+
+.lg .input {
+  height: var(--glacier-control-height-lg);
+  font-size: var(--glacier-font-size-md);
+  padding-left: var(--glacier-space-10);
+  padding-right: var(--glacier-space-10);
+}
+.lg .icon {
+  left: var(--glacier-space-4);
+}
+
+/* Frosted glass material on the field surface; the input's solid background
+   is dropped so the wrapper's material shows through. */
+.glass {
+  /* the material sits on the wrapper, so it must round to match the input it
+     sits behind - otherwise its square corners poke past the rounded field */
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-glass-regular);
+  color: var(--glacier-text);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 1px 0 var(--glacier-glass-highlight);
+}
+
+.glass .input {
+  background: transparent;
+  border-color: var(--glacier-glass-border);
+}

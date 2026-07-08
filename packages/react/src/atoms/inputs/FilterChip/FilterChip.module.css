@@ -1,0 +1,64 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  border: var(--glacier-hairline) solid var(--glacier-border-strong);
+  border-radius: var(--glacier-radius-full);
+  background: transparent;
+  color: var(--glacier-text-muted);
+  font-family: var(--glacier-font-sans);
+  font-weight: var(--glacier-font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.chip:hover:not(:disabled) {
+  background: var(--glacier-hover);
+  color: var(--glacier-text);
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--glacier-accent-soft);
+  border-color: var(--glacier-accent-border);
+  color: var(--glacier-accent-text);
+}
+
+.chip[aria-pressed='true']:hover:not(:disabled) {
+  background: var(--glacier-accent-soft-hover);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: 2px;
+}
+
+.chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* sizes - compact, capsule-shaped like Pill */
+.sm {
+  height: 1.375rem;
+  padding-inline: var(--glacier-space-2);
+  font-size: var(--glacier-font-size-xs);
+}
+.md {
+  height: 1.75rem;
+  padding-inline: var(--glacier-space-3);
+  font-size: var(--glacier-font-size-sm);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}

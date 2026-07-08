@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@perfect/motion';
+import { Speed, Ease, transition } from '@glacier/motion';
 import {
   cloneElement,
   createContext,
@@ -41,8 +41,8 @@ export interface MenuProps {
 
 /**
  * A dropdown list of actions anchored to a trigger. Built on the same anchored
- * overlay as Popover — it portals to the body, flips and clamps on screen, and
- * closes on outside press or Escape — but with menu semantics: a role="menu"
+ * overlay as Popover - it portals to the body, flips and clamps on screen, and
+ * closes on outside press or Escape - but with menu semantics: a role="menu"
  * panel of role="menuitem" rows, arrow-key roving focus, and select-to-close.
  */
 export function Menu({

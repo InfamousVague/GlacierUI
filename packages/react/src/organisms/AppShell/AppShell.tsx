@@ -1,8 +1,9 @@
 import { useEffect, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
+import { Variant } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
-import { IconButton } from '../../atoms/Button/IconButton.tsx';
+import { IconButton } from '../../atoms/inputs/Button/IconButton.tsx';
 import styles from './AppShell.module.css';
 
 export interface AppShellProps {
@@ -74,7 +75,7 @@ export function AppShell({
         <header className={cx(styles.header)} data-empty={header ? undefined : ''}>
           <IconButton
             aria-label={t(kitMessages.openNavigation)}
-            variant="ghost"
+            variant={Variant.Ghost}
             className={styles.menuButton}
             onClick={() => setOpen(true)}
           >

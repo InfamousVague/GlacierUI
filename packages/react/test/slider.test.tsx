@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Size } from '@glacier/react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import axe from 'axe-core';
 import { Slider, Switch } from '../src/index.ts';
@@ -60,7 +61,7 @@ describe('Slider', () => {
 
 describe('Switch sizes', () => {
   it('renders the small variant without changing semantics', () => {
-    render(<Switch label="Wi-Fi" size="sm" defaultChecked />);
+    render(<Switch label="Wi-Fi" size={Size.Small} defaultChecked />);
     expect(screen.getByRole('switch', { name: 'Wi-Fi' })).toBeChecked();
   });
 });

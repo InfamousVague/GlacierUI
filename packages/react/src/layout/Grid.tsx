@@ -1,6 +1,7 @@
 import type { ComponentProps, CSSProperties, ElementType, ReactNode } from 'react';
-import type { SpaceStep } from '@perfect/tokens';
+import type { SpaceStep } from '@glacier/tokens';
 import { cx } from '../internal/cx.ts';
+import { asPolymorphic } from '../internal/poly.ts';
 import { assignColumns, resolveBox, resolveFlow, splitBoxProps } from './resolve.ts';
 import type { Align, BoxStyleProps, Justify, Responsive } from './types.ts';
 import styles from './Layout.module.css';
@@ -40,7 +41,7 @@ export function Grid({
   const gridStyle: Record<string, string> = { ...(f.style as Record<string, string>) };
   if (minChildWidth) gridStyle['--pl-min'] = minChildWidth;
   else assignColumns(gridStyle, columns);
-  const Component: ElementType = as ?? 'div';
+  const Component = asPolymorphic(as, 'div');
   return (
     <Component
       className={cx(styles.box, styles.grid, className)}

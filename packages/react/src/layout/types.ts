@@ -1,4 +1,4 @@
-import type { SpaceStep } from '@perfect/tokens';
+import type { SpaceStep } from '@glacier/tokens';
 
 /** A value that can vary by breakpoint. Scalars apply at every width. */
 export type Responsive<T> = T | Partial<Record<'base' | 'sm' | 'md' | 'lg' | 'xl', T>>;

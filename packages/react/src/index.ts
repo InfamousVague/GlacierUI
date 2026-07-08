@@ -1,43 +1,47 @@
+// shared enum vocabulary — Size.Large, Tone.Accent, TextTone.Muted, Variant.Soft, SkeletonVariant.Circle
+export { Size, Tone, TextTone, Variant, SkeletonVariant } from '@glacier/spec';
+
 // atoms
-export { Button, type ButtonProps, type ButtonVariant, type ControlSize } from './atoms/Button/Button.tsx';
-export { IconButton, type IconButtonProps } from './atoms/Button/IconButton.tsx';
-export { Input, type InputProps } from './atoms/Input/Input.tsx';
-export { Checkbox, type CheckboxProps } from './atoms/Selection/Checkbox.tsx';
-export { Radio, type RadioProps } from './atoms/Selection/Radio.tsx';
-export { Switch, type SwitchProps } from './atoms/Selection/Switch.tsx';
-export { Card, type CardProps, type CardVariant, type Elevation } from './atoms/Surface/Card.tsx';
-export { Surface, type SurfaceProps, type SurfaceLevel } from './atoms/Surface/Surface.tsx';
-export { Text, type TextProps, type TextTone } from './atoms/Typography/Text.tsx';
-export { Heading, type HeadingProps } from './atoms/Typography/Heading.tsx';
-export { Label, type LabelProps } from './atoms/Typography/Label.tsx';
-export { Link, type LinkProps } from './atoms/Typography/Link.tsx';
-export { Kbd, type KbdProps } from './atoms/Typography/Kbd.tsx';
-export { Pill, type PillProps, type PillTone, type PillVariant } from './atoms/Pill/Pill.tsx';
-export { Divider, type DividerProps } from './atoms/Divider/Divider.tsx';
-export { ProgressBar, type ProgressBarProps } from './atoms/Progress/ProgressBar.tsx';
-export { Spinner, type SpinnerProps } from './atoms/Progress/Spinner.tsx';
-export { Slider, type SliderProps } from './atoms/Slider/Slider.tsx';
-export { Skeleton, type SkeletonProps } from './atoms/Skeleton/Skeleton.tsx';
-export { Toggle, type ToggleProps } from './atoms/Toggle/Toggle.tsx';
-export { Meter, type MeterProps, type MeterTone } from './atoms/Meter/Meter.tsx';
-export { Textarea, type TextareaProps } from './atoms/Textarea/Textarea.tsx';
-export { SearchField, type SearchFieldProps } from './atoms/SearchField/SearchField.tsx';
-export { NumberInput, type NumberInputProps } from './atoms/NumberInput/NumberInput.tsx';
-export { ProgressRing, type ProgressRingProps } from './atoms/ProgressRing/ProgressRing.tsx';
-export { Avatar, type AvatarProps } from './atoms/Avatar/Avatar.tsx';
-export { StatusDot, type StatusDotProps } from './atoms/StatusDot/StatusDot.tsx';
-export { CounterBadge, type CounterBadgeProps } from './atoms/CounterBadge/CounterBadge.tsx';
-export { Callout, type CalloutProps, type CalloutTone } from './atoms/Callout/Callout.tsx';
-export { CodeBlock, type CodeBlockProps } from './atoms/CodeBlock/CodeBlock.tsx';
-export { SegmentedBar, type SegmentedBarProps } from './atoms/SegmentedBar/SegmentedBar.tsx';
-export { Banner, type BannerProps, type BannerTone } from './atoms/Banner/Banner.tsx';
-export { EmptyState, type EmptyStateProps } from './atoms/EmptyState/EmptyState.tsx';
-export { Steps, type StepsProps, type StepsTone, type StepsSize } from './atoms/Steps/Steps.tsx';
-export { RadioCard, type RadioCardProps } from './atoms/RadioCard/RadioCard.tsx';
-export { Badge, type BadgeProps, type BadgeTone, type BadgeVariant } from './atoms/Badge/Badge.tsx';
-export { StatTile, type StatTileProps } from './atoms/StatTile/StatTile.tsx';
-export { DeviceFrame, type DeviceFrameProps, type DeviceFrameSize } from './atoms/DeviceFrame/DeviceFrame.tsx';
-export { FilterChip, type FilterChipProps } from './atoms/FilterChip/FilterChip.tsx';
+export { Button, type ButtonProps, type ButtonVariant, type ControlSize } from './atoms/inputs/Button/Button.tsx';
+export { IconButton, type IconButtonProps } from './atoms/inputs/Button/IconButton.tsx';
+export { Input, type InputProps } from './atoms/inputs/Input/Input.tsx';
+export { Checkbox, type CheckboxProps } from './atoms/inputs/Selection/Checkbox.tsx';
+export { Radio, type RadioProps } from './atoms/inputs/Selection/Radio.tsx';
+export { Switch, type SwitchProps } from './atoms/inputs/Selection/Switch.tsx';
+export { Card, type CardProps, type CardVariant, type Elevation } from './atoms/display/Surface/Card.tsx';
+export { Surface, type SurfaceProps, type SurfaceLevel } from './atoms/display/Surface/Surface.tsx';
+export { Text, type TextProps, type TextAlign } from './atoms/display/Typography/Text.tsx';
+export { Heading, type HeadingProps } from './atoms/display/Typography/Heading.tsx';
+export { Label, type LabelProps } from './atoms/display/Typography/Label.tsx';
+export { Link, type LinkProps } from './atoms/display/Typography/Link.tsx';
+export { Kbd, type KbdProps } from './atoms/display/Typography/Kbd.tsx';
+export { Pill, type PillProps, type PillTone, type PillVariant } from './atoms/display/Pill/Pill.tsx';
+export { Divider, type DividerProps } from './atoms/display/Divider/Divider.tsx';
+export { ProgressBar, type ProgressBarProps } from './atoms/feedback/Progress/ProgressBar.tsx';
+export { Spinner, type SpinnerProps } from './atoms/feedback/Progress/Spinner.tsx';
+export { Slider, type SliderProps } from './atoms/inputs/Slider/Slider.tsx';
+export { Skeleton, type SkeletonProps } from './atoms/feedback/Skeleton/Skeleton.tsx';
+export { Toggle, type ToggleProps } from './atoms/inputs/Toggle/Toggle.tsx';
+export { Meter, type MeterProps, type MeterTone } from './atoms/feedback/Meter/Meter.tsx';
+export { Textarea, type TextareaProps } from './atoms/inputs/Textarea/Textarea.tsx';
+export { SearchField, type SearchFieldProps } from './atoms/inputs/SearchField/SearchField.tsx';
+export { NumberInput, type NumberInputProps } from './atoms/inputs/NumberInput/NumberInput.tsx';
+export { ProgressRing, type ProgressRingProps } from './atoms/feedback/ProgressRing/ProgressRing.tsx';
+export { Avatar, type AvatarProps } from './atoms/display/Avatar/Avatar.tsx';
+export { StatusDot, type StatusDotProps } from './atoms/display/StatusDot/StatusDot.tsx';
+export { CounterBadge, type CounterBadgeProps } from './atoms/display/CounterBadge/CounterBadge.tsx';
+export { Callout, type CalloutProps, type CalloutTone } from './atoms/feedback/Callout/Callout.tsx';
+export { CodeBlock, type CodeBlockProps } from './atoms/display/CodeBlock/CodeBlock.tsx';
+export { SegmentedBar, type SegmentedBarProps } from './atoms/feedback/SegmentedBar/SegmentedBar.tsx';
+export { Banner, type BannerProps, type BannerTone } from './atoms/feedback/Banner/Banner.tsx';
+export { EmptyState, type EmptyStateProps } from './atoms/feedback/EmptyState/EmptyState.tsx';
+export { Steps, type StepsProps, type StepsTone, type StepsSize } from './atoms/feedback/Steps/Steps.tsx';
+export { RadioCard, type RadioCardProps } from './atoms/inputs/RadioCard/RadioCard.tsx';
+export { StatTile, type StatTileProps } from './atoms/display/StatTile/StatTile.tsx';
+export { DeviceFrame, type DeviceFrameProps, type DeviceFrameSize } from './atoms/display/DeviceFrame/DeviceFrame.tsx';
+export { FilterChip, type FilterChipProps } from './atoms/inputs/FilterChip/FilterChip.tsx';
+export { Image, type ImageProps, type ImageFit, type ImageRadius } from './atoms/display/Image/Image.tsx';
+export { Rating, type RatingProps } from './atoms/inputs/Rating/Rating.tsx';
 
 // molecules
 export { Field, type FieldProps } from './molecules/Field/Field.tsx';
@@ -116,7 +120,7 @@ export {
 } from './organisms/ResizableSplitPane/ResizableSplitPane.tsx';
 export type { Placement } from './internal/useAnchoredPosition.ts';
 
-// i18n — the translation mandate: every user-facing string resolves through a
+// i18n - the translation mandate: every user-facing string resolves through a
 // message catalog that must cover every locale, so a missing translation is a
 // compile error rather than a runtime surprise.
 export {

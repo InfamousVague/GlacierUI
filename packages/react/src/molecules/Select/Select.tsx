@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@perfect/motion';
+import { Speed, Ease, transition } from '@glacier/motion';
 import {
   useEffect,
   useId,
@@ -14,8 +14,8 @@ import { createPortal } from 'react-dom';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import { useField } from '../../internal/FieldContext.ts';
-import type { ControlSize } from '../../atoms/Button/Button.tsx';
-import { Skeleton } from '../../atoms/Skeleton/Skeleton.tsx';
+import type { ControlSize } from '../../atoms/inputs/Button/Button.tsx';
+import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
 import styles from './Select.module.css';
 
 export interface SelectOption {
@@ -35,6 +35,8 @@ export interface SelectProps {
   disabled?: boolean;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
+  /** Renders the frosted glass material on the trigger instead of a solid surface. */
+  glass?: boolean;
   /** Submitted with forms via a hidden input when set. */
   name?: string;
   id?: string;
@@ -77,6 +79,7 @@ export function Select({
   fullWidth = false,
   disabled = false,
   skeleton = false,
+  glass = false,
   name,
   id,
   className,
@@ -223,8 +226,8 @@ export function Select({
     return (
       <Skeleton
         width={fullWidth ? '100%' : '11rem'}
-        height={`var(--perfect-control-height-${size})`}
-        radius="var(--perfect-radius-lg)"
+        height={`var(--glacier-control-height-${size})`}
+        radius="var(--glacier-radius-lg)"
         className={className}
       />
     );
@@ -236,7 +239,7 @@ export function Select({
         ref={triggerRef}
         type="button"
         id={id ?? field?.id}
-        className={cx(styles.trigger, styles[size])}
+        className={cx(styles.trigger, styles[size], glass && styles.glass)}
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={open}

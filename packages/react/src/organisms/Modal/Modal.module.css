@@ -4,28 +4,28 @@
   z-index: 100;
   display: grid;
   place-items: center;
-  padding: var(--perfect-space-6);
-  background: var(--perfect-overlay);
-  backdrop-filter: blur(var(--perfect-blur-sm));
-  -webkit-backdrop-filter: blur(var(--perfect-blur-sm));
+  padding: var(--glacier-space-6);
+  background: var(--glacier-overlay);
+  backdrop-filter: blur(var(--glacier-blur-sm));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm));
 }
 
 .panel {
   position: relative;
   width: 100%;
-  max-height: calc(100vh - var(--perfect-space-16));
+  max-height: calc(100vh - var(--glacier-space-16));
   overflow-y: auto;
-  padding: var(--perfect-space-8);
-  border: var(--perfect-hairline) solid var(--perfect-glass-border);
-  border-radius: var(--perfect-radius-2xl);
-  background: var(--perfect-glass-thick);
-  backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
+  padding: var(--glacier-space-8);
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-radius: var(--glacier-radius-2xl);
+  background: var(--glacier-glass-thick);
+  backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
   box-shadow:
-    inset 0 1px 0 var(--perfect-glass-highlight),
-    var(--perfect-shadow-5);
-  color: var(--perfect-text);
-  font-family: var(--perfect-font-sans);
+    inset 0 1px 0 var(--glacier-glass-highlight),
+    var(--glacier-shadow-5);
+  color: var(--glacier-text);
+  font-family: var(--glacier-font-sans);
 }
 
 .panel:focus-visible {
@@ -39,20 +39,20 @@
 .header {
   display: flex;
   flex-direction: column;
-  gap: var(--perfect-space-2);
-  margin-bottom: var(--perfect-space-6);
-  padding-inline-end: var(--perfect-space-10);
+  gap: var(--glacier-space-2);
+  margin-bottom: var(--glacier-space-6);
+  padding-inline-end: var(--glacier-space-10);
 }
 
 .close {
   position: absolute;
-  top: var(--perfect-space-4);
-  right: var(--perfect-space-4);
+  top: var(--glacier-space-4);
+  right: var(--glacier-space-4);
 }
 
 .footer {
   display: flex;
   justify-content: flex-end;
-  gap: var(--perfect-space-3);
-  margin-top: var(--perfect-space-8);
+  gap: var(--glacier-space-3);
+  margin-top: var(--glacier-space-8);
 }

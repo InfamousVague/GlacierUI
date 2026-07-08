@@ -1,0 +1,138 @@
+.codeBlock {
+  display: grid;
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface-sunken);
+  overflow: hidden;
+}
+
+/* docked beneath the element above it: no top edge, square top corners */
+.attached {
+  border-top: none;
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+
+.glass {
+  background: var(--glacier-glass-regular);
+  border-color: var(--glacier-glass-border);
+  color: var(--glacier-text);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 1px 0 var(--glacier-glass-highlight);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--glacier-space-3);
+  padding: var(--glacier-space-2) var(--glacier-space-3);
+  border-bottom: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-muted);
+}
+
+.meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--glacier-space-2);
+  min-width: 0;
+}
+
+.filename {
+  font-family: var(--glacier-font-mono);
+  color: var(--glacier-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.language {
+  font-family: var(--glacier-font-mono);
+  color: var(--glacier-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.copy {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-sm);
+  padding: var(--glacier-space-1) var(--glacier-space-2);
+  background: transparent;
+  color: var(--glacier-text-muted);
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-xs);
+  cursor: pointer;
+  transition: background var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.copy:hover {
+  background: var(--glacier-hover);
+}
+
+.pre {
+  margin: 0;
+  padding: var(--glacier-space-4);
+  overflow-x: auto;
+  font-family: var(--glacier-font-mono);
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-md);
+  color: var(--glacier-text);
+  tab-size: 2;
+}
+
+/* The code is plain flowing text, never the host app's inline-code pill:
+   neutralize any inherited <code> background, border, padding, and sizing so
+   only the block frame shows and lines never fragment into boxes. */
+.pre code {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+}
+
+/* highlighted markup passed as children: strip the highlighter's own <pre> so
+   it inherits this block's padding, font, background, and line height */
+.pre :global(pre) {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font: inherit;
+  line-height: inherit;
+  tab-size: inherit;
+}
+
+/* line-number gutter, driven by CSS counters on the per-line spans that both
+   the plain fallback and highlighters emit as <span class="line"> */
+.numbered :global(code) {
+  counter-reset: line;
+}
+
+.numbered :global(.line) {
+  counter-increment: line;
+}
+
+.numbered :global(.line)::before {
+  content: counter(line);
+  display: inline-block;
+  min-width: 2ch;
+  margin-right: var(--glacier-space-4);
+  color: var(--glacier-text-subtle);
+  text-align: right;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy {
+    transition: none;
+  }
+}

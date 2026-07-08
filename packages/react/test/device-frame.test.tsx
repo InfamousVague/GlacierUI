@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Size } from '@glacier/react';
 import { render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { DeviceFrame } from '../src/index.ts';
@@ -29,7 +30,7 @@ describe('DeviceFrame', () => {
 
   it('lets an explicit numeric width override the size, as px', () => {
     render(
-      <DeviceFrame aria-label="Custom" size="sm" width={320}>
+      <DeviceFrame aria-label="Custom" size={Size.Small} width={320}>
         <span>child</span>
       </DeviceFrame>,
     );

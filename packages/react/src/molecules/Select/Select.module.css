@@ -1,7 +1,7 @@
 .root {
   position: relative;
   display: inline-block;
-  font-family: var(--perfect-font-sans);
+  font-family: var(--glacier-font-sans);
 }
 
 .fullWidth {
@@ -18,41 +18,53 @@
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--perfect-space-3);
-  border: var(--perfect-hairline) solid var(--perfect-border);
-  border-radius: var(--perfect-radius-lg);
-  background: var(--perfect-surface);
-  color: var(--perfect-text);
+  gap: var(--glacier-space-3);
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface);
+  color: var(--glacier-text);
   font: inherit;
   line-height: 1;
   cursor: pointer;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   transition:
-    border-color var(--perfect-duration-fast) var(--perfect-ease-out),
-    box-shadow var(--perfect-duration-fast) var(--perfect-ease-out),
-    background-color var(--perfect-duration-fast) var(--perfect-ease-out);
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    box-shadow var(--glacier-duration-fast) var(--glacier-ease-out),
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out);
 }
 
 .trigger:hover:not(:disabled) {
-  border-color: var(--perfect-border-strong);
+  border-color: var(--glacier-border-strong);
 }
 
 .trigger:focus-visible,
 .trigger[aria-expanded='true'] {
   outline: none;
-  border-color: var(--perfect-focus-ring);
-  box-shadow: 0 0 0 3px var(--perfect-accent-soft);
+  border-color: var(--glacier-focus-ring);
+  box-shadow: 0 0 0 3px var(--glacier-accent-soft);
 }
 
 .trigger:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background: var(--perfect-surface-sunken);
+  background: var(--glacier-surface-sunken);
 }
 
 .trigger[aria-invalid='true'] {
-  border-color: var(--perfect-danger-border);
+  border-color: var(--glacier-danger-border);
+}
+
+/* Frosted glass material on the trigger, matching the kit's other glass
+   surfaces (the portaled menu is already glass). Where the trigger sits inside
+   an already-blurred glass panel, drop the blur locally to avoid a double-blur. */
+.glass {
+  background: var(--glacier-glass-regular);
+  border-color: var(--glacier-glass-border);
+  color: var(--glacier-text);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 1px 0 var(--glacier-glass-highlight);
 }
 
 .value {
@@ -61,35 +73,43 @@
   white-space: nowrap;
   /* the trigger sets line-height: 1 to keep the chevron tight; give the value
      room so overflow: hidden does not clip glyph tops or descenders */
-  line-height: var(--perfect-leading-sm);
+  line-height: var(--glacier-leading-sm);
   padding-block: 1px;
 }
 
 .trigger[data-placeholder] .value {
-  color: var(--perfect-text-subtle);
+  color: var(--glacier-text-subtle);
 }
 
 .chevrons {
   flex: none;
-  color: var(--perfect-text-subtle);
+  color: var(--glacier-text-subtle);
   display: block;
 }
 
-/* sizes match Input */
+/* sizes match Input. Height and font apply to root + trigger, but the inline
+   padding is the trigger's own — on the root it would inset and widen the whole
+   control (a visible left indent whenever the root is not full width). */
 .sm {
-  height: var(--perfect-control-height-sm);
-  padding-inline: var(--perfect-space-3);
-  font-size: var(--perfect-font-size-xs);
+  height: var(--glacier-control-height-sm);
+  font-size: var(--glacier-font-size-xs);
 }
 .md {
-  height: var(--perfect-control-height-md);
-  padding-inline: var(--perfect-space-4);
-  font-size: var(--perfect-font-size-sm);
+  height: var(--glacier-control-height-md);
+  font-size: var(--glacier-font-size-sm);
 }
 .lg {
-  height: var(--perfect-control-height-lg);
-  padding-inline: var(--perfect-space-5);
-  font-size: var(--perfect-font-size-md);
+  height: var(--glacier-control-height-lg);
+  font-size: var(--glacier-font-size-md);
+}
+.trigger.sm {
+  padding-inline: var(--glacier-space-3);
+}
+.trigger.md {
+  padding-inline: var(--glacier-space-4);
+}
+.trigger.lg {
+  padding-inline: var(--glacier-space-5);
 }
 
 /* dropdown: glass panel; position, size bounds, and origin are set inline
@@ -97,17 +117,17 @@
 .menu {
   overflow-y: auto;
   margin: 0;
-  padding: var(--perfect-space-1);
+  padding: var(--glacier-space-1);
   list-style: none;
-  border: var(--perfect-hairline) solid var(--perfect-glass-border);
-  border-radius: var(--perfect-radius-lg);
-  background: var(--perfect-glass-thick);
-  backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--perfect-blur-lg)) saturate(var(--perfect-glass-saturate));
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-glass-thick);
+  backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
   box-shadow:
-    inset 0 1px 0 var(--perfect-glass-highlight),
-    var(--perfect-shadow-4);
-  font-family: var(--perfect-font-sans);
+    inset 0 1px 0 var(--glacier-glass-highlight),
+    var(--glacier-shadow-4);
+  font-family: var(--glacier-font-sans);
 }
 
 .menu:focus-visible {
@@ -117,12 +137,12 @@
 .option {
   display: flex;
   align-items: center;
-  gap: var(--perfect-space-1);
-  padding: var(--perfect-space-2) var(--perfect-space-3) var(--perfect-space-2) var(--perfect-space-2);
-  border-radius: var(--perfect-radius-md);
-  color: var(--perfect-text);
-  font-size: var(--perfect-font-size-sm);
-  line-height: var(--perfect-leading-sm);
+  gap: var(--glacier-space-1);
+  padding: var(--glacier-space-2) var(--glacier-space-3) var(--glacier-space-2) var(--glacier-space-2);
+  border-radius: var(--glacier-radius-md);
+  color: var(--glacier-text);
+  font-size: var(--glacier-font-size-sm);
+  line-height: var(--glacier-leading-sm);
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
@@ -130,16 +150,16 @@
 
 /* the portaled menu carries its own size class */
 .menuSm .option {
-  font-size: var(--perfect-font-size-xs);
+  font-size: var(--glacier-font-size-xs);
 }
 
 .option[data-active] {
-  background: var(--perfect-accent-solid);
-  color: var(--perfect-accent-contrast);
+  background: var(--glacier-accent-solid);
+  color: var(--glacier-accent-contrast);
 }
 
 .option[data-disabled] {
-  color: var(--perfect-text-disabled);
+  color: var(--glacier-text-disabled);
   cursor: not-allowed;
 }
 

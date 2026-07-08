@@ -1,13 +1,14 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Spring, springTransition } from '@perfect/motion';
+import { Size, TextTone } from '@glacier/spec';
+import { Spring, springTransition } from '@glacier/motion';
 import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../internal/cx.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
-import { IconButton } from '../../atoms/Button/IconButton.tsx';
-import { Heading } from '../../atoms/Typography/Heading.tsx';
-import { Text } from '../../atoms/Typography/Text.tsx';
+import { IconButton } from '../../atoms/inputs/Button/IconButton.tsx';
+import { Heading } from '../../atoms/display/Typography/Heading.tsx';
+import { Text } from '../../atoms/display/Typography/Text.tsx';
 import styles from './Modal.module.css';
 
 export interface ModalProps {
@@ -102,7 +103,7 @@ export function Modal({ open, onClose, title, description, size = 'md', footer, 
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={reduce ? { duration: 0 } : springTransition(Spring.Snappy)}
       >
-        <IconButton aria-label={t(kitMessages.close)} size="sm" className={styles.close} onClick={onClose}>
+        <IconButton aria-label={t(kitMessages.close)} size={Size.Small} className={styles.close} onClick={onClose}>
           {CloseIcon}
         </IconButton>
         {(title || description) && (
@@ -113,7 +114,7 @@ export function Modal({ open, onClose, title, description, size = 'md', footer, 
               </Heading>
             )}
             {description && (
-              <Text tone="muted" size="sm" id={descriptionId}>
+              <Text tone={TextTone.Muted} size={Size.Small} id={descriptionId}>
                 {description}
               </Text>
             )}

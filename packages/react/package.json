@@ -1,14 +1,14 @@
 {
-  "name": "@perfect/react",
+  "name": "@glacier/react",
   "version": "0.1.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@perfect/motion": "*",
-    "@perfect/spec": "*",
-    "@perfect/tokens": "*",
+    "@glacier/motion": "*",
+    "@glacier/spec": "*",
+    "@glacier/tokens": "*",
     "motion": "^12.23.0"
   },
   "peerDependencies": {

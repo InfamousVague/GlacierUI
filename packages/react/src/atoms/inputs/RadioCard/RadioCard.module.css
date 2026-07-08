@@ -1,0 +1,136 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-2);
+  min-width: 0;
+  padding: var(--glacier-space-4);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface-raised);
+  font-family: var(--glacier-font-sans);
+  color: var(--glacier-text);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.card:hover {
+  border-color: var(--glacier-border-strong);
+}
+
+.card.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* checked: accent border + accent-soft tint, driven by the hidden input for
+   the uncontrolled case and by the .checked class for the controlled case. */
+.card:has(.nativeInput:checked),
+.card.checked {
+  border-color: var(--glacier-accent-solid);
+  background: var(--glacier-accent-soft);
+}
+
+.card:hover:has(.nativeInput:checked),
+.card.checked:hover {
+  border-color: var(--glacier-accent-solid);
+}
+
+.nativeInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.card:has(.nativeInput:focus-visible) {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: 2px;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  color: var(--glacier-accent-text);
+  font-size: var(--glacier-font-size-md);
+  line-height: 1;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-1);
+  min-width: 0;
+  /* keep text clear of the corner indicator */
+  padding-inline-end: var(--glacier-space-5);
+}
+
+.title {
+  font-size: var(--glacier-font-size-sm);
+  font-weight: var(--glacier-font-weight-semibold);
+  line-height: var(--glacier-leading-md);
+  color: var(--glacier-text);
+}
+
+.description {
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-md);
+  color: var(--glacier-text-muted);
+}
+
+.extra {
+  margin-top: var(--glacier-space-1);
+}
+
+/* corner check indicator */
+.indicator {
+  position: absolute;
+  top: var(--glacier-space-3);
+  inset-inline-end: var(--glacier-space-3);
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-accent-solid);
+  color: var(--glacier-accent-contrast);
+}
+
+.indicator svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  display: block;
+}
+
+/* uncontrolled: the check is driven by the hidden input's state */
+.indicatorCss {
+  transform: scale(0);
+  opacity: 0;
+  transition:
+    transform var(--glacier-duration-fast) var(--glacier-ease-spring),
+    opacity var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.card:has(.nativeInput:checked) .indicatorCss {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-2);
+  padding: var(--glacier-space-4);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface-raised);
+}

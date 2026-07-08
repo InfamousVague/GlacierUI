@@ -1,32 +1,32 @@
 .field {
   display: flex;
   flex-direction: column;
-  gap: var(--perfect-space-2);
-  font-family: var(--perfect-font-sans);
+  gap: var(--glacier-space-2);
+  font-family: var(--glacier-font-sans);
 }
 
 .label {
-  font-size: var(--perfect-font-size-sm);
-  font-weight: var(--perfect-font-weight-medium);
-  color: var(--perfect-text);
-  line-height: var(--perfect-leading-sm);
+  font-size: var(--glacier-font-size-sm);
+  font-weight: var(--glacier-font-weight-medium);
+  color: var(--glacier-text);
+  line-height: var(--glacier-leading-sm);
 }
 
 .req {
-  color: var(--perfect-danger-text);
+  color: var(--glacier-danger-text);
 }
 
 .meta {
-  min-height: calc(var(--perfect-font-size-xs) * var(--perfect-leading-xs));
-  font-size: var(--perfect-font-size-xs);
-  line-height: var(--perfect-leading-xs);
+  min-height: calc(var(--glacier-font-size-xs) * var(--glacier-leading-xs));
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-xs);
 }
 
 .hint {
-  color: var(--perfect-text-muted);
+  color: var(--glacier-text-muted);
 }
 
 .error {
-  color: var(--perfect-danger-text);
-  font-weight: var(--perfect-font-weight-medium);
+  color: var(--glacier-danger-text);
+  font-weight: var(--glacier-font-weight-medium);
 }

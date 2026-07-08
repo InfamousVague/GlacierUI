@@ -4,7 +4,7 @@
 
 .scroller {
   display: flex;
-  gap: var(--carousel-gap, var(--perfect-space-4));
+  gap: var(--carousel-gap, var(--glacier-space-4));
   overflow-x: auto;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
@@ -13,8 +13,8 @@
   -ms-overflow-style: none;
   -webkit-overflow-scrolling: touch;
   /* pad so snapped cards clear the overlaid controls without clipping shadows */
-  padding: var(--perfect-space-1);
-  margin: calc(-1 * var(--perfect-space-1));
+  padding: var(--glacier-space-1);
+  margin: calc(-1 * var(--glacier-space-1));
 }
 
 .scroller::-webkit-scrollbar {
@@ -22,9 +22,9 @@
 }
 
 .scroller:focus-visible {
-  outline: 2px solid var(--perfect-focus-ring);
+  outline: 2px solid var(--glacier-focus-ring);
   outline-offset: 2px;
-  border-radius: var(--perfect-radius-md);
+  border-radius: var(--glacier-radius-md);
 }
 
 /* every direct child becomes a snap target that keeps its intrinsic width */
@@ -38,11 +38,11 @@
   top: 50%;
   z-index: 1;
   transform: translateY(-50%);
-  box-shadow: var(--perfect-shadow-3);
+  box-shadow: var(--glacier-shadow-3);
   opacity: 1;
   transition:
-    opacity var(--perfect-duration-fast) var(--perfect-ease-out),
-    visibility var(--perfect-duration-fast) var(--perfect-ease-out);
+    opacity var(--glacier-duration-fast) var(--glacier-ease-out),
+    visibility var(--glacier-duration-fast) var(--glacier-ease-out);
 }
 
 .prev {

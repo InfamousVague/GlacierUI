@@ -1,12 +1,13 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@perfect/motion';
+import { Size } from '@glacier/spec';
+import { Speed, Ease, transition } from '@glacier/motion';
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../internal/cx.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
-import { IconButton } from '../../atoms/Button/IconButton.tsx';
-import { Heading } from '../../atoms/Typography/Heading.tsx';
+import { IconButton } from '../../atoms/inputs/Button/IconButton.tsx';
+import { Heading } from '../../atoms/display/Typography/Heading.tsx';
 import styles from './FloatingPanel.module.css';
 
 export interface Point {
@@ -50,7 +51,7 @@ function clampToViewport(point: Point, size: { width: number; height: number }, 
  * to the body with a header grab-bar you drag to move it (pointer events), a
  * title, and a close button. Its position is clamped to the viewport so it can
  * never be dragged fully off-screen. Unlike Modal it does not lock scroll, trap
- * focus, or render an overlay — it floats above the page and lets you keep
+ * focus, or render an overlay - it floats above the page and lets you keep
  * working underneath.
  */
 export function FloatingPanel({
@@ -158,11 +159,11 @@ export function FloatingPanel({
       animate={{ opacity: 1, scale: 1 }}
       transition={reduce ? { duration: 0 } : transition(Speed.Fast, Ease.Out)}
     >
-      <div ref={handleRef} className={styles.handle} data-perfect-drag-handle="">
+      <div ref={handleRef} className={styles.handle} data-glacier-drag-handle="">
         <Heading level={2} visualLevel={6} id={titleId} className={styles.title}>
           {title}
         </Heading>
-        <IconButton aria-label={t(kitMessages.close)} size="sm" className={styles.close} onClick={onClose}>
+        <IconButton aria-label={t(kitMessages.close)} size={Size.Small} className={styles.close} onClick={onClose}>
           {CloseIcon}
         </IconButton>
       </div>

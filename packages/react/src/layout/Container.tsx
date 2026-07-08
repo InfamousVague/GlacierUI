@@ -1,5 +1,6 @@
 import type { ComponentProps, ElementType, ReactNode } from 'react';
 import { cx } from '../internal/cx.ts';
+import { asPolymorphic } from '../internal/poly.ts';
 import { resolveBox, splitBoxProps } from './resolve.ts';
 import type { BoxStyleProps, ContainerSize } from './types.ts';
 import styles from './Layout.module.css';
@@ -27,7 +28,7 @@ export function Container({ as, size = 'lg', className, style, children, ...prop
     maxWidth: size,
     paddingX: hasX ? box.paddingX : { base: 4, md: 6 },
   });
-  const Component: ElementType = as ?? 'div';
+  const Component = asPolymorphic(as, 'div');
   return (
     <Component
       className={cx(styles.box, styles.container, className)}

@@ -90,7 +90,7 @@ describe('FloatingPanel', () => {
       </FloatingPanel>,
     );
     const dialog = screen.getByRole('dialog');
-    const handle = dialog.querySelector('[data-perfect-drag-handle]') as HTMLElement;
+    const handle = dialog.querySelector('[data-glacier-drag-handle]') as HTMLElement;
     expect(dialog).toHaveStyle({ left: '100px', top: '100px' });
     // jsdom reports 0-size rects, so grabbing at (40,30) gives a grab offset of
     // (40,30); moving the pointer to (200,160) lands the top-left at (160,130).
@@ -107,7 +107,7 @@ describe('FloatingPanel', () => {
       </FloatingPanel>,
     );
     const dialog = screen.getByRole('dialog');
-    const handle = dialog.querySelector('[data-perfect-drag-handle]') as HTMLElement;
+    const handle = dialog.querySelector('[data-glacier-drag-handle]') as HTMLElement;
     // grab at (0,0): jsdom rect.left/top are 0, so the grab offset is 0 and the
     // panel top-left tracks the pointer directly.
     pointer('pointerdown', handle, { button: 0, clientX: 0, clientY: 0 });

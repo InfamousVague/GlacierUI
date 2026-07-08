@@ -1,0 +1,115 @@
+.frame {
+  --device-frame-width: 17rem;
+  --device-frame-aspect: 9 / 19.5;
+  --device-frame-bezel: var(--glacier-space-2);
+
+  position: relative;
+  display: inline-block;
+  width: var(--device-frame-width);
+  padding: var(--device-frame-bezel);
+  border-radius: var(--glacier-radius-2xl);
+  background: var(--glacier-gray-9);
+  box-shadow:
+    inset 0 0 0 var(--glacier-hairline) var(--glacier-border-strong),
+    var(--glacier-shadow-4);
+  font-family: var(--glacier-font-sans);
+}
+
+/* A subtle inner rim between the outer shell and the screen. */
+.bezel {
+  position: absolute;
+  inset: calc(var(--device-frame-bezel) / 2);
+  border-radius: var(--glacier-radius-xl);
+  box-shadow: inset 0 0 0 var(--glacier-hairline) var(--glacier-border);
+  pointer-events: none;
+}
+
+.screen {
+  position: relative;
+  aspect-ratio: var(--device-frame-aspect);
+  overflow: hidden;
+  border-radius: var(--glacier-radius-xl);
+  background: var(--glacier-surface-sunken);
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+  overflow: auto;
+}
+
+/* Children fill the screen edge to edge. */
+.content > :only-child {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  display: flex;
+  gap: var(--glacier-space-2);
+  align-items: center;
+  justify-content: center;
+  min-width: 38%;
+  height: var(--glacier-space-5);
+  padding: 0 var(--glacier-space-3);
+  transform: translateX(-50%);
+  border-bottom-left-radius: var(--glacier-radius-md);
+  border-bottom-right-radius: var(--glacier-radius-md);
+  background: var(--glacier-gray-9);
+  pointer-events: none;
+}
+
+.speaker {
+  width: var(--glacier-space-6);
+  height: var(--glacier-hairline);
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-border-strong);
+}
+
+.camera {
+  width: var(--glacier-space-2);
+  height: var(--glacier-space-2);
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-border-strong);
+}
+
+/* Decorative side buttons on the shell. */
+.buttonSilence,
+.buttonVolumeUp,
+.buttonVolumeDown,
+.buttonPower {
+  position: absolute;
+  width: var(--glacier-hairline);
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-border-strong);
+  pointer-events: none;
+}
+
+.buttonSilence {
+  left: calc(-1 * var(--glacier-hairline));
+  top: 16%;
+  height: var(--glacier-space-4);
+}
+
+.buttonVolumeUp {
+  left: calc(-1 * var(--glacier-hairline));
+  top: 26%;
+  height: var(--glacier-space-6);
+}
+
+.buttonVolumeDown {
+  left: calc(-1 * var(--glacier-hairline));
+  top: 38%;
+  height: var(--glacier-space-6);
+}
+
+.buttonPower {
+  right: calc(-1 * var(--glacier-hairline));
+  top: 28%;
+  height: var(--glacier-space-8);
+}

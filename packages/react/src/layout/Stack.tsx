@@ -1,5 +1,6 @@
 import type { ComponentProps, ElementType, ReactNode } from 'react';
 import { cx } from '../internal/cx.ts';
+import { asPolymorphic } from '../internal/poly.ts';
 import { resolveBox, resolveFlow, splitBoxProps } from './resolve.ts';
 import type { BoxStyleProps, FlowProps } from './types.ts';
 import styles from './Layout.module.css';
@@ -26,7 +27,7 @@ export function Stack({
   const { box, rest } = splitBoxProps(props);
   const b = resolveBox(box);
   const f = resolveFlow({ gap, align, justify });
-  const Component: ElementType = as ?? 'div';
+  const Component = asPolymorphic(as, 'div');
   return (
     <Component
       className={cx(styles.box, styles.stack, className)}

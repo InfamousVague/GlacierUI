@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Size } from '@glacier/react';
 import { render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { Divider, Heading, Kbd, Label, Link, Pill, Text } from '../src/index.ts';
@@ -11,13 +12,13 @@ describe('typography skeleton states', () => {
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton).not.toBeNull();
     expect(skeleton.style.width).toBe('14ch');
-    expect(skeleton.style.fontSize).toBe('var(--perfect-font-size-md)');
+    expect(skeleton.style.fontSize).toBe('var(--glacier-font-size-md)');
   });
 
   it('Text skeleton scales with the size prop', () => {
-    const { container } = render(<Text skeleton size="lg" />);
+    const { container } = render(<Text skeleton size={Size.Large} />);
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
-    expect(skeleton.style.fontSize).toBe('var(--perfect-font-size-lg)');
+    expect(skeleton.style.fontSize).toBe('var(--glacier-font-size-lg)');
   });
 
   it('Heading skeleton renders no heading role and sizes from the level', () => {
@@ -25,13 +26,13 @@ describe('typography skeleton states', () => {
     expect(screen.queryByRole('heading')).toBeNull();
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton.style.width).toBe('10ch');
-    expect(skeleton.style.fontSize).toBe('var(--perfect-font-size-3xl)');
+    expect(skeleton.style.fontSize).toBe('var(--glacier-font-size-3xl)');
   });
 
   it('Heading skeleton follows visualLevel over level', () => {
     const { container } = render(<Heading skeleton level={3} visualLevel={6} />);
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
-    expect(skeleton.style.fontSize).toBe('var(--perfect-font-size-sm)');
+    expect(skeleton.style.fontSize).toBe('var(--glacier-font-size-sm)');
   });
 
   it('Label skeleton is a short sm text line', () => {
@@ -39,7 +40,7 @@ describe('typography skeleton states', () => {
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton).not.toBeNull();
     expect(skeleton.style.width).toBe('6ch');
-    expect(skeleton.style.fontSize).toBe('var(--perfect-font-size-sm)');
+    expect(skeleton.style.fontSize).toBe('var(--glacier-font-size-sm)');
   });
 
   it('Link skeleton renders no link role', () => {
@@ -55,7 +56,7 @@ describe('typography skeleton states', () => {
     expect(skeleton).not.toBeNull();
     expect(skeleton.style.width).toBe('2.25rem');
     expect(skeleton.style.height).toBe('1.375rem');
-    expect(skeleton.style.borderRadius).toBe('var(--perfect-radius-sm)');
+    expect(skeleton.style.borderRadius).toBe('var(--glacier-radius-sm)');
   });
 
   it('Pill skeleton matches the md pill geometry', () => {
@@ -63,11 +64,11 @@ describe('typography skeleton states', () => {
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton.style.width).toBe('4.5rem');
     expect(skeleton.style.height).toBe('1.75rem');
-    expect(skeleton.style.borderRadius).toBe('var(--perfect-radius-full)');
+    expect(skeleton.style.borderRadius).toBe('var(--glacier-radius-full)');
   });
 
   it('Pill skeleton matches the sm pill geometry', () => {
-    const { container } = render(<Pill skeleton size="sm" />);
+    const { container } = render(<Pill skeleton size={Size.Small} />);
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton.style.width).toBe('3.5rem');
     expect(skeleton.style.height).toBe('1.375rem');
@@ -78,14 +79,14 @@ describe('typography skeleton states', () => {
     expect(screen.queryByRole('separator')).toBeNull();
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
     expect(skeleton.style.width).toBe('100%');
-    expect(skeleton.style.height).toBe('var(--perfect-hairline)');
+    expect(skeleton.style.height).toBe('var(--glacier-hairline)');
   });
 
   it('Divider skeleton keeps the vertical hairline', () => {
     const { container } = render(<Divider skeleton orientation="vertical" />);
     expect(screen.queryByRole('separator')).toBeNull();
     const skeleton = container.querySelector('[data-skeleton]') as HTMLElement;
-    expect(skeleton.style.width).toBe('var(--perfect-hairline)');
+    expect(skeleton.style.width).toBe('var(--glacier-hairline)');
     expect(skeleton.style.height).toBe('1.5rem');
   });
 

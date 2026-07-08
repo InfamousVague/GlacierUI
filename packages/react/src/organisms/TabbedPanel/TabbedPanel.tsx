@@ -1,9 +1,10 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@perfect/motion';
+import { Size } from '@glacier/spec';
+import { Speed, Ease, transition } from '@glacier/motion';
 import { useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
-import { CounterBadge } from '../../atoms/CounterBadge/CounterBadge.tsx';
+import { CounterBadge } from '../../atoms/display/CounterBadge/CounterBadge.tsx';
 import styles from './TabbedPanel.module.css';
 
 export interface TabbedPanelTab {
@@ -119,7 +120,7 @@ export function TabbedPanel({
                   <CounterBadge
                     count={tab.count}
                     tone={isSelected ? 'accent' : 'neutral'}
-                    size="sm"
+                    size={Size.Small}
                     className={styles.count}
                   />
                 )}

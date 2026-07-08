@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { Tone } from '@glacier/react';
 import { render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { StatusDot } from '../src/index.ts';
@@ -7,7 +8,7 @@ const AXE_RULES = { region: { enabled: false }, 'page-has-heading-one': { enable
 
 describe('StatusDot', () => {
   it('exposes a status role and accessible name when labeled', () => {
-    render(<StatusDot tone="success" label="Online" />);
+    render(<StatusDot tone={Tone.Success} label="Online" />);
     expect(screen.getByRole('status', { name: 'Online' })).toBeInTheDocument();
   });
 
@@ -17,7 +18,7 @@ describe('StatusDot', () => {
   });
 
   it('has no axe violations', async () => {
-    const { container } = render(<StatusDot tone="success" label="Online" />);
+    const { container } = render(<StatusDot tone={Tone.Success} label="Online" />);
     expect((await axe.run(container, { rules: AXE_RULES })).violations).toEqual([]);
   });
 });

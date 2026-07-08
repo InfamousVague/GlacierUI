@@ -1,0 +1,33 @@
+.bar {
+  display: flex;
+  width: 100%;
+  gap: var(--glacier-space-1);
+  overflow: hidden;
+  background: var(--glacier-segment-track);
+}
+
+.sm {
+  height: 0.375rem;
+}
+
+.md {
+  height: 0.625rem;
+}
+
+.rounded {
+  border-radius: var(--glacier-radius-full);
+}
+
+.slice {
+  height: 100%;
+  /* a micro radius so each segment reads as its own piece, not a hard rectangle */
+  border-radius: 2px;
+  background: var(--glacier-segment-track);
+}
+
+.slice.accent { background: var(--glacier-accent-solid); }
+.slice.success { background: var(--glacier-success-solid); }
+.slice.warning { background: var(--glacier-warning-solid); }
+.slice.danger { background: var(--glacier-danger-solid); }
+/* neutral paints the track color, indistinct from the empty remainder */
+.slice.neutral { background: var(--glacier-segment-track); }

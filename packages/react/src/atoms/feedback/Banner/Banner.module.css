@@ -1,0 +1,105 @@
+.banner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: var(--glacier-space-3);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-lg);
+  padding: var(--glacier-space-3) var(--glacier-space-4);
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-sm);
+  line-height: var(--glacier-leading-md);
+  color: var(--glacier-text-muted);
+}
+
+.icon {
+  flex: none;
+  display: flex;
+  align-items: center;
+  line-height: var(--glacier-leading-md);
+}
+
+.message {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.action {
+  flex: none;
+  display: flex;
+  align-items: center;
+}
+
+.dismiss {
+  flex: none;
+  display: flex;
+  align-items: center;
+  margin-inline-start: calc(-1 * var(--glacier-space-1));
+}
+
+/* neutral maps to a low-emphasis surface, matching the Pill neutral family */
+.neutral {
+  background: var(--glacier-hover);
+  border-color: var(--glacier-border-subtle);
+}
+.neutral .icon {
+  color: var(--glacier-text-muted);
+}
+
+.accent {
+  background: var(--glacier-accent-soft);
+  border-color: var(--glacier-accent-border);
+}
+.accent .icon {
+  color: var(--glacier-accent-text);
+}
+
+.success {
+  background: var(--glacier-success-soft);
+  border-color: var(--glacier-success-border);
+}
+.success .icon {
+  color: var(--glacier-success-text);
+}
+
+.warning {
+  background: var(--glacier-warning-soft);
+  border-color: var(--glacier-warning-border);
+}
+.warning .icon {
+  color: var(--glacier-warning-text);
+}
+
+.danger {
+  background: var(--glacier-danger-soft);
+  border-color: var(--glacier-danger-border);
+}
+.danger .icon {
+  color: var(--glacier-danger-text);
+}
+
+.info {
+  background: var(--glacier-info-soft);
+  border-color: var(--glacier-info-border);
+}
+.info .icon {
+  color: var(--glacier-info-text);
+}
+
+/* The dismiss button tints its hover to a brighter shade of the banner's tone
+   instead of the neutral grey, so it reads as part of the alert. */
+.accent .dismiss button:hover {
+  background: var(--glacier-accent-soft-hover);
+}
+.success .dismiss button:hover {
+  background: var(--glacier-success-soft-hover);
+}
+.warning .dismiss button:hover {
+  background: var(--glacier-warning-soft-hover);
+}
+.danger .dismiss button:hover {
+  background: var(--glacier-danger-soft-hover);
+}
+.info .dismiss button:hover {
+  background: var(--glacier-info-soft-hover);
+}

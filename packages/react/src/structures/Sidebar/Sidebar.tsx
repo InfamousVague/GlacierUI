@@ -1,7 +1,8 @@
 import { createContext, useContext, useId, type ComponentProps, type ElementType, type ReactNode } from 'react';
 import { motion, useReducedMotion, type Transition } from 'motion/react';
-import { Spring, springTransition } from '@perfect/motion';
+import { Spring, springTransition } from '@glacier/motion';
 import { cx } from '../../internal/cx.ts';
+import { asPolymorphic } from '../../internal/poly.ts';
 import styles from './Sidebar.module.css';
 
 // Shared with SidebarItem so the active pill is one layout element that slides
@@ -89,8 +90,8 @@ export function SidebarItem({
   children,
   ...rest
 }: SidebarItemProps) {
-  const Component: ElementType = as ?? 'button';
-  const extra = Component === 'button' ? { type: 'button' as const, disabled } : {};
+  const Component = asPolymorphic(as, 'button');
+  const extra = (as ?? 'button') === 'button' ? { type: 'button' as const, disabled } : {};
   const context = useContext(SidebarContext);
   return (
     <Component

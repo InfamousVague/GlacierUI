@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { Spring, springTransition } from '@perfect/motion';
-import { toastTones } from '@perfect/spec';
+import { Spring, springTransition } from '@glacier/motion';
+import { toastTones } from '@glacier/spec';
 import {
   createContext,
   useCallback,
@@ -15,7 +15,7 @@ import { createPortal } from 'react-dom';
 import { cx } from '../../internal/cx.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
-import { Skeleton } from '../../atoms/Skeleton/Skeleton.tsx';
+import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
 import styles from './Toast.module.css';
 
 // Derived from the spec so the tone union cannot drift.
@@ -36,7 +36,6 @@ const DismissIcon = (
   </svg>
 );
 
-// ---- visual pill -----------------------------------------------------------
 
 export interface ToastProps {
   tone?: ToastTone;
@@ -76,7 +75,7 @@ export function Toast({
       <Skeleton
         width="18rem"
         height="2.75rem"
-        radius="var(--perfect-radius-full)"
+        radius="var(--glacier-radius-full)"
         className={className}
       />
     );
@@ -107,8 +106,6 @@ export function Toast({
     </div>
   );
 }
-
-// ---- provider + hook -------------------------------------------------------
 
 export interface ToastOptions {
   tone?: ToastTone;
