@@ -1,5 +1,5 @@
 /**
- * Fixed size scale for square and circular component footprints — avatar,
+ * Fixed size scale for square and circular component footprints - avatar,
  * badge, counter, status-dot, and spinner diameters. Unlike spacing these are
  * intentionally NOT fluid: a control's footprint should stay stable across
  * viewports, so the same step always renders the same size.

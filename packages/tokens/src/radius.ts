@@ -1,6 +1,6 @@
 /**
  * Radius ramp. Every step except `none` and `full` is multiplied by the
- * global --perfect-radius-scale knob, so the whole kit's shape language can
+ * global --glacier-radius-scale knob, so the whole kit's shape language can
  * be sharpened or softened in one place.
  *
  * The ramp is tuned soft: controls sit on the round end (capsule buttons,
@@ -23,7 +23,7 @@ export type RadiusStep = keyof typeof radii;
 export const SCALED_RADII: RadiusStep[] = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 
 /** Default corner treatment for interactive controls (buttons, segments). */
-export const CONTROL_RADIUS = 'var(--perfect-radius-full)';
+export const CONTROL_RADIUS = 'var(--glacier-radius-full)';
 
 // ---- CSS emission ----------------------------------------------------------
 
@@ -32,7 +32,7 @@ export function radiusDecls(): Array<[string, string]> {
   const decls: Array<[string, string]> = [['radius-scale', '1']];
   for (const [name, value] of Object.entries(radii)) {
     const scaled = SCALED_RADII.includes(name as RadiusStep);
-    decls.push([`radius-${name}`, scaled ? `calc(${value} * var(--perfect-radius-scale))` : value]);
+    decls.push([`radius-${name}`, scaled ? `calc(${value} * var(--glacier-radius-scale))` : value]);
   }
   decls.push(['control-radius', CONTROL_RADIUS]);
   return decls;

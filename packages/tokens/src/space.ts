@@ -50,7 +50,7 @@ export const space: Record<SpaceStep, FluidValue> = Object.fromEntries(
 export function spacingDecls(): Array<[string, string]> {
   const decls: Array<[string, string]> = SPACE_STEPS.map((n) => [
     `space-${n}`,
-    `calc(${space[n].clamp} * var(--perfect-density-scale))`,
+    `calc(${space[n].clamp} * var(--glacier-density-scale))`,
   ]);
   decls.push(['space-px', '1px']);
   return decls;

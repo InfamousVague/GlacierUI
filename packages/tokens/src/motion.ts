@@ -1,6 +1,6 @@
 /**
  * Motion tokens, named by role so the whole kit's feel retunes in one place.
- * The @perfect/motion package mirrors these as framer-motion transitions.
+ * The @glacier/motion package mirrors these as framer-motion transitions.
  */
 
 export const durations = {

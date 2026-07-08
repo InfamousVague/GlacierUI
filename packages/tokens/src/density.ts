@@ -3,7 +3,7 @@
  *
  * Two things move together: control heights, and a density scale that
  * multiplies the whole space scale. So every padding and gap built on
- * --perfect-space-* breathes with density while staying on one shared scale.
+ * --glacier-space-* breathes with density while staying on one shared scale.
  *
  * Comfortable is cozy: generous heights near Apple touch targets and roomier
  * padding. Compact pulls everything in for dense desktop tools.

@@ -50,7 +50,7 @@ const SYSTEM_MONO = "ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace";
 
 /**
  * Switchable sans families, bundled via Fontsource (see css/fonts.css). The
- * first key is the default and matches the base --perfect-font-sans, so its
+ * first key is the default and matches the base --glacier-font-sans, so its
  * [data-font] selector would be a no-op and is not emitted.
  */
 export const sansFonts = {

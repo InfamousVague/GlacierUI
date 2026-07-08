@@ -25,11 +25,11 @@ export interface RampDef {
 
 export const ramps: RampDef[] = [
   { name: 'gray', hue: 260, chroma: 0.012, contrast: 'white' },
-  { name: 'accent', hue: 240, chroma: 0.16, contrast: 'white' },
+  { name: 'accent', hue: 228, chroma: 0.15, contrast: 'white' },
   { name: 'red', hue: 25, chroma: 0.19, contrast: 'white' },
   { name: 'amber', hue: 75, chroma: 0.15, contrast: 'black' },
   { name: 'green', hue: 150, chroma: 0.14, contrast: 'white' },
-  { name: 'blue', hue: 240, chroma: 0.16, contrast: 'white' },
+  { name: 'blue', hue: 228, chroma: 0.15, contrast: 'white' },
   { name: 'purple', hue: 305, chroma: 0.17, contrast: 'white' },
   { name: 'teal', hue: 190, chroma: 0.12, contrast: 'black' },
 ];

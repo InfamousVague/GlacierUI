@@ -1,13 +1,13 @@
 /**
- * Semantic alias layer — what components actually consume. Because ramp step
+ * Semantic alias layer - what components actually consume. Because ramp step
  * numbers play the same role in both themes, most aliases are defined once;
  * only true surfaces need per-theme overrides.
  */
 
 import { WHITE, BLACK_TEXT, type Theme } from './color.ts';
 
-const g = (n: number) => `var(--perfect-gray-${n})`;
-const a = (n: number) => `var(--perfect-accent-${n})`;
+const g = (n: number) => `var(--glacier-gray-${n})`;
+const a = (n: number) => `var(--glacier-accent-${n})`;
 
 export const semantic: Record<string, string> = {
   // surfaces
@@ -76,12 +76,12 @@ export const statuses: Record<string, { ramp: string; contrast: string }> = {
 export function statusTokens(): Record<string, string> {
   const out: Record<string, string> = {};
   for (const [role, { ramp, contrast }] of Object.entries(statuses)) {
-    out[`${role}-solid`] = `var(--perfect-${ramp}-9)`;
-    out[`${role}-solid-hover`] = `var(--perfect-${ramp}-10)`;
-    out[`${role}-soft`] = `var(--perfect-${ramp}-3)`;
-    out[`${role}-soft-hover`] = `var(--perfect-${ramp}-4)`;
-    out[`${role}-border`] = `var(--perfect-${ramp}-7)`;
-    out[`${role}-text`] = `var(--perfect-${ramp}-11)`;
+    out[`${role}-solid`] = `var(--glacier-${ramp}-9)`;
+    out[`${role}-solid-hover`] = `var(--glacier-${ramp}-10)`;
+    out[`${role}-soft`] = `var(--glacier-${ramp}-3)`;
+    out[`${role}-soft-hover`] = `var(--glacier-${ramp}-4)`;
+    out[`${role}-border`] = `var(--glacier-${ramp}-7)`;
+    out[`${role}-text`] = `var(--glacier-${ramp}-11)`;
     out[`${role}-contrast`] = contrast;
   }
   return out;

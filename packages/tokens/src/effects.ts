@@ -4,6 +4,13 @@
  * the default chrome material, thick is close to opaque. Pair the background
  * with backdrop-filter blur + saturation, a hairline border, and an inner top
  * highlight so the surface reads as glass.
+ *
+ * Two runtime knobs ride on top, both overridable by setting the variable on
+ * :root (the docs Preferences panel drives them live):
+ *   --glacier-glass-blur-scale  frostedness - every blur token multiplies by it
+ *   --glacier-glass-filter      an extra backdrop-filter (e.g. an SVG
+ *                               displacement map) for the Apple "liquid glass"
+ *                               refraction; empty by default
  */
 
 import type { Theme } from './color.ts';
@@ -45,7 +52,12 @@ export const glassTokens: Record<Theme, Record<string, string>> = {
 /** The hairline, blur radii, and glass saturation (theme-agnostic). */
 export function effectsDecls(): Array<[string, string]> {
   const decls: Array<[string, string]> = [['hairline', HAIRLINE]];
-  for (const [name, value] of Object.entries(blurs)) decls.push([`blur-${name}`, value]);
+  // Frostedness knob: every blur token rides this multiplier, so the glass
+  // across the whole kit can be thinned or thickened from one place - the same
+  // trick the radius ramp uses with --glacier-radius-scale.
+  decls.push(['glass-blur-scale', '1']);
+  for (const [name, value] of Object.entries(blurs))
+    decls.push([`blur-${name}`, `calc(${value} * var(--glacier-glass-blur-scale))`]);
   decls.push(['glass-saturate', GLASS_SATURATE]);
   return decls;
 }
