@@ -36,12 +36,18 @@
 .note .title {
   color: var(--perfect-text);
 }
+.note .icon {
+  color: var(--perfect-text-muted);
+}
 
 .info {
   background: var(--perfect-info-soft);
   border-color: var(--perfect-info-border);
 }
 .info .title {
+  color: var(--perfect-info-text);
+}
+.info .icon {
   color: var(--perfect-info-text);
 }
 
@@ -52,6 +58,9 @@
 .success .title {
   color: var(--perfect-success-text);
 }
+.success .icon {
+  color: var(--perfect-success-text);
+}
 
 .warning {
   background: var(--perfect-warning-soft);
@@ -60,12 +69,18 @@
 .warning .title {
   color: var(--perfect-warning-text);
 }
+.warning .icon {
+  color: var(--perfect-warning-text);
+}
 
 .danger {
   background: var(--perfect-danger-soft);
   border-color: var(--perfect-danger-border);
 }
 .danger .title {
+  color: var(--perfect-danger-text);
+}
+.danger .icon {
   color: var(--perfect-danger-text);
 }
 
