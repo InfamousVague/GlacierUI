@@ -3,6 +3,8 @@ import { Speed, Ease, transition } from '@perfect/motion';
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../internal/cx.ts';
+import { useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import { IconButton } from '../../atoms/Button/IconButton.tsx';
 import { Heading } from '../../atoms/Typography/Heading.tsx';
 import styles from './FloatingPanel.module.css';
@@ -59,6 +61,7 @@ export function FloatingPanel({
   className,
   children,
 }: FloatingPanelProps) {
+  const t = useT();
   const titleId = useId();
   const panelRef = useRef<HTMLDivElement>(null);
   const handleRef = useRef<HTMLDivElement>(null);
@@ -159,7 +162,7 @@ export function FloatingPanel({
         <Heading level={2} visualLevel={6} id={titleId} className={styles.title}>
           {title}
         </Heading>
-        <IconButton aria-label="Close" size="sm" className={styles.close} onClick={onClose}>
+        <IconButton aria-label={t(kitMessages.close)} size="sm" className={styles.close} onClick={onClose}>
           {CloseIcon}
         </IconButton>
       </div>

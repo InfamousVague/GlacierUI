@@ -1,6 +1,8 @@
 import { bannerTones } from '@perfect/spec';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
+import { useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import { IconButton } from '../Button/IconButton.tsx';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Banner.module.css';
@@ -37,6 +39,7 @@ export function Banner({
   children,
   ...rest
 }: BannerProps) {
+  const t = useT();
   if (skeleton) {
     return (
       <Skeleton
@@ -59,7 +62,7 @@ export function Banner({
       {action != null && <div className={styles.action}>{action}</div>}
       {onDismiss != null && (
         <div className={styles.dismiss}>
-          <IconButton aria-label="Dismiss" size="sm" onClick={onDismiss}>
+          <IconButton aria-label={t(kitMessages.dismiss)} size="sm" onClick={onDismiss}>
             {DismissIcon}
           </IconButton>
         </div>

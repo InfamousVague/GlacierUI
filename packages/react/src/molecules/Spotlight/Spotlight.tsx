@@ -11,6 +11,8 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../internal/cx.ts';
+import { useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import { useAnchoredPosition, type Placement } from '../../internal/useAnchoredPosition.ts';
 import { Button } from '../../atoms/Button/Button.tsx';
 import { IconButton } from '../../atoms/Button/IconButton.tsx';
@@ -79,6 +81,7 @@ export function Spotlight({
   onClose,
   className,
 }: SpotlightProps) {
+  const t = useT();
   const titleId = useId();
   const descriptionId = useId();
   const reduce = useReducedMotion();
@@ -202,7 +205,7 @@ export function Spotlight({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={reduce ? { duration: 0 } : transition(Speed.Fast, Ease.Out)}
       >
-        <IconButton aria-label="Close tour" size="sm" className={styles.close} onClick={onClose}>
+        <IconButton aria-label={t(kitMessages.closeTour)} size="sm" className={styles.close} onClick={onClose}>
           {CloseIcon}
         </IconButton>
         {title && (
@@ -217,19 +220,19 @@ export function Spotlight({
         )}
         <div className={styles.footer}>
           {step != null && total != null && (
-            <span className={styles.count} aria-label={`Step ${step} of ${total}`}>
+            <span className={styles.count} aria-label={t(kitMessages.stepOf, { step, total })}>
               {step} / {total}
             </span>
           )}
           <div className={styles.actions}>
             {onBack && (
               <Button variant="ghost" size="sm" onClick={onBack}>
-                Back
+                {t(kitMessages.back)}
               </Button>
             )}
             {onNext && (
               <Button variant="solid" size="sm" onClick={onNext}>
-                {total != null && step === total ? 'Done' : 'Next'}
+                {total != null && step === total ? t(kitMessages.done) : t(kitMessages.next)}
               </Button>
             )}
           </div>

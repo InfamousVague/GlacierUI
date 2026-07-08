@@ -1,6 +1,8 @@
 import { controlSizes, spinnerTones } from '@perfect/spec';
 import type { ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
+import { useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './Progress.module.css';
 
@@ -27,7 +29,8 @@ const SKELETON_DIAMETERS: Record<'sm' | 'md' | 'lg', string> = {
 };
 
 export function Spinner({ size = 'md', tone = 'subtle', skeleton = false, className, ...rest }: SpinnerProps) {
-  const label = rest['aria-label'] ?? 'Loading';
+  const t = useT();
+  const label = rest['aria-label'] ?? t(kitMessages.loading);
   if (skeleton) {
     return <Skeleton variant="circle" width={SKELETON_DIAMETERS[size]} className={className} />;
   }

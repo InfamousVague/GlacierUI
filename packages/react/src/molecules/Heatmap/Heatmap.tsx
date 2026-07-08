@@ -1,5 +1,7 @@
 import { useId, type CSSProperties } from 'react';
 import { cx } from '../../internal/cx.ts';
+import { useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import styles from './Heatmap.module.css';
 
 /** A single dated value, e.g. one day of contribution counts. */
@@ -85,6 +87,7 @@ function levelOf(value: number, max: number, levels: number): number {
  * and an optional legend spells out the less→more scale.
  */
 export function Heatmap({ data, levels = 5, legend = false, rows = 7, className, ...rest }: HeatmapProps) {
+  const t = useT();
   const label = rest['aria-label'];
   const steps = Math.max(2, Math.floor(levels));
   const columns = toColumns(data, Math.max(1, Math.floor(rows)));
@@ -128,7 +131,7 @@ export function Heatmap({ data, levels = 5, legend = false, rows = 7, className,
       </div>
       {legend && (
         <div id={legendId} className={styles.legend}>
-          <span className={styles.legendText}>Less</span>
+          <span className={styles.legendText}>{t(kitMessages.less)}</span>
           {legendSwatches.map((level) => (
             <span
               key={level}
@@ -138,7 +141,7 @@ export function Heatmap({ data, levels = 5, legend = false, rows = 7, className,
               aria-hidden="true"
             />
           ))}
-          <span className={styles.legendText}>More</span>
+          <span className={styles.legendText}>{t(kitMessages.more)}</span>
         </div>
       )}
     </div>

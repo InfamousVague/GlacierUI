@@ -1,5 +1,7 @@
 import { useEffect, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
+import { useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import { IconButton } from '../../atoms/Button/IconButton.tsx';
 import styles from './AppShell.module.css';
 
@@ -37,6 +39,7 @@ export function AppShell({
   floating = false,
   children,
 }: AppShellProps) {
+  const t = useT();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -70,7 +73,7 @@ export function AppShell({
       <div className={styles.main}>
         <header className={cx(styles.header)} data-empty={header ? undefined : ''}>
           <IconButton
-            aria-label="Open navigation"
+            aria-label={t(kitMessages.openNavigation)}
             variant="ghost"
             className={styles.menuButton}
             onClick={() => setOpen(true)}

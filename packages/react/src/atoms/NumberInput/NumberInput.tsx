@@ -1,6 +1,8 @@
 import type { ComponentProps } from 'react';
 import type { ControlSize } from '../Button/Button.tsx';
 import { cx } from '../../internal/cx.ts';
+import { useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import { useField } from '../../internal/FieldContext.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
@@ -45,6 +47,7 @@ export function NumberInput({
   'aria-label': ariaLabel,
   ...rest
 }: NumberInputProps) {
+  const t = useT();
   const field = useField();
   const [current, setCurrent] = useControlled(value, defaultValue ?? 0);
 
@@ -79,7 +82,7 @@ export function NumberInput({
     <div className={cx(styles.group, styles[size], glass && styles.glass, disabled && styles.disabled, className)}>
       <button
         type="button"
-        aria-label="Decrease"
+        aria-label={t(kitMessages.decrease)}
         className={styles.step}
         disabled={disabled || atMin}
         onClick={() => commit(current - step)}
@@ -104,7 +107,7 @@ export function NumberInput({
       />
       <button
         type="button"
-        aria-label="Increase"
+        aria-label={t(kitMessages.increase)}
         className={styles.step}
         disabled={disabled || atMax}
         onClick={() => commit(current + step)}

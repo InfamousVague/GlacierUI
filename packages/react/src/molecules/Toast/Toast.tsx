@@ -13,6 +13,8 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../internal/cx.ts';
+import { useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import { Skeleton } from '../../atoms/Skeleton/Skeleton.tsx';
 import styles from './Toast.module.css';
 
@@ -68,6 +70,7 @@ export function Toast({
   skeleton = false,
   className,
 }: ToastProps) {
+  const t = useT();
   if (skeleton) {
     return (
       <Skeleton
@@ -91,7 +94,7 @@ export function Toast({
       {dismissible && (
         <button
           type="button"
-          aria-label="Dismiss"
+          aria-label={t(kitMessages.dismiss)}
           className={styles.dismiss}
           onClick={(e) => {
             e.stopPropagation();

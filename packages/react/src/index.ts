@@ -115,3 +115,23 @@ export {
   type SplitOrientation,
 } from './organisms/ResizableSplitPane/ResizableSplitPane.tsx';
 export type { Placement } from './internal/useAnchoredPosition.ts';
+
+// i18n — the translation mandate: every user-facing string resolves through a
+// message catalog that must cover every locale, so a missing translation is a
+// compile error rather than a runtime surprise.
+export {
+  LocaleProvider,
+  useLocale,
+  useT,
+  locales,
+  DEFAULT_LOCALE,
+  defineMessages,
+  format,
+  kitMessages,
+  type Locale,
+  type Message,
+  type MessageCatalog,
+  type Translate,
+  type LocaleProviderProps,
+  type KitMessageKey,
+} from './i18n/index.ts';

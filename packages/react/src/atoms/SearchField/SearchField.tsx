@@ -1,5 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
+import { useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import { useField } from '../../internal/FieldContext.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
@@ -33,6 +35,7 @@ export function SearchField({
   id,
   ...rest
 }: SearchFieldProps) {
+  const t = useT();
   const field = useField();
   const [value, setValue] = useControlled(controlledValue, defaultValue);
 
@@ -77,7 +80,7 @@ export function SearchField({
         <button
           type="button"
           className={styles.clear}
-          aria-label="Clear search"
+          aria-label={t(kitMessages.clearSearch)}
           onClick={() => {
             setValue('');
             onValueChange?.('');

@@ -8,6 +8,8 @@ import {
   type WheelEvent,
 } from 'react';
 import { cx } from '../../internal/cx.ts';
+import { useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import { IconButton } from '../../atoms/Button/IconButton.tsx';
 import styles from './Carousel.module.css';
 
@@ -47,6 +49,7 @@ export function Carousel({
   className,
   ...rest
 }: CarouselProps) {
+  const t = useT();
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [overflowing, setOverflowing] = useState(false);
   const [atStart, setAtStart] = useState(true);
@@ -101,7 +104,7 @@ export function Carousel({
       {showControls && (
         <IconButton
           variant="soft"
-          aria-label="Previous"
+          aria-label={t(kitMessages.previous)}
           className={cx(styles.control, styles.prev)}
           data-hidden={!overflowing || undefined}
           disabled={atStart}
@@ -125,7 +128,7 @@ export function Carousel({
       {showControls && (
         <IconButton
           variant="soft"
-          aria-label="Next"
+          aria-label={t(kitMessages.next)}
           className={cx(styles.control, styles.next)}
           data-hidden={!overflowing || undefined}
           disabled={atEnd}
