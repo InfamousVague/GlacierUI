@@ -1,0 +1,113 @@
+.layout {
+  display: grid;
+  grid-template-columns: 12rem minmax(0, 1fr);
+  gap: var(--perfect-space-6);
+  min-height: 18rem;
+  font-family: var(--perfect-font-sans);
+}
+
+/* fixed left nav rail: does not scroll, so the section list stays put */
+.rail {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.125rem;
+  min-width: 0;
+  padding-inline-end: var(--perfect-space-4);
+  border-inline-end: var(--perfect-hairline) solid var(--perfect-border-subtle);
+}
+
+.railItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--perfect-space-2);
+  width: 100%;
+  padding: var(--perfect-space-2) var(--perfect-space-3);
+  border: none;
+  border-radius: var(--perfect-radius-md);
+  background: transparent;
+  color: var(--perfect-text-muted);
+  font: inherit;
+  font-size: var(--perfect-font-size-sm);
+  line-height: var(--perfect-leading-sm);
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background-color var(--perfect-duration-fast) var(--perfect-ease-out),
+    color var(--perfect-duration-fast) var(--perfect-ease-out);
+}
+
+/* the active item shows the pill, not the hover wash, so it never flashes gray
+   as the sliding pill passes over it */
+.railItem:hover:not(:disabled):not([data-active]) {
+  background: var(--perfect-hover);
+  color: var(--perfect-text);
+}
+
+.railItem:focus-visible {
+  outline: 2px solid var(--perfect-focus-ring);
+  outline-offset: -2px;
+}
+
+.railItem[data-active] {
+  /* raised so the sliding pill always paints above sibling items */
+  z-index: 1;
+  color: var(--perfect-accent-text);
+  font-weight: var(--perfect-font-weight-medium);
+}
+
+.railItem:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* the active pill: one layout element that slides between items, behind the row
+   content which is lifted above it */
+.indicator {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--perfect-accent-soft);
+  border-radius: var(--perfect-radius-md);
+}
+
+.railIcon,
+.railLabel {
+  position: relative;
+  z-index: 1;
+}
+
+.railIcon {
+  flex: none;
+  display: inline-flex;
+  width: 1.125rem;
+  height: 1.125rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.railLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* scrollable right pane: the active section scrolls here, the rail does not */
+.pane {
+  min-width: 0;
+  max-height: 24rem;
+  overflow: auto;
+  padding-inline-end: var(--perfect-space-2);
+  color: var(--perfect-text);
+  font-size: var(--perfect-font-size-sm);
+  line-height: var(--perfect-leading-md);
+}
+
+.pane:focus-visible {
+  outline: 2px solid var(--perfect-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--perfect-radius-sm);
+}

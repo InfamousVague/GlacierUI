@@ -1,0 +1,98 @@
+.root {
+  position: relative;
+  /* The fade width at each edge; sits on the space scale. */
+  --scroll-fade: var(--perfect-space-6);
+  min-height: 0;
+  min-width: 0;
+  font-family: var(--perfect-font-sans);
+  color: var(--perfect-text);
+}
+
+/* The scrolling viewport. A CSS mask, driven by the root's data-fade-*
+   attributes, dissolves the content toward whichever edge can still scroll. */
+.viewport {
+  overflow: auto;
+  overscroll-behavior: contain;
+  /* mask defaults to fully opaque; each fade edge is layered in below */
+  --mask-start: transparent 0;
+  --mask-end: #000 0;
+  scrollbar-width: thin;
+  scrollbar-color: var(--perfect-border-strong) transparent;
+}
+
+.viewport:focus-visible {
+  outline: 2px solid var(--perfect-focus-ring);
+  outline-offset: -2px;
+  border-radius: var(--perfect-radius-sm);
+}
+
+.vertical .viewport {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.horizontal .viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* --- fade masks -------------------------------------------------------------
+   Only the edges that can still scroll get a transparent-to-opaque ramp. */
+.vertical[data-fade-start='true'] .viewport {
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--scroll-fade), #000 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--scroll-fade), #000 100%);
+}
+
+.vertical[data-fade-end='true'] .viewport {
+  mask-image: linear-gradient(to top, transparent 0, #000 var(--scroll-fade), #000 100%);
+  -webkit-mask-image: linear-gradient(to top, transparent 0, #000 var(--scroll-fade), #000 100%);
+}
+
+.vertical[data-fade-start='true'][data-fade-end='true'] .viewport {
+  mask-image: linear-gradient(to bottom, transparent 0, #000 var(--scroll-fade), #000 calc(100% - var(--scroll-fade)), transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--scroll-fade), #000 calc(100% - var(--scroll-fade)), transparent 100%);
+}
+
+.horizontal[data-fade-start='true'] .viewport {
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--scroll-fade), #000 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--scroll-fade), #000 100%);
+}
+
+.horizontal[data-fade-end='true'] .viewport {
+  mask-image: linear-gradient(to left, transparent 0, #000 var(--scroll-fade), #000 100%);
+  -webkit-mask-image: linear-gradient(to left, transparent 0, #000 var(--scroll-fade), #000 100%);
+}
+
+.horizontal[data-fade-start='true'][data-fade-end='true'] .viewport {
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--scroll-fade), #000 calc(100% - var(--scroll-fade)), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--scroll-fade), #000 calc(100% - var(--scroll-fade)), transparent 100%);
+}
+
+/* --- WebKit scrollbar (thin, themed) --------------------------------------- */
+.viewport::-webkit-scrollbar {
+  width: var(--perfect-space-2);
+  height: var(--perfect-space-2);
+}
+
+.viewport::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.viewport::-webkit-scrollbar-thumb {
+  background: var(--perfect-border);
+  border-radius: var(--perfect-radius-full);
+}
+
+.viewport::-webkit-scrollbar-thumb:hover {
+  background: var(--perfect-border-strong);
+}
+
+.viewport::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewport {
+    scroll-behavior: auto;
+  }
+}

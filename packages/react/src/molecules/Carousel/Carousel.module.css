@@ -1,0 +1,61 @@
+.root {
+  position: relative;
+}
+
+.scroller {
+  display: flex;
+  gap: var(--carousel-gap, var(--perfect-space-4));
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  /* pad so snapped cards clear the overlaid controls without clipping shadows */
+  padding: var(--perfect-space-1);
+  margin: calc(-1 * var(--perfect-space-1));
+}
+
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.scroller:focus-visible {
+  outline: 2px solid var(--perfect-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--perfect-radius-md);
+}
+
+/* every direct child becomes a snap target that keeps its intrinsic width */
+.scroller > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+.control {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  transform: translateY(-50%);
+  box-shadow: var(--perfect-shadow-3);
+  opacity: 1;
+  transition:
+    opacity var(--perfect-duration-fast) var(--perfect-ease-out),
+    visibility var(--perfect-duration-fast) var(--perfect-ease-out);
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+/* controls fade out entirely when the strip fits with nothing to scroll */
+.control[data-hidden] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}

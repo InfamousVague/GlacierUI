@@ -58,6 +58,19 @@ export * from './components/toast.ts';
 export * from './components/toggle.ts';
 export * from './components/toolbar.ts';
 export * from './components/tooltip.ts';
+export * from './components/badge.ts';
+export * from './components/stat-tile.ts';
+export * from './components/device-frame.ts';
+export * from './components/filter-chip.ts';
+export * from './components/scroll-area.ts';
+export * from './components/carousel.ts';
+export * from './components/heatmap.ts';
+export * from './components/spotlight.ts';
+export * from './components/floating-panel.ts';
+export * from './components/tabbed-panel.ts';
+export * from './components/tabbed-modal.ts';
+export * from './components/tab-strip.ts';
+export * from './components/resizable-split-pane.ts';
 
 import type { ComponentSpec } from './schema.ts';
 import { appShellSpec } from './components/app-shell.ts';
@@ -107,6 +120,19 @@ import { toastSpec } from './components/toast.ts';
 import { toggleSpec } from './components/toggle.ts';
 import { toolbarSpec } from './components/toolbar.ts';
 import { tooltipSpec } from './components/tooltip.ts';
+import { badgeSpec } from './components/badge.ts';
+import { statTileSpec } from './components/stat-tile.ts';
+import { deviceFrameSpec } from './components/device-frame.ts';
+import { filterChipSpec } from './components/filter-chip.ts';
+import { scrollAreaSpec } from './components/scroll-area.ts';
+import { carouselSpec } from './components/carousel.ts';
+import { heatmapSpec } from './components/heatmap.ts';
+import { spotlightSpec } from './components/spotlight.ts';
+import { floatingPanelSpec } from './components/floating-panel.ts';
+import { tabbedPanelSpec } from './components/tabbed-panel.ts';
+import { tabbedModalSpec } from './components/tabbed-modal.ts';
+import { tabStripSpec } from './components/tab-strip.ts';
+import { resizableSplitPaneSpec } from './components/resizable-split-pane.ts';
 
 /** Bump when the schema shape changes in a breaking way. */
 export const SPEC_VERSION = '0.1.0';
@@ -166,6 +192,22 @@ export const specs: ComponentSpec[] = [
   popoverSpec,
   menuSpec,
   appShellSpec,
+  // new atoms
+  badgeSpec,
+  statTileSpec,
+  deviceFrameSpec,
+  filterChipSpec,
+  // new molecules
+  scrollAreaSpec,
+  carouselSpec,
+  heatmapSpec,
+  spotlightSpec,
+  // new organisms
+  floatingPanelSpec,
+  tabbedPanelSpec,
+  tabbedModalSpec,
+  tabStripSpec,
+  resizableSplitPaneSpec,
   // structures
   sidebarSpec,
   toolbarSpec,

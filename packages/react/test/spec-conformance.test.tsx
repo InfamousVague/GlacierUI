@@ -58,6 +58,19 @@ import {
   Popover,
   Menu,
   MenuItem,
+  Badge,
+  StatTile,
+  DeviceFrame,
+  FilterChip,
+  ScrollArea,
+  Carousel,
+  Heatmap,
+  Spotlight,
+  FloatingPanel,
+  TabbedPanel,
+  TabbedModal,
+  TabStrip,
+  ResizableSplitPane,
   AppShell,
   Sidebar,
   SidebarSection,
@@ -187,6 +200,66 @@ const RENDER: Record<string, Renderer> = {
         <SidebarItem>Home</SidebarItem>
       </SidebarSection>
     </Sidebar>
+  ),
+  badge: (o) => (
+    <Badge tone={o.tone as never} variant={o.variant as never} size={o.size as never}>
+      Label
+    </Badge>
+  ),
+  'stat-tile': () => <StatTile value="12,480" label="Total users" />,
+  'device-frame': () => (
+    <DeviceFrame aria-label="Preview">
+      <div>Screen</div>
+    </DeviceFrame>
+  ),
+  'filter-chip': () => <FilterChip count={3}>Open</FilterChip>,
+  'scroll-area': () => <ScrollArea maxHeight={100}>Scrollable content</ScrollArea>,
+  carousel: () => (
+    <Carousel aria-label="Featured">
+      <Card>A</Card>
+    </Carousel>
+  ),
+  heatmap: () => <Heatmap aria-label="Activity" data={[[0, 3, 6, 9]]} legend />,
+  spotlight: () => (
+    <Spotlight open={false} targetRef={{ current: null } as never} onClose={() => {}} title="Tip" description="Body" />
+  ),
+  'floating-panel': () => (
+    <FloatingPanel open={false} title="Panel" onClose={() => {}}>
+      Body
+    </FloatingPanel>
+  ),
+  'tabbed-panel': () => (
+    <TabbedPanel
+      aria-label="Report"
+      tabs={[
+        { id: 'a', label: 'One', content: 'First' },
+        { id: 'b', label: 'Two', count: 3, content: 'Second' },
+      ]}
+    />
+  ),
+  'tabbed-modal': () => (
+    <TabbedModal
+      open={false}
+      onClose={() => {}}
+      title="Settings"
+      sections={[{ id: 'general', label: 'General', content: 'Body' }]}
+    />
+  ),
+  'tab-strip': () => (
+    <TabStrip
+      aria-label="Files"
+      tabs={[
+        { id: 'a', label: 'Alpha' },
+        { id: 'b', label: 'Bravo' },
+      ]}
+      onClose={() => {}}
+    />
+  ),
+  'resizable-split-pane': () => (
+    <ResizableSplitPane aria-label="Resize">
+      <div>Start</div>
+      <div>End</div>
+    </ResizableSplitPane>
   ),
 };
 

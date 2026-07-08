@@ -34,6 +34,10 @@ export { Banner, type BannerProps, type BannerTone } from './atoms/Banner/Banner
 export { EmptyState, type EmptyStateProps } from './atoms/EmptyState/EmptyState.tsx';
 export { Steps, type StepsProps, type StepsTone, type StepsSize } from './atoms/Steps/Steps.tsx';
 export { RadioCard, type RadioCardProps } from './atoms/RadioCard/RadioCard.tsx';
+export { Badge, type BadgeProps, type BadgeTone, type BadgeVariant } from './atoms/Badge/Badge.tsx';
+export { StatTile, type StatTileProps } from './atoms/StatTile/StatTile.tsx';
+export { DeviceFrame, type DeviceFrameProps, type DeviceFrameSize } from './atoms/DeviceFrame/DeviceFrame.tsx';
+export { FilterChip, type FilterChipProps } from './atoms/FilterChip/FilterChip.tsx';
 
 // molecules
 export { Field, type FieldProps } from './molecules/Field/Field.tsx';
@@ -43,6 +47,10 @@ export {
   type SegmentedControlProps,
   type SegmentedOption,
 } from './molecules/Segmented/SegmentedControl.tsx';
+export { ScrollArea, type ScrollAreaProps, type ScrollAreaOrientation } from './molecules/ScrollArea/ScrollArea.tsx';
+export { Carousel, type CarouselProps } from './molecules/Carousel/Carousel.tsx';
+export { Heatmap, type HeatmapProps, type HeatmapData, type HeatmapPoint } from './molecules/Heatmap/Heatmap.tsx';
+export { Spotlight, type SpotlightProps } from './molecules/Spotlight/Spotlight.tsx';
 export { Select, type SelectProps, type SelectOption } from './molecules/Select/Select.tsx';
 export { Tabs, type TabsProps, type TabItem } from './molecules/Tabs/Tabs.tsx';
 export { Tooltip, type TooltipProps } from './molecules/Tooltip/Tooltip.tsx';
@@ -97,4 +105,13 @@ export {
   type MenuProps,
   type MenuItemProps,
 } from './organisms/Menu/Menu.tsx';
+export { FloatingPanel, type FloatingPanelProps } from './organisms/FloatingPanel/FloatingPanel.tsx';
+export { TabbedPanel, type TabbedPanelProps, type TabbedPanelTab } from './organisms/TabbedPanel/TabbedPanel.tsx';
+export { TabbedModal, type TabbedModalProps, type TabbedModalSection } from './organisms/TabbedModal/TabbedModal.tsx';
+export { TabStrip, type TabStripProps, type TabStripItem } from './organisms/TabStrip/TabStrip.tsx';
+export {
+  ResizableSplitPane,
+  type ResizableSplitPaneProps,
+  type SplitOrientation,
+} from './organisms/ResizableSplitPane/ResizableSplitPane.tsx';
 export type { Placement } from './internal/useAnchoredPosition.ts';

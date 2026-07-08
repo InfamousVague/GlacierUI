@@ -1,0 +1,111 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  border-radius: var(--perfect-radius-xl);
+  background: var(--perfect-surface-raised);
+  color: var(--perfect-text);
+  font-family: var(--perfect-font-sans);
+  box-shadow: var(--perfect-shadow-1);
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: stretch;
+  gap: var(--perfect-space-2);
+  padding-inline: var(--perfect-space-2);
+  border-bottom: var(--perfect-hairline) solid var(--perfect-border-subtle);
+  background: var(--perfect-surface);
+}
+
+.list {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: var(--perfect-space-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.list::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--perfect-space-2);
+  padding: var(--perfect-space-3) var(--perfect-space-4);
+  border: none;
+  background: transparent;
+  color: var(--perfect-text-muted);
+  font-family: var(--perfect-font-sans);
+  font-size: var(--perfect-font-size-sm);
+  font-weight: var(--perfect-font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  border-radius: var(--perfect-radius-md) var(--perfect-radius-md) 0 0;
+  transition: color var(--perfect-duration-fast) var(--perfect-ease-out);
+}
+
+.tab:hover:not(:disabled) {
+  color: var(--perfect-text);
+}
+
+.tab[aria-selected='true'] {
+  color: var(--perfect-text);
+}
+
+.tab:disabled {
+  color: var(--perfect-text-disabled);
+  cursor: not-allowed;
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--perfect-focus-ring);
+  outline-offset: -2px;
+}
+
+.tabLabel {
+  min-width: 0;
+}
+
+.count {
+  flex: none;
+}
+
+/* the underline sitting on the header's bottom hairline */
+.indicator {
+  position: absolute;
+  left: var(--perfect-space-2);
+  right: var(--perfect-space-2);
+  bottom: calc(-1 * var(--perfect-hairline));
+  height: 2px;
+  border-radius: var(--perfect-radius-full);
+  background: var(--perfect-accent-solid);
+}
+
+.actions {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--perfect-space-2);
+  padding-block: var(--perfect-space-2);
+}
+
+.body {
+  padding: var(--perfect-space-5);
+  min-width: 0;
+}
+
+.body:focus-visible {
+  outline: 2px solid var(--perfect-focus-ring);
+  outline-offset: -2px;
+  border-radius: var(--perfect-radius-sm);
+}
