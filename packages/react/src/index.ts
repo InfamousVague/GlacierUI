@@ -89,4 +89,12 @@ export { Toolbar, type ToolbarProps } from './structures/Toolbar/Toolbar.tsx';
 export { Modal, type ModalProps } from './organisms/Modal/Modal.tsx';
 export { AppShell, type AppShellProps } from './organisms/AppShell/AppShell.tsx';
 export { Popover, type PopoverProps } from './organisms/Popover/Popover.tsx';
+export {
+  Menu,
+  MenuItem,
+  MenuSeparator,
+  MenuLabel,
+  type MenuProps,
+  type MenuItemProps,
+} from './organisms/Menu/Menu.tsx';
 export type { Placement } from './internal/useAnchoredPosition.ts';

@@ -56,6 +56,8 @@ import {
   Tabs,
   Modal,
   Popover,
+  Menu,
+  MenuItem,
   AppShell,
   Sidebar,
   SidebarSection,
@@ -173,6 +175,11 @@ const RENDER: Record<string, Renderer> = {
     </Modal>
   ),
   popover: () => <Popover trigger={<button type="button">Open</button>}>Content</Popover>,
+  menu: () => (
+    <Menu trigger={<button type="button">Open</button>}>
+      <MenuItem>Item</MenuItem>
+    </Menu>
+  ),
   'app-shell': () => <AppShell sidebar={<div>Nav</div>}>Body</AppShell>,
   sidebar: () => (
     <Sidebar>

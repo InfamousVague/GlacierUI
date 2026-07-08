@@ -32,6 +32,7 @@ export * from './components/link.ts';
 export * from './components/meter.ts';
 export * from './components/modal.ts';
 export * from './components/number-input.ts';
+export * from './components/menu.ts';
 export * from './components/pill.ts';
 export * from './components/popover.ts';
 export * from './components/progress-bar.ts';
@@ -80,6 +81,7 @@ import { linkSpec } from './components/link.ts';
 import { meterSpec } from './components/meter.ts';
 import { modalSpec } from './components/modal.ts';
 import { numberInputSpec } from './components/number-input.ts';
+import { menuSpec } from './components/menu.ts';
 import { pillSpec } from './components/pill.ts';
 import { popoverSpec } from './components/popover.ts';
 import { progressBarSpec } from './components/progress-bar.ts';
@@ -162,6 +164,7 @@ export const specs: ComponentSpec[] = [
   // organisms
   modalSpec,
   popoverSpec,
+  menuSpec,
   appShellSpec,
   // structures
   sidebarSpec,
