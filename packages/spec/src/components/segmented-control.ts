@@ -34,9 +34,9 @@ export const segmentedControlSpec: ComponentSpec = {
     { name: 'className', type: 'string', description: 'Extra class on the track.' },
   ],
   sizes: [
-    { name: 'sm', height: 'calc(var(--perfect-control-height-sm) - 0.375rem)', paddingInline: token('space-3'), fontSize: token('font-size-xs') },
-    { name: 'md', height: 'calc(var(--perfect-control-height-md) - 0.375rem)', paddingInline: token('space-4'), fontSize: token('font-size-sm') },
-    { name: 'lg', height: 'calc(var(--perfect-control-height-lg) - 0.375rem)', paddingInline: token('space-5'), fontSize: token('font-size-md') },
+    { name: 'sm', height: 'calc(var(--glacier-control-height-sm) - 0.375rem)', paddingInline: token('space-3'), fontSize: token('font-size-xs') },
+    { name: 'md', height: 'calc(var(--glacier-control-height-md) - 0.375rem)', paddingInline: token('space-4'), fontSize: token('font-size-sm') },
+    { name: 'lg', height: 'calc(var(--glacier-control-height-lg) - 0.375rem)', paddingInline: token('space-5'), fontSize: token('font-size-md') },
   ],
   defaults: { size: 'md', fullWidth: false, skeleton: false, spring: 'snappy', disabled: false },
   // track padding is an off-scale 0.1875rem so the segment plus padding equals the control height

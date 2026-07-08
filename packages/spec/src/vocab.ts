@@ -15,9 +15,9 @@ export function token(name: string): TokenRef {
   return `$${name}`;
 }
 
-/** Resolve a measure to a `var(--perfect-*)` expression, or pass a raw value through. */
+/** Resolve a measure to a `var(--glacier-*)` expression, or pass a raw value through. */
 export function cssValue(measure: Measure): string {
-  return measure.startsWith('$') ? `var(--perfect-${measure.slice(1)})` : measure;
+  return measure.startsWith('$') ? `var(--glacier-${measure.slice(1)})` : measure;
 }
 
 // ---- sizes -----------------------------------------------------------------
@@ -45,7 +45,7 @@ export const controlFontToken: Record<ControlSize, TokenRef> = {
 
 /**
  * Build a control-size spec. Height and font size come from the shared
- * convention; the component supplies only what differs — its inline padding
+ * convention; the component supplies only what differs - its inline padding
  * and optional gap.
  */
 export function controlSize(
@@ -64,7 +64,8 @@ export function controlSize(
 
 /** The semantic color families shared by pills, badges, dots, callouts, meters. */
 export const tones = ['neutral', 'accent', 'success', 'warning', 'danger', 'info'] as const;
-export type Tone = (typeof tones)[number];
+// The `Tone` enum lives in enums.ts; this local union still backs the spec helpers below.
+type Tone = (typeof tones)[number];
 
 const TONE_DESCRIPTION: Record<Tone, string> = {
   neutral: 'The default, low-emphasis gray family.',

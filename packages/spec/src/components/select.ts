@@ -32,6 +32,7 @@ export const selectSpec: ComponentSpec = {
     { name: 'fullWidth', type: 'boolean', default: false, description: 'Stretches the trigger to the container width.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Dims the trigger and blocks opening the menu.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material on the trigger instead of a solid surface.' },
     { name: 'name', type: 'string', description: 'Submitted with forms via a hidden input when set.' },
     { name: 'id', type: 'string', description: 'Id for the trigger; falls back to the field context id.' },
     { name: 'aria-label', type: 'string', description: 'Accessible name for the trigger and listbox.' },
@@ -42,7 +43,7 @@ export const selectSpec: ComponentSpec = {
     controlSize('md', { paddingInline: token('space-4') }),
     controlSize('lg', { paddingInline: token('space-5') }),
   ],
-  defaults: { placeholder: 'Select…', size: 'md', fullWidth: false, disabled: false, skeleton: false },
+  defaults: { placeholder: 'Select…', size: 'md', fullWidth: false, disabled: false, skeleton: false, glass: false },
   // trigger radius and menu geometry that do not vary with control size
   dimensions: {
     radius: token('radius-lg'),
@@ -78,7 +79,7 @@ export const selectSpec: ComponentSpec = {
     'border', 'border-strong', 'focus-ring', 'danger-border',
     'surface', 'surface-sunken', 'text', 'text-subtle', 'text-disabled',
     'accent-solid', 'accent-soft', 'accent-contrast',
-    'glass-thick', 'glass-border', 'glass-highlight', 'glass-saturate', 'blur-lg', 'shadow-4',
+    'glass-regular', 'glass-thick', 'glass-border', 'glass-highlight', 'glass-saturate', 'blur-sm', 'blur-lg', 'shadow-4',
     'duration-fast', 'ease-out',
   ],
   a11y: {

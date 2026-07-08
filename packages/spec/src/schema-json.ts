@@ -9,8 +9,8 @@ const tokenMap = { type: 'object', additionalProperties: { type: 'string', patte
 
 export const schemaJson = {
   $schema: 'http://json-schema.org/draft-07/schema#',
-  $id: 'https://perfect.design/schema/component-spec.json',
-  title: 'Perfect component spec',
+  $id: 'https://glacier.design/schema/component-spec.json',
+  title: 'GlacierUI component spec',
   type: 'object',
   required: ['name', 'id', 'category', 'status', 'summary', 'props'],
   additionalProperties: false,

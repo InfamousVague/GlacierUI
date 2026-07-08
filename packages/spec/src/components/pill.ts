@@ -8,13 +8,20 @@ export const pillSpec: ComponentSpec = {
   id: 'pill',
   category: 'atom',
   status: 'stable',
-  summary: 'A compact capsule label in three variants and every tone, for tags, statuses, and counts.',
+  summary:
+    'A compact capsule label in three variants and every tone - for tags, statuses, and counts - with an optional leading icon and an optional remove button that turns it into a dismissible tag.',
   element: 'span',
-  anatomy: [{ name: 'label', description: 'The pill content, kept to one line.', required: true }],
+  anatomy: [
+    { name: 'icon', description: 'Optional leading glyph, hidden from assistive tech.' },
+    { name: 'label', description: 'The pill content, kept to one line.', required: true },
+    { name: 'remove', description: 'Optional trailing remove button, shown when onRemove is set.' },
+  ],
   props: [
     { name: 'tone', type: 'enum', values: [...toneSpecs().map((t) => t.name)], default: 'neutral', description: 'Semantic color family.' },
     { name: 'variant', type: 'enum', values: pillVariants, default: 'soft', description: 'Fill treatment.' },
     { name: 'size', type: 'enum', values: compactSizes, default: 'md', description: 'Compact size step.' },
+    { name: 'icon', type: 'node', description: 'Leading glyph, hidden from assistive tech.' },
+    { name: 'onRemove', type: 'handler', description: 'When set, renders a trailing remove button that calls this on click, turning the pill into a removable tag.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
     { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
     { name: 'children', type: 'node', required: true, description: 'Pill label.' },
@@ -37,7 +44,12 @@ export const pillSpec: ComponentSpec = {
     'accent-soft', 'accent-text', 'accent-solid', 'accent-border', 'success-soft', 'success-text', 'success-solid',
     'success-contrast', 'success-border', 'warning-soft', 'warning-text', 'warning-solid', 'warning-contrast',
     'warning-border', 'danger-soft', 'danger-text', 'danger-solid', 'danger-contrast', 'danger-border',
-    'info-soft', 'info-text', 'info-solid', 'info-contrast', 'info-border',
+    'info-soft', 'info-text', 'info-solid', 'info-contrast', 'info-border', 'focus-ring', 'duration-fast', 'ease-out',
   ],
-  a11y: { notes: ['Decorative by default; the pill text carries the meaning.'] },
+  a11y: {
+    notes: [
+      'Decorative by default; the pill text carries the meaning.',
+      'When onRemove is set the remove button is labeled from the kit’s translatable Dismiss message and is keyboard reachable.',
+    ],
+  },
 };

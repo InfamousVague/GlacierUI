@@ -46,8 +46,8 @@ export const emptyStateSpec: ComponentSpec = {
     'space-2', 'space-3', 'space-4', 'space-6', 'space-8',
     'radius-full', 'surface-sunken',
     'font-sans', 'font-size-sm', 'font-size-lg', 'font-size-2xl',
-    'font-weight-semibold', 'line-height-normal', 'line-height-relaxed',
-    'text', 'text-secondary',
+    'font-weight-semibold', 'leading-md',
+    'text', 'text-muted',
   ],
   a11y: {
     focusable: false,

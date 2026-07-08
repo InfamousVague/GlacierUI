@@ -64,8 +64,8 @@ export const radioCardSpec: ComponentSpec = {
   ],
   tokens: [
     'space-1', 'space-2', 'space-3', 'space-4', 'space-5', 'hairline', 'radius-lg', 'radius-full',
-    'font-sans', 'font-size-xs', 'font-size-sm', 'font-size-md', 'font-weight-semibold', 'line-height-normal',
-    'text', 'text-secondary', 'surface-raised', 'border-subtle', 'border-strong',
+    'font-sans', 'font-size-xs', 'font-size-sm', 'font-size-md', 'font-weight-semibold', 'leading-md',
+    'text', 'text-muted', 'surface-raised', 'border-subtle', 'border-strong',
     'accent-soft', 'accent-solid', 'accent-text', 'accent-contrast',
     'focus-ring', 'duration-fast', 'ease-out', 'ease-spring',
   ],

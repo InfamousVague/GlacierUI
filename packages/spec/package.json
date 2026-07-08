@@ -1,5 +1,5 @@
 {
-  "name": "@perfect/spec",
+  "name": "@glacier/spec",
   "version": "0.1.0",
   "type": "module",
   "exports": {
@@ -11,6 +11,6 @@
     "gen": "node src/generate.ts"
   },
   "dependencies": {
-    "@perfect/tokens": "*"
+    "@glacier/tokens": "*"
   }
 }

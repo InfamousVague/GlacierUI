@@ -7,7 +7,7 @@ export const tabbedPanelSpec: ComponentSpec = {
   category: 'organism',
   status: 'stable',
   summary:
-    'A framed panel with a header row of tabs — each optionally carrying a count badge — plus a bounded content body that switches per active tab and an optional end slot for actions.',
+    'A framed panel with a header row of tabs - each optionally carrying a count badge - plus a bounded content body that switches per active tab and an optional end slot for actions.',
   element: 'div',
   anatomy: [
     { name: 'panel', description: 'The bordered, rounded frame wrapping the header and body.', required: true },

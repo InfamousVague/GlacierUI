@@ -62,7 +62,7 @@ export const floatingPanelSpec: ComponentSpec = {
     keyboard: [{ keys: 'Escape', action: 'Closes the panel.' }],
     notes: [
       'The panel portals to document.body and renders as role="dialog" labelled by its title via aria-labelledby.',
-      'Non-modal by design: it does not use aria-modal, lock body scroll, trap focus, or render an overlay — the page underneath stays interactive.',
+      'Non-modal by design: it does not use aria-modal, lock body scroll, trap focus, or render an overlay - the page underneath stays interactive.',
       'The grab-bar carries a grab cursor and touch-action:none so pointer-drag works on touch without scrolling the page.',
       'Dragging is pointer-only; keyboard users cannot move the panel, but its position is never load-bearing.',
     ],

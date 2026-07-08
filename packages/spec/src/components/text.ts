@@ -13,6 +13,9 @@ export const textTones = ['default', 'muted', 'subtle', 'accent', 'danger', 'suc
 /** Font weights, exported so bindings share the union. */
 export const textWeights = ['regular', 'medium', 'semibold', 'bold'] as const;
 
+/** Text alignment options, exported so bindings share the union. */
+export const textAligns = ['start', 'center', 'end', 'justify'] as const;
+
 export const textSpec: ComponentSpec = {
   name: 'Text',
   id: 'text',
@@ -26,6 +29,7 @@ export const textSpec: ComponentSpec = {
     { name: 'tone', type: 'enum', values: textTones, default: 'default', description: 'Semantic text color.' },
     { name: 'weight', type: 'enum', values: textWeights, default: 'regular', description: 'Font weight.' },
     { name: 'mono', type: 'boolean', default: false, description: 'Monospace family with tabular numerals, for values and measurements.' },
+    { name: 'align', type: 'enum', values: textAligns, description: 'Text alignment; inherits when unset.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
     { name: 'children', type: 'node', description: 'Text content.' },
   ],

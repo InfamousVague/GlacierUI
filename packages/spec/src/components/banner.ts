@@ -43,7 +43,7 @@ export const bannerSpec: ComponentSpec = {
   ],
   tokens: [
     'space-1', 'space-3', 'space-4', 'hairline', 'radius-lg',
-    'font-sans', 'font-size-sm', 'line-height-normal', 'text-secondary',
+    'font-sans', 'font-size-sm', 'leading-md',
     'hover', 'text-muted', 'border-subtle',
     'accent-soft', 'accent-border', 'accent-text',
     'success-soft', 'success-border', 'success-text',

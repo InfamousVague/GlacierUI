@@ -7,7 +7,7 @@ export const tabStripSpec: ComponentSpec = {
   category: 'organism',
   status: 'stable',
   summary:
-    'A horizontal strip of closable document tabs — like editor or browser tabs — with a springing active indicator, horizontal overflow scrolling, and a per-tab close button.',
+    'A horizontal strip of closable document tabs - like editor or browser tabs - with a springing active indicator, horizontal overflow scrolling, and a per-tab close button.',
   element: 'div',
   anatomy: [
     { name: 'strip', description: 'The role="tablist" container that scrolls horizontally when its tabs overflow.', required: true },

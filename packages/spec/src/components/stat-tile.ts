@@ -11,13 +11,13 @@ export const statTileSpec: ComponentSpec = {
   element: 'div',
   anatomy: [
     { name: 'icon', description: 'Optional leading glyph framed in a muted, sunken disc. Decorative and aria-hidden; omitted when unset.' },
-    { name: 'value', description: 'The prominent figure — a number, currency, or short string — in the primary text color.', required: true },
+    { name: 'value', description: 'The prominent figure - a number, currency, or short string - in the primary text color.', required: true },
     { name: 'hint', description: 'Optional trailing delta or hint aligned to the value baseline, e.g. a change chip or timeframe.' },
     { name: 'label', description: 'The muted label naming what the value measures.', required: true },
   ],
   props: [
     { name: 'icon', type: 'node', description: 'Decorative glyph rendered in the leading disc; the disc is omitted when unset.' },
-    { name: 'value', type: 'node', required: true, description: 'The prominent value — a number, currency, or short string.' },
+    { name: 'value', type: 'node', required: true, description: 'The prominent value - a number, currency, or short string.' },
     { name: 'label', type: 'node', required: true, description: 'The muted label naming what the value measures.' },
     { name: 'hint', type: 'node', description: 'Optional trailing delta or hint on the value baseline.' },
     { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid card.' },
@@ -47,15 +47,15 @@ export const statTileSpec: ComponentSpec = {
     'surface-raised', 'surface-sunken',
     'glass-regular', 'glass-border', 'glass-highlight', 'glass-saturate', 'blur-sm',
     'font-sans', 'font-size-xs', 'font-size-sm', 'font-size-lg', 'font-size-2xl',
-    'font-weight-medium', 'font-weight-semibold', 'line-height-normal',
-    'text', 'text-secondary', 'text-muted',
+    'font-weight-medium', 'font-weight-semibold', 'leading-md',
+    'text', 'text-muted',
   ],
   a11y: {
     focusable: false,
     notes: [
       'A presentational container with no role of its own; the value and label are read in source order, so keep the label a short, literal phrase.',
       'The leading icon disc is decorative and marked aria-hidden, so it is not announced.',
-      'When the hint conveys direction (up or down), do not rely on color alone — include a glyph or sign so the change is legible without color.',
+      'When the hint conveys direction (up or down), do not rely on color alone - include a glyph or sign so the change is legible without color.',
     ],
   },
   motion: {

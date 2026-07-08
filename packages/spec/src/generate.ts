@@ -4,7 +4,7 @@
  *   dist/components/<id>.json one file per component
  *   dist/schema.json          a JSON Schema any language can validate against
  *
- * Run with: npm run gen -w @perfect/spec  (Node runs .ts natively)
+ * Run with: npm run gen -w @glacier/spec  (Node runs .ts natively)
  * Validation runs first, so a malformed spec fails the build instead of
  * shipping. Output is deterministic (no timestamps) so it diffs cleanly.
  */

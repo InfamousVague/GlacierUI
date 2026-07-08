@@ -43,8 +43,8 @@ export const calloutSpec: ComponentSpec = {
   },
   tokens: [
     'space-1', 'space-3', 'space-4', 'space-5', 'hairline', 'radius-lg',
-    'border-subtle', 'surface-sunken', 'font-sans', 'font-size-sm', 'line-height-normal',
-    'font-weight-semibold', 'text', 'text-secondary',
+    'border-subtle', 'surface-sunken', 'font-sans', 'font-size-sm', 'leading-md',
+    'font-weight-semibold', 'text', 'text-muted',
     'info-soft', 'info-border', 'info-text',
     'success-soft', 'success-border', 'success-text',
     'warning-soft', 'warning-border', 'warning-text',

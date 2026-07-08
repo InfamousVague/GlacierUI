@@ -12,8 +12,10 @@ export const buttonSpec: ComponentSpec = {
   summary: 'The primary action control: a labelled, optionally icon-led button in six variants and three sizes.',
   element: 'button',
   anatomy: [
-    { name: 'spinner', description: 'A leading Spinner shown in place of nothing while loading.' },
+    { name: 'leadingIcon', description: 'Optional icon before the label, passed as part of children.' },
+    { name: 'spinner', description: 'A leading Spinner shown before the label while loading.' },
     { name: 'label', description: 'The button text or icon content.', required: true },
+    { name: 'trailingIcon', description: 'Optional icon after the label, passed as part of children.' },
   ],
   props: [
     { name: 'variant', type: 'enum', values: buttonVariants, default: 'solid', description: 'Visual style family.' },

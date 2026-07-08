@@ -2,7 +2,7 @@
  * The Perfect component specification schema.
  *
  * A spec is the language-agnostic contract for one component: its API, its
- * variants and sizes, and — crucially — its measurements expressed in units of
+ * variants and sizes, and - crucially - its measurements expressed in units of
  * the shared token scale rather than raw pixels. Any framework (React, Angular,
  * a Rust or Swift kit) can read a spec plus the token catalog and build the
  * same component. The React kit in this repo is held to its spec by a
@@ -16,7 +16,7 @@
  * A reference to a design token, written as the token name with a leading `$`
  * (for example `$space-4`, `$control-height-md`, `$radius-full`). The `$`
  * marks it as resolvable against the token catalog (tokens.json / the
- * `--perfect-*` custom properties) rather than a literal value. A measurement
+ * `--glacier-*` custom properties) rather than a literal value. A measurement
  * may also be a raw CSS length like `0.5rem` when it genuinely sits off the
  * scale (icon glyphs, hairlines), but token references are strongly preferred.
  */
@@ -141,7 +141,7 @@ export interface ComponentSpec {
   /** Size-independent measurements. */
   dimensions?: Dimensions;
   states?: readonly StateSpec[];
-  /** Every `--perfect-*` token the component consumes, by bare name. */
+  /** Every `--glacier-*` token the component consumes, by bare name. */
   tokens?: readonly string[];
   a11y?: A11ySpec;
   motion?: MotionSpec;

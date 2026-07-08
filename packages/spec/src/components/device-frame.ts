@@ -10,7 +10,7 @@ export const deviceFrameSpec: ComponentSpec = {
   category: 'atom',
   status: 'stable',
   summary:
-    'A decorative phone bezel with a fixed-aspect, inset screen that hosts arbitrary children — a preview, a screenshot, or an iframe — in three preset widths or an explicit width.',
+    'A decorative phone bezel with a fixed-aspect, inset screen that hosts arbitrary children - a preview, a screenshot, or an iframe - in three preset widths or an explicit width.',
   element: 'div',
   anatomy: [
     { name: 'bezel', description: 'The decorative outer shell and inner rim; aria-hidden.' },
@@ -49,7 +49,7 @@ export const deviceFrameSpec: ComponentSpec = {
     focusable: false,
     notes: [
       'The frame is a role="group"; give it an aria-label to name what it presents.',
-      'The bezel, notch, and side buttons are decorative and marked aria-hidden — only the screen contents carry meaning.',
+      'The bezel, notch, and side buttons are decorative and marked aria-hidden - only the screen contents carry meaning.',
       'An embedded iframe still needs its own title for assistive tech.',
     ],
   },

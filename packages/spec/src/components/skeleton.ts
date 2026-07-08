@@ -15,7 +15,7 @@ export const skeletonSpec: ComponentSpec = {
     { name: 'variant', type: 'enum', values: skeletonVariants, default: 'rect', description: 'Shape: text is a 1em line, rect a rounded block, circle a disc.' },
     { name: 'width', type: 'string', description: 'Box width, a CSS length or number of pixels.' },
     { name: 'height', type: 'string', description: 'Box height; defaults to the width for circle, otherwise unset.' },
-    { name: 'radius', type: 'string', description: 'Corner radius override, e.g. var(--perfect-control-radius).' },
+    { name: 'radius', type: 'string', description: 'Corner radius override, e.g. var(--glacier-control-radius).' },
   ],
   variants: [
     { name: 'text', description: 'A 1em-tall line with a small radius, for placeholder text.' },

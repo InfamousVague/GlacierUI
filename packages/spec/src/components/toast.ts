@@ -63,7 +63,7 @@ export const toastSpec: ComponentSpec = {
   tokens: [
     'space-2', 'space-3', 'space-4', 'space-5', 'space-6',
     'hairline', 'radius-full', 'shadow-4',
-    'font-sans', 'font-size-sm', 'line-height-normal', 'font-weight-medium',
+    'font-sans', 'font-size-sm', 'leading-md', 'font-weight-medium',
     'surface-raised', 'border-subtle', 'text',
     'glass-regular', 'glass-border', 'glass-highlight', 'glass-saturate', 'blur-sm',
     'info-soft', 'info-border', 'info-text',

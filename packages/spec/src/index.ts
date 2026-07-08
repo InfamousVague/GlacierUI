@@ -1,5 +1,5 @@
 /**
- * @perfect/spec — the language-agnostic contract for the Perfect kit.
+ * @glacier/spec - the language-agnostic contract for the Perfect kit.
  *
  * Import the specs to render docs or drive a framework binding, or read the
  * generated JSON (dist/spec.json) from any language. The React kit consumes the
@@ -8,6 +8,7 @@
 
 export * from './schema.ts';
 export * from './vocab.ts';
+export * from './enums.ts';
 
 // re-export every component module (each exports its `*Spec` plus any shared
 // enum const arrays, e.g. buttonVariants, textTones, selectSizes)
@@ -58,7 +59,6 @@ export * from './components/toast.ts';
 export * from './components/toggle.ts';
 export * from './components/toolbar.ts';
 export * from './components/tooltip.ts';
-export * from './components/badge.ts';
 export * from './components/stat-tile.ts';
 export * from './components/device-frame.ts';
 export * from './components/filter-chip.ts';
@@ -71,6 +71,8 @@ export * from './components/tabbed-panel.ts';
 export * from './components/tabbed-modal.ts';
 export * from './components/tab-strip.ts';
 export * from './components/resizable-split-pane.ts';
+export * from './components/image.ts';
+export * from './components/rating.ts';
 
 import type { ComponentSpec } from './schema.ts';
 import { appShellSpec } from './components/app-shell.ts';
@@ -120,7 +122,6 @@ import { toastSpec } from './components/toast.ts';
 import { toggleSpec } from './components/toggle.ts';
 import { toolbarSpec } from './components/toolbar.ts';
 import { tooltipSpec } from './components/tooltip.ts';
-import { badgeSpec } from './components/badge.ts';
 import { statTileSpec } from './components/stat-tile.ts';
 import { deviceFrameSpec } from './components/device-frame.ts';
 import { filterChipSpec } from './components/filter-chip.ts';
@@ -133,6 +134,8 @@ import { tabbedPanelSpec } from './components/tabbed-panel.ts';
 import { tabbedModalSpec } from './components/tabbed-modal.ts';
 import { tabStripSpec } from './components/tab-strip.ts';
 import { resizableSplitPaneSpec } from './components/resizable-split-pane.ts';
+import { imageSpec } from './components/image.ts';
+import { ratingSpec } from './components/rating.ts';
 
 /** Bump when the schema shape changes in a breaking way. */
 export const SPEC_VERSION = '0.1.0';
@@ -193,10 +196,11 @@ export const specs: ComponentSpec[] = [
   menuSpec,
   appShellSpec,
   // new atoms
-  badgeSpec,
   statTileSpec,
   deviceFrameSpec,
   filterChipSpec,
+  imageSpec,
+  ratingSpec,
   // new molecules
   scrollAreaSpec,
   carouselSpec,
