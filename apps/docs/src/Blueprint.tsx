@@ -1,6 +1,6 @@
 import { getSpec, type Measure, type SizeSpec } from '@perfect/spec';
 import { useState, type ReactElement } from 'react';
-import { SegmentedControl, Select } from '@perfect/react';
+import { SegmentedControl, Select, Stack } from '@perfect/react';
 
 /**
  * A blueprint-style illustration of a component's box: a schematic drawing with
@@ -370,10 +370,10 @@ export function ComponentBlueprint({ specId }: { specId: string }) {
   if (!active) return null;
   const options = items.map((s) => ({ value: s.name, label: s.name }));
   return (
-    <div>
-      {items.length > 1 && (
-        <div style={{ marginBottom: 'var(--perfect-space-4)' }}>
-          {items.length <= 4 ? (
+    <div className="blueprint">
+      <Stack gap={4} align="start">
+        {items.length > 1 &&
+          (items.length <= 4 ? (
             <SegmentedControl
               size="sm"
               aria-label="Blueprint size"
@@ -385,15 +385,14 @@ export function ComponentBlueprint({ specId }: { specId: string }) {
             <div style={{ maxWidth: '12rem' }}>
               <Select aria-label="Blueprint size" value={name} onValueChange={setName} options={options} />
             </div>
-          )}
-        </div>
-      )}
-      <Blueprint
-        size={active}
-        dimensions={spec.dimensions}
-        slots={spec.anatomy?.map((a) => a.name)}
-        shape={RING_IDS.has(spec.id) ? 'ring' : spec.id === 'slider' ? 'slider' : undefined}
-      />
+          ))}
+        <Blueprint
+          size={active}
+          dimensions={spec.dimensions}
+          slots={spec.anatomy?.map((a) => a.name)}
+          shape={RING_IDS.has(spec.id) ? 'ring' : spec.id === 'slider' ? 'slider' : undefined}
+        />
+      </Stack>
     </div>
   );
 }
