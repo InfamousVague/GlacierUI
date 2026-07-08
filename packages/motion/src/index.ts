@@ -1,16 +1,16 @@
 /**
- * @perfect/motion — the kit's micro-animation vocabulary as enums, backed by
- * framer-motion (the `motion` package) and the @perfect/tokens motion tokens.
+ * @glacier/motion - the kit's micro-animation vocabulary as enums, backed by
+ * framer-motion (the `motion` package) and the @glacier/tokens motion tokens.
  *
  * Usage:
  *   import { motion } from 'motion/react';
- *   import { Motion, Speed, Ease, motionProps } from '@perfect/motion';
+ *   import { Motion, Speed, Ease, motionProps } from '@glacier/motion';
  *
  *   <motion.div {...motionProps(Motion.ScaleIn, Speed.Fast)} />
  */
 
 import type { TargetAndTransition, Transition } from 'motion/react';
-import { durations, easings } from '@perfect/tokens';
+import { durations, easings } from '@glacier/tokens';
 
 /** Every micro-animation the kit ships. Values are stable kebab-case ids. */
 export enum Motion {
@@ -30,7 +30,7 @@ export enum Motion {
   Shimmer = 'shimmer',
 }
 
-/** Duration roles — mirror --perfect-duration-*. */
+/** Duration roles - mirror --glacier-duration-*. */
 export enum Speed {
   Instant = 'instant',
   Fast = 'fast',
@@ -39,7 +39,7 @@ export enum Speed {
   Slower = 'slower',
 }
 
-/** Easing roles — mirror --perfect-ease-*. */
+/** Easing roles - mirror --glacier-ease-*. */
 export enum Ease {
   Out = 'out',
   InOut = 'in-out',
@@ -86,7 +86,7 @@ export interface MotionProps {
 /**
  * Ready-to-spread props for a motion element. Entrances/exits carry
  * initial/animate/exit; attention effects (Shake, Pulse, Bounce, Shimmer)
- * animate in place — re-mount (change `key`) to replay one-shots.
+ * animate in place - re-mount (change `key`) to replay one-shots.
  */
 export function motionProps(kind: Motion, speed?: Speed, ease?: Ease): MotionProps {
   const t = (fallbackSpeed: Speed, fallbackEase: Ease) =>
@@ -140,7 +140,7 @@ export function motionProps(kind: Motion, speed?: Speed, ease?: Ease): MotionPro
   }
 }
 
-/** Tactile press feedback — spread onto any motion element. */
+/** Tactile press feedback - spread onto any motion element. */
 export const press = {
   whileTap: { scale: 0.97 },
   transition: transition(Speed.Fast, Ease.Out),

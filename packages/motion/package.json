@@ -1,12 +1,12 @@
 {
-  "name": "@perfect/motion",
+  "name": "@glacier/motion",
   "version": "0.1.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@perfect/tokens": "*",
+    "@glacier/tokens": "*",
     "motion": "^12.23.0"
   },
   "peerDependencies": {
