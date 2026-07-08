@@ -184,7 +184,7 @@ import { Spring } from '@glacier/motion';
         title="Header and footer"
         description="The header and footer slots stay pinned while the body scrolls. Use them for a brand mark up top and a settings link at the bottom."
         code={`<Sidebar
-  header={<div style={{ fontWeight: 700, fontSize: '1.125rem' }}>Perfect</div>}
+  header={<div style={{ fontWeight: 700, fontSize: '1.125rem' }}>GlacierUI</div>}
   footer={<SidebarItem icon={settingsIcon}>Settings</SidebarItem>}
 >
   <SidebarSection title="Workspace">
@@ -195,7 +195,7 @@ import { Spring } from '@glacier/motion';
       >
         <Frame>
           <Sidebar
-            header={<div style={{ fontWeight: 700, fontSize: '1.125rem' }}>Perfect</div>}
+            header={<div style={{ fontWeight: 700, fontSize: '1.125rem' }}>GlacierUI</div>}
             footer={<SidebarItem icon={settingsIcon}>Settings</SidebarItem>}
           >
             <SidebarSection title="Workspace">

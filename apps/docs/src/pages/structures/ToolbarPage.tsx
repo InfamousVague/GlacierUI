@@ -95,13 +95,13 @@ export function ToolbarPage() {
     surface
     end={<Button variant={Variant.Soft}>Sign in</Button>}
   >
-    <Text weight="semibold">Perfect</Text>
+    <Text weight="semibold">GlacierUI</Text>
   </Toolbar>
 </Box>`}
       >
         <Box width="full" border radius="lg">
           <Toolbar border surface end={<Button variant={Variant.Soft}>Sign in</Button>}>
-            <Text weight="semibold">Perfect</Text>
+            <Text weight="semibold">GlacierUI</Text>
           </Toolbar>
         </Box>
       </Example>

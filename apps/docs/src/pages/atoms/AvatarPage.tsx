@@ -70,11 +70,11 @@ export function AvatarPage() {
           </>
         }
         code={`<Avatar shape="circle" name="Ada Lovelace" />
-<Avatar shape="rounded" name="Perfect Team" />`}
+<Avatar shape="rounded" name="GlacierUI Team" />`}
       >
         <Row gap={4} wrap>
           <Avatar shape="circle" name="Ada Lovelace" />
-          <Avatar shape="rounded" name="Perfect Team" />
+          <Avatar shape="rounded" name="GlacierUI Team" />
         </Row>
       </Example>
 

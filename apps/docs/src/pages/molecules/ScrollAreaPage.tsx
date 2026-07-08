@@ -2,7 +2,7 @@ import { ScrollArea, Heading, Text, Size, TextTone } from '@glacier/react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
 
 const paragraphs = [
-  'Perfect keeps every measurement on a shared token scale, so a scroll area caps its viewport in the same units as everything else.',
+  'GlacierUI keeps every measurement on a shared token scale, so a scroll area caps its viewport in the same units as everything else.',
   'The edge fades are pure CSS masks driven by a scroll listener, so they cost nothing until the content actually overflows.',
   'A ResizeObserver watches both the viewport and its content, which keeps the fades honest as fonts load or the layout reflows.',
   'The viewport is a focusable group, so a keyboard user can scroll it with the arrow keys without ever reaching for a pointer.',

@@ -824,6 +824,22 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
       {slots?.includes('leadingIcon') && <IconSlot x={leadIconX} cy={iconY} placeholder={inlineIcons} />}
       {slots?.includes('trailingIcon') && <IconSlot x={trailIconX} cy={iconY} placeholder={inlineIcons} />}
 
+      {/* the label slot: show the button's real text where the label sits, between
+          the leading and trailing icon slots */}
+      {id === 'button' && slots?.includes('label') && (
+        <text
+          x={BX + pIn + cw / 2}
+          y={iconY}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill={C.text}
+          stroke="none"
+          style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 15, fontWeight: 600 }}
+        >
+          Button
+        </text>
+      )}
+
       {/* height on the left */}
       {height && <VDim x={BX - 34} y1={BY} y2={BY + BH} label={height} />}
       {/* width span on top (content-sized, but the box width is shown) */}

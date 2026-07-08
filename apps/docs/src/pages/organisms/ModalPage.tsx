@@ -6,7 +6,7 @@ export function ModalPage() {
   const [basicOpen, setBasicOpen] = useState(false);
   const [sizeOpen, setSizeOpen] = useState<'sm' | 'md' | 'lg' | null>(null);
   const [formOpen, setFormOpen] = useState(false);
-  const [projectName, setProjectName] = useState('Perfect UI Kit');
+  const [projectName, setProjectName] = useState('GlacierUI Kit');
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   return (
@@ -95,7 +95,7 @@ const [open, setOpen] = useState(false);
         title="Form"
         description="Field and Input work inside the body without extra wiring. Cancel is a ghost button, and the solid Save button sits rightmost as the primary action."
         code={`const [open, setOpen] = useState(false);
-const [name, setName] = useState('Perfect UI Kit');
+const [name, setName] = useState('GlacierUI Kit');
 
 <Button onClick={() => setOpen(true)}>Rename project</Button>
 <Modal

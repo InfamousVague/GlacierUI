@@ -483,8 +483,14 @@ code {
 
 .bpGalleryGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--glacier-space-4);
+}
+
+@media (max-width: 720px) {
+  .bpGalleryGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .bpGalleryCard {
@@ -523,42 +529,26 @@ code {
 }
 
 .bpGalleryFigure {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 150px;
-  overflow: hidden;
-  border-radius: var(--glacier-radius-md);
+  display: block;
 }
 
-/* The blueprint renders its own framed SVG; drop its page margin and let the
-   figure box scale it down to a consistent thumbnail. */
+/* The blueprint renders its own framed SVG; drop its page margin so the frame
+   sits flush in the card and fills the width at its natural height (no fixed
+   height + overflow, which cropped the frame's top and bottom borders). */
 .bpGalleryFigure .blueprint {
   margin: 0;
-  width: 100%;
-}
-
-.bpGalleryFigure .bpFrame {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.bpGalleryFigure .bpSvg {
-  width: auto;
-  max-width: 100%;
-  max-height: 100%;
 }
 
 .bpGalleryTitle {
-  font-weight: var(--glacier-font-weight-medium, 500);
-  font-size: var(--glacier-font-size-sm, 0.875rem);
+  font-weight: var(--glacier-font-weight-semibold, 600);
+  font-size: var(--glacier-font-size-md, 1rem);
   color: var(--glacier-text);
 }
 
-.bpGallerySentinel {
-  height: 1px;
+.bpGalleryBlurb {
+  font-size: var(--glacier-font-size-sm, 0.875rem);
+  line-height: var(--glacier-leading-sm, 1.5);
+  color: var(--glacier-text-muted);
 }
 
 @media (prefers-reduced-motion: reduce) {
