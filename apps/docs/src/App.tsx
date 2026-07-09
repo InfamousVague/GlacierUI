@@ -2,7 +2,9 @@ import { accentOptions } from '@glacier/tokens';
 import {
   AppShell, Button, Container, LocaleProvider, Row, Sidebar, SidebarItem, SidebarSection, Spacer, locales, useT, type Locale, Size, Variant } from '@glacier/react';
 import { Settings } from '@glacier/icons';
-import { useEffect, useMemo, useState } from 'react';
+import glacierLogoFull from '../../../packages/assets/glacier_logo_blue.png';
+import glacierLogoText from '../../../packages/assets/logo_text.png';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { DEFAULT_PREFERENCES, PreferencesModal, type Preferences } from './PreferencesModal.tsx';
 import { DocSearch } from './DocSearch.tsx';
 import { LanguageSelect } from './LanguageSelect.tsx';
@@ -67,6 +69,10 @@ import { ScrollAreaPage } from './pages/molecules/ScrollAreaPage.tsx';
 import { CarouselPage } from './pages/molecules/CarouselPage.tsx';
 import { HeatmapPage } from './pages/molecules/HeatmapPage.tsx';
 import { SpotlightPage } from './pages/molecules/SpotlightPage.tsx';
+import { BreadcrumbsPage } from './pages/molecules/BreadcrumbsPage.tsx';
+import { PaginationPage } from './pages/molecules/PaginationPage.tsx';
+import { AccordionPage } from './pages/molecules/AccordionPage.tsx';
+import { TablePage } from './pages/organisms/TablePage.tsx';
 
 // Organisms
 import { ModalPage } from './pages/organisms/ModalPage.tsx';
@@ -138,6 +144,10 @@ const PAGES = {
   carousel: { title: 'Carousel', group: 'Molecules', el: <CarouselPage /> },
   heatmap: { title: 'Heatmap', group: 'Molecules', el: <HeatmapPage /> },
   spotlight: { title: 'Spotlight', group: 'Molecules', el: <SpotlightPage /> },
+  breadcrumbs: { title: 'Breadcrumbs', group: 'Molecules', el: <BreadcrumbsPage /> },
+  pagination: { title: 'Pagination', group: 'Molecules', el: <PaginationPage /> },
+  accordion: { title: 'Accordion', group: 'Molecules', el: <AccordionPage /> },
+  table: { title: 'Table', group: 'Organisms', el: <TablePage /> },
   floatingpanel: { title: 'Floating Panel', group: 'Organisms', el: <FloatingPanelPage /> },
   tabbedpanel: { title: 'Tabbed Panel', group: 'Organisms', el: <TabbedPanelPage /> },
   tabbedmodal: { title: 'Tabbed Modal', group: 'Organisms', el: <TabbedModalPage /> },
@@ -232,6 +242,31 @@ export function App() {
   );
 }
 
+function SidebarBrand() {
+  const [scrolled, setScrolled] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const sidebar = root.closest('[data-docs-sidebar]') as HTMLElement | null;
+    const body = sidebar?.children[1] as HTMLElement | null;
+    if (!body) return;
+
+    const onScroll = () => setScrolled(body.scrollTop > 8);
+    body.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => body.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <div ref={rootRef} className={`brandLogo${scrolled ? ' scrolled' : ''}`}>
+      <img src={glacierLogoFull} alt="Glacier logo" className="brandLogoFull" />
+      <img src={glacierLogoText} alt="Glacier text logo" className="brandLogoText" />
+    </div>
+  );
+}
+
 function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (next: Locale) => void }) {
   const t = useT();
   const searchItems = useMemo(
@@ -310,11 +345,12 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
 
   const sidebar = (
     <Sidebar
+      className="docsSidebar"
+      data-docs-sidebar="true"
       header={
-        <h1 className="brand">
-          GlacierUI
-          <small>{t(m.brandTagline)}</small>
-        </h1>
+        <div className="brand">
+          <SidebarBrand />
+        </div>
       }
     >
       {GROUPS.map((group) => (

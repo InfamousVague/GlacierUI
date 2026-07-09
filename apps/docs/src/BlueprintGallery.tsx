@@ -267,6 +267,9 @@ const MOLECULES: GalleryItem[] = [
   { spec: 'carousel', page: 'carousel', title: 'Carousel', blurb: 'A horizontal snap-scroll strip of cards with prev/next controls that appear on overflow.' },
   { spec: 'heatmap', page: 'heatmap', title: 'Heatmap', blurb: 'A grid of level-shaded cells for calendar-style activity, with an optional less-to-more legend.' },
   { spec: 'spotlight', page: 'spotlight', title: 'Spotlight', blurb: 'A guided-tour overlay that dims the screen, cuts out the target, and anchors a step callout.' },
+  { spec: 'breadcrumbs', page: 'breadcrumbs', title: 'Breadcrumbs', blurb: 'A path trail that shows the current location inside a hierarchy and makes navigation feel grounded.' },
+  { spec: 'pagination', page: 'pagination', title: 'Pagination', blurb: 'A compact pager for moving through pages of results or content without losing context.' },
+  { spec: 'accordion', page: 'accordion', title: 'Accordion', blurb: 'A stack of disclosure panels that expand to reveal more detail in place.' },
 ];
 
 const ORGANISMS: GalleryItem[] = [
@@ -278,6 +281,7 @@ const ORGANISMS: GalleryItem[] = [
   { spec: 'tabbed-modal', page: 'tabbedmodal', title: 'Tabbed Modal', blurb: 'A modal with a fixed left rail of sections and a scrolling content pane.' },
   { spec: 'tab-strip', page: 'tabstrip', title: 'Tab Strip', blurb: 'A scrollable row of closable tabs with icons and a springing active underline.' },
   { spec: 'resizable-split-pane', page: 'resizablesplitpane', title: 'Resizable Split Pane', blurb: 'Two panes divided by a draggable separator that resizes them by ratio.' },
+  { spec: 'table', page: 'table', title: 'Table', blurb: 'A semantic table for rows of structured data, with accessible headers and a caption slot.' },
 ];
 
 const SECTIONS: Section[] = [

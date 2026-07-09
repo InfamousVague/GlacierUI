@@ -2142,6 +2142,84 @@ function ImageBlueprint({ size }: BlueprintProps) {
   );
 }
 
+// Breadcrumbs: a short chain of linked steps separated by a slash.
+function BreadcrumbsBlueprint({ size }: BlueprintProps) {
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the breadcrumbs">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={60} y={78} width={304} height={56} rx={12} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <text x={94} y={110} className="bpLabel" fill={C.text}>Home</text>
+      <text x={164} y={110} className="bpLabel" fill={C.text}>/</text>
+      <text x={196} y={110} className="bpLabel" fill={C.text}>Docs</text>
+      <text x={248} y={110} className="bpLabel" fill={C.text}>/</text>
+      <text x={278} y={110} className="bpLabel" fill={C.text}>Components</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={['separator: /']} />
+    </svg>
+  );
+}
+
+// Pagination: a previous/next pair around a compact set of page-number buttons.
+function PaginationBlueprint({ size }: BlueprintProps) {
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the pagination">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={70} y={88} width={72} height={34} rx={17} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <rect x={156} y={88} width={34} height={34} rx={17} fill={C.content} fillOpacity={0.32} stroke={C.edge} strokeWidth={1.25} />
+      <rect x={204} y={88} width={34} height={34} rx={17} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <rect x={252} y={88} width={34} height={34} rx={17} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <rect x={300} y={88} width={76} height={34} rx={17} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <text x={106} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>Prev</text>
+      <text x={173} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>2</text>
+      <text x={221} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>3</text>
+      <text x={269} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>4</text>
+      <text x={338} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>Next</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={['page: 2', 'total: 20']} />
+    </svg>
+  );
+}
+
+// Accordion: a row of disclosure headers and one open panel body.
+function AccordionBlueprint({ size }: BlueprintProps) {
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the accordion">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={72} y={56} width={256} height={42} rx={12} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <rect x={72} y={108} width={256} height={72} rx={12} fill={C.content} fillOpacity={0.1} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <text x={102} y={82} className="bpLabel" fill={C.text}>Section one</text>
+      <text x={102} y={140} className="bpLabel" fill={C.text}>Details</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={['open: one', 'collapsed: rest']} />
+    </svg>
+  );
+}
+
+// Table: a semantic grid with a header row and two body rows.
+function TableBlueprint({ size }: BlueprintProps) {
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the table">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={56} y={54} width={288} height={112} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <line x1={56} y1={90} x2={344} y2={90} stroke={C.line} strokeWidth={1.25} />
+      <line x1={56} y1={122} x2={344} y2={122} stroke={C.line} strokeWidth={1.25} />
+      <line x1={56} y1={154} x2={344} y2={154} stroke={C.line} strokeWidth={1.25} />
+      <text x={92} y={76} className="bpLabel" fill={C.text}>Name</text>
+      <text x={232} y={76} className="bpLabel" fill={C.text}>Status</text>
+      <text x={92} y={108} className="bpLabel" fill={C.text}>Ada</text>
+      <text x={232} y={108} className="bpLabel" fill={C.text}>Active</text>
+      <text x={92} y={140} className="bpLabel" fill={C.text}>Grace</text>
+      <text x={232} y={140} className="bpLabel" fill={C.text}>Paused</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={['headers', 'rows']} />
+    </svg>
+  );
+}
+
 // Rating: a row of stars filled to the value (3.5 of 5 here), with a half-filled
 // star to show fractional display and the rest hollow.
 function RatingBlueprint({ size, dimensions }: BlueprintProps) {
@@ -2220,6 +2298,10 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'carousel') return withFrame(<CarouselBlueprint size={size} dimensions={dimensions} />);
   if (id === 'heatmap') return withFrame(<HeatmapBlueprint size={size} dimensions={dimensions} />);
   if (id === 'spotlight') return withFrame(<SpotlightBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'breadcrumbs') return withFrame(<BreadcrumbsBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'pagination') return withFrame(<PaginationBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'accordion') return withFrame(<AccordionBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'table') return withFrame(<TableBlueprint size={size} dimensions={dimensions} />);
   // organisms
   if (id === 'modal') return withFrame(<ModalBlueprint size={size} dimensions={dimensions} />);
   if (id === 'popover') return withFrame(<PopoverBlueprint size={size} dimensions={dimensions} />);
