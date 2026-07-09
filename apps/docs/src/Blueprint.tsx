@@ -988,6 +988,47 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
 }
 
 /** Bar blueprint for thin line atoms (divider, progress bar): thickness + radius. */
+// Textarea: a multi-line field - a taller, more square box with placeholder
+// lines and the vertical resize grip in the bottom-right corner.
+function TextareaBlueprint({ size, dimensions }: BlueprintProps) {
+  const padIn = fmt(size.paddingInline);
+  const radius = fmt(dimensions?.radius);
+  const border = fmt(dimensions?.border);
+  const minHeight = fmt(dimensions?.minHeight);
+  const BW = 150;
+  const BH = 124;
+  const BX = (400 - BW) / 2;
+  const BY = 44;
+  const rr = 12;
+  const pIn = 18;
+  const pBl = 16;
+  const cw = BW - pIn * 2;
+  const rx = BX + BW;
+  const ry = BY + BH;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the textarea">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <Frame x={BX} y={BY} w={BW} h={BH} r={rr} />
+      {/* multi-line placeholder text */}
+      {[0, 1, 2, 3].map((i) => (
+        <Ln key={i} x={BX + pIn} y={BY + pBl + i * 17} w={i === 3 ? cw * 0.55 : cw} h={6} op={0.45} />
+      ))}
+      {/* resize grip, bottom-right corner */}
+      <g stroke={C.line} strokeWidth={1.5} strokeLinecap="round">
+        <line x1={rx - 7} y1={ry - 17} x2={rx - 17} y2={ry - 7} />
+        <line x1={rx - 7} y1={ry - 11} x2={rx - 11} y2={ry - 7} />
+      </g>
+      {/* measurements */}
+      <HDim x1={BX} x2={BX + BW} y={BY - 20} label="width: auto" />
+      {minHeight && <VDim x={BX - 24} y1={BY} y2={BY + BH} label={`min ${minHeight}`} />}
+      <text x={rx + 12} y={ry - 8} className="bpLabel bpMuted">resize</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={200} parts={[radius && `radius: ${radius}`, padIn && `padding: ${padIn}`, border && `border: ${border}`]} />
+    </svg>
+  );
+}
+
 // Skeleton: the loading-placeholder primitive - a little content skeleton
 // (avatar, lines, image block) with a static blue-to-transparent shimmer on
 // each shape.
@@ -1947,6 +1988,7 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'divider') return withFrame(<DividerBlueprint size={size} dimensions={dimensions} />);
   if (id === 'code-block') return withFrame(<CodeBlockBlueprint size={size} dimensions={dimensions} />);
   if (id === 'skeleton') return withFrame(<SkeletonBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'textarea') return withFrame(<TextareaBlueprint size={size} dimensions={dimensions} />);
   if (size.diameter && !size.height) return withFrame(<CircleBlueprint size={size} id={id} />);
   if (size.thickness && !size.height && !size.diameter) return withFrame(<BarBlueprint size={size} dimensions={dimensions} />);
   return withFrame(<BoxBlueprint size={size} dimensions={dimensions} slots={slots} id={id} />);
