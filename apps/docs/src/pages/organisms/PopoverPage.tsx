@@ -1,6 +1,7 @@
 import { Button, Field, IconButton, Input, Popover, Row, SidebarItem, Stack, Text, Heading, Size, TextTone, Variant } from '@glacier/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 export function PopoverPage() {
   const [controlledOpen, setControlledOpen] = useState(false);
@@ -12,6 +13,10 @@ export function PopoverPage() {
         Popover is a floating panel anchored to a trigger. Use it for menus, filters, and rich
         tooltips that need real content instead of a single line of text.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="popover" />
 
       <Heading level={2}>Examples</Heading>
 

@@ -735,6 +735,100 @@ function MeterBlueprint({ size, dimensions }: BlueprintProps) {
   );
 }
 
+// SegmentedBar: one proportional bar split into slices sized by share of the
+// total, with the uncovered remainder painting the empty track. Draw a few
+// example slices with their share labelled inside, plus the height, gap, radius
+// and slice-radius measurements.
+function SegmentedBarBlueprint({ size, dimensions }: BlueprintProps) {
+  const height = fmt(size.height);
+  const gap = fmt(dimensions?.gap);
+  const radius = fmt(dimensions?.radius);
+  const sliceRadius = fmt(dimensions?.sliceRadius);
+
+  // schematic geometry (not to scale; labels carry the real values)
+  const BW = 316;
+  const BH = 30;
+  const SX = (400 - BW) / 2;
+  const SY = 98;
+  const rr = BH / 2; // radius-full ends
+  const sr = 3; // schematic slice radius (real value lives in the footnote)
+  const g = 8; // schematic gap between slices
+
+  // three example slices sized by share of the total; the rest is empty track
+  const shares = [40, 25, 20];
+  let cursor = SX;
+  let firstMidX = SX;
+  let firstRight = SX;
+  let secondX = SX;
+  const slices = shares.map((share, i) => {
+    const w = (share / 100) * BW;
+    const s = { x: cursor, w, share, first: i === 0 };
+    if (i === 0) {
+      firstMidX = cursor + w / 2;
+      firstRight = cursor + w;
+    }
+    if (i === 1) secondX = cursor;
+    cursor += w + g;
+    return s;
+  });
+  const emptyX = cursor - g;
+  const emptyW = SX + BW - emptyX;
+
+  // a rect with independent corner radii, for the first slice's rounded-full end
+  const cornerPath = (x: number, y: number, w: number, h: number, tl: number, tr: number, br: number, bl: number) =>
+    `M ${x + tl} ${y} L ${x + w - tr} ${y} A ${tr} ${tr} 0 0 1 ${x + w} ${y + tr} L ${x + w} ${y + h - br} A ${br} ${br} 0 0 1 ${x + w - br} ${y + h} L ${x + bl} ${y + h} A ${bl} ${bl} 0 0 1 ${x} ${y + h - bl} L ${x} ${y + tl} A ${tl} ${tl} 0 0 1 ${x + tl} ${y} Z`;
+
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the segmented bar">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+
+      {/* the track: the container that clips the slices and paints the empty remainder */}
+      <rect x={SX} y={SY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
+
+      {/* the proportional slices, each sized by its share of the total and labelled with it */}
+      {slices.map((s, i) => {
+        const op = 0.55 - i * 0.08;
+        const d = s.first
+          ? cornerPath(s.x, SY, s.w, BH, rr, sr, sr, rr)
+          : cornerPath(s.x, SY, s.w, BH, sr, sr, sr, sr);
+        return (
+          <g key={i}>
+            <path d={d} fill={C.content} fillOpacity={op} stroke={C.edge} strokeWidth={1} />
+            <text
+              x={s.x + s.w / 2}
+              y={SY + BH / 2}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fill={C.text}
+              stroke="none"
+              style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 11, fontWeight: 600 }}
+            >
+              {s.share}%
+            </text>
+          </g>
+        );
+      })}
+
+      {/* anatomy callouts: a slice, and the empty remainder of the track */}
+      <text x={firstMidX} y={SY - 14} textAnchor="middle" className="bpLabel bpMuted">slice</text>
+      {emptyW > 24 && (
+        <text x={emptyX + emptyW / 2} y={SY - 14} textAnchor="middle" className="bpLabel bpMuted">track</text>
+      )}
+
+      {/* width on top, one slice height on the left, the gap between two slices below */}
+      <HDim x1={SX} x2={SX + BW} y={SY - 32} label="width: auto" />
+      {height && <VDim x={SX - 26} y1={SY} y2={SY + BH} label={height} />}
+      {gap && <HDim x1={firstRight} x2={secondX} y={SY + BH + 18} label={gap} above={false} />}
+
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <text x={200} y={198} textAnchor="middle" className="bpLabel bpMuted">
+        {[radius && `radius: ${radius}`, sliceRadius && `slice radius: ${sliceRadius}`].filter(Boolean).join('   ·   ')}
+      </text>
+    </svg>
+  );
+}
+
 // A generic placeholder glyph (lucide "star") standing in for a real icon in
 // the anatomy figure. Inlined so the docs figure needs no icon dependency.
 const PLACEHOLDER_ICON =
@@ -875,6 +969,39 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
 }
 
 /** Bar blueprint for thin line atoms (divider, progress bar): thickness + radius. */
+// Divider: a hairline rule with an optional centered label, drawn as the
+// labelled separator - a rule on each side of a centered "or".
+function DividerBlueprint({ size, dimensions }: BlueprintProps) {
+  const thickness = fmt(size.thickness) ?? fmt(dimensions?.thickness);
+  const gap = fmt(dimensions?.gap);
+  const X = 64;
+  const W = 272;
+  const Y = 76;
+  const cx = X + W / 2;
+  const half = 15; // half the label box
+  const g = 20; // schematic gap around the label
+  const leftEnd = cx - half - g;
+  const rightStart = cx + half + g;
+  return (
+    <svg viewBox="0 0 400 150" className="bpSvg" role="img" aria-label="Blueprint of the divider">
+      <Defs />
+      <rect x={0} y={0} width={400} height={150} fill="url(#bpGrid)" />
+      {/* the two hairline rules with the label between them */}
+      <line x1={X} y1={Y} x2={leftEnd} y2={Y} stroke={C.line} strokeWidth={1.5} />
+      <line x1={rightStart} y1={Y} x2={X + W} y2={Y} stroke={C.line} strokeWidth={1.5} />
+      <text x={cx} y={Y} textAnchor="middle" dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 13, fontWeight: 600 }}>
+        or
+      </text>
+      <text x={cx} y={Y - 22} textAnchor="middle" className="bpLabel bpMuted">label</text>
+      <text x={X + 44} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">hairline</text>
+      <HDim x1={X} x2={X + W} y={Y - 36} label="width: auto" />
+      {gap && <HDim x1={leftEnd} x2={cx - half} y={Y + 20} label={gap} above={false} />}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={138} parts={[thickness && `thickness: ${thickness}`, gap && `gap: ${gap}`]} />
+    </svg>
+  );
+}
+
 function BarBlueprint({ size, dimensions }: BlueprintProps) {
   const BX = 70;
   const BW = 260;
@@ -908,6 +1035,700 @@ function BarBlueprint({ size, dimensions }: BlueprintProps) {
   );
 }
 
+// A slim content placeholder bar: a stand-in for a line of text or a control.
+const Ln = ({ x, y, w, h = 6, op = 0.5 }: { x: number; y: number; w: number; h?: number; op?: number }) => (
+  <rect x={x} y={y} width={w} height={h} rx={Math.min(h / 2, 3)} fill={C.content} fillOpacity={op} />
+);
+
+// A dashed schematic frame (the component box outline).
+const Frame = ({ x, y, w, h, r = 10 }: { x: number; y: number; w: number; h: number; r?: number }) => (
+  <rect x={x} y={y} width={w} height={h} rx={r} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
+);
+
+// Footnote row of measure chips, centred at the bottom of a figure.
+const Foot = ({ y = 198, parts }: { y?: number; parts: (string | undefined | false)[] }) => (
+  <text x={200} y={y} textAnchor="middle" className="bpLabel bpMuted">
+    {parts.filter(Boolean).join('   \u00b7   ')}
+  </text>
+);
+
+// ---- Molecules ---------------------------------------------------------
+
+// Field: label + required marker, the control, and the reserved meta line.
+function FieldBlueprint({ size, dimensions }: BlueprintProps) {
+  const gap = fmt(dimensions?.gap) ?? fmt(size.gap);
+  const X = 104;
+  const W = 192;
+  const labelY = 50;
+  const ctrlY = 70;
+  const ctrlH = 40;
+  const metaY = 126;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the field">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <Ln x={X} y={labelY} w={60} op={0.75} />
+      <text x={X + 68} y={labelY + 8} fill="var(--glacier-danger-solid)" stroke="none" style={{ fontSize: 12, fontWeight: 700 }}>*</text>
+      <Frame x={X} y={ctrlY} w={W} h={ctrlH} r={8} />
+      <Ln x={X + 12} y={ctrlY + ctrlH / 2 - 3} w={104} op={0.5} />
+      <Ln x={X} y={metaY} w={140} h={5} op={0.32} />
+      <text x={X - 10} y={labelY + 8} textAnchor="end" className="bpLabel bpMuted">label</text>
+      <text x={X + W + 12} y={ctrlY + ctrlH / 2 + 3} className="bpLabel bpMuted">control</text>
+      <text x={X - 10} y={metaY + 6} textAnchor="end" className="bpLabel bpMuted">meta</text>
+      {gap && <VDim x={X + W + 30} y1={ctrlY + ctrlH} y2={metaY} label={gap} left={false} />}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={['label', 'control', 'hint / error']} />
+    </svg>
+  );
+}
+
+// Select: the trigger (value + chevrons) with the portalled option menu below.
+function SelectBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const optionRadius = fmt(dimensions?.optionRadius);
+  const padIn = fmt(size.paddingInline);
+  const border = fmt(dimensions?.border);
+  const X = 118;
+  const W = 200;
+  const trigY = 44;
+  const trigH = 34;
+  const menuY = trigY + trigH + 12;
+  const rowH = 22;
+  const rows = 3;
+  const pad = 8;
+  const menuH = rows * pad * 0 + rows * rowH + pad * 2;
+  return (
+    <svg viewBox="0 0 400 220" className="bpSvg" role="img" aria-label="Blueprint of the select">
+      <Defs />
+      <rect x={0} y={0} width={400} height={220} fill="url(#bpGrid)" />
+      <Frame x={X} y={trigY} w={W} h={trigH} r={9} />
+      <Ln x={X + 12} y={trigY + trigH / 2 - 3} w={88} op={0.55} />
+      <path d={`M ${X + W - 20} ${trigY + 12} l 5 -5 l 5 5`} fill="none" stroke={C.line} strokeWidth={1.4} />
+      <path d={`M ${X + W - 20} ${trigY + trigH - 12} l 5 5 l 5 -5`} fill="none" stroke={C.line} strokeWidth={1.4} />
+      <Frame x={X} y={menuY} w={W} h={menuH} r={10} />
+      {Array.from({ length: rows }, (_, i) => {
+        const ry = menuY + pad + i * rowH;
+        return (
+          <g key={i}>
+            {i === 0 && <rect x={X + 6} y={ry + 1} width={W - 12} height={rowH - 2} rx={5} fill={C.content} fillOpacity={0.24} />}
+            {i === 0 && <path d={`M ${X + 12} ${ry + rowH / 2} l 4 4 l 7 -8`} fill="none" stroke={C.line} strokeWidth={1.6} />}
+            <Ln x={X + 28} y={ry + rowH / 2 - 3} w={78} op={0.45} />
+          </g>
+        );
+      })}
+      <text x={X - 10} y={trigY + trigH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">trigger</text>
+      <text x={X + W + 12} y={menuY + 13} className="bpLabel bpMuted">menu</text>
+      <text x={X + W + 12} y={menuY + pad + rowH / 2 + 3} className="bpLabel bpMuted">option ✓</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={210} parts={[radius && `radius: ${radius}`, optionRadius && `option: ${optionRadius}`, padIn && `pad: ${padIn}`, border && `border: ${border}`]} />
+    </svg>
+  );
+}
+
+// SegmentedControl: a glass track of segments with a thumb under the selected one.
+function SegmentedControlBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const padding = fmt(dimensions?.padding);
+  const gap = fmt(dimensions?.gap);
+  const N = 3;
+  const segW = 84;
+  const segH = 40;
+  const g = 8;
+  const totalW = N * segW + (N - 1) * g;
+  const SX = (400 - totalW) / 2;
+  const SY = 84;
+  const pad = 6;
+  const segX = (i: number) => SX + i * (segW + g);
+  return (
+    <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label="Blueprint of the segmented control">
+      <Defs />
+      <rect x={0} y={0} width={400} height={200} fill="url(#bpGrid)" />
+      <rect x={SX - pad} y={SY - pad} width={totalW + pad * 2} height={segH + pad * 2} rx={12} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
+      {/* the thumb under the first segment */}
+      <rect x={segX(0)} y={SY} width={segW} height={segH} rx={9} fill={C.content} fillOpacity={0.3} stroke={C.text} strokeWidth={1} />
+      {Array.from({ length: N }, (_, i) => (
+        <Ln key={i} x={segX(i) + segW / 2 - 22} y={SY + segH / 2 - 3} w={44} op={i === 0 ? 0.7 : 0.4} />
+      ))}
+      <text x={segX(0) + segW / 2} y={SY - pad - 8} textAnchor="middle" className="bpLabel bpMuted">thumb</text>
+      <text x={segX(1) + segW / 2} y={SY + segH + pad + 16} textAnchor="middle" className="bpLabel bpMuted">segment</text>
+      <HDim x1={SX - pad} x2={SX + totalW + pad} y={SY - pad - 20} label="width: auto" />
+      {gap && <HDim x1={segX(0) + segW} x2={segX(1)} y={SY + segH + 6} label={gap} above={false} />}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={190} parts={[radius && `radius: ${radius}`, padding && `padding: ${padding}`]} />
+    </svg>
+  );
+}
+
+// Tabs: a tablist underlined by a hairline, the active indicator, and the panel.
+function TabsBlueprint({ size, dimensions }: BlueprintProps) {
+  const indicator = fmt(dimensions?.indicatorThickness);
+  const radius = fmt(dimensions?.radius);
+  const padBl = fmt(dimensions?.paddingBlock);
+  const X = 70;
+  const W = 260;
+  const listY = 48;
+  const tabW = 66;
+  const gap = 10;
+  const panelY = listY + 34;
+  const panelH = 84;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the tabs">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      {/* tablist labels */}
+      {Array.from({ length: 3 }, (_, i) => (
+        <Ln key={i} x={X + i * (tabW + gap) + 12} y={listY + 8} w={tabW - 24} op={i === 0 ? 0.75 : 0.4} />
+      ))}
+      {/* the list bottom hairline + the active indicator */}
+      <line x1={X} y1={listY + 26} x2={X + W} y2={listY + 26} stroke={C.edge} strokeWidth={1} />
+      <rect x={X} y={listY + 25} width={tabW} height={3} rx={1.5} fill={C.line} />
+      {/* the panel */}
+      <Frame x={X} y={panelY} w={W} h={panelH} r={10} />
+      <Ln x={X + 16} y={panelY + 20} w={150} op={0.4} />
+      <Ln x={X + 16} y={panelY + 38} w={200} h={5} op={0.3} />
+      <Ln x={X + 16} y={panelY + 52} w={170} h={5} op={0.3} />
+      <text x={X + tabW / 2} y={listY - 8} textAnchor="middle" className="bpLabel bpMuted">tab</text>
+      <text x={X + W + 12} y={listY + 30} className="bpLabel bpMuted">indicator</text>
+      <text x={X + W + 12} y={panelY + panelH / 2} className="bpLabel bpMuted">panel</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[indicator && `indicator: ${indicator}`, radius && `radius: ${radius}`, padBl && `pad: ${padBl}`]} />
+    </svg>
+  );
+}
+
+// Tooltip: a small glass bubble with a pointer, offset above its trigger.
+function TooltipBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const offset = fmt(dimensions?.offset);
+  const padIn = fmt(dimensions?.paddingInline);
+  const bubbleX = 128;
+  const bubbleY = 56;
+  const bubbleW = 144;
+  const bubbleH = 40;
+  const trigY = bubbleY + bubbleH + 26;
+  const cx = bubbleX + bubbleW / 2;
+  return (
+    <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label="Blueprint of the tooltip">
+      <Defs />
+      <rect x={0} y={0} width={400} height={200} fill="url(#bpGrid)" />
+      {/* the bubble */}
+      <Frame x={bubbleX} y={bubbleY} w={bubbleW} h={bubbleH} r={8} />
+      <Ln x={bubbleX + 14} y={bubbleY + bubbleH / 2 - 3} w={bubbleW - 28} h={5} op={0.5} />
+      {/* the pointer */}
+      <path d={`M ${cx - 7} ${bubbleY + bubbleH} L ${cx + 7} ${bubbleY + bubbleH} L ${cx} ${bubbleY + bubbleH + 9} Z`} fill={C.fill} stroke={C.edge} strokeWidth={1.5} />
+      {/* the trigger */}
+      <rect x={cx - 34} y={trigY} width={68} height={26} rx={6} fill={C.content} fillOpacity={0.22} stroke={C.edge} strokeWidth={1.25} />
+      <Ln x={cx - 20} y={trigY + 10} w={40} h={5} op={0.5} />
+      <text x={bubbleX + bubbleW + 12} y={bubbleY + bubbleH / 2 + 3} className="bpLabel bpMuted">bubble</text>
+      <text x={cx + 42} y={trigY + 16} className="bpLabel bpMuted">trigger</text>
+      {offset && <VDim x={bubbleX - 20} y1={bubbleY + bubbleH} y2={trigY} label={`offset ${offset}`} />}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={190} parts={[radius && `radius: ${radius}`, padIn && `pad-inline: ${padIn}`, 'glass + blur']} />
+    </svg>
+  );
+}
+
+// Toast: a rounded-full pill with a leading icon, the message, and a dismiss.
+function ToastBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const gap = fmt(dimensions?.gap);
+  const padIn = fmt(dimensions?.paddingInline);
+  const X = 70;
+  const W = 260;
+  const Y = 82;
+  const H = 46;
+  const rr = H / 2;
+  const iconX = X + 24;
+  const cyc = Y + H / 2;
+  return (
+    <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label="Blueprint of the toast">
+      <Defs />
+      <rect x={0} y={0} width={400} height={200} fill="url(#bpGrid)" />
+      <rect x={X} y={Y} width={W} height={H} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
+      <circle cx={iconX} cy={cyc} r={9} fill={C.content} fillOpacity={0.4} stroke={C.line} strokeWidth={1} />
+      <Ln x={iconX + 20} y={cyc - 3} w={120} h={6} op={0.5} />
+      {/* dismiss */}
+      <g stroke={C.line} strokeWidth={1.4}>
+        <line x1={X + W - 26} y1={cyc - 5} x2={X + W - 16} y2={cyc + 5} />
+        <line x1={X + W - 26} y1={cyc + 5} x2={X + W - 16} y2={cyc - 5} />
+      </g>
+      <text x={iconX} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">icon</text>
+      <text x={iconX + 80} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">message</text>
+      <text x={X + W - 21} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">dismiss</text>
+      {padIn && <HDim x1={X} x2={X + 34} y={Y + H + 16} label={padIn} above={false} />}
+      {gap && <HDim x1={iconX + 9} x2={iconX + 20} y={Y + H + 16} label={gap} above={false} />}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={190} parts={[radius && `radius: ${radius}`]} />
+    </svg>
+  );
+}
+
+// ScrollArea: a capped viewport with edge fade masks and a thin scrollbar.
+function ScrollAreaBlueprint({ size, dimensions }: BlueprintProps) {
+  const fade = fmt(dimensions?.fade);
+  const scrollbar = fmt(dimensions?.scrollbar);
+  const X = 118;
+  const W = 180;
+  const Y = 44;
+  const H = 128;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the scroll area">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <Frame x={X} y={Y} w={W} h={H} r={10} />
+      {/* content lines */}
+      {Array.from({ length: 6 }, (_, i) => (
+        <Ln key={i} x={X + 14} y={Y + 14 + i * 18} w={W - 52} h={6} op={0.4} />
+      ))}
+      {/* fade ramps top and bottom */}
+      <rect x={X + 1} y={Y + 1} width={W - 2} height={18} fill="url(#bpFadeTop)" />
+      <rect x={X + 1} y={Y + H - 19} width={W - 2} height={18} fill="url(#bpFadeBot)" />
+      <defs>
+        <linearGradient id="bpFadeTop" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="var(--glacier-blue-3)" stopOpacity={0.95} />
+          <stop offset="1" stopColor="var(--glacier-blue-3)" stopOpacity={0} />
+        </linearGradient>
+        <linearGradient id="bpFadeBot" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stopColor="var(--glacier-blue-3)" stopOpacity={0.95} />
+          <stop offset="1" stopColor="var(--glacier-blue-3)" stopOpacity={0} />
+        </linearGradient>
+      </defs>
+      {/* scrollbar */}
+      <rect x={X + W - 8} y={Y + 10} width={4} height={54} rx={2} fill={C.line} fillOpacity={0.6} />
+      <text x={X + W / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">fade</text>
+      <text x={X - 10} y={Y + H / 2} textAnchor="end" className="bpLabel bpMuted">viewport</text>
+      <text x={X + W + 12} y={Y + 40} className="bpLabel bpMuted">scrollbar</text>
+      {fade && <VDim x={X + W + 30} y1={Y} y2={Y + 18} label={fade} left={false} />}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[fade && `fade: ${fade}`, scrollbar && `bar: ${scrollbar}`]} />
+    </svg>
+  );
+}
+
+// Carousel: a snap-scrolling track of items with prev/next edge controls.
+function CarouselBlueprint({ size, dimensions }: BlueprintProps) {
+  const gap = fmt(dimensions?.gap);
+  const radius = fmt(dimensions?.radius);
+  const X = 58;
+  const W = 284;
+  const Y = 70;
+  const H = 74;
+  const itemW = 78;
+  const g = 12;
+  return (
+    <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label="Blueprint of the carousel">
+      <Defs />
+      <rect x={0} y={0} width={400} height={200} fill="url(#bpGrid)" />
+      {/* items */}
+      {Array.from({ length: 3 }, (_, i) => (
+        <rect key={i} x={X + i * (itemW + g)} y={Y} width={itemW} height={H} rx={8} fill={C.content} fillOpacity={0.24} stroke={C.edge} strokeWidth={1.25} strokeDasharray="4 3" />
+      ))}
+      {/* the fourth item, clipped, hinting the overflow */}
+      <rect x={X + 3 * (itemW + g)} y={Y} width={itemW} height={H} rx={8} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1} strokeDasharray="4 3" />
+      {/* prev / next controls */}
+      {[{ cx: X + 14, d: 'M 3 -6 l -6 6 l 6 6' }, { cx: X + W - 14, d: 'M -3 -6 l 6 6 l -6 6' }].map((c, i) => (
+        <g key={i}>
+          <circle cx={c.cx} cy={Y + H / 2} r={13} fill={C.fill} stroke={C.edge} strokeWidth={1.5} />
+          <path d={`M ${c.cx} ${Y + H / 2} ${c.d}`} fill="none" stroke={C.line} strokeWidth={1.6} />
+        </g>
+      ))}
+      <text x={X + itemW / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">item</text>
+      <text x={X + W - 14} y={Y + H + 18} textAnchor="middle" className="bpLabel bpMuted">control</text>
+      {gap && <HDim x1={X + itemW} x2={X + itemW + g} y={Y + H + 14} label={gap} above={false} />}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={190} parts={[gap && `gap: ${gap}`, radius && `radius: ${radius}`]} />
+    </svg>
+  );
+}
+
+// Heatmap: columns of level-shaded cells with a less-to-more legend.
+function HeatmapBlueprint({ size, dimensions }: BlueprintProps) {
+  const cell = fmt(dimensions?.cell);
+  const gap = fmt(dimensions?.gap);
+  const radius = fmt(dimensions?.radius);
+  const cols = 10;
+  const rowsN = 5;
+  const cs = 18;
+  const g = 4;
+  const gridW = cols * cs + (cols - 1) * g;
+  const X = (400 - gridW) / 2;
+  const Y = 52;
+  const levels = [0, 0.18, 0.34, 0.55, 0.8];
+  return (
+    <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label="Blueprint of the heatmap">
+      <Defs />
+      <rect x={0} y={0} width={400} height={200} fill="url(#bpGrid)" />
+      {Array.from({ length: cols }, (_, c) =>
+        Array.from({ length: rowsN }, (_, r) => {
+          const op = levels[(c + r) % levels.length] ?? 0.3;
+          return (
+            <rect key={`${c}-${r}`} x={X + c * (cs + g)} y={Y + r * (cs + g)} width={cs} height={cs} rx={3}
+              fill={op === 0 ? C.fill : C.content} fillOpacity={op === 0 ? 1 : op} stroke={C.edge} strokeWidth={op === 0 ? 1 : 0} />
+          );
+        }),
+      )}
+      {/* legend */}
+      {Array.from({ length: 5 }, (_, i) => (
+        <rect key={i} x={X + gridW - 5 * (cs * 0.7 + 3) + i * (cs * 0.7 + 3)} y={Y + rowsN * (cs + g) + 12} width={cs * 0.7} height={cs * 0.7} rx={2}
+          fill={i === 0 ? C.fill : C.content} fillOpacity={i === 0 ? 1 : 0.2 + i * 0.18} stroke={i === 0 ? C.edge : 'none'} strokeWidth={1} />
+      ))}
+      <text x={X} y={Y + rowsN * (cs + g) + 12 + cs * 0.55} textAnchor="start" className="bpLabel bpMuted">less</text>
+      <text x={X + gridW} y={Y + rowsN * (cs + g) + 12 + cs * 0.55} textAnchor="end" className="bpLabel bpMuted">more</text>
+      <text x={X + cs / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">cell</text>
+      <text x={200} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">legend →</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={192} parts={[cell && `cell: ${cell}`, gap && `gap: ${gap}`, radius && `radius: ${radius}`]} />
+    </svg>
+  );
+}
+
+// Spotlight: a dimmed backdrop, a cutout ring on the target, and the callout.
+function SpotlightBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const cutoutRadius = fmt(dimensions?.cutoutRadius);
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the spotlight">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      {/* backdrop */}
+      <rect x={40} y={38} width={320} height={140} rx={10} fill={C.text} fillOpacity={0.08} stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 3" />
+      {/* the cutout ring on the target */}
+      <rect x={70} y={80} width={70} height={56} rx={10} fill="none" stroke={C.line} strokeWidth={2} />
+      <rect x={64} y={74} width={82} height={68} rx={14} fill="none" stroke={C.line} strokeWidth={1} strokeOpacity={0.5} strokeDasharray="3 3" />
+      {/* the callout dialog */}
+      <Frame x={188} y={64} w={150} h={96} r={12} />
+      <Ln x={202} y={80} w={90} op={0.7} />
+      <Ln x={202} y={98} w={118} h={5} op={0.35} />
+      <Ln x={202} y={110} w={100} h={5} op={0.35} />
+      <text x={300} y={140} textAnchor="end" className="bpLabel bpMuted">2 / 4</text>
+      <rect x={296} y={130} width={30} height={16} rx={5} fill={C.content} fillOpacity={0.35} />
+      <text x={105} y={72} textAnchor="middle" className="bpLabel bpMuted">cutout</text>
+      <text x={263} y={56} textAnchor="middle" className="bpLabel bpMuted">callout</text>
+      <text x={52} y={52} className="bpLabel bpMuted">backdrop</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[radius && `radius: ${radius}`, cutoutRadius && `cutout: ${cutoutRadius}`]} />
+    </svg>
+  );
+}
+
+// ---- Organisms ---------------------------------------------------------
+
+// Modal: a blurred overlay centering a glass panel with header, body, footer.
+function ModalBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const panelPad = fmt(dimensions?.panelPadding);
+  const diameter = fmt(size.diameter);
+  const OX = 40;
+  const OY = 38;
+  const OW = 320;
+  const OH = 150;
+  const PW = 168;
+  const PX = (400 - PW) / 2;
+  const PY = 52;
+  const PH = 120;
+  const R = PX + PW;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the modal">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={OX} y={OY} width={OW} height={OH} rx={10} fill={C.text} fillOpacity={0.06} stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 3" />
+      <Frame x={PX} y={PY} w={PW} h={PH} r={14} />
+      <g stroke={C.line} strokeWidth={1.3}>
+        <line x1={R - 20} y1={PY + 12} x2={R - 12} y2={PY + 20} />
+        <line x1={R - 20} y1={PY + 20} x2={R - 12} y2={PY + 12} />
+      </g>
+      <Ln x={PX + 16} y={PY + 15} w={92} op={0.75} />
+      <Ln x={PX + 16} y={PY + 30} w={PW - 44} h={5} op={0.35} />
+      <line x1={PX + 16} y1={PY + 46} x2={R - 16} y2={PY + 46} stroke={C.edge} strokeWidth={1} />
+      <Ln x={PX + 16} y={PY + 58} w={PW - 32} h={5} op={0.3} />
+      <Ln x={PX + 16} y={PY + 70} w={PW - 54} h={5} op={0.3} />
+      <rect x={R - 96} y={PY + PH - 26} width={40} height={16} rx={5} fill={C.content} fillOpacity={0.25} />
+      <rect x={R - 50} y={PY + PH - 26} width={40} height={16} rx={5} fill={C.content} fillOpacity={0.5} />
+      <text x={OX + 8} y={OY + 15} className="bpLabel bpMuted">overlay</text>
+      <text x={PX - 10} y={PY + PH / 2} textAnchor="end" className="bpLabel bpMuted">panel</text>
+      <text x={R + 10} y={PY + 16} className="bpLabel bpMuted">close</text>
+      <text x={R + 10} y={PY + 32} className="bpLabel bpMuted">header</text>
+      <text x={R + 10} y={PY + 64} className="bpLabel bpMuted">body</text>
+      <text x={R + 10} y={PY + PH - 16} className="bpLabel bpMuted">footer</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[diameter && `width: ${diameter}`, radius && `radius: ${radius}`, panelPad && `padding: ${panelPad}`]} />
+    </svg>
+  );
+}
+
+// Popover: a trigger with an anchored, arrowed panel offset below it.
+function PopoverBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const padding = fmt(dimensions?.padding);
+  const offset = fmt(dimensions?.offset);
+  const cx = 196;
+  const trigY = 44;
+  const trigW = 86;
+  const trigH = 28;
+  const panelY = trigY + trigH + 17;
+  const panelW = 162;
+  const panelH = 96;
+  const panelX = cx - panelW / 2;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the popover">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={cx - trigW / 2} y={trigY} width={trigW} height={trigH} rx={6} fill={C.content} fillOpacity={0.22} stroke={C.edge} strokeWidth={1.25} />
+      <Ln x={cx - 26} y={trigY + trigH / 2 - 3} w={52} h={5} op={0.5} />
+      <path d={`M ${cx - 7} ${panelY} L ${cx + 7} ${panelY} L ${cx} ${panelY - 9} Z`} fill={C.fill} stroke={C.edge} strokeWidth={1.5} />
+      <Frame x={panelX} y={panelY} w={panelW} h={panelH} r={10} />
+      <Ln x={panelX + 14} y={panelY + 16} w={100} op={0.6} />
+      <Ln x={panelX + 14} y={panelY + 34} w={panelW - 28} h={5} op={0.32} />
+      <Ln x={panelX + 14} y={panelY + 46} w={panelW - 44} h={5} op={0.32} />
+      <Ln x={panelX + 14} y={panelY + 58} w={panelW - 60} h={5} op={0.32} />
+      <text x={cx + trigW / 2 + 12} y={trigY + trigH / 2 + 3} className="bpLabel bpMuted">trigger</text>
+      <text x={panelX + panelW + 12} y={panelY + panelH / 2} className="bpLabel bpMuted">content</text>
+      <text x={panelX - 10} y={panelY + 14} textAnchor="end" className="bpLabel bpMuted">panel</text>
+      {offset && <VDim x={panelX - 24} y1={trigY + trigH} y2={panelY} label={`offset ${offset}`} />}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[radius && `radius: ${radius}`, padding && `padding: ${padding}`]} />
+    </svg>
+  );
+}
+
+// Menu: a trigger with a portalled panel of items, a separator, and a label.
+function MenuBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const gap = fmt(dimensions?.gap);
+  const X = 130;
+  const W = 176;
+  const trigY = 40;
+  const trigH = 26;
+  const menuY = trigY + trigH + 12;
+  const pad = 8;
+  const rowH = 20;
+  const rowY = (i: number) => menuY + pad + 12 + i * rowH;
+  const menuH = pad * 2 + 12 + 4 * rowH + 8;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the menu">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={X} y={trigY} width={W} height={trigH} rx={6} fill={C.content} fillOpacity={0.22} stroke={C.edge} strokeWidth={1.25} />
+      <Ln x={X + 12} y={trigY + trigH / 2 - 3} w={70} h={5} op={0.5} />
+      <Frame x={X} y={menuY} w={W} h={menuH} r={11} />
+      {/* section label */}
+      <Ln x={X + 12} y={menuY + pad + 2} w={44} h={5} op={0.3} />
+      {/* items with icon + label + shortcut */}
+      {[0, 1].map((i) => (
+        <g key={i}>
+          <rect x={X + 12} y={rowY(i) + 2} width={11} height={11} rx={3} fill={C.content} fillOpacity={0.45} />
+          <Ln x={X + 30} y={rowY(i) + 4} w={70} h={5} op={0.5} />
+          <Ln x={X + W - 34} y={rowY(i) + 4} w={20} h={5} op={0.3} />
+        </g>
+      ))}
+      {/* separator */}
+      <line x1={X + 10} y1={rowY(2) + 2} x2={X + W - 10} y2={rowY(2) + 2} stroke={C.edge} strokeWidth={1} />
+      <g>
+        <rect x={X + 12} y={rowY(3) - 2} width={11} height={11} rx={3} fill={C.content} fillOpacity={0.45} />
+        <Ln x={X + 30} y={rowY(3)} w={82} h={5} op={0.5} />
+      </g>
+      <text x={X + W + 12} y={menuY + 14} className="bpLabel bpMuted">menu</text>
+      <text x={X + W + 12} y={rowY(0) + 6} className="bpLabel bpMuted">item</text>
+      <text x={X - 10} y={rowY(2) + 4} textAnchor="end" className="bpLabel bpMuted">separator</text>
+      <text x={X - 10} y={trigY + trigH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">trigger</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[radius && `radius: ${radius}`, gap && `gap: ${gap}`, 'icon · label · shortcut']} />
+    </svg>
+  );
+}
+
+// FloatingPanel: a draggable panel with a grab-bar handle, title, close, body.
+function FloatingPanelBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const gap = fmt(dimensions?.gap);
+  const X = 112;
+  const W = 176;
+  const Y = 44;
+  const H = 126;
+  const handleH = 30;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the floating panel">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <Frame x={X} y={Y} w={W} h={H} r={11} />
+      {/* handle bar */}
+      <path d={`M ${X + 1} ${Y + handleH} L ${X + 1} ${Y + 11} A 10 10 0 0 1 ${X + 11} ${Y + 1} L ${X + W - 11} ${Y + 1} A 10 10 0 0 1 ${X + W - 1} ${Y + 11} L ${X + W - 1} ${Y + handleH} Z`} fill={C.content} fillOpacity={0.18} stroke="none" />
+      <line x1={X} y1={Y + handleH} x2={X + W} y2={Y + handleH} stroke={C.edge} strokeWidth={1} />
+      {/* grip dots */}
+      {[0, 1, 2].map((i) => (
+        <circle key={i} cx={X + 16 + i * 5} cy={Y + handleH / 2} r={1.4} fill={C.line} />
+      ))}
+      <Ln x={X + 34} y={Y + handleH / 2 - 3} w={70} op={0.6} />
+      <g stroke={C.line} strokeWidth={1.3}>
+        <line x1={X + W - 20} y1={Y + handleH / 2 - 4} x2={X + W - 12} y2={Y + handleH / 2 + 4} />
+        <line x1={X + W - 20} y1={Y + handleH / 2 + 4} x2={X + W - 12} y2={Y + handleH / 2 - 4} />
+      </g>
+      {/* body */}
+      <Ln x={X + 16} y={Y + handleH + 16} w={W - 32} h={5} op={0.3} />
+      <Ln x={X + 16} y={Y + handleH + 30} w={W - 50} h={5} op={0.3} />
+      <Ln x={X + 16} y={Y + handleH + 44} w={W - 40} h={5} op={0.3} />
+      <text x={X - 10} y={Y + handleH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">handle</text>
+      <text x={X + W + 12} y={Y + handleH / 2 + 3} className="bpLabel bpMuted">close</text>
+      <text x={X + W + 12} y={Y + handleH + 34} className="bpLabel bpMuted">body</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[radius && `radius: ${radius}`, gap && `gap: ${gap}`, 'drag the handle to move']} />
+    </svg>
+  );
+}
+
+// TabbedPanel: a bordered frame with a tab header (+ actions) and a body.
+function TabbedPanelBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const bodyPad = fmt(dimensions?.bodyPadding);
+  const border = fmt(dimensions?.border);
+  const X = 64;
+  const W = 272;
+  const Y = 44;
+  const H = 130;
+  const headerH = 36;
+  const tabW = 58;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the tabbed panel">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <Frame x={X} y={Y} w={W} h={H} r={14} />
+      {/* header row: tabs + actions */}
+      {[0, 1, 2].map((i) => (
+        <g key={i}>
+          {i === 0 && <rect x={X + 12 + i * (tabW + 6)} y={Y + 7} width={tabW} height={headerH - 14} rx={7} fill={C.content} fillOpacity={0.28} />}
+          <Ln x={X + 12 + i * (tabW + 6) + 10} y={Y + headerH / 2 - 3} w={tabW - 28} op={i === 0 ? 0.7 : 0.4} />
+        </g>
+      ))}
+      {/* a count badge on the first tab */}
+      <circle cx={X + 12 + tabW - 8} cy={Y + headerH / 2} r={5} fill={C.content} fillOpacity={0.6} />
+      {/* actions slot */}
+      <rect x={X + W - 34} y={Y + 9} width={22} height={headerH - 18} rx={5} fill={C.content} fillOpacity={0.3} />
+      <line x1={X} y1={Y + headerH} x2={X + W} y2={Y + headerH} stroke={C.edge} strokeWidth={1} />
+      {/* body */}
+      <Ln x={X + 18} y={Y + headerH + 18} w={W - 60} h={5} op={0.3} />
+      <Ln x={X + 18} y={Y + headerH + 32} w={W - 36} h={5} op={0.3} />
+      <Ln x={X + 18} y={Y + headerH + 46} w={W - 80} h={5} op={0.3} />
+      <text x={X + 12 + tabW / 2} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">tab</text>
+      <text x={X + W - 23} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">actions</text>
+      <text x={X + W + 12} y={Y + headerH + 34} className="bpLabel bpMuted">body</text>
+      <text x={X - 10} y={Y + headerH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">header</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[radius && `radius: ${radius}`, bodyPad && `body pad: ${bodyPad}`, border && `border: ${border}`]} />
+    </svg>
+  );
+}
+
+// TabbedModal: a modal with a fixed left rail of sections and a scrolling pane.
+function TabbedModalBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const gap = fmt(dimensions?.gap);
+  const rail = fmt(dimensions?.rail);
+  const X = 78;
+  const W = 244;
+  const Y = 40;
+  const H = 150;
+  const railW = 78;
+  const itemH = 24;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the tabbed modal">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <Frame x={X} y={Y} w={W} h={H} r={16} />
+      {/* rail */}
+      <line x1={X + railW} y1={Y + 8} x2={X + railW} y2={Y + H - 8} stroke={C.edge} strokeWidth={1} />
+      {[0, 1, 2, 3].map((i) => (
+        <g key={i}>
+          {i === 1 && <rect x={X + 8} y={Y + 16 + i * itemH - 3} width={railW - 16} height={itemH - 4} rx={6} fill={C.content} fillOpacity={0.3} />}
+          <rect x={X + 14} y={Y + 16 + i * itemH} width={10} height={10} rx={3} fill={C.content} fillOpacity={0.5} />
+          <Ln x={X + 30} y={Y + 16 + i * itemH + 2} w={30} h={5} op={i === 1 ? 0.6 : 0.4} />
+        </g>
+      ))}
+      {/* pane */}
+      <Ln x={X + railW + 18} y={Y + 22} w={90} op={0.7} />
+      <Ln x={X + railW + 18} y={Y + 42} w={W - railW - 40} h={5} op={0.3} />
+      <Ln x={X + railW + 18} y={Y + 56} w={W - railW - 60} h={5} op={0.3} />
+      <Ln x={X + railW + 18} y={Y + 70} w={W - railW - 48} h={5} op={0.3} />
+      <text x={X + railW / 2} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">rail</text>
+      <text x={X + railW + (W - railW) / 2} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">pane</text>
+      <text x={X + 8} y={Y + 16 + 1 * itemH + 20} className="bpLabel bpMuted">railItem</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[radius && `radius: ${radius}`, gap && `gap: ${gap}`, rail && `rail: ${rail}`]} />
+    </svg>
+  );
+}
+
+// TabStrip: a scrollable row of closable tabs with a springing underline.
+function TabStripBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const padIn = fmt(dimensions?.paddingInline);
+  const gap = fmt(dimensions?.gap);
+  const X = 50;
+  const tabW = 96;
+  const g = 6;
+  const Y = 74;
+  const H = 34;
+  return (
+    <svg viewBox="0 0 400 190" className="bpSvg" role="img" aria-label="Blueprint of the tab strip">
+      <Defs />
+      <rect x={0} y={0} width={400} height={190} fill="url(#bpGrid)" />
+      {[0, 1, 2, 3].map((i) => {
+        const tx = X + i * (tabW + g);
+        const active = i === 0;
+        return (
+          <g key={i}>
+            <rect x={tx} y={Y} width={tabW} height={H} rx={7} fill={active ? C.content : C.fill} fillOpacity={active ? 0.24 : 1} stroke={C.edge} strokeWidth={1.25} strokeDasharray={active ? undefined : '4 3'} />
+            <rect x={tx + 12} y={Y + H / 2 - 5} width={10} height={10} rx={3} fill={C.content} fillOpacity={0.5} />
+            <Ln x={tx + 28} y={Y + H / 2 - 3} w={36} h={5} op={active ? 0.7 : 0.4} />
+            <g stroke={C.line} strokeWidth={1.2}>
+              <line x1={tx + tabW - 20} y1={Y + H / 2 - 4} x2={tx + tabW - 12} y2={Y + H / 2 + 4} />
+              <line x1={tx + tabW - 20} y1={Y + H / 2 + 4} x2={tx + tabW - 12} y2={Y + H / 2 - 4} />
+            </g>
+            {active && <rect x={tx + 6} y={Y + H + 2} width={tabW - 12} height={3} rx={1.5} fill={C.line} />}
+          </g>
+        );
+      })}
+      <text x={X + tabW / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">tab</text>
+      <text x={X + 17} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">icon</text>
+      <text x={X + tabW - 16} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">close</text>
+      <text x={X + tabW / 2} y={Y + H + 22} textAnchor="middle" className="bpLabel bpMuted">indicator</text>
+      {padIn && <HDim x1={X} x2={X + 16} y={Y + H + 30} label={padIn} above={false} />}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={178} parts={[radius && `radius: ${radius}`, gap && `gap: ${gap}`]} />
+    </svg>
+  );
+}
+
+// ResizableSplitPane: two panes divided by a draggable separator grip.
+function ResizableSplitPaneBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const gripHeight = fmt(dimensions?.gripHeight);
+  const thickness = fmt(dimensions?.thickness);
+  const X = 62;
+  const W = 276;
+  const Y = 56;
+  const H = 104;
+  const divX = X + Math.round(W * 0.42);
+  return (
+    <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label="Blueprint of the resizable split pane">
+      <Defs />
+      <rect x={0} y={0} width={400} height={200} fill="url(#bpGrid)" />
+      {/* start pane */}
+      <rect x={X} y={Y} width={divX - X - 6} height={H} rx={10} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      {/* end pane */}
+      <rect x={divX + 6} y={Y} width={X + W - divX - 6} height={H} rx={10} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      {/* divider + grip */}
+      <line x1={divX} y1={Y} x2={divX} y2={Y + H} stroke={C.line} strokeWidth={1.5} />
+      <rect x={divX - 2.5} y={Y + H / 2 - 16} width={5} height={32} rx={2.5} fill={C.line} />
+      <text x={X + (divX - X) / 2} y={Y + H / 2 + 3} textAnchor="middle" className="bpLabel bpMuted">start</text>
+      <text x={divX + (X + W - divX) / 2} y={Y + H / 2 + 3} textAnchor="middle" className="bpLabel bpMuted">end</text>
+      <text x={divX} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">divider</text>
+      <HDim x1={X} x2={divX} y={Y + H + 16} label="ratio" above={false} />
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={190} parts={[radius && `radius: ${radius}`, gripHeight && `grip: ${gripHeight}`, thickness && `divider: ${thickness}`]} />
+    </svg>
+  );
+}
+
 function Defs() {
   return (
     <defs>
@@ -930,6 +1751,28 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'callout') return withFrame(<CalloutBlueprint size={size} dimensions={dimensions} />);
   if (id === 'banner') return withFrame(<BannerBlueprint size={size} dimensions={dimensions} />);
   if (id === 'meter') return withFrame(<MeterBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'segmented-bar') return withFrame(<SegmentedBarBlueprint size={size} dimensions={dimensions} />);
+  // molecules
+  if (id === 'field') return withFrame(<FieldBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'select') return withFrame(<SelectBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'segmented-control') return withFrame(<SegmentedControlBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'tabs') return withFrame(<TabsBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'tooltip') return withFrame(<TooltipBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'toast') return withFrame(<ToastBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'scroll-area') return withFrame(<ScrollAreaBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'carousel') return withFrame(<CarouselBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'heatmap') return withFrame(<HeatmapBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'spotlight') return withFrame(<SpotlightBlueprint size={size} dimensions={dimensions} />);
+  // organisms
+  if (id === 'modal') return withFrame(<ModalBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'popover') return withFrame(<PopoverBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'menu') return withFrame(<MenuBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'floating-panel') return withFrame(<FloatingPanelBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'tabbed-panel') return withFrame(<TabbedPanelBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'tabbed-modal') return withFrame(<TabbedModalBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'tab-strip') return withFrame(<TabStripBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'resizable-split-pane') return withFrame(<ResizableSplitPaneBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'divider') return withFrame(<DividerBlueprint size={size} dimensions={dimensions} />);
   if (size.diameter && !size.height) return withFrame(<CircleBlueprint size={size} id={id} />);
   if (size.thickness && !size.height && !size.diameter) return withFrame(<BarBlueprint size={size} dimensions={dimensions} />);
   return withFrame(<BoxBlueprint size={size} dimensions={dimensions} slots={slots} id={id} />);

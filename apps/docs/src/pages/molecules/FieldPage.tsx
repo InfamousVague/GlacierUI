@@ -1,6 +1,7 @@
 import { Button, Field, Input, Row, Stack, Heading, Text, Size, TextTone } from '@glacier/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 export function FieldPage() {
   const [username, setUsername] = useState('');
@@ -14,6 +15,10 @@ export function FieldPage() {
         is the text control itself, and when placed inside a Field it receives its id and aria
         wiring automatically.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="field" />
 
       <Heading level={2}>Examples</Heading>
 

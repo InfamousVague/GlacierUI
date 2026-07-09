@@ -1,6 +1,7 @@
 import { Button, Row, Stack, Toast, ToastProvider, useToast, Heading, Text, Size, TextTone, Tone, Variant } from '@glacier/react';
 import { Check } from '@glacier/icons';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 function ToneDemo() {
   const { toast } = useToast();
@@ -84,6 +85,7 @@ export function ToastPage() {
       </Text>
 
       <Heading level={2}>Anatomy</Heading>
+      <ComponentBlueprint specId="toast" />
       <Text tone={TextTone.Muted}>
         Wrap your app once in a <code>ToastProvider</code>. It holds the current toast in state,
         portals it to <code>document.body</code>, and runs the auto-dismiss timer. Anywhere inside,

@@ -1,6 +1,7 @@
 import { Button, Field, Input, Modal, Row, Text, Heading, Size, TextTone, Variant } from '@glacier/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 export function ModalPage() {
   const [basicOpen, setBasicOpen] = useState(false);
@@ -16,6 +17,10 @@ export function ModalPage() {
         Modal is a glass dialog rendered in a portal. It springs open, closes instantly, locks
         body scroll, traps Tab focus, and returns focus to the element that opened it.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="modal" />
 
       <Heading level={2}>Examples</Heading>
 

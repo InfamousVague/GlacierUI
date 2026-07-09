@@ -1,5 +1,6 @@
 import { Heatmap, Heading, Text, Size, TextTone } from '@glacier/react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 // A pseudo-random but stable year of daily counts, laid out as weeks (7 rows).
 const weeks = 26;
@@ -29,6 +30,10 @@ export function HeatmapPage() {
         track at level 0 up through saturated tiles. Every cell is titled with its value, and an
         optional legend spells out the less→more scale.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="heatmap" />
 
       <Heading level={2}>Examples</Heading>
 

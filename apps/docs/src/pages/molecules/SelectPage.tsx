@@ -1,6 +1,7 @@
 import { Field, Select, Heading, Text, Size, TextTone } from '@glacier/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const FRUIT = [
   { value: 'apple', label: 'Apple' },
@@ -20,6 +21,10 @@ export function SelectPage() {
         up in forms, and the dropdown is a glass panel that animates open. This site uses it for
         the theme, density, and accent pickers in the top bar.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="select" />
 
       <Heading level={2}>Examples</Heading>
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Row, SegmentedControl, Stack, Heading, Text, Size, TextTone } from '@glacier/react';
 import { Spring } from '@glacier/motion';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 export function SegmentedPage() {
   const [view, setView] = useState('week');
@@ -14,6 +15,10 @@ export function SegmentedPage() {
         a sliding thumb. Use it to switch between views of the same content, like list and grid or
         day and week.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="segmented-control" />
 
       <Heading level={2}>Examples</Heading>
 

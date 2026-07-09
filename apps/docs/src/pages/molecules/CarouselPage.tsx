@@ -1,5 +1,6 @@
 import { Carousel, Card, Heading, Text, Size, TextTone } from '@glacier/react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const cards = ['Nebula', 'Aurora', 'Comet', 'Eclipse', 'Meridian', 'Quasar', 'Zephyr'];
 
@@ -23,6 +24,10 @@ export function CarouselPage() {
         per-card stops, turns vertical wheel gestures into horizontal scroll, and can overlay prev/next
         controls that appear only while the strip overflows.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="carousel" />
 
       <Heading level={2}>Examples</Heading>
 

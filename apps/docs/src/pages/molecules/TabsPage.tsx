@@ -2,6 +2,7 @@ import { Spring } from '@glacier/motion';
 import { Pill, Stack, Tabs, Text, Heading, Size, TextTone, Tone } from '@glacier/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 export function TabsPage() {
   const [section, setSection] = useState('activity');
@@ -14,6 +15,10 @@ export function TabsPage() {
         layout element, so it springs between tabs with the same physics as the segmented
         control's thumb.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="tabs" />
 
       <Heading level={2}>Examples</Heading>
 

@@ -1,6 +1,7 @@
 import { Button, FloatingPanel, Row, Text, Heading, Size, TextTone, Variant } from '@glacier/react';
 import { useState } from 'react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 export function FloatingPanelPage() {
   const [basicOpen, setBasicOpen] = useState(false);
@@ -15,6 +16,10 @@ export function FloatingPanelPage() {
         locks no scroll, and traps no focus - it floats above the page while you keep working
         underneath.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="floating-panel" />
 
       <Heading level={2}>Examples</Heading>
 

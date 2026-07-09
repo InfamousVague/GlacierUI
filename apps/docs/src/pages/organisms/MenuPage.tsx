@@ -1,6 +1,7 @@
 import { Button, Menu, MenuItem, MenuSeparator, MenuLabel, Kbd, Heading, Text, Size, TextTone } from '@glacier/react';
 import { Pencil, Copy, Trash2 } from '@glacier/icons';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const editIcon = <Pencil size={16} />;
 const copyIcon = <Copy size={16} />;
@@ -15,6 +16,10 @@ export function MenuPage() {
         Popover - portalled, flipping and clamping on screen, dismiss-on-outside - with menu
         semantics: arrow-key roving focus and select-to-close.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="menu" />
 
       <Heading level={2}>Examples</Heading>
 

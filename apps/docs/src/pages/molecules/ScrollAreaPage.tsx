@@ -1,5 +1,6 @@
 import { ScrollArea, Heading, Text, Size, TextTone } from '@glacier/react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const paragraphs = [
   'GlacierUI keeps every measurement on a shared token scale, so a scroll area caps its viewport in the same units as everything else.',
@@ -26,6 +27,10 @@ export function ScrollAreaPage() {
         ResizeObserver keep the fades in sync, and the viewport is focusable so it scrolls from the
         keyboard.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="scroll-area" />
 
       <Heading level={2}>Examples</Heading>
 

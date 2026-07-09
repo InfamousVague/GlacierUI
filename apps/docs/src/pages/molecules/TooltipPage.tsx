@@ -1,6 +1,7 @@
 import { Button, IconButton, Kbd, Row, Tooltip, Heading, Text, Size, TextTone, Variant } from '@glacier/react';
 import { Link2 } from '@glacier/icons';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 export function TooltipPage() {
   return (
@@ -11,6 +12,10 @@ export function TooltipPage() {
         keyboard shortcut, or a one-line hint. The bubble portals to the body so it is never clipped,
         and it stays non-interactive so it can never trap the cursor.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="tooltip" />
 
       <Heading level={2}>Examples</Heading>
 

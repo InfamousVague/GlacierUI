@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, TabbedPanel, Heading, Text, Size, TextTone, Variant } from '@glacier/react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const overview = <Text tone={TextTone.Muted}>Traffic is up 12% week over week, with mobile leading the gain.</Text>;
 const activity = <Text tone={TextTone.Muted}>Six new comments and two mentions since you last checked in.</Text>;
@@ -31,6 +32,10 @@ export function TabbedPanelPage() {
         tab. Each tab can carry a count as a CounterBadge, and the header keeps an end slot for
         actions. It follows the WAI-ARIA tabs pattern with automatic activation.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="tabbed-panel" />
 
       <Heading level={2}>Examples</Heading>
 

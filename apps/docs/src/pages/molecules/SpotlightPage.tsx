@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { Button, Spotlight, Heading, Text, Size, TextTone, Variant } from '@glacier/react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const STEPS = [
   { title: 'Your dashboard', description: 'Everything you track lives here. Let’s walk through the essentials.' },
@@ -75,6 +76,10 @@ export function SpotlightPage() {
         element, and anchors a callout to it - carrying a title, body, step count, and Back / Next /
         Close controls. The cutout is click-through, so the highlighted control stays usable.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="spotlight" />
 
       <Heading level={2}>Examples</Heading>
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button, TabbedModal, Heading, Text, Size, TextTone } from '@glacier/react';
 import { Bell, Shield, User } from '@glacier/icons';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const accountIcon = <User size={18} />;
 const bellIcon = <Bell size={18} />;
@@ -80,6 +81,10 @@ export function TabbedModalPage() {
         trap, scroll lock, and dismiss behaviour - and lays a fixed left nav rail of sections beside
         a scrollable right pane that shows the active one.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="tabbed-modal" />
 
       <Heading level={2}>Examples</Heading>
 

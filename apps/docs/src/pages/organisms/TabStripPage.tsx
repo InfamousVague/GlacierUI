@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { TabStrip, type TabStripItem, Heading, Text, Size, TextTone } from '@glacier/react';
 import { File } from '@glacier/icons';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const fileIcon = <File size={14} />;
 
@@ -39,6 +40,10 @@ export function TabStripPage() {
         browser. The active tab carries a springing underline, the strip scrolls when its tabs
         overflow, and every tab has its own close button.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="tab-strip" />
 
       <Heading level={2}>Examples</Heading>
 

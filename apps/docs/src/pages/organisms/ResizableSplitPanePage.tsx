@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ResizableSplitPane, Heading, Text, Size, TextTone } from '@glacier/react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const paneStyle: React.CSSProperties = {
   display: 'flex',
@@ -58,6 +59,10 @@ export function ResizableSplitPanePage() {
         pointer, nudge it with the arrow keys, or double-click to reset. The size is a ratio you can
         control and persist.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <ComponentBlueprint specId="resizable-split-pane" />
 
       <Heading level={2}>Examples</Heading>
 
