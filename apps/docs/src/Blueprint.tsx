@@ -988,6 +988,90 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
 }
 
 /** Bar blueprint for thin line atoms (divider, progress bar): thickness + radius. */
+// Skeleton: the loading-placeholder primitive - a little content skeleton
+// (avatar, lines, image block) with a static blue-to-transparent shimmer on
+// each shape.
+function SkeletonBlueprint({ size, dimensions }: BlueprintProps) {
+  const textRadius = fmt(dimensions?.textRadius);
+  const rectRadius = fmt(dimensions?.rectRadius);
+  const circleRadius = fmt(dimensions?.circleRadius);
+  const g = 'url(#bpSkel)';
+  return (
+    <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label="Blueprint of the skeleton">
+      <Defs />
+      <defs>
+        <linearGradient id="bpSkel" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stopColor="var(--glacier-blue-8)" stopOpacity={0.8} />
+          <stop offset="1" stopColor="var(--glacier-blue-8)" stopOpacity={0.05} />
+        </linearGradient>
+      </defs>
+      <rect x={0} y={0} width={400} height={200} fill="url(#bpGrid)" />
+      {/* avatar (circle) + name / subtitle (text) */}
+      <circle cx={90} cy={58} r={18} fill={g} />
+      <rect x={122} y={50} width={128} height={12} rx={4} fill={g} />
+      <rect x={122} y={70} width={86} height={9} rx={4} fill={g} />
+      {/* image block (rect) */}
+      <rect x={62} y={98} width={150} height={62} rx={8} fill={g} />
+      {/* paragraph lines (text) */}
+      <rect x={226} y={104} width={110} height={10} rx={4} fill={g} />
+      <rect x={226} y={124} width={94} height={10} rx={4} fill={g} />
+      <rect x={226} y={144} width={110} height={10} rx={4} fill={g} />
+      <text x={90} y={30} textAnchor="middle" className="bpLabel bpMuted">circle</text>
+      <text x={186} y={44} textAnchor="middle" className="bpLabel bpMuted">text</text>
+      <text x={137} y={92} textAnchor="middle" className="bpLabel bpMuted">rect</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={186} parts={[textRadius && `text: ${textRadius}`, rectRadius && `rect: ${rectRadius}`, circleRadius && `circle: ${circleRadius}`]} />
+    </svg>
+  );
+}
+
+// CodeBlock: a framed code panel with a header (filename, language, copy), a
+// line-number gutter, and the source - a small main() function.
+function CodeBlockBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const border = fmt(dimensions?.border);
+  const prePadding = fmt(dimensions?.prePadding);
+  const X = 66;
+  const W = 268;
+  const Y = 44;
+  const H = 134;
+  const headerH = 28;
+  const gutterW = 24;
+  const bodyY = Y + headerH;
+  const mono = 'var(--glacier-font-mono)';
+  const lines = ['function main() {', '  render();', '}'];
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the code block">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <Frame x={X} y={Y} w={W} h={H} r={12} />
+      {/* header: filename, language, copy */}
+      <line x1={X} y1={bodyY} x2={X + W} y2={bodyY} stroke={C.edge} strokeWidth={1} />
+      <text x={X + 12} y={Y + headerH / 2} dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: mono, fontSize: 11 }}>main.ts</text>
+      <text x={X + W - 80} y={Y + headerH / 2} dominantBaseline="central" fill={C.faint} stroke="none" style={{ fontFamily: mono, fontSize: 9 }}>TS</text>
+      <rect x={X + W - 52} y={Y + 6} width={42} height={headerH - 12} rx={4} fill={C.content} fillOpacity={0.32} />
+      <text x={X + W - 31} y={Y + headerH / 2} textAnchor="middle" dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: mono, fontSize: 9 }}>Copy</text>
+      {/* line-number gutter */}
+      <line x1={X + gutterW} y1={bodyY} x2={X + gutterW} y2={Y + H} stroke={C.edge} strokeWidth={1} />
+      {lines.map((ln, i) => {
+        const ly = bodyY + 22 + i * 22;
+        return (
+          <g key={i}>
+            <text x={X + gutterW - 7} y={ly} textAnchor="end" dominantBaseline="central" fill={C.faint} stroke="none" style={{ fontFamily: mono, fontSize: 10 }}>{i + 1}</text>
+            <text x={X + gutterW + 10} y={ly} dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: mono, fontSize: 12, fontWeight: 500 }}>{ln}</text>
+          </g>
+        );
+      })}
+      <text x={X + W + 12} y={Y + headerH / 2} className="bpLabel bpMuted">header</text>
+      <text x={X + W - 31} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">copy</text>
+      <text x={X + W + 12} y={bodyY + 44} className="bpLabel bpMuted">pre</text>
+      <text x={X + gutterW / 2} y={Y + H + 14} textAnchor="middle" className="bpLabel bpMuted">gutter</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[radius && `radius: ${radius}`, prePadding && `padding: ${prePadding}`, border && `border: ${border}`]} />
+    </svg>
+  );
+}
+
 // Steps: a row of progress dots - completed solid, the current one enlarged,
 // upcoming ones hollow with a hairline border.
 function StepsBlueprint({ size, dimensions }: BlueprintProps) {
@@ -1860,6 +1944,8 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'progress-bar') return withFrame(<ProgressBarBlueprint size={size} dimensions={dimensions} />);
   if (id === 'steps') return withFrame(<StepsBlueprint size={size} dimensions={dimensions} />);
   if (id === 'divider') return withFrame(<DividerBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'code-block') return withFrame(<CodeBlockBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'skeleton') return withFrame(<SkeletonBlueprint size={size} dimensions={dimensions} />);
   if (size.diameter && !size.height) return withFrame(<CircleBlueprint size={size} id={id} />);
   if (size.thickness && !size.height && !size.diameter) return withFrame(<BarBlueprint size={size} dimensions={dimensions} />);
   return withFrame(<BoxBlueprint size={size} dimensions={dimensions} slots={slots} id={id} />);
