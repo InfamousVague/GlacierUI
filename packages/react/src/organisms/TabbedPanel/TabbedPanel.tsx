@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Size } from '@glacier/spec';
 import { Speed, Ease, transition } from '@glacier/motion';
-import { useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
+import { useId, useRef, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import { CounterBadge } from '../../atoms/display/CounterBadge/CounterBadge.tsx';
@@ -16,7 +16,7 @@ export interface TabbedPanelTab {
   disabled?: boolean;
 }
 
-export interface TabbedPanelProps {
+export interface TabbedPanelProps extends ComponentProps<'div'> {
   tabs: TabbedPanelTab[];
   /** Controlled active tab id. */
   value?: string;
@@ -46,6 +46,7 @@ export function TabbedPanel({
   onValueChange,
   actions,
   className,
+  'aria-label': ariaLabel,
   ...rest
 }: TabbedPanelProps) {
   const id = useId();
@@ -88,11 +89,11 @@ export function TabbedPanel({
   }
 
   return (
-    <div className={cx(styles.panel, className)}>
+    <div {...rest} className={cx(styles.panel, className)}>
       <div className={styles.header}>
         <div
           role="tablist"
-          aria-label={rest['aria-label']}
+          aria-label={ariaLabel}
           className={styles.list}
           onKeyDown={onListKeyDown}
         >

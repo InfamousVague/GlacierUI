@@ -1,13 +1,13 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { SkeletonVariant } from '@glacier/spec';
 import { Motion, Speed, motionProps } from '@glacier/motion';
-import { useId, type ReactNode } from 'react';
+import { useId, type ComponentProps, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { FieldContext } from '../../internal/FieldContext.ts';
 import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
 import styles from './Field.module.css';
 
-export interface FieldProps {
+export interface FieldProps extends ComponentProps<'div'> {
   label?: ReactNode;
   hint?: ReactNode;
   /** When set, replaces the hint and shakes in. */
@@ -19,7 +19,7 @@ export interface FieldProps {
   children: ReactNode;
 }
 
-export function Field({ label, hint, error, required, skeleton = false, className, children }: FieldProps) {
+export function Field({ label, hint, error, required, skeleton = false, className, children, ...rest }: FieldProps) {
   const id = useId();
   const reduce = useReducedMotion();
   const invalid = Boolean(error);
@@ -27,7 +27,7 @@ export function Field({ label, hint, error, required, skeleton = false, classNam
 
   if (skeleton) {
     return (
-      <div className={cx(styles.field, className)}>
+      <div {...rest} className={cx(styles.field, className)}>
         {label && (
           <span className={styles.label}>
             <Skeleton variant={SkeletonVariant.Text} width="5rem" />
@@ -42,7 +42,7 @@ export function Field({ label, hint, error, required, skeleton = false, classNam
   }
 
   return (
-    <div className={cx(styles.field, className)} data-invalid={invalid || undefined}>
+    <div {...rest} className={cx(styles.field, className)} data-invalid={invalid || undefined}>
       {label && (
         <label htmlFor={id} className={styles.label}>
           {label}

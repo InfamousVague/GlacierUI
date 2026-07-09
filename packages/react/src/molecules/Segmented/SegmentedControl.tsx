@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Spring, springTransition } from '@glacier/motion';
-import { useId, type ReactNode } from 'react';
+import { useId, type ComponentProps, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import type { ControlSize } from '../../atoms/inputs/Button/Button.tsx';
@@ -13,7 +13,7 @@ export interface SegmentedOption {
   disabled?: boolean;
 }
 
-export interface SegmentedControlProps {
+export interface SegmentedControlProps extends ComponentProps<'div'> {
   options: SegmentedOption[];
   value?: string;
   defaultValue?: string;
@@ -47,6 +47,7 @@ export function SegmentedControl({
   spring = Spring.Snappy,
   disabled = false,
   className,
+  'aria-label': ariaLabel,
   ...rest
 }: SegmentedControlProps) {
   const id = useId();
@@ -59,6 +60,7 @@ export function SegmentedControl({
     // placeholder matches the live control's intrinsic size exactly.
     return (
       <div
+        {...rest}
         aria-hidden="true"
         className={cx(styles.root, styles[size], fullWidth && styles.fullWidth, className)}
       >
@@ -76,8 +78,9 @@ export function SegmentedControl({
 
   return (
     <div
+      {...rest}
       role="radiogroup"
-      aria-label={rest['aria-label']}
+      aria-label={ariaLabel}
       className={cx(styles.root, styles[size], fullWidth && styles.fullWidth, className)}
     >
       {options.map((option) => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import {
   buttonSpec,
   cardElevations,
@@ -77,7 +77,7 @@ import {
   SidebarSection,
   SidebarItem,
 } from '../src/index.ts';
-import type { ReactElement } from 'react';
+import { cloneElement, type ReactElement } from 'react';
 
 /**
  * The spec is the contract; these tests hold the React kit to it. Every
@@ -272,6 +272,37 @@ describe('React renders every spec variant, tone, and size', () => {
     it(`${spec.name} renders every declared combination`, () => {
       for (const combo of combos(spec))
         expect(() => render(renderer(combo))).not.toThrow();
+    });
+  }
+});
+
+// These are portaled or open-gated: in their default/closed state they render
+// nothing (or only a portal shell), so they carry no synchronous root to
+// receive data-testid. They are intentionally targeted by role (dialog,
+// listbox, menu, tooltip) instead and stay excluded from the passthrough sweep.
+const NO_SYNC_ROOT = new Set([
+  'modal',
+  'spotlight',
+  'floating-panel',
+  'tabbed-modal',
+  'tooltip',
+  'popover',
+  'menu',
+  'toast',
+]);
+
+// The passthrough contract: every component extends ComponentProps<element> and
+// spreads {...rest}, so a consumer's data-testid (and any data-*, id, aria-*)
+// reaches the DOM as a stable test hook - no bespoke testID prop required. This
+// locks that in kit-wide and fails loudly if a component ever drops {...rest}.
+describe('every component forwards data-testid to the DOM', () => {
+  for (const spec of specs) {
+    const renderer = RENDER[spec.id];
+    if (!renderer || NO_SYNC_ROOT.has(spec.id)) continue;
+    it(`${spec.name} forwards data-testid`, () => {
+      const combo = combos(spec)[0] ?? {};
+      render(cloneElement(renderer(combo), { 'data-testid': 'probe' } as never));
+      expect(screen.getByTestId('probe')).toBeInTheDocument();
     });
   }
 });

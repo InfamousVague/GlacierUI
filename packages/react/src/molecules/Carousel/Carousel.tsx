@@ -3,6 +3,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type ComponentProps,
   type CSSProperties,
   type ReactNode,
   type WheelEvent,
@@ -25,7 +26,7 @@ const chevronRight = (
   </svg>
 );
 
-export interface CarouselProps {
+export interface CarouselProps extends ComponentProps<'div'> {
   /** The card children laid out in a horizontal snap-scroll strip. */
   children?: ReactNode;
   /** Shows prev/next controls that appear when the strip overflows. */
@@ -48,6 +49,8 @@ export function Carousel({
   showControls = false,
   gap = 'var(--glacier-space-4)',
   className,
+  style,
+  'aria-label': ariaLabel,
   ...rest
 }: CarouselProps) {
   const t = useT();
@@ -98,10 +101,10 @@ export function Carousel({
     el.scrollBy({ left: direction * el.clientWidth * 0.8, behavior: 'smooth' });
   }
 
-  const style = { '--carousel-gap': gap } as CSSProperties;
+  const rootStyle = { '--carousel-gap': gap, ...style } as CSSProperties;
 
   return (
-    <div className={cx(styles.root, className)} style={style}>
+    <div {...rest} className={cx(styles.root, className)} style={rootStyle}>
       {showControls && (
         <span className={cx(styles.controlSlot, styles.prev)} data-hidden={!overflowing || undefined}>
           <IconButton
@@ -119,7 +122,7 @@ export function Carousel({
       <div
         ref={scrollerRef}
         role="group"
-        aria-label={rest['aria-label']}
+        aria-label={ariaLabel}
         className={styles.scroller}
         tabIndex={0}
         onWheel={onWheel}

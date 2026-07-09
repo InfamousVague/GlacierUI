@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type ComponentProps, type CSSProperties, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from 'react';
 import { Variant } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
@@ -6,7 +6,7 @@ import { kitMessages } from '../../i18n/messages.ts';
 import { IconButton } from '../../atoms/inputs/Button/IconButton.tsx';
 import styles from './AppShell.module.css';
 
-export interface AppShellProps {
+export interface AppShellProps extends ComponentProps<'div'> {
   /** The persistent side navigation. */
   sidebar: ReactNode;
   /** Optional top bar content, placed to the right of the mobile menu button. */
@@ -50,6 +50,8 @@ export function AppShell({
   minSidebarWidth = 200,
   maxSidebarWidth = 460,
   children,
+  style,
+  ...rest
 }: AppShellProps) {
   const t = useT();
   const [open, setOpen] = useState(false);
@@ -125,9 +127,10 @@ export function AppShell({
 
   return (
     <div
+      {...rest}
       className={styles.shell}
       data-floating={floating ? '' : undefined}
-      style={{ '--shell-sidebar': sidebarWidth } as CSSProperties}
+      style={{ '--shell-sidebar': sidebarWidth, ...style } as CSSProperties}
     >
       <aside
         ref={asideRef}

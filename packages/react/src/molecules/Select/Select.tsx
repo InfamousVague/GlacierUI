@@ -6,6 +6,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
+  type ComponentProps,
   type CSSProperties,
   type KeyboardEvent,
   type ReactNode,
@@ -24,7 +25,7 @@ export interface SelectOption {
   disabled?: boolean;
 }
 
-export interface SelectProps {
+export interface SelectProps extends ComponentProps<'div'> {
   options: SelectOption[];
   value?: string;
   defaultValue?: string;
@@ -83,6 +84,7 @@ export function Select({
   name,
   id,
   className,
+  'aria-label': ariaLabel,
   ...rest
 }: SelectProps) {
   const listboxId = useId();
@@ -234,7 +236,7 @@ export function Select({
   }
 
   return (
-    <div ref={rootRef} className={cx(styles.root, styles[size], fullWidth && styles.fullWidth, className)}>
+    <div {...rest} ref={rootRef} className={cx(styles.root, styles[size], fullWidth && styles.fullWidth, className)}>
       <button
         ref={triggerRef}
         type="button"
@@ -246,7 +248,7 @@ export function Select({
         aria-controls={open ? listboxId : undefined}
         aria-describedby={field?.describedBy}
         aria-invalid={field?.invalid || undefined}
-        aria-label={rest['aria-label']}
+        aria-label={ariaLabel}
         data-placeholder={selectedOption ? undefined : true}
         onClick={() => (open ? closeMenu(true) : openMenu())}
         onKeyDown={onTriggerKeyDown}
@@ -267,7 +269,7 @@ export function Select({
             className={cx(styles.menu, size === 'sm' && styles.menuSm)}
             style={position.style}
             tabIndex={-1}
-            aria-label={rest['aria-label']}
+            aria-label={ariaLabel}
             aria-activedescendant={activeIndex >= 0 ? `${listboxId}-${activeIndex}` : undefined}
             onKeyDown={onListKeyDown}
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: position.openUp ? 4 : -4 }}

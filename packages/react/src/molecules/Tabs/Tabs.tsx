@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { SkeletonVariant } from '@glacier/spec';
 import { Spring, springTransition, Speed, Ease, transition } from '@glacier/motion';
-import { useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
+import { useId, useRef, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
@@ -14,7 +14,7 @@ export interface TabItem {
   disabled?: boolean;
 }
 
-export interface TabsProps {
+export interface TabsProps extends ComponentProps<'div'> {
   tabs: TabItem[];
   value?: string;
   defaultValue?: string;
@@ -46,6 +46,7 @@ export function Tabs({
   fullWidth = false,
   skeleton = false,
   className,
+  'aria-label': ariaLabel,
   ...rest
 }: TabsProps) {
   const id = useId();
@@ -56,7 +57,7 @@ export function Tabs({
 
   if (skeleton) {
     return (
-      <div className={className}>
+      <div {...rest} className={className}>
         <div className={cx(styles.list, fullWidth && styles.fullWidth)}>
           {[0, 1, 2].map((line) => (
             <span
@@ -114,10 +115,10 @@ export function Tabs({
   }
 
   return (
-    <div className={className}>
+    <div {...rest} className={className}>
       <div
         role="tablist"
-        aria-label={rest['aria-label']}
+        aria-label={ariaLabel}
         className={cx(styles.list, fullWidth && styles.fullWidth)}
         onKeyDown={onListKeyDown}
       >

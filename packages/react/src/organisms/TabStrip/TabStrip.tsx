@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Spring, springTransition } from '@glacier/motion';
-import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, type ComponentProps, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import styles from './TabStrip.module.css';
@@ -14,7 +14,7 @@ export interface TabStripItem {
   icon?: ReactNode;
 }
 
-export interface TabStripProps {
+export interface TabStripProps extends ComponentProps<'div'> {
   tabs: TabStripItem[];
   /** Controlled active tab id. */
   value?: string;
@@ -48,6 +48,7 @@ export function TabStrip({
   onClose,
   spring = Spring.Snappy,
   className,
+  'aria-label': ariaLabel,
   ...rest
 }: TabStripProps) {
   const id = useId();
@@ -120,9 +121,10 @@ export function TabStrip({
 
   return (
     <div
+      {...rest}
       ref={stripRef}
       role="tablist"
-      aria-label={rest['aria-label']}
+      aria-label={ariaLabel}
       aria-orientation="horizontal"
       className={cx(styles.strip, className)}
       data-overflowing={overflowing || undefined}

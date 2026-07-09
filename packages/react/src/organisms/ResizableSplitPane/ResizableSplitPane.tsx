@@ -2,6 +2,8 @@ import {
   useCallback,
   useId,
   useRef,
+  type ComponentProps,
+  type CSSProperties,
   type KeyboardEvent,
   type PointerEvent,
   type ReactNode,
@@ -12,7 +14,7 @@ import styles from './ResizableSplitPane.module.css';
 
 export type SplitOrientation = 'horizontal' | 'vertical';
 
-export interface ResizableSplitPaneProps {
+export interface ResizableSplitPaneProps extends Omit<ComponentProps<'div'>, 'children'> {
   /** Exactly two children: the start pane and the end pane. */
   children: [ReactNode, ReactNode];
   /**
@@ -62,6 +64,8 @@ export function ResizableSplitPane({
   resetRatio,
   step = 0.02,
   className,
+  style,
+  'aria-label': ariaLabel,
   ...rest
 }: ResizableSplitPaneProps) {
   const labelId = useId();
@@ -138,13 +142,14 @@ export function ResizableSplitPane({
 
   return (
     <div
+      {...rest}
       ref={rootRef}
       className={cx(styles.root, className)}
       data-orientation={orientation}
-      style={{ '--split-start': `${percent}%` } as React.CSSProperties}
+      style={{ '--split-start': `${percent}%`, ...style } as CSSProperties}
     >
       <span id={labelId} hidden>
-        {rest['aria-label'] ?? 'Resize panes'}
+        {ariaLabel ?? 'Resize panes'}
       </span>
       <div className={styles.pane} data-pane="start">
         {start}

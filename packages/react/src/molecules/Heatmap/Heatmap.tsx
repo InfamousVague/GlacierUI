@@ -1,4 +1,4 @@
-import { useId, type CSSProperties } from 'react';
+import { useId, type ComponentProps, type CSSProperties } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
@@ -18,7 +18,7 @@ export interface HeatmapPoint {
  */
 export type HeatmapData = number[][] | HeatmapPoint[];
 
-export interface HeatmapProps {
+export interface HeatmapProps extends ComponentProps<'div'> {
   /** Values to plot: a 2D `number[][]` grid or a flat `{ date, value }[]` list. */
   data: HeatmapData;
   /** Number of intensity steps (including the empty step 0). Defaults to 5. */
@@ -86,9 +86,8 @@ function levelOf(value: number, max: number, levels: number): number {
  * carries a title so its value is legible to pointer and screen-reader users,
  * and an optional legend spells out the less→more scale.
  */
-export function Heatmap({ data, levels = 5, legend = false, rows = 7, className, ...rest }: HeatmapProps) {
+export function Heatmap({ data, levels = 5, legend = false, rows = 7, className, 'aria-label': label, ...rest }: HeatmapProps) {
   const t = useT();
-  const label = rest['aria-label'];
   const steps = Math.max(2, Math.floor(levels));
   const columns = toColumns(data, Math.max(1, Math.floor(rows)));
   const max = columns.reduce(
@@ -101,6 +100,7 @@ export function Heatmap({ data, levels = 5, legend = false, rows = 7, className,
 
   return (
     <div
+      {...rest}
       role="img"
       aria-label={label}
       aria-describedby={legend ? legendId : undefined}
