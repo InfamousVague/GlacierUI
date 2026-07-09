@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { Heading } from '@glacier/react';
 import { ComponentBlueprint } from './Blueprint.tsx';
 
 type GalleryItem = { spec: string; page: string; title: string; blurb: string };
+type Section = { group: string; title: string; items: GalleryItem[] };
 
-// Every atom that ships a measured blueprint, paired with the page that
-// documents it. `spec` (hyphenated) drives the figure via getSpec(); `page`
-// (no hyphens) is the hash route under #/atoms/<page>. A handful of atoms share
-// a page (checkbox/radio/switch -> selection, card/surface -> surfaces,
-// text/heading -> text). `blurb` is the component's page subtext (its lede).
-// Each item is shown exactly once.
-const ITEMS: GalleryItem[] = [
+// Every component that ships a measured blueprint, grouped by layer. `spec`
+// (hyphenated) drives the figure via getSpec(); `page` (no hyphens) is the hash
+// route under #/<group>/<page>. `blurb` is a one-line description. A handful of
+// atoms share a page (checkbox/radio/switch -> selection, card/surface ->
+// surfaces, text/heading -> text).
+const ATOMS: GalleryItem[] = [
   {
     spec: 'button',
     page: 'button',
@@ -220,6 +221,36 @@ const ITEMS: GalleryItem[] = [
   },
 ];
 
+const MOLECULES: GalleryItem[] = [
+  { spec: 'field', page: 'field', title: 'Field', blurb: 'Groups a label, control, and a reserved hint or error line into one accessible form field.' },
+  { spec: 'select', page: 'select', title: 'Select', blurb: 'A styled replacement for the native select: a trigger that matches Input, with a glass dropdown of options.' },
+  { spec: 'segmented-control', page: 'segmented', title: 'Segmented Control', blurb: 'A compact row of mutually exclusive options with a thumb that slides under the selected one.' },
+  { spec: 'tabs', page: 'tabs', title: 'Tabs', blurb: 'A tablist with a springing indicator that switches between cross-faded panels.' },
+  { spec: 'tooltip', page: 'tooltip', title: 'Tooltip', blurb: 'A small glass bubble that describes its trigger on hover or focus, positioned around it.' },
+  { spec: 'toast', page: 'toast', title: 'Toast', blurb: 'A single-slot notification that slides up from the bottom center; a new one replaces the last.' },
+  { spec: 'scroll-area', page: 'scrollarea', title: 'Scroll Area', blurb: 'A capped, keyboard-scrollable viewport with edge fade masks and a thin themed scrollbar.' },
+  { spec: 'carousel', page: 'carousel', title: 'Carousel', blurb: 'A horizontal snap-scroll strip of cards with prev/next controls that appear on overflow.' },
+  { spec: 'heatmap', page: 'heatmap', title: 'Heatmap', blurb: 'A grid of level-shaded cells for calendar-style activity, with an optional less-to-more legend.' },
+  { spec: 'spotlight', page: 'spotlight', title: 'Spotlight', blurb: 'A guided-tour overlay that dims the screen, cuts out the target, and anchors a step callout.' },
+];
+
+const ORGANISMS: GalleryItem[] = [
+  { spec: 'modal', page: 'modal', title: 'Modal', blurb: 'A focus-trapped dialog centered over a blurred overlay, with header, body, and footer slots.' },
+  { spec: 'popover', page: 'popover', title: 'Popover', blurb: 'A floating, anchored panel with an arrow that toggles open from a trigger.' },
+  { spec: 'menu', page: 'menu', title: 'Menu', blurb: 'A portalled action menu of items with icons, shortcuts, separators, and section labels.' },
+  { spec: 'floating-panel', page: 'floatingpanel', title: 'Floating Panel', blurb: 'A draggable dialog with a grab-bar handle, title, close button, and a scrollable body.' },
+  { spec: 'tabbed-panel', page: 'tabbedpanel', title: 'Tabbed Panel', blurb: 'A bordered panel whose tab header switches the body, with an optional actions slot.' },
+  { spec: 'tabbed-modal', page: 'tabbedmodal', title: 'Tabbed Modal', blurb: 'A modal with a fixed left rail of sections and a scrolling content pane.' },
+  { spec: 'tab-strip', page: 'tabstrip', title: 'Tab Strip', blurb: 'A scrollable row of closable tabs with icons and a springing active underline.' },
+  { spec: 'resizable-split-pane', page: 'resizablesplitpane', title: 'Resizable Split Pane', blurb: 'Two panes divided by a draggable separator that resizes them by ratio.' },
+];
+
+const SECTIONS: Section[] = [
+  { group: 'atoms', title: 'Atoms', items: ATOMS },
+  { group: 'molecules', title: 'Molecules', items: MOLECULES },
+  { group: 'organisms', title: 'Organisms', items: ORGANISMS },
+];
+
 export function BlueprintGallery() {
   const revealRef = useRef<IntersectionObserver | null>(null);
   const cardsRef = useRef<Set<Element>>(new Set());
@@ -260,23 +291,28 @@ export function BlueprintGallery() {
 
   return (
     <div className="bpGallery">
-      <div className="bpGalleryGrid">
-        {ITEMS.map((item, i) => (
-          <a
-            key={item.title}
-            ref={registerCard}
-            className="bpGalleryCard"
-            href={`#/atoms/${item.page}`}
-            style={{ transitionDelay: `${(i % 2) * 60}ms` }}
-          >
-            <span className="bpGalleryFigure" aria-hidden="true">
-              <ComponentBlueprint specId={item.spec} preview />
-            </span>
-            <span className="bpGalleryTitle">{item.title}</span>
-            <span className="bpGalleryBlurb">{item.blurb}</span>
-          </a>
-        ))}
-      </div>
+      {SECTIONS.map((section) => (
+        <section key={section.group}>
+          <Heading level={2}>{section.title}</Heading>
+          <div className="bpGalleryGrid">
+            {section.items.map((item, i) => (
+              <a
+                key={item.title}
+                ref={registerCard}
+                className="bpGalleryCard"
+                href={`#/${section.group}/${item.page}`}
+                style={{ transitionDelay: `${(i % 2) * 60}ms` }}
+              >
+                <span className="bpGalleryFigure" aria-hidden="true">
+                  <ComponentBlueprint specId={item.spec} preview />
+                </span>
+                <span className="bpGalleryTitle">{item.title}</span>
+                <span className="bpGalleryBlurb">{item.blurb}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   );
 }
