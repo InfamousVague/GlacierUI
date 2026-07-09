@@ -14,10 +14,11 @@
   border-right: var(--glacier-hairline) solid var(--glacier-glass-border);
 }
 
-/* the drag handle that resizes the sidebar: a wide, invisible hit strip centered
-   on the sidebar's right edge that shows an accent line on hover or focus */
+/* the drag handle that resizes the sidebar: a fixed, full-height hit strip on
+   the sidebar's right edge with an always-visible grip centred in the viewport,
+   so it reads as draggable; the grip turns to the accent on hover or focus */
 .resizer {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   left: var(--shell-sidebar);
@@ -31,18 +32,22 @@
 .resizer::after {
   content: '';
   position: absolute;
-  inset-block: 0;
+  top: 50%;
   left: 50%;
-  width: var(--glacier-hairline);
-  transform: translateX(-50%);
-  background: var(--glacier-accent-solid);
-  opacity: 0;
-  transition: opacity var(--glacier-duration-fast) var(--glacier-ease-out);
+  width: 4px;
+  height: var(--glacier-space-7);
+  transform: translate(-50%, -50%);
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-border-strong);
+  transition:
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    height var(--glacier-duration-fast) var(--glacier-ease-out);
 }
 
 .resizer:hover::after,
 .resizer:focus-visible::after {
-  opacity: 1;
+  background: var(--glacier-accent-solid);
+  height: var(--glacier-space-8);
 }
 
 .resizer:focus-visible {
