@@ -1156,7 +1156,7 @@ function CodeBlockBlueprint({ size, dimensions }: BlueprintProps) {
       <text x={X + W + 12} y={Y + headerH / 2} className="bpLabel bpMuted">header</text>
       <text x={X + W - 31} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">copy</text>
       <text x={X + W + 12} y={bodyY + 44} className="bpLabel bpMuted">pre</text>
-      <text x={X + gutterW / 2} y={Y + H + 14} textAnchor="middle" className="bpLabel bpMuted">gutter</text>
+      <text x={X - 10} y={bodyY + 44} textAnchor="end" className="bpLabel bpMuted">gutter</text>
       <text x={16} y={26} className="bpTitle">{size.name}</text>
       <Foot parts={[radius && `radius: ${radius}`, prePadding && `padding: ${prePadding}`, border && `border: ${border}`]} />
     </svg>
