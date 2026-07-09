@@ -1,4 +1,5 @@
 .shell {
+  position: relative;
   display: grid;
   grid-template-columns: var(--shell-sidebar) 1fr;
   min-height: 100vh;
@@ -11,6 +12,41 @@
   overflow-y: auto;
   background: var(--glacier-surface);
   border-right: var(--glacier-hairline) solid var(--glacier-glass-border);
+}
+
+/* the drag handle that resizes the sidebar: a wide, invisible hit strip centered
+   on the sidebar's right edge that shows an accent line on hover or focus */
+.resizer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--shell-sidebar);
+  width: var(--glacier-space-3);
+  transform: translateX(-50%);
+  z-index: 25;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.resizer::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  left: 50%;
+  width: var(--glacier-hairline);
+  transform: translateX(-50%);
+  background: var(--glacier-accent-solid);
+  opacity: 0;
+  transition: opacity var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.resizer:hover::after,
+.resizer:focus-visible::after {
+  opacity: 1;
+}
+
+.resizer:focus-visible {
+  outline: none;
 }
 
 .main {
@@ -57,6 +93,10 @@
 @media (max-width: 1023px) {
   .shell {
     grid-template-columns: 1fr;
+  }
+
+  .resizer {
+    display: none;
   }
 
   .sidebar {
@@ -118,6 +158,12 @@
     background: var(--glacier-surface);
     box-shadow: var(--glacier-shadow-3);
     overflow: hidden;
+  }
+
+  /* in the floating layout the sidebar card sits a gutter in from the edge, so
+     move the divider out to its right edge */
+  .shell[data-floating] .resizer {
+    left: calc(var(--shell-sidebar) + var(--glacier-space-4));
   }
 
   /* the top bar floats too, so the whole chrome reads as detached panels: a

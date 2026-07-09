@@ -176,6 +176,7 @@ function pageFromHash(): PageId {
 }
 
 const STORAGE_KEY = 'glacier-docs-preferences';
+const SIDEBAR_WIDTH_KEY = 'glacier-docs-sidebar-width';
 
 function loadPreferences(): Preferences {
   try {
@@ -238,6 +239,21 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
   const [page, setPage] = useState<PageId>(pageFromHash);
   const [preferences, setPreferences] = useState<Preferences>(loadPreferences);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
+  const [sidebarWidth, setSidebarWidth] = useState<string>(() => {
+    try {
+      return localStorage.getItem(SIDEBAR_WIDTH_KEY) ?? '16rem';
+    } catch {
+      return '16rem';
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(SIDEBAR_WIDTH_KEY, sidebarWidth);
+    } catch {
+      /* ignore write failures (private mode, quota) */
+    }
+  }, [sidebarWidth]);
 
   useEffect(() => {
     const onHash = () => setPage(pageFromHash());
@@ -346,6 +362,9 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
         sidebar={sidebar}
         header={header}
         sidebarLabel={t(m.sidebarLabel)}
+        resizable
+        sidebarWidth={sidebarWidth}
+        onSidebarWidthChange={setSidebarWidth}
       >
         <Container size={Size.XLarge} paddingY={8} as="main" className="content">
           {PAGES[page].el}

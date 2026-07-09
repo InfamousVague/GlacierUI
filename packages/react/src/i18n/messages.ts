@@ -18,6 +18,7 @@ export const kitMessages = defineMessages({
   decrease: { en: 'Decrease', es: 'Disminuir', fr: 'Diminuer', de: 'Verringern', ja: '減らす' },
   increase: { en: 'Increase', es: 'Aumentar', fr: 'Augmenter', de: 'Erhöhen', ja: '増やす' },
   openNavigation: { en: 'Open navigation', es: 'Abrir navegación', fr: 'Ouvrir la navigation', de: 'Navigation öffnen', ja: 'ナビゲーションを開く' },
+  resizeSidebar: { en: 'Resize sidebar', es: 'Redimensionar la barra lateral', fr: 'Redimensionner la barre latérale', de: 'Seitenleiste anpassen', ja: 'サイドバーのサイズを変更' },
   loading: { en: 'Loading', es: 'Cargando', fr: 'Chargement', de: 'Wird geladen', ja: '読み込み中' },
   copy: { en: 'Copy', es: 'Copiar', fr: 'Copier', de: 'Kopieren', ja: 'コピー' },
   copied: { en: 'Copied', es: 'Copiado', fr: 'Copié', de: 'Kopiert', ja: 'コピーしました' },

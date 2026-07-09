@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from 'react';
 import { Variant } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
@@ -17,6 +17,13 @@ export interface AppShellProps {
   sidebarLabel?: string;
   /** Detach the desktop sidebar into a floating, rounded card with a gutter. */
   floating?: boolean;
+  /** Let the user drag the divider (or arrow-key it) to resize the sidebar. */
+  resizable?: boolean;
+  /** Called with the next sidebar width (a px string) while resizing. */
+  onSidebarWidthChange?: (width: string) => void;
+  /** Clamp for the resize drag, in pixels. */
+  minSidebarWidth?: number;
+  maxSidebarWidth?: number;
   children?: ReactNode;
 }
 
@@ -38,14 +45,19 @@ export function AppShell({
   sidebarWidth = '16rem',
   sidebarLabel = 'Navigation',
   floating = false,
+  resizable = false,
+  onSidebarWidthChange,
+  minSidebarWidth = 200,
+  maxSidebarWidth = 460,
   children,
 }: AppShellProps) {
   const t = useT();
   const [open, setOpen] = useState(false);
+  const asideRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!open) return;
-    const onKey = (event: KeyboardEvent) => {
+    const onKey = (event: globalThis.KeyboardEvent) => {
       if (event.key === 'Escape') setOpen(false);
     };
     document.addEventListener('keydown', onKey);
@@ -56,6 +68,61 @@ export function AppShell({
     if ((event.target as HTMLElement).closest('a, button')) setOpen(false);
   };
 
+  const commitWidth = useCallback(
+    (px: number) => {
+      const clamped = Math.round(Math.min(maxSidebarWidth, Math.max(minSidebarWidth, px)));
+      onSidebarWidthChange?.(`${clamped}px`);
+    },
+    [minSidebarWidth, maxSidebarWidth, onSidebarWidthChange],
+  );
+
+  // Drag the divider: size the sidebar to the pointer's distance from the
+  // sidebar's left edge, so it works in both the flush and floating layouts.
+  function startResize(event: PointerEvent<HTMLDivElement>) {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    const handle = event.currentTarget;
+    handle.setPointerCapture(event.pointerId);
+    const move = (e: globalThis.PointerEvent) => {
+      const aside = asideRef.current;
+      if (!aside) return;
+      commitWidth(e.clientX - aside.getBoundingClientRect().left);
+    };
+    const up = () => {
+      handle.releasePointerCapture?.(event.pointerId);
+      handle.removeEventListener('pointermove', move);
+      handle.removeEventListener('pointerup', up);
+      handle.removeEventListener('pointercancel', up);
+    };
+    handle.addEventListener('pointermove', move);
+    handle.addEventListener('pointerup', up);
+    handle.addEventListener('pointercancel', up);
+  }
+
+  function onResizeKey(event: KeyboardEvent<HTMLDivElement>) {
+    const aside = asideRef.current;
+    if (!aside) return;
+    const cur = aside.getBoundingClientRect().width;
+    switch (event.key) {
+      case 'ArrowLeft':
+        event.preventDefault();
+        commitWidth(cur - 16);
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        commitWidth(cur + 16);
+        break;
+      case 'Home':
+        event.preventDefault();
+        commitWidth(minSidebarWidth);
+        break;
+      case 'End':
+        event.preventDefault();
+        commitWidth(maxSidebarWidth);
+        break;
+    }
+  }
+
   return (
     <div
       className={styles.shell}
@@ -63,6 +130,7 @@ export function AppShell({
       style={{ '--shell-sidebar': sidebarWidth } as CSSProperties}
     >
       <aside
+        ref={asideRef}
         aria-label={sidebarLabel}
         className={styles.sidebar}
         data-open={open ? '' : undefined}
@@ -70,6 +138,17 @@ export function AppShell({
       >
         {sidebar}
       </aside>
+      {resizable && (
+        <div
+          role="separator"
+          aria-orientation="vertical"
+          aria-label={t(kitMessages.resizeSidebar)}
+          tabIndex={0}
+          className={styles.resizer}
+          onPointerDown={startResize}
+          onKeyDown={onResizeKey}
+        />
+      )}
       {open && <div className={styles.backdrop} onClick={() => setOpen(false)} />}
       <div className={styles.main}>
         <header className={cx(styles.header)} data-empty={header ? undefined : ''}>
