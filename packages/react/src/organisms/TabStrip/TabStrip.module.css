@@ -10,6 +10,13 @@
   scrollbar-color: var(--glacier-border-strong) transparent;
 }
 
+/* when the tabs overflow, reserve a band beneath them for the horizontal
+   scrollbar so it sits below the tabs instead of overlaying their bottom edge
+   and the active indicator */
+.strip[data-overflowing] {
+  padding-bottom: var(--glacier-space-2);
+}
+
 .strip::-webkit-scrollbar {
   height: var(--glacier-space-2);
 }

@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Spring, springTransition } from '@glacier/motion';
-import { useId, useRef, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
+import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import styles from './TabStrip.module.css';
@@ -56,6 +56,28 @@ export function TabStrip({
   const fallback = defaultValue ?? tabs[0]?.id ?? '';
   const [active, setActive] = useControlled(value, fallback);
 
+  // Track horizontal overflow so the strip can reserve room for the scrollbar
+  // and keep it below the tabs rather than overlaying their bottom edge.
+  const stripRef = useRef<HTMLDivElement>(null);
+  const [overflowing, setOverflowing] = useState(false);
+
+  const syncOverflow = useCallback(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    setOverflowing(el.scrollWidth - el.clientWidth > 1);
+  }, []);
+
+  useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    syncOverflow();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(syncOverflow);
+    observer.observe(el);
+    for (const child of Array.from(el.children)) observer.observe(child);
+    return () => observer.disconnect();
+  }, [syncOverflow, tabs]);
+
   function select(id: string, focus: boolean) {
     setActive(id);
     onValueChange?.(id);
@@ -98,10 +120,12 @@ export function TabStrip({
 
   return (
     <div
+      ref={stripRef}
       role="tablist"
       aria-label={rest['aria-label']}
       aria-orientation="horizontal"
       className={cx(styles.strip, className)}
+      data-overflowing={overflowing || undefined}
       onKeyDown={onStripKeyDown}
     >
       {tabs.map((tab) => {
