@@ -530,13 +530,24 @@ code {
 
 .bpGalleryFigure {
   display: block;
+  /* A touch taller than the blueprint's natural ~400x210 ratio, for more
+     vertical presence on the card. */
+  aspect-ratio: 20 / 12;
 }
 
-/* The blueprint renders its own framed SVG; drop its page margin so the frame
-   sits flush in the card and fills the width at its natural height (no fixed
-   height + overflow, which cropped the frame's top and bottom borders). */
-.bpGalleryFigure .blueprint {
+/* Fill the taller figure: the frame stretches to it and the SVG scales to fit
+   (preserveAspectRatio meet), so the drawing stays crisp and centered with no
+   distortion or clipping. */
+.bpGalleryFigure .blueprint,
+.bpGalleryFigure .blueprint > *,
+.bpGalleryFigure .bpFrame {
   margin: 0;
+  height: 100%;
+}
+
+.bpGalleryFigure .bpSvg {
+  width: 100%;
+  height: 100%;
 }
 
 .bpGalleryTitle {
