@@ -969,6 +969,72 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
 }
 
 /** Bar blueprint for thin line atoms (divider, progress bar): thickness + radius. */
+// Steps: a row of progress dots - completed solid, the current one enlarged,
+// upcoming ones hollow with a hairline border.
+function StepsBlueprint({ size, dimensions }: BlueprintProps) {
+  const diameter = fmt(size.diameter);
+  const gap = fmt(size.gap) ?? fmt(dimensions?.gap);
+  const radius = fmt(dimensions?.radius);
+  const border = fmt(dimensions?.border);
+  const currentScale = fmt(dimensions?.currentScale) ?? '1.5';
+  const N = 5;
+  const active = 2;
+  const r = 9;
+  const cr = 13.5; // current dot: r x 1.5
+  const cgap = 56;
+  const totalW = (N - 1) * cgap;
+  const SX = (400 - totalW) / 2;
+  const Y = 82;
+  const cxOf = (i: number) => SX + i * cgap;
+  return (
+    <svg viewBox="0 0 400 160" className="bpSvg" role="img" aria-label="Blueprint of the steps">
+      <Defs />
+      <rect x={0} y={0} width={400} height={160} fill="url(#bpGrid)" />
+      {Array.from({ length: N }, (_, i) => {
+        if (i < active) return <circle key={i} cx={cxOf(i)} cy={Y} r={r} fill={C.content} fillOpacity={0.7} />;
+        if (i === active) return <circle key={i} cx={cxOf(i)} cy={Y} r={cr} fill={C.content} fillOpacity={0.95} stroke={C.text} strokeWidth={1} />;
+        return <circle key={i} cx={cxOf(i)} cy={Y} r={r} fill={C.fill} stroke={C.edge} strokeWidth={1.25} />;
+      })}
+      <text x={(cxOf(0) + cxOf(1)) / 2} y={Y + cr + 16} textAnchor="middle" className="bpLabel bpMuted">completed</text>
+      <text x={cxOf(active)} y={Y - cr - 10} textAnchor="middle" className="bpLabel bpMuted">current ×{currentScale}</text>
+      <text x={(cxOf(3) + cxOf(4)) / 2} y={Y + cr + 16} textAnchor="middle" className="bpLabel bpMuted">upcoming</text>
+      {diameter && <HDim x1={cxOf(0) - r} x2={cxOf(0) + r} y={Y - r - 12} label={`⌀ ${diameter}`} />}
+      {gap && <HDim x1={cxOf(3) + r} x2={cxOf(4) - r} y={Y - r - 12} label={gap} />}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={148} parts={[radius && `radius: ${radius}`, border && `border: ${border}`, `count ${N} · active ${active}`]} />
+    </svg>
+  );
+}
+
+// ProgressBar: a thin rounded track with a tone fill sized to the value.
+function ProgressBarBlueprint({ size, dimensions }: BlueprintProps) {
+  const height = fmt(size.height);
+  const radius = fmt(dimensions?.radius);
+  const X = 70;
+  const W = 260;
+  const H = 22;
+  const Y = 82;
+  const rr = H / 2;
+  const fillW = Math.round(W * 0.6);
+  return (
+    <svg viewBox="0 0 400 160" className="bpSvg" role="img" aria-label="Blueprint of the progress bar">
+      <Defs />
+      <rect x={0} y={0} width={400} height={160} fill="url(#bpGrid)" />
+      {/* the track */}
+      <rect x={X} y={Y} width={W} height={H} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
+      {/* the fill, sized to the value */}
+      <rect x={X} y={Y} width={fillW} height={H} rx={rr} fill={C.content} fillOpacity={0.55} stroke={C.text} strokeWidth={1} />
+      <text x={X + fillW / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">fill</text>
+      <text x={X + fillW + (W - fillW) / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">track</text>
+      <HDim x1={X} x2={X + W} y={Y - 30} label="width: auto" />
+      {height && <VDim x={X - 22} y1={Y} y2={Y + H} label={height} />}
+      <HDim x1={X} x2={X + fillW} y={Y + H + 16} label="value = 60% of max" above={false} />
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot y={148} parts={[height && `height: ${height}`, radius && `radius: ${radius}`, 'indeterminate: 40% sweep']} />
+    </svg>
+  );
+}
+
 // Divider: a hairline rule with an optional centered label, drawn as the
 // labelled separator - a rule on each side of a centered "or".
 function DividerBlueprint({ size, dimensions }: BlueprintProps) {
@@ -1772,6 +1838,8 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'tabbed-modal') return withFrame(<TabbedModalBlueprint size={size} dimensions={dimensions} />);
   if (id === 'tab-strip') return withFrame(<TabStripBlueprint size={size} dimensions={dimensions} />);
   if (id === 'resizable-split-pane') return withFrame(<ResizableSplitPaneBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'progress-bar') return withFrame(<ProgressBarBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'steps') return withFrame(<StepsBlueprint size={size} dimensions={dimensions} />);
   if (id === 'divider') return withFrame(<DividerBlueprint size={size} dimensions={dimensions} />);
   if (size.diameter && !size.height) return withFrame(<CircleBlueprint size={size} id={id} />);
   if (size.thickness && !size.height && !size.diameter) return withFrame(<BarBlueprint size={size} dimensions={dimensions} />);
