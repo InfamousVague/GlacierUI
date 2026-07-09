@@ -135,7 +135,7 @@ function StatusDotBlueprint({ size }: { size: SizeSpec }) {
       <rect x={0} y={0} width={380} height={200} fill="url(#bpGrid)" />
       {/* the host element the dot attaches to, drawn as a dotted circle */}
       <circle cx={hostCx} cy={hostCy} r={hostR} fill="none" stroke={C.edge} strokeWidth={1} strokeDasharray="2 4" strokeLinecap="round" />
-      <text x={hostCx} y={hostCy} textAnchor="middle" dominantBaseline="central" stroke="none" fill={C.text} className="bpLabel">Online</text>
+      <text x={hostCx} y={hostCy} textAnchor="middle" dominantBaseline="central" stroke="none" className="bpLabel bpMuted">host</text>
       {/* the status dot, pinned to the bottom-right of the host */}
       <circle cx={dx} cy={dy} r={dotR} fill={C.fill} stroke={C.edge} strokeWidth={2} strokeDasharray="4 3" />
       {/* the dot's diameter, dimensioned below it */}
@@ -980,6 +980,21 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
           }}
         >
           {id === 'heading' ? 'heading' : id === 'counter-badge' ? '99+' : 'text'}
+        </text>
+      )}
+
+      {/* the pill's own label, centred in the capsule */}
+      {id === 'pill' && (
+        <text
+          x={BX + BW / 2}
+          y={BY + BH / 2}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill={C.text}
+          stroke="none"
+          style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 15, fontWeight: 600 }}
+        >
+          Online
         </text>
       )}
 
