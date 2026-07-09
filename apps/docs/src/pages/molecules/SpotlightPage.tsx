@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { Button, Spotlight, Heading, Text, Size, TextTone, Variant } from '@glacier/react';
+import { Bell } from '@glacier/icons';
 import { Example, PropsTable } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
 
@@ -26,7 +27,7 @@ function TourDemo() {
         New
       </Button>
       <Button ref={bellRef} variant={Variant.Ghost} aria-label="Notifications">
-        🔔
+        <Bell size={16} />
       </Button>
 
       {index !== null && (
