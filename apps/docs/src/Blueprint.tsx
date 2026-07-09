@@ -782,7 +782,11 @@ function SegmentedBarBlueprint({ size, dimensions }: BlueprintProps) {
   const SY = 98;
   const rr = BH / 2; // radius-full ends
   const sr = 3; // schematic slice radius (real value lives in the footnote)
-  const g = 8; // schematic gap between slices
+  // Wide enough for the gap dimension's opposed arrowheads to render (HDim needs
+  // >= 2x its 6px chevrons between the witness lines); the label carries the real
+  // value. The slices are scaled to the track minus the two gaps below so their
+  // shares stay proportional and the empty remainder still reads.
+  const g = 20; // schematic gap between slices
 
   // three example slices sized by share of the total; the rest is empty track
   const shares = [40, 25, 20];
@@ -791,7 +795,7 @@ function SegmentedBarBlueprint({ size, dimensions }: BlueprintProps) {
   let firstRight = SX;
   let secondX = SX;
   const slices = shares.map((share, i) => {
-    const w = (share / 100) * BW;
+    const w = (share / 100) * (BW - 2 * g);
     const s = { x: cursor, w, share, first: i === 0 };
     if (i === 0) {
       firstMidX = cursor + w / 2;
