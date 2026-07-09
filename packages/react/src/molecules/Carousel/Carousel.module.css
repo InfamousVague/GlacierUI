@@ -1,5 +1,9 @@
 .root {
   position: relative;
+  /* As a flex item the root must be allowed to shrink below its content width,
+     otherwise it grows to fit every card and the scroller never clips or
+     overflows (so the controls, which show only on overflow, stay hidden). */
+  min-width: 0;
 }
 
 .scroller {
