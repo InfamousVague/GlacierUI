@@ -103,17 +103,18 @@ export function Carousel({
   return (
     <div className={cx(styles.root, className)} style={style}>
       {showControls && (
-        <IconButton
-          variant={Variant.Soft}
-          aria-label={t(kitMessages.previous)}
-          className={cx(styles.control, styles.prev)}
-          data-hidden={!overflowing || undefined}
-          disabled={atStart}
-          tabIndex={-1}
-          onClick={() => page(-1)}
-        >
-          {chevronLeft}
-        </IconButton>
+        <span className={cx(styles.controlSlot, styles.prev)} data-hidden={!overflowing || undefined}>
+          <IconButton
+            variant={Variant.Soft}
+            aria-label={t(kitMessages.previous)}
+            className={styles.control}
+            disabled={atStart}
+            tabIndex={-1}
+            onClick={() => page(-1)}
+          >
+            {chevronLeft}
+          </IconButton>
+        </span>
       )}
       <div
         ref={scrollerRef}
@@ -127,17 +128,18 @@ export function Carousel({
         {children}
       </div>
       {showControls && (
-        <IconButton
-          variant={Variant.Soft}
-          aria-label={t(kitMessages.next)}
-          className={cx(styles.control, styles.next)}
-          data-hidden={!overflowing || undefined}
-          disabled={atEnd}
-          tabIndex={-1}
-          onClick={() => page(1)}
-        >
-          {chevronRight}
-        </IconButton>
+        <span className={cx(styles.controlSlot, styles.next)} data-hidden={!overflowing || undefined}>
+          <IconButton
+            variant={Variant.Soft}
+            aria-label={t(kitMessages.next)}
+            className={styles.control}
+            disabled={atEnd}
+            tabIndex={-1}
+            onClick={() => page(1)}
+          >
+            {chevronRight}
+          </IconButton>
+        </span>
       )}
     </div>
   );

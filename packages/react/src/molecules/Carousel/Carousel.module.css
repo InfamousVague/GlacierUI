@@ -37,16 +37,27 @@
   scroll-snap-align: start;
 }
 
-.control {
+/* The control slot handles positioning and vertical centering with flexbox
+   (not a transform), so the button's own tap-scale animation can't override the
+   offset and leave the control shifted. The slot ignores pointer events; only
+   the button inside it is interactive, so the strip stays usable behind it. */
+.controlSlot {
   position: absolute;
-  top: 50%;
+  top: 0;
+  bottom: 0;
   z-index: 1;
-  transform: translateY(-50%);
-  box-shadow: var(--glacier-shadow-3);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
   opacity: 1;
   transition:
     opacity var(--glacier-duration-fast) var(--glacier-ease-out),
     visibility var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.control {
+  box-shadow: var(--glacier-shadow-3);
+  pointer-events: auto;
 }
 
 .prev {
@@ -58,7 +69,7 @@
 }
 
 /* controls fade out entirely when the strip fits with nothing to scroll */
-.control[data-hidden] {
+.controlSlot[data-hidden] {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
