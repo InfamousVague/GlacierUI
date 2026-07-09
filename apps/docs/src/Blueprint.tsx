@@ -116,6 +116,36 @@ function CircleBlueprint({ size, id }: { size: SizeSpec; id?: string }) {
   );
 }
 
+/**
+ * StatusDot blueprint: the presence dot pinned to the bottom-right of a host
+ * element (an avatar or icon), which is how it is almost always used. The host
+ * is a dotted circle for context; the dot itself is dimensioned by its diameter.
+ */
+function StatusDotBlueprint({ size }: { size: SizeSpec }) {
+  const diameter = fmt(size.diameter);
+  const hostCx = 158;
+  const hostCy = 100;
+  const hostR = 54;
+  // pin the dot to the host's bottom-right edge (the 4:30 / 135° position).
+  const [dx, dy] = polar(hostCx, hostCy, hostR, 135);
+  const dotR = 21;
+  return (
+    <svg viewBox="0 0 380 200" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} size`}>
+      <Defs />
+      <rect x={0} y={0} width={380} height={200} fill="url(#bpGrid)" />
+      {/* the host element the dot attaches to, drawn as a dotted circle */}
+      <circle cx={hostCx} cy={hostCy} r={hostR} fill="none" stroke={C.edge} strokeWidth={1} strokeDasharray="2 4" strokeLinecap="round" />
+      <text x={hostCx} y={hostCy} textAnchor="middle" dominantBaseline="central" stroke="none" className="bpLabel bpMuted">host</text>
+      {/* the status dot, pinned to the bottom-right of the host */}
+      <circle cx={dx} cy={dy} r={dotR} fill={C.fill} stroke={C.edge} strokeWidth={2} strokeDasharray="4 3" />
+      {/* the dot's diameter, dimensioned below it */}
+      <HDim x1={dx - dotR} x2={dx + dotR} y={dy + dotR + 22} label={`⌀ ${diameter ?? 'auto'}`} above={false} />
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <text x={16} y={184} className="bpLabel bpMuted">radius: full</text>
+    </svg>
+  );
+}
+
 // A point on a circle, with 0° at 12 o'clock and angles going clockwise.
 function polar(cx: number, cy: number, r: number, deg: number): [number, number] {
   const rad = ((deg - 90) * Math.PI) / 180;
@@ -1963,6 +1993,7 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'banner') return withFrame(<BannerBlueprint size={size} dimensions={dimensions} />);
   if (id === 'meter') return withFrame(<MeterBlueprint size={size} dimensions={dimensions} />);
   if (id === 'segmented-bar') return withFrame(<SegmentedBarBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'status-dot') return withFrame(<StatusDotBlueprint size={size} />);
   // molecules
   if (id === 'field') return withFrame(<FieldBlueprint size={size} dimensions={dimensions} />);
   if (id === 'select') return withFrame(<SelectBlueprint size={size} dimensions={dimensions} />);
