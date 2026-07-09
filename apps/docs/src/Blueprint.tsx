@@ -992,10 +992,16 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
 // (avatar, lines, image block) with a static blue-to-transparent shimmer on
 // each shape.
 function SkeletonBlueprint({ size, dimensions }: BlueprintProps) {
-  const textRadius = fmt(dimensions?.textRadius);
   const rectRadius = fmt(dimensions?.rectRadius);
   const circleRadius = fmt(dimensions?.circleRadius);
   const g = 'url(#bpSkel)';
+  const RX = 80;
+  const RY = 70;
+  const RW = 112;
+  const RH = 76;
+  const Ccx = 300;
+  const Ccy = RY + RH / 2;
+  const Cr = 38;
   return (
     <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label="Blueprint of the skeleton">
       <Defs />
@@ -1006,21 +1012,16 @@ function SkeletonBlueprint({ size, dimensions }: BlueprintProps) {
         </linearGradient>
       </defs>
       <rect x={0} y={0} width={400} height={200} fill="url(#bpGrid)" />
-      {/* avatar (circle) + name / subtitle (text) */}
-      <circle cx={90} cy={58} r={18} fill={g} />
-      <rect x={122} y={50} width={128} height={12} rx={4} fill={g} />
-      <rect x={122} y={70} width={86} height={9} rx={4} fill={g} />
-      {/* image block (rect) */}
-      <rect x={62} y={98} width={150} height={62} rx={8} fill={g} />
-      {/* paragraph lines (text) */}
-      <rect x={226} y={104} width={110} height={10} rx={4} fill={g} />
-      <rect x={226} y={124} width={94} height={10} rx={4} fill={g} />
-      <rect x={226} y={144} width={110} height={10} rx={4} fill={g} />
-      <text x={90} y={30} textAnchor="middle" className="bpLabel bpMuted">circle</text>
-      <text x={186} y={44} textAnchor="middle" className="bpLabel bpMuted">text</text>
-      <text x={137} y={92} textAnchor="middle" className="bpLabel bpMuted">rect</text>
+      {/* one rect + one circle, filled with the static blue-to-transparent shimmer */}
+      <rect x={RX} y={RY} width={RW} height={RH} rx={10} fill={g} />
+      <circle cx={Ccx} cy={Ccy} r={Cr} fill={g} />
+      {/* the width bar over the rect, and the circle's diameter */}
+      <HDim x1={RX} x2={RX + RW} y={RY - 20} label="width: auto" />
+      <HDim x1={Ccx - Cr} x2={Ccx + Cr} y={Ccy - Cr - 18} label="⌀ width" />
+      <text x={RX + RW / 2} y={RY + RH + 20} textAnchor="middle" className="bpLabel bpMuted">rect</text>
+      <text x={Ccx} y={Ccy + Cr + 20} textAnchor="middle" className="bpLabel bpMuted">circle</text>
       <text x={16} y={26} className="bpTitle">{size.name}</text>
-      <Foot y={186} parts={[textRadius && `text: ${textRadius}`, rectRadius && `rect: ${rectRadius}`, circleRadius && `circle: ${circleRadius}`]} />
+      <Foot y={188} parts={[rectRadius && `rect: ${rectRadius}`, circleRadius && `circle: ${circleRadius}`]} />
     </svg>
   );
 }
