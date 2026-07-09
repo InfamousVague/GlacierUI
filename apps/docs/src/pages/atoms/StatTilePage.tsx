@@ -1,6 +1,7 @@
 import { StatTile, Pill, Heading, Text, Size, TextTone, Tone } from '@glacier/react';
 import { DollarSign, TrendingUp, Users } from '@glacier/icons';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const usersIcon = <Users size={18} />;
 const revenueIcon = <DollarSign size={18} />;
@@ -15,6 +16,10 @@ export function StatTilePage() {
         with an optional trailing delta or hint. Sits in rows and grids on the card surface tokens so
         a dashboard of tiles reads as one consistent panel.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <ComponentBlueprint specId="stat-tile" />
 
       <Heading level={2}>Examples</Heading>
 

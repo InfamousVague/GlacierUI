@@ -1,5 +1,6 @@
 import { Image, Heading, Text, Size, TextTone } from '@glacier/react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 /** A deterministic, offline SVG "cover" so the docs render without network images. */
 function cover(title: string, from: string, to: string, w = 200, h = 300): string {
@@ -27,6 +28,10 @@ export function ImagePage() {
         fallback if the source fails. Built for content imagery like cover art, thumbnails, and hero
         shots.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <ComponentBlueprint specId="image" />
 
       <Heading level={2}>Examples</Heading>
 

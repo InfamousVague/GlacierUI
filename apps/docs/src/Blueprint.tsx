@@ -2002,6 +2002,194 @@ function Defs() {
   );
 }
 
+// StatTile: a micro-card with a leading icon disc, a prominent value and trailing
+// hint, and a muted label below.
+function StatTileBlueprint({ size, dimensions }: BlueprintProps) {
+  const radius = fmt(dimensions?.radius);
+  const padIn = fmt(dimensions?.paddingInline);
+  const gap = fmt(dimensions?.gap);
+  const X = 78;
+  const Y = 60;
+  const W = 244;
+  const H = 92;
+  const iconS = 44;
+  const iconX = X + 22;
+  const iconY = Y + (H - iconS) / 2;
+  const colX = iconX + iconS + 20;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the stat tile">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <Frame x={X} y={Y} w={W} h={H} r={14} />
+      <rect x={iconX} y={iconY} width={iconS} height={iconS} rx={9} fill={C.content} fillOpacity={0.28} stroke={C.text} strokeWidth={1} strokeDasharray="3 2" />
+      <g transform={`translate(${iconX + iconS / 2 - 9} ${iconY + iconS / 2 - 9}) scale(${18 / 24})`} fill={C.line} stroke="none">
+        <path d={PLACEHOLDER_ICON} />
+      </g>
+      <text x={colX} y={Y + 38} fill={C.text} stroke="none" style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 25, fontWeight: 700 }}>1,240</text>
+      <rect x={colX + 96} y={Y + 20} width={40} height={18} rx={9} fill={C.content} fillOpacity={0.32} />
+      <text x={colX + 116} y={Y + 30} textAnchor="middle" dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 10, fontWeight: 600 }}>+12%</text>
+      <Ln x={colX} y={Y + 56} w={96} h={7} op={0.4} />
+      <text x={iconX + iconS / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">icon</text>
+      <text x={colX + 24} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">value</text>
+      <text x={colX + 116} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">hint</text>
+      <text x={colX} y={Y + H + 18} className="bpLabel bpMuted">label</text>
+      <HDim x1={X} x2={X + W} y={Y - 26} label="width: auto" />
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[radius && `radius: ${radius}`, padIn && `padding: ${padIn}`, gap && `gap: ${gap}`]} />
+    </svg>
+  );
+}
+
+// DeviceFrame: a phone bezel with an inset screen, a top notch, and side buttons.
+function DeviceFrameBlueprint({ size, dimensions }: BlueprintProps) {
+  const width = fmt(size.diameter);
+  const radius = fmt(dimensions?.radius);
+  const screenRadius = fmt(dimensions?.screenRadius);
+  const bezel = fmt(dimensions?.bezel);
+  const pw = 78;
+  const ph = 150;
+  const px = (400 - pw) / 2;
+  const py = 30;
+  const bz = 7;
+  const sx = px + bz;
+  const sy = py + bz;
+  const sw = pw - bz * 2;
+  const sh = ph - bz * 2;
+  const notchW = sw * 0.42;
+  const notchH = 8;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the device frame">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={px} y={py} width={pw} height={ph} rx={18} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
+      <rect x={sx} y={sy} width={sw} height={sh} rx={12} fill={C.content} fillOpacity={0.2} stroke={C.text} strokeWidth={1} strokeDasharray="3 2" />
+      <rect x={sx + (sw - notchW) / 2} y={sy} width={notchW} height={notchH} rx={4} fill={C.edge} />
+      <rect x={px - 2.5} y={py + 34} width={2.5} height={14} rx={1.25} fill={C.edge} />
+      <rect x={px - 2.5} y={py + 54} width={2.5} height={22} rx={1.25} fill={C.edge} />
+      <rect x={px + pw} y={py + 46} width={2.5} height={28} rx={1.25} fill={C.edge} />
+      <HDim x1={sx} x2={sx + sw} y={py - 14} label={width ? `screen: ${width}` : 'screen'} />
+      <text x={px + pw + 14} y={py + 18} className="bpLabel bpMuted">bezel</text>
+      <text x={sx + sw / 2} y={sy + notchH + 15} textAnchor="middle" className="bpLabel bpMuted">notch</text>
+      <text x={px - 12} y={py + 46} textAnchor="end" className="bpLabel bpMuted">buttons</text>
+      <text x={px + pw + 14} y={py + ph / 2 + 24} className="bpLabel bpMuted">screen</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[radius && `radius: ${radius}`, screenRadius && `screen: ${screenRadius}`, bezel && `bezel: ${bezel}`]} />
+    </svg>
+  );
+}
+
+// FilterChip: a toggle pill shown selected (accent tint) with a leading icon, a
+// label, and a trailing count badge.
+function FilterChipBlueprint({ size, dimensions }: BlueprintProps) {
+  const height = fmt(size.height);
+  const padIn = fmt(size.paddingInline);
+  const radius = fmt(dimensions?.radius);
+  const border = fmt(dimensions?.border);
+  const CW = 176;
+  const CH = 46;
+  const CX = (400 - CW) / 2;
+  const CY = 86;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the filter chip">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={CX} y={CY} width={CW} height={CH} rx={CH / 2} fill="var(--glacier-accent-soft)" stroke="var(--glacier-accent-border)" strokeWidth={1.5} />
+      <g transform={`translate(${CX + 20} ${CY + CH / 2 - 8}) scale(${16 / 24})`} fill={C.line} stroke="none">
+        <path d={PLACEHOLDER_ICON} />
+      </g>
+      <Ln x={CX + 44} y={CY + CH / 2 - 3.5} w={64} h={7} op={0.6} />
+      <circle cx={CX + CW - 26} cy={CY + CH / 2} r={13} fill={C.content} fillOpacity={0.42} stroke={C.text} strokeWidth={1} />
+      <text x={CX + CW - 26} y={CY + CH / 2} textAnchor="middle" dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 11, fontWeight: 600 }}>3</text>
+      <text x={CX + 20} y={CY - 12} textAnchor="middle" className="bpLabel bpMuted">icon</text>
+      <text x={CX + 76} y={CY - 12} textAnchor="middle" className="bpLabel bpMuted">label</text>
+      <text x={CX + CW - 26} y={CY - 12} textAnchor="middle" className="bpLabel bpMuted">count</text>
+      <text x={CX + CW / 2} y={CY + CH + 20} textAnchor="middle" className="bpLabel bpMuted">selected</text>
+      <HDim x1={CX} x2={CX + CW} y={CY - 30} label="width: auto" />
+      {height && <VDim x={CX - 22} y1={CY} y2={CY + CH} label={height} />}
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[radius && `radius: ${radius}`, padIn && `padding: ${padIn}`, border && `border: ${border}`]} />
+    </svg>
+  );
+}
+
+// Image: a fixed aspect-ratio frame that clips and rounds an image, with a
+// fallback shown on error.
+function ImageBlueprint({ size }: BlueprintProps) {
+  const X = 134;
+  const Y = 42;
+  const W = 132;
+  const H = 126;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the image">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={X} y={Y} width={W} height={H} rx={12} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
+      <circle cx={X + 34} cy={Y + 38} r={11} fill="none" stroke={C.line} strokeWidth={2} />
+      <path
+        d={`M ${X + 10} ${Y + H - 16} L ${X + W * 0.38} ${Y + H * 0.46} L ${X + W * 0.6} ${Y + H - 34} L ${X + W * 0.78} ${Y + H * 0.52} L ${X + W - 10} ${Y + H - 16}`}
+        fill="none"
+        stroke={C.line}
+        strokeWidth={2}
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      />
+      <text x={X + W / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">frame</text>
+      <text x={X + W + 14} y={Y + H / 2 - 6} className="bpLabel bpMuted">image</text>
+      <text x={X - 14} y={Y + H / 2 + 8} textAnchor="end" className="bpLabel bpMuted">fallback</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={['radius: md', 'fit: cover', 'aspect: auto']} />
+    </svg>
+  );
+}
+
+// Rating: a row of stars filled to the value (3.5 of 5 here), with a half-filled
+// star to show fractional display and the rest hollow.
+function RatingBlueprint({ size, dimensions }: BlueprintProps) {
+  const font = fmt(size.fontSize);
+  const gap = fmt(dimensions?.gap);
+  const N = 5;
+  const starS = 42;
+  const g = 18;
+  const totalW = N * starS + (N - 1) * g;
+  const SX = (400 - totalW) / 2;
+  const SY = 74;
+  const halfX = SX + 3 * (starS + g) + starS / 2;
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the rating">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <clipPath id="bpRatingHalf">
+        <rect x={0} y={0} width={halfX} height={210} />
+      </clipPath>
+      {Array.from({ length: N }, (_, i) => {
+        const x = SX + i * (starS + g);
+        const filled = i < 3;
+        const half = i === 3;
+        const tx = `translate(${x} ${SY}) scale(${starS / 24})`;
+        return (
+          <g key={i}>
+            <g transform={tx} fill={filled ? C.content : 'none'} fillOpacity={filled ? 0.6 : 1} stroke={C.edge} strokeWidth={1.6} strokeLinejoin="round">
+              <path d={PLACEHOLDER_ICON} />
+            </g>
+            {half && (
+              <g clipPath="url(#bpRatingHalf)">
+                <g transform={tx} fill={C.content} fillOpacity={0.6} stroke="none">
+                  <path d={PLACEHOLDER_ICON} />
+                </g>
+              </g>
+            )}
+          </g>
+        );
+      })}
+      <text x={SX + starS / 2} y={SY - 12} textAnchor="middle" className="bpLabel bpMuted">star</text>
+      {gap && <HDim x1={SX + starS} x2={SX + starS + g} y={SY + starS + 16} label={gap} above={false} />}
+      <text x={200} y={SY + starS + 40} textAnchor="middle" className="bpLabel bpMuted">value 3.5 / 5</text>
+      <text x={16} y={26} className="bpTitle">{size.name}</text>
+      <Foot parts={[font && `star: ${font}`]} />
+    </svg>
+  );
+}
+
 export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps) {
   if (shape === 'ring') return withFrame(<RingBlueprint size={size} />);
   if (shape === 'slider') return withFrame(<SliderBlueprint size={size} dimensions={dimensions} />);
@@ -2016,6 +2204,11 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'meter') return withFrame(<MeterBlueprint size={size} dimensions={dimensions} />);
   if (id === 'segmented-bar') return withFrame(<SegmentedBarBlueprint size={size} dimensions={dimensions} />);
   if (id === 'status-dot') return withFrame(<StatusDotBlueprint size={size} />);
+  if (id === 'stat-tile') return withFrame(<StatTileBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'device-frame') return withFrame(<DeviceFrameBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'filter-chip') return withFrame(<FilterChipBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'image') return withFrame(<ImageBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'rating') return withFrame(<RatingBlueprint size={size} dimensions={dimensions} />);
   // molecules
   if (id === 'field') return withFrame(<FieldBlueprint size={size} dimensions={dimensions} />);
   if (id === 'select') return withFrame(<SelectBlueprint size={size} dimensions={dimensions} />);

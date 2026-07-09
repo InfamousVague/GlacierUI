@@ -219,6 +219,41 @@ const ATOMS: GalleryItem[] = [
     title: 'Surface',
     blurb: 'A plain background layer that maps directly to the surface tokens.',
   },
+  {
+    spec: 'stat-tile',
+    page: 'stattile',
+    title: 'Stat Tile',
+    blurb:
+      'A compact stat micro-card: an optional leading icon, a prominent value, and a muted label, with an optional trailing delta, built on the card surface tokens.',
+  },
+  {
+    spec: 'filter-chip',
+    page: 'filterchip',
+    title: 'Filter Chip',
+    blurb:
+      'A toggleable filter pill for faceted filtering; the selected state paints the accent soft tint, with an optional leading icon and a trailing count.',
+  },
+  {
+    spec: 'rating',
+    page: 'rating',
+    title: 'Rating',
+    blurb:
+      'A star rating: an interactive native radio group by default, or a read-only display that supports fractional fill.',
+  },
+  {
+    spec: 'image',
+    page: 'image',
+    title: 'Image',
+    blurb:
+      'A framed image with a fixed aspect ratio: it holds its box while loading, fits with object-fit, rounds its corners, and falls back on error.',
+  },
+  {
+    spec: 'device-frame',
+    page: 'deviceframe',
+    title: 'Device Frame',
+    blurb:
+      'A decorative phone bezel with a fixed-aspect, inset screen that hosts a preview, screenshot, or iframe in preset widths.',
+  },
 ];
 
 const MOLECULES: GalleryItem[] = [

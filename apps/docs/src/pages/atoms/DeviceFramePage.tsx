@@ -1,6 +1,7 @@
 import { DeviceFrame, Heading, Text, Size, TextTone } from '@glacier/react';
 import type { CSSProperties } from 'react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const previewStyle: CSSProperties = {
   height: '100%',
@@ -36,6 +37,10 @@ export function DeviceFramePage() {
         live preview, a screenshot, or an iframe. The bezel, notch, and side buttons are purely
         presentational; only the screen contents carry meaning.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <ComponentBlueprint specId="device-frame" />
 
       <Heading level={2}>Examples</Heading>
 

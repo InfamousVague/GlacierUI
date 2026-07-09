@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Rating, Heading, Text, Size, TextTone } from '@glacier/react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 function ControlledRating() {
   const [value, setValue] = useState(3);
@@ -23,6 +24,10 @@ export function RatingPage() {
         stars and the value participates in forms - or <code>readOnly</code> for a display badge that
         supports fractional fill, like a 4.3 average.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <ComponentBlueprint specId="rating" />
 
       <Heading level={2}>Examples</Heading>
 

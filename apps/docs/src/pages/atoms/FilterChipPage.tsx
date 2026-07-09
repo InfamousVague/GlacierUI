@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FilterChip, Heading, Text, Size, TextTone } from '@glacier/react';
 import { Star } from '@glacier/icons';
 import { Example, PropsTable } from '../../docs-ui.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 
 const starIcon = <Star size={14} />;
 
@@ -33,6 +34,10 @@ export function FilterChipPage() {
         leading icon and a trailing count. Controlled <code>selected</code> +{' '}
         <code>onSelectedChange</code>, like the kit's other toggles.
       </Text>
+
+      <Heading level={2}>Anatomy</Heading>
+      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <ComponentBlueprint specId="filter-chip" />
 
       <Heading level={2}>Examples</Heading>
 
