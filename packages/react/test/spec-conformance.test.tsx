@@ -76,6 +76,10 @@ import {
   Sidebar,
   SidebarSection,
   SidebarItem,
+  Breadcrumbs,
+  Pagination,
+  Accordion,
+  Table,
 } from '../src/index.ts';
 import { cloneElement, type ReactElement } from 'react';
 
@@ -258,6 +262,25 @@ const RENDER: Record<string, Renderer> = {
       <div>Start</div>
       <div>End</div>
     </ResizableSplitPane>
+  ),
+  breadcrumbs: () => <Breadcrumbs items={[{ label: 'Home', href: '#' }, { label: 'Docs', current: true }]} />,
+  pagination: () => <Pagination page={2} total={20} pageSize={5} onPageChange={() => {}} />,
+  accordion: () => (
+    <Accordion
+      items={[
+        { id: 'one', title: 'One', content: <div>First</div> },
+        { id: 'two', title: 'Two', content: <div>Second</div> },
+      ]}
+    />
+  ),
+  table: () => (
+    <Table
+      columns={[
+        { key: 'name', header: 'Name' },
+        { key: 'status', header: 'Status' },
+      ]}
+      data={[{ name: 'Ada', status: 'Active' }]}
+    />
   ),
 };
 

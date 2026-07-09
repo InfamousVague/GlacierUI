@@ -41,6 +41,10 @@
   color: var(--glacier-text);
 }
 
+.noMargin {
+  margin: 0;
+}
+
 .heading.h1 {
   font-size: var(--glacier-font-size-3xl);
   line-height: var(--glacier-leading-3xl);

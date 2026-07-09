@@ -54,6 +54,9 @@ export {
 export { ScrollArea, type ScrollAreaProps, type ScrollAreaOrientation } from './molecules/ScrollArea/ScrollArea.tsx';
 export { Carousel, type CarouselProps } from './molecules/Carousel/Carousel.tsx';
 export { Heatmap, type HeatmapProps, type HeatmapData, type HeatmapPoint } from './molecules/Heatmap/Heatmap.tsx';
+export { Breadcrumbs, type BreadcrumbsProps, type BreadcrumbItem } from './molecules/Breadcrumbs/Breadcrumbs.tsx';
+export { Pagination, type PaginationProps } from './molecules/Pagination/Pagination.tsx';
+export { Accordion, type AccordionProps, type AccordionItem } from './molecules/Accordion/Accordion.tsx';
 export { Spotlight, type SpotlightProps } from './molecules/Spotlight/Spotlight.tsx';
 export { Select, type SelectProps, type SelectOption } from './molecules/Select/Select.tsx';
 export { Tabs, type TabsProps, type TabItem } from './molecules/Tabs/Tabs.tsx';
@@ -118,6 +121,7 @@ export {
   type ResizableSplitPaneProps,
   type SplitOrientation,
 } from './organisms/ResizableSplitPane/ResizableSplitPane.tsx';
+export { Table, type TableProps, type TableColumn } from './organisms/Table/Table.tsx';
 export type { Placement } from './internal/useAnchoredPosition.ts';
 
 // i18n - the translation mandate: every user-facing string resolves through a

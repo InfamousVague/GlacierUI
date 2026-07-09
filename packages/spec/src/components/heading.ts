@@ -15,6 +15,7 @@ export const headingSpec: ComponentSpec = {
     { name: 'level', type: 'enum', values: ['1', '2', '3', '4', '5', '6'], default: 2, description: 'Semantic heading level h1 through h6; also sets the visual size.' },
     { name: 'visualLevel', type: 'enum', values: ['1', '2', '3', '4', '5', '6'], description: 'Visual size override when the semantic level and the looks need to differ.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
+    { name: 'noMargin', type: 'boolean', default: false, description: 'Removes the heading margin for compact layouts.' },
     { name: 'children', type: 'node', description: 'Heading content.' },
   ],
   sizes: [

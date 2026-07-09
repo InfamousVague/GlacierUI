@@ -1,0 +1,8 @@
+.root { display: flex; align-items: center; } 
+.list { display: inline-flex; align-items: center; gap: var(--glacier-space-2); margin: 0; padding: 0; list-style: none; flex-wrap: wrap; }
+.item { display: inline-flex; align-items: center; gap: var(--glacier-space-2); color: var(--glacier-text-subtle); }
+.link { color: inherit; text-decoration: none; }
+.link:hover { color: var(--glacier-text); }
+.current { color: var(--glacier-text); font-weight: 600; }
+.text { color: var(--glacier-text-subtle); }
+.separator { color: var(--glacier-text-subtle); }

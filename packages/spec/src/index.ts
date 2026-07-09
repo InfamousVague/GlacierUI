@@ -65,6 +65,10 @@ export * from './components/filter-chip.ts';
 export * from './components/scroll-area.ts';
 export * from './components/carousel.ts';
 export * from './components/heatmap.ts';
+export * from './components/breadcrumbs.ts';
+export * from './components/pagination.ts';
+export * from './components/accordion.ts';
+export * from './components/table.ts';
 export * from './components/spotlight.ts';
 export * from './components/floating-panel.ts';
 export * from './components/tabbed-panel.ts';
@@ -128,6 +132,10 @@ import { filterChipSpec } from './components/filter-chip.ts';
 import { scrollAreaSpec } from './components/scroll-area.ts';
 import { carouselSpec } from './components/carousel.ts';
 import { heatmapSpec } from './components/heatmap.ts';
+import { breadcrumbsSpec } from './components/breadcrumbs.ts';
+import { paginationSpec } from './components/pagination.ts';
+import { accordionSpec } from './components/accordion.ts';
+import { tableSpec } from './components/table.ts';
 import { spotlightSpec } from './components/spotlight.ts';
 import { floatingPanelSpec } from './components/floating-panel.ts';
 import { tabbedPanelSpec } from './components/tabbed-panel.ts';
@@ -205,6 +213,10 @@ export const specs: ComponentSpec[] = [
   scrollAreaSpec,
   carouselSpec,
   heatmapSpec,
+  breadcrumbsSpec,
+  paginationSpec,
+  accordionSpec,
+  tableSpec,
   spotlightSpec,
   // new organisms
   floatingPanelSpec,

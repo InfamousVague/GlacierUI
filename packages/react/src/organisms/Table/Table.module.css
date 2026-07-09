@@ -1,0 +1,9 @@
+.wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; background: var(--glacier-surface); color: var(--glacier-text); }
+.caption { text-align: left; padding-bottom: var(--glacier-space-2); color: var(--glacier-text-subtle); }
+.headerCell { text-align: left; padding: var(--glacier-space-3) var(--glacier-space-4); border-bottom: 1px solid var(--glacier-border); font-weight: 600; }
+.cell { padding: var(--glacier-space-3) var(--glacier-space-4); border-bottom: 1px solid var(--glacier-border); }
+.emptyCell { padding: var(--glacier-space-4); text-align: center; color: var(--glacier-text-subtle); }
+.left { text-align: left; }
+.center { text-align: center; }
+.right { text-align: right; }
