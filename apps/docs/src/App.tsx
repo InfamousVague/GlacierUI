@@ -21,6 +21,7 @@ import { MaterialsPage } from './pages/foundations/MaterialsPage.tsx';
 import { MotionPage } from './pages/foundations/MotionPage.tsx';
 import { SpecPage } from './pages/foundations/SpecPage.tsx';
 import { IconsPage } from './pages/foundations/IconsPage.tsx';
+import { TestingPage } from './pages/foundations/TestingPage.tsx';
 
 // Atoms
 import { ButtonPage } from './pages/atoms/ButtonPage.tsx';
@@ -92,6 +93,7 @@ const PAGES = {
   motion: { title: 'Motion', group: 'Foundations', el: <MotionPage /> },
   spec: { title: 'Specification', group: 'Foundations', el: <SpecPage /> },
   icons: { title: 'Icons', group: 'Foundations', el: <IconsPage /> },
+  testing: { title: 'Testing', group: 'Foundations', el: <TestingPage /> },
   button: { title: 'Button', group: 'Atoms', el: <ButtonPage /> },
   text: { title: 'Text & Headings', group: 'Atoms', el: <TextPage /> },
   pill: { title: 'Pill', group: 'Atoms', el: <PillPage /> },

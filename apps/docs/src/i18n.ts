@@ -31,6 +31,7 @@ export const pageTitles = defineMessages({
   motion: { en: 'Motion', es: 'Movimiento', fr: 'Mouvement', de: 'Bewegung', ja: 'モーション' },
   spec: { en: 'Specification', es: 'Especificación', fr: 'Spécification', de: 'Spezifikation', ja: '仕様' },
   icons: { en: 'Icons', es: 'Iconos', fr: 'Icônes', de: 'Symbole', ja: 'アイコン' },
+  testing: { en: 'Testing', es: 'Pruebas', fr: 'Tests', de: 'Tests', ja: 'テスト' },
   button: { en: 'Button', es: 'Botón', fr: 'Bouton', de: 'Schaltfläche', ja: 'ボタン' },
   text: { en: 'Text & Headings', es: 'Texto y títulos', fr: 'Texte et titres', de: 'Text & Überschriften', ja: 'テキストと見出し' },
   pill: { en: 'Pill', es: 'Píldora', fr: 'Pilule', de: 'Pill', ja: 'ピル' },
