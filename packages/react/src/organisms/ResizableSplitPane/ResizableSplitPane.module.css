@@ -43,7 +43,7 @@
 .divider:hover,
 .divider:focus-visible {
   outline: none;
-  background: var(--glacier-accent-border);
+  background: var(--glacier-accent-solid);
 }
 
 .root[data-orientation='horizontal'] .divider {
@@ -82,6 +82,7 @@
 .grip {
   position: relative;
   z-index: 1;
+  flex: none;
   border-radius: var(--glacier-radius-full);
   background: var(--glacier-border-strong);
   opacity: 0;
@@ -94,13 +95,13 @@
 }
 
 .root[data-orientation='horizontal'] .grip {
-  width: 3px;
+  width: 6px;
   height: var(--glacier-space-6);
 }
 
 .root[data-orientation='vertical'] .grip {
   width: var(--glacier-space-6);
-  height: 3px;
+  height: 6px;
 }
 
 @media (prefers-reduced-motion: reduce) {
