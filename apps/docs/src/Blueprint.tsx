@@ -123,7 +123,7 @@ function CircleBlueprint({ size, id }: { size: SizeSpec; id?: string }) {
  */
 function StatusDotBlueprint({ size }: { size: SizeSpec }) {
   const diameter = fmt(size.diameter);
-  const hostCx = 158;
+  const hostCx = 190;
   const hostCy = 100;
   const hostR = 54;
   // pin the dot to the host's bottom-right edge (the 4:30 / 135° position).
@@ -135,7 +135,7 @@ function StatusDotBlueprint({ size }: { size: SizeSpec }) {
       <rect x={0} y={0} width={380} height={200} fill="url(#bpGrid)" />
       {/* the host element the dot attaches to, drawn as a dotted circle */}
       <circle cx={hostCx} cy={hostCy} r={hostR} fill="none" stroke={C.edge} strokeWidth={1} strokeDasharray="2 4" strokeLinecap="round" />
-      <text x={hostCx} y={hostCy} textAnchor="middle" dominantBaseline="central" stroke="none" className="bpLabel bpMuted">host</text>
+      <text x={hostCx} y={hostCy} textAnchor="middle" dominantBaseline="central" stroke="none" fill={C.text} className="bpLabel">Online</text>
       {/* the status dot, pinned to the bottom-right of the host */}
       <circle cx={dx} cy={dy} r={dotR} fill={C.fill} stroke={C.edge} strokeWidth={2} strokeDasharray="4 3" />
       {/* the dot's diameter, dimensioned below it */}
