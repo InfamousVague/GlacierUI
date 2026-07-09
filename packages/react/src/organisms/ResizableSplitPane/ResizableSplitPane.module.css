@@ -84,7 +84,7 @@
   z-index: 1;
   flex: none;
   border-radius: var(--glacier-radius-full);
-  background: var(--glacier-border-strong);
+  background: #fff;
   opacity: 0;
   transition: opacity var(--glacier-duration-fast) var(--glacier-ease-out);
 }
