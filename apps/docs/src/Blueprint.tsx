@@ -934,6 +934,25 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
         </text>
       )}
 
+      {/* content label: show the atom's own text centred in the box */}
+      {(id === 'text' || id === 'heading' || id === 'counter-badge') && (
+        <text
+          x={BX + BW / 2}
+          y={BY + BH / 2}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fill={C.text}
+          stroke="none"
+          style={{
+            fontFamily: 'var(--glacier-font-sans)',
+            fontSize: id === 'heading' ? 22 : id === 'counter-badge' ? 17 : 15,
+            fontWeight: id === 'heading' ? 700 : 600,
+          }}
+        >
+          {id === 'heading' ? 'heading' : id === 'counter-badge' ? '99+' : 'text'}
+        </text>
+      )}
+
       {/* height on the left */}
       {height && <VDim x={BX - 34} y1={BY} y2={BY + BH} label={height} />}
       {/* width span on top (content-sized, but the box width is shown) */}
