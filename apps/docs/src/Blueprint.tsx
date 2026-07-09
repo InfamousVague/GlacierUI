@@ -1389,7 +1389,10 @@ function SegmentedControlBlueprint({ size, dimensions }: BlueprintProps) {
   const N = 3;
   const segW = 84;
   const segH = 40;
-  const g = 8;
+  // Wide enough that the gap dimension's opposed arrowheads have room to render
+  // (HDim needs >= 2x its 6px chevrons between the witness lines). The label
+  // carries the real value; the figure is schematic.
+  const g = 26;
   const totalW = N * segW + (N - 1) * g;
   const SX = (400 - totalW) / 2;
   const SY = 84;
