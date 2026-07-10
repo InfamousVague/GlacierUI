@@ -34,13 +34,13 @@ export const deviceFrameSpec: ComponentSpec = {
   ],
   defaults: { size: 'md', aspect: '9 / 19.5', hideNotch: false },
   dimensions: {
-    radius: token('radius-2xl'),
-    screenRadius: token('radius-xl'),
+    radius: '14% of frame width',
+    screenRadius: '14% of frame width minus the bezel',
     bezel: token('space-2'),
   },
   tokens: [
     'gray-9', 'surface-sunken', 'border', 'border-strong', 'hairline',
-    'radius-2xl', 'radius-xl', 'radius-md', 'radius-full',
+    'radius-md', 'radius-full',
     'space-2', 'space-3', 'space-4', 'space-5', 'space-6', 'space-8',
     'shadow-4', 'font-sans',
   ],

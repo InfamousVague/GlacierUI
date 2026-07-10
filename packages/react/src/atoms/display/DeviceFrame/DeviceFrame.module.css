@@ -2,12 +2,18 @@
   --device-frame-width: 17rem;
   --device-frame-aspect: 9 / 19.5;
   --device-frame-bezel: var(--glacier-space-2);
+  /* iPhone corners are proportional to the body, about 14% of its width, so
+     the shell keeps the same curve at every size and width override. The
+     inner radii below stay concentric: outer minus their inset. */
+  --device-frame-radius: calc(var(--device-frame-width) * 0.14);
 
   position: relative;
   display: inline-block;
   width: var(--device-frame-width);
   padding: var(--device-frame-bezel);
-  border-radius: var(--glacier-radius-2xl);
+  border-radius: var(--device-frame-radius);
+  /* continuous Apple-style corner where corner-shape is supported */
+  corner-shape: squircle;
   background: #000;
   box-shadow:
     inset 0 0 0 var(--glacier-hairline) var(--glacier-accent-7),
@@ -19,7 +25,8 @@
 .bezel {
   position: absolute;
   inset: calc(var(--device-frame-bezel) / 2);
-  border-radius: var(--glacier-radius-xl);
+  border-radius: calc(var(--device-frame-radius) - var(--device-frame-bezel) / 2);
+  corner-shape: squircle;
   pointer-events: none;
 }
 
@@ -27,7 +34,8 @@
   position: relative;
   aspect-ratio: var(--device-frame-aspect);
   overflow: hidden;
-  border-radius: var(--glacier-radius-xl);
+  border-radius: calc(var(--device-frame-radius) - var(--device-frame-bezel));
+  corner-shape: squircle;
   background: var(--glacier-surface-sunken);
 }
 
