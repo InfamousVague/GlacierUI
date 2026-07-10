@@ -1,3 +1,8 @@
+.positioner {
+  /* the whole point: never trap the cursor over the trigger it describes */
+  pointer-events: none;
+}
+
 .bubble {
   max-width: min(18rem, calc(100vw - 2rem));
   padding: var(--glacier-space-2) var(--glacier-space-3);
@@ -20,35 +25,38 @@
 /* The pointer: a small rotated square wearing the bubble's material, poking
    out of the edge that faces the trigger. The two exposed pre-rotation edges
    carry the hairline so the bubble's outline continues around the tip. It
-   skips its own backdrop-filter: at this size a second blur pass only buys a
-   visible seam against the bubble. */
+   carries the same backdrop blur, which works because it sits BESIDE the
+   bubble in the positioner rather than inside it: a nested arrow could only
+   tint, never blur, what is behind the bubble's edge. */
 .arrow {
   position: absolute;
   width: 9px;
   height: 9px;
   background: var(--glacier-glass-thick);
+  backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
   transform: rotate(45deg);
   pointer-events: none;
 }
 
 /* side: which bubble edge the tip pokes out of, and which pre-rotation
    borders draw the exposed V */
-.bubble[data-placement^='top'] .arrow {
+.positioner[data-placement^='top'] .arrow {
   bottom: -5px;
   border-right: var(--glacier-hairline) solid var(--glacier-glass-border);
   border-bottom: var(--glacier-hairline) solid var(--glacier-glass-border);
 }
-.bubble[data-placement^='bottom'] .arrow {
+.positioner[data-placement^='bottom'] .arrow {
   top: -5px;
   border-left: var(--glacier-hairline) solid var(--glacier-glass-border);
   border-top: var(--glacier-hairline) solid var(--glacier-glass-border);
 }
-.bubble[data-placement^='left'] .arrow {
+.positioner[data-placement^='left'] .arrow {
   right: -5px;
   border-top: var(--glacier-hairline) solid var(--glacier-glass-border);
   border-right: var(--glacier-hairline) solid var(--glacier-glass-border);
 }
-.bubble[data-placement^='right'] .arrow {
+.positioner[data-placement^='right'] .arrow {
   left: -5px;
   border-bottom: var(--glacier-hairline) solid var(--glacier-glass-border);
   border-left: var(--glacier-hairline) solid var(--glacier-glass-border);
@@ -56,34 +64,34 @@
 
 /* alignment along the edge: centered by default, pinned near the leading or
    trailing corner for -start and -end placements */
-.bubble[data-placement^='top'] .arrow,
-.bubble[data-placement^='bottom'] .arrow {
+.positioner[data-placement^='top'] .arrow,
+.positioner[data-placement^='bottom'] .arrow {
   left: 50%;
   margin-left: -4.5px;
 }
-.bubble[data-placement$='-start'][data-placement^='top'] .arrow,
-.bubble[data-placement$='-start'][data-placement^='bottom'] .arrow {
+.positioner[data-placement$='-start'][data-placement^='top'] .arrow,
+.positioner[data-placement$='-start'][data-placement^='bottom'] .arrow {
   left: 12px;
   margin-left: 0;
 }
-.bubble[data-placement$='-end'][data-placement^='top'] .arrow,
-.bubble[data-placement$='-end'][data-placement^='bottom'] .arrow {
+.positioner[data-placement$='-end'][data-placement^='top'] .arrow,
+.positioner[data-placement$='-end'][data-placement^='bottom'] .arrow {
   left: auto;
   right: 12px;
   margin-left: 0;
 }
-.bubble[data-placement^='left'] .arrow,
-.bubble[data-placement^='right'] .arrow {
+.positioner[data-placement^='left'] .arrow,
+.positioner[data-placement^='right'] .arrow {
   top: 50%;
   margin-top: -4.5px;
 }
-.bubble[data-placement$='-start'][data-placement^='left'] .arrow,
-.bubble[data-placement$='-start'][data-placement^='right'] .arrow {
+.positioner[data-placement$='-start'][data-placement^='left'] .arrow,
+.positioner[data-placement$='-start'][data-placement^='right'] .arrow {
   top: 10px;
   margin-top: 0;
 }
-.bubble[data-placement$='-end'][data-placement^='left'] .arrow,
-.bubble[data-placement$='-end'][data-placement^='right'] .arrow {
+.positioner[data-placement$='-end'][data-placement^='left'] .arrow,
+.positioner[data-placement$='-end'][data-placement^='right'] .arrow {
   top: auto;
   bottom: 10px;
   margin-top: 0;
