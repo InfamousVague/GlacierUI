@@ -27,7 +27,7 @@ export function SurfacesPage() {
 
       <Example
         title="Elevation"
-        description="Six elevation levels are available. Levels 0 through 3 cover most layouts: 0 sits flat, 1 is the default, 2 and 3 separate floating content from the page."
+        description="Six elevation levels are available. Levels 0 through 3 cover most layouts: 0 sits flat, 1 is the default, 2 and 3 separate floating content from the page. In the light theme depth comes from shadows; in the dark theme raised cards also lighten step by step, since ink shadows vanish against a near-black page."
         code={`import { Card } from '@glacier/react';
 
 <Row gap={4}>

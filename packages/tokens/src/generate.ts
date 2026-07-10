@@ -18,7 +18,7 @@ import { motionDecls, reducedMotionDecls } from './motion.ts';
 import { densityDecls } from './density.ts';
 import { effectsDecls, glassDecls } from './effects.ts';
 import { layoutDecls } from './layout.ts';
-import { shadowDecls } from './elevation.ts';
+import { shadowDecls, elevationOverlayDecls } from './elevation.ts';
 import { semanticDecls, statusDecls, themeOverrideDecls } from './semantic.ts';
 
 const P = '--glacier';
@@ -45,7 +45,7 @@ const rootSections: Array<{ title: string; decls: Decl[] }> = [
   { title: 'Effects - blur, glass, hairline', decls: effectsDecls() },
   { title: 'Layout - containers & breakpoints', decls: layoutDecls() },
   { title: 'Color ramps', decls: rampDecls('light') },
-  { title: 'Elevation', decls: shadowDecls('light') },
+  { title: 'Elevation', decls: [...shadowDecls('light'), ...elevationOverlayDecls('light')] },
   { title: 'Glass materials', decls: glassDecls('light') },
   { title: 'Semantic aliases', decls: semanticDecls() },
   { title: 'Status aliases', decls: statusDecls() },
@@ -57,7 +57,7 @@ const darkBlock = (indent: string): string[] => [
   `${indent}color-scheme: dark;`,
   '',
   ...section('Color ramps', rampDecls('dark'), indent),
-  ...section('Elevation', shadowDecls('dark'), indent),
+  ...section('Elevation', [...shadowDecls('dark'), ...elevationOverlayDecls('dark')], indent),
   ...section('Glass materials', glassDecls('dark'), indent),
   ...section('Theme surfaces', themeOverrideDecls('dark'), indent),
 ];

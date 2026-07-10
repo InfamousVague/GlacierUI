@@ -26,9 +26,25 @@ export const shadows: Record<Theme, string[]> = {
   ],
 };
 
+// Dark pages swallow shadows: ink on a near-black background barely reads, so
+// raised dark surfaces ALSO lighten with elevation, the way a light theme's
+// shadows deepen. Light keeps the overlays fully transparent - shadows carry
+// the depth there - so components can paint the overlay unconditionally.
+const lift = (alpha: number) => `oklch(1 0 0 / ${alpha})`;
+
+export const elevationOverlays: Record<Theme, string[]> = {
+  light: Array.from({ length: 6 }, () => lift(0)),
+  dark: [lift(0), lift(0.04), lift(0.06), lift(0.09), lift(0.12), lift(0.15)],
+};
+
 // ---- CSS emission ----------------------------------------------------------
 
 /** The six `shadow-<n>` levels for one theme. */
 export function shadowDecls(theme: Theme): Array<[string, string]> {
   return shadows[theme].map((s, i) => [`shadow-${i}`, s] as [string, string]);
+}
+
+/** The six `elevation-overlay-<n>` surface tints for one theme. */
+export function elevationOverlayDecls(theme: Theme): Array<[string, string]> {
+  return elevationOverlays[theme].map((o, i) => [`elevation-overlay-${i}`, o] as [string, string]);
 }
