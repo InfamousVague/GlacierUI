@@ -50,6 +50,14 @@ describe('StatTile', () => {
     expect(screen.queryByText('Total users')).not.toBeInTheDocument();
   });
 
+  it('skeleton mirrors the anatomy the props declare', () => {
+    const bare = render(<StatTile skeleton value="" label="" />);
+    expect(bare.container.querySelectorAll('[data-skeleton]')).toHaveLength(2);
+    bare.unmount();
+    const full = render(<StatTile skeleton icon={<span />} hint="+12%" value="" label="" />);
+    expect(full.container.querySelectorAll('[data-skeleton]')).toHaveLength(4);
+  });
+
   it('has no axe violations', async () => {
     render(<StatTile icon={icon} value="$48.2k" label="Revenue this month" hint={<span>+12%</span>} />);
     expect((await axe.run(document.body, { rules: AXE_RULES })).violations).toEqual([]);

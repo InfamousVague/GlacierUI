@@ -85,10 +85,14 @@ export function StatTilePage() {
 
       <Example
         title="Loading"
-        description="The skeleton holds the tile's geometry - a value line and a label line - while data loads."
-        code={`<StatTile skeleton value="" label="" />`}
+        description="The skeleton mirrors the tile it will become: pass the same icon and hint presence and it renders the disc bone, the value and label lines, and a hint bone, so nothing shifts when the data lands."
+        code={`<StatTile skeleton icon={usersIcon} hint="+12%" value="" label="" />
+<StatTile skeleton value="" label="" />`}
       >
-        <StatTile skeleton value="" label="" />
+        <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', maxWidth: '16rem' }}>
+          <StatTile skeleton icon={usersIcon} hint="+12%" value="" label="" />
+          <StatTile skeleton value="" label="" />
+        </div>
       </Example>
 
       <Heading level={2}>Props</Heading>
@@ -99,7 +103,7 @@ export function StatTilePage() {
           { name: 'icon', type: 'ReactNode', description: 'Decorative leading glyph rendered in a muted disc; the disc is omitted when unset.' },
           { name: 'hint', type: 'ReactNode', description: 'Trailing delta or hint aligned to the value baseline, e.g. a Pill change chip.' },
           { name: 'glass', type: 'boolean', default: 'false', description: 'Renders the frosted glass material instead of a solid card.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders a placeholder with the exact geometry.' },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders a placeholder mirroring the anatomy: icon disc and hint bones follow the icon and hint props.' },
         ]}
       />
 

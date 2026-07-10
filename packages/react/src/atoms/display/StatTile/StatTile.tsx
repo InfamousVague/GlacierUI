@@ -35,10 +35,26 @@ export function StatTile({
   ...rest
 }: StatTileProps) {
   if (skeleton) {
+    // Mirrors the live anatomy, keyed off the same props: the icon disc bone
+    // renders when the host's tile carries an icon, and a hint bone joins the
+    // value row when a hint will, so nothing shifts when the data lands.
     return (
       <div className={cx(styles.tile, glass && styles.glass, className)} {...rest}>
+        {icon != null && (
+          <Skeleton
+            width="2.25rem"
+            height="2.25rem"
+            radius="var(--glacier-radius-md)"
+            className={styles.skeletonIcon}
+          />
+        )}
         <div className={styles.body}>
-          <Skeleton variant={SkeletonVariant.Text} width="6ch" style={{ fontSize: 'var(--glacier-font-size-2xl)' }} />
+          <div className={styles.valueRow}>
+            <Skeleton variant={SkeletonVariant.Text} width="6ch" style={{ fontSize: 'var(--glacier-font-size-2xl)' }} />
+            {hint != null && (
+              <Skeleton variant={SkeletonVariant.Text} width="4ch" style={{ fontSize: 'var(--glacier-font-size-xs)' }} />
+            )}
+          </div>
           <Skeleton variant={SkeletonVariant.Text} width="10ch" style={{ fontSize: 'var(--glacier-font-size-sm)' }} />
         </div>
       </div>

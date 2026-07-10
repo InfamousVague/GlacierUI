@@ -21,7 +21,7 @@ export const statTileSpec: ComponentSpec = {
     { name: 'label', type: 'node', required: true, description: 'The muted label naming what the value measures.' },
     { name: 'hint', type: 'node', description: 'Optional trailing delta or hint on the value baseline.' },
     { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid card.' },
-    { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry: value and label text lines.' },
+    { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder mirroring the anatomy: icon disc and hint bones follow the icon and hint props, around the value and label lines.' },
   ],
   defaults: { glass: false, skeleton: false },
   dimensions: {
