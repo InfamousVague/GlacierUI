@@ -84,6 +84,23 @@ export function ScrollAreaPage() {
         </ScrollArea>
       </Example>
 
+      <Example
+        title="Hidden scrollbar"
+        description="hideScrollbar removes the bar entirely for chrome-free surfaces; the edge fades still signal the overflow, and wheel, drag, keyboard, and touch scrolling all keep working."
+        code={`<ScrollArea hideScrollbar maxHeight={160}>
+  {paragraphs}
+</ScrollArea>`}
+      >
+        <ScrollArea hideScrollbar maxHeight={160} aria-label="Release notes">
+          <div style={{ display: 'grid', gap: 'var(--glacier-space-3)', maxWidth: '28rem' }}>
+            <p>The scrollbar is gone, but the bottom fade says there is more below.</p>
+            <p>Wheel and trackpad scrolling behave exactly as before, and the viewport still takes keyboard focus for arrow-key scrolling.</p>
+            <p>Reach for this on dense chip rows, carousels, and cards where a visible bar would read as noise.</p>
+            <p>Prefer the visible thin bar for long reading content, where the thumb doubles as a position indicator.</p>
+          </div>
+        </ScrollArea>
+      </Example>
+
       <Heading level={2}>Props</Heading>
       <PropsTable
         props={[
@@ -94,6 +111,7 @@ export function ScrollAreaPage() {
               'Caps the viewport along the scroll axis: a max-height when vertical, a max-width when horizontal. A pixel number or any CSS length.',
           },
           { name: 'orientation', type: "'vertical' | 'horizontal'", default: "'vertical'", description: 'Scroll axis; vertical fades top/bottom, horizontal fades left/right.' },
+          { name: 'hideScrollbar', type: 'boolean', default: 'false', description: 'Hides the scrollbar entirely; every scroll input keeps working and the fades still signal overflow.' },
           { name: 'children', type: 'ReactNode', description: 'The overflowing content.' },
           { name: 'className', type: 'string', description: 'Extra class on the root wrapper.' },
         ]}

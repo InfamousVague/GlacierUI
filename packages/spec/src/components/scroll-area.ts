@@ -20,10 +20,11 @@ export const scrollAreaSpec: ComponentSpec = {
   props: [
     { name: 'maxHeight', type: 'string', description: 'Caps the viewport along the scroll axis (max-height when vertical, max-width when horizontal); a CSS length or pixel number.' },
     { name: 'orientation', type: 'enum', values: scrollAreaOrientations, default: 'vertical', description: 'Scroll axis; vertical fades top/bottom, horizontal fades left/right.' },
+    { name: 'hideScrollbar', type: 'boolean', default: false, description: 'Hides the scrollbar entirely while every scroll input keeps working; the edge fades still signal the overflow.' },
     { name: 'children', type: 'node', description: 'The overflowing content.' },
     { name: 'className', type: 'string', description: 'Extra class on the root wrapper.' },
   ],
-  defaults: { orientation: 'vertical' },
+  defaults: { orientation: 'vertical', hideScrollbar: false },
   // fade width and scrollbar thickness are fixed on the space scale
   dimensions: {
     fade: token('space-6'),
