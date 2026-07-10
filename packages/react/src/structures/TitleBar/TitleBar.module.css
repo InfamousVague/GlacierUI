@@ -1,0 +1,64 @@
+/* A three-column grid (1fr auto 1fr) keeps the middle truly centered in the
+   window even when the start and end slots differ in width. The height sits
+   off the space scale on purpose, matched to the spec's fixed 3.25rem (52px):
+   window chrome must not breathe with density. */
+.bar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  column-gap: var(--glacier-space-3);
+  block-size: 3.25rem;
+  padding-inline: var(--glacier-space-3);
+  min-width: 0;
+  font-family: var(--glacier-font-sans);
+  /* the bar is window chrome: text selection would fight the drag gesture */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Clear the macOS close/minimize/zoom buttons that an overlay window paints
+   over the bar's inline start. */
+.bar[data-inset] {
+  padding-inline-start: 88px;
+}
+
+.bar[data-border] {
+  border-block-end: var(--glacier-hairline) solid var(--glacier-border-subtle);
+}
+
+.bar[data-surface] {
+  background: var(--glacier-glass-thin);
+  backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
+}
+
+.slot {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  min-width: 0;
+}
+
+.endSlot {
+  justify-self: end;
+}
+
+.center {
+  justify-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  min-width: 0;
+  overflow: hidden;
+}
+
+.title {
+  min-width: 0;
+  font-size: var(--glacier-font-size-sm);
+  font-weight: var(--glacier-font-weight-medium);
+  color: var(--glacier-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

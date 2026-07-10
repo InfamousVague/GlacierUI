@@ -1,0 +1,161 @@
+.nav {
+  display: flex;
+  min-width: 0;
+  font-family: var(--glacier-font-sans);
+}
+
+.horizontal {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--glacier-space-1);
+  padding: var(--glacier-space-2);
+}
+
+/* the slim icon rail: the space-12 step of the scale (~3.5rem), a column of
+   centered square items, top-aligned */
+.vertical {
+  flex-direction: column;
+  align-items: center;
+  gap: var(--glacier-space-1);
+  inline-size: var(--glacier-space-12);
+  block-size: 100%;
+  min-height: 0;
+  padding-block: var(--glacier-space-2);
+}
+
+.items {
+  display: flex;
+  gap: var(--glacier-space-1);
+  min-width: 0;
+}
+
+.horizontal .items {
+  flex-direction: row;
+  align-items: center;
+}
+
+.vertical .items {
+  flex-direction: column;
+  align-items: center;
+}
+
+/* the end slot hugs the far edge: trailing when horizontal, bottom when vertical */
+.end {
+  flex: none;
+  display: flex;
+  gap: var(--glacier-space-1);
+  align-items: center;
+}
+
+.horizontal .end {
+  margin-inline-start: auto;
+}
+
+.vertical .end {
+  flex-direction: column;
+  margin-block-start: auto;
+}
+
+.item {
+  position: relative;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--glacier-space-2);
+  border: none;
+  border-radius: var(--glacier-radius-md);
+  background: transparent;
+  color: var(--glacier-text-muted);
+  font: inherit;
+  font-size: var(--glacier-font-size-sm);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.itemHorizontal {
+  block-size: var(--glacier-control-height-md);
+  padding-inline: var(--glacier-space-3);
+}
+
+/* a classic desktop rail item: a centered square icon button */
+.itemVertical {
+  inline-size: var(--glacier-control-height-md);
+  block-size: var(--glacier-control-height-md);
+  padding: 0;
+}
+
+/* the active item shows the pill, not the hover wash, so it never flashes gray
+   as the sliding pill passes over it */
+.item:hover:not([aria-disabled='true']):not([data-active]) {
+  background: var(--glacier-hover);
+  color: var(--glacier-text);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: -2px;
+}
+
+.item[data-active] {
+  /* raised so the sliding pill always paints above sibling items and their
+     hover wash, never behind them */
+  z-index: 1;
+  color: var(--glacier-accent-text);
+  font-weight: var(--glacier-font-weight-medium);
+}
+
+.item[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* the active pill: one layout element that slides between items. It sits behind
+   the item content, which is lifted above it. */
+.indicator {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--glacier-accent-soft);
+  border-radius: var(--glacier-radius-md);
+}
+
+/* lift the item content above the sliding pill */
+.icon,
+.label,
+.badge {
+  position: relative;
+  z-index: 1;
+}
+
+.icon {
+  flex: none;
+  display: inline-flex;
+  width: 1.125rem;
+  height: 1.125rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  flex: none;
+}
+
+/* in the rail the badge pins to the top-right corner of the icon square */
+.itemVertical .badge {
+  position: absolute;
+  inset-block-start: var(--glacier-space-1);
+  inset-inline-end: var(--glacier-space-1);
+  z-index: 2;
+}
