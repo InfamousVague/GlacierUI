@@ -1738,8 +1738,14 @@ function PopoverBlueprint({ size, dimensions }: BlueprintProps) {
       <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
       <rect x={cx - trigW / 2} y={trigY} width={trigW} height={trigH} rx={6} fill={C.content} fillOpacity={0.22} stroke={C.edge} strokeWidth={1.25} />
       <Ln x={cx - 26} y={trigY + trigH / 2 - 3} w={52} h={5} op={0.5} />
-      <path d={`M ${cx - 7} ${panelY} L ${cx + 7} ${panelY} L ${cx} ${panelY - 9} Z`} fill={C.fill} stroke={C.edge} strokeWidth={1.5} />
-      <Frame x={panelX} y={panelY} w={panelW} h={panelH} r={10} />
+      <path
+        d={`M ${panelX + 10} ${panelY} H ${cx - 7} L ${cx} ${panelY - 9} L ${cx + 7} ${panelY} H ${panelX + panelW - 10} Q ${panelX + panelW} ${panelY} ${panelX + panelW} ${panelY + 10} V ${panelY + panelH - 10} Q ${panelX + panelW} ${panelY + panelH} ${panelX + panelW - 10} ${panelY + panelH} H ${panelX + 10} Q ${panelX} ${panelY + panelH} ${panelX} ${panelY + panelH - 10} V ${panelY + 10} Q ${panelX} ${panelY} ${panelX + 10} ${panelY} Z`}
+        fill={C.fill}
+        stroke={C.edge}
+        strokeWidth={1.5}
+        strokeDasharray="5 3"
+        strokeLinejoin="round"
+      />
       <Ln x={panelX + 14} y={panelY + 16} w={100} op={0.6} />
       <Ln x={panelX + 14} y={panelY + 34} w={panelW - 28} h={5} op={0.32} />
       <Ln x={panelX + 14} y={panelY + 46} w={panelW - 44} h={5} op={0.32} />
@@ -1766,7 +1772,7 @@ function MenuBlueprint({ size, dimensions }: BlueprintProps) {
   const pad = 8;
   const rowH = 20;
   const rowY = (i: number) => menuY + pad + 12 + i * rowH;
-  const menuH = pad * 2 + 12 + 4 * rowH + 8;
+  const menuH = pad * 2 + 12 + 4 * rowH - 4;
   return (
     <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the menu">
       <Defs />
@@ -1913,7 +1919,7 @@ function TabbedModalBlueprint({ size, dimensions }: BlueprintProps) {
       <Ln x={X + railW + 18} y={Y + 70} w={W - railW - 48} h={5} op={0.3} />
       <text x={X + railW / 2} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">rail</text>
       <text x={X + railW + (W - railW) / 2} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">pane</text>
-      <text x={X + 8} y={Y + 16 + 1 * itemH + 20} className="bpLabel bpMuted">railItem</text>
+      <text x={X - 10} y={Y + 16 + itemH + 8} textAnchor="end" className="bpLabel bpMuted">rail item</text>
       <text x={16} y={26} className="bpTitle">{size.name}</text>
       <Foot parts={[radius && `radius: ${radius}`, gap && `gap: ${gap}`, rail && `rail: ${rail}`]} />
     </svg>
@@ -2055,21 +2061,32 @@ function DeviceFrameBlueprint({ size, dimensions }: BlueprintProps) {
   const sy = py + bz;
   const sw = pw - bz * 2;
   const sh = ph - bz * 2;
-  const notchW = sw * 0.42;
-  const notchH = 8;
+  const notchW = sw * 0.44;
+  const notchH = 7;
+  const notchX = sx + (sw - notchW) / 2;
+  const notchY = sy;
+  const screenCorner = 12;
   return (
     <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the device frame">
       <Defs />
       <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
       <rect x={px} y={py} width={pw} height={ph} rx={18} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
-      <rect x={sx} y={sy} width={sw} height={sh} rx={12} fill={C.content} fillOpacity={0.2} stroke={C.text} strokeWidth={1} strokeDasharray="3 2" />
-      <rect x={sx + (sw - notchW) / 2} y={sy} width={notchW} height={notchH} rx={4} fill={C.edge} />
+      <path
+        d={`M ${sx} ${sy + screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx + screenCorner} ${sy} H ${notchX} V ${notchY + notchH - 2} a 2 2 0 0 1 2 2 H ${notchX + notchW - 2} a 2 2 0 0 1 2 -2 V ${notchY} H ${sx + sw - screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx + sw} ${sy + screenCorner} V ${sy + sh - screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx + sw - screenCorner} ${sy + sh} H ${sx + screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx} ${sy + sh - screenCorner} Z`}
+        fill={C.content}
+        fillOpacity={0.2}
+        stroke={C.text}
+        strokeWidth={1}
+        strokeDasharray="3 2"
+      />
+      <rect x={notchX + 4} y={notchY + 2} width={10} height={3} rx={1.5} fill={C.line} />
+      <circle cx={notchX + notchW - 7} cy={notchY + notchH / 2} r={2} fill={C.line} />
       <rect x={px - 2.5} y={py + 34} width={2.5} height={14} rx={1.25} fill={C.edge} />
       <rect x={px - 2.5} y={py + 54} width={2.5} height={22} rx={1.25} fill={C.edge} />
       <rect x={px + pw} y={py + 46} width={2.5} height={28} rx={1.25} fill={C.edge} />
       <HDim x1={sx} x2={sx + sw} y={py - 14} label={width ? `screen: ${width}` : 'screen'} />
       <text x={px + pw + 14} y={py + 18} className="bpLabel bpMuted">bezel</text>
-      <text x={sx + sw / 2} y={sy + notchH + 15} textAnchor="middle" className="bpLabel bpMuted">notch</text>
+      <text x={sx + sw / 2} y={notchY + notchH + 16} textAnchor="middle" className="bpLabel bpMuted">notch</text>
       <text x={px - 12} y={py + 46} textAnchor="end" className="bpLabel bpMuted">buttons</text>
       <text x={px + pw + 14} y={py + ph / 2 + 24} className="bpLabel bpMuted">screen</text>
       <text x={16} y={26} className="bpTitle">{size.name}</text>

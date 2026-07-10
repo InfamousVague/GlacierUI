@@ -40,6 +40,11 @@ body::before {
   overflow: hidden;
   display: flex;
   align-items: center;
+  border: var(--glacier-hairline) solid var(--glacier-blue-6);
+  border-radius: var(--glacier-radius-lg);
+  background-color: var(--glacier-blue-1);
+  background-image: radial-gradient(circle at 1px 1px, var(--glacier-blue-6) 1px, transparent 1.25px);
+  background-size: 1rem 1rem;
   min-height: 20rem;
   height: 20rem;
   transition: height var(--glacier-duration-fast) var(--glacier-ease-out),
