@@ -47,9 +47,10 @@ describe('Rating', () => {
     expect(root.className).toMatch(/lg/);
   });
 
-  it('renders a placeholder and no controls when skeleton', () => {
-    render(<Rating skeleton aria-label="Rate" />);
+  it('renders one star-shaped bone per star and no controls when skeleton', () => {
+    const { container } = render(<Rating skeleton max={4} aria-label="Rate" />);
     expect(screen.queryAllByRole('radio')).toHaveLength(0);
+    expect(container.querySelectorAll('[data-skeleton]')).toHaveLength(4);
   });
 
   it('has no axe violations', async () => {

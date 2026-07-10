@@ -23,7 +23,7 @@ export const ratingSpec: ComponentSpec = {
     { name: 'readOnly', type: 'boolean', default: false, description: 'Display-only; renders fractional fill and no controls.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Dim and disable interaction.' },
     { name: 'size', type: 'enum', values: ratingSizes, default: 'md', description: 'Star size step.' },
-    { name: 'skeleton', type: 'boolean', default: false, description: 'Render a placeholder with the component geometry.' },
+    { name: 'skeleton', type: 'boolean', default: false, description: 'Render a placeholder: one star-shaped shimmer bone per star, in the live size and gap.' },
     { name: 'aria-label', type: 'string', description: 'Accessible name for the rating group.' },
   ],
   sizes: [

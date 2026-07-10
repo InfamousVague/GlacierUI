@@ -80,7 +80,7 @@ export function RatingPage() {
 
       <Example
         title="Custom max, disabled, and skeleton"
-        description="Set max for a different scale; disabled dims and blocks input; skeleton reserves the geometry while data loads."
+        description="Set max for a different scale; disabled dims and blocks input; skeleton reserves the geometry with one star-shaped bone per star."
         code={`<Rating readOnly value={7} max={10} aria-label="Rated 7 of 10" />
 <Rating defaultValue={3} disabled aria-label="Rating (disabled)" />
 <Rating skeleton />`}

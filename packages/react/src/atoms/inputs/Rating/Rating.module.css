@@ -79,3 +79,23 @@
   overflow: hidden;
   height: 1em;
 }
+
+/* The skeleton bone for one star: the shimmer clipped to a five-point star so
+   the placeholder reads as stars, not a bar. clip-path leaves the shared
+   viewport-fixed shimmer geometry alone (unlike transform or filter), so the
+   bones stay in phase with every other skeleton on screen. */
+.skeletonStar {
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+  border-radius: 0;
+}

@@ -71,7 +71,15 @@ export function Rating({
   const name = useId();
 
   if (skeleton) {
-    return <Skeleton width={`calc(${max} * 1.15em)`} height="1.15em" className={className} />;
+    // One star-clipped bone per star, in the live wrapper's size and gap, so
+    // the placeholder reads as the row of stars it will become.
+    return (
+      <span className={cx(styles.rating, styles[size], className)} aria-hidden="true">
+        {Array.from({ length: max }, (_, i) => (
+          <Skeleton key={i} width="1em" height="1em" className={styles.skeletonStar} />
+        ))}
+      </span>
+    );
   }
 
   const stars = Array.from({ length: max }, (_, i) => i + 1);
