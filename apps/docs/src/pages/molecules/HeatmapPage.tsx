@@ -77,6 +77,25 @@ const days = [
         <Heatmap aria-label="Load" data={grid} levels={3} legend />
       </Example>
 
+      <Example
+        title="Skeleton"
+        description={
+          <>
+            <code>skeleton</code> renders one shimmer square per cell at the exact cell size and
+            gap, so the grid holds its place while the data loads. Size the placeholder to the
+            grid it will become with <code>skeletonColumns</code> and <code>rows</code>; with data
+            already present the bones mirror it instead.
+          </>
+        }
+        code={`<Heatmap skeleton data={[]} aria-label="Activity" />
+<Heatmap skeleton skeletonColumns={26} rows={5} data={[]} aria-label="Half a year" />`}
+      >
+        <div style={{ display: 'grid', gap: 'var(--glacier-space-4)' }}>
+          <Heatmap skeleton data={[]} aria-label="Activity" />
+          <Heatmap skeleton skeletonColumns={26} rows={5} data={[]} aria-label="Half a year" />
+        </div>
+      </Example>
+
       <Heading level={2}>Props</Heading>
       <PropsTable
         props={[
@@ -84,6 +103,8 @@ const days = [
           { name: 'levels', type: 'number', default: '5', description: 'Number of intensity steps, including the empty step 0.' },
           { name: 'legend', type: 'boolean', default: 'false', description: 'Show a less→more legend under the grid.' },
           { name: 'rows', type: 'number', default: '7', description: 'Cells per column when data is a flat list.' },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders one shimmer square per cell with the exact grid geometry.' },
+          { name: 'skeletonColumns', type: 'number', default: '12', description: 'Columns the skeleton grid renders while there is no data; rows follow rows.' },
           { name: 'aria-label', type: 'string', description: 'Accessible name for the grid.' },
         ]}
       />

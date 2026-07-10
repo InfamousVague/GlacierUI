@@ -1,5 +1,6 @@
 import { useId, type ComponentProps, type CSSProperties } from 'react';
 import { cx } from '../../internal/cx.ts';
+import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
 import styles from './Heatmap.module.css';
@@ -27,6 +28,10 @@ export interface HeatmapProps extends ComponentProps<'div'> {
   legend?: boolean;
   /** Cells per column when `data` is a flat list. Defaults to 7 (a week). */
   rows?: number;
+  /** Renders a placeholder grid of square skeletons with the exact geometry. */
+  skeleton?: boolean;
+  /** Columns the skeleton grid renders while there is no data. Rows follow `rows`. */
+  skeletonColumns?: number;
   /** Accessible name for the grid. */
   'aria-label'?: string;
   className?: string;
@@ -86,7 +91,7 @@ function levelOf(value: number, max: number, levels: number): number {
  * carries a title so its value is legible to pointer and screen-reader users,
  * and an optional legend spells out the less→more scale.
  */
-export function Heatmap({ data, levels = 5, legend = false, rows = 7, className, 'aria-label': label, ...rest }: HeatmapProps) {
+export function Heatmap({ data, levels = 5, legend = false, rows = 7, skeleton = false, skeletonColumns = 12, className, 'aria-label': label, ...rest }: HeatmapProps) {
   const t = useT();
   const steps = Math.max(2, Math.floor(levels));
   const columns = toColumns(data, Math.max(1, Math.floor(rows)));
@@ -97,6 +102,46 @@ export function Heatmap({ data, levels = 5, legend = false, rows = 7, className,
 
   const legendId = useId();
   const legendSwatches: number[] = Array.from({ length: steps }, (_, i) => i);
+
+  if (skeleton) {
+    // one square bone per cell so the placeholder reads as the grid it holds;
+    // real data wins, otherwise the host names the grid via skeletonColumns
+    // and rows so the bones match the heatmap that will replace them
+    const columnCount = columns.length > 0 ? columns.length : Math.max(1, Math.floor(skeletonColumns));
+    const rowCount = Math.max(1, Math.floor(rows));
+    return (
+      <div className={cx(styles.heatmap, className)} aria-hidden="true">
+        <div className={styles.grid}>
+          {Array.from({ length: columnCount }, (_, ci) => (
+            <div key={ci} className={styles.column}>
+              {Array.from({ length: rowCount }, (_, ri) => (
+                <Skeleton
+                  key={ri}
+                  width="var(--glacier-space-4)"
+                  height="var(--glacier-space-4)"
+                  radius="var(--glacier-radius-xs)"
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+        {legend && (
+          <div className={styles.legend}>
+            <Skeleton width="1.5rem" height="0.5rem" />
+            {legendSwatches.map((level) => (
+              <Skeleton
+                key={level}
+                width="var(--glacier-space-3)"
+                height="var(--glacier-space-3)"
+                radius="var(--glacier-radius-xs)"
+              />
+            ))}
+            <Skeleton width="1.75rem" height="0.5rem" />
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div

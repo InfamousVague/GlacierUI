@@ -73,6 +73,28 @@ describe('Heatmap', () => {
     expect(screen.getByRole('img', { name: 'Empty' })).toBeInTheDocument();
   });
 
+  it('skeleton renders one square bone per cell and stays silent', () => {
+    const { container } = render(<Heatmap skeleton rows={7} data={[]} aria-label="Activity" />);
+    expect(screen.queryByRole('img')).toBeNull();
+    // the empty-data fallback grid is 12 columns of 7
+    expect(container.querySelectorAll('[data-skeleton]')).toHaveLength(84);
+  });
+
+  it('skeleton grid follows skeletonColumns and rows when there is no data', () => {
+    const { container } = render(
+      <Heatmap skeleton skeletonColumns={26} rows={5} data={[]} aria-label="Half a year" />,
+    );
+    expect(container.querySelectorAll('[data-skeleton]')).toHaveLength(130);
+  });
+
+  it('skeleton mirrors the data grid when data is provided', () => {
+    const { container } = render(
+      <Heatmap skeleton rows={2} data={[{ date: 'a', value: 1 }, { date: 'b', value: 2 }, { date: 'c', value: 3 }, { date: 'd', value: 4 }]} />,
+    );
+    // 4 points in columns of 2 -> 2 columns x 2 rows
+    expect(container.querySelectorAll('[data-skeleton]')).toHaveLength(4);
+  });
+
   it('has no axe violations', async () => {
     render(<Heatmap aria-label="Contributions in the last weeks" data={points} rows={3} legend />);
     await screen.findByRole('img');

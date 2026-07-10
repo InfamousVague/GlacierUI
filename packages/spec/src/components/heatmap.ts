@@ -19,9 +19,11 @@ export const heatmapSpec: ComponentSpec = {
     { name: 'levels', type: 'number', default: 5, description: 'Number of intensity steps including the empty step 0.' },
     { name: 'legend', type: 'boolean', default: false, description: 'Show a less→more legend under the grid.' },
     { name: 'rows', type: 'number', default: 7, description: 'Cells per column when data is a flat list.' },
+    { name: 'skeleton', type: 'boolean', default: false, description: 'Renders an aria-hidden placeholder: one square Skeleton per cell at the exact cell size and gap, plus legend bones when legend is set.' },
+    { name: 'skeletonColumns', type: 'number', default: 12, description: 'Columns the skeleton grid renders while there is no data; rows follow the rows prop.' },
     { name: 'aria-label', type: 'string', description: 'Accessible name for the grid.' },
   ],
-  defaults: { levels: 5, legend: false, rows: 7 },
+  defaults: { levels: 5, legend: false, rows: 7, skeleton: false, skeletonColumns: 12 },
   dimensions: {
     radius: token('radius-xs'),
     gap: token('space-1'),
