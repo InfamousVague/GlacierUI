@@ -41,6 +41,12 @@ export const tooltipSpec: ComponentSpec = {
       required: true,
     },
     {
+      name: 'arrow',
+      description:
+        'A small rotated-square pointer wearing the bubble material, poking out of the edge that faces the trigger. It follows the resolved placement: centered on the edge, or pinned near the leading or trailing corner for start and end alignments.',
+      required: true,
+    },
+    {
       name: 'bubble',
       description:
         'The portalled role="tooltip" glass surface holding the content, positioned above, below, or beside the trigger. It carries a thick-glass background, hairline border, backdrop blur and saturation, an inset top highlight and a drop shadow, and is fixed to the viewport with pointer-events disabled so it can never trap the cursor.',
@@ -60,14 +66,14 @@ export const tooltipSpec: ComponentSpec = {
   // fixed bubble metrics; the bubble does not vary with size
   dimensions: {
     maxWidth: 'min(18rem, calc(100vw - 2rem))',
-    paddingInline: token('space-2'),
-    paddingBlock: token('space-1'),
+    paddingInline: token('space-3'),
+    paddingBlock: token('space-2'),
     radius: token('radius-md'),
     border: token('hairline'),
     blur: token('blur-md'),
     fontSize: token('font-size-xs'),
     lineHeight: token('leading-xs'),
-    offset: '6px',
+    offset: '10px',
   },
   states: [
     { name: 'shown', description: 'Bubble is mounted and portalled to the body, fades and scales up with a small upward drift from the trigger-anchored transform origin, and the trigger carries aria-describedby pointing at it.' },
