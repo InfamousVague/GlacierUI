@@ -65,7 +65,7 @@ export function FilterChip({
       )}
       {children}
       {count !== undefined && count > 0 && (
-        <CounterBadge count={count} tone={isSelected ? 'accent' : 'neutral'} size={size} />
+        <CounterBadge className={styles.count} count={count} tone={isSelected ? 'accent' : 'neutral'} size={size} />
       )}
     </motion.button>
   );
