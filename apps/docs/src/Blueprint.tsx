@@ -2279,6 +2279,143 @@ function FormSectionBlueprint({ dimensions }: BlueprintProps) {
 }
 
 
+// Sidebar: a vertical navigation column - pinned header, section heading, item
+// rows with the sliding active pill, and a pinned footer behind hairlines.
+function SidebarBlueprint({ dimensions }: BlueprintProps) {
+  const itemRadius = fmt(dimensions?.itemRadius);
+  const regionPadding = fmt(dimensions?.regionPadding);
+  const itemGap = fmt(dimensions?.itemGap);
+  const border = fmt(dimensions?.border);
+  const X = 134;
+  const Y = 50;
+  const W = 132;
+  const H = 172;
+  const rowH = 24;
+  const rowX = X + 10;
+  const rowW = W - 20;
+  const r1 = Y + 46;
+  const r2 = r1 + rowH + 6;
+  const r3 = r2 + rowH + 6;
+  const item = (y: number, active: boolean) => (
+    <g>
+      {active && <rect x={rowX} y={y} width={rowW} height={rowH} rx={7} fill={C.content} fillOpacity={0.3} stroke={C.text} strokeWidth={1} />}
+      <rect x={rowX + 6} y={y + rowH / 2 - 6} width={12} height={12} rx={3} fill="none" stroke={C.line} strokeWidth={1.1} strokeDasharray="2 2" />
+      <Ln x={rowX + 24} y={y + rowH / 2 - 3} w={active ? 56 : 48} h={5} op={active ? 0.7 : 0.4} />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 400 244" className="bpSvg" role="img" aria-label="Blueprint of the sidebar">
+      <Defs />
+      <rect x={0} y={0} width={400} height={244} fill="url(#bpGrid)" />
+      <Frame x={X} y={Y} w={W} h={H} r={12} />
+      {/* pinned header with its hairline */}
+      <Ln x={rowX} y={Y + 12} w={64} h={7} op={0.7} />
+      <line x1={X} y1={Y + 30} x2={X + W} y2={Y + 30} stroke={C.edge} strokeWidth={1} />
+      {/* section heading + items; the first row carries the active pill */}
+      <Ln x={rowX} y={r1 - 10} w={38} h={4} op={0.3} />
+      {item(r1, true)}
+      {item(r2, false)}
+      {item(r3, false)}
+      {/* pinned footer behind its hairline */}
+      <line x1={X} y1={Y + H - 28} x2={X + W} y2={Y + H - 28} stroke={C.edge} strokeWidth={1} />
+      <circle cx={rowX + 8} cy={Y + H - 14} r={6} fill={C.content} fillOpacity={0.35} />
+      <Ln x={rowX + 22} y={Y + H - 17} w={48} h={5} op={0.4} />
+
+      {itemGap && <VDim x={X + W + 14} y1={r1 + rowH} y2={r2} label={itemGap} left={false} horizontal />}
+      <text x={X - 10} y={Y + 18} textAnchor="end" className="bpLabel bpMuted">header</text>
+      <text x={X - 10} y={r1 - 8} textAnchor="end" className="bpLabel bpMuted">section</text>
+      <text x={X - 10} y={r1 + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">indicator</text>
+      <text x={X + W + 12} y={r2 + rowH / 2 + 3} className="bpLabel bpMuted">item</text>
+      <text x={X - 10} y={Y + H - 11} textAnchor="end" className="bpLabel bpMuted">footer</text>
+      <BpTitle />
+      <Foot y={236} parts={[regionPadding && `region pad: ${regionPadding}`, itemRadius && `item radius: ${itemRadius}`, border && `border: ${border}`]} />
+    </svg>
+  );
+}
+
+// Toolbar: the horizontal action strip - a leading start slot, the growing
+// middle, and end-aligned controls, with the slot gap dimensioned.
+function ToolbarBlueprint({ dimensions }: BlueprintProps) {
+  const padding = fmt(dimensions?.padding);
+  const gap = fmt(dimensions?.gap);
+  const X = 62;
+  const Y = 86;
+  const W = 276;
+  const H = 44;
+  const a1 = X + W - 10 - 30;
+  const a2 = a1 - 18 - 26;
+  return (
+    <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label="Blueprint of the toolbar">
+      <Defs />
+      <rect x={0} y={0} width={400} height={200} fill="url(#bpGrid)" />
+      <Frame x={X} y={Y} w={W} h={H} r={11} />
+      {/* start: an icon control and a title */}
+      <rect x={X + 10} y={Y + H / 2 - 9} width={18} height={18} rx={5} fill="none" stroke={C.line} strokeWidth={1.25} strokeDasharray="2 2" />
+      <Ln x={X + 36} y={Y + H / 2 - 3} w={58} h={6} op={0.7} />
+      {/* the growing middle */}
+      <line x1={X + 108} y1={Y + H / 2} x2={a2 - 18} y2={Y + H / 2} stroke={C.edge} strokeWidth={1} strokeDasharray="2 4" />
+      {/* end-aligned controls with the gap dimensioned */}
+      <rect x={a2} y={Y + H / 2 - 10} width={26} height={20} rx={10} fill={C.content} fillOpacity={0.25} stroke={C.edge} strokeWidth={1.1} />
+      <rect x={a1} y={Y + H / 2 - 10} width={30} height={20} rx={10} fill={C.content} fillOpacity={0.4} stroke={C.text} strokeWidth={1} />
+      {gap && <HDim x1={a2 + 26} x2={a1} y={Y + H + 14} label={gap} above={false} />}
+
+      <HDim x1={X} x2={X + W} y={Y - 18} label="width: auto" />
+      <text x={X - 10} y={Y + H / 2 + 3} textAnchor="end" className="bpLabel bpMuted">start</text>
+      <text x={(X + 108 + a2 - 18) / 2} y={Y + H / 2 - 8} textAnchor="middle" className="bpLabel bpMuted">content</text>
+      <text x={X + W + 12} y={Y + H / 2 + 3} className="bpLabel bpMuted">end</text>
+      <BpTitle />
+      <Foot y={190} parts={[padding && `padding: ${padding}`, gap && `gap: ${gap}`, 'surface: glass-thin']} />
+    </svg>
+  );
+}
+
+// NavBar: the primary navigation row - icon-first items, the sliding active
+// pill behind the current one, a badge on an item, and the end slot.
+function NavBarBlueprint({ dimensions }: BlueprintProps) {
+  const gap = fmt(dimensions?.gap);
+  const padding = fmt(dimensions?.padding);
+  const radius = fmt(dimensions?.radius);
+  const itemSize = fmt(dimensions?.itemSize);
+  const X = 66;
+  const Y = 84;
+  const W = 268;
+  const H = 48;
+  const itemW = 64;
+  const itemH = 32;
+  const iy = Y + (H - itemH) / 2;
+  const ix = (i: number) => X + 8 + i * (itemW + 8);
+  const item = (i: number, active: boolean) => (
+    <g>
+      {active && <rect x={ix(i)} y={iy} width={itemW} height={itemH} rx={8} fill={C.content} fillOpacity={0.3} stroke={C.text} strokeWidth={1} />}
+      <rect x={ix(i) + 8} y={iy + itemH / 2 - 6} width={12} height={12} rx={3} fill="none" stroke={C.line} strokeWidth={1.1} strokeDasharray="2 2" />
+      <Ln x={ix(i) + 26} y={iy + itemH / 2 - 2} w={28} h={4} op={active ? 0.7 : 0.4} />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 400 196" className="bpSvg" role="img" aria-label="Blueprint of the nav bar">
+      <Defs />
+      <rect x={0} y={0} width={400} height={196} fill="url(#bpGrid)" />
+      <Frame x={X} y={Y} w={W} h={H} r={12} />
+      {item(0, true)}
+      {item(1, false)}
+      {item(2, false)}
+      {/* a counter badge riding the third item */}
+      <circle cx={ix(2) + itemW - 4} cy={iy + 2} r={6} fill={C.content} fillOpacity={0.55} stroke={C.text} strokeWidth={1} />
+      {/* the end slot */}
+      <circle cx={X + W - 20} cy={Y + H / 2} r={9} fill="none" stroke={C.edge} strokeWidth={1.25} strokeDasharray="2 2" />
+
+      {gap && <HDim x1={ix(0) + itemW} x2={ix(1)} y={Y + H + 14} label={gap} above={false} />}
+      <text x={X - 10} y={iy + itemH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">indicator</text>
+      <text x={ix(1) + itemW / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">item</text>
+      <text x={ix(2) + itemW + 14} y={iy - 4} className="bpLabel bpMuted">badge</text>
+      <text x={X + W + 12} y={Y + H / 2 + 3} className="bpLabel bpMuted">end</text>
+      <BpTitle />
+      <Foot y={188} parts={[itemSize && `item: ${itemSize}`, padding && `pad: ${padding}`, radius && `radius: ${radius}`]} />
+    </svg>
+  );
+}
+
+
 // AppShell: the app frame - a sticky sidebar column beside a scrollable main
 // column with a header bar on top. The figure shows the desktop grid.
 function AppShellBlueprint({ dimensions }: BlueprintProps) {
@@ -3264,6 +3401,9 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'card-group') return withFrame(<CardGroupBlueprint size={size} dimensions={dimensions} />);
   if (id === 'timeline') return withFrame(<TimelineBlueprint size={size} dimensions={dimensions} />);
   // organisms
+  if (id === 'sidebar') return withFrame(<SidebarBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'toolbar') return withFrame(<ToolbarBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'nav-bar') return withFrame(<NavBarBlueprint size={size} dimensions={dimensions} />);
   if (id === 'fieldset') return withFrame(<FieldsetBlueprint size={size} dimensions={dimensions} />);
   if (id === 'form-section') return withFrame(<FormSectionBlueprint size={size} dimensions={dimensions} />);
   if (id === 'app-shell') return withFrame(<AppShellBlueprint size={size} dimensions={dimensions} />);
