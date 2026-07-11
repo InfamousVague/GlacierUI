@@ -7,6 +7,12 @@ export function FieldPage() {
   const [username, setUsername] = useState('');
   const [usernameError, setUsernameError] = useState<string | null>(null);
 
+  const validateUsername = () => {
+    if (!username) return setUsernameError('Username is required.');
+    if (!/^[a-zA-Z0-9]+$/.test(username)) return setUsernameError('Letters and numbers only.');
+    setUsernameError(null);
+  };
+
   return (
     <>
       <Heading level={1}>Field &amp; Input</Heading>
@@ -40,9 +46,15 @@ export function FieldPage() {
 
       <Example
         title="Validation"
-        description="Click Validate with an empty value to set an error. The error replaces the hint, shakes in, and marks the input invalid. Typing clears it."
+        description="Click Validate with an empty or non-alphanumeric value to set an error. The error replaces the hint, shakes in, and marks the input invalid. Typing clears it."
         code={`const [value, setValue] = useState('');
 const [error, setError] = useState<string | null>(null);
+
+const validate = () => {
+  if (!value) return setError('Username is required.');
+  if (!/^[a-zA-Z0-9]+$/.test(value)) return setError('Letters and numbers only.');
+  setError(null);
+};
 
 <Field label="Username" hint="Letters and numbers only." error={error}>
   <Input
@@ -54,9 +66,7 @@ const [error, setError] = useState<string | null>(null);
     }}
   />
 </Field>
-<Button onClick={() => setError(value ? null : 'Username is required.')}>
-  Validate
-</Button>`}
+<Button onClick={validate}>Validate</Button>`}
       >
         <Stack gap={4} maxWidth="xs" width="full">
           <Field label="Username" hint="Letters and numbers only." error={usernameError}>
@@ -70,9 +80,7 @@ const [error, setError] = useState<string | null>(null);
             />
           </Field>
           <Row gap={4} wrap>
-            <Button onClick={() => setUsernameError(username ? null : 'Username is required.')}>
-              Validate
-            </Button>
+            <Button onClick={validateUsername}>Validate</Button>
           </Row>
         </Stack>
       </Example>

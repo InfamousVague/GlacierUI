@@ -1,6 +1,6 @@
 import { accentOptions } from '@glacier/tokens';
 import {
-  AppShell, Button, Container, LocaleProvider, Row, Sidebar, SidebarItem, SidebarSection, Spacer, locales, useT, type Locale, Size, Variant } from '@glacier/react';
+  AppShell, Button, Container, HapticsProvider, LocaleProvider, Row, Sidebar, SidebarItem, SidebarSection, Spacer, locales, direction, useT, type Locale, Size, Variant } from '@glacier/react';
 import { Settings } from '@glacier/icons';
 import glacierLogoFull from '../../../packages/assets/glacier_logo_blue.png';
 import glacierLogoText from '../../../packages/assets/logo_text.png';
@@ -8,7 +8,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { DEFAULT_PREFERENCES, PreferencesModal, type Preferences } from './PreferencesModal.tsx';
 import { DocSearch } from './DocSearch.tsx';
 import { LanguageSelect } from './LanguageSelect.tsx';
-import { groupTitles, m, pageTitles } from './i18n.ts';
+import { groupTitles, m, pageTags, pageTitles } from './i18n.ts';
 // Pages are compartmentalized by category under pages/<group>/, and the routes
 // mirror that layout: #/<group>/<id> (the overview is the root, #/).
 import { OverviewPage } from './pages/OverviewPage.tsx';
@@ -20,14 +20,19 @@ import { SpacingPage } from './pages/foundations/SpacingPage.tsx';
 import { LayoutPage } from './pages/foundations/LayoutPage.tsx';
 import { ShapePage } from './pages/foundations/ShapePage.tsx';
 import { MaterialsPage } from './pages/foundations/MaterialsPage.tsx';
+import { HapticsPage } from './pages/foundations/HapticsPage.tsx';
 import { MotionPage } from './pages/foundations/MotionPage.tsx';
 import { SpecPage } from './pages/foundations/SpecPage.tsx';
 import { IconsPage } from './pages/foundations/IconsPage.tsx';
 import { TestingPage } from './pages/foundations/TestingPage.tsx';
+import { TestReportPage } from './pages/foundations/TestReportPage.tsx';
+import { ParityMatrixPage } from './pages/foundations/ParityMatrixPage.tsx';
 
 // Atoms
 import { ButtonPage } from './pages/atoms/ButtonPage.tsx';
+import { IconPage } from './pages/atoms/IconPage.tsx';
 import { TextPage } from './pages/atoms/TextPage.tsx';
+import { KbdPage } from './pages/atoms/KbdPage.tsx';
 import { PillPage } from './pages/atoms/PillPage.tsx';
 import { CounterBadgePage } from './pages/atoms/CounterBadgePage.tsx';
 import { StatusDotPage } from './pages/atoms/StatusDotPage.tsx';
@@ -41,6 +46,7 @@ import { RadioCardPage } from './pages/atoms/RadioCardPage.tsx';
 import { TextareaPage } from './pages/atoms/TextareaPage.tsx';
 import { SearchFieldPage } from './pages/atoms/SearchFieldPage.tsx';
 import { NumberInputPage } from './pages/atoms/NumberInputPage.tsx';
+import { OtpFieldPage } from './pages/atoms/OtpFieldPage.tsx';
 import { SliderPage } from './pages/atoms/SliderPage.tsx';
 import { TogglePage } from './pages/atoms/TogglePage.tsx';
 import { MeterPage } from './pages/atoms/MeterPage.tsx';
@@ -61,6 +67,8 @@ import { RatingPage } from './pages/atoms/RatingPage.tsx';
 // Molecules
 import { FieldPage } from './pages/molecules/FieldPage.tsx';
 import { SelectPage } from './pages/molecules/SelectPage.tsx';
+import { ComboboxPage } from './pages/molecules/ComboboxPage.tsx';
+import { MultiSelectPage } from './pages/molecules/MultiSelectPage.tsx';
 import { SegmentedPage } from './pages/molecules/SegmentedPage.tsx';
 import { TabsPage } from './pages/molecules/TabsPage.tsx';
 import { TooltipPage } from './pages/molecules/TooltipPage.tsx';
@@ -72,12 +80,21 @@ import { SpotlightPage } from './pages/molecules/SpotlightPage.tsx';
 import { BreadcrumbsPage } from './pages/molecules/BreadcrumbsPage.tsx';
 import { PaginationPage } from './pages/molecules/PaginationPage.tsx';
 import { AccordionPage } from './pages/molecules/AccordionPage.tsx';
+import { DatePickerPage } from './pages/molecules/DatePickerPage.tsx';
+import { FileUploadPage } from './pages/molecules/FileUploadPage.tsx';
+import { FieldsetPage } from './pages/molecules/FieldsetPage.tsx';
+import { ListPage } from './pages/molecules/ListPage.tsx';
 import { TablePage } from './pages/organisms/TablePage.tsx';
+import { DataGridPage } from './pages/organisms/DataGridPage.tsx';
 
 // Organisms
+import { AppShellPage } from './pages/organisms/AppShellPage.tsx';
 import { ModalPage } from './pages/organisms/ModalPage.tsx';
+import { DrawerPage } from './pages/organisms/DrawerPage.tsx';
+import { AlertDialogPage } from './pages/organisms/AlertDialogPage.tsx';
 import { PopoverPage } from './pages/organisms/PopoverPage.tsx';
 import { MenuPage } from './pages/organisms/MenuPage.tsx';
+import { TreeViewPage } from './pages/organisms/TreeViewPage.tsx';
 import { FloatingPanelPage } from './pages/organisms/FloatingPanelPage.tsx';
 import { TabbedPanelPage } from './pages/organisms/TabbedPanelPage.tsx';
 import { TabbedModalPage } from './pages/organisms/TabbedModalPage.tsx';
@@ -87,6 +104,8 @@ import { ResizableSplitPanePage } from './pages/organisms/ResizableSplitPanePage
 // Structures
 import { SidebarPage } from './pages/structures/SidebarPage.tsx';
 import { ToolbarPage } from './pages/structures/ToolbarPage.tsx';
+import { TitleBarPage } from './pages/structures/TitleBarPage.tsx';
+import { NavBarPage } from './pages/structures/NavBarPage.tsx';
 
 const PAGES = {
   overview: { title: 'Overview', group: 'Start', el: <OverviewPage /> },
@@ -96,12 +115,17 @@ const PAGES = {
   layout: { title: 'Layout', group: 'Foundations', el: <LayoutPage /> },
   shape: { title: 'Shape & Elevation', group: 'Foundations', el: <ShapePage /> },
   materials: { title: 'Glass', group: 'Foundations', el: <MaterialsPage /> },
+  haptics: { title: 'Haptics', group: 'Foundations', el: <HapticsPage /> },
   motion: { title: 'Motion', group: 'Foundations', el: <MotionPage /> },
   spec: { title: 'Specification', group: 'Foundations', el: <SpecPage /> },
   icons: { title: 'Icons', group: 'Foundations', el: <IconsPage /> },
   testing: { title: 'Testing', group: 'Foundations', el: <TestingPage /> },
+  testreport: { title: 'Test Report', group: 'Foundations', el: <TestReportPage /> },
+  paritymatrix: { title: 'Parity Matrix', group: 'Foundations', el: <ParityMatrixPage /> },
   button: { title: 'Button', group: 'Atoms', el: <ButtonPage /> },
+  icon: { title: 'Icon', group: 'Atoms', el: <IconPage /> },
   text: { title: 'Text & Headings', group: 'Atoms', el: <TextPage /> },
+  kbd: { title: 'Keyboard Key', group: 'Atoms', el: <KbdPage /> },
   pill: { title: 'Pill', group: 'Atoms', el: <PillPage /> },
   counterbadge: { title: 'Counter Badge', group: 'Atoms', el: <CounterBadgePage /> },
   statusdot: { title: 'Status Dot', group: 'Atoms', el: <StatusDotPage /> },
@@ -115,6 +139,7 @@ const PAGES = {
   textarea: { title: 'Textarea', group: 'Atoms', el: <TextareaPage /> },
   searchfield: { title: 'Search Field', group: 'Atoms', el: <SearchFieldPage /> },
   numberinput: { title: 'Number Input', group: 'Atoms', el: <NumberInputPage /> },
+  otpfield: { title: 'OTP Field', group: 'Atoms', el: <OtpFieldPage /> },
   slider: { title: 'Slider', group: 'Atoms', el: <SliderPage /> },
   toggle: { title: 'Toggle', group: 'Atoms', el: <TogglePage /> },
   meter: { title: 'Meter', group: 'Atoms', el: <MeterPage /> },
@@ -128,13 +153,19 @@ const PAGES = {
   surfaces: { title: 'Card & Surface', group: 'Atoms', el: <SurfacesPage /> },
   field: { title: 'Field & Input', group: 'Molecules', el: <FieldPage /> },
   select: { title: 'Select', group: 'Molecules', el: <SelectPage /> },
+  combobox: { title: 'Combobox', group: 'Molecules', el: <ComboboxPage /> },
+  multiselect: { title: 'MultiSelect', group: 'Molecules', el: <MultiSelectPage /> },
   segmented: { title: 'Segmented Control', group: 'Molecules', el: <SegmentedPage /> },
   tabs: { title: 'Tabs', group: 'Molecules', el: <TabsPage /> },
   tooltip: { title: 'Tooltip', group: 'Molecules', el: <TooltipPage /> },
   toast: { title: 'Toast', group: 'Molecules', el: <ToastPage /> },
+  appshell: { title: 'App Shell', group: 'Organisms', el: <AppShellPage /> },
   modal: { title: 'Modal', group: 'Organisms', el: <ModalPage /> },
+  drawer: { title: 'Drawer', group: 'Organisms', el: <DrawerPage /> },
+  alertdialog: { title: 'AlertDialog', group: 'Organisms', el: <AlertDialogPage /> },
   popover: { title: 'Popover', group: 'Organisms', el: <PopoverPage /> },
   menu: { title: 'Menu', group: 'Organisms', el: <MenuPage /> },
+  treeview: { title: 'Tree View', group: 'Organisms', el: <TreeViewPage /> },
   stattile: { title: 'Stat Tile', group: 'Atoms', el: <StatTilePage /> },
   deviceframe: { title: 'Device Frame', group: 'Atoms', el: <DeviceFramePage /> },
   filterchip: { title: 'Filter Chip', group: 'Atoms', el: <FilterChipPage /> },
@@ -147,7 +178,12 @@ const PAGES = {
   breadcrumbs: { title: 'Breadcrumbs', group: 'Molecules', el: <BreadcrumbsPage /> },
   pagination: { title: 'Pagination', group: 'Molecules', el: <PaginationPage /> },
   accordion: { title: 'Accordion', group: 'Molecules', el: <AccordionPage /> },
+  datepicker: { title: 'Date Picker', group: 'Molecules', el: <DatePickerPage /> },
+  fileupload: { title: 'File Upload', group: 'Molecules', el: <FileUploadPage /> },
+  fieldset: { title: 'Fieldset & Form Section', group: 'Molecules', el: <FieldsetPage /> },
+  list: { title: 'List', group: 'Molecules', el: <ListPage /> },
   table: { title: 'Table', group: 'Organisms', el: <TablePage /> },
+  datagrid: { title: 'Data Grid', group: 'Organisms', el: <DataGridPage /> },
   floatingpanel: { title: 'Floating Panel', group: 'Organisms', el: <FloatingPanelPage /> },
   tabbedpanel: { title: 'Tabbed Panel', group: 'Organisms', el: <TabbedPanelPage /> },
   tabbedmodal: { title: 'Tabbed Modal', group: 'Organisms', el: <TabbedModalPage /> },
@@ -155,6 +191,8 @@ const PAGES = {
   resizablesplitpane: { title: 'Resizable Split Pane', group: 'Organisms', el: <ResizableSplitPanePage /> },
   sidebar: { title: 'Sidebar', group: 'Structures', el: <SidebarPage /> },
   toolbar: { title: 'Toolbar', group: 'Structures', el: <ToolbarPage /> },
+  titlebar: { title: 'Title Bar', group: 'Structures', el: <TitleBarPage /> },
+  navbar: { title: 'Nav Bar', group: 'Structures', el: <NavBarPage /> },
 } as const;
 
 type PageId = keyof typeof PAGES;
@@ -198,6 +236,8 @@ function loadPreferences(): Preferences {
       theme: saved.theme === 'light' || saved.theme === 'dark' ? saved.theme : 'system',
       density: saved.density === 'compact' ? 'compact' : 'comfortable',
       layout: saved.layout === 'full' ? 'full' : 'floating',
+      direction: saved.direction === 'rtl' ? 'rtl' : 'ltr',
+      haptics: saved.haptics === true,
       accent: accentValid ? saved.accent! : DEFAULT_PREFERENCES.accent,
       font: saved.font === 'noto' || saved.font === 'plex' ? saved.font : 'inter',
       mono: saved.mono === 'plex' ? 'plex' : 'jetbrains',
@@ -233,6 +273,7 @@ export function App() {
   useEffect(() => {
     localStorage.setItem(LOCALE_KEY, locale);
     document.documentElement.lang = locale;
+    document.documentElement.dir = direction(locale);
   }, [locale]);
 
   return (
@@ -270,7 +311,13 @@ function SidebarBrand() {
 function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (next: Locale) => void }) {
   const t = useT();
   const searchItems = useMemo(
-    () => SEARCH_PAGE_IDS.map((id) => ({ id, title: t(pageTitles[id]), group: t(groupTitles[PAGES[id].group]) })),
+    () =>
+      SEARCH_PAGE_IDS.map((id) => ({
+        id,
+        title: t(pageTitles[id]),
+        group: t(groupTitles[PAGES[id].group]),
+        keywords: (pageTags[id] ?? []).join(' '),
+      })),
     [t],
   );
   const [page, setPage] = useState<PageId>(pageFromHash);
@@ -309,7 +356,7 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
 
   useEffect(() => {
     const root = document.documentElement;
-    const { theme, density, layout, accent, font, mono, radiusScale, frostedness } = preferences;
+    const { theme, density, layout, direction, accent, font, mono, radiusScale, frostedness } = preferences;
 
     if (theme === 'system') root.removeAttribute('data-theme');
     else root.setAttribute('data-theme', theme);
@@ -327,11 +374,18 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
 
     // a common layout mode, like theme and density: floating is the default,
     // full pins the chrome to the edges
-    if (layout === 'floating') root.removeAttribute('data-layout');
-    else root.setAttribute('data-layout', layout);
+    // Always stamped: portalled kit surfaces (Drawer) read the mode from the
+    // root, so 'floating' must be visible there, not just the default absence.
+    root.setAttribute('data-layout', layout);
+
+    // direction: ltr is the default, so no attribute is set for it, matching
+    // how data-theme handles system
+    if (direction === 'ltr') root.removeAttribute('dir');
+    else root.setAttribute('dir', direction);
 
     if (accent === DEFAULT_PREFERENCES.accent) root.removeAttribute('data-accent');
     else root.setAttribute('data-accent', accent);
+
 
     if (radiusScale === 1) root.style.removeProperty('--glacier-radius-scale');
     else root.style.setProperty('--glacier-radius-scale', String(radiusScale));
@@ -384,7 +438,6 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
         }}
       />
       <Spacer />
-      <span className="accentDot" aria-hidden="true" />
       <LanguageSelect locale={locale} onChange={onLocaleChange} />
       <Button variant={Variant.Glass} size={Size.Medium} onClick={() => setPreferencesOpen(true)}>
         {GearIcon}
@@ -394,7 +447,7 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
   );
 
   return (
-    <>
+    <HapticsProvider enabled={preferences.haptics}>
       <AppShell
         floating={preferences.layout === 'floating'}
         sidebar={sidebar}
@@ -414,6 +467,6 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
         preferences={preferences}
         onChange={(patch) => setPreferences((current) => ({ ...current, ...patch }))}
       />
-    </>
+    </HapticsProvider>
   );
 }

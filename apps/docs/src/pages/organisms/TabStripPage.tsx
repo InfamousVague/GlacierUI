@@ -79,7 +79,7 @@ const [active, setActive] = useState('index');
 
       <Example
         title="Overflow scroll"
-        description="When the tabs are wider than the strip, it scrolls horizontally rather than wrapping. Constrain the width to see the scrollbar."
+        description="When the tabs are wider than the strip, it scrolls horizontally rather than wrapping. The scrollbar stays hidden by default so the baseline hairline hugs the tabs; pass showScrollbar to reserve a band for a visible bar."
         code={`<div style={{ maxWidth: '20rem' }}>
   <TabStrip
     aria-label="Sheets"

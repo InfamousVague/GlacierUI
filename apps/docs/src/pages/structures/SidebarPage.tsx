@@ -7,16 +7,6 @@ import { Example, PropsTable } from '../../docs-ui.tsx';
 // A mock app window so each example shows the sidebar at its real width beside a
 // content pane, filling the demo instead of floating in a narrow card.
 function Frame({ children }: { children: ReactNode }) {
-  const bar = (width: string) => (
-    <div
-      style={{
-        width,
-        height: '0.6rem',
-        borderRadius: 'var(--glacier-radius-full)',
-        background: 'var(--glacier-surface-sunken)',
-      }}
-    />
-  );
   return (
     <Box border radius="lg" width="full" style={{ height: '20rem', overflow: 'hidden', display: 'flex' }}>
       <div
@@ -36,13 +26,20 @@ function Frame({ children }: { children: ReactNode }) {
           padding: 'var(--glacier-space-6)',
           display: 'flex',
           flexDirection: 'column',
-          gap: 'var(--glacier-space-4)',
+          gap: 'var(--glacier-space-3)',
         }}
       >
-        <div style={{ width: '38%', height: '0.9rem', borderRadius: 'var(--glacier-radius-full)', background: 'var(--glacier-surface-sunken)' }} />
-        {bar('86%')}
-        {bar('72%')}
-        {bar('80%')}
+        <div style={{ fontSize: 'var(--glacier-font-size-lg)', fontWeight: 'var(--glacier-font-weight-semibold)', color: 'var(--glacier-text-muted)' }}>
+          Overview
+        </div>
+        <p style={{ margin: 0, color: 'var(--glacier-text-subtle)', fontSize: 'var(--glacier-font-size-sm)', lineHeight: 'var(--glacier-leading-md)' }}>
+          The sidebar sits to the left of this main content area. Selecting an item routes the page
+          shown here.
+        </p>
+        <p style={{ margin: 0, color: 'var(--glacier-text-subtle)', fontSize: 'var(--glacier-font-size-sm)', lineHeight: 'var(--glacier-leading-md)' }}>
+          This pane is a placeholder, so each example shows the sidebar at its real width beside
+          content.
+        </p>
       </div>
     </Box>
   );

@@ -120,6 +120,22 @@ export function RatingPage() {
         </li>
       </ul>
 
+      <Heading level={2}>Haptics</Heading>
+      <ul>
+        <li>
+          Scrubbing across the stars fires a <code>selection</code> tick each time the previewed
+          star changes; the preview falling back to the committed value on pointer leave is silent.
+        </li>
+        <li>
+          Committing a value with a click fires <code>light</code>, and keyboard arrows tick{' '}
+          <code>selection</code> per change.
+        </li>
+        <li>
+          Feedback only fires when a <code>HapticsProvider</code> enables it; pass{' '}
+          <code>data-haptic="none"</code> to opt a rating out.
+        </li>
+      </ul>
+
       <Heading level={2}>Usage</Heading>
       <ul>
         <li>Use an interactive Rating to collect a score and a read-only one to display an average.</li>

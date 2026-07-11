@@ -19,6 +19,13 @@ const ATOMS: GalleryItem[] = [
       'Buttons trigger actions. Use Button for labeled actions and IconButton for compact, icon-only controls such as toolbars and card corners.',
   },
   {
+    spec: 'icon',
+    page: 'icon',
+    title: 'Icon',
+    blurb:
+      'A single-glyph SVG on a 24-unit grid: sized by a pixel prop, stroked at a shared weight, and colored by currentColor so it follows the text around it.',
+  },
+  {
     spec: 'pill',
     page: 'pill',
     title: 'Pill',
@@ -96,6 +103,13 @@ const ATOMS: GalleryItem[] = [
       "The typography atoms put every piece of copy on the kit's type scale. Text and Heading cover body copy and titles, while Label, Link, and Kbd handle form captions, anchors, and keyboard keys.",
   },
   {
+    spec: 'kbd',
+    page: 'kbd',
+    title: 'Kbd',
+    blurb:
+      'A monospace key cap for keyboard keys and shortcuts, sized in em units so it rides the surrounding text, with a raised bottom edge and a glass variant for frosted surfaces.',
+  },
+  {
     spec: 'textarea',
     page: 'textarea',
     title: 'Textarea',
@@ -150,6 +164,13 @@ const ATOMS: GalleryItem[] = [
     title: 'Number Input',
     blurb:
       'A numeric stepper: a minus button, a centered native number input with tabular figures, and a plus button in one bordered group. Results clamp to the bounds and the step buttons disable at the ends.',
+  },
+  {
+    spec: 'otp-field',
+    page: 'otpfield',
+    title: 'OTP Field',
+    blurb:
+      'A one-time passcode entry: a row of character cells driven by one invisible native input, so typing, paste, and platform code autofill behave natively while the caret blinks in the next empty cell.',
   },
   {
     spec: 'slider',
@@ -259,6 +280,8 @@ const ATOMS: GalleryItem[] = [
 const MOLECULES: GalleryItem[] = [
   { spec: 'field', page: 'field', title: 'Field', blurb: 'Groups a label, control, and a reserved hint or error line into one accessible form field.' },
   { spec: 'select', page: 'select', title: 'Select', blurb: 'A styled replacement for the native select: a trigger that matches Input, with a glass dropdown of options.' },
+  { spec: 'combobox', page: 'combobox', title: 'Combobox', blurb: 'An editable input that filters a glass listbox of suggestions and commits one matching value.' },
+  { spec: 'multi-select', page: 'multiselect', title: 'MultiSelect', blurb: 'An editable tag control that filters and toggles several values from a portaled multi-select listbox.' },
   { spec: 'segmented-control', page: 'segmented', title: 'Segmented Control', blurb: 'A compact row of mutually exclusive options with a thumb that slides under the selected one.' },
   { spec: 'tabs', page: 'tabs', title: 'Tabs', blurb: 'A tablist with a springing indicator that switches between cross-faded panels.' },
   { spec: 'tooltip', page: 'tooltip', title: 'Tooltip', blurb: 'A small glass bubble that describes its trigger on hover or focus, positioned around it.' },
@@ -270,10 +293,14 @@ const MOLECULES: GalleryItem[] = [
   { spec: 'breadcrumbs', page: 'breadcrumbs', title: 'Breadcrumbs', blurb: 'A path trail that shows the current location inside a hierarchy and makes navigation feel grounded.' },
   { spec: 'pagination', page: 'pagination', title: 'Pagination', blurb: 'A compact pager for moving through pages of results or content without losing context.' },
   { spec: 'accordion', page: 'accordion', title: 'Accordion', blurb: 'A stack of disclosure panels that expand to reveal more detail in place.' },
+  { spec: 'list', page: 'list', title: 'List', blurb: 'Single-column content rows as raised cards with leading and trailing slots, or flat divided rows.' },
 ];
 
 const ORGANISMS: GalleryItem[] = [
+  { spec: 'app-shell', page: 'appshell', title: 'AppShell', blurb: 'The app frame: a sticky sidebar beside a scrollable main column with an optional header, collapsing to a drawer on small screens.' },
   { spec: 'modal', page: 'modal', title: 'Modal', blurb: 'A focus-trapped dialog centered over a blurred overlay, with header, body, and footer slots.' },
+  { spec: 'drawer', page: 'drawer', title: 'Drawer', blurb: 'A focus-trapped modal sheet that enters from a viewport edge and keeps the surrounding page visible behind a blurred overlay.' },
+  { spec: 'alert-dialog', page: 'alertdialog', title: 'AlertDialog', blurb: 'A deliberate confirmation dialog that focuses Cancel first and gives consequential actions an explicit, readable label.' },
   { spec: 'popover', page: 'popover', title: 'Popover', blurb: 'A floating, anchored panel with an arrow that toggles open from a trigger.' },
   { spec: 'menu', page: 'menu', title: 'Menu', blurb: 'A portalled action menu of items with icons, shortcuts, separators, and section labels.' },
   { spec: 'floating-panel', page: 'floatingpanel', title: 'Floating Panel', blurb: 'A draggable dialog with a grab-bar handle, title, close button, and a scrollable body.' },
@@ -282,6 +309,7 @@ const ORGANISMS: GalleryItem[] = [
   { spec: 'tab-strip', page: 'tabstrip', title: 'Tab Strip', blurb: 'A scrollable row of closable tabs with icons and a springing active underline.' },
   { spec: 'resizable-split-pane', page: 'resizablesplitpane', title: 'Resizable Split Pane', blurb: 'Two panes divided by a draggable separator that resizes them by ratio.' },
   { spec: 'table', page: 'table', title: 'Table', blurb: 'A semantic table for rows of structured data, with accessible headers and a caption slot.' },
+  { spec: 'data-grid', page: 'datagrid', title: 'Data Grid', blurb: 'A column-driven grid with client sorting, row selection, loading and empty states, and a roving-focus keyboard model.' },
 ];
 
 const SECTIONS: Section[] = [

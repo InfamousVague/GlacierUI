@@ -1,5 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@glacier/react": ["../../packages/react/src/index.ts"]
+    }
+  },
   "include": [
     "src",
     "tests",

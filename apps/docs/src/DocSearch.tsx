@@ -7,6 +7,8 @@ export interface DocSearchItem {
   id: string;
   title: string;
   group: string;
+  /** Extra keywords (nested component names, concepts) matched but not shown. */
+  keywords?: string;
 }
 
 interface DocSearchProps {
@@ -32,8 +34,19 @@ export function DocSearch({ items, onSelect }: DocSearchProps) {
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const pool = q ? items.filter((i) => `${i.title} ${i.group}`.toLowerCase().includes(q)) : items;
-    return pool.slice(0, MAX_RESULTS);
+    if (!q) return items.slice(0, MAX_RESULTS).map((i) => ({ ...i, match: undefined as string | undefined }));
+    return items
+      .filter((i) => `${i.title} ${i.group} ${i.keywords ?? ''}`.toLowerCase().includes(q))
+      .slice(0, MAX_RESULTS)
+      .map((i) => {
+        // If the query hit a keyword rather than the page title, surface that
+        // keyword so a nested component (Switch on the Selection page) is
+        // obviously the thing that matched.
+        const match = i.title.toLowerCase().includes(q)
+          ? undefined
+          : (i.keywords ?? '').split(' ').find((k) => k.toLowerCase().includes(q));
+        return { ...i, match };
+      });
   }, [items, query]);
 
   useEffect(() => setActive(0), [query]);
@@ -160,7 +173,10 @@ export function DocSearch({ items, onSelect }: DocSearchProps) {
                     choose(result.id);
                   }}
                 >
-                  <span className="docSearchTitle">{result.title}</span>
+                  <span className="docSearchTitle">
+                    {result.match ?? result.title}
+                    {result.match && <span className="docSearchContext"> · {result.title}</span>}
+                  </span>
                   <span className="docSearchGroup">{result.group}</span>
                 </button>
               </li>

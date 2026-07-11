@@ -134,11 +134,25 @@ export function SliderPage() {
           { name: 'max', type: 'number', default: '100', description: 'Upper bound.' },
           { name: 'step', type: 'number', default: '1', description: 'Increment for drags and arrow keys.' },
           { name: 'onValueChange', type: '(value: number) => void', description: 'Called with the numeric value on every change.' },
+          { name: 'hapticStep', type: 'number', default: '10', description: 'Percent of the range between haptic ticks while dragging or keying. 0 or less disables the ticks.' },
           { name: 'skeleton', type: 'boolean', default: 'false', description: "Renders a placeholder with the component's exact geometry." },
           { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the control.' },
           { name: 'aria-label', type: 'string', description: 'Accessible name. Not needed inside a Field with a label.' },
         ]}
       />
+
+      <Heading level={2}>Haptics</Heading>
+      <ul>
+        <li>
+          Under an enabled HapticsProvider, dragging or arrowing fires a selection tick each time
+          the value crosses a boundary of <code>hapticStep</code> percent of the range, plus one
+          medium bump on landing at min or max.
+        </li>
+        <li>
+          Set <code>hapticStep</code> to 0 to turn off the ticks, or{' '}
+          <code>data-haptic="none"</code> to silence the slider entirely.
+        </li>
+      </ul>
 
       <Heading level={2}>Accessibility</Heading>
       <ul>

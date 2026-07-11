@@ -18,7 +18,7 @@ export function SelectionPage() {
       <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
       <ComponentBlueprint specId="checkbox" />
       <ComponentBlueprint specId="radio" />
-      <ComponentBlueprint specId="switch" />
+      <ComponentBlueprint specId="switch" fixedSize="md" />
 
       <Heading level={2}>Examples</Heading>
 

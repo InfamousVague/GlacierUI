@@ -41,6 +41,24 @@ export function StepsPage() {
       </Example>
 
       <Example
+        title="Connected"
+        description={
+          <>
+            The <code>connected</code> variant joins larger circular markers with connector lines.
+            Completed steps draw a check, the current step rings itself in the tone, and{' '}
+            <code>numbered</code> writes the 1-based step number in the remaining markers.
+          </>
+        }
+        code={`<Steps variant="connected" count={4} active={2} />
+<Steps variant="connected" numbered count={4} active={2} />`}
+      >
+        <Stack gap={5} style={{ width: '100%', maxWidth: '24rem' }}>
+          <Steps variant="connected" count={4} active={2} style={{ width: '100%' }} />
+          <Steps variant="connected" numbered count={4} active={2} style={{ width: '100%' }} />
+        </Stack>
+      </Example>
+
+      <Example
         title="Tones"
         description={
           <>
@@ -110,6 +128,19 @@ export function StepsPage() {
             default: '0',
             description:
               'Zero-based index of the current step. Earlier dots read as completed, later ones as upcoming.',
+          },
+          {
+            name: 'variant',
+            type: "'dots' | 'connected'",
+            default: "'dots'",
+            description:
+              'dots renders the compact dot row; connected joins circular markers with lines and draws a check on completed steps.',
+          },
+          {
+            name: 'numbered',
+            type: 'boolean',
+            default: 'false',
+            description: 'Numbers the connected markers from 1. Ignored by the dots variant.',
           },
           {
             name: 'tone',

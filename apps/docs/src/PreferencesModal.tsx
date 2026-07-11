@@ -1,11 +1,15 @@
 import { accentOptions, accentSteps, type SansFont, type MonoFont } from '@glacier/tokens';
-import { Button, Divider, Label, Modal, SegmentedControl, Slider, Text, useT, Size, TextTone, Variant } from '@glacier/react';
+import { Button, Divider, Label, SegmentedControl, Slider, Switch, TabbedModal, Text, useT, Size, TextTone, Variant } from '@glacier/react';
+import { LayoutTemplate, Palette, Sparkles, Type } from '@glacier/icons';
 import { m } from './i18n.ts';
 
 export interface Preferences {
   theme: 'system' | 'light' | 'dark';
   density: 'comfortable' | 'compact';
   layout: 'floating' | 'full';
+  direction: 'ltr' | 'rtl';
+  /** Vibration feedback on tap, on supported touch devices. */
+  haptics: boolean;
   accent: string;
   font: SansFont;
   mono: MonoFont;
@@ -18,6 +22,8 @@ export const DEFAULT_PREFERENCES: Preferences = {
   theme: 'system',
   density: 'comfortable',
   layout: 'floating',
+  direction: 'ltr',
+  haptics: false,
   accent: accentOptions[0]!.name,
   font: 'inter',
   mono: 'jetbrains',
@@ -43,27 +49,17 @@ interface PreferencesModalProps {
   onChange: (patch: Partial<Preferences>) => void;
 }
 
+/**
+ * The docs preferences, grouped into a sectioned settings dialog: Appearance
+ * (theme, accent), Typography (typeface, monospace), Layout (density, frame,
+ * direction), and Effects (rounding, frost, haptics). Every control drives a
+ * design token, so changes apply to the whole kit at once.
+ */
 export function PreferencesModal({ open, onClose, preferences, onChange }: PreferencesModalProps) {
   const t = useT();
-  return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      title={t(m.preferences)}
-      description={t(m.prefsDescription)}
-      size={Size.Medium}
-      footer={
-        <>
-          <Button variant={Variant.Ghost} size={Size.Large} onClick={() => onChange(DEFAULT_PREFERENCES)}>
-            {t(m.reset)}
-          </Button>
-          <Button size={Size.Large} onClick={onClose}>
-            {t(m.done)}
-          </Button>
-        </>
-      }
-    >
-      <div className="prefsBody">
+
+  const appearance = (
+    <div className="prefsBody">
       <div className="prefsSection">
         <Label>{t(m.theme)}</Label>
         <SegmentedControl
@@ -79,6 +75,62 @@ export function PreferencesModal({ open, onClose, preferences, onChange }: Prefe
         />
       </div>
       <Divider />
+      <div className="prefsSection">
+        <Label>{t(m.accent)}</Label>
+        <div className="accentSwatches" role="radiogroup" aria-label={t(m.accentColor)}>
+          {accentOptions.map((option) => (
+            <button
+              key={option.name}
+              type="button"
+              role="radio"
+              aria-checked={preferences.accent === option.name}
+              aria-label={option.label}
+              title={option.label}
+              className="accentSwatch"
+              data-selected={preferences.accent === option.name || undefined}
+              style={{ background: accentSteps(option, 'light')[8] }}
+              onClick={() => onChange({ accent: option.name })}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const typography = (
+    <div className="prefsBody">
+      <div className="prefsSection">
+        <Label>{t(m.typeface)}</Label>
+        <SegmentedControl
+          aria-label={t(m.typeface)}
+          fullWidth
+          value={preferences.font}
+          onValueChange={(value) => onChange({ font: value as SansFont })}
+          options={SANS_OPTIONS}
+        />
+        <Text size={Size.XSmall} tone={TextTone.Subtle}>
+          {t(m.typefaceHelp)}
+        </Text>
+      </div>
+      <Divider />
+      <div className="prefsSection">
+        <Label>{t(m.monospace)}</Label>
+        <SegmentedControl
+          aria-label={t(m.monospace)}
+          fullWidth
+          value={preferences.mono}
+          onValueChange={(value) => onChange({ mono: value as MonoFont })}
+          options={MONO_OPTIONS}
+        />
+        <Text size={Size.XSmall} tone={TextTone.Subtle}>
+          {t(m.monospaceHelp)}
+        </Text>
+      </div>
+    </div>
+  );
+
+  const layout = (
+    <div className="prefsBody">
       <div className="prefsSection">
         <Label>{t(m.density)}</Label>
         <SegmentedControl
@@ -111,53 +163,23 @@ export function PreferencesModal({ open, onClose, preferences, onChange }: Prefe
       </div>
       <Divider />
       <div className="prefsSection">
-        <Label>{t(m.accent)}</Label>
-        <div className="accentSwatches" role="radiogroup" aria-label={t(m.accentColor)}>
-          {accentOptions.map((option) => (
-            <button
-              key={option.name}
-              type="button"
-              role="radio"
-              aria-checked={preferences.accent === option.name}
-              aria-label={option.label}
-              title={option.label}
-              className="accentSwatch"
-              data-selected={preferences.accent === option.name || undefined}
-              style={{ background: accentSteps(option, 'light')[8] }}
-              onClick={() => onChange({ accent: option.name })}
-            />
-          ))}
-        </div>
-      </div>
-      <Divider />
-      <div className="prefsSection">
-        <Label>{t(m.typeface)}</Label>
+        <Label>{t(m.direction)}</Label>
         <SegmentedControl
-          aria-label={t(m.typeface)}
+          aria-label={t(m.direction)}
           fullWidth
-          value={preferences.font}
-          onValueChange={(value) => onChange({ font: value as SansFont })}
-          options={SANS_OPTIONS}
+          value={preferences.direction}
+          onValueChange={(value) => onChange({ direction: value as Preferences['direction'] })}
+          options={[
+            { value: 'ltr', label: t(m.ltr) },
+            { value: 'rtl', label: t(m.rtl) },
+          ]}
         />
-        <Text size={Size.XSmall} tone={TextTone.Subtle}>
-          {t(m.typefaceHelp)}
-        </Text>
       </div>
-      <Divider />
-      <div className="prefsSection">
-        <Label>{t(m.monospace)}</Label>
-        <SegmentedControl
-          aria-label={t(m.monospace)}
-          fullWidth
-          value={preferences.mono}
-          onValueChange={(value) => onChange({ mono: value as MonoFont })}
-          options={MONO_OPTIONS}
-        />
-        <Text size={Size.XSmall} tone={TextTone.Subtle}>
-          {t(m.monospaceHelp)}
-        </Text>
-      </div>
-      <Divider />
+    </div>
+  );
+
+  const effects = (
+    <div className="prefsBody">
       <div className="prefsSection">
         <Label htmlFor="prefs-radius">{t(m.cornerRounding)}</Label>
         <div className="prefsRange">
@@ -197,7 +219,42 @@ export function PreferencesModal({ open, onClose, preferences, onChange }: Prefe
           {t(m.frostednessHelp)}
         </Text>
       </div>
+      <Divider />
+      <div className="prefsSection">
+        <Label htmlFor="prefs-haptics">{t(m.haptics)}</Label>
+        <Switch
+          id="prefs-haptics"
+          checked={preferences.haptics}
+          onCheckedChange={(haptics) => onChange({ haptics })}
+        />
+        <Text size={Size.XSmall} tone={TextTone.Subtle}>
+          {t(m.hapticsHelp)}
+        </Text>
       </div>
-    </Modal>
+    </div>
+  );
+
+  return (
+    <TabbedModal
+      open={open}
+      onClose={onClose}
+      title={t(m.preferences)}
+      sections={[
+        { id: 'appearance', label: t(m.appearance), icon: <Palette size={16} />, content: appearance },
+        { id: 'typography', label: t(m.typographySection), icon: <Type size={16} />, content: typography },
+        { id: 'layout', label: t(m.layoutSection), icon: <LayoutTemplate size={16} />, content: layout },
+        { id: 'effects', label: t(m.effects), icon: <Sparkles size={16} />, content: effects },
+      ]}
+      footer={
+        <>
+          <Button variant={Variant.Ghost} size={Size.Large} onClick={() => onChange(DEFAULT_PREFERENCES)}>
+            {t(m.reset)}
+          </Button>
+          <Button size={Size.Large} onClick={onClose}>
+            {t(m.done)}
+          </Button>
+        </>
+      }
+    />
   );
 }

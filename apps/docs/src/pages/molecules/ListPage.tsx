@@ -23,7 +23,7 @@ function SelectableList() {
     />
   );
   return (
-    <List divided aria-label="Projects">
+    <List aria-label="Projects">
       {row('docs', 'Documentation', 'Guides, references, and release notes')}
       {row('kit', 'Component kit', 'The React workspace and its tests')}
       {row('tokens', 'Tokens', 'Color ramps, spacing, and typography scales')}
@@ -67,12 +67,12 @@ export function ListPage() {
       <Example
         title="Leading and trailing slots"
         description="Lead with an Avatar or icon; trail with a Pill, CounterBadge, or a chevron for navigation rows."
-        code={`<List divided aria-label="People">
+        code={`<List aria-label="People">
   <ListItem title="Ada Lovelace" description="Owner" leading={<Avatar name="Ada Lovelace" size="sm" />} trailing={<Pill size="sm">Admin</Pill>} />
   <ListItem title="Inbox" leading={fileIcon} trailing={<CounterBadge count={12} />} />
 </List>`}
       >
-        <List divided aria-label="People" style={{ maxWidth: '28rem' }}>
+        <List aria-label="People" style={{ maxWidth: '28rem' }}>
           <ListItem
             title="Ada Lovelace"
             description="Owner"

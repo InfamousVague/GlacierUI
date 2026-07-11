@@ -54,6 +54,14 @@ export function NumberInputPage() {
       </Example>
 
       <Example
+        title="Press and hold"
+        description="Tap a step button for one increment, or press and hold to auto-repeat: it pauses, then ramps from slow to rapid, and stops at a bound. Handy for a wide range. Try holding a button here."
+        code={`<NumberInput aria-label="Amount" defaultValue={0} min={0} max={500} />`}
+      >
+        <NumberInput aria-label="Amount" defaultValue={0} min={0} max={500} />
+      </Example>
+
+      <Example
         title="Sizes"
         description="sm, md, and lg match the shared control heights, so a stepper lines up with inputs and buttons on the same row."
         code={`<NumberInput aria-label="Small" size={Size.Small} defaultValue={1} />
@@ -115,6 +123,27 @@ export function NumberInputPage() {
         </li>
         <li>The step buttons are plain buttons labeled Decrease and Increase, and disable at the matching bound.</li>
         <li>Inside a Field the input inherits the label and hint ids.</li>
+      </ul>
+
+      <Heading level={2}>Haptics</Heading>
+      <ul>
+        <li>
+          Under an enabled <code>HapticsProvider</code>, every committed step fires a selection
+          tick: a button tap, each tick of a press-and-hold auto-repeat, and ArrowUp or ArrowDown in
+          the field.
+        </li>
+        <li>
+          A step that clamps at min or max bumps medium once, and re-arms after the value leaves the
+          bound.
+        </li>
+        <li>
+          Typed digits are silent; committing a typed value on blur fires one light tap.
+        </li>
+        <li>
+          Pass <code>data-haptic="none"</code> to silence the whole control. The step buttons opt out
+          of the provider's delegated press haptic themselves, so a tap buzzes once, from the value
+          change.
+        </li>
       </ul>
 
       <Heading level={2}>Usage</Heading>
