@@ -564,12 +564,18 @@ function RadioCardBlueprint({ size, dimensions }: BlueprintProps) {
       )}
 
       <BpTitle />
-      <text x={200} y={214} textAnchor="middle" className="bpLabel bpMuted">
-        {[padding && `padding: ${padding}`, gap && `gap: ${gap}`, border && `border: ${border}`].filter(Boolean).join('   ·   ')}
-      </text>
-      <text x={200} y={244} textAnchor="middle" className="bpLabel bpMuted">
-        {[titleSize && `title: ${titleSize}`, descriptionSize && `desc: ${descriptionSize}`, iconSize && `icon: ${iconSize}`, indicator && `check: ${indicator}`].filter(Boolean).join('   ·   ')}
-      </text>
+      <Foot
+        y={244}
+        parts={[
+          padding && `padding: ${padding}`,
+          gap && `gap: ${gap}`,
+          border && `border: ${border}`,
+          titleSize && `title: ${titleSize}`,
+          descriptionSize && `desc: ${descriptionSize}`,
+          iconSize && `icon: ${iconSize}`,
+          indicator && `check: ${indicator}`,
+        ]}
+      />
     </svg>
   );
 }
@@ -685,7 +691,7 @@ function CalloutBlueprint({ size, dimensions }: BlueprintProps) {
       {/* width on top, padding-inline below, padding-block on the right */}
       <HDim x1={BX} x2={BX + BW} y={BY - 24} label="width: auto" />
       {paddingInline && <HDim x1={BX} x2={BX + pIn} y={BY + BH + 14} label={paddingInline} above={false} />}
-      {paddingBlock && <VDim x={BX + BW + 28} y1={BY} y2={BY + pBl} label={paddingBlock} left={false} />}
+      {paddingBlock && <VDim x={BX + BW + 14} y1={BY} y2={BY + pBl} label={paddingBlock} left={false} horizontal />}
 
       {/* radius on the top-right corner */}
       {radius && (
@@ -716,7 +722,7 @@ function BannerBlueprint({ size, dimensions }: BlueprintProps) {
   // is a full-width strip, so the figure is wide; it is tall enough that the
   // part labels above and the measurements below never clip into each other.
   const W = 460;
-  const H = 196;
+  const H = 212;
   const BX = 48;
   const BW = 364;
   const BY = 72;
@@ -778,9 +784,11 @@ function BannerBlueprint({ size, dimensions }: BlueprintProps) {
       )}
 
       <BpTitle />
-      <text x={W / 2} y={H - 14} textAnchor="middle" className="bpLabel bpMuted">
-        {['width: full', gap && `gap: ${gap}`, font && `font: ${font}`, border && `border: ${border}`].filter(Boolean).join('   ·   ')}
-      </text>
+      <Foot
+        y={H - 14}
+        x={W / 2}
+        parts={['width: full', gap && `gap: ${gap}`, font && `font: ${font}`, border && `border: ${border}`]}
+      />
     </svg>
   );
 }
@@ -1106,7 +1114,7 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
       {/* padding-inline: measured across the left gap; the right gap is symmetric */}
       {padIn && <HDim x1={BX} x2={BX + pIn} y={BY + BH + 16} label={padIn} above={false} />}
       {/* padding-block: measured across the top gap; the bottom gap is symmetric */}
-      {padBl && <VDim x={BX + BW + 30} y1={BY} y2={BY + pBl} label={padBl} left={false} />}
+      {padBl && <VDim x={BX + BW + 30} y1={BY} y2={BY + pBl} label={padBl} left={false} horizontal />}
 
       {/* radius: an arc traced on the top-right corner, labelled above it */}
       {radius && (
@@ -1401,12 +1409,36 @@ const Frame = ({ x, y, w, h, r = 10 }: { x: number; y: number; w: number; h: num
   <rect x={x} y={y} width={w} height={h} rx={r} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
 );
 
-// Footnote row of measure chips, centred at the bottom of a figure.
-const Foot = ({ y = 212, parts }: { y?: number; parts: (string | undefined | false)[] }) => (
-  <text x={200} y={y} textAnchor="middle" className="bpLabel bpMuted">
-    {parts.filter(Boolean).join('   \u00b7   ')}
-  </text>
-);
+// Footnote rows of measure chips, centred at the bottom of a figure. Long
+// chip sets wrap onto extra lines stacked above the baseline so they never
+// run past the viewBox edges.
+const Foot = ({ y = 212, x = 200, parts }: { y?: number; x?: number; parts: (string | undefined | false)[] }) => {
+  const chips = parts.filter(Boolean) as string[];
+  const separator = '   \u00b7   ';
+  const maxWidth = 376;
+  const charWidth = 6.6;
+  const lines: string[] = [];
+  let current = '';
+  for (const chip of chips) {
+    const candidate = current ? current + separator + chip : chip;
+    if (current && candidate.length * charWidth > maxWidth) {
+      lines.push(current);
+      current = chip;
+    } else {
+      current = candidate;
+    }
+  }
+  if (current) lines.push(current);
+  return (
+    <g>
+      {lines.map((line, i) => (
+        <text key={i} x={x} y={y - (lines.length - 1 - i) * 15} textAnchor="middle" className="bpLabel bpMuted">
+          {line}
+        </text>
+      ))}
+    </g>
+  );
+};
 
 // ---- Molecules ---------------------------------------------------------
 
@@ -1673,7 +1705,7 @@ function ListBlueprint({ size, dimensions }: BlueprintProps) {
 
       <text x={X + W + 12} y={rows[0]! + rowH / 2 + 3} className="bpLabel bpMuted">selected</text>
       <text x={X - 10} y={rows[1]! + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">leading</text>
-      <text x={X - 10} y={rows[2]! + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">title + description</text>
+      <text x={X - 10} y={rows[2]! + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">title + desc</text>
       <text x={X + W + 12} y={rows[2]! + rowH / 2 + 3} className="bpLabel bpMuted">trailing</text>
       <BpTitle />
       <Foot y={274} parts={[padIn && `pad: ${padIn}`, radius && `radius: ${radius}`, border && `border: ${border}`]} />
@@ -2412,7 +2444,7 @@ function NavBarBlueprint({ dimensions }: BlueprintProps) {
       <circle cx={X + W - 20} cy={Y + H / 2} r={9} fill="none" stroke={C.edge} strokeWidth={1.25} strokeDasharray="2 2" />
 
       {gap && <HDim x1={ix(0) + itemW} x2={ix(1)} y={Y + H + 14} label={gap} above={false} />}
-      <text x={X - 10} y={iy + itemH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">indicator</text>
+      <text x={X - 6} y={iy + itemH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">indicator</text>
       <text x={ix(1) + itemW / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">item</text>
       <text x={ix(2) + itemW + 14} y={iy - 4} className="bpLabel bpMuted">badge</text>
       <text x={X + W + 12} y={Y + H / 2 + 3} className="bpLabel bpMuted">end</text>
@@ -2604,7 +2636,7 @@ function PopoverBlueprint({ size, dimensions }: BlueprintProps) {
       <text x={cx + trigW / 2 + 12} y={trigY + trigH / 2 + 3} className="bpLabel bpMuted">trigger</text>
       <text x={panelX + panelW + 12} y={panelY + panelH / 2} className="bpLabel bpMuted">content</text>
       <text x={panelX - 10} y={panelY + 14} textAnchor="end" className="bpLabel bpMuted">panel</text>
-      {offset && <VDim x={panelX - 24} y1={trigY + trigH} y2={panelY} label={`offset ${offset}`} />}
+      {offset && <VDim x={panelX - 24} y1={trigY + trigH} y2={panelY} label={`offset ${offset}`} horizontal />}
       <BpTitle />
       <Foot parts={[radius && `radius: ${radius}`, padding && `padding: ${padding}`]} />
     </svg>
@@ -2768,7 +2800,7 @@ function TabbedModalBlueprint({ size, dimensions }: BlueprintProps) {
       <Ln x={X + railW + 18} y={Y + 42} w={W - railW - 40} h={5} op={0.3} />
       <Ln x={X + railW + 18} y={Y + 56} w={W - railW - 60} h={5} op={0.3} />
       <Ln x={X + railW + 18} y={Y + 70} w={W - railW - 48} h={5} op={0.3} />
-      <text x={X + railW / 2} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">rail</text>
+      <text x={X - 10} y={Y + 20} textAnchor="end" className="bpLabel bpMuted">rail</text>
       <text x={X + railW + (W - railW) / 2} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">pane</text>
       <text x={X - 10} y={Y + 16 + itemH + 8} textAnchor="end" className="bpLabel bpMuted">rail item</text>
       <BpTitle />
@@ -2829,9 +2861,9 @@ function ResizableSplitPaneBlueprint({ size, dimensions }: BlueprintProps) {
   const H = 104;
   const divX = X + Math.round(W * 0.42);
   return (
-    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label="Blueprint of the resizable split pane">
+    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label="Blueprint of the resizable split pane">
       <Defs />
-      <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
+      <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
       {/* start pane */}
       <rect x={X} y={Y} width={divX - X - 6} height={H} rx={10} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       {/* end pane */}
@@ -2844,7 +2876,7 @@ function ResizableSplitPaneBlueprint({ size, dimensions }: BlueprintProps) {
       <text x={divX} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">divider</text>
       <HDim x1={X} x2={divX} y={Y + H + 16} label="ratio" above={false} />
       <BpTitle />
-      <Foot y={204} parts={[radius && `radius: ${radius}`, gripHeight && `grip: ${gripHeight}`, thickness && `divider: ${thickness}`]} />
+      <Foot y={222} parts={[radius && `radius: ${radius}`, gripHeight && `grip: ${gripHeight}`, thickness && `divider: ${thickness}`]} />
     </svg>
   );
 }
@@ -3160,9 +3192,9 @@ function PageHeaderBlueprint({ dimensions }: BlueprintProps) {
 function SectionBlueprint({ dimensions }: BlueprintProps) {
   const gap = fmt(dimensions?.gap);
   return (
-    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the section">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the section">
       <Defs />
-      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <line x1={36} y1={44} x2={364} y2={44} stroke={C.line} strokeWidth={1.25} strokeDasharray="5 3" />
       <text x={370} y={40} textAnchor="end" className="bpLabel" fill={C.faint}>divider</text>
       {/* heading row */}
@@ -3174,7 +3206,7 @@ function SectionBlueprint({ dimensions }: BlueprintProps) {
       <rect x={44} y={116} width={312} height={54} rx={8} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       <text x={200} y={147} textAnchor="middle" className="bpLabel" fill={C.faint}>content</text>
       <BpTitle />
-      <Foot parts={['aria-labelledby wires the heading', 'header row', 'content']} />
+      <Foot y={216} parts={['aria-labelledby wires the heading', 'header row', 'content']} />
     </svg>
   );
 }
@@ -3186,9 +3218,9 @@ function CardGroupBlueprint({ dimensions }: BlueprintProps) {
   const cols = [40, 152, 264];
   const rows = [54, 122];
   return (
-    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the card group">
+    <svg viewBox="0 0 400 226" className="bpSvg" role="img" aria-label="Blueprint of the card group">
       <Defs />
-      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <rect x={0} y={0} width={400} height={226} fill="url(#bpGrid)" />
       {rows.map((y) =>
         cols.map((x) => (
           <g key={`${x}-${y}`}>
@@ -3198,10 +3230,10 @@ function CardGroupBlueprint({ dimensions }: BlueprintProps) {
           </g>
         )),
       )}
-      <HDim x1={40} x2={136} y={190} above={false} label="min-item: 16rem" />
-      <VDim x={376} y1={106} y2={122} label={gap ? `gap: ${gap}` : 'gap'} left={false} horizontal />
+      <HDim x1={40} x2={136} y={190} label="min-item: 16rem" />
+      <VDim x={372} y1={106} y2={122} label={gap ?? 'gap'} horizontal />
       <BpTitle />
-      <Foot y={206} parts={['grid: repeat(auto-fill, minmax(min-item, 1fr))', 'list: one column']} />
+      <Foot y={220} parts={['grid: repeat(auto-fill, minmax(min-item, 1fr))', 'list: one column']} />
     </svg>
   );
 }
