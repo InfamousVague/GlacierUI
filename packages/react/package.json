@@ -21,7 +21,8 @@
   "dependencies": {
     "date-fns": "^4.4.0",
     "motion": "^12.23.0",
-    "react-day-picker": "^10.0.1"
+    "react-day-picker": "^10.0.1",
+    "uplot": "^1.6.32"
   },
   "devDependencies": {
     "@glacier/icons": "*",

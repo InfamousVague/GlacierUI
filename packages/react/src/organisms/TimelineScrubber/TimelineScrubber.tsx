@@ -1,0 +1,223 @@
+import { timelineScrubberMarkerTones } from '@glacier/spec';
+import { useCallback, useRef, useState, type ComponentProps, type KeyboardEvent, type PointerEvent } from 'react';
+import { cx } from '../../internal/cx.ts';
+import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
+import styles from './TimelineScrubber.module.css';
+
+// Derived from the spec so the tone union cannot drift.
+export type TimelineScrubberMarkerTone = (typeof timelineScrubberMarkerTones)[number];
+
+export interface TimelineScrubberMarker {
+  /** Epoch milliseconds; clamped into the window. */
+  time: number;
+  /** Tick color family. Defaults to neutral. */
+  tone?: TimelineScrubberMarkerTone;
+  /** Accessible description of the event, surfaced as the tick tooltip. */
+  label?: string;
+}
+
+export interface TimelineScrubberProps extends Omit<ComponentProps<'div'>, 'onChange'> {
+  /** Window start, epoch milliseconds. */
+  start: number;
+  /** Window end, epoch milliseconds. While live this is "now" and advances as new samples arrive. */
+  end: number;
+  /** The inspected time. Omit to pin the playhead to the live edge. */
+  value?: number;
+  /** Called with the scrubbed time as the playhead moves, or null when the user returns to live. */
+  onChange?: (time: number | null) => void;
+  /** Optional normalized 0-1 context series rendered as the track backdrop. */
+  activity?: number[];
+  /** Flagged instants drawn as thin ticks over the track. */
+  markers?: TimelineScrubberMarker[];
+  /** Arrow-key step in milliseconds; PageUp/PageDown move by ten steps. */
+  step?: number;
+  /** Formats a timestamp for the readout, the ticks, and aria-valuetext. */
+  formatTime?: (time: number) => string;
+  /** Label for the live button; replace it for localization. */
+  liveLabel?: string;
+  /** Track height step. */
+  size?: 'sm' | 'md';
+  /** Blocks scrubbing and dims the control. */
+  disabled?: boolean;
+  /** Renders a placeholder with the exact geometry. */
+  skeleton?: boolean;
+  /** Accessible name for the scrubber. */
+  'aria-label': string;
+}
+
+const defaultFormat = (time: number) => new Date(time).toLocaleTimeString();
+
+/** How many sparse time labels the track carries. */
+const TICK_COUNT = 4;
+
+/** Scrubbing within this fraction of the trailing edge snaps back to live. */
+const LIVE_SNAP = 0.995;
+
+/**
+ * A flight-recorder control: a horizontal band over a recorded time window
+ * with an activity backdrop, event markers, and a draggable playhead. Scrub
+ * to inspect any recorded moment, or pin the playhead to the live edge and
+ * let new time stream in. Controlled: `value` is the inspected time (omit for
+ * live) and `onChange` reports scrubs, with null meaning "back to live".
+ */
+export function TimelineScrubber({
+  start,
+  end,
+  value,
+  onChange,
+  activity,
+  markers,
+  step = 1000,
+  formatTime = defaultFormat,
+  liveLabel = 'Live',
+  size = 'md',
+  disabled = false,
+  skeleton = false,
+  className,
+  'aria-label': ariaLabel,
+  ...rest
+}: TimelineScrubberProps) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [scrubbing, setScrubbing] = useState(false);
+
+  const live = value === undefined;
+  const windowSpan = Math.max(end - start, 1);
+  const clamped = live ? end : Math.min(Math.max(value, start), end);
+  const fraction = (clamped - start) / windowSpan;
+
+  const timeFromPointer = useCallback(
+    (event: PointerEvent<HTMLDivElement>): number | null => {
+      const track = trackRef.current;
+      if (!track) return null;
+      const rect = track.getBoundingClientRect();
+      const f = Math.min(Math.max((event.clientX - rect.left) / rect.width, 0), 1);
+      return f >= LIVE_SNAP ? null : start + f * windowSpan;
+    },
+    [start, windowSpan],
+  );
+
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    if (disabled) return;
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch {
+      // jsdom and some synthetic events have no active pointer to capture
+    }
+    setScrubbing(true);
+    onChange?.(timeFromPointer(event));
+  };
+
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (disabled || !scrubbing) return;
+    onChange?.(timeFromPointer(event));
+  };
+
+  const endScrub = () => setScrubbing(false);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (disabled) return;
+    const moves: Record<string, number | null> = {
+      ArrowLeft: clamped - step,
+      ArrowRight: clamped + step >= end ? null : clamped + step,
+      PageDown: clamped - step * 10,
+      PageUp: clamped + step * 10 >= end ? null : clamped + step * 10,
+      Home: start,
+      End: null,
+    };
+    if (!(event.key in moves)) return;
+    event.preventDefault();
+    const next = moves[event.key];
+    onChange?.(next === null ? null : Math.min(Math.max(next, start), end));
+  };
+
+  if (skeleton) {
+    return (
+      <div className={cx(styles.root, styles[size], className)} {...rest}>
+        <Skeleton height={size === 'sm' ? '2.5rem' : '3.5rem'} width="100%" radius="var(--glacier-radius-md)" style={{ flex: 1 }} />
+        <Skeleton height="2rem" width="3.5rem" radius="var(--glacier-radius-md)" />
+      </div>
+    );
+  }
+
+  const activityPath =
+    activity && activity.length >= 2
+      ? `M ${activity
+          .map((v, i) => `${(i / (activity.length - 1)) * 100} ${100 - Math.min(Math.max(v, 0), 1) * 100}`)
+          .join(' L ')} L 100 100 L 0 100 Z`
+      : undefined;
+
+  const ticks = Array.from({ length: TICK_COUNT }, (_, i) => {
+    const f = i / (TICK_COUNT - 1);
+    return { f, label: formatTime(start + f * windowSpan) };
+  });
+
+  return (
+    <div
+      className={cx(styles.root, styles[size], className)}
+      data-live={live || undefined}
+      data-disabled={disabled || undefined}
+      {...rest}
+    >
+      <div
+        ref={trackRef}
+        className={styles.track}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={endScrub}
+        onPointerCancel={endScrub}
+      >
+        {activityPath && (
+          <svg className={styles.activity} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d={activityPath} />
+          </svg>
+        )}
+        {markers?.map((marker, i) => {
+          const f = Math.min(Math.max((marker.time - start) / windowSpan, 0), 1);
+          return (
+            <span
+              key={i}
+              className={styles.marker}
+              data-tone={marker.tone ?? 'neutral'}
+              style={{ left: `${f * 100}%` }}
+              title={marker.label}
+            />
+          );
+        })}
+        <div className={styles.ticks} aria-hidden="true">
+          {ticks.map((tick) => (
+            <span key={tick.f} className={styles.tick} style={{ left: `${tick.f * 100}%` }} data-edge={tick.f === 0 ? 'start' : tick.f === 1 ? 'end' : undefined}>
+              {tick.label}
+            </span>
+          ))}
+        </div>
+        <div
+          className={styles.playhead}
+          style={{ left: `${fraction * 100}%` }}
+          data-scrubbing={scrubbing || undefined}
+          role="slider"
+          tabIndex={disabled ? -1 : 0}
+          aria-label={ariaLabel}
+          aria-valuemin={start}
+          aria-valuemax={end}
+          aria-valuenow={clamped}
+          aria-valuetext={live ? liveLabel : formatTime(clamped)}
+          aria-disabled={disabled || undefined}
+          onKeyDown={handleKeyDown}
+        >
+          <span className={styles.handle} />
+          {scrubbing && !live && <span className={styles.readout}>{formatTime(clamped)}</span>}
+        </div>
+      </div>
+      <button
+        type="button"
+        className={styles.live}
+        aria-pressed={live}
+        disabled={disabled}
+        onClick={() => onChange?.(null)}
+      >
+        <span className={styles.liveDot} aria-hidden="true" />
+        {liveLabel}
+      </button>
+    </div>
+  );
+}

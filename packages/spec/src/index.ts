@@ -98,6 +98,10 @@ export * from './components/date-picker.ts';
 export * from './components/file-upload.ts';
 export * from './components/fieldset.ts';
 export * from './components/form-section.ts';
+// monitoring (Permafrost)
+export * from './components/sparkline.ts';
+export * from './components/timeline-scrubber.ts';
+export * from './components/time-series-chart.ts';
 
 import type { ComponentSpec } from './schema.ts';
 import { appShellSpec } from './components/app-shell.ts';
@@ -186,6 +190,9 @@ import { iconSpec } from './components/icon.ts';
 import { imageSpec } from './components/image.ts';
 import { ratingSpec } from './components/rating.ts';
 import { otpFieldSpec } from './components/otp-field.ts';
+import { sparklineSpec } from './components/sparkline.ts';
+import { timelineScrubberSpec } from './components/timeline-scrubber.ts';
+import { timeSeriesChartSpec } from './components/time-series-chart.ts';
 
 /** Bump when the schema shape changes in a breaking way. */
 export const SPEC_VERSION = '0.1.0';
@@ -292,6 +299,10 @@ export const specs: ComponentSpec[] = [
   cardGroupSpec,
   timelineSpec,
   wizardSpec,
+  // monitoring
+  sparklineSpec,
+  timelineScrubberSpec,
+  timeSeriesChartSpec,
 ];
 
 /** Specs keyed by id for O(1) lookup. */

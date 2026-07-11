@@ -114,6 +114,9 @@ export const pageTitles = defineMessages({
   cardgroup: { en: 'Card Group', es: 'Grupo de tarjetas', fr: 'Groupe de cartes', de: 'Kartengruppe', ja: 'カードグループ', pt: 'Grupo de cartões', zh: '卡片组', ar: 'مجموعة بطاقات' },
   timeline: { en: 'Timeline', es: 'Línea de tiempo', fr: 'Chronologie', de: 'Zeitleiste', ja: 'タイムライン', pt: 'Linha do tempo', zh: '时间线', ar: 'الخط الزمني' },
   wizard: { en: 'Wizard', es: 'Asistente', fr: 'Assistant', de: 'Assistent', ja: 'ウィザード', pt: 'Assistente', zh: '向导', ar: 'معالج الخطوات' },
+  sparkline: { en: 'Sparkline', es: 'Minigráfico', fr: 'Sparkline', de: 'Sparkline', ja: 'スパークライン', pt: 'Minigráfico', zh: '迷你图', ar: 'مخطط مصغّر' },
+  timelinescrubber: { en: 'Timeline Scrubber', es: 'Depurador de línea de tiempo', fr: 'Curseur de chronologie', de: 'Zeitleisten-Scrubber', ja: 'タイムラインスクラバー', pt: 'Depurador de linha do tempo', zh: '时间线拖动条', ar: 'منزلق الخط الزمني' },
+  timeserieschart: { en: 'Time Series Chart', es: 'Gráfico de series temporales', fr: 'Graphique de séries temporelles', de: 'Zeitreihendiagramm', ja: '時系列チャート', pt: 'Gráfico de séries temporais', zh: '时间序列图', ar: 'مخطط السلاسل الزمنية' },
 });
 
 /**
@@ -161,6 +164,9 @@ export const pageTags: Record<string, string[]> = {
   tabbedmodal: ['TabbedModal', 'TabbedModalSection'],
   tabstrip: ['TabStrip'],
   resizablesplitpane: ['ResizableSplitPane'],
+  sparkline: ['Sparkline', 'trend', 'microchart'],
+  timelinescrubber: ['TimelineScrubber', 'scrubber', 'playhead', 'flight recorder', 'history'],
+  timeserieschart: ['TimeSeriesChart', 'chart', 'graph', 'plot', 'telemetry', 'streaming', 'uPlot'],
   titlebar: ['TitleBar'],
   navbar: ['NavBar', 'NavBarItem', 'rail', 'tab bar'],
   pageheader: ['PageHeader', 'header', 'page title', 'breadcrumbs', 'actions', 'overflow menu'],

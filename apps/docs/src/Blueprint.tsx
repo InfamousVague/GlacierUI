@@ -3437,6 +3437,172 @@ function OtpFieldBlueprint({ size, dimensions }: BlueprintProps) {
   );
 }
 
+// Sparkline: the word-sized trend box with a real wavy mark, its dashed
+// baseline, and the emphasis dot on the newest sample.
+function SparklineBlueprint({ size, dimensions }: BlueprintProps) {
+  const height = fmt(size.height);
+  const thickness = fmt(size.thickness);
+  const pointDia = fmt(dimensions?.pointDiameter);
+  const baselineW = fmt(dimensions?.baselineWidth);
+
+  // schematic geometry (not to scale; labels carry the real values)
+  const BX = 78;
+  const BW = 244;
+  const BY = 72;
+  const BH = 72;
+  // a wavy series across the box, newest sample last
+  const N = 12;
+  const ys = [0.62, 0.5, 0.58, 0.34, 0.42, 0.22, 0.38, 0.55, 0.44, 0.3, 0.4, 0.26];
+  const pts = ys.map((v, i) => `${BX + (i / (N - 1)) * BW},${BY + v * BH}`);
+  const last = pts[pts.length - 1].split(',').map(Number);
+  const baseY = BY + 0.3 * BH;
+
+  return (
+    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label="Blueprint of the sparkline">
+      <Defs />
+      <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
+
+      {/* the box: fluid width, fixed height */}
+      <rect x={BX} y={BY} width={BW} height={BH} fill={C.fill} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+
+      {/* dashed baseline at a reference value */}
+      <line x1={BX} y1={baseY} x2={BX + BW} y2={baseY} stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 3" />
+      <text x={BX + BW + 8} y={baseY + 3} className="bpLabel" fill={C.faint}>baseline{baselineW ? `: ${baselineW}` : ''}</text>
+
+      {/* the mark: a thin polyline, with the newest sample emphasized */}
+      <polyline points={pts.join(' ')} fill="none" stroke={C.line} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+      <circle cx={last[0]} cy={last[1]} r={4} fill={C.line} />
+      <text x={last[0] - 10} y={last[1] - 12} textAnchor="end" className="bpLabel" fill={C.faint}>end point{pointDia ? ` ⌀ ${pointDia}` : ''}</text>
+
+      {/* dimensions: fluid width above, the size's height on the left */}
+      <HDim x1={BX} x2={BX + BW} y={BY - 20} label="width: auto" />
+      <VDim x={BX - 22} y1={BY} y2={BY + BH} label={`height: ${height ?? 'auto'}`} />
+      <text x={BX + 10} y={BY + BH + 18} className="bpLabel">mark: {thickness ?? 'thin'} stroke</text>
+
+      <BpTitle />
+      <Foot parts={['mark: line, area, or bars', 'no axes - the text names it', 'samples spread evenly']} />
+    </svg>
+  );
+}
+
+// TimelineScrubber: the recorded window with its activity silhouette, marker
+// ticks, the playhead with its readout, and the live button at the edge.
+function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
+  const height = fmt(size.height);
+  const radius = fmt(dimensions?.radius);
+  const playheadW = fmt(dimensions?.playheadWidth);
+  const markerW = fmt(dimensions?.markerWidth);
+
+  const TX = 44;
+  const TW = 264;
+  const TY = 76;
+  const TH = 64;
+  const PX = TX + TW * 0.66; // playhead position
+  // activity silhouette: normalized samples, a calm base with two bursts
+  const act = [0.25, 0.3, 0.26, 0.35, 0.3, 0.68, 0.75, 0.5, 0.32, 0.3, 0.42, 0.55, 0.4, 0.3, 0.28, 0.34];
+  const actPts = act.map((v, i) => `${TX + (i / (act.length - 1)) * TW},${TY + TH - v * TH}`);
+
+  return (
+    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label="Blueprint of the timeline scrubber">
+      <Defs />
+      <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
+
+      {/* the track over the recorded window */}
+      <rect x={TX} y={TY} width={TW} height={TH} rx={8} fill={C.fill} fillOpacity={0.4} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      {/* activity backdrop */}
+      <polygon points={`${TX},${TY + TH} ${actPts.join(' ')} ${TX + TW},${TY + TH}`} fill={C.content} fillOpacity={0.35} />
+      {/* marker ticks */}
+      <line x1={TX + TW * 0.38} y1={TY} x2={TX + TW * 0.38} y2={TY + TH} stroke={C.edge} strokeWidth={2} />
+      <line x1={TX + TW * 0.42} y1={TY} x2={TX + TW * 0.42} y2={TY + TH} stroke={C.edge} strokeWidth={2} opacity={0.6} />
+      <text x={TX + TW * 0.4} y={TY - 8} textAnchor="middle" className="bpLabel" fill={C.faint}>markers{markerW ? `: ${markerW}` : ''}</text>
+
+      {/* playhead: the slider, with its grab handle and time readout */}
+      <line x1={PX} y1={TY - 4} x2={PX} y2={TY + TH + 4} stroke={C.line} strokeWidth={2.5} />
+      <circle cx={PX} cy={TY - 4} r={5} fill={C.line} />
+      <rect x={PX - 30} y={TY + TH + 10} width={60} height={18} rx={5} fill={C.fill} stroke={C.edge} strokeWidth={1.1} />
+      <text x={PX} y={TY + TH + 23} textAnchor="middle" className="bpLabel">14:29:36</text>
+      <text x={PX + 10} y={TY - 12} className="bpLabel">playhead{playheadW ? `: ${playheadW}` : ''}</text>
+
+      {/* sparse time ticks along the bottom edge */}
+      <text x={TX + 4} y={TY + TH - 6} className="bpLabel" fill={C.faint}>14:15</text>
+      <text x={TX + TW - 4} y={TY + TH - 6} textAnchor="end" className="bpLabel" fill={C.faint}>now</text>
+
+      {/* the live button at the trailing edge */}
+      <rect x={TX + TW + 12} y={TY + TH / 2 - 14} width={52} height={28} rx={8} fill={C.content} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.25} />
+      <circle cx={TX + TW + 26} cy={TY + TH / 2} r={3} fill={C.text} />
+      <text x={TX + TW + 34} y={TY + TH / 2 + 3.5} className="bpLabel">Live</text>
+
+      {/* dimensions */}
+      <HDim x1={TX} x2={TX + TW} y={TY - 28} label="window: start → end" />
+      <VDim x={TX - 20} y1={TY} y2={TY + TH} label={`height: ${height ?? 'auto'}`} />
+      {radius && <text x={TX + TW - 6} y={TY + TH + 16} textAnchor="end" className="bpLabel">radius: {radius}</text>}
+
+      <BpTitle />
+      <Foot y={222} parts={['activity backdrop', 'marker ticks', 'playhead: role slider', 'live button: aria-pressed']} />
+    </svg>
+  );
+}
+
+// TimeSeriesChart: the plot with recessive grid and axes, two series, the
+// hover crosshair, and the readout and legend rows above the plot.
+function TimeSeriesChartBlueprint({ dimensions }: BlueprintProps) {
+  const strokeW = fmt(dimensions?.strokeWidth);
+  const gridW = fmt(dimensions?.gridWidth);
+  const swatch = fmt(dimensions?.swatchDiameter);
+
+  const PXx = 64;
+  const PW = 288;
+  const PY = 74;
+  const PH = 104;
+  const CXx = PXx + PW * 0.6; // crosshair position
+  const s1 = [0.55, 0.4, 0.5, 0.28, 0.38, 0.2, 0.34, 0.46, 0.3, 0.24, 0.36, 0.3];
+  const s2 = [0.8, 0.72, 0.78, 0.62, 0.7, 0.58, 0.66, 0.74, 0.64, 0.6, 0.7, 0.66];
+  const line = (vals: number[]) => vals.map((v, i) => `${PXx + (i / (vals.length - 1)) * PW},${PY + v * PH}`).join(' ');
+
+  return (
+    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label="Blueprint of the time series chart">
+      <Defs />
+      <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
+
+      {/* readout (left) and legend (right) rows above the plot */}
+      <circle cx={PXx + 4} cy={44} r={3.5} fill={C.line} />
+      <text x={PXx + 12} y={47.5} className="bpLabel">14:29:36 · user 42%</text>
+      <circle cx={PXx + PW - 92} cy={44} r={3.5} fill={C.line} />
+      <text x={PXx + PW - 84} y={47.5} className="bpLabel">user</text>
+      <circle cx={PXx + PW - 48} cy={44} r={3.5} fill={C.edge} />
+      <text x={PXx + PW - 40} y={47.5} className="bpLabel">system</text>
+      <text x={PXx + PW} y={30} textAnchor="end" className="bpLabel" fill={C.faint}>legend{swatch ? ` · swatch ⌀ ${swatch}` : ''}</text>
+
+      {/* plot box with recessive horizontal grid */}
+      <rect x={PXx} y={PY} width={PW} height={PH} fill={C.fill} fillOpacity={0.25} stroke={C.edge} strokeWidth={1.1} strokeDasharray="5 3" />
+      {[0.25, 0.5, 0.75].map((f) => (
+        <line key={f} x1={PXx} y1={PY + PH * f} x2={PXx + PW} y2={PY + PH * f} stroke={C.grid} strokeWidth={1} />
+      ))}
+      {/* y-axis value labels, x-axis time labels */}
+      <text x={PXx - 8} y={PY + 8} textAnchor="end" className="bpLabel" fill={C.faint}>100%</text>
+      <text x={PXx - 8} y={PY + PH} textAnchor="end" className="bpLabel" fill={C.faint}>0</text>
+      <text x={PXx} y={PY + PH + 16} className="bpLabel" fill={C.faint}>14:28</text>
+      <text x={PXx + PW} y={PY + PH + 16} textAnchor="end" className="bpLabel" fill={C.faint}>14:30</text>
+
+      {/* two series */}
+      <polyline points={line(s1)} fill="none" stroke={C.line} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+      <polyline points={line(s2)} fill="none" stroke={C.edge} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
+
+      {/* hover crosshair snapped to a sample */}
+      <line x1={CXx} y1={PY} x2={CXx} y2={PY + PH} stroke={C.text} strokeWidth={1} strokeDasharray="3 2" />
+      <circle cx={CXx} cy={PY + 0.34 * PH} r={4} fill="none" stroke={C.line} strokeWidth={1.5} />
+      <text x={CXx + 8} y={PY + 14} className="bpLabel" fill={C.faint}>crosshair</text>
+
+      {/* dimensions */}
+      <VDim x={PXx - 34} y1={PY} y2={PY + PH} label="height: 12rem" />
+      <text x={PXx + 8} y={PY + PH - 8} className="bpLabel">series: {strokeW ?? '2px'} stroke</text>
+
+      <BpTitle />
+      <Foot y={222} parts={[gridW && `grid: ${gridW} hairline`, 'canvas plot (uPlot)', 'legend toggles: aria-pressed']} />
+    </svg>
+  );
+}
+
 export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps) {
   if (shape === 'ring') return withFrame(<RingBlueprint size={size} />);
   if (shape === 'slider') return withFrame(<SliderBlueprint size={size} dimensions={dimensions} />);
@@ -3483,6 +3649,9 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'card-group') return withFrame(<CardGroupBlueprint size={size} dimensions={dimensions} />);
   if (id === 'timeline') return withFrame(<TimelineBlueprint size={size} dimensions={dimensions} />);
   if (id === 'wizard') return withFrame(<WizardBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'sparkline') return withFrame(<SparklineBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'timeline-scrubber') return withFrame(<TimelineScrubberBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'time-series-chart') return withFrame(<TimeSeriesChartBlueprint size={size} dimensions={dimensions} />);
   // organisms
   if (id === 'sidebar') return withFrame(<SidebarBlueprint size={size} dimensions={dimensions} />);
   if (id === 'toolbar') return withFrame(<ToolbarBlueprint size={size} dimensions={dimensions} />);

@@ -63,6 +63,7 @@ import { DeviceFramePage } from './pages/atoms/DeviceFramePage.tsx';
 import { FilterChipPage } from './pages/atoms/FilterChipPage.tsx';
 import { ImagePage } from './pages/atoms/ImagePage.tsx';
 import { RatingPage } from './pages/atoms/RatingPage.tsx';
+import { SparklinePage } from './pages/atoms/SparklinePage.tsx';
 
 // Molecules
 import { FieldPage } from './pages/molecules/FieldPage.tsx';
@@ -111,6 +112,8 @@ import { SectionPage } from './pages/structures/SectionPage.tsx';
 import { CardGroupPage } from './pages/structures/CardGroupPage.tsx';
 import { TimelinePage } from './pages/organisms/TimelinePage.tsx';
 import { WizardPage } from './pages/organisms/WizardPage.tsx';
+import { TimelineScrubberPage } from './pages/organisms/TimelineScrubberPage.tsx';
+import { TimeSeriesChartPage } from './pages/organisms/TimeSeriesChartPage.tsx';
 
 const PAGES = {
   overview: { title: 'Overview', group: 'Start', el: <OverviewPage /> },
@@ -172,6 +175,7 @@ const PAGES = {
   menu: { title: 'Menu', group: 'Organisms', el: <MenuPage /> },
   treeview: { title: 'Tree View', group: 'Organisms', el: <TreeViewPage /> },
   stattile: { title: 'Stat Tile', group: 'Atoms', el: <StatTilePage /> },
+  sparkline: { title: 'Sparkline', group: 'Atoms', el: <SparklinePage /> },
   deviceframe: { title: 'Device Frame', group: 'Atoms', el: <DeviceFramePage /> },
   filterchip: { title: 'Filter Chip', group: 'Atoms', el: <FilterChipPage /> },
   image: { title: 'Image', group: 'Atoms', el: <ImagePage /> },
@@ -191,6 +195,8 @@ const PAGES = {
   datagrid: { title: 'Data Grid', group: 'Organisms', el: <DataGridPage /> },
   timeline: { title: 'Timeline', group: 'Organisms', el: <TimelinePage /> },
   wizard: { title: 'Wizard', group: 'Organisms', el: <WizardPage /> },
+  timelinescrubber: { title: 'Timeline Scrubber', group: 'Organisms', el: <TimelineScrubberPage /> },
+  timeserieschart: { title: 'Time Series Chart', group: 'Organisms', el: <TimeSeriesChartPage /> },
   floatingpanel: { title: 'Floating Panel', group: 'Organisms', el: <FloatingPanelPage /> },
   tabbedpanel: { title: 'Tabbed Panel', group: 'Organisms', el: <TabbedPanelPage /> },
   tabbedmodal: { title: 'Tabbed Modal', group: 'Organisms', el: <TabbedModalPage /> },

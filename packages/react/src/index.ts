@@ -41,6 +41,7 @@ export { EmptyState, type EmptyStateProps } from './atoms/feedback/EmptyState/Em
 export { Steps, type StepsProps, type StepsTone, type StepsSize } from './atoms/feedback/Steps/Steps.tsx';
 export { RadioCard, type RadioCardProps } from './atoms/inputs/RadioCard/RadioCard.tsx';
 export { StatTile, type StatTileProps } from './atoms/display/StatTile/StatTile.tsx';
+export { Sparkline, type SparklineProps, type SparklineShape, type SparklineTone } from './atoms/display/Sparkline/Sparkline.tsx';
 export { DeviceFrame, type DeviceFrameProps, type DeviceFrameSize } from './atoms/display/DeviceFrame/DeviceFrame.tsx';
 export { FilterChip, type FilterChipProps } from './atoms/inputs/FilterChip/FilterChip.tsx';
 export { Image, type ImageProps, type ImageFit, type ImageRadius } from './atoms/display/Image/Image.tsx';
@@ -180,6 +181,19 @@ export {
 } from './organisms/DataGrid/DataGrid.tsx';
 export { Timeline, type TimelineProps, type TimelineItem, type TimelineTone } from './organisms/Timeline/Timeline.tsx';
 export { Wizard, type WizardProps, type WizardStep } from './organisms/Wizard/Wizard.tsx';
+export {
+  TimelineScrubber,
+  type TimelineScrubberProps,
+  type TimelineScrubberMarker,
+  type TimelineScrubberMarkerTone,
+} from './organisms/TimelineScrubber/TimelineScrubber.tsx';
+export {
+  TimeSeriesChart,
+  type TimeSeriesChartProps,
+  type TimeSeriesChartSeries,
+  type ChartSeriesTone,
+  type TimeSeriesChartShape,
+} from './organisms/TimeSeriesChart/TimeSeriesChart.tsx';
 export type { Placement } from './internal/useAnchoredPosition.ts';
 
 // i18n - the translation mandate: every user-facing string resolves through a

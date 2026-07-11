@@ -1,0 +1,146 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-3);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--glacier-space-3);
+  min-height: 1.25rem;
+}
+
+.readout {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-muted);
+  opacity: 0;
+  transition: opacity var(--glacier-duration-fast) var(--glacier-ease-out);
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.readout[data-active] {
+  opacity: 1;
+}
+
+.readoutTime {
+  font-variant-numeric: tabular-nums;
+  color: var(--glacier-text-subtle);
+}
+
+.readoutEntry {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-1);
+}
+
+.readoutEntry strong {
+  color: var(--glacier-text);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  flex-shrink: 0;
+}
+
+.legendEntry {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-1);
+  padding: 0 var(--glacier-space-2);
+  border: none;
+  border-radius: var(--glacier-radius-sm);
+  background: transparent;
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-subtle);
+  cursor: pointer;
+  transition: color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.legendEntry:hover {
+  color: var(--glacier-text);
+}
+
+.legendEntry:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: 2px;
+}
+
+.legendEntry[data-hidden] {
+  color: var(--glacier-text-disabled);
+}
+
+.legendEntry[data-hidden] .swatch {
+  opacity: 0.35;
+}
+
+.swatch {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-gray-9);
+  flex-shrink: 0;
+}
+
+.swatch[data-tone='accent'] {
+  background: var(--glacier-accent-solid);
+}
+
+.swatch[data-tone='blue'] {
+  background: var(--glacier-blue-9);
+}
+
+.swatch[data-tone='amber'] {
+  background: var(--glacier-amber-9);
+}
+
+.swatch[data-tone='purple'] {
+  background: var(--glacier-purple-9);
+}
+
+.swatch[data-tone='teal'] {
+  background: var(--glacier-teal-9);
+}
+
+.swatch[data-tone='red'] {
+  background: var(--glacier-red-9);
+}
+
+.swatch[data-tone='green'] {
+  background: var(--glacier-green-9);
+}
+
+.plot {
+  position: relative;
+  width: 100%;
+}
+
+.host {
+  position: absolute;
+  inset: 0;
+}
+
+/* uPlot's own cursor line, restyled to the kit's crosshair ink. */
+.host :global(.u-cursor-x) {
+  border-right: 1px solid var(--glacier-border-strong);
+}
+
+.empty {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  border: var(--glacier-hairline) dashed var(--glacier-border);
+  border-radius: var(--glacier-radius-md);
+  font-size: var(--glacier-font-size-sm);
+  color: var(--glacier-text-muted);
+}

@@ -103,6 +103,9 @@ import {
   CardGroup,
   Timeline,
   Wizard,
+  Sparkline,
+  TimelineScrubber,
+  TimeSeriesChart,
 } from '../src/index.ts';
 import { Star } from '@glacier/icons';
 import { cloneElement, type ReactElement } from 'react';
@@ -244,6 +247,22 @@ const RENDER: Record<string, Renderer> = {
     </Sidebar>
   ),
   'stat-tile': () => <StatTile value="12,480" label="Total users" />,
+  sparkline: (o) => (
+    <Sparkline shape={o.variant as never} tone={o.tone as never} size={o.size as never} data={[2, 5, 3, 8, 6]} aria-label="Trend" />
+  ),
+  'timeline-scrubber': (o) => (
+    <TimelineScrubber size={o.size as never} start={0} end={60_000} value={30_000} aria-label="Recorded activity" />
+  ),
+  'time-series-chart': (o) => (
+    <TimeSeriesChart
+      aria-label="CPU usage"
+      times={[0, 1000, 2000]}
+      series={[
+        { id: 'user', label: 'User', values: [10, 20, 15], tone: o.tone as never },
+        { id: 'system', label: 'System', values: [5, 8, 6] },
+      ]}
+    />
+  ),
   'device-frame': () => (
     <DeviceFrame aria-label="Preview">
       <div>Screen</div>
