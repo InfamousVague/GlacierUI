@@ -16,7 +16,7 @@
     "./styles.css": "./dist/styles.css"
   },
   "scripts": {
-    "build": "vite build && NODE_OPTIONS=--max-old-space-size=12288 rollup -c rollup.dts.config.mjs"
+    "build": "vite build && NODE_OPTIONS=--max-old-space-size=16384 rollup -c rollup.dts.config.mjs"
   },
   "dependencies": {
     "date-fns": "^4.4.0",
