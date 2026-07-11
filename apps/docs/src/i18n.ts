@@ -109,6 +109,10 @@ export const pageTitles = defineMessages({
   toolbar: { en: 'Toolbar', es: 'Barra de herramientas', fr: 'Barre d’outils', de: 'Symbolleiste', ja: 'ツールバー', pt: 'Barra de ferramentas', zh: '工具栏', ar: 'شريط الأدوات' },
   titlebar: { en: 'Title Bar', es: 'Barra de título', fr: 'Barre de titre', de: 'Titelleiste', ja: 'タイトルバー', pt: 'Barra de título', zh: '标题栏', ar: 'شريط العنوان' },
   navbar: { en: 'Nav Bar', es: 'Barra de navegación', fr: 'Barre de navigation', de: 'Navigationsleiste', ja: 'ナビゲーションバー', pt: 'Barra de navegação', zh: '导航栏', ar: 'شريط التنقل' },
+  pageheader: { en: 'Page Header', es: 'Encabezado de página', fr: 'En-tête de page', de: 'Seitenkopf', ja: 'ページヘッダー', pt: 'Cabeçalho de página', zh: '页面页眉', ar: 'رأس الصفحة' },
+  section: { en: 'Section', es: 'Sección', fr: 'Section', de: 'Abschnitt', ja: 'セクション', pt: 'Secção', zh: '内容区块', ar: 'قسم' },
+  cardgroup: { en: 'Card Group', es: 'Grupo de tarjetas', fr: 'Groupe de cartes', de: 'Kartengruppe', ja: 'カードグループ', pt: 'Grupo de cartões', zh: '卡片组', ar: 'مجموعة بطاقات' },
+  timeline: { en: 'Timeline', es: 'Línea de tiempo', fr: 'Chronologie', de: 'Zeitleiste', ja: 'タイムライン', pt: 'Linha do tempo', zh: '时间线', ar: 'الخط الزمني' },
 });
 
 /**
@@ -158,6 +162,10 @@ export const pageTags: Record<string, string[]> = {
   resizablesplitpane: ['ResizableSplitPane'],
   titlebar: ['TitleBar'],
   navbar: ['NavBar', 'NavBarItem', 'rail', 'tab bar'],
+  pageheader: ['PageHeader', 'header', 'page title', 'breadcrumbs', 'actions', 'overflow menu'],
+  section: ['Section', 'content section', 'region', 'heading', 'vertical rhythm'],
+  cardgroup: ['CardGroup', 'card grid', 'grid', 'list', 'responsive cards', 'gallery'],
+  timeline: ['Timeline', 'activity feed', 'events', 'feed', 'history', 'audit log', 'changelog'],
   // foundations: concept keywords
   colors: ['ramp', 'OKLCH', 'palette', 'accent', 'tint', 'gray', 'semantic token'],
   typography: ['font', 'type scale', 'monospace', 'Inter'],

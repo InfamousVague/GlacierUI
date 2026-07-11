@@ -1,0 +1,79 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-3);
+  min-width: 0;
+  padding-block: var(--glacier-space-6);
+  font-family: var(--glacier-font-sans);
+  color: var(--glacier-text);
+}
+
+/* Compact density trims the vertical rhythm for dense or nested screens. */
+.header[data-density='compact'] {
+  gap: var(--glacier-space-2);
+  padding-block: var(--glacier-space-4);
+}
+
+.breadcrumbs {
+  display: flex;
+  min-width: 0;
+}
+
+/*
+ * The title block and the actions share one wrapping row: the block grows, so
+ * the actions hug the trailing edge on wide layouts and drop below the title
+ * block on narrow widths. No JS measurement - flex-wrap does all the work.
+ */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--glacier-space-3) var(--glacier-space-4);
+}
+
+.titleBlock {
+  /*
+   * The 20rem basis is the wrap threshold: once the row cannot give the title
+   * block 20rem beside the actions, the actions wrap to their own line.
+   */
+  flex: 1 1 20rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-2);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--glacier-font-size-2xl);
+  line-height: var(--glacier-leading-2xl);
+  letter-spacing: var(--glacier-tracking-2xl);
+  font-weight: var(--glacier-font-weight-semibold);
+  color: var(--glacier-text);
+  overflow-wrap: anywhere;
+}
+
+.description {
+  font-size: var(--glacier-font-size-md);
+  line-height: var(--glacier-leading-md);
+  color: var(--glacier-text-muted);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  font-size: var(--glacier-font-size-sm);
+  line-height: var(--glacier-leading-sm);
+  color: var(--glacier-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  /* stays end-aligned even after wrapping onto its own line */
+  margin-inline-start: auto;
+}

@@ -60,6 +60,10 @@ export * from './components/toggle.ts';
 export * from './components/toolbar.ts';
 export * from './components/nav-bar.ts';
 export * from './components/title-bar.ts';
+export * from './components/page-header.ts';
+export * from './components/section.ts';
+export * from './components/card-group.ts';
+export * from './components/timeline.ts';
 export * from './components/tooltip.ts';
 export * from './components/stat-tile.ts';
 export * from './components/device-frame.ts';
@@ -143,6 +147,10 @@ import { toggleSpec } from './components/toggle.ts';
 import { toolbarSpec } from './components/toolbar.ts';
 import { navBarSpec } from './components/nav-bar.ts';
 import { titleBarSpec } from './components/title-bar.ts';
+import { pageHeaderSpec } from './components/page-header.ts';
+import { sectionSpec } from './components/section.ts';
+import { cardGroupSpec } from './components/card-group.ts';
+import { timelineSpec } from './components/timeline.ts';
 import { tooltipSpec } from './components/tooltip.ts';
 import { statTileSpec } from './components/stat-tile.ts';
 import { deviceFrameSpec } from './components/device-frame.ts';
@@ -276,6 +284,11 @@ export const specs: ComponentSpec[] = [
   toolbarSpec,
   navBarSpec,
   titleBarSpec,
+  pageHeaderSpec,
+  sectionSpec,
+  // product composition
+  cardGroupSpec,
+  timelineSpec,
 ];
 
 /** Specs keyed by id for O(1) lookup. */

@@ -1,0 +1,49 @@
+.group {
+    /* md comfortable is the default rhythm; gap/density hooks retune it below */
+    --card-group-gap: var(--glacier-space-4);
+    display: grid;
+    gap: var(--card-group-gap);
+}
+
+/* Every child is one grid item; the floor stops long content from blowing tracks. */
+.group > * {
+    min-width: 0;
+}
+
+/*
+ * Responsive shelf: as many columns as fit at the minimum card width, each
+ * sharing the leftover space. min(100%, ...) clamps the floor to the container
+ * so a card never overflows a parent narrower than --card-group-min.
+ */
+.grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-group-min)), 1fr));
+}
+
+.list {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.group[data-gap='sm'] {
+    --card-group-gap: var(--glacier-space-3);
+}
+
+.group[data-gap='md'] {
+    --card-group-gap: var(--glacier-space-4);
+}
+
+.group[data-gap='lg'] {
+    --card-group-gap: var(--glacier-space-6);
+}
+
+/* Compact density tightens the chosen gap one space step. */
+.group[data-density='compact'][data-gap='sm'] {
+    --card-group-gap: var(--glacier-space-2);
+}
+
+.group[data-density='compact'][data-gap='md'] {
+    --card-group-gap: var(--glacier-space-3);
+}
+
+.group[data-density='compact'][data-gap='lg'] {
+    --card-group-gap: var(--glacier-space-4);
+}

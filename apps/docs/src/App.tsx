@@ -106,6 +106,10 @@ import { SidebarPage } from './pages/structures/SidebarPage.tsx';
 import { ToolbarPage } from './pages/structures/ToolbarPage.tsx';
 import { TitleBarPage } from './pages/structures/TitleBarPage.tsx';
 import { NavBarPage } from './pages/structures/NavBarPage.tsx';
+import { PageHeaderPage } from './pages/structures/PageHeaderPage.tsx';
+import { SectionPage } from './pages/structures/SectionPage.tsx';
+import { CardGroupPage } from './pages/structures/CardGroupPage.tsx';
+import { TimelinePage } from './pages/organisms/TimelinePage.tsx';
 
 const PAGES = {
   overview: { title: 'Overview', group: 'Start', el: <OverviewPage /> },
@@ -184,6 +188,7 @@ const PAGES = {
   list: { title: 'List', group: 'Molecules', el: <ListPage /> },
   table: { title: 'Table', group: 'Organisms', el: <TablePage /> },
   datagrid: { title: 'Data Grid', group: 'Organisms', el: <DataGridPage /> },
+  timeline: { title: 'Timeline', group: 'Organisms', el: <TimelinePage /> },
   floatingpanel: { title: 'Floating Panel', group: 'Organisms', el: <FloatingPanelPage /> },
   tabbedpanel: { title: 'Tabbed Panel', group: 'Organisms', el: <TabbedPanelPage /> },
   tabbedmodal: { title: 'Tabbed Modal', group: 'Organisms', el: <TabbedModalPage /> },
@@ -193,6 +198,9 @@ const PAGES = {
   toolbar: { title: 'Toolbar', group: 'Structures', el: <ToolbarPage /> },
   titlebar: { title: 'Title Bar', group: 'Structures', el: <TitleBarPage /> },
   navbar: { title: 'Nav Bar', group: 'Structures', el: <NavBarPage /> },
+  pageheader: { title: 'Page Header', group: 'Structures', el: <PageHeaderPage /> },
+  section: { title: 'Section', group: 'Structures', el: <SectionPage /> },
+  cardgroup: { title: 'Card Group', group: 'Structures', el: <CardGroupPage /> },
 } as const;
 
 type PageId = keyof typeof PAGES;

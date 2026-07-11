@@ -98,6 +98,10 @@ import {
   Accordion,
   Table,
   DataGrid,
+  PageHeader,
+  Section,
+  CardGroup,
+  Timeline,
 } from '../src/index.ts';
 import { Star } from '@glacier/icons';
 import { cloneElement, type ReactElement } from 'react';
@@ -353,6 +357,22 @@ const RENDER: Record<string, Renderer> = {
       data={[
         { id: 1, name: 'Ada', status: 'Active' },
         { id: 2, name: 'Linus', status: 'Away' },
+      ]}
+    />
+  ),
+  'page-header': () => <PageHeader title="Overview" />,
+  section: () => <Section title="Overview">Body</Section>,
+  'card-group': () => (
+    <CardGroup>
+      <div>Card</div>
+    </CardGroup>
+  ),
+  timeline: (o) => (
+    <Timeline
+      aria-label="Activity"
+      items={[
+        { id: 1, title: 'Deployed', tone: o.tone as never, timestamp: '2h ago' },
+        { id: 2, title: 'Build passed' },
       ]}
     />
   ),

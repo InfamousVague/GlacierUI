@@ -154,15 +154,15 @@ and visual-test route before it moves to the current-catalog section.
 
 ### Product Composition Components
 
-- [ ] Page Header - Build an operational page header with title, description, breadcrumb/metadata, actions, and responsive action overflow.
-- [ ] Page Header specification - Describe title/meta/actions anatomy, heading semantics, density, and layout tokens.
-- [ ] Section - Build a semantic content section with optional title, description, action, and predictable vertical rhythm.
-- [ ] Section specification - Describe heading/content/actions anatomy, heading semantics, and spacing tokens.
-- [ ] Card Group - Build a responsive group layout for repeated Cards with stable grid/list modes and consistent density.
-- [ ] Card Group specification - Describe group/item anatomy, layout variants, responsive rules, and gap tokens.
-- [ ] Timeline / Activity Feed - Build chronological event presentation with actor, timestamp, state/tone, media/action slots, and accessible ordering.
-- [ ] Timeline / Activity Feed specification - Describe event data contract, marker/content anatomy, semantic list order, tone states, and layout tokens.
-- [ ] Empty State scenario recipes - Add docs-level examples for common domain empty states before adding domain-specific core APIs.
+- [x] Page Header - Shipped `PageHeader`: breadcrumbs/title/description/meta/actions slots, a localized overflow Menu for `secondaryActions`, headingLevel 1 or 2, comfortable/compact density, presence-gated skeleton, and pure-CSS responsive wrap (actions drop below the title block on narrow widths). Docs: Structures > Page Header.
+- [x] Page Header specification - Registered the `page-header` contract: slot anatomy including the overflow menu, heading semantics, density paddings, and layout tokens; validateSpec clean at full strictness.
+- [x] Section - Shipped `Section`: semantic section with optional title (auto `aria-labelledby`), description, end-aligned actions, headingLevel 2 or 3, sm/md/lg gap rhythm, divider for stacking, compact density, and skeleton. Docs: Structures > Section.
+- [x] Section specification - Registered the `section` contract: header-row/content anatomy, conditional region labelling, gap tokens per step with compact deltas, and divider paint; validateSpec clean at full strictness.
+- [x] Card Group - Shipped `CardGroup`: grid mode on repeat(auto-fill, minmax(min(100%, minItemWidth), 1fr)) with a stable minimum card width, list mode single column, sm/md/lg token gaps, compact density, and a skeletonCount placeholder grid. Docs: Structures > Card Group.
+- [x] Card Group specification - Registered the `card-group` contract: group/item anatomy, grid and list variants, the auto-fill responsive rule, and gap/density tokens; validateSpec clean at full strictness.
+- [x] Timeline / Activity Feed - Shipped `Timeline`: semantic ol feed with per-event actor/title/timestamp/description/media/actions slots, tone-painted markers (all six tones) on a connector rail that ends at the last item, comfortable/compact density, and skeleton rows. Docs: Organisms > Timeline.
+- [x] Timeline / Activity Feed specification - Registered the `timeline` contract: the TimelineItem data contract, marker/connector/content anatomy, ordered-list semantics, tone states with token paint, and density dimensions; validateSpec clean at full strictness.
+- [x] Empty State scenario recipes - Added six docs recipes to the Empty State page (first use, no search results, failed to load, permission denied, offline, empty selection), each composing the existing atom with guidance on when to reach for it.
 
 ### Optional Domain Integrations
 

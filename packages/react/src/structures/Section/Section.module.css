@@ -1,0 +1,85 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-family: var(--glacier-font-sans);
+  color: var(--glacier-text);
+}
+
+/* The gap steps: vertical rhythm between the header block and the content. */
+.section[data-gap='sm'] {
+  gap: var(--glacier-space-3);
+}
+
+.section[data-gap='md'] {
+  gap: var(--glacier-space-5);
+}
+
+.section[data-gap='lg'] {
+  gap: var(--glacier-space-8);
+}
+
+/* Compact density trims each gap step one notch down the space scale. */
+.section[data-density='compact'][data-gap='sm'] {
+  gap: var(--glacier-space-2);
+}
+
+.section[data-density='compact'][data-gap='md'] {
+  gap: var(--glacier-space-3);
+}
+
+.section[data-density='compact'][data-gap='lg'] {
+  gap: var(--glacier-space-5);
+}
+
+/* A hairline top rule so stacked sections separate cleanly. */
+.section[data-divider] {
+  border-block-start: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  padding-block-start: var(--glacier-space-6);
+}
+
+.section[data-density='compact'][data-divider] {
+  padding-block-start: var(--glacier-space-4);
+}
+
+/* The heading row: title block grows, actions hug the end. flex-wrap keeps it
+   responsive without container queries: actions drop below on narrow widths. */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--glacier-space-2) var(--glacier-space-4);
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+.description {
+  font-size: var(--glacier-font-size-sm);
+  line-height: var(--glacier-leading-sm);
+  color: var(--glacier-text-muted);
+}
+
+.actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--glacier-space-2);
+}
+
+.content {
+  min-width: 0;
+}
+
+/* Skeleton content: placeholder text lines stacked at reading rhythm. */
+.skeletonLines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-2);
+}

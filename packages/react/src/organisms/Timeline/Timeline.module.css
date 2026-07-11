@@ -1,0 +1,160 @@
+.root {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--glacier-font-sans);
+    font-size: var(--glacier-font-size-sm);
+    color: var(--glacier-text);
+}
+
+.item {
+    display: flex;
+    gap: var(--glacier-space-3);
+    min-width: 0;
+}
+
+/* ---- marker column --------------------------------------------------------- */
+
+.rail {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--glacier-space-1);
+    width: var(--glacier-size-lg);
+}
+
+.marker {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--glacier-size-lg);
+    height: var(--glacier-size-lg);
+    border-radius: var(--glacier-radius-full);
+}
+
+/* Each tone binds the marker fill and the glyph color drawn on it. Neutral
+   fills with text-subtle, a text color, so the surface glyph keeps readable
+   contrast against the disc in both themes. */
+.marker[data-tone='neutral'] {
+    --timeline-marker-fill: var(--glacier-text-subtle);
+    --timeline-marker-glyph: var(--glacier-surface);
+}
+
+.marker[data-tone='accent'] {
+    --timeline-marker-fill: var(--glacier-accent-solid);
+    --timeline-marker-glyph: var(--glacier-accent-contrast);
+}
+
+.marker[data-tone='success'] {
+    --timeline-marker-fill: var(--glacier-success-solid);
+    --timeline-marker-glyph: var(--glacier-success-contrast);
+}
+
+.marker[data-tone='warning'] {
+    --timeline-marker-fill: var(--glacier-warning-solid);
+    --timeline-marker-glyph: var(--glacier-warning-contrast);
+}
+
+.marker[data-tone='danger'] {
+    --timeline-marker-fill: var(--glacier-danger-solid);
+    --timeline-marker-glyph: var(--glacier-danger-contrast);
+}
+
+.marker[data-tone='info'] {
+    --timeline-marker-fill: var(--glacier-info-solid);
+    --timeline-marker-glyph: var(--glacier-info-contrast);
+}
+
+/* With an icon the whole marker becomes a filled disc holding a contrast glyph. */
+.marker[data-icon] {
+    background: var(--timeline-marker-fill);
+    color: var(--timeline-marker-glyph);
+}
+
+/* Without an icon only a small dot fills, centered in the same marker box. */
+.dot {
+    width: var(--glacier-size-xs);
+    height: var(--glacier-size-xs);
+    border-radius: var(--glacier-radius-full);
+    background: var(--timeline-marker-fill);
+}
+
+/* The connector fills the rail between markers; the last item renders none. */
+.connector {
+    flex: 1;
+    width: var(--glacier-hairline);
+    min-height: var(--glacier-space-3);
+    background: var(--glacier-border);
+}
+
+/* ---- content column --------------------------------------------------------- */
+
+.content {
+    flex: 1;
+    min-width: 0;
+    /* the gap between events lives here so the connector spans through it */
+    padding-block-end: var(--glacier-space-5);
+}
+
+.item[data-last] .content {
+    padding-block-end: 0;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--glacier-space-2);
+    /* centers a one-line header on the marker */
+    min-height: var(--glacier-size-lg);
+}
+
+.actor {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--glacier-space-2);
+}
+
+.title {
+    font-weight: var(--glacier-font-weight-medium);
+    min-width: 0;
+}
+
+.timestamp {
+    margin-inline-start: auto;
+    color: var(--glacier-text-subtle);
+    font-size: var(--glacier-font-size-xs);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.description {
+    margin-block-start: var(--glacier-space-1);
+    color: var(--glacier-text-muted);
+}
+
+.media {
+    margin-block-start: var(--glacier-space-2);
+    border-radius: var(--glacier-radius-md);
+    overflow: hidden;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--glacier-space-2);
+    margin-block-start: var(--glacier-space-2);
+}
+
+/* ---- density ---------------------------------------------------------------- */
+
+/* Compact trims the vertical rhythm between events without changing markers. */
+.root[data-density='compact'] .content {
+    padding-block-end: var(--glacier-space-3);
+}

@@ -310,12 +310,24 @@ const ORGANISMS: GalleryItem[] = [
   { spec: 'resizable-split-pane', page: 'resizablesplitpane', title: 'Resizable Split Pane', blurb: 'Two panes divided by a draggable separator that resizes them by ratio.' },
   { spec: 'table', page: 'table', title: 'Table', blurb: 'A semantic table for rows of structured data, with accessible headers and a caption slot.' },
   { spec: 'data-grid', page: 'datagrid', title: 'Data Grid', blurb: 'A column-driven grid with client sorting, row selection, loading and empty states, and a roving-focus keyboard model.' },
+  { spec: 'timeline', page: 'timeline', title: 'Timeline', blurb: 'A chronological activity feed: tone-coded markers on a connector rail with actor, timestamp, media, and action slots.' },
+];
+
+const STRUCTURES: GalleryItem[] = [
+  { spec: 'sidebar', page: 'sidebar', title: 'Sidebar', blurb: 'Vertical navigation with sections, items, and a brand slot.' },
+  { spec: 'toolbar', page: 'toolbar', title: 'Toolbar', blurb: 'A horizontal action strip with start content and end-aligned controls.' },
+  { spec: 'title-bar', page: 'titlebar', title: 'Title Bar', blurb: 'Desktop window chrome: a centered title with start and end action slots.' },
+  { spec: 'nav-bar', page: 'navbar', title: 'Nav Bar', blurb: 'Primary navigation with a sliding active pill, horizontal or vertical.' },
+  { spec: 'page-header', page: 'pageheader', title: 'Page Header', blurb: 'An operational page header: breadcrumbs, title, description, meta, and actions with an overflow menu.' },
+  { spec: 'section', page: 'section', title: 'Section', blurb: 'A labelled content section with a heading row, actions, and predictable vertical rhythm.' },
+  { spec: 'card-group', page: 'cardgroup', title: 'Card Group', blurb: 'A responsive auto-fill grid or list that keeps repeated cards at a stable minimum width.' },
 ];
 
 const SECTIONS: Section[] = [
   { group: 'atoms', title: 'Atoms', items: ATOMS },
   { group: 'molecules', title: 'Molecules', items: MOLECULES },
   { group: 'organisms', title: 'Organisms', items: ORGANISMS },
+  { group: 'structures', title: 'Structures', items: STRUCTURES },
 ];
 
 export function BlueprintGallery() {

@@ -96,6 +96,13 @@ export { Grid, type GridProps } from './layout/Grid.tsx';
 export { Center, type CenterProps } from './layout/Center.tsx';
 export { Spacer, type SpacerProps } from './layout/Spacer.tsx';
 export { Container, type ContainerProps } from './layout/Container.tsx';
+export {
+  CardGroup,
+  type CardGroupProps,
+  type CardGroupMode,
+  type CardGroupGap,
+  type CardGroupDensity,
+} from './layout/CardGroup/CardGroup.tsx';
 export type {
   Responsive,
   Align,
@@ -124,6 +131,14 @@ export {
   type NavBarOrientation,
 } from './structures/NavBar/NavBar.tsx';
 export { TitleBar, type TitleBarProps } from './structures/TitleBar/TitleBar.tsx';
+export { PageHeader, type PageHeaderProps, type PageHeaderAction } from './structures/PageHeader/PageHeader.tsx';
+export {
+  Section,
+  type SectionProps,
+  type SectionGap,
+  type SectionDensity,
+  type SectionHeadingLevel,
+} from './structures/Section/Section.tsx';
 
 // organisms
 export { Modal, type ModalProps } from './organisms/Modal/Modal.tsx';
@@ -163,6 +178,7 @@ export {
   type DataGridSort,
   type SortDirection,
 } from './organisms/DataGrid/DataGrid.tsx';
+export { Timeline, type TimelineProps, type TimelineItem, type TimelineTone } from './organisms/Timeline/Timeline.tsx';
 export type { Placement } from './internal/useAnchoredPosition.ts';
 
 // i18n - the translation mandate: every user-facing string resolves through a

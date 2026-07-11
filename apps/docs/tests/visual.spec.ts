@@ -55,6 +55,10 @@ const PAGES = [
   'datepicker',
   'fileupload',
   'fieldset',
+  'pageheader',
+  'section',
+  'cardgroup',
+  'timeline',
 ];
 
 const THEME_LABEL = { light: 'Light', dark: 'Dark' } as const;

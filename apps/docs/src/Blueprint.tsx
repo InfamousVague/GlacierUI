@@ -2977,6 +2977,131 @@ function DataGridBlueprint(_: BlueprintProps) {
   );
 }
 
+// Page header: breadcrumbs above a title block (title, description, meta pills)
+// with the actions cluster and overflow trigger end-aligned.
+function PageHeaderBlueprint({ dimensions }: BlueprintProps) {
+  const padBlock = fmt(dimensions?.paddingBlock);
+  const gap = fmt(dimensions?.sectionGap);
+  return (
+    <svg viewBox="0 0 400 220" className="bpSvg" role="img" aria-label="Blueprint of the page header">
+      <Defs />
+      <rect x={0} y={0} width={400} height={220} fill="url(#bpGrid)" />
+      <rect x={28} y={44} width={344} height={140} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      {/* padding-block from the region edge down to the first content */}
+      <VDim x={38} y1={44} y2={58} label={padBlock ? `pad: ${padBlock}` : 'padding-block'} left={false} horizontal />
+      {/* breadcrumbs */}
+      <text x={46} y={72} className="bpLabel" fill={C.faint}>Library / Courses</text>
+      {/* title + description + meta */}
+      <text x={46} y={100} fill={C.text} fontSize={15} fontWeight={650}>Page title</text>
+      <rect x={46} y={110} width={168} height={6} rx={3} fill={C.content} fillOpacity={0.55} />
+      <rect x={46} y={132} width={44} height={13} rx={6.5} fill="none" stroke={C.edge} strokeWidth={1.25} />
+      <rect x={96} y={132} width={34} height={13} rx={6.5} fill="none" stroke={C.edge} strokeWidth={1.25} />
+      {/* stack gap between the description and the meta row */}
+      <VDim x={228} y1={116} y2={132} label={gap ? `gap: ${gap}` : 'gap'} left={false} horizontal />
+      {/* actions cluster + overflow trigger */}
+      <rect x={232} y={56} width={50} height={22} rx={6} fill="none" stroke={C.edge} strokeWidth={1.25} />
+      <rect x={288} y={56} width={50} height={22} rx={6} fill={C.content} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.25} />
+      <rect x={344} y={56} width={22} height={22} rx={6} fill="none" stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 2" />
+      <circle cx={351} cy={67} r={1.1} fill={C.text} />
+      <circle cx={355} cy={67} r={1.1} fill={C.text} />
+      <circle cx={359} cy={67} r={1.1} fill={C.text} />
+      <BpTitle />
+      <Foot parts={['breadcrumbs', 'title + description', 'meta', 'actions', 'overflow']} />
+    </svg>
+  );
+}
+
+// Section: a heading row with an end-aligned action, a description line, then
+// the content region a token gap below; a hairline divider tops stacked sections.
+function SectionBlueprint({ dimensions }: BlueprintProps) {
+  const gap = fmt(dimensions?.gap);
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the section">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      <line x1={36} y1={44} x2={364} y2={44} stroke={C.line} strokeWidth={1.25} strokeDasharray="5 3" />
+      <text x={370} y={40} textAnchor="end" className="bpLabel" fill={C.faint}>divider</text>
+      {/* heading row */}
+      <text x={44} y={72} fill={C.text} fontSize={14} fontWeight={650}>Section title</text>
+      <rect x={300} y={58} width={56} height={20} rx={6} fill="none" stroke={C.edge} strokeWidth={1.25} />
+      <rect x={44} y={82} width={150} height={6} rx={3} fill={C.content} fillOpacity={0.55} />
+      {/* gap dimension into the content region */}
+      <VDim x={36} y1={92} y2={116} label={gap ? `gap: ${gap}` : 'gap'} />
+      <rect x={44} y={116} width={312} height={54} rx={8} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <text x={200} y={147} textAnchor="middle" className="bpLabel" fill={C.faint}>content</text>
+      <BpTitle />
+      <Foot parts={['aria-labelledby wires the heading', 'header row', 'content']} />
+    </svg>
+  );
+}
+
+// Card group: an auto-fill grid of card slots that wrap at the minimum item
+// width, with the min-width and gap called out.
+function CardGroupBlueprint({ dimensions }: BlueprintProps) {
+  const gap = fmt(dimensions?.gap);
+  const cols = [40, 152, 264];
+  const rows = [54, 122];
+  return (
+    <svg viewBox="0 0 400 210" className="bpSvg" role="img" aria-label="Blueprint of the card group">
+      <Defs />
+      <rect x={0} y={0} width={400} height={210} fill="url(#bpGrid)" />
+      {rows.map((y) =>
+        cols.map((x) => (
+          <g key={`${x}-${y}`}>
+            <rect x={x} y={y} width={96} height={52} rx={8} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+            <rect x={x + 10} y={y + 12} width={44} height={6} rx={3} fill={C.content} fillOpacity={0.55} />
+            <rect x={x + 10} y={y + 26} width={64} height={5} rx={2.5} fill={C.content} fillOpacity={0.35} />
+          </g>
+        )),
+      )}
+      <HDim x1={40} x2={136} y={190} above={false} label="min-item: 16rem" />
+      <VDim x={376} y1={106} y2={122} label={gap ? `gap: ${gap}` : 'gap'} left={false} horizontal />
+      <BpTitle />
+      <Foot y={206} parts={['grid: repeat(auto-fill, minmax(min-item, 1fr))', 'list: one column']} />
+    </svg>
+  );
+}
+
+// Timeline: tone-colored markers on a shared connector rail, each event's
+// content block beside it; the last marker ends the rail.
+function TimelineBlueprint(_: BlueprintProps) {
+  const items = [
+    { y: 64, filled: true, icon: true },
+    { y: 118, filled: true, icon: false },
+    { y: 172, filled: false, icon: false },
+  ];
+  return (
+    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label="Blueprint of the timeline">
+      <Defs />
+      <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
+      {/* connector segments stop above the last marker */}
+      <line x1={56} y1={72} x2={56} y2={110} stroke={C.line} strokeWidth={1.25} />
+      <line x1={56} y1={126} x2={56} y2={164} stroke={C.line} strokeWidth={1.25} />
+      {items.map(({ y, filled, icon }) => (
+        <g key={y}>
+          <circle cx={56} cy={y} r={7} fill={filled ? C.content : 'none'} fillOpacity={filled ? 0.6 : 1} stroke={C.edge} strokeWidth={1.4} />
+          {icon && <path d="M53 64 l2.2 2.2 L59.5 61.5" fill="none" stroke={C.text} strokeWidth={1.4} strokeLinecap="round" strokeLinejoin="round" />}
+        </g>
+      ))}
+      {/* content blocks: actor, title, timestamp, description */}
+      {items.map(({ y }, i) => (
+        <g key={y}>
+          <circle cx={86} cy={y} r={6} fill={C.content} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.1} />
+          <rect x={98} y={y - 4} width={i === 1 ? 120 : 96} height={8} rx={4} fill={C.content} fillOpacity={0.55} />
+          <text x={356} y={y + 3} textAnchor="end" className="bpLabel" fill={C.faint}>2h</text>
+          <rect x={80} y={y + 12} width={188} height={5} rx={2.5} fill={C.content} fillOpacity={0.35} />
+        </g>
+      ))}
+      {/* media slot on the middle event */}
+      <rect x={80} y={140} width={110} height={16} rx={5} fill="none" stroke={C.edge} strokeWidth={1.1} strokeDasharray="4 3" />
+      <text x={196} y={151} className="bpLabel" fill={C.faint}>media</text>
+      <text x={26} y={94} className="bpLabel" fill={C.faint} transform="rotate(-90 26 94)">rail</text>
+      <BpTitle />
+      <Foot y={222} parts={['marker + connector rail', 'actor, title, timestamp', 'description, media, actions']} />
+    </svg>
+  );
+}
+
 // Rating: a row of stars filled to the value (3.5 of 5 here), with a half-filled
 // star to show fractional display and the rest hollow.
 function RatingBlueprint({ size, dimensions }: BlueprintProps) {
@@ -3133,6 +3258,11 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'accordion') return withFrame(<AccordionBlueprint size={size} dimensions={dimensions} />);
   if (id === 'table') return withFrame(<TableBlueprint size={size} dimensions={dimensions} />);
   if (id === 'data-grid') return withFrame(<DataGridBlueprint size={size} dimensions={dimensions} />);
+  // structures
+  if (id === 'page-header') return withFrame(<PageHeaderBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'section') return withFrame(<SectionBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'card-group') return withFrame(<CardGroupBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'timeline') return withFrame(<TimelineBlueprint size={size} dimensions={dimensions} />);
   // organisms
   if (id === 'fieldset') return withFrame(<FieldsetBlueprint size={size} dimensions={dimensions} />);
   if (id === 'form-section') return withFrame(<FormSectionBlueprint size={size} dimensions={dimensions} />);
