@@ -383,6 +383,22 @@ describe('MenuSub', () => {
   });
 });
 
+describe('Menu with every item disabled', () => {
+  it('focuses the panel so Escape still closes', async () => {
+    render(
+      <Menu aria-label="Actions" trigger={<Button>Open</Button>}>
+        <MenuItem disabled>Archive</MenuItem>
+        <MenuItem disabled>Delete</MenuItem>
+      </Menu>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Open' }));
+    const panel = await screen.findByRole('menu', { name: 'Actions' });
+    await waitFor(() => expect(document.activeElement).toBe(panel));
+    fireEvent.keyDown(panel, { key: 'Escape' });
+    await waitFor(() => expect(screen.queryByRole('menu', { name: 'Actions' })).toBeNull());
+  });
+});
+
 // ---- RTL -----------------------------------------------------------------------
 
 // jsdom has no layout, so alignment tests stub the trigger rect and the

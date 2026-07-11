@@ -42,7 +42,12 @@ function enabledItemsIn(panel: HTMLElement | null): HTMLElement[] {
 
 function focusItemIn(panel: HTMLElement | null, index: number) {
   const items = enabledItemsIn(panel);
-  if (items.length === 0) return;
+  if (items.length === 0) {
+    // Every item disabled: focus the panel itself so Escape (handled on the
+    // panel's onKeyDown) still closes the menu instead of stranding focus.
+    panel?.focus();
+    return;
+  }
   const i = ((index % items.length) + items.length) % items.length;
   items[i]?.focus();
 }
@@ -121,6 +126,7 @@ function MenuPanel({
       id={id}
       role="menu"
       aria-label={label}
+      tabIndex={-1}
       dir={dir}
       data-menu-stack={stackId}
       className={cx(styles.menu, className)}
