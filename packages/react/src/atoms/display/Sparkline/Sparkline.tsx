@@ -28,6 +28,8 @@ export interface SparklineProps extends ComponentProps<'span'> {
   size?: 'sm' | 'md' | 'lg';
   /** Marks the newest sample with an emphasis dot. */
   endPoint?: boolean;
+  /** Mounts the mark on the frosted glass material: a rounded, blurred tile. */
+  glass?: boolean;
   /** Renders a placeholder with the exact geometry. */
   skeleton?: boolean;
   /** Accessible name; describe the trend, not the pixels. */
@@ -61,6 +63,7 @@ export function Sparkline({
   tone = 'accent',
   size = 'md',
   endPoint = false,
+  glass = false,
   skeleton = false,
   className,
   'aria-label': ariaLabel,
@@ -92,26 +95,28 @@ export function Sparkline({
     <span
       role="img"
       aria-label={ariaLabel}
-      className={cx(styles.root, styles[size], styles[tone], className)}
+      className={cx(styles.root, styles[size], styles[tone], glass && styles.glass, className)}
       {...rest}
     >
-      {hasMark && shape !== 'bars' && (
-        <svg className={styles.plot} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          {shape === 'area' && <path className={styles.fill} d={areaPath} />}
-          <path className={styles.line} d={linePath} vectorEffect="non-scaling-stroke" fill="none" />
-        </svg>
-      )}
-      {hasMark && shape === 'bars' && (
-        <span className={styles.bars} aria-hidden="true">
-          {points.map((p, i) => (
-            <span key={i} className={styles.bar} style={{ height: `${Math.max(100 - p.y, 4)}%` }} />
-          ))}
-        </span>
-      )}
-      {baselineY !== undefined && <span className={styles.baseline} style={{ top: `${baselineY}%` }} />}
-      {hasMark && endPoint && shape !== 'bars' && last && (
-        <span className={styles.point} style={{ left: `${last.x}%`, top: `${last.y}%` }} />
-      )}
+      <span className={styles.canvas} aria-hidden="true">
+        {hasMark && shape !== 'bars' && (
+          <svg className={styles.plot} viewBox="0 0 100 100" preserveAspectRatio="none">
+            {shape === 'area' && <path className={styles.fill} d={areaPath} />}
+            <path className={styles.line} d={linePath} vectorEffect="non-scaling-stroke" fill="none" />
+          </svg>
+        )}
+        {hasMark && shape === 'bars' && (
+          <span className={styles.bars}>
+            {points.map((p, i) => (
+              <span key={i} className={styles.bar} style={{ height: `${Math.max(100 - p.y, 4)}%` }} />
+            ))}
+          </span>
+        )}
+        {baselineY !== undefined && <span className={styles.baseline} style={{ top: `${baselineY}%` }} />}
+        {hasMark && endPoint && shape !== 'bars' && last && (
+          <span className={styles.point} style={{ left: `${last.x}%`, top: `${last.y}%` }} />
+        )}
+      </span>
     </span>
   );
 }

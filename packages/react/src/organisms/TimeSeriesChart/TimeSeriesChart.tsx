@@ -42,6 +42,8 @@ export interface TimeSeriesChartProps extends ComponentProps<'div'> {
   height?: string;
   /** Message shown while times is empty. */
   emptyLabel?: string;
+  /** Frames the plot on the frosted glass material. */
+  glass?: boolean;
   /** Renders a placeholder with the exact geometry. */
   skeleton?: boolean;
   /** Accessible name describing what the chart plots. */
@@ -117,6 +119,7 @@ export function TimeSeriesChart({
   showLegend = true,
   height = '12rem',
   emptyLabel = 'No samples yet',
+  glass = false,
   skeleton = false,
   className,
   'aria-label': ariaLabel,
@@ -318,7 +321,7 @@ export function TimeSeriesChart({
           </div>
         )}
       </div>
-      <div role="img" aria-label={ariaLabel} className={styles.plot} style={{ height }}>
+      <div role="img" aria-label={ariaLabel} className={cx(styles.plot, glass && styles.glass)} style={{ height }}>
         {times.length === 0 ? (
           <div className={styles.empty}>{emptyLabel}</div>
         ) : (

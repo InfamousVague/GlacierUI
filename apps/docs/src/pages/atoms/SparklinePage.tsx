@@ -97,6 +97,26 @@ export function SparklinePage() {
       </Example>
 
       <Example
+        title="Glass"
+        description="glass mounts the mark on the frosted material - a word-sized frosted tile for HUDs and overlays."
+        code={`<Sparkline data={cpu} min={0} max={100} glass aria-label="CPU, last hour" />`}
+      >
+        <div
+          style={{
+            width: '18rem',
+            padding: 'var(--glacier-space-5)',
+            borderRadius: 'var(--glacier-radius-lg)',
+            background: 'linear-gradient(120deg, var(--glacier-accent-soft), var(--glacier-purple-4), var(--glacier-teal-4))',
+            display: 'grid',
+            gap: 'var(--glacier-space-3)',
+          }}
+        >
+          <Sparkline data={TREND} min={0} max={100} glass aria-label="CPU, glass" />
+          <Sparkline data={SPIKY} min={0} max={130} shape="area" glass aria-label="Memory, glass" />
+        </div>
+      </Example>
+
+      <Example
         title="Skeleton"
         description="skeleton renders a placeholder with the exact height of the chosen size."
         code={`<Sparkline data={[]} skeleton aria-label="Loading trend" />`}
@@ -117,6 +137,7 @@ export function SparklinePage() {
           { name: 'tone', type: "'accent' | 'neutral' | 'success' | 'warning' | 'danger' | 'info'", default: "'accent'", description: 'Ink family for the mark.' },
           { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Height step; width follows the container.' },
           { name: 'endPoint', type: 'boolean', default: 'false', description: 'Marks the newest sample with a dot.' },
+          { name: 'glass', type: 'boolean', default: 'false', description: 'Mounts the mark on the frosted glass material.' },
           { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders a placeholder with the exact geometry.' },
           { name: 'aria-label', type: 'string', description: 'Required. Describe the trend, not the pixels.' },
         ]}

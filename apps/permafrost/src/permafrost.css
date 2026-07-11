@@ -1,0 +1,235 @@
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--glacier-bg);
+  color: var(--glacier-text);
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-md);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ---- app frame: content column with the recorder bar pinned below ---- */
+
+.pfColumn {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.pfView {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--glacier-space-6);
+  display: grid;
+  gap: var(--glacier-space-6);
+  align-content: start;
+}
+
+.pfRecorder {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-4);
+  padding: var(--glacier-space-3) var(--glacier-space-6);
+  border-top: var(--glacier-hairline) solid var(--glacier-border);
+  background: var(--glacier-surface);
+}
+
+.pfRecorderMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-muted);
+  white-space: nowrap;
+}
+
+.pfRecorderScrubber {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---- shared view scaffolding ---- */
+
+.pfTiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--glacier-space-4);
+}
+
+.pfCharts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+  gap: var(--glacier-space-4);
+}
+
+.pfPanel {
+  padding: var(--glacier-space-5);
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface-raised);
+  display: grid;
+  gap: var(--glacier-space-4);
+}
+
+.pfPanelTitle {
+  margin: 0;
+  font-size: var(--glacier-font-size-sm);
+  font-weight: 600;
+  color: var(--glacier-text-subtle);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.pfCores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--glacier-space-3) var(--glacier-space-5);
+}
+
+.pfCore {
+  display: grid;
+  gap: var(--glacier-space-1);
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-muted);
+}
+
+.pfCore strong {
+  color: var(--glacier-text);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+/* ---- process table ---- */
+
+.pfSplit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--glacier-space-4);
+  align-items: start;
+}
+
+.pfSplit[data-detail] {
+  grid-template-columns: minmax(0, 1fr) 20rem;
+}
+
+.pfName {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--glacier-text);
+  cursor: pointer;
+  max-width: 100%;
+}
+
+.pfName:hover {
+  color: var(--glacier-accent-text);
+}
+
+.pfName:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--glacier-radius-sm);
+}
+
+.pfName .pfProcName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pfMono {
+  font-variant-numeric: tabular-nums;
+}
+
+.pfCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+}
+
+.pfDim {
+  color: var(--glacier-text-muted);
+}
+
+/* ---- detail panel ---- */
+
+.pfDetailHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--glacier-space-3);
+}
+
+.pfDetailName {
+  margin: 0;
+  font-size: var(--glacier-font-size-lg);
+  font-weight: 700;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.pfDetailSub {
+  margin: 2px 0 0;
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-muted);
+}
+
+.pfFacts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--glacier-space-3);
+  font-size: var(--glacier-font-size-sm);
+}
+
+.pfFacts dt {
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-muted);
+  margin: 0 0 2px;
+}
+
+.pfFacts dd {
+  margin: 0;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.pfActions {
+  display: flex;
+  gap: var(--glacier-space-2);
+}
+
+/* header bits */
+
+.pfBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  font-weight: 700;
+}
+
+.pfBrand svg {
+  color: var(--glacier-accent-text);
+}
+
+.pfHeaderEnd {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  margin-left: auto;
+}

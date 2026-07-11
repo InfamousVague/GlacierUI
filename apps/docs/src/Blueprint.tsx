@@ -3467,20 +3467,19 @@ function SparklineBlueprint({ size, dimensions }: BlueprintProps) {
 
       {/* dashed baseline at a reference value */}
       <line x1={BX} y1={baseY} x2={BX + BW} y2={baseY} stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 3" />
-      <text x={BX + BW + 8} y={baseY + 3} className="bpLabel" fill={C.faint}>baseline{baselineW ? `: ${baselineW}` : ''}</text>
+      <text x={BX + BW + 8} y={baseY + 3} className="bpLabel" fill={C.faint}>baseline</text>
 
       {/* the mark: a thin polyline, with the newest sample emphasized */}
       <polyline points={pts.join(' ')} fill="none" stroke={C.line} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
       <circle cx={last[0]} cy={last[1]} r={4} fill={C.line} />
-      <text x={last[0] - 10} y={last[1] - 12} textAnchor="end" className="bpLabel" fill={C.faint}>end point{pointDia ? ` ⌀ ${pointDia}` : ''}</text>
+      <text x={last[0] - 10} y={last[1] - 12} textAnchor="end" className="bpLabel" fill={C.faint}>end point</text>
 
       {/* dimensions: fluid width above, the size's height on the left */}
       <HDim x1={BX} x2={BX + BW} y={BY - 20} label="width: auto" />
       <VDim x={BX - 22} y1={BY} y2={BY + BH} label={`height: ${height ?? 'auto'}`} />
-      <text x={BX + 10} y={BY + BH + 18} className="bpLabel">mark: {thickness ?? 'thin'} stroke</text>
 
       <BpTitle />
-      <Foot parts={['mark: line, area, or bars', 'no axes - the text names it', 'samples spread evenly']} />
+      <Foot parts={[thickness && `stroke: ${thickness}`, pointDia && `point: ⌀ ${pointDia}`, baselineW && `baseline: ${baselineW}`]} />
     </svg>
   );
 }
@@ -3492,6 +3491,7 @@ function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
   const radius = fmt(dimensions?.radius);
   const playheadW = fmt(dimensions?.playheadWidth);
   const markerW = fmt(dimensions?.markerWidth);
+  const handleDia = fmt(dimensions?.handleDiameter);
 
   const TX = 44;
   const TW = 264;
@@ -3514,14 +3514,14 @@ function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
       {/* marker ticks */}
       <line x1={TX + TW * 0.38} y1={TY} x2={TX + TW * 0.38} y2={TY + TH} stroke={C.edge} strokeWidth={2} />
       <line x1={TX + TW * 0.42} y1={TY} x2={TX + TW * 0.42} y2={TY + TH} stroke={C.edge} strokeWidth={2} opacity={0.6} />
-      <text x={TX + TW * 0.4} y={TY - 8} textAnchor="middle" className="bpLabel" fill={C.faint}>markers{markerW ? `: ${markerW}` : ''}</text>
+      <text x={TX + TW * 0.4} y={TY - 8} textAnchor="middle" className="bpLabel" fill={C.faint}>markers</text>
 
-      {/* playhead: the slider, with its grab handle and time readout */}
-      <line x1={PX} y1={TY - 4} x2={PX} y2={TY + TH + 4} stroke={C.line} strokeWidth={2.5} />
-      <circle cx={PX} cy={TY - 4} r={5} fill={C.line} />
+      {/* playhead: the slider, its grab handle riding above the track edge */}
+      <line x1={PX} y1={TY - 6} x2={PX} y2={TY + TH} stroke={C.line} strokeWidth={2.5} />
+      <circle cx={PX} cy={TY - 10} r={6} fill={C.line} />
       <rect x={PX - 30} y={TY + TH + 10} width={60} height={18} rx={5} fill={C.fill} stroke={C.edge} strokeWidth={1.1} />
       <text x={PX} y={TY + TH + 23} textAnchor="middle" className="bpLabel">14:29:36</text>
-      <text x={PX + 10} y={TY - 12} className="bpLabel">playhead{playheadW ? `: ${playheadW}` : ''}</text>
+      <text x={PX + 14} y={TY - 12} className="bpLabel">playhead</text>
 
       {/* sparse time ticks along the bottom edge */}
       <text x={TX + 4} y={TY + TH - 6} className="bpLabel" fill={C.faint}>14:15</text>
@@ -3535,10 +3535,9 @@ function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
       {/* dimensions */}
       <HDim x1={TX} x2={TX + TW} y={TY - 28} label="window: start → end" />
       <VDim x={TX - 20} y1={TY} y2={TY + TH} label={`height: ${height ?? 'auto'}`} />
-      {radius && <text x={TX + TW - 6} y={TY + TH + 16} textAnchor="end" className="bpLabel">radius: {radius}</text>}
 
       <BpTitle />
-      <Foot y={222} parts={['activity backdrop', 'marker ticks', 'playhead: role slider', 'live button: aria-pressed']} />
+      <Foot y={222} parts={[playheadW && `playhead: ${playheadW}`, handleDia && `handle: ⌀ ${handleDia}`, markerW && `marker: ${markerW}`, radius && `radius: ${radius}`]} />
     </svg>
   );
 }
@@ -3571,7 +3570,7 @@ function TimeSeriesChartBlueprint({ dimensions }: BlueprintProps) {
       <text x={PXx + PW - 84} y={47.5} className="bpLabel">user</text>
       <circle cx={PXx + PW - 48} cy={44} r={3.5} fill={C.edge} />
       <text x={PXx + PW - 40} y={47.5} className="bpLabel">system</text>
-      <text x={PXx + PW} y={30} textAnchor="end" className="bpLabel" fill={C.faint}>legend{swatch ? ` · swatch ⌀ ${swatch}` : ''}</text>
+      <text x={PXx + PW} y={30} textAnchor="end" className="bpLabel" fill={C.faint}>legend</text>
 
       {/* plot box with recessive horizontal grid */}
       <rect x={PXx} y={PY} width={PW} height={PH} fill={C.fill} fillOpacity={0.25} stroke={C.edge} strokeWidth={1.1} strokeDasharray="5 3" />
@@ -3595,10 +3594,9 @@ function TimeSeriesChartBlueprint({ dimensions }: BlueprintProps) {
 
       {/* dimensions */}
       <VDim x={PXx - 34} y1={PY} y2={PY + PH} label="height: 12rem" />
-      <text x={PXx + 8} y={PY + PH - 8} className="bpLabel">series: {strokeW ?? '2px'} stroke</text>
 
       <BpTitle />
-      <Foot y={222} parts={[gridW && `grid: ${gridW} hairline`, 'canvas plot (uPlot)', 'legend toggles: aria-pressed']} />
+      <Foot y={222} parts={[strokeW && `stroke: ${strokeW}`, gridW && `grid: ${gridW}`, swatch && `swatch: ⌀ ${swatch}`, 'canvas: uPlot']} />
     </svg>
   );
 }

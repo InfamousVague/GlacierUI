@@ -1,17 +1,19 @@
 .root {
   display: flex;
-  align-items: stretch;
+  align-items: flex-end;
   gap: var(--glacier-space-2);
   width: 100%;
+  /* room for the playhead handle riding above the track edge */
+  padding-top: 0.625rem;
 }
 
 .track {
   position: relative;
   flex: 1;
+  min-width: 0;
   border: var(--glacier-hairline) solid var(--glacier-border);
   border-radius: var(--glacier-radius-md);
   background: var(--glacier-surface-sunken);
-  overflow: hidden;
   cursor: crosshair;
   touch-action: none;
   user-select: none;
@@ -28,6 +30,23 @@
 [data-disabled] .track {
   cursor: default;
   opacity: 0.5;
+}
+
+/* the paint layer: clips the activity, markers, and ticks to the rounding */
+.clip {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+/* glass swaps the sunken track and soft button for the frosted material */
+.glass .track {
+  background: var(--glacier-glass-regular);
+  border-color: var(--glacier-glass-border);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
 }
 
 .activity {
@@ -88,12 +107,12 @@
 
 .tick[data-edge='start'] {
   transform: none;
-  left: 4px !important;
+  left: 6px !important;
 }
 
 .tick[data-edge='end'] {
   transform: translateX(-100%);
-  margin-left: -4px;
+  margin-left: -6px;
 }
 
 .playhead {
@@ -103,6 +122,7 @@
   width: 2px;
   transform: translateX(-50%);
   background: var(--glacier-accent-solid);
+  border-radius: var(--glacier-radius-full);
   transition: left var(--glacier-duration-fast) var(--glacier-ease-out);
   outline: none;
 }
@@ -112,7 +132,7 @@
   box-shadow: 0 0 0 3px var(--glacier-accent-soft);
 }
 
-.playhead:focus-visible {
+.playhead:focus-visible .handle {
   box-shadow: 0 0 0 2px var(--glacier-focus-ring);
 }
 
@@ -122,23 +142,36 @@
   }
 }
 
+/* the grab handle: a lollipop head riding above the track edge */
 .handle {
   position: absolute;
-  top: -1px;
+  top: -0.5625rem;
   left: 50%;
   transform: translateX(-50%);
-  width: 0.625rem;
-  height: 0.625rem;
+  width: 0.75rem;
+  height: 0.75rem;
   border-radius: var(--glacier-radius-full);
   background: var(--glacier-accent-solid);
+  transition: transform var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.playhead[data-scrubbing] .handle,
+.playhead:hover .handle {
+  transform: translateX(-50%) scale(1.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .handle {
+    transition: none;
+  }
 }
 
 .readout {
   position: absolute;
-  top: calc(100% + 2px);
+  top: calc(100% + 4px);
   left: 50%;
   transform: translateX(-50%);
-  padding: 0 var(--glacier-space-2);
+  padding: 2px var(--glacier-space-2);
   border-radius: var(--glacier-radius-sm);
   background: var(--glacier-surface-raised);
   border: var(--glacier-hairline) solid var(--glacier-border);
@@ -146,6 +179,13 @@
   color: var(--glacier-text);
   white-space: nowrap;
   z-index: 1;
+}
+
+.glass .readout {
+  background: var(--glacier-glass-regular);
+  border-color: var(--glacier-glass-border);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
 }
 
 .live {
@@ -163,6 +203,23 @@
   transition:
     background-color var(--glacier-duration-fast) var(--glacier-ease-out),
     color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+/* the button matches the track height, sitting under the handle overhang */
+.sm .live {
+  height: 2.5rem;
+}
+
+.md .live {
+  height: 3.5rem;
+}
+
+.glass .live {
+  background: var(--glacier-glass-regular);
+  border-color: var(--glacier-glass-border);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
 }
 
 .live:focus-visible {

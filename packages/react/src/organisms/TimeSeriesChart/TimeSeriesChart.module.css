@@ -126,13 +126,24 @@
 }
 
 .host {
-  position: absolute;
-  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* glass frames the plot on the frosted material */
+.plot.glass {
+  padding: var(--glacier-space-3);
+  border-radius: var(--glacier-radius-md);
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  background: var(--glacier-glass-regular);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
 }
 
 /* uPlot's own cursor line, restyled to the kit's crosshair ink. */
 .host :global(.u-cursor-x) {
-  border-right: 1px solid var(--glacier-border-strong);
+  border-right: var(--glacier-hairline) solid var(--glacier-border-strong);
 }
 
 .empty {

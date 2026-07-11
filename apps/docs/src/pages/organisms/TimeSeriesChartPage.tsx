@@ -111,6 +111,34 @@ export function TimeSeriesChartPage() {
       </Example>
 
       <Example
+        title="Glass"
+        description="glass frames the plot on the frosted material, for charts floating over imagery or a tinted dashboard."
+        code={`<TimeSeriesChart times={times} series={series} glass aria-label="CPU usage" />`}
+      >
+        <div
+          style={{
+            width: '100%',
+            padding: 'var(--glacier-space-5)',
+            borderRadius: 'var(--glacier-radius-lg)',
+            background: 'linear-gradient(120deg, var(--glacier-accent-soft), var(--glacier-purple-4), var(--glacier-teal-4))',
+          }}
+        >
+          <TimeSeriesChart
+            times={TIMES}
+            series={[
+              { id: 'user', label: 'User', values: USER },
+              { id: 'system', label: 'System', values: SYSTEM },
+            ]}
+            max={60}
+            formatValue={(v) => `${v}%`}
+            height="9rem"
+            glass
+            aria-label="CPU usage, glass"
+          />
+        </div>
+      </Example>
+
+      <Example
         title="Empty and skeleton"
         description="Before the first sample the plot keeps its box and says so; skeleton mirrors the exact geometry while a recording loads."
         code={`<TimeSeriesChart times={[]} series={[]} emptyLabel="No samples yet" aria-label="CPU usage" />
@@ -135,6 +163,7 @@ export function TimeSeriesChartPage() {
           { name: 'showLegend', type: 'boolean', default: 'true', description: 'Legend appears for two or more series.' },
           { name: 'height', type: 'string', default: "'12rem'", description: 'Plot height; width follows the container.' },
           { name: 'emptyLabel', type: 'string', default: "'No samples yet'", description: 'Message while times is empty.' },
+          { name: 'glass', type: 'boolean', default: 'false', description: 'Frames the plot on the frosted glass material.' },
           { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders a placeholder with the exact geometry.' },
           { name: 'aria-label', type: 'string', description: 'Required. What the chart plots.' },
         ]}

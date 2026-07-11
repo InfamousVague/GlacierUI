@@ -35,8 +35,10 @@ export interface TimelineScrubberProps extends Omit<ComponentProps<'div'>, 'onCh
   formatTime?: (time: number) => string;
   /** Label for the live button; replace it for localization. */
   liveLabel?: string;
-  /** Track height step. */
+  /** Track height step. The handle adds its overhang above the track. */
   size?: 'sm' | 'md';
+  /** Renders the track and live button on the frosted glass material. */
+  glass?: boolean;
   /** Blocks scrubbing and dims the control. */
   disabled?: boolean;
   /** Renders a placeholder with the exact geometry. */
@@ -71,6 +73,7 @@ export function TimelineScrubber({
   formatTime = defaultFormat,
   liveLabel = 'Live',
   size = 'md',
+  glass = false,
   disabled = false,
   skeleton = false,
   className,
@@ -153,7 +156,7 @@ export function TimelineScrubber({
 
   return (
     <div
-      className={cx(styles.root, styles[size], className)}
+      className={cx(styles.root, styles[size], glass && styles.glass, className)}
       data-live={live || undefined}
       data-disabled={disabled || undefined}
       {...rest}
@@ -166,29 +169,33 @@ export function TimelineScrubber({
         onPointerUp={endScrub}
         onPointerCancel={endScrub}
       >
-        {activityPath && (
-          <svg className={styles.activity} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            <path d={activityPath} />
-          </svg>
-        )}
-        {markers?.map((marker, i) => {
-          const f = Math.min(Math.max((marker.time - start) / windowSpan, 0), 1);
-          return (
-            <span
-              key={i}
-              className={styles.marker}
-              data-tone={marker.tone ?? 'neutral'}
-              style={{ left: `${f * 100}%` }}
-              title={marker.label}
-            />
-          );
-        })}
-        <div className={styles.ticks} aria-hidden="true">
-          {ticks.map((tick) => (
-            <span key={tick.f} className={styles.tick} style={{ left: `${tick.f * 100}%` }} data-edge={tick.f === 0 ? 'start' : tick.f === 1 ? 'end' : undefined}>
-              {tick.label}
-            </span>
-          ))}
+        {/* everything painted on the track clips to its rounding; the playhead
+            lives outside this layer so its handle rides above the edge */}
+        <div className={styles.clip} aria-hidden="true">
+          {activityPath && (
+            <svg className={styles.activity} viewBox="0 0 100 100" preserveAspectRatio="none">
+              <path d={activityPath} />
+            </svg>
+          )}
+          {markers?.map((marker, i) => {
+            const f = Math.min(Math.max((marker.time - start) / windowSpan, 0), 1);
+            return (
+              <span
+                key={i}
+                className={styles.marker}
+                data-tone={marker.tone ?? 'neutral'}
+                style={{ left: `${f * 100}%` }}
+                title={marker.label}
+              />
+            );
+          })}
+          <div className={styles.ticks}>
+            {ticks.map((tick) => (
+              <span key={tick.f} className={styles.tick} style={{ left: `${tick.f * 100}%` }} data-edge={tick.f === 0 ? 'start' : tick.f === 1 ? 'end' : undefined}>
+                {tick.label}
+              </span>
+            ))}
+          </div>
         </div>
         <div
           className={styles.playhead}

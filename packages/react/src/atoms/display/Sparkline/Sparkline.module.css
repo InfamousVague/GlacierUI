@@ -1,6 +1,5 @@
 .root {
-  position: relative;
-  display: inline-block;
+  display: inline-flex;
   width: 100%;
   vertical-align: middle;
   /* the tone classes repaint these two custom props; everything reads from them */
@@ -8,18 +7,34 @@
   --sparkline-fill: var(--glacier-accent-soft);
 }
 
-.sm {
+/* the mark box: the size steps pin its height, the width stays fluid */
+.canvas {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.sm .canvas {
   height: 1rem;
+}
+
+.md .canvas {
+  height: 1.5rem;
+}
+
+.lg .canvas {
+  height: 2.25rem;
+}
+
+.sm {
   --sparkline-stroke: 1.5px;
 }
 
 .md {
-  height: 1.5rem;
   --sparkline-stroke: 1.5px;
 }
 
 .lg {
-  height: 2.25rem;
   --sparkline-stroke: 2px;
 }
 
@@ -48,6 +63,17 @@
   --sparkline-fill: var(--glacier-info-soft);
 }
 
+/* glass mounts the mark on the frosted material */
+.glass {
+  padding: var(--glacier-space-1) var(--glacier-space-2);
+  border-radius: var(--glacier-radius-md);
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  background: var(--glacier-glass-regular);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
+}
+
 .plot {
   position: absolute;
   inset: 0;
@@ -72,7 +98,7 @@
   inset: 0;
   display: flex;
   align-items: flex-end;
-  gap: 1px;
+  gap: var(--glacier-hairline);
 }
 
 .bar {
@@ -86,7 +112,7 @@
   position: absolute;
   inset-inline: 0;
   height: 0;
-  border-top: 1px dashed var(--glacier-border-strong);
+  border-top: var(--glacier-hairline) dashed var(--glacier-border-strong);
 }
 
 .point {
