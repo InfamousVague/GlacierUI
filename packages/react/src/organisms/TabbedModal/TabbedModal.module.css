@@ -98,7 +98,7 @@
 /* scrollable right pane: the active section scrolls here, the rail does not */
 .pane {
   min-width: 0;
-  max-height: 24rem;
+  max-height: 28rem;
   overflow: auto;
   padding-inline-end: var(--glacier-space-2);
   color: var(--glacier-text);

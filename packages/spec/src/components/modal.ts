@@ -2,7 +2,7 @@ import type { ComponentSpec } from '../schema.ts';
 import { token } from '../vocab.ts';
 
 /** Panel width steps, exported so the React kit derives its union from here. */
-export const modalSizes = ['sm', 'md', 'lg'] as const;
+export const modalSizes = ['sm', 'md', 'lg', 'xl'] as const;
 
 export const modalSpec: ComponentSpec = {
   name: 'Modal',
@@ -34,6 +34,7 @@ export const modalSpec: ComponentSpec = {
     { name: 'sm', diameter: '22rem' },
     { name: 'md', diameter: '28rem' },
     { name: 'lg', diameter: '36rem' },
+    { name: 'xl', diameter: '48rem' },
   ],
   defaults: { size: 'md' },
   // panel padding, radius, and the internal gaps; sizes only vary the max-width

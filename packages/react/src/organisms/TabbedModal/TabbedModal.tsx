@@ -97,7 +97,7 @@ export function TabbedModal({
   }
 
   return (
-    <Modal open={open} onClose={onClose} title={title} footer={footer} size={Size.Large}>
+    <Modal open={open} onClose={onClose} title={title} footer={footer} size={Size.XLarge}>
       <div className={cx(styles.layout, className)}>
         <div
           role="tablist"
