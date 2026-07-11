@@ -31,3 +31,12 @@
 .slice.danger { background: var(--glacier-danger-solid); }
 /* neutral paints the track color, indistinct from the empty remainder */
 .slice.neutral { background: var(--glacier-segment-track); }
+
+/* The skeleton mirrors the bar's real anatomy: the same flex track, gap, and
+   clip, holding a few shimmer slices instead of one solid strip. */
+.skeletonBar {
+  display: flex;
+  width: 100%;
+  gap: var(--glacier-space-1);
+  overflow: hidden;
+}

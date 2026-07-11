@@ -1,0 +1,137 @@
+.list {
+  display: grid;
+  gap: var(--glacier-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--glacier-text);
+  font-family: var(--glacier-font-sans);
+}
+
+.list.sm {
+  gap: var(--glacier-space-1);
+}
+
+.divided {
+  gap: 0;
+}
+
+.divided > [data-glacier-list-item]:not(:first-child) {
+  border-top: var(--glacier-hairline) solid var(--glacier-border);
+}
+
+.item {
+  min-width: 0;
+  border-radius: var(--glacier-radius-lg);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  width: 100%;
+  box-sizing: border-box;
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: inherit;
+  background: var(--glacier-surface-raised);
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  text-decoration: none;
+}
+
+/* divided lists separate rows with the hairline dividers instead: flat rows */
+.divided .row {
+  border: 0;
+  background: transparent;
+}
+
+button.row {
+  cursor: pointer;
+}
+
+a.row:hover,
+button.row:hover:not(:disabled) {
+  background: var(--glacier-active);
+}
+
+.divided a.row:hover,
+.divided button.row:hover:not(:disabled) {
+  background: var(--glacier-hover);
+}
+
+a.row:focus-visible,
+button.row:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--glacier-focus-ring);
+}
+
+button.row:disabled {
+  cursor: not-allowed;
+}
+
+.item[data-selected] .row {
+  background: var(--glacier-accent-soft);
+  border-color: var(--glacier-accent-border);
+  color: var(--glacier-accent-text);
+}
+
+.item[data-disabled] {
+  color: var(--glacier-text-disabled);
+}
+
+.leading {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  color: var(--glacier-text-muted);
+}
+
+.copy {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  gap: var(--glacier-space-1);
+}
+
+.title,
+.description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.title {
+  white-space: nowrap;
+}
+
+.description {
+  color: var(--glacier-text-muted);
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-sm);
+}
+
+.item[data-selected] .description {
+  color: inherit;
+  opacity: 0.78;
+}
+
+.trailing {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  color: var(--glacier-text-muted);
+}
+
+.list.sm .row {
+  min-height: var(--glacier-control-height-sm);
+  padding: var(--glacier-space-2) var(--glacier-space-3);
+  font-size: var(--glacier-font-size-xs);
+}
+
+.list.md .row {
+  min-height: var(--glacier-control-height-md);
+  padding: var(--glacier-space-3) var(--glacier-space-4);
+  font-size: var(--glacier-font-size-sm);
+}

@@ -25,7 +25,7 @@ describe('display skeleton states', () => {
   it('Spinner skeleton is a silent circle at each size', () => {
     const sizes = [
       ['sm', '1em'],
-      ['md', '1.25rem'],
+      ['md', 'var(--glacier-size-md)'],
       ['lg', '1.875rem'],
     ] as const;
     for (const [size, dimension] of sizes) {

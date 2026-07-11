@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import { Spring, springTransition } from '@glacier/motion';
 import { useCallback, useEffect, useId, useRef, useState, type ComponentProps, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
+import { resolveDirection } from '../../internal/direction.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import styles from './TabStrip.module.css';
 
@@ -26,6 +27,8 @@ export interface TabStripProps extends ComponentProps<'div'> {
   onClose?: (id: string) => void;
   /** Spring preset for the active indicator. Defaults to Spring.Snappy. */
   spring?: Spring;
+  /** Shows the horizontal scrollbar beneath overflowing tabs. Hidden by default so the baseline hairline stays flush with the tabs. */
+  showScrollbar?: boolean;
   /** Accessible name for the strip. */
   'aria-label'?: string;
   className?: string;
@@ -47,6 +50,7 @@ export function TabStrip({
   onValueChange,
   onClose,
   spring = Spring.Snappy,
+  showScrollbar = false,
   className,
   'aria-label': ariaLabel,
   ...rest
@@ -94,14 +98,16 @@ export function TabStrip({
     const focusedId = (document.activeElement as HTMLElement | null)?.dataset?.tabId;
     const pos = tabs.findIndex((tab) => tab.id === (focusedId ?? active));
     if (pos < 0) return;
+    // APG: horizontal arrows follow reading direction, so they invert in RTL.
+    const forward = resolveDirection(event.currentTarget) === 'rtl' ? -1 : 1;
     switch (event.key) {
       case 'ArrowRight':
         event.preventDefault();
-        select(tabs[(pos + 1) % tabs.length]!.id, true);
+        select(tabs[(pos + forward + tabs.length) % tabs.length]!.id, true);
         break;
       case 'ArrowLeft':
         event.preventDefault();
-        select(tabs[(pos - 1 + tabs.length) % tabs.length]!.id, true);
+        select(tabs[(pos - forward + tabs.length) % tabs.length]!.id, true);
         break;
       case 'Home':
         event.preventDefault();
@@ -126,7 +132,7 @@ export function TabStrip({
       role="tablist"
       aria-label={ariaLabel}
       aria-orientation="horizontal"
-      className={cx(styles.strip, className)}
+      className={cx(styles.strip, showScrollbar && styles.showScrollbar, className)}
       data-overflowing={overflowing || undefined}
       onKeyDown={onStripKeyDown}
     >
@@ -152,6 +158,9 @@ export function TabStrip({
             aria-selected={isActive}
             tabIndex={isActive ? 0 : -1}
             className={styles.tab}
+            // rest spreads on the strip div, so the tab's haptic kind sits
+            // directly on the button and is not per-caller overridable
+            data-haptic="selection"
             onClick={() => select(tab.id, false)}
           >
             {tab.icon && (

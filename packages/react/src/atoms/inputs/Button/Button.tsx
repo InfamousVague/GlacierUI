@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@glacier/motion';
+import { Speed, Ease, transition, pressTap } from '@glacier/motion';
 import { buttonVariants, controlSizes, Size, Tone } from '@glacier/spec';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../../internal/cx.ts';
@@ -53,7 +53,7 @@ export function Button({
       className={cx(styles.button, styles[variant], styles[size], fullWidth && styles.fullWidth, className)}
       disabled={inert}
       data-loading={loading || undefined}
-      whileTap={reduce || inert ? undefined : { scale: 0.97 }}
+      whileTap={pressTap('control', reduce || inert)}
       transition={transition(Speed.Fast, Ease.Out)}
       {...rest}
     >

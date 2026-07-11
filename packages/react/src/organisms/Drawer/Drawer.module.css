@@ -1,0 +1,165 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  background: var(--glacier-overlay);
+  backdrop-filter: blur(var(--glacier-blur-sm));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm));
+}
+
+/* The side prop is deliberately physical ('left' means the left viewport edge
+   in any writing direction), and the slide-in transform is a physical
+   translateX tied to it. flex-start/flex-end are flow-relative and would flip
+   in RTL out from under that transform, so pin the panel to the physical edge
+   with an explicit RTL counter-flip. */
+.overlay.left {
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.overlay.right {
+  align-items: stretch;
+  justify-content: flex-end;
+}
+
+[dir='rtl'] .overlay.left {
+  justify-content: flex-end;
+}
+
+[dir='rtl'] .overlay.right {
+  justify-content: flex-start;
+}
+
+.overlay.bottom {
+  align-items: flex-end;
+  justify-content: stretch;
+}
+
+/* Floating mode detaches the sheet into a card: a gutter on EVERY edge,
+   including the one it slides through. The padding lives on the overlay, so
+   the panel insets itself at any size and on any side. */
+.overlay.floating {
+  padding: var(--glacier-space-3);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  background: var(--glacier-glass-thick);
+  backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
+  box-shadow:
+    inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight),
+    var(--glacier-shadow-5);
+  color: var(--glacier-text);
+  font-family: var(--glacier-font-sans);
+}
+
+.panel:focus-visible {
+  outline: none;
+}
+
+.panel.left,
+.panel.right {
+  height: 100%;
+  max-height: 100%;
+}
+
+.panel.left {
+  border-top-right-radius: var(--glacier-radius-2xl);
+  border-bottom-right-radius: var(--glacier-radius-2xl);
+  border-left: 0;
+}
+
+.panel.right {
+  border-top-left-radius: var(--glacier-radius-2xl);
+  border-bottom-left-radius: var(--glacier-radius-2xl);
+  border-right: 0;
+}
+
+.panel.bottom {
+  width: 100%;
+  max-height: calc(100vh - var(--glacier-space-12));
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 0;
+  border-top-left-radius: var(--glacier-radius-2xl);
+  border-top-right-radius: var(--glacier-radius-2xl);
+}
+
+/* ...and the floating card rounds all four corners and keeps its full
+   hairline, since the gutter exposes every edge. Declared after the per-side
+   rules so it wins at equal specificity. */
+.panel.floating {
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-radius: var(--glacier-radius-2xl);
+}
+
+.panel.left.sm,
+.panel.right.sm {
+  width: min(22rem, calc(100vw - var(--glacier-space-8)));
+}
+
+.panel.left.md,
+.panel.right.md {
+  width: min(28rem, calc(100vw - var(--glacier-space-8)));
+}
+
+.panel.left.lg,
+.panel.right.lg {
+  width: min(36rem, calc(100vw - var(--glacier-space-8)));
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--glacier-space-4);
+  padding: var(--glacier-space-6) var(--glacier-space-6) var(--glacier-space-4);
+}
+
+.headerContent {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: var(--glacier-space-2);
+}
+
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--glacier-space-2) var(--glacier-space-6) var(--glacier-space-6);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--glacier-space-3);
+  padding: var(--glacier-space-4) var(--glacier-space-6) var(--glacier-space-6);
+  border-top: var(--glacier-hairline) solid var(--glacier-border);
+}
+
+@media (max-width: 40rem) {
+  .panel.left,
+  .panel.right {
+    width: calc(100vw - var(--glacier-space-4));
+  }
+
+  .header {
+    padding: var(--glacier-space-5) var(--glacier-space-4) var(--glacier-space-3);
+  }
+
+  .body {
+    padding: var(--glacier-space-2) var(--glacier-space-4) var(--glacier-space-5);
+  }
+
+  .footer {
+    padding: var(--glacier-space-3) var(--glacier-space-4) var(--glacier-space-4);
+  }
+}

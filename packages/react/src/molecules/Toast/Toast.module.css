@@ -116,6 +116,6 @@
   backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
   -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
   box-shadow:
-    inset 0 1px 0 var(--glacier-glass-highlight),
+    inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight),
     var(--glacier-shadow-4);
 }

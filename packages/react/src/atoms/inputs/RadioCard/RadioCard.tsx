@@ -47,6 +47,9 @@ export function RadioCard({
 }: RadioCardProps) {
   const reduce = useReducedMotion();
   const controlled = checked !== undefined;
+  // A bare title (no description or extra content) is a compact tile: the check
+  // rides inline with the title instead of pinning to the top-right corner.
+  const compact = description == null && children == null;
 
   if (skeleton) {
     return (
@@ -58,7 +61,15 @@ export function RadioCard({
   }
 
   return (
-    <label className={cx(styles.card, controlled && checked && styles.checked, disabled && styles.disabled, className)}>
+    <label
+      className={cx(
+        styles.card,
+        compact && styles.compact,
+        controlled && checked && styles.checked,
+        disabled && styles.disabled,
+        className,
+      )}
+    >
       <input
         type="radio"
         className={styles.nativeInput}

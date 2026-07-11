@@ -16,6 +16,9 @@ const t = defineMessages({
     fr: 'Bonjour, {name}',
     de: 'Hallo, {name}',
     ja: 'こんにちは、{name}',
+    pt: 'Olá, {name}',
+    zh: '你好，{name}',
+    ar: 'مرحبا، {name}',
   },
 });
 

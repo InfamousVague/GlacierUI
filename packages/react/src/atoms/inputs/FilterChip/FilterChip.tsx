@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@glacier/motion';
+import { Speed, Ease, transition, pressTap } from '@glacier/motion';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../../internal/cx.ts';
 import { useControlled } from '../../../internal/useControlled.ts';
@@ -49,8 +49,9 @@ export function FilterChip({
       aria-pressed={isSelected}
       className={cx(styles.chip, styles[size], className)}
       disabled={disabled}
-      whileTap={reduce || disabled ? undefined : { scale: 0.96 }}
+      whileTap={pressTap('chip', reduce || disabled)}
       transition={transition(Speed.Fast, Ease.Out)}
+      data-haptic="selection"
       onClick={(event) => {
         setSelected(!isSelected);
         onSelectedChange?.(!isSelected);

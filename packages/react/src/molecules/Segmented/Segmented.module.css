@@ -52,7 +52,7 @@
   border-radius: var(--glacier-control-radius);
   background: var(--glacier-segment-thumb);
   box-shadow:
-    inset 0 1px 0 var(--glacier-glass-highlight),
+    inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight),
     var(--glacier-shadow-2);
 }
 
@@ -61,8 +61,7 @@
   position: absolute;
   top: 22%;
   bottom: 22%;
-  left: var(--glacier-space-2);
-  right: var(--glacier-space-2);
+  inset-inline: var(--glacier-space-2);
 }
 
 .label {

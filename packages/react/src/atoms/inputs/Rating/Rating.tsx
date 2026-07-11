@@ -1,6 +1,7 @@
-import { useId, useState, type ComponentProps } from 'react';
+import { useId, useRef, useState, type ComponentProps } from 'react';
 import { cx } from '../../../internal/cx.ts';
 import { useControlled } from '../../../internal/useControlled.ts';
+import { useHaptics } from '../../../haptics/HapticsProvider.tsx';
 import { Skeleton } from '../../feedback/Skeleton/Skeleton.tsx';
 import styles from './Rating.module.css';
 
@@ -46,6 +47,8 @@ export interface RatingProps extends Omit<ComponentProps<'span'>, 'onChange' | '
   skeleton?: boolean;
   /** Accessible name for the rating group. */
   'aria-label'?: string;
+  /** Set to "none" to opt this rating out of haptic feedback. */
+  'data-haptic'?: string;
 }
 
 /**
@@ -69,6 +72,11 @@ export function Rating({
   const [current, setCurrent] = useControlled(value, defaultValue ?? 0);
   const [hover, setHover] = useState<number | null>(null);
   const name = useId();
+  const fire = useHaptics();
+  // True between a pointer press on the group and the change it commits, so the
+  // shared change handler can tell a click (impact) from a keyboard arrow (tick).
+  const pointerDown = useRef(false);
+  const hapticsOff = rest['data-haptic'] === 'none';
 
   if (skeleton) {
     // One star-clipped bone per star, in the live wrapper's size and gap, so
@@ -102,8 +110,19 @@ export function Rating({
   const set = (v: number) => {
     setCurrent(v);
     onChange?.(v);
+    // A pointer commit lands as an impact; a keyboard arrow adjusting the
+    // value is a selection tick, one per change.
+    if (!hapticsOff) fire(pointerDown.current ? 'light' : 'selection');
   };
   const display = hover ?? current;
+
+  // Tick when the pointer scrub moves the previewed value to a different star.
+  // Leaving (hover back to the committed value) goes through setHover directly,
+  // so the return to rest is silent.
+  const preview = (v: number) => {
+    if (!hapticsOff && v !== (hover ?? current)) fire('selection');
+    setHover(v);
+  };
 
   return (
     <span
@@ -112,9 +131,15 @@ export function Rating({
       role="radiogroup"
       aria-label={ariaLabel}
       onMouseLeave={() => setHover(null)}
+      onPointerDown={() => {
+        pointerDown.current = true;
+      }}
+      onKeyDown={() => {
+        pointerDown.current = false;
+      }}
     >
       {stars.map((v) => (
-        <label key={v} className={styles.star} onMouseEnter={() => !disabled && setHover(v)}>
+        <label key={v} className={styles.star} onMouseEnter={() => !disabled && preview(v)}>
           <input
             type="radio"
             className={styles.input}

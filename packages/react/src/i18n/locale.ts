@@ -17,12 +17,20 @@
  * locale is added here, every message in the codebase fails to compile until it
  * is translated. Rename or add to this tuple to choose the languages.
  */
-export const locales = ['en', 'es', 'fr', 'de', 'ja'] as const;
+export const locales = ['en', 'es', 'fr', 'de', 'ja', 'pt', 'zh', 'ar'] as const;
 
 export type Locale = (typeof locales)[number];
 
 /** The locale used when no LocaleProvider is present. */
 export const DEFAULT_LOCALE: Locale = 'en';
+
+/** Locales written right to left. */
+export const rtlLocales: ReadonlySet<Locale> = new Set<Locale>(['ar']);
+
+/** The writing direction for a locale, for the html dir attribute. */
+export function direction(locale: Locale): 'ltr' | 'rtl' {
+  return rtlLocales.has(locale) ? 'rtl' : 'ltr';
+}
 
 /**
  * One translated string, mandated across all locales. Omitting any locale is a

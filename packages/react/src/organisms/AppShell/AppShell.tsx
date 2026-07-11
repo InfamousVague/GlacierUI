@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ComponentProps, type CSSProperties, type KeyboardEvent, type MouseEvent, type PointerEvent, type ReactNode } from 'react';
 import { Variant } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
+import { resolveDirection } from '../../internal/direction.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
 import { IconButton } from '../../atoms/inputs/Button/IconButton.tsx';
@@ -79,7 +80,8 @@ export function AppShell({
   );
 
   // Drag the divider: size the sidebar to the pointer's distance from the
-  // sidebar's left edge, so it works in both the flush and floating layouts.
+  // sidebar's inline-start edge (its left edge in LTR, its right edge in RTL),
+  // so it works in both the flush and floating layouts.
   function startResize(event: PointerEvent<HTMLDivElement>) {
     if (event.button !== 0) return;
     event.preventDefault();
@@ -88,7 +90,8 @@ export function AppShell({
     const move = (e: globalThis.PointerEvent) => {
       const aside = asideRef.current;
       if (!aside) return;
-      commitWidth(e.clientX - aside.getBoundingClientRect().left);
+      const rect = aside.getBoundingClientRect();
+      commitWidth(resolveDirection(aside) === 'rtl' ? rect.right - e.clientX : e.clientX - rect.left);
     };
     const up = () => {
       handle.releasePointerCapture?.(event.pointerId);
@@ -105,14 +108,17 @@ export function AppShell({
     const aside = asideRef.current;
     if (!aside) return;
     const cur = aside.getBoundingClientRect().width;
+    // The arrows track the divider, not the width: pressing toward the sidebar
+    // shrinks it. In RTL the sidebar sits on the right, so the arrows invert.
+    const grow = resolveDirection(aside) === 'rtl' ? -16 : 16;
     switch (event.key) {
       case 'ArrowLeft':
         event.preventDefault();
-        commitWidth(cur - 16);
+        commitWidth(cur - grow);
         break;
       case 'ArrowRight':
         event.preventDefault();
-        commitWidth(cur + 16);
+        commitWidth(cur + grow);
         break;
       case 'Home':
         event.preventDefault();

@@ -54,13 +54,17 @@ export function SegmentedBar({
   ...rest
 }: SegmentedBarProps) {
   if (skeleton) {
+    // a representative three-way split, so the placeholder reads as a breakdown
+    const slices = ['42%', '30%', '18%'];
     return (
-      <Skeleton
-        width="100%"
-        height={size === 'sm' ? '0.375rem' : '0.625rem'}
-        radius="var(--glacier-radius-full)"
-        className={className}
-      />
+      <div
+        className={cx(styles.skeletonBar, styles[size], rounded && styles.rounded, className)}
+        aria-hidden="true"
+      >
+        {slices.map((width) => (
+          <Skeleton key={width} width={width} height="100%" radius="2px" />
+        ))}
+      </div>
     );
   }
 

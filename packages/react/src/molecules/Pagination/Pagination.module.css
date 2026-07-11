@@ -1,6 +1,6 @@
 .root { display: inline-flex; align-items: center; gap: var(--glacier-space-2); flex-wrap: wrap; }
 .pages { display: inline-flex; align-items: center; gap: var(--glacier-space-2); }
-.button, .page { border: 1px solid var(--glacier-border); background: var(--glacier-surface); color: var(--glacier-text); border-radius: var(--glacier-radius-full); min-width: 2.25rem; min-height: 2.25rem; padding: 0 var(--glacier-space-3); cursor: pointer; }
+.button, .page { border: var(--glacier-hairline) solid var(--glacier-border); background: var(--glacier-surface); color: var(--glacier-text); border-radius: var(--glacier-radius-full); min-width: 2.25rem; min-height: 2.25rem; padding: 0 var(--glacier-space-3); cursor: pointer; }
 .button:disabled { opacity: 0.5; cursor: not-allowed; }
 .page.current { background: var(--glacier-accent-soft); border-color: var(--glacier-accent-border); color: var(--glacier-accent-contrast); }
 .ellipsis { color: var(--glacier-text-subtle); padding: 0 var(--glacier-space-2); }

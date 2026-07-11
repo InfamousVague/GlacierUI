@@ -1,0 +1,104 @@
+/* ---- Fieldset -------------------------------------------------------------- */
+
+.fieldset {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+  font-family: var(--glacier-font-sans);
+}
+
+.legend {
+  padding: 0;
+  font-size: var(--glacier-font-size-md);
+  font-weight: var(--glacier-font-weight-semibold);
+  line-height: var(--glacier-leading-sm);
+  color: var(--glacier-text);
+}
+
+.description {
+  margin-block-start: var(--glacier-space-1);
+  font-size: var(--glacier-font-size-sm);
+  line-height: var(--glacier-leading-sm);
+  color: var(--glacier-text-muted);
+}
+
+/* Anchored to the legend line; a legend cannot sit inside a flex row (the
+   browser pulls it out of flow), so the actions pin to the top end corner. */
+.actions {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-5);
+  margin-block-start: var(--glacier-space-4);
+}
+
+/* The classic boxed group: hairline border with the legend floating on it. */
+.bordered {
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-lg);
+  padding: var(--glacier-space-5);
+}
+
+.bordered .legend {
+  padding-inline: var(--glacier-space-2);
+  margin-inline-start: calc(-1 * var(--glacier-space-2));
+}
+
+.bordered .actions {
+  top: var(--glacier-space-4);
+  inset-inline-end: var(--glacier-space-5);
+}
+
+/* The native disabled cascade already blocks every nested control; this only
+   dims the group's own text so the state reads at a glance. */
+.fieldset:disabled .legend,
+.fieldset:disabled .description {
+  opacity: 0.5;
+}
+
+/* ---- FormSection ----------------------------------------------------------- */
+
+.section {
+  font-family: var(--glacier-font-sans);
+}
+
+.divider {
+  margin-block-end: var(--glacier-space-6);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--glacier-space-4);
+}
+
+.headerText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.sectionActions {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  flex-shrink: 0;
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-5);
+  margin-block-start: var(--glacier-space-5);
+}

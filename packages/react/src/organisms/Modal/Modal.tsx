@@ -1,9 +1,10 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Size, TextTone } from '@glacier/spec';
 import { Spring, springTransition } from '@glacier/motion';
-import { useEffect, useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
+import { useId, useRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../internal/cx.ts';
+import { useDialogLayer } from '../../internal/useDialogLayer.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
 import { IconButton } from '../../atoms/inputs/Button/IconButton.tsx';
@@ -17,7 +18,7 @@ export interface ModalProps {
   onClose: () => void;
   title?: ReactNode;
   description?: ReactNode;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   footer?: ReactNode;
   children?: ReactNode;
 }
@@ -27,9 +28,6 @@ const CloseIcon = (
     <path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
   </svg>
 );
-
-const FOCUSABLE =
-  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /**
  * A glass dialog rendered in a portal. Springs open, closes instantly.
@@ -43,41 +41,7 @@ export function Modal({ open, onClose, title, description, size = 'md', footer, 
   const panelRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
 
-  // lock body scroll, focus the panel, restore focus on close
-  useEffect(() => {
-    if (!open) return;
-    const opener = document.activeElement as HTMLElement | null;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    panelRef.current?.focus();
-    const onKeyDown = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener('keydown', onKeyDown);
-      opener?.focus();
-    };
-  }, [open, onClose]);
-
-  function trapTab(e: KeyboardEvent<HTMLDivElement>) {
-    if (e.key !== 'Tab' || !panelRef.current) return;
-    const focusable = [...panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)];
-    if (focusable.length === 0) {
-      e.preventDefault();
-      return;
-    }
-    const first = focusable[0]!;
-    const last = focusable[focusable.length - 1]!;
-    if (e.shiftKey && (document.activeElement === first || document.activeElement === panelRef.current)) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
-  }
+  useDialogLayer({ open, onClose, dialogRef: panelRef });
 
   if (!open) return null;
 
@@ -98,7 +62,6 @@ export function Modal({ open, onClose, title, description, size = 'md', footer, 
         className={cx(styles.panel, styles[size])}
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
-        onKeyDown={trapTab}
         initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.95, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={reduce ? { duration: 0 } : springTransition(Spring.Snappy)}

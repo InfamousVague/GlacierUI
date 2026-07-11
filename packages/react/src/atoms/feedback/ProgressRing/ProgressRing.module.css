@@ -47,3 +47,28 @@
     transition: none;
   }
 }
+
+/* The skeleton keeps the ring's true shape: the shimmer disc is masked down to
+   the stroke band, so the placeholder has a transparent center like the ring.
+   The half-pixel overlap between the stops antialiases the inner edge. */
+.skeletonWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skeletonRing {
+  position: absolute;
+  inset: 0;
+  mask-image: radial-gradient(
+    closest-side,
+    transparent calc(100% - var(--ring-thickness) - 0.5px),
+    #000 calc(100% - var(--ring-thickness) + 0.5px)
+  );
+  -webkit-mask-image: radial-gradient(
+    closest-side,
+    transparent calc(100% - var(--ring-thickness) - 0.5px),
+    #000 calc(100% - var(--ring-thickness) + 0.5px)
+  );
+}

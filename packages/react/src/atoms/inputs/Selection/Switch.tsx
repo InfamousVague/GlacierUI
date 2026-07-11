@@ -61,6 +61,7 @@ export function Switch({
         className={styles.nativeInput}
         checked={isChecked}
         disabled={disabled}
+        data-haptic="selection"
         onChange={(e) => {
           setChecked(e.target.checked);
           onCheckedChange?.(e.target.checked);

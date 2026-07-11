@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import axe from 'axe-core';
-import { Button, Checkbox, Field, Input, Switch } from '../src/index.ts';
+import { Button, Checkbox, Field, Input, Radio, Switch } from '../src/index.ts';
 
 async function expectNoAxeViolations(container: HTMLElement) {
   const results = await axe.run(container, {
@@ -82,6 +82,19 @@ describe('selection controls', () => {
     render(<Switch label="Wi-Fi" onCheckedChange={(v) => (latest = v)} />);
     fireEvent.click(screen.getByRole('switch', { name: 'Wi-Fi' }));
     expect(latest).toBe(true);
+  });
+
+  it('defaults each native input to the selection haptic kind', () => {
+    render(
+      <>
+        <Checkbox label="Enable" />
+        <Switch label="Wi-Fi" />
+        <Radio label="Pick" />
+      </>,
+    );
+    expect(screen.getByRole('checkbox', { name: 'Enable' })).toHaveAttribute('data-haptic', 'selection');
+    expect(screen.getByRole('switch', { name: 'Wi-Fi' })).toHaveAttribute('data-haptic', 'selection');
+    expect(screen.getByRole('radio', { name: 'Pick' })).toHaveAttribute('data-haptic', 'selection');
   });
 
   it('has no axe violations', async () => {

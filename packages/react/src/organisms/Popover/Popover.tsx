@@ -12,8 +12,10 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../internal/cx.ts';
+import { useDirection } from '../../internal/direction.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import { useAnchoredPosition, type Placement } from '../../internal/useAnchoredPosition.ts';
+import { ArrowGlass } from '../../internal/ArrowGlass.tsx';
 import styles from './Popover.module.css';
 
 export interface PopoverProps {
@@ -52,8 +54,12 @@ export function Popover({
   const panelRef = useRef<HTMLDivElement>(null);
   const [isOpen, setOpen] = useControlled(open, defaultOpen);
   const [mounted, setMounted] = useState(isOpen);
+  // the panel portals to the body, past any scoped dir ancestor - carry the
+  // trigger's resolved direction with it
+  const dir = useDirection(triggerRef);
 
-  const position = useAnchoredPosition(mounted, triggerRef, panelRef, { placement });
+  // offset leaves room for the arrow tip plus a small visual gap
+  const position = useAnchoredPosition(mounted, triggerRef, panelRef, { placement, offset: 12 });
 
   function setOpenState(next: boolean) {
     setOpen(next);
@@ -110,6 +116,10 @@ export function Popover({
   return (
     <>
       {triggerEl}
+      {/* The positioned wrapper stays transparent and the glass panel and
+          arrow are SIBLINGS inside it: a backdrop-filter can only sample the
+          page from outside a filtered ancestor, so an arrow nested in the
+          blurred panel could tint but never blur what is behind it. */}
       {mounted &&
         createPortal(
           <motion.div
@@ -117,8 +127,10 @@ export function Popover({
             id={panelId}
             role="dialog"
             aria-label={rest['aria-label']}
+            dir={dir}
             tabIndex={-1}
-            className={cx(styles.panel, className)}
+            className={styles.positioner}
+            data-placement={position?.placement}
             style={position?.style}
             onKeyDown={onPanelKeyDown}
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: -4 }}
@@ -128,7 +140,8 @@ export function Popover({
               if (!isOpen) setMounted(false);
             }}
           >
-            {children}
+            <ArrowGlass placement={position?.placement} />
+            <div className={cx(styles.panel, className)}>{children}</div>
           </motion.div>,
           document.body,
         )}

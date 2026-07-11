@@ -51,8 +51,7 @@
 /* the springing underline; sits on the list's hairline */
 .indicator {
   position: absolute;
-  left: var(--glacier-space-2);
-  right: var(--glacier-space-2);
+  inset-inline: var(--glacier-space-2);
   bottom: calc(-1 * var(--glacier-hairline));
   height: 2px;
   border-radius: var(--glacier-radius-full);

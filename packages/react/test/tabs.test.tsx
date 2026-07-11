@@ -58,8 +58,38 @@ describe('Tabs', () => {
     expect(screen.getByRole('tabpanel')).toHaveTextContent('Settings content');
   });
 
+  it('defaults each tab button to the selection haptic kind', () => {
+    render(<Tabs aria-label="Sections" tabs={TABS} />);
+    expect(screen.getByRole('tab', { name: 'Overview' })).toHaveAttribute('data-haptic', 'selection');
+  });
+
   it('has no axe violations', async () => {
     const { container } = render(<Tabs aria-label="Sections" tabs={TABS} />);
     expect((await axe.run(container, { rules: AXE_RULES })).violations).toEqual([]);
+  });
+
+  describe('in RTL', () => {
+    it('inverts the horizontal arrows, keeping Home and End at the extremes', () => {
+      render(
+        <div dir="rtl">
+          <Tabs aria-label="Sections" tabs={TABS} />
+        </div>,
+      );
+      const overview = screen.getByRole('tab', { name: 'Overview' });
+      // ArrowLeft advances in reading order in RTL
+      fireEvent.keyDown(overview, { key: 'ArrowLeft' });
+      expect(screen.getByRole('tab', { name: 'Activity' })).toHaveAttribute('aria-selected', 'true');
+      // ArrowRight steps back
+      fireEvent.keyDown(screen.getByRole('tab', { name: 'Activity' }), { key: 'ArrowRight' });
+      expect(screen.getByRole('tab', { name: 'Overview' })).toHaveAttribute('aria-selected', 'true');
+      // and it wraps past the start
+      fireEvent.keyDown(overview, { key: 'ArrowRight' });
+      expect(screen.getByRole('tab', { name: 'Settings' })).toHaveAttribute('aria-selected', 'true');
+      // Home and End do not change meaning
+      fireEvent.keyDown(screen.getByRole('tab', { name: 'Settings' }), { key: 'Home' });
+      expect(screen.getByRole('tab', { name: 'Overview' })).toHaveAttribute('aria-selected', 'true');
+      fireEvent.keyDown(overview, { key: 'End' });
+      expect(screen.getByRole('tab', { name: 'Settings' })).toHaveAttribute('aria-selected', 'true');
+    });
   });
 });

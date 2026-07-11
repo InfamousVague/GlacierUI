@@ -13,6 +13,10 @@
 .viewport {
   overflow: auto;
   overscroll-behavior: contain;
+  /* when the host sizes the root instead of passing maxHeight (flex panels,
+     sidebar bodies), the viewport still may not outgrow it */
+  max-height: 100%;
+  max-width: 100%;
   /* mask defaults to fully opaque; each fade edge is layered in below */
   --mask-start: transparent 0;
   --mask-end: #000 0;
@@ -68,6 +72,25 @@
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--scroll-fade), #000 calc(100% - var(--scroll-fade)), transparent 100%);
 }
 
+/* In RTL the horizontal start edge is the right one, so the single-edge ramps
+   flip; the both-edges ramp is symmetric and needs no change, but it is
+   restated so it still outranks the flipped single-edge rules. Gradient
+   directions are physical, hence the ancestor flip rather than logical values. */
+[dir='rtl'] .horizontal[data-fade-start='true'] .viewport {
+  mask-image: linear-gradient(to left, transparent 0, #000 var(--scroll-fade), #000 100%);
+  -webkit-mask-image: linear-gradient(to left, transparent 0, #000 var(--scroll-fade), #000 100%);
+}
+
+[dir='rtl'] .horizontal[data-fade-end='true'] .viewport {
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--scroll-fade), #000 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--scroll-fade), #000 100%);
+}
+
+[dir='rtl'] .horizontal[data-fade-start='true'][data-fade-end='true'] .viewport {
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--scroll-fade), #000 calc(100% - var(--scroll-fade)), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--scroll-fade), #000 calc(100% - var(--scroll-fade)), transparent 100%);
+}
+
 /* --- WebKit scrollbar (thin, themed) --------------------------------------- */
 .viewport::-webkit-scrollbar {
   width: var(--glacier-space-2);
@@ -95,4 +118,15 @@
   .viewport {
     scroll-behavior: auto;
   }
+}
+
+/* Scrollbar-less mode: the edge fades still signal the overflow, so the bar
+   itself can disappear for chrome-free surfaces like carousels and chip rows.
+   Every scroll input keeps working. */
+.hideScrollbar .viewport {
+  scrollbar-width: none;
+}
+
+.hideScrollbar .viewport::-webkit-scrollbar {
+  display: none;
 }

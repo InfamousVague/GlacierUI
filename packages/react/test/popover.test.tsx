@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import axe from 'axe-core';
 import { Button, Popover, Text } from '../src/index.ts';
@@ -76,5 +76,34 @@ describe('Popover', () => {
     );
     await screen.findByRole('dialog');
     expect((await axe.run(document.body, { rules: AXE_RULES })).violations).toEqual([]);
+  });
+});
+
+describe('Popover in RTL', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('aligns bottom-start to the trigger right edge and stamps dir on the panel', async () => {
+    render(
+      <div dir="rtl">
+        <Popover aria-label="Details" trigger={<Button>Open</Button>}>
+          <Text>Panel content</Text>
+        </Popover>
+      </div>,
+    );
+    // jsdom has no layout: stub the trigger rect and the panel's offset size
+    const trigger = screen.getByRole('button', { name: 'Open' });
+    vi.spyOn(trigger, 'getBoundingClientRect').mockReturnValue({
+      left: 100, top: 10, width: 100, height: 20, right: 200, bottom: 30, x: 100, y: 10, toJSON: () => ({}),
+    } as DOMRect);
+    vi.spyOn(HTMLElement.prototype, 'offsetWidth', 'get').mockReturnValue(120);
+    vi.spyOn(HTMLElement.prototype, 'offsetHeight', 'get').mockReturnValue(80);
+
+    fireEvent.click(trigger);
+    const dialog = await screen.findByRole('dialog', { name: 'Details' });
+    expect(dialog.style.left).toBe('80px'); // trigger right 200 - panel width 120
+    expect(dialog.style.top).toBe('42px'); // trigger bottom 30 + offset 12
+    expect(dialog).toHaveAttribute('dir', 'rtl'); // carried past the body portal
   });
 });

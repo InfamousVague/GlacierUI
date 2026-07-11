@@ -70,9 +70,37 @@ describe('TabStrip', () => {
     expect(onValueChange).not.toHaveBeenCalled();
   });
 
+  it('defaults each tab button to the selection haptic kind', () => {
+    render(<TabStrip aria-label="Files" tabs={TABS} />);
+    expect(screen.getByRole('tab', { name: /Alpha/ })).toHaveAttribute('data-haptic', 'selection');
+  });
+
   it('has no axe violations', async () => {
     render(<TabStrip aria-label="Files" tabs={TABS} onClose={() => {}} />);
     await screen.findByRole('tablist');
     expect((await axe.run(document.body, { rules: AXE_RULES })).violations).toEqual([]);
+  });
+
+  describe('in RTL', () => {
+    it('inverts the horizontal arrows, keeping Home and End at the extremes', () => {
+      render(
+        <div dir="rtl">
+          <TabStrip aria-label="Files" tabs={TABS} defaultValue="a" />
+        </div>,
+      );
+      const tablist = screen.getByRole('tablist');
+      // ArrowLeft advances in reading order in RTL
+      fireEvent.keyDown(tablist, { key: 'ArrowLeft' });
+      expect(screen.getByRole('tab', { name: /Bravo/ })).toHaveAttribute('aria-selected', 'true');
+      // ArrowRight steps back, wrapping past the start
+      fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+      fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+      expect(screen.getByRole('tab', { name: /Charlie/ })).toHaveAttribute('aria-selected', 'true');
+      // Home and End do not change meaning
+      fireEvent.keyDown(tablist, { key: 'Home' });
+      expect(screen.getByRole('tab', { name: /Alpha/ })).toHaveAttribute('aria-selected', 'true');
+      fireEvent.keyDown(tablist, { key: 'End' });
+      expect(screen.getByRole('tab', { name: /Charlie/ })).toHaveAttribute('aria-selected', 'true');
+    });
   });
 });

@@ -9,7 +9,9 @@ import {
   type ReactNode,
 } from 'react';
 import { cx } from '../../internal/cx.ts';
+import { resolveDirection } from '../../internal/direction.ts';
 import { useControlled } from '../../internal/useControlled.ts';
+import { useHaptics } from '../../haptics/HapticsProvider.tsx';
 import styles from './ResizableSplitPane.module.css';
 
 export type SplitOrientation = 'horizontal' | 'vertical';
@@ -73,6 +75,11 @@ export function ResizableSplitPane({
   const [current, setCurrent] = useControlled(ratio, defaultRatio);
   const isHorizontal = orientation === 'horizontal';
   const [start, end] = children;
+  const fireHaptic = useHaptics();
+  const hapticsOff = (rest as Record<string, unknown>)['data-haptic'] === 'none';
+  // Which clamp the drag last rested on. One medium tick fires per arrival at
+  // a bound; moving off the bound resets this and re-arms the tick.
+  const clampEdgeRef = useRef<'min' | 'max' | null>(null);
 
   const commit = useCallback(
     (next: number) => {
@@ -91,13 +98,28 @@ export function ResizableSplitPane({
     event.preventDefault();
     const handle = event.currentTarget;
     handle.setPointerCapture(event.pointerId);
+    // Arm the clamp tick from where the drag starts, so a divider already
+    // resting on a bound stays silent until it leaves and comes back.
+    clampEdgeRef.current = current <= min ? 'min' : current >= max ? 'max' : null;
 
     const move = (e: globalThis.PointerEvent) => {
       const rect = root.getBoundingClientRect();
       const size = isHorizontal ? rect.width : rect.height;
       if (size <= 0) return;
-      const offset = isHorizontal ? e.clientX - rect.left : e.clientY - rect.top;
-      commit(offset / size);
+      // The start pane hugs the inline-start edge, which is the right edge in
+      // RTL, so measure the pointer's offset from there.
+      const offset = isHorizontal
+        ? resolveDirection(root) === 'rtl'
+          ? rect.right - e.clientX
+          : e.clientX - rect.left
+        : e.clientY - rect.top;
+      const next = offset / size;
+      const edge = next <= min ? 'min' : next >= max ? 'max' : null;
+      if (edge !== clampEdgeRef.current) {
+        clampEdgeRef.current = edge;
+        if (edge && !hapticsOff) fireHaptic('medium');
+      }
+      commit(next);
     };
     const up = () => {
       handle.releasePointerCapture?.(event.pointerId);
@@ -111,9 +133,12 @@ export function ResizableSplitPane({
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    // decrease keys move the divider toward the start; increase toward the end
-    const decrease = isHorizontal ? 'ArrowLeft' : 'ArrowUp';
-    const increase = isHorizontal ? 'ArrowRight' : 'ArrowDown';
+    // decrease keys move the divider toward the start; increase toward the
+    // end. APG: the horizontal arrows invert in RTL, where the start pane is
+    // on the right, so ArrowLeft grows it (moves the divider away from it).
+    const rtl = isHorizontal && resolveDirection(event.currentTarget) === 'rtl';
+    const decrease = isHorizontal ? (rtl ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp';
+    const increase = isHorizontal ? (rtl ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown';
     switch (event.key) {
       case decrease:
         event.preventDefault();

@@ -1,5 +1,5 @@
 import { progressRingTones, SkeletonVariant } from '@glacier/spec';
-import type { ComponentProps, ReactNode } from 'react';
+import type { ComponentProps, CSSProperties, ReactNode } from 'react';
 import { cx } from '../../../internal/cx.ts';
 import { Skeleton } from '../Skeleton/Skeleton.tsx';
 import styles from './ProgressRing.module.css';
@@ -39,7 +39,21 @@ export function ProgressRing({
   ...rest
 }: ProgressRingProps) {
   if (skeleton) {
-    return <Skeleton variant={SkeletonVariant.Circle} width={size} className={className} />;
+    return (
+      <span className={cx(styles.skeletonWrap, className)} style={{ width: size, height: size }}>
+        <Skeleton
+          variant={SkeletonVariant.Circle}
+          width={size}
+          className={styles.skeletonRing}
+          style={{ '--ring-thickness': `${thickness}px` } as CSSProperties}
+        />
+        <Skeleton
+          variant={SkeletonVariant.Text}
+          width={Math.round(size * 0.42)}
+          height={Math.max(5, Math.round(size * 0.12))}
+        />
+      </span>
+    );
   }
 
   const clamped = Math.min(Math.max(value, 0), max);

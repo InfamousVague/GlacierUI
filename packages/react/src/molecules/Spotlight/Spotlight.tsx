@@ -15,6 +15,7 @@ import { cx } from '../../internal/cx.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
 import { useAnchoredPosition, type Placement } from '../../internal/useAnchoredPosition.ts';
+import { useDirection } from '../../internal/direction.ts';
 import { Button } from '../../atoms/inputs/Button/Button.tsx';
 import { IconButton } from '../../atoms/inputs/Button/IconButton.tsx';
 import { Heading } from '../../atoms/display/Typography/Heading.tsx';
@@ -90,6 +91,9 @@ export function Spotlight({
   const [rect, setRect] = useState<Rect | null>(null);
 
   const position = useAnchoredPosition(open, targetRef, calloutRef, { placement, offset: 12 });
+  // The callout portals to the body, so it re-carries the target's direction
+  // for its internal logical CSS to resolve against.
+  const direction = useDirection(targetRef);
 
   // Track the target's box so the cutout stays glued to it through scroll and
   // resize, mirroring how the anchored callout tracks it.
@@ -198,6 +202,7 @@ export function Spotlight({
         aria-modal="true"
         aria-labelledby={title ? titleId : undefined}
         aria-describedby={description ? descriptionId : undefined}
+        dir={direction}
         className={cx(styles.callout, className)}
         style={position?.style}
         tabIndex={-1}

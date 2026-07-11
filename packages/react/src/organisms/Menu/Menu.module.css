@@ -11,7 +11,7 @@
   backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
   -webkit-backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
   box-shadow:
-    inset 0 1px 0 var(--glacier-glass-highlight),
+    inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight),
     var(--glacier-shadow-4);
   color: var(--glacier-text);
   font-family: var(--glacier-font-sans);
@@ -87,6 +87,34 @@
   color: var(--glacier-text-subtle);
   font-size: var(--glacier-font-size-xs);
   font-variant-numeric: tabular-nums;
+}
+
+/* The ContextMenu target wrapper: contributes no box of its own, so wrapping
+   arbitrary content never disturbs the layout around it. */
+.contextTarget {
+  display: contents;
+}
+
+/* A MenuSub row keeps its parent-row highlight while its flyout is open. */
+.item[aria-expanded='true'] {
+  background: var(--glacier-hover);
+}
+
+/* The trailing flyout chevron on a MenuSub row. */
+.chevron {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: var(--glacier-space-2);
+  color: var(--glacier-text-subtle);
+}
+
+/* The chevron glyph points into the flyout, which opens toward inline-end -
+   mirror it under RTL. The panel carries its own dir attribute (it portals to
+   the body, past any scoped dir ancestor), so this ancestor selector holds. */
+[dir='rtl'] .chevron svg {
+  transform: scaleX(-1);
 }
 
 .separator {

@@ -2,14 +2,32 @@
   "name": "@glacier/react",
   "version": "0.1.0",
   "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "scripts": {
+    "build": "vite build && NODE_OPTIONS=--max-old-space-size=12288 rollup -c rollup.dts.config.mjs"
   },
   "dependencies": {
+    "date-fns": "^4.4.0",
+    "motion": "^12.23.0",
+    "react-day-picker": "^10.0.1"
+  },
+  "devDependencies": {
+    "@glacier/icons": "*",
     "@glacier/motion": "*",
     "@glacier/spec": "*",
-    "@glacier/tokens": "*",
-    "motion": "^12.23.0"
+    "@glacier/tokens": "*"
   },
   "peerDependencies": {
     "react": "^19.0.0",

@@ -4,7 +4,7 @@
   gap: var(--glacier-space-3);
   min-width: 0;
   /* even padding on every side, matched to the spec's dimensions */
-  padding: var(--glacier-space-2);
+  padding: var(--glacier-space-3);
   font-family: var(--glacier-font-sans);
 }
 
@@ -29,12 +29,12 @@
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: var(--glacier-space-2);
+  gap: var(--glacier-space-3);
 }
 
 .slot {
   flex: none;
   display: inline-flex;
   align-items: center;
-  gap: var(--glacier-space-2);
+  gap: var(--glacier-space-3);
 }

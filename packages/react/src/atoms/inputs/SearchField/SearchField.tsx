@@ -76,6 +76,9 @@ export function SearchField({
         className={styles.input}
         {...rest}
       />
+      {/* The clear button and the shortcut hint share the trailing slot, so only
+          one shows at a time: the shortcut hints how to focus an empty field;
+          once there is a value, it becomes the clear button. */}
       {value ? (
         <button
           type="button"
@@ -88,21 +91,20 @@ export function SearchField({
         >
           <svg
             aria-hidden="true"
-            viewBox="0 0 24 24"
+            viewBox="0 0 16 16"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="1.5"
             strokeLinecap="round"
-            strokeLinejoin="round"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M10 5a2 2 0 0 0-1.344.519l-6.328 5.74a1 1 0 0 0 0 1.481l6.328 5.741A2 2 0 0 0 10 19h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z" />
-            <path d="m12 9 6 6" />
-            <path d="m18 9-6 6" />
+            <path d="m3.5 3.5 9 9" />
+            <path d="m12.5 3.5-9 9" />
           </svg>
         </button>
+      ) : shortcut ? (
+        <span className={styles.shortcut}>{shortcut}</span>
       ) : null}
-      {shortcut ? <span className={styles.shortcut}>{shortcut}</span> : null}
     </div>
   );
 }

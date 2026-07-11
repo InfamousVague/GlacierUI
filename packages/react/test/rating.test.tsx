@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { Size } from '@glacier/react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import axe from 'axe-core';
-import { Rating } from '../src/index.ts';
+import { HapticsProvider, Rating } from '../src/index.ts';
 
 const AXE_RULES = { region: { enabled: false }, 'page-has-heading-one': { enabled: false } };
 
@@ -61,5 +61,63 @@ describe('Rating', () => {
       </div>,
     );
     expect((await axe.run(document.body, { rules: AXE_RULES })).violations).toEqual([]);
+  });
+});
+
+describe('Rating haptics', () => {
+  // Render inside a HapticsProvider with a stub engine so the kit's fire calls
+  // are observable without a real motor. React derives mouseenter/mouseleave
+  // from mouseover/mouseout, so the scrub is driven with those.
+  function setup(props: Partial<Parameters<typeof Rating>[0]> = {}) {
+    const impl = vi.fn();
+    render(
+      <HapticsProvider enabled impl={impl}>
+        <Rating aria-label="Rate" defaultValue={2} {...props} />
+      </HapticsProvider>,
+    );
+    return { impl, group: screen.getByRole('radiogroup', { name: 'Rate' }) };
+  }
+  const star = (n: number) => screen.getByRole('radio', { name: String(n) }).closest('label')!;
+
+  it('ticks selection once per previewed star change while scrubbing', () => {
+    const { impl, group } = setup();
+    fireEvent.mouseOver(star(2)); // preview equals the committed value: silent
+    expect(impl).not.toHaveBeenCalled();
+    fireEvent.mouseOver(star(3));
+    expect(impl).toHaveBeenCalledTimes(1);
+    expect(impl).toHaveBeenLastCalledWith('selection');
+    fireEvent.mouseOver(star(3)); // same star again: no repeat tick
+    expect(impl).toHaveBeenCalledTimes(1);
+    fireEvent.mouseOver(star(5));
+    expect(impl).toHaveBeenCalledTimes(2);
+    expect(impl).toHaveBeenLastCalledWith('selection');
+    fireEvent.mouseOut(group); // preview falls back to the committed value: silent
+    expect(impl).toHaveBeenCalledTimes(2);
+  });
+
+  it('fires light on a pointer commit', () => {
+    const { impl, group } = setup();
+    fireEvent.pointerDown(group);
+    fireEvent.click(screen.getByRole('radio', { name: '4' }));
+    expect(impl).toHaveBeenCalledTimes(1);
+    expect(impl).toHaveBeenLastCalledWith('light');
+  });
+
+  it('ticks selection per keyboard arrow change', () => {
+    const { impl } = setup();
+    // jsdom does not rove native radio selection on arrows, so fire the keydown
+    // and then the change the browser would land on the next radio.
+    fireEvent.keyDown(screen.getByRole('radio', { name: '2' }), { key: 'ArrowRight' });
+    fireEvent.click(screen.getByRole('radio', { name: '3' }));
+    expect(impl).toHaveBeenCalledTimes(1);
+    expect(impl).toHaveBeenLastCalledWith('selection');
+  });
+
+  it('data-haptic="none" silences scrubs and commits', () => {
+    const { impl, group } = setup({ 'data-haptic': 'none' });
+    fireEvent.mouseOver(star(4));
+    fireEvent.pointerDown(group);
+    fireEvent.click(screen.getByRole('radio', { name: '5' }));
+    expect(impl).not.toHaveBeenCalled();
   });
 });

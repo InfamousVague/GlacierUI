@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@glacier/motion';
+import { Speed, Ease, transition, pressTap } from '@glacier/motion';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../../internal/cx.ts';
 import { useControlled } from '../../../internal/useControlled.ts';
@@ -62,8 +62,9 @@ export function Toggle({
       aria-pressed={isPressed}
       className={cx(styles.toggle, styles[size], iconOnly && styles.iconOnly, glass && styles.glass, className)}
       disabled={disabled}
-      whileTap={reduce || disabled ? undefined : { scale: 0.94 }}
+      whileTap={pressTap('compact', reduce || disabled)}
       transition={transition(Speed.Fast, Ease.Out)}
+      data-haptic="selection"
       onClick={(event) => {
         setPressed(!isPressed);
         onPressedChange?.(!isPressed);

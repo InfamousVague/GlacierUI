@@ -65,6 +65,11 @@ describe('FilterChip', () => {
     expect(chip).toHaveAttribute('aria-pressed', 'false');
   });
 
+  it('defaults to the selection haptic kind', () => {
+    render(<FilterChip>Open</FilterChip>);
+    expect(screen.getByRole('button', { name: 'Open' })).toHaveAttribute('data-haptic', 'selection');
+  });
+
   it('has no axe violations', async () => {
     render(
       <FilterChip defaultSelected count={7}>

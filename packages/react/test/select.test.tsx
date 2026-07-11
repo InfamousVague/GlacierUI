@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import axe from 'axe-core';
 import { Select } from '../src/index.ts';
@@ -90,5 +90,44 @@ describe('Select', () => {
     fireEvent.click(getTrigger());
     // the menu portals to document.body, so audit the whole document
     expect((await axe.run(document.body, { rules })).violations).toEqual([]);
+  });
+});
+
+describe('Select alignment', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  // jsdom has no layout, so the trigger rect is stubbed: left 100, right 200
+  function stubTriggerRect() {
+    vi.spyOn(getTrigger(), 'getBoundingClientRect').mockReturnValue({
+      left: 100, top: 10, width: 100, height: 20, right: 200, bottom: 30, x: 100, y: 10, toJSON: () => ({}),
+    } as DOMRect);
+  }
+
+  it('anchors the menu left edge to the trigger in LTR', () => {
+    render(<Select aria-label="Format" options={OPTIONS} />);
+    stubTriggerRect();
+    fireEvent.click(getTrigger());
+    const listbox = screen.getByRole('listbox');
+    expect(listbox.style.left).toBe('100px');
+    expect(listbox.style.right).toBe('');
+    expect(listbox.style.minWidth).toBe('100px'); // matches the trigger either way
+  });
+
+  it('anchors the menu right edge to the trigger in RTL and stamps dir', () => {
+    render(
+      <div dir="rtl">
+        <Select aria-label="Format" options={OPTIONS} />
+      </div>,
+    );
+    stubTriggerRect();
+    fireEvent.click(getTrigger());
+    const listbox = screen.getByRole('listbox');
+    // anchored via `right` so a menu wider than the trigger grows toward inline-end
+    expect(listbox.style.right).toBe('824px'); // innerWidth 1024 - trigger right 200
+    expect(listbox.style.left).toBe('');
+    expect(listbox.style.minWidth).toBe('100px');
+    expect(listbox).toHaveAttribute('dir', 'rtl'); // carried past the body portal
   });
 });

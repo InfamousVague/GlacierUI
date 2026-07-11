@@ -6,6 +6,16 @@
   overscroll-behavior-x: contain;
   border-bottom: var(--glacier-hairline) solid var(--glacier-border-subtle);
   font-family: var(--glacier-font-sans);
+  /* scrolling is invisible by default so the baseline hairline hugs the tabs;
+     showScrollbar opts back into the visible bar with its reserved band */
+  scrollbar-width: none;
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+.showScrollbar {
   scrollbar-width: thin;
   scrollbar-color: var(--glacier-border-strong) transparent;
 }
@@ -15,7 +25,7 @@
    that band, so hide it and repaint the baseline hairline at the tab baseline
    with a scroll-fixed background: it lines up with the active indicator, and the
    scrollbar sits directly under it. */
-.strip[data-overflowing] {
+.showScrollbar[data-overflowing] {
   padding-bottom: var(--glacier-space-2);
   border-bottom-color: transparent;
   background-image: linear-gradient(var(--glacier-border-subtle), var(--glacier-border-subtle));
@@ -24,20 +34,21 @@
   background-position: left 0 bottom var(--glacier-space-2);
 }
 
-.strip::-webkit-scrollbar {
+.showScrollbar::-webkit-scrollbar {
+  display: block;
   height: var(--glacier-space-2);
 }
 
-.strip::-webkit-scrollbar-track {
+.showScrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.strip::-webkit-scrollbar-thumb {
+.showScrollbar::-webkit-scrollbar-thumb {
   background: var(--glacier-border);
   border-radius: var(--glacier-radius-full);
 }
 
-.strip::-webkit-scrollbar-thumb:hover {
+.showScrollbar::-webkit-scrollbar-thumb:hover {
   background: var(--glacier-border-strong);
 }
 
@@ -47,7 +58,8 @@
   flex: none;
   align-items: center;
   gap: var(--glacier-space-2);
-  padding: var(--glacier-space-2) var(--glacier-space-2) var(--glacier-space-2) var(--glacier-space-3);
+  padding-block: var(--glacier-space-2);
+  padding-inline: var(--glacier-space-3) var(--glacier-space-2);
   border: 0;
   border-radius: var(--glacier-radius-md) var(--glacier-radius-md) 0 0;
   background: transparent;
@@ -125,8 +137,7 @@
 /* the springing underline; sits on the strip's hairline */
 .indicator {
   position: absolute;
-  left: var(--glacier-space-2);
-  right: var(--glacier-space-2);
+  inset-inline: var(--glacier-space-2);
   bottom: calc(-1 * var(--glacier-hairline));
   height: 2px;
   border-radius: var(--glacier-radius-full);

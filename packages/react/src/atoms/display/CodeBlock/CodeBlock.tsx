@@ -103,10 +103,14 @@ export function CodeBlock({
       )}
       {children != null ? (
         // The app supplies the highlighted markup; .pre lays it out, the inner
-        // highlighter <pre> is reset to inherit spacing and background.
-        <div className={preClass}>{children}</div>
+        // highlighter <pre> is reset to inherit spacing and background. Source
+        // code is inherently left-to-right, so the sample is pinned dir=ltr and
+        // never bidi-reorders inside an RTL page.
+        <div className={preClass} dir="ltr">
+          {children}
+        </div>
       ) : (
-        <pre className={preClass}>
+        <pre className={preClass} dir="ltr">
           <code>
             {lineNumbers
               ? code.split('\n').map((line, i, all) => (

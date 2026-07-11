@@ -111,6 +111,18 @@
   display: block;
 }
 
+/* compact tile (title only): center the title and ride the check inline with
+   it, instead of pinning the check to the top-right corner. */
+.compact {
+  justify-content: center;
+}
+
+.compact .indicator {
+  top: 50%;
+  /* center without a transform, which is reserved for the check's scale anim */
+  margin-block-start: -0.625rem;
+}
+
 /* uncontrolled: the check is driven by the hidden input's state */
 .indicatorCss {
   transform: scale(0);

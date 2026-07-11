@@ -11,22 +11,28 @@
   height: 100vh;
   overflow-y: auto;
   background: var(--glacier-surface);
-  border-right: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-inline-end: var(--glacier-hairline) solid var(--glacier-glass-border);
 }
 
 /* the drag handle that resizes the sidebar: a fixed, full-height hit strip on
-   the sidebar's right edge with an always-visible grip centred in the viewport,
-   so it reads as draggable; the grip turns to the accent on hover or focus */
+   the sidebar's inline-end edge with an always-visible grip centred in the
+   viewport, so it reads as draggable; the grip turns to the accent on hover or
+   focus. The centring translate is physical, so it flips with an ancestor
+   [dir='rtl'] rule below. */
 .resizer {
   position: fixed;
   top: 0;
   bottom: 0;
-  left: var(--shell-sidebar);
+  inset-inline-start: var(--shell-sidebar);
   width: var(--glacier-space-3);
   transform: translateX(-50%);
   z-index: 25;
   cursor: col-resize;
   touch-action: none;
+}
+
+[dir='rtl'] .resizer {
+  transform: translateX(50%);
 }
 
 .resizer::after {
@@ -35,7 +41,7 @@
   top: 50%;
   left: 50%;
   width: 4px;
-  height: var(--glacier-space-7);
+  height: var(--glacier-space-6);
   transform: translate(-50%, -50%);
   border-radius: var(--glacier-radius-full);
   background: var(--glacier-border-strong);
@@ -67,7 +73,9 @@
   display: flex;
   align-items: center;
   gap: var(--glacier-space-3);
-  padding: var(--glacier-space-2);
+  /* block padding stays tight; inline padding is roomier so the leading
+     title never hugs the bar's edge, especially on the floating card */
+  padding: var(--glacier-space-2) var(--glacier-space-4);
   border-bottom: var(--glacier-hairline) solid var(--glacier-glass-border);
   background: var(--glacier-glass-thin);
   backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
@@ -104,10 +112,12 @@
     display: none;
   }
 
+  /* the drawer parks at the inline-start edge; the off-canvas translate is
+     physical, so it flips under [dir='rtl'] */
   .sidebar {
     position: fixed;
     inset-block: 0;
-    left: 0;
+    inset-inline-start: 0;
     width: var(--shell-sidebar);
     max-width: 85vw;
     z-index: 40;
@@ -115,9 +125,17 @@
     transition: transform var(--glacier-duration-normal) var(--glacier-ease-out);
   }
 
+  [dir='rtl'] .sidebar {
+    transform: translateX(100%);
+  }
+
   .sidebar[data-open] {
     transform: translateX(0);
     box-shadow: var(--glacier-shadow-5);
+  }
+
+  [dir='rtl'] .sidebar[data-open] {
+    transform: translateX(0);
   }
 
   .backdrop {
@@ -166,17 +184,18 @@
   }
 
   /* in the floating layout the sidebar card sits a gutter in from the edge, so
-     move the divider out to its right edge */
+     move the divider out to its inline-end edge */
   .shell[data-floating] .resizer {
-    left: calc(var(--shell-sidebar) + var(--glacier-space-4));
+    inset-inline-start: calc(var(--shell-sidebar) + var(--glacier-space-4));
   }
 
   /* the top bar floats too, so the whole chrome reads as detached panels: a
-     rounded toolbar with the same gutter, sitting to the right of the sidebar
-     card and clear of the top and right edges */
+     rounded toolbar with the same gutter, sitting inline-after the sidebar
+     card and clear of the top and outer edges */
   .shell[data-floating] .header {
     top: var(--glacier-space-4);
-    margin: var(--glacier-space-4) var(--glacier-space-4) 0 0;
+    margin-block: var(--glacier-space-4) 0;
+    margin-inline: 0 var(--glacier-space-4);
     border: var(--glacier-hairline) solid var(--glacier-glass-border);
     border-radius: var(--glacier-radius-xl);
     box-shadow: var(--glacier-shadow-3);

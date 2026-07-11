@@ -60,12 +60,19 @@
   pointer-events: auto;
 }
 
+/* prev sits at the inline-start edge (where "back toward the start" lives in
+   both directions); next at the inline-end edge */
 .prev {
-  left: 0;
+  inset-inline-start: 0;
 }
 
 .next {
-  right: 0;
+  inset-inline-end: 0;
+}
+
+/* chevron glyphs point along the reading direction, so they mirror in RTL */
+[dir='rtl'] .chevron {
+  transform: scaleX(-1);
 }
 
 /* controls fade out entirely when the strip fits with nothing to scroll */

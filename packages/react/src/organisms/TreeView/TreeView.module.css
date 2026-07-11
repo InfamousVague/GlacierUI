@@ -1,0 +1,130 @@
+.tree {
+  margin: 0;
+  padding: var(--glacier-space-1);
+  list-style: none;
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-sm);
+  color: var(--glacier-text-muted);
+}
+
+.glass {
+  background: var(--glacier-glass-regular);
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-radius: var(--glacier-radius-lg);
+  backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
+  padding: var(--glacier-space-2);
+}
+
+.item {
+  list-style: none;
+  outline: none;
+}
+
+/* focus paints the row, not the whole subtree the li owns */
+.item:focus-visible > .row {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: -2px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  padding-block: var(--glacier-space-1);
+  padding-inline-end: var(--glacier-space-3);
+  /* indent grows with the row's depth, carried in on a custom property */
+  padding-inline-start: calc(var(--glacier-space-2) + (var(--tree-depth, 1) - 1) * var(--glacier-space-4));
+  border-radius: var(--glacier-radius-md);
+  line-height: 1.4;
+  cursor: pointer;
+  transition:
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.row:hover:not([data-disabled]):not([data-selected]) {
+  background: var(--glacier-hover);
+  color: var(--glacier-text);
+}
+
+/* the selected row wears the accent soft tint, like an active SidebarItem */
+.row[data-selected] {
+  background: var(--glacier-accent-soft);
+  color: var(--glacier-accent-text);
+  font-weight: var(--glacier-font-weight-medium);
+}
+
+.row[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chevron {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  color: var(--glacier-text-subtle);
+  transition: transform var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.row[data-selected] .chevron {
+  color: inherit;
+}
+
+.chevron[data-expanded] {
+  transform: rotate(90deg);
+}
+
+/* the collapsed chevron points toward the expand direction, so it mirrors in
+   RTL; expanded it points down in both directions (rotate first, then mirror) */
+[dir='rtl'] .chevron {
+  transform: scaleX(-1);
+}
+
+[dir='rtl'] .chevron[data-expanded] {
+  transform: scaleX(-1) rotate(90deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row,
+  .chevron {
+    transition: none;
+  }
+}
+
+.icon {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trailing {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  color: var(--glacier-text-subtle);
+}
+
+.group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* clipped so the branch can animate its height open and closed */
+  overflow: hidden;
+}

@@ -3,6 +3,7 @@ import { SkeletonVariant } from '@glacier/spec';
 import { Spring, springTransition, Speed, Ease, transition } from '@glacier/motion';
 import { useId, useRef, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
+import { resolveDirection } from '../../internal/direction.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
 import styles from './Tabs.module.css';
@@ -94,14 +95,16 @@ export function Tabs({
   function onListKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (enabled.length === 0) return;
     const pos = enabled.findIndex((tab) => tab.value === selected);
+    // APG: horizontal arrows follow reading direction, so they invert in RTL.
+    const forward = resolveDirection(event.currentTarget) === 'rtl' ? -1 : 1;
     switch (event.key) {
       case 'ArrowRight':
         event.preventDefault();
-        select(enabled[(pos + 1) % enabled.length]!, true);
+        select(enabled[(pos + forward + enabled.length) % enabled.length]!, true);
         break;
       case 'ArrowLeft':
         event.preventDefault();
-        select(enabled[(pos - 1 + enabled.length) % enabled.length]!, true);
+        select(enabled[(pos - forward + enabled.length) % enabled.length]!, true);
         break;
       case 'Home':
         event.preventDefault();
@@ -139,6 +142,9 @@ export function Tabs({
               tabIndex={isSelected ? 0 : -1}
               disabled={tab.disabled}
               className={styles.tab}
+              // rest spreads on the root div, so the tab's haptic kind sits
+              // directly on the button and is not per-caller overridable
+              data-haptic="selection"
               onClick={() => select(tab, false)}
             >
               {tab.label}

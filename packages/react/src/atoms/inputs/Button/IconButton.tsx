@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@glacier/motion';
+import { Speed, Ease, transition, pressTap } from '@glacier/motion';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../../internal/cx.ts';
 import { Skeleton } from '../../feedback/Skeleton/Skeleton.tsx';
@@ -41,7 +41,7 @@ export function IconButton({
       type="button"
       className={cx(styles.button, styles.icon, styles[variant], styles[size], className)}
       disabled={disabled}
-      whileTap={reduce || disabled ? undefined : { scale: 0.94 }}
+      whileTap={pressTap('compact', reduce || disabled)}
       transition={transition(Speed.Fast, Ease.Out)}
       {...rest}
     >

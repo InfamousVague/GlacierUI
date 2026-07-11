@@ -1,0 +1,343 @@
+/* ---- Calendar --------------------------------------------------------- */
+
+/* The kit wrapper around react-day-picker. The library provides the grid
+   math, keyboard navigation, and ARIA; every visible surface is restyled here
+   through its classNames prop, so none of its stylesheet is imported. */
+.calendar {
+  display: inline-block;
+  font-family: var(--glacier-font-sans);
+  color: var(--glacier-text);
+}
+
+/* Standalone inline calendars read as a card; inside the DatePicker panel the
+   glass surface already frames the grid, so the bare variant strips it. */
+.calendarCard {
+  padding: var(--glacier-space-4);
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface);
+}
+
+.calendarDisabled {
+  opacity: 0.5;
+}
+
+.calendarRoot {
+  position: relative;
+}
+
+.months {
+  display: flex;
+  gap: var(--glacier-space-6);
+}
+
+/* nav floats over the caption row: previous at inline-start, next at
+   inline-end, with the month label centered between them */
+.nav {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.navButton {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--glacier-space-8);
+  height: var(--glacier-space-8);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: var(--glacier-control-radius);
+  color: var(--glacier-text-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.navButton:hover:not([aria-disabled='true']) {
+  background: var(--glacier-hover);
+  color: var(--glacier-text);
+}
+
+.navButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--glacier-accent-soft);
+}
+
+.navButton[aria-disabled='true'] {
+  color: var(--glacier-text-disabled);
+  cursor: default;
+}
+
+/* the library's chevron glyph paints with fill */
+.chevron {
+  display: block;
+  width: var(--glacier-size-md);
+  height: var(--glacier-size-md);
+  fill: currentColor;
+}
+
+.caption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--glacier-space-8);
+  margin-block-end: var(--glacier-space-2);
+}
+
+.captionLabel {
+  font-size: var(--glacier-font-size-sm);
+  font-weight: var(--glacier-font-weight-semibold);
+}
+
+.monthGrid {
+  border-collapse: collapse;
+}
+
+/* structural hooks mapped so no rdp-* class leaks through; the table layout
+   already provides their geometry */
+.month,
+.weekdays,
+.weeks,
+.week,
+.dayFocused {
+  box-sizing: border-box;
+}
+
+.dayDisabled {
+  cursor: not-allowed;
+}
+
+.weekday {
+  padding-block: var(--glacier-space-1);
+  color: var(--glacier-text-subtle);
+  font-size: var(--glacier-font-size-xs);
+  font-weight: var(--glacier-font-weight-medium);
+}
+
+.day {
+  padding: 0;
+  text-align: center;
+}
+
+.dayButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--glacier-space-8);
+  height: var(--glacier-space-8);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: var(--glacier-control-radius);
+  color: inherit;
+  font-family: inherit;
+  font-size: var(--glacier-font-size-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.dayButton:hover:not(:disabled) {
+  background: var(--glacier-hover);
+}
+
+.dayButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--glacier-accent-soft);
+}
+
+.dayButton:disabled {
+  color: var(--glacier-text-disabled);
+  background: transparent;
+  cursor: not-allowed;
+}
+
+.dayToday .dayButton {
+  color: var(--glacier-accent-text);
+  font-weight: var(--glacier-font-weight-semibold);
+}
+
+.dayOutside .dayButton {
+  color: var(--glacier-text-subtle);
+}
+
+.dayHidden {
+  visibility: hidden;
+}
+
+.daySelected .dayButton {
+  background: var(--glacier-accent-solid);
+  color: var(--glacier-accent-contrast);
+  font-weight: var(--glacier-font-weight-medium);
+}
+
+.daySelected .dayButton:hover:not(:disabled) {
+  background: var(--glacier-accent-solid-hover);
+}
+
+/* the middle of a range is a soft band; endpoints keep the solid disc.
+   Range-middle days also carry the selected class, so this must win. */
+.rangeMiddle {
+  background: var(--glacier-accent-soft);
+}
+
+.rangeMiddle .dayButton,
+.rangeMiddle .dayButton:hover:not(:disabled) {
+  background: transparent;
+  color: var(--glacier-accent-text);
+  font-weight: var(--glacier-font-weight-regular);
+  border-radius: 0;
+}
+
+.rangeStart,
+.rangeEnd {
+  background: var(--glacier-accent-soft);
+}
+
+.rangeStart {
+  border-start-start-radius: var(--glacier-control-radius);
+  border-end-start-radius: var(--glacier-control-radius);
+}
+
+.rangeEnd {
+  border-start-end-radius: var(--glacier-control-radius);
+  border-end-end-radius: var(--glacier-control-radius);
+}
+
+/* a one-day range is both ends at once: round the whole cell */
+.rangeStart.rangeEnd {
+  border-radius: var(--glacier-control-radius);
+}
+
+/* ---- DatePicker -------------------------------------------------------- */
+
+.root {
+  position: relative;
+  display: inline-block;
+  font-family: var(--glacier-font-sans);
+}
+
+.fullWidth {
+  display: block;
+  width: 100%;
+}
+
+.fullWidth .trigger {
+  width: 100%;
+}
+
+/* trigger: same metrics as Input and Select so mixed form rows line up */
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  min-width: 11rem;
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface);
+  color: var(--glacier-text);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    box-shadow var(--glacier-duration-fast) var(--glacier-ease-out),
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.trigger:hover:not(:disabled) {
+  border-color: var(--glacier-border-strong);
+}
+
+.trigger:focus-visible,
+.trigger[aria-expanded='true'] {
+  outline: none;
+  border-color: var(--glacier-focus-ring);
+  box-shadow: 0 0 0 3px var(--glacier-accent-soft);
+}
+
+.trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--glacier-surface-sunken);
+}
+
+.trigger[aria-invalid='true'] {
+  border-color: var(--glacier-danger-border);
+}
+
+.glass {
+  background: var(--glacier-glass-regular);
+  border-color: var(--glacier-glass-border);
+  color: var(--glacier-text);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
+}
+
+.icon {
+  flex: none;
+  color: var(--glacier-text-subtle);
+}
+
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  /* the trigger sets line-height: 1 to keep the icon tight; give the value
+     room so overflow: hidden does not clip glyph tops or descenders */
+  line-height: var(--glacier-leading-sm);
+  padding-block: 1px;
+}
+
+.trigger[data-placeholder] .value {
+  color: var(--glacier-text-subtle);
+}
+
+/* sizes match Input */
+.sm {
+  height: var(--glacier-control-height-sm);
+  font-size: var(--glacier-font-size-xs);
+}
+.md {
+  height: var(--glacier-control-height-md);
+  font-size: var(--glacier-font-size-sm);
+}
+.lg {
+  height: var(--glacier-control-height-lg);
+  font-size: var(--glacier-font-size-md);
+}
+.trigger.sm {
+  padding-inline: var(--glacier-space-3);
+}
+.trigger.md {
+  padding-inline: var(--glacier-space-4);
+}
+.trigger.lg {
+  padding-inline: var(--glacier-space-5);
+}
+
+/* anchored panel: glass surface; position and origin are set inline by the
+   shared anchoring engine since the panel portals to document.body */
+.panel {
+  padding: var(--glacier-space-3);
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-glass-thick);
+  backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
+  box-shadow:
+    inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight),
+    var(--glacier-shadow-4);
+  font-family: var(--glacier-font-sans);
+}

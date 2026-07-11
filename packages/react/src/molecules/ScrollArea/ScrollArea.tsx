@@ -22,6 +22,8 @@ export interface ScrollAreaProps extends Omit<ComponentProps<'div'>, 'children'>
   maxHeight?: number | string;
   /** Scroll axis. Vertical (the default) shows top/bottom fades; horizontal shows left/right. */
   orientation?: ScrollAreaOrientation;
+  /** Hides the scrollbar entirely; wheel, drag, keyboard, and touch scrolling all still work. */
+  hideScrollbar?: boolean;
   /** The overflowing content. */
   children?: ReactNode;
 }
@@ -39,6 +41,7 @@ type Edges = { start: boolean; end: boolean };
 export function ScrollArea({
   maxHeight,
   orientation = 'vertical',
+  hideScrollbar = false,
   className,
   style,
   children,
@@ -52,8 +55,10 @@ export function ScrollArea({
     if (!el) return;
     if (orientation === 'horizontal') {
       const max = el.scrollWidth - el.clientWidth;
-      // clamp against sub-pixel rounding so the end fade fully clears
-      const pos = Math.min(Math.max(el.scrollLeft, 0), max);
+      // scrollLeft runs 0..-max in RTL, so its absolute value is the distance
+      // from the inline start either way; clamp against sub-pixel rounding so
+      // the end fade fully clears
+      const pos = Math.min(Math.abs(el.scrollLeft), max);
       setEdges({ start: pos > 1, end: max - pos > 1 });
     } else {
       const max = el.scrollHeight - el.clientHeight;
@@ -87,16 +92,24 @@ export function ScrollArea({
 
   return (
     <div
-      className={cx(styles.root, orientation === 'horizontal' ? styles.horizontal : styles.vertical, className)}
+      className={cx(
+        styles.root,
+        orientation === 'horizontal' ? styles.horizontal : styles.vertical,
+        hideScrollbar && styles.hideScrollbar,
+        className,
+      )}
       data-orientation={orientation}
       data-fade-start={edges.start || undefined}
       data-fade-end={edges.end || undefined}
-      style={{ ...sizeStyle, ...style }}
+      style={style}
       {...rest}
     >
+      {/* the cap belongs on the viewport: it is the overflow container, so
+          constraining anything else leaves it content-sized and scroll-less */}
       <div
         ref={viewportRef}
         className={styles.viewport}
+        style={sizeStyle}
         tabIndex={0}
         role="group"
         onScroll={measure}

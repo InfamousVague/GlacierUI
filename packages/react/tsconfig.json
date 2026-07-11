@@ -1,4 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
-  "include": ["src", "test"]
+  "compilerOptions": {
+    "paths": {
+      "@glacier/react": ["./src/index.ts"]
+    }
+  },
+  "include": ["src", "test", "vite.config.ts"]
 }

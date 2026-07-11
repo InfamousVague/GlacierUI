@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { Speed, Ease, transition } from '@glacier/motion';
+import { Speed, Ease, transition, pressTap } from '@glacier/motion';
 import { cardElevations, cardVariants, SkeletonVariant } from '@glacier/spec';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../../internal/cx.ts';
@@ -51,7 +51,7 @@ export function Card({
       className={cx(styles.card, variant === 'glass' && styles.glass, interactive && styles.interactive, className)}
       data-elevation={elevation}
       whileHover={interactive && !reduce ? { y: -2 } : undefined}
-      whileTap={interactive && !reduce ? { scale: 0.99 } : undefined}
+      whileTap={pressTap('surface', reduce || !interactive)}
       transition={transition(Speed.Fast, Ease.Out)}
       {...rest}
     >

@@ -33,7 +33,7 @@ export function Radio({
   }
   return (
     <label className={cx(styles.control, disabled && styles.disabled, className)}>
-      <input type="radio" className={styles.nativeInput} disabled={disabled} {...rest} />
+      <input type="radio" className={styles.nativeInput} disabled={disabled} data-haptic="selection" {...rest} />
       <RadioIndicator checked={rest.checked ?? undefined} glass={glass} />
       {label && <span>{label}</span>}
     </label>

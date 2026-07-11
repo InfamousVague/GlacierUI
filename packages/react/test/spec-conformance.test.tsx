@@ -55,6 +55,8 @@ import {
   SegmentedControl,
   Tabs,
   Modal,
+  Drawer,
+  AlertDialog,
   Popover,
   Menu,
   MenuItem,
@@ -63,14 +65,29 @@ import {
   FilterChip,
   Image,
   Rating,
+  OtpField,
   ScrollArea,
   Carousel,
+  Combobox,
+  MultiSelect,
+  Calendar,
+  DatePicker,
+  FileUpload,
+  Fieldset,
+  FormSection,
+  List,
+  ListItem,
   Heatmap,
   Spotlight,
   FloatingPanel,
   TabbedPanel,
   TabbedModal,
   TabStrip,
+  TreeView,
+  MenuSub,
+  TitleBar,
+  NavBar,
+  NavBarItem,
   ResizableSplitPane,
   AppShell,
   Sidebar,
@@ -80,7 +97,9 @@ import {
   Pagination,
   Accordion,
   Table,
+  DataGrid,
 } from '../src/index.ts';
+import { Star } from '@glacier/icons';
 import { cloneElement, type ReactElement } from 'react';
 
 /**
@@ -137,6 +156,7 @@ const RENDER: Record<string, Renderer> = {
   ),
   input: (o) => <Input size={o.size as never} />,
   kbd: () => <Kbd>K</Kbd>,
+  icon: () => <Star size={16} />,
   label: () => <Label>Email</Label>,
   link: () => <Link href="#">Docs</Link>,
   meter: (o) => <Meter tone={o.tone as never} size={o.size as never} value={50} />,
@@ -157,7 +177,7 @@ const RENDER: Record<string, Renderer> = {
   skeleton: (o) => <Skeleton variant={o.variant as never} />,
   slider: () => <Slider value={50} />,
   spinner: (o) => <Spinner tone={o.tone as never} size={o.size as never} />,
-  steps: (o) => <Steps tone={o.tone as never} size={o.size as never} count={3} active={1} />,
+  steps: (o) => <Steps variant={o.variant as never} tone={o.tone as never} size={o.size as never} numbered count={3} active={1} />,
   'empty-state': () => <EmptyState title="Nothing here" description="No items yet." />,
   'status-dot': (o) => <StatusDot tone={o.tone as never} size={o.size as never} />,
   surface: () => <Surface>Body</Surface>,
@@ -170,6 +190,13 @@ const RENDER: Record<string, Renderer> = {
   textarea: (o) => <Textarea size={o.size as never} />,
   toggle: (o) => <Toggle size={o.size as never}>Bold</Toggle>,
   toolbar: () => <Toolbar end={<span>Actions</span>}>Title</Toolbar>,
+  'title-bar': () => <TitleBar title="Documents" start={<span>Back</span>} end={<span>Share</span>} />,
+  'nav-bar': (o) => (
+    <NavBar orientation={o.variant as never} aria-label="Primary">
+      <NavBarItem icon={<span />} label="Library" active />
+      <NavBarItem icon={<span />} label="Discover" badge={3} />
+    </NavBar>
+  ),
   // molecules, organisms, and the sidebar structure: required props baked in
   field: () => (
     <Field label="Email">
@@ -192,10 +219,15 @@ const RENDER: Record<string, Renderer> = {
       Body
     </Modal>
   ),
+  drawer: (o) => <Drawer open={false} onClose={() => {}} side={o.variant as never} size={o.size as never} title="Drawer">Body</Drawer>,
+  'alert-dialog': (o) => <AlertDialog open={false} onClose={() => {}} tone={o.tone as never} title="Continue?" actionLabel="Continue" onAction={() => {}} />,
   popover: () => <Popover trigger={<button type="button">Open</button>}>Content</Popover>,
   menu: () => (
     <Menu trigger={<button type="button">Open</button>}>
       <MenuItem>Item</MenuItem>
+      <MenuSub label="More">
+        <MenuItem>Nested</MenuItem>
+      </MenuSub>
     </Menu>
   ),
   'app-shell': () => <AppShell sidebar={<div>Nav</div>}>Body</AppShell>,
@@ -214,6 +246,7 @@ const RENDER: Record<string, Renderer> = {
   ),
   'filter-chip': () => <FilterChip count={3}>Open</FilterChip>,
   image: () => <Image src="/cover.jpg" alt="Cover" aspectRatio="2 / 3" />,
+  'otp-field': (o) => <OtpField size={o.size as never} />,
   rating: (o) => <Rating size={o.size as never} value={3} aria-label="Rating" />,
   'scroll-area': () => <ScrollArea maxHeight={100}>Scrollable content</ScrollArea>,
   carousel: () => (
@@ -221,6 +254,23 @@ const RENDER: Record<string, Renderer> = {
       <Card>A</Card>
     </Carousel>
   ),
+  combobox: (o) => <Combobox size={o.size as never} aria-label="Fruit" options={[{ value: 'apple', label: 'Apple' }]} />,
+  'multi-select': (o) => <MultiSelect size={o.size as never} aria-label="Fruit" options={[{ value: 'apple', label: 'Apple' }]} />,
+  calendar: () => <Calendar aria-label="Pick a day" defaultValue={new Date(2026, 5, 15)} />,
+  'date-picker': (o) => <DatePicker size={o.size as never} aria-label="Due date" />,
+  'file-upload': () => <FileUpload aria-label="Attachments" />,
+  fieldset: () => (
+    <Fieldset legend="Shipping">
+      <input aria-label="City" />
+    </Fieldset>
+  ),
+  'form-section': () => (
+    <FormSection title="Profile">
+      <input aria-label="Name" />
+    </FormSection>
+  ),
+  list: (o) => <List size={o.size as never}><ListItem title="Item" /></List>,
+  'list-item': () => <ListItem title="Item" />,
   heatmap: () => <Heatmap aria-label="Activity" data={[[0, 3, 6, 9]]} legend />,
   spotlight: () => (
     <Spotlight open={false} targetRef={{ current: null } as never} onClose={() => {}} title="Tip" description="Body" />
@@ -257,6 +307,16 @@ const RENDER: Record<string, Renderer> = {
       onClose={() => {}}
     />
   ),
+  'tree-view': () => (
+    <TreeView
+      aria-label="Files"
+      items={[
+        { id: 'src', label: 'src', children: [{ id: 'main', label: 'main.tsx' }] },
+        { id: 'readme', label: 'README.md' },
+      ]}
+      defaultExpandedIds={['src']}
+    />
+  ),
   'resizable-split-pane': () => (
     <ResizableSplitPane aria-label="Resize">
       <div>Start</div>
@@ -282,6 +342,20 @@ const RENDER: Record<string, Renderer> = {
       data={[{ name: 'Ada', status: 'Active' }]}
     />
   ),
+  'data-grid': () => (
+    <DataGrid
+      aria-label="People"
+      selectable
+      columns={[
+        { key: 'name', header: 'Name', sortable: true },
+        { key: 'status', header: 'Status' },
+      ]}
+      data={[
+        { id: 1, name: 'Ada', status: 'Active' },
+        { id: 2, name: 'Linus', status: 'Away' },
+      ]}
+    />
+  ),
 };
 
 describe('React renders every spec variant, tone, and size', () => {
@@ -305,6 +379,8 @@ describe('React renders every spec variant, tone, and size', () => {
 // listbox, menu, tooltip) instead and stay excluded from the passthrough sweep.
 const NO_SYNC_ROOT = new Set([
   'modal',
+  'drawer',
+  'alert-dialog',
   'spotlight',
   'floating-panel',
   'tabbed-modal',

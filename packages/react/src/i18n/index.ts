@@ -1,6 +1,8 @@
 export {
   locales,
   DEFAULT_LOCALE,
+  rtlLocales,
+  direction,
   defineMessages,
   format,
   type Locale,

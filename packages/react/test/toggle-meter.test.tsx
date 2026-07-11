@@ -30,6 +30,11 @@ describe('Toggle', () => {
     expect(toggle).toHaveAttribute('aria-pressed', 'true');
   });
 
+  it('defaults to the selection haptic kind', () => {
+    render(<Toggle aria-label="Underline" />);
+    expect(screen.getByRole('button', { name: 'Underline' })).toHaveAttribute('data-haptic', 'selection');
+  });
+
   it('still calls a consumer onClick', () => {
     let clicks = 0;
     render(<Toggle aria-label="Pin" onClick={() => clicks++} />);

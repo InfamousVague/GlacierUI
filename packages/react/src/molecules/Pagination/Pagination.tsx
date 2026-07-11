@@ -1,5 +1,7 @@
 import { type ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
+import { useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import styles from './Pagination.module.css';
 
 export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'children'> {
@@ -45,6 +47,7 @@ function buildPageItems(page: number, totalPages: number, siblingCount: number, 
 }
 
 export function Pagination({ page, total, pageSize = 10, onPageChange, siblingCount = 1, boundaryCount = 1, className, ...rest }: PaginationProps) {
+  const t = useT();
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const currentPage = clampPage(page, totalPages);
   const items = buildPageItems(currentPage, totalPages, siblingCount, boundaryCount);
@@ -52,7 +55,7 @@ export function Pagination({ page, total, pageSize = 10, onPageChange, siblingCo
   return (
     <nav aria-label="Pagination" className={cx(styles.root, className)} {...rest}>
       <button type="button" className={styles.button} disabled={currentPage <= 1} onClick={() => onPageChange(currentPage - 1)}>
-        Previous
+        {t(kitMessages.previous)}
       </button>
       <div className={styles.pages}>
         {items.map((item, index) => {
@@ -78,7 +81,7 @@ export function Pagination({ page, total, pageSize = 10, onPageChange, siblingCo
         })}
       </div>
       <button type="button" className={styles.button} disabled={currentPage >= totalPages} onClick={() => onPageChange(currentPage + 1)}>
-        Next
+        {t(kitMessages.next)}
       </button>
     </nav>
   );

@@ -99,6 +99,9 @@ export function SegmentedControl({
               value={option.value}
               checked={isSelected}
               disabled={isDisabled}
+              // rest spreads on the wrapper div, so the segment's haptic kind
+              // sits directly on the control and is not per-caller overridable
+              data-haptic="selection"
               onChange={() => {
                 setSelected(option.value);
                 onValueChange?.(option.value);

@@ -1,0 +1,143 @@
+.root {
+  position: relative;
+  display: inline-flex;
+}
+
+/* One-time codes are digit strings that read left to right in every locale,
+   so the cell row is pinned ltr (the dir attribute lives on the row in the
+   markup) and the whole field never mirrors under RTL pages. */
+.cells {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-md);
+  background: var(--glacier-surface);
+  color: var(--glacier-text);
+  font-family: var(--glacier-font-mono);
+  user-select: none;
+  transition:
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    box-shadow var(--glacier-duration-fast) var(--glacier-ease-out),
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+/* the active cell carries the focus ring while the real input has focus */
+.cell[data-active] {
+  border-color: var(--glacier-focus-ring);
+  box-shadow: 0 0 0 3px var(--glacier-accent-soft);
+}
+
+.root:hover:not([data-disabled]) .cell:not([data-active]) {
+  border-color: var(--glacier-border-strong);
+}
+
+/* a short rounded dash between digit groups */
+.separator {
+  flex: none;
+  width: var(--glacier-space-2);
+  height: 2px;
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-border-strong);
+}
+
+/* the caret blinks in the next empty cell while the field has focus */
+.caret {
+  width: 2px;
+  height: 1.1em;
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-text);
+  animation: otp-caret-blink 1.1s steps(2, start) infinite;
+}
+
+@keyframes otp-caret-blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret {
+    animation: none;
+  }
+}
+
+/* The real input: stretched invisibly across the cells so clicks, typing,
+   paste, and platform one-time-code autofill all land on a native text box.
+   Its own text and caret are transparent; the cells are the presentation. */
+.input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  opacity: 0;
+  background: transparent;
+  color: transparent;
+  caret-color: transparent;
+  font: inherit;
+  cursor: text;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+.root[data-disabled] .cell {
+  opacity: 0.5;
+  background: var(--glacier-surface-sunken);
+}
+
+/* invalid state mirrors the Input atom's aria-invalid treatment */
+.root[data-error] .cell {
+  border-color: var(--glacier-danger-border);
+}
+
+.root[data-error] .cell[data-active] {
+  border-color: var(--glacier-danger-solid);
+  box-shadow: 0 0 0 3px var(--glacier-danger-soft);
+}
+
+/* sizes: square-ish cells on the control heights */
+.sm .cell {
+  width: 2rem;
+  height: var(--glacier-control-height-sm);
+  font-size: var(--glacier-font-size-sm);
+}
+
+.md .cell {
+  width: 2.5rem;
+  height: var(--glacier-control-height-md);
+  font-size: var(--glacier-font-size-md);
+}
+
+.lg .cell {
+  width: 3rem;
+  height: var(--glacier-control-height-lg);
+  font-size: var(--glacier-font-size-lg);
+}
+
+/* frosted glass material on the cells */
+.glass .cell {
+  background: var(--glacier-glass-regular);
+  border-color: var(--glacier-glass-border);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
+}
+
+.glass .cell[data-active] {
+  border-color: var(--glacier-focus-ring);
+  box-shadow:
+    inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight),
+    0 0 0 3px var(--glacier-accent-soft);
+}

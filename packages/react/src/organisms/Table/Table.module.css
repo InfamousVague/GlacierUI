@@ -1,6 +1,6 @@
 .wrap {
     overflow-x: auto;
-    border: 1px solid var(--glacier-border);
+    border: var(--glacier-hairline) solid var(--glacier-border);
     border-radius: var(--glacier-radius-md);
     background: var(--glacier-surface);
 }
@@ -17,19 +17,19 @@
     padding: var(--glacier-space-2) var(--glacier-space-4);
     color: var(--glacier-text-subtle);
     font-size: var(--glacier-font-size-sm);
-    text-align: left;
+    text-align: start;
 }
 
 .headerCell {
-    text-align: left;
+    text-align: start;
     padding: var(--glacier-space-3) var(--glacier-space-4);
-    border-bottom: 1px solid var(--glacier-border);
+    border-bottom: var(--glacier-hairline) solid var(--glacier-border);
     font-weight: 600;
 }
 
 .cell {
     padding: var(--glacier-space-3) var(--glacier-space-4);
-    border-bottom: 1px solid var(--glacier-border);
+    border-bottom: var(--glacier-hairline) solid var(--glacier-border);
 }
 
 .emptyCell {
@@ -39,7 +39,7 @@
 }
 
 .left {
-    text-align: left;
+    text-align: start;
 }
 
 .center {
@@ -47,5 +47,5 @@
 }
 
 .right {
-    text-align: right;
+    text-align: end;
 }

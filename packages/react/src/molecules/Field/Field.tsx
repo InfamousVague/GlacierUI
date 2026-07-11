@@ -58,7 +58,10 @@ export function Field({ label, hint, error, required, skeleton = false, classNam
         {children}
       </FieldContext.Provider>
       <div className={styles.meta} id={metaId}>
-        <AnimatePresence mode="wait" initial={false}>
+        {/* popLayout, not wait: the incoming error must mount immediately on
+            validate, not sit behind the hint's exit animation. The exiting hint
+            is popped out of flow so it fades without shoving the layout. */}
+        <AnimatePresence mode="popLayout" initial={false}>
           {error ? (
             <motion.div
               key="error"

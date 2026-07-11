@@ -13,7 +13,9 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../internal/cx.ts';
+import { useDirection } from '../../internal/direction.ts';
 import { useAnchoredPosition, type Placement } from '../../internal/useAnchoredPosition.ts';
+import { ArrowGlass } from '../../internal/ArrowGlass.tsx';
 import styles from './Tooltip.module.css';
 
 export interface TooltipProps {
@@ -56,8 +58,12 @@ export function Tooltip({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // the bubble portals to the body, past any scoped dir ancestor - carry the
+  // trigger's resolved direction with it
+  const dir = useDirection(triggerRef);
 
-  const position = useAnchoredPosition(mounted, triggerRef, bubbleRef, { placement, offset: 6 });
+  // offset leaves room for the arrow tip plus a small visual gap
+  const position = useAnchoredPosition(mounted, triggerRef, bubbleRef, { placement, offset: 10 });
 
   function clearTimer() {
     if (timerRef.current !== null) {
@@ -143,13 +149,19 @@ export function Tooltip({
   return (
     <>
       {triggerEl}
+      {/* The positioned wrapper stays transparent and the glass surface and
+          arrow are SIBLINGS inside it: a backdrop-filter can only sample the
+          page from outside a filtered ancestor, so an arrow nested in the
+          blurred bubble could tint but never blur what is behind it. */}
       {mounted &&
         createPortal(
           <motion.div
             ref={bubbleRef}
             id={tooltipId}
             role="tooltip"
-            className={cx(styles.bubble, className)}
+            dir={dir}
+            className={styles.positioner}
+            data-placement={position?.placement}
             style={position?.style}
             initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.96, y: 2 }}
             animate={open ? { opacity: 1, scale: 1, y: 0 } : { opacity: 0, scale: 0.98, y: 1 }}
@@ -158,7 +170,8 @@ export function Tooltip({
               if (!open) setMounted(false);
             }}
           >
-            {content}
+            <ArrowGlass placement={position?.placement} tip={5} tipHalf={6} tipInset={12} />
+            <div className={cx(styles.bubble, className)}>{content}</div>
           </motion.div>,
           document.body,
         )}

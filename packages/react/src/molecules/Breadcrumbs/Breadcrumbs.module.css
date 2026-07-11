@@ -5,4 +5,8 @@
 .link:hover { color: var(--glacier-text); }
 .current { color: var(--glacier-text); font-weight: 600; }
 .text { color: var(--glacier-text-subtle); }
-.separator { color: var(--glacier-text-subtle); }
+.separator { display: inline-block; color: var(--glacier-text-subtle); }
+
+/* the separator glyph leans along the reading direction (/, >, a chevron), so
+   it mirrors in RTL; inline-block so the transform takes hold */
+[dir='rtl'] .separator { transform: scaleX(-1); }

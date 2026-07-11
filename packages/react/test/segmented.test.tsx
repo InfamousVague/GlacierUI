@@ -56,6 +56,11 @@ describe('SegmentedControl', () => {
     expect(screen.getByRole('radio', { name: 'Month' })).toBeDisabled();
   });
 
+  it('defaults each segment input to the selection haptic kind', () => {
+    render(<SegmentedControl aria-label="Range" options={OPTIONS} />);
+    expect(screen.getByRole('radio', { name: 'Day' })).toHaveAttribute('data-haptic', 'selection');
+  });
+
   it('has no axe violations', async () => {
     const { container } = render(<SegmentedControl aria-label="Range" options={OPTIONS} />);
     const results = await axe.run(container, {

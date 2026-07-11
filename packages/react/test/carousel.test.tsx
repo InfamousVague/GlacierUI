@@ -132,4 +132,75 @@ describe('Carousel', () => {
     );
     expect((await axe.run(document.body, { rules: AXE_RULES })).violations).toEqual([]);
   });
+
+  describe('in RTL', () => {
+    const renderRtl = (showControls = true) =>
+      render(
+        <div dir="rtl">
+          <Carousel showControls={showControls} aria-label="Featured">
+            {items.map((i) => (
+              <Card key={i}>{i}</Card>
+            ))}
+          </Carousel>
+        </div>,
+      );
+
+    it('detects the start edge at scrollLeft 0 despite the reversed axis', () => {
+      renderRtl();
+      const scroller = mockScroller(1000, 300, 0);
+      fireEvent.scroll(scroller);
+      expect(screen.getByRole('button', { name: 'Previous' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled();
+    });
+
+    it('detects the end edge at a fully negative scrollLeft, as Chrome reports RTL', () => {
+      renderRtl();
+      const scroller = mockScroller(1000, 300, -700); // RTL end: scrollLeft === -(scrollWidth - clientWidth)
+      fireEvent.scroll(scroller);
+      expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Previous' })).toBeEnabled();
+    });
+
+    it('keeps both controls live in the middle of a negative scroll range', () => {
+      renderRtl();
+      const scroller = mockScroller(1000, 300, -350);
+      fireEvent.scroll(scroller);
+      expect(screen.getByRole('button', { name: 'Previous' })).toBeEnabled();
+      expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled();
+    });
+
+    it('maps wheel-down onto a negative scroll, toward the content end', () => {
+      renderRtl(false);
+      const scroller = mockScroller(1000, 300, 0);
+      fireEvent.wheel(scroller, { deltaY: 120, deltaX: 0 });
+      expect(scroller.scrollLeft).toBe(-120);
+    });
+
+    it('releases the wheel gesture at the RTL end so the page can keep scrolling', () => {
+      renderRtl(false);
+      const scroller = mockScroller(1000, 300, -700);
+      fireEvent.wheel(scroller, { deltaY: 120, deltaX: 0 });
+      expect(scroller.scrollLeft).toBe(-700); // unchanged: no room left toward the end
+    });
+
+    it('pages next toward the inline end (negative scrollLeft)', () => {
+      renderRtl();
+      const scroller = mockScroller(1000, 300, 0);
+      const scrollBy = vi.fn();
+      scroller.scrollBy = scrollBy as unknown as typeof scroller.scrollBy;
+      fireEvent.scroll(scroller);
+      fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+      expect(scrollBy.mock.calls[0]?.[0].left).toBeLessThan(0);
+    });
+
+    it('pages previous toward the inline start (positive scrollLeft)', () => {
+      renderRtl();
+      const scroller = mockScroller(1000, 300, -350);
+      const scrollBy = vi.fn();
+      scroller.scrollBy = scrollBy as unknown as typeof scroller.scrollBy;
+      fireEvent.scroll(scroller);
+      fireEvent.click(screen.getByRole('button', { name: 'Previous' }));
+      expect(scrollBy.mock.calls[0]?.[0].left).toBeGreaterThan(0);
+    });
+  });
 });

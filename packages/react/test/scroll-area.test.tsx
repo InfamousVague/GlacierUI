@@ -39,7 +39,19 @@ describe('ScrollArea', () => {
         <p>Tall content</p>
       </ScrollArea>,
     );
-    expect(root()).toHaveStyle({ maxHeight: '200px' });
+    // the cap sits on the scrolling viewport itself, not the wrapper: the
+    // viewport is the overflow container, so capping anything else leaves
+    // it content-sized and scroll-less
+    expect(screen.getByRole('group')).toHaveStyle({ maxHeight: '200px' });
+  });
+
+  it('hideScrollbar marks the root so the viewport drops its scrollbar', () => {
+    render(
+      <ScrollArea hideScrollbar maxHeight={100}>
+        <p>Content</p>
+      </ScrollArea>,
+    );
+    expect(root().className).toMatch(/hideScrollbar/);
   });
 
   it('caps the width with maxHeight when horizontal', () => {
@@ -48,7 +60,7 @@ describe('ScrollArea', () => {
         <p>Wide content</p>
       </ScrollArea>,
     );
-    expect(root()).toHaveStyle({ maxWidth: '300px' });
+    expect(screen.getByRole('group')).toHaveStyle({ maxWidth: '300px' });
     expect(root()).toHaveAttribute('data-orientation', 'horizontal');
   });
 
@@ -111,5 +123,43 @@ describe('ScrollArea', () => {
       </ScrollArea>,
     );
     expect((await axe.run(document.body, { rules: AXE_RULES })).violations).toEqual([]);
+  });
+
+  describe('in RTL', () => {
+    const renderRtl = () =>
+      render(
+        <div dir="rtl">
+          <ScrollArea orientation="horizontal" maxHeight={100}>
+            <p>Wide</p>
+          </ScrollArea>
+        </div>,
+      );
+
+    it('shows only the end fade at the horizontal start (scrollLeft 0)', () => {
+      renderRtl();
+      const vp = viewport();
+      stubMetrics(vp, { scrollWidth: 500, clientWidth: 100, scrollLeft: 0 });
+      fireEvent.scroll(vp);
+      expect(root()).not.toHaveAttribute('data-fade-start');
+      expect(root()).toHaveAttribute('data-fade-end', 'true');
+    });
+
+    it('fades both edges mid-scroll despite the negative scrollLeft', () => {
+      renderRtl();
+      const vp = viewport();
+      stubMetrics(vp, { scrollWidth: 500, clientWidth: 100, scrollLeft: -200 });
+      fireEvent.scroll(vp);
+      expect(root()).toHaveAttribute('data-fade-start', 'true');
+      expect(root()).toHaveAttribute('data-fade-end', 'true');
+    });
+
+    it('clears the end fade at the fully negative end of the range', () => {
+      renderRtl();
+      const vp = viewport();
+      stubMetrics(vp, { scrollWidth: 500, clientWidth: 100, scrollLeft: -400 });
+      fireEvent.scroll(vp);
+      expect(root()).toHaveAttribute('data-fade-start', 'true');
+      expect(root()).not.toHaveAttribute('data-fade-end');
+    });
   });
 });

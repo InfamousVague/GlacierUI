@@ -13,6 +13,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../../internal/cx.ts';
+import { resolveDirection, useDirection } from '../../internal/direction.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import { useField } from '../../internal/FieldContext.ts';
 import type { ControlSize } from '../../atoms/inputs/Button/Button.tsx';
@@ -97,6 +98,9 @@ export function Select({
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [position, setPosition] = useState<MenuPosition | null>(null);
+  // the menu portals to the body, past any scoped dir ancestor - carry the
+  // trigger's resolved direction with it
+  const dir = useDirection(triggerRef);
 
   const selectedOption = options.find((o) => o.value === selected);
 
@@ -185,12 +189,19 @@ export function Select({
       const spaceAbove = rect.top - gap - margin;
       const openUp = spaceBelow < 240 && spaceAbove > spaceBelow;
       const maxHeight = Math.max(120, Math.min(416, openUp ? spaceAbove : spaceBelow));
-      const left = Math.max(margin, Math.min(rect.left, window.innerWidth - rect.width - margin));
+      // Logical alignment, resolved live at measure time: the menu's inline-
+      // start edge hugs the trigger's. Under RTL that is the right edge, and
+      // anchoring via `right` keeps a menu wider than its trigger (minWidth
+      // only floors it) growing toward inline-end without knowing its width.
+      const rtl = resolveDirection(triggerRef.current) === 'rtl';
+      const inline = rtl
+        ? { right: Math.max(margin, Math.min(window.innerWidth - rect.right, window.innerWidth - rect.width - margin)) }
+        : { left: Math.max(margin, Math.min(rect.left, window.innerWidth - rect.width - margin)) };
       setPosition({
         openUp,
         style: {
           position: 'fixed',
-          left,
+          ...inline,
           minWidth: rect.width,
           maxHeight,
           zIndex: 200,
@@ -266,6 +277,7 @@ export function Select({
             ref={listRef}
             id={listboxId}
             role="listbox"
+            dir={dir}
             className={cx(styles.menu, size === 'sm' && styles.menuSm)}
             style={position.style}
             tabIndex={-1}

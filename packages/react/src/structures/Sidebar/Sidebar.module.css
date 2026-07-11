@@ -61,7 +61,7 @@
   align-items: center;
   gap: var(--glacier-space-2);
   width: 100%;
-  text-align: left;
+  text-align: start;
   padding: var(--glacier-space-2) var(--glacier-space-3);
   border: none;
   border-radius: var(--glacier-radius-md);
