@@ -2419,15 +2419,16 @@ function NavBarBlueprint({ dimensions }: BlueprintProps) {
   const Y = 84;
   const W = 268;
   const H = 48;
-  const itemW = 64;
+  const itemW = 58;
   const itemH = 32;
   const iy = Y + (H - itemH) / 2;
-  const ix = (i: number) => X + 8 + i * (itemW + 8);
+  // the schematic item gap stays wide enough for the gap dimension arrowheads
+  const ix = (i: number) => X + 8 + i * (itemW + 20);
   const item = (i: number, active: boolean) => (
     <g>
       {active && <rect x={ix(i)} y={iy} width={itemW} height={itemH} rx={8} fill={C.content} fillOpacity={0.3} stroke={C.text} strokeWidth={1} />}
       <rect x={ix(i) + 8} y={iy + itemH / 2 - 6} width={12} height={12} rx={3} fill="none" stroke={C.line} strokeWidth={1.1} strokeDasharray="2 2" />
-      <Ln x={ix(i) + 26} y={iy + itemH / 2 - 2} w={28} h={4} op={active ? 0.7 : 0.4} />
+      <Ln x={ix(i) + 26} y={iy + itemH / 2 - 2} w={24} h={4} op={active ? 0.7 : 0.4} />
     </g>
   );
   return (
