@@ -179,6 +179,7 @@ export {
   type SortDirection,
 } from './organisms/DataGrid/DataGrid.tsx';
 export { Timeline, type TimelineProps, type TimelineItem, type TimelineTone } from './organisms/Timeline/Timeline.tsx';
+export { Wizard, type WizardProps, type WizardStep } from './organisms/Wizard/Wizard.tsx';
 export type { Placement } from './internal/useAnchoredPosition.ts';
 
 // i18n - the translation mandate: every user-facing string resolves through a

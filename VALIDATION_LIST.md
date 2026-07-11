@@ -149,8 +149,8 @@ and visual-test route before it moves to the current-catalog section.
 - [x] File Upload / Dropzone specification - Registered the `file-upload` contract for the accepted-file rules, dropzone/input/file-list anatomy, dragging/invalid/disabled states, keyboard behavior, and token metrics.
 - [x] Fieldset and Form Section - Shipped a native fieldset/legend group (native disabled cascades to nested controls) with description and actions slots plus a bordered variant, and a FormSection for page-level grouping with aria-labelledby, actions, and stacking dividers.
 - [x] Fieldset and Form Section specification - Registered `fieldset` and `form-section` contracts for legend/description/content/actions anatomy, native fieldset semantics, spacing tokens, and responsive behavior.
-- [ ] Wizard - Build a multi-step workflow organism that composes Steps with validation gates, previous/next actions, accessible step status, and optional save/resume callbacks.
-- [ ] Wizard specification - Describe step and action contracts, panel anatomy, validation/error states, keyboard/focus behavior, progress tokens, and motion.
+- [x] Wizard - Shipped `Wizard`: composes the connected numbered Steps header with per-step validation gates (sync boolean/string or async with a loading Next and disabled footer), localized Previous/Next/Done actions, a role="group" panel focused on committed navigation with a visually hidden localized "Step X of Y", an always-reserved role="status" error line, onSave/onComplete/onStepChange with defaultActiveStep resume, directional reduced-motion-safe panel transition, and a presence-honest skeleton. Docs: Organisms > Wizard.
+- [x] Wizard specification - Registered the `wizard` contract: the WizardStep array and gate semantics, action props with kitMessages defaults, progress/heading/panel/error/footer anatomy, error and validating states, keyboard/focus policy, layout token dimensions, and motion; validateSpec clean at full strictness.
 
 ### Product Composition Components
 

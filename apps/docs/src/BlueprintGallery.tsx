@@ -311,6 +311,7 @@ const ORGANISMS: GalleryItem[] = [
   { spec: 'table', page: 'table', title: 'Table', blurb: 'A semantic table for rows of structured data, with accessible headers and a caption slot.' },
   { spec: 'data-grid', page: 'datagrid', title: 'Data Grid', blurb: 'A column-driven grid with client sorting, row selection, loading and empty states, and a roving-focus keyboard model.' },
   { spec: 'timeline', page: 'timeline', title: 'Timeline', blurb: 'A chronological activity feed: tone-coded markers on a connector rail with actor, timestamp, media, and action slots.' },
+  { spec: 'wizard', page: 'wizard', title: 'Wizard', blurb: 'A multi-step workflow on connected Steps: validation gates, previous/next actions, a focused panel, and save/resume callbacks.' },
 ];
 
 const STRUCTURES: GalleryItem[] = [

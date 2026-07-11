@@ -110,6 +110,7 @@ import { PageHeaderPage } from './pages/structures/PageHeaderPage.tsx';
 import { SectionPage } from './pages/structures/SectionPage.tsx';
 import { CardGroupPage } from './pages/structures/CardGroupPage.tsx';
 import { TimelinePage } from './pages/organisms/TimelinePage.tsx';
+import { WizardPage } from './pages/organisms/WizardPage.tsx';
 
 const PAGES = {
   overview: { title: 'Overview', group: 'Start', el: <OverviewPage /> },
@@ -189,6 +190,7 @@ const PAGES = {
   table: { title: 'Table', group: 'Organisms', el: <TablePage /> },
   datagrid: { title: 'Data Grid', group: 'Organisms', el: <DataGridPage /> },
   timeline: { title: 'Timeline', group: 'Organisms', el: <TimelinePage /> },
+  wizard: { title: 'Wizard', group: 'Organisms', el: <WizardPage /> },
   floatingpanel: { title: 'Floating Panel', group: 'Organisms', el: <FloatingPanelPage /> },
   tabbedpanel: { title: 'Tabbed Panel', group: 'Organisms', el: <TabbedPanelPage /> },
   tabbedmodal: { title: 'Tabbed Modal', group: 'Organisms', el: <TabbedModalPage /> },

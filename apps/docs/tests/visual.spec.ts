@@ -59,6 +59,7 @@ const PAGES = [
   'section',
   'cardgroup',
   'timeline',
+  'wizard',
 ];
 
 const THEME_LABEL = { light: 'Light', dark: 'Dark' } as const;

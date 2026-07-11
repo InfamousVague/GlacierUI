@@ -102,6 +102,7 @@ import {
   Section,
   CardGroup,
   Timeline,
+  Wizard,
 } from '../src/index.ts';
 import { Star } from '@glacier/icons';
 import { cloneElement, type ReactElement } from 'react';
@@ -373,6 +374,15 @@ const RENDER: Record<string, Renderer> = {
       items={[
         { id: 1, title: 'Deployed', tone: o.tone as never, timestamp: '2h ago' },
         { id: 2, title: 'Build passed' },
+      ]}
+    />
+  ),
+  wizard: () => (
+    <Wizard
+      aria-label="Setup"
+      steps={[
+        { id: 'one', label: 'One', content: <div /> },
+        { id: 'two', label: 'Two', content: <div /> },
       ]}
     />
   ),

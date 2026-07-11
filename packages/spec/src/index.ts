@@ -64,6 +64,7 @@ export * from './components/page-header.ts';
 export * from './components/section.ts';
 export * from './components/card-group.ts';
 export * from './components/timeline.ts';
+export * from './components/wizard.ts';
 export * from './components/tooltip.ts';
 export * from './components/stat-tile.ts';
 export * from './components/device-frame.ts';
@@ -151,6 +152,7 @@ import { pageHeaderSpec } from './components/page-header.ts';
 import { sectionSpec } from './components/section.ts';
 import { cardGroupSpec } from './components/card-group.ts';
 import { timelineSpec } from './components/timeline.ts';
+import { wizardSpec } from './components/wizard.ts';
 import { tooltipSpec } from './components/tooltip.ts';
 import { statTileSpec } from './components/stat-tile.ts';
 import { deviceFrameSpec } from './components/device-frame.ts';
@@ -289,6 +291,7 @@ export const specs: ComponentSpec[] = [
   // product composition
   cardGroupSpec,
   timelineSpec,
+  wizardSpec,
 ];
 
 /** Specs keyed by id for O(1) lookup. */

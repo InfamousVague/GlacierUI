@@ -1,0 +1,52 @@
+.wizard {
+    display: flex;
+    flex-direction: column;
+    gap: var(--glacier-space-5);
+    color: var(--glacier-text);
+}
+
+/* Standard visually-hidden text: present for assistive tech, no paint. */
+.srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Positioned so AnimatePresence popLayout can pop the exiting step out of
+   flow, and focusable (tabIndex -1) so navigation can land focus here. */
+.panel {
+    position: relative;
+    border-radius: var(--glacier-radius-md);
+}
+
+.panel:focus-visible {
+    outline: 2px solid var(--glacier-focus-ring);
+    outline-offset: 2px;
+}
+
+/* The polite live region. One line of height is always reserved so a gate
+   message appearing (or clearing) never shoves the footer. */
+.error {
+    min-height: 1lh;
+    color: var(--glacier-danger-text);
+    font-size: var(--glacier-font-size-sm);
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--glacier-space-3);
+}
+
+/* Skeleton-only: the stand-in for the step content lines. */
+.contentBones {
+    display: grid;
+    gap: var(--glacier-space-2);
+}

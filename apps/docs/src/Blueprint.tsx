@@ -3281,7 +3281,9 @@ function TimelineBlueprint(_: BlueprintProps) {
 
 // Wizard: the connected Steps progress row, the active step's label, the
 // content panel, the error live region, and the previous/next footer.
-function WizardBlueprint(_: BlueprintProps) {
+function WizardBlueprint({ dimensions }: BlueprintProps) {
+  const gap = fmt(dimensions?.gap);
+  const radius = fmt(dimensions?.panelRadius);
   const markers = [
     { x: 60, state: 'done' },
     { x: 116, state: 'active' },
@@ -3305,15 +3307,16 @@ function WizardBlueprint(_: BlueprintProps) {
       ))}
       {/* step label + panel */}
       <text x={44} y={100} fill={C.text} fontSize={14} fontWeight={650}>Account details</text>
-      <rect x={44} y={112} width={312} height={40} rx={8} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
-      <text x={200} y={136} textAnchor="middle" className="bpLabel" fill={C.faint}>panel: role="group", focused on navigation</text>
+      <VDim x={364} y1={104} y2={116} label={gap ? `gap: ${gap}` : 'gap'} horizontal />
+      <rect x={44} y={116} width={312} height={38} rx={8} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <text x={200} y={139} textAnchor="middle" className="bpLabel" fill={C.faint}>panel: role="group", focused on navigation</text>
       {/* error live region */}
       <text x={44} y={162} className="bpLabel" fill={C.faint}>error live region</text>
       {/* footer actions */}
       <rect x={232} y={166} width={58} height={22} rx={6} fill="none" stroke={C.edge} strokeWidth={1.25} />
       <rect x={296} y={166} width={58} height={22} rx={6} fill={C.content} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.25} />
       <BpTitle />
-      <Foot y={222} parts={['progress', 'step label', 'panel', 'error region', 'previous / next']} />
+      <Foot y={222} parts={['progress', radius && `panel radius: ${radius}`, 'error region', 'previous / next']} />
     </svg>
   );
 }

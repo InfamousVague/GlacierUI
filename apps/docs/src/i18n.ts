@@ -113,6 +113,7 @@ export const pageTitles = defineMessages({
   section: { en: 'Section', es: 'Sección', fr: 'Section', de: 'Abschnitt', ja: 'セクション', pt: 'Secção', zh: '内容区块', ar: 'قسم' },
   cardgroup: { en: 'Card Group', es: 'Grupo de tarjetas', fr: 'Groupe de cartes', de: 'Kartengruppe', ja: 'カードグループ', pt: 'Grupo de cartões', zh: '卡片组', ar: 'مجموعة بطاقات' },
   timeline: { en: 'Timeline', es: 'Línea de tiempo', fr: 'Chronologie', de: 'Zeitleiste', ja: 'タイムライン', pt: 'Linha do tempo', zh: '时间线', ar: 'الخط الزمني' },
+  wizard: { en: 'Wizard', es: 'Asistente', fr: 'Assistant', de: 'Assistent', ja: 'ウィザード', pt: 'Assistente', zh: '向导', ar: 'معالج الخطوات' },
 });
 
 /**
@@ -166,6 +167,7 @@ export const pageTags: Record<string, string[]> = {
   section: ['Section', 'content section', 'region', 'heading', 'vertical rhythm'],
   cardgroup: ['CardGroup', 'card grid', 'grid', 'list', 'responsive cards', 'gallery'],
   timeline: ['Timeline', 'activity feed', 'events', 'feed', 'history', 'audit log', 'changelog'],
+  wizard: ['Wizard', 'multi-step', 'stepper', 'workflow', 'onboarding', 'form steps', 'validation gates', 'save resume'],
   // foundations: concept keywords
   colors: ['ramp', 'OKLCH', 'palette', 'accent', 'tint', 'gray', 'semantic token'],
   typography: ['font', 'type scale', 'monospace', 'Inter'],
