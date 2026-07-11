@@ -1,5 +1,14 @@
-import { Box, Button, EmptyState, Stack, Heading, Text, Size, TextTone } from '@glacier/react';
-import { Folder, Inbox } from '@glacier/icons';
+import { Box, Button, EmptyState, Pill, SearchField, Stack, Heading, Text, Size, TextTone } from '@glacier/react';
+import {
+  Folder,
+  Inbox,
+  Lock,
+  MousePointerClick,
+  SearchX,
+  Sparkles,
+  TriangleAlert,
+  WifiOff,
+} from '@glacier/icons';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
 import { Example, PropsTable } from '../../docs-ui.tsx';
 
@@ -140,6 +149,152 @@ export function EmptyStatePage() {
           },
         ]}
       />
+
+      <Heading level={2}>Recipes</Heading>
+      <Text tone={TextTone.Muted}>
+        Ready-made compositions for the empty screens most products hit: first use, no results,
+        load failures, locked content, offline, and an unselected detail pane.
+      </Text>
+
+      <Example
+        title="First use"
+        description="Reach for this when the user has never created anything in the feature: a brand new account, a fresh workspace, an untouched tab. Lead with what the feature is for and make the create action the only next step."
+        code={`<EmptyState
+  icon={<Sparkles size={28} />}
+  title="Create your first project"
+  description="Projects keep related documents, tasks, and people in one place."
+  action={<Button>New project</Button>}
+/>`}
+      >
+        <Box style={{ width: '100%', maxWidth: '34rem' }}>
+          <EmptyState
+            icon={<Sparkles size={28} />}
+            title="Create your first project"
+            description="Projects keep related documents, tasks, and people in one place."
+            action={<Button>New project</Button>}
+          />
+        </Box>
+      </Example>
+
+      <Example
+        title="No search results"
+        description="Reach for this when a query or filter set matched nothing. Echo the query in the title so the user can see what was searched, and offer a quiet action that clears the filters rather than leaving a dead end."
+        code={`<Stack gap={4}>
+  <SearchField defaultValue="quarterly report" aria-label="Search documents" />
+  <EmptyState
+    icon={<SearchX size={28} />}
+    title='No results for "quarterly report"'
+    description="Check the spelling, or clear the filters to widen the search."
+    action={<Button variant="ghost">Clear filters</Button>}
+  />
+</Stack>`}
+      >
+        <Stack gap={4} style={{ width: '100%', maxWidth: '34rem' }}>
+          <SearchField defaultValue="quarterly report" aria-label="Search documents" />
+          <EmptyState
+            icon={<SearchX size={28} />}
+            title='No results for "quarterly report"'
+            description="Check the spelling, or clear the filters to widen the search."
+            action={<Button variant="ghost">Clear filters</Button>}
+          />
+        </Stack>
+      </Example>
+
+      <Example
+        title="Failed to load"
+        description="Reach for this when a fetch failed, not when the view is truly empty. Keep the danger tone on the framing (the icon and the status pill), and keep the retry button neutral: retrying is safe, so it should not look destructive."
+        code={`<EmptyState
+  icon={<TriangleAlert size={28} color="var(--glacier-danger-text)" />}
+  title="Couldn't load activity"
+  description="The request didn't go through. Your data is safe, this view just needs another try."
+  action={<Button>Retry</Button>}
+>
+  <Pill tone="danger" variant="soft">Error 503</Pill>
+</EmptyState>`}
+      >
+        <Box style={{ width: '100%', maxWidth: '34rem' }}>
+          <EmptyState
+            icon={<TriangleAlert size={28} color="var(--glacier-danger-text)" />}
+            title="Couldn't load activity"
+            description="The request didn't go through. Your data is safe, this view just needs another try."
+            action={<Button>Retry</Button>}
+          >
+            <Pill tone="danger" variant="soft">Error 503</Pill>
+          </EmptyState>
+        </Box>
+      </Example>
+
+      <Example
+        title="Permission denied"
+        description="Reach for this when the content exists but the user is not allowed to see it. Name the gate and who controls it, then make requesting access the action so the user is not left hunting for an owner."
+        code={`<EmptyState
+  icon={<Lock size={28} />}
+  title="This space is private"
+  description="You need an invitation from a space admin to view these documents."
+  action={<Button variant="outline">Request access</Button>}
+/>`}
+      >
+        <Box style={{ width: '100%', maxWidth: '34rem' }}>
+          <EmptyState
+            icon={<Lock size={28} />}
+            title="This space is private"
+            description="You need an invitation from a space admin to view these documents."
+            action={<Button variant="outline">Request access</Button>}
+          />
+        </Box>
+      </Example>
+
+      <Example
+        title="Offline"
+        description="Reach for this when the view cannot render without a network. Blame the connection, not the user, give reconnect guidance, and offer a manual retry for anyone who does not want to wait for the automatic refresh."
+        code={`<EmptyState
+  icon={<WifiOff size={28} />}
+  title="You're offline"
+  description="Check your connection. This view refreshes automatically when you're back online."
+  action={<Button variant="soft">Try again</Button>}
+/>`}
+      >
+        <Box style={{ width: '100%', maxWidth: '34rem' }}>
+          <EmptyState
+            icon={<WifiOff size={28} />}
+            title="You're offline"
+            description="Check your connection. This view refreshes automatically when you're back online."
+            action={<Button variant="soft">Try again</Button>}
+          />
+        </Box>
+      </Example>
+
+      <Example
+        title="Empty selection"
+        description="Reach for this in the detail pane of a master-detail layout before anything is chosen. There is no action because the fix lives in the other pane: point the user there instead."
+        code={`<Box
+  style={{
+    border: '1px dashed var(--glacier-border)',
+    borderRadius: 'var(--glacier-radius-md)',
+  }}
+>
+  <EmptyState
+    icon={<MousePointerClick size={28} />}
+    title="Nothing selected"
+    description="Choose a conversation from the list to read it here."
+  />
+</Box>`}
+      >
+        <Box
+          style={{
+            width: '100%',
+            maxWidth: '34rem',
+            border: '1px dashed var(--glacier-border)',
+            borderRadius: 'var(--glacier-radius-md)',
+          }}
+        >
+          <EmptyState
+            icon={<MousePointerClick size={28} />}
+            title="Nothing selected"
+            description="Choose a conversation from the list to read it here."
+          />
+        </Box>
+      </Example>
 
       <Heading level={2}>Accessibility</Heading>
       <ul>
