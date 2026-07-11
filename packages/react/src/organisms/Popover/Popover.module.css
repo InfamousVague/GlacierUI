@@ -1,3 +1,7 @@
+.positioner {
+  outline: none;
+}
+
 .panel {
   min-width: 12rem;
   max-width: min(24rem, calc(100vw - 2rem));
@@ -8,16 +12,96 @@
   backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
   -webkit-backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
   box-shadow:
-    inset 0 1px 0 var(--glacier-glass-highlight),
+    inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight),
     var(--glacier-shadow-4);
   color: var(--glacier-text);
   font-family: var(--glacier-font-sans);
 }
 
-.panel:focus-visible {
+.positioner:focus-visible {
   outline: none;
 }
 
 .triggerWrap {
   display: contents;
+}
+
+/* The pointer: a rotated square wearing the panel's material, poking out of
+   the edge that faces the trigger. It sits BESIDE the panel in the positioner
+   so its backdrop blur samples the real page; nested inside the blurred panel
+   it could tint but never blur. The two exposed pre-rotation edges carry the
+   hairline so the panel's outline continues around the tip. */
+.arrow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: var(--glacier-glass-thick);
+  backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
+  transform: rotate(45deg);
+  pointer-events: none;
+}
+
+/* Each side clips the arrow to its protruding half plus a 1.25px band past
+   the diagonal: the band keeps the panel's junction hairline covered while
+   the rest of the overlap is cut away, so the arrow's own backdrop blur
+   never re-samples the already-blurred panel and darkens it. */
+.positioner[data-placement^='top'] .arrow {
+  clip-path: polygon(0 calc(100% - 1.25px), calc(100% - 1.25px) 0, 100% 0, 100% 100%, 0 100%);
+  bottom: -5px;
+  border-right: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-bottom: var(--glacier-hairline) solid var(--glacier-glass-border);
+}
+.positioner[data-placement^='bottom'] .arrow {
+  clip-path: polygon(0 0, 100% 0, 100% 1.25px, 1.25px 100%, 0 100%);
+  top: -5px;
+  border-left: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-top: var(--glacier-hairline) solid var(--glacier-glass-border);
+}
+.positioner[data-placement^='left'] .arrow {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, calc(100% - 1.25px) 100%, 0 1.25px);
+  right: -5px;
+  border-top: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-right: var(--glacier-hairline) solid var(--glacier-glass-border);
+}
+.positioner[data-placement^='right'] .arrow {
+  clip-path: polygon(0 0, 1.25px 0, 100% calc(100% - 1.25px), 100% 100%, 0 100%);
+  left: -5px;
+  border-bottom: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-left: var(--glacier-hairline) solid var(--glacier-glass-border);
+}
+
+.positioner[data-placement^='top'] .arrow,
+.positioner[data-placement^='bottom'] .arrow {
+  clip-path: polygon(0 0, 100% 0, 100% 1.25px, 1.25px 100%, 0 100%);
+  left: 50%;
+  margin-left: -5px;
+}
+.positioner[data-placement$='-start'][data-placement^='top'] .arrow,
+.positioner[data-placement$='-start'][data-placement^='bottom'] .arrow {
+  left: 16px;
+  margin-left: 0;
+}
+.positioner[data-placement$='-end'][data-placement^='top'] .arrow,
+.positioner[data-placement$='-end'][data-placement^='bottom'] .arrow {
+  left: auto;
+  right: 16px;
+  margin-left: 0;
+}
+.positioner[data-placement^='left'] .arrow,
+.positioner[data-placement^='right'] .arrow {
+  clip-path: polygon(0 0, 1.25px 0, 100% calc(100% - 1.25px), 100% 100%, 0 100%);
+  top: 50%;
+  margin-top: -5px;
+}
+.positioner[data-placement$='-start'][data-placement^='left'] .arrow,
+.positioner[data-placement$='-start'][data-placement^='right'] .arrow {
+  top: 14px;
+  margin-top: 0;
+}
+.positioner[data-placement$='-end'][data-placement^='left'] .arrow,
+.positioner[data-placement$='-end'][data-placement^='right'] .arrow {
+  top: auto;
+  bottom: 14px;
+  margin-top: 0;
 }
