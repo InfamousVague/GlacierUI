@@ -140,9 +140,34 @@ export function motionProps(kind: Motion, speed?: Speed, ease?: Ease): MotionPro
   }
 }
 
+/**
+ * Named press-in depths for tap feedback, keyed by control weight. A larger
+ * surface should dip less than a small control, so a Card barely moves while an
+ * icon button presses noticeably. Standardized here so no component hardcodes a
+ * scale.
+ */
+export const PRESS_SCALE = {
+  surface: 0.99,
+  control: 0.97,
+  chip: 0.96,
+  compact: 0.94,
+} as const;
+
+export type PressScale = keyof typeof PRESS_SCALE;
+
+/**
+ * The `whileTap` value for a standardized press, or `undefined` when the
+ * control must not animate. Pass the guard (reduced motion, disabled) as `off`:
+ *
+ *   whileTap={pressTap('compact', reduce || disabled)}
+ */
+export function pressTap(scale: PressScale = 'control', off = false): { scale: number } | undefined {
+  return off ? undefined : { scale: PRESS_SCALE[scale] };
+}
+
 /** Tactile press feedback - spread onto any motion element. */
 export const press = {
-  whileTap: { scale: 0.97 },
+  whileTap: { scale: PRESS_SCALE.control },
   transition: transition(Speed.Fast, Ease.Out),
 } as const;
 
