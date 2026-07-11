@@ -91,6 +91,14 @@
     background: var(--glacier-border);
 }
 
+/* Skeleton stand-in for the connector: the same rail geometry, but painted by
+   the Skeleton atom so it shimmers with the rest of the placeholder. */
+.connectorSkeleton {
+    flex: 1;
+    width: calc(var(--glacier-hairline) * 2);
+    min-height: var(--glacier-space-3);
+}
+
 /* ---- content column --------------------------------------------------------- */
 
 .content {

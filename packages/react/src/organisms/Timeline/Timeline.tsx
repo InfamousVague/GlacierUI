@@ -72,7 +72,7 @@ export function Timeline({
                 <span className={styles.marker}>
                   <Skeleton variant="circle" width="var(--glacier-size-lg)" />
                 </span>
-                {last ? null : <span className={styles.connector} />}
+                {last ? null : <Skeleton className={styles.connectorSkeleton} radius="var(--glacier-radius-full)" />}
               </span>
               <div className={styles.content}>
                 <div className={styles.header}>
