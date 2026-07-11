@@ -2184,6 +2184,101 @@ function SpotlightBlueprint({ size, dimensions }: BlueprintProps) {
 // ---- Organisms ---------------------------------------------------------
 
 // Modal: a blurred overlay centering a glass panel with header, body, footer.
+// Fieldset: shown in its bordered form so the anatomy reads - the legend chip
+// floating on the border with the actions pinned to its line, the description
+// under it, and the stacked fields one gap step apart.
+function FieldsetBlueprint({ dimensions }: BlueprintProps) {
+  const gap = fmt(dimensions?.gap);
+  const padding = fmt(dimensions?.padding);
+  const radius = fmt(dimensions?.radius);
+  const border = fmt(dimensions?.border);
+  const X = 96;
+  const Y = 56;
+  const W = 220;
+  const H = 156;
+  const fieldH = 30;
+  const f1 = Y + 52;
+  const f2 = f1 + fieldH + 22;
+  const field = (y: number) => (
+    <g>
+      <Ln x={X + 18} y={y - 10} w={54} h={5} op={0.55} />
+      <rect x={X + 18} y={y} width={W - 36} height={fieldH} rx={9} fill={C.content} fillOpacity={0.14} stroke={C.edge} strokeWidth={1.25} />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 400 248" className="bpSvg" role="img" aria-label="Blueprint of the fieldset">
+      <Defs />
+      <rect x={0} y={0} width={400} height={248} fill="url(#bpGrid)" />
+      {/* the bordered group; the legend chip sits on the border line */}
+      <Frame x={X} y={Y} w={W} h={H} r={10} />
+      <rect x={X + 14} y={Y - 9} width={62} height={18} rx={5} fill={C.fill} stroke={C.text} strokeWidth={1} />
+      <Ln x={X + 22} y={Y - 3} w={46} h={6} op={0.75} />
+      {/* actions pinned to the legend line, at the end */}
+      <rect x={X + W - 62} y={Y - 9} width={48} height={18} rx={9} fill={C.content} fillOpacity={0.3} stroke={C.text} strokeWidth={1} />
+      <Ln x={X + W - 52} y={Y - 3} w={28} h={5} op={0.6} />
+      {/* description under the legend */}
+      <Ln x={X + 18} y={Y + 14} w={128} h={4} op={0.3} />
+      {/* two stacked fields with the gap dimensioned */}
+      {field(f1)}
+      {field(f2)}
+      {gap && <VDim x={X + W + 16} y1={f1 + fieldH} y2={f2 - 15} label={gap} left={false} horizontal />}
+
+      <text x={X - 10} y={Y - 2} textAnchor="end" className="bpLabel bpMuted">legend</text>
+      <text x={X + W + 12} y={Y - 2} className="bpLabel bpMuted">actions</text>
+      <text x={X - 10} y={Y + 20} textAnchor="end" className="bpLabel bpMuted">description</text>
+      <text x={X - 10} y={f1 + fieldH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">content</text>
+      <BpTitle />
+      <Foot y={240} parts={[padding && `padding: ${padding}`, radius && `radius: ${radius}`, border && `border: ${border}`]} />
+    </svg>
+  );
+}
+
+// FormSection: the page-level grouping - a stacking divider above, the title
+// row with actions at its end, the description, and the content region.
+function FormSectionBlueprint({ dimensions }: BlueprintProps) {
+  const headerGap = fmt(dimensions?.headerGap);
+  const contentOffset = fmt(dimensions?.contentOffset);
+  const dividerOffset = fmt(dimensions?.dividerOffset);
+  const border = fmt(dimensions?.border);
+  const X = 96;
+  const W = 220;
+  const divY = 52;
+  const titleY = divY + 30;
+  const contentY = titleY + 46;
+  const contentH = 84;
+  return (
+    <svg viewBox="0 0 400 236" className="bpSvg" role="img" aria-label="Blueprint of the form section">
+      <Defs />
+      <rect x={0} y={0} width={400} height={236} fill="url(#bpGrid)" />
+      {/* the stacking divider above the section */}
+      <line x1={X} y1={divY} x2={X + W} y2={divY} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
+      {/* title row with actions at the end */}
+      <Ln x={X} y={titleY - 6} w={96} h={8} op={0.8} />
+      <rect x={X + W - 56} y={titleY - 12} width={56} height={20} rx={10} fill={C.content} fillOpacity={0.3} stroke={C.text} strokeWidth={1} />
+      <Ln x={X + W - 46} y={titleY - 5} w={36} h={5} op={0.6} />
+      {/* description */}
+      <Ln x={X} y={titleY + 14} w={150} h={4} op={0.3} />
+      {/* content region, often holding Fieldsets */}
+      <rect x={X} y={contentY} width={W} height={contentH} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.text} strokeWidth={1} strokeDasharray="3 2" />
+      <Ln x={X + 14} y={contentY + 16} w={W - 60} h={5} op={0.35} />
+      <Ln x={X + 14} y={contentY + 32} w={W - 28} h={5} op={0.35} />
+      <Ln x={X + 14} y={contentY + 48} w={W - 90} h={5} op={0.35} />
+      {/* the divider offset and the header-to-content offset, dimensioned */}
+      {dividerOffset && <VDim x={X + W + 16} y1={divY} y2={titleY - 12} label={dividerOffset} left={false} horizontal />}
+      {contentOffset && <VDim x={X + W + 16} y1={titleY + 20} y2={contentY} label={contentOffset} left={false} horizontal />}
+
+      <text x={X - 10} y={divY + 4} textAnchor="end" className="bpLabel bpMuted">divider</text>
+      <text x={X - 10} y={titleY + 2} textAnchor="end" className="bpLabel bpMuted">title</text>
+      <text x={X - 10} y={titleY + 20} textAnchor="end" className="bpLabel bpMuted">description</text>
+      <text x={X - 10} y={contentY + contentH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">content</text>
+      <text x={X + W + 12} y={titleY + 2} className="bpLabel bpMuted">actions</text>
+      <BpTitle />
+      <Foot y={228} parts={[headerGap && `header gap: ${headerGap}`, contentOffset && `content offset: ${contentOffset}`, border && `border: ${border}`]} />
+    </svg>
+  );
+}
+
+
 // AppShell: the app frame - a sticky sidebar column beside a scrollable main
 // column with a header bar on top. The figure shows the desktop grid.
 function AppShellBlueprint({ dimensions }: BlueprintProps) {
@@ -3039,6 +3134,8 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'table') return withFrame(<TableBlueprint size={size} dimensions={dimensions} />);
   if (id === 'data-grid') return withFrame(<DataGridBlueprint size={size} dimensions={dimensions} />);
   // organisms
+  if (id === 'fieldset') return withFrame(<FieldsetBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'form-section') return withFrame(<FormSectionBlueprint size={size} dimensions={dimensions} />);
   if (id === 'app-shell') return withFrame(<AppShellBlueprint size={size} dimensions={dimensions} />);
   if (id === 'modal') return withFrame(<ModalBlueprint size={size} dimensions={dimensions} />);
   if (id === 'alert-dialog') return withFrame(<AlertDialogBlueprint size={size} dimensions={dimensions} />);
