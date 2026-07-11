@@ -143,9 +143,12 @@ interface StrictCategory {
   name: string;
   ratio: number;
   detail: string;
+  /** Passed checks and total checks, when the audit reports discrete counts. */
+  filled?: number;
+  total?: number;
 }
 
-function extractRatio(value: unknown): { ratio: number; detail: string } | null {
+function extractRatio(value: unknown): { ratio: number; detail: string; filled?: number; total?: number } | null {
   const direct = asNumber(value);
   if (direct != null) {
     const ratio = direct <= 1 ? direct : direct <= 100 ? direct / 100 : null;
@@ -164,7 +167,7 @@ function extractRatio(value: unknown): { ratio: number; detail: string } | null 
     denominator ??= asNumber(record[key]);
   }
   if (numerator != null && denominator != null && denominator > 0) {
-    return { ratio: numerator / denominator, detail: `${numerator}/${denominator}` };
+    return { ratio: numerator / denominator, detail: `${numerator}/${denominator}`, filled: numerator, total: denominator };
   }
   const pctKeys = ['pct', 'percent', 'percentage', 'ratio', 'score', 'value'];
   for (const key of pctKeys) {
@@ -187,11 +190,11 @@ function strictnessEntry(raw: unknown, name: string | null): StrictCategory | nu
   const checks = asNumber(entry.checks);
   const missingCount = Array.isArray(entry.missing) ? entry.missing.length : asNumber(entry.missing);
   if (id != null && completeness != null) {
-    const detail =
-      checks != null && missingCount != null
-        ? `${checks - missingCount}/${checks}`
-        : `${Math.round(completeness * 100)}%`;
-    return { name: id, ratio: completeness, detail };
+    if (checks != null && missingCount != null) {
+      const passed = checks - missingCount;
+      return { name: id, ratio: completeness, detail: `${passed}/${checks}`, filled: passed, total: checks };
+    }
+    return { name: id, ratio: completeness, detail: `${Math.round(completeness * 100)}%` };
   }
   const found = extractRatio(entry) ?? extractRatio(entry.summary);
   return id != null && found ? { name: id, ...found } : null;
@@ -466,12 +469,25 @@ function StrictnessBlock({ data }: { data: unknown }) {
               {category.name}
             </Text>
             <div style={{ flex: 1 }}>
-              <Meter
-                value={Math.round(category.ratio * 100)}
-                max={100}
-                segments={10}
-                aria-label={`${category.name} strictness`}
-              />
+              {category.total === 0 ? (
+                <Text as="span" size={Size.Small} tone={TextTone.Subtle}>
+                  no strict checks
+                </Text>
+              ) : category.total != null && category.filled != null ? (
+                // One segment per strictness check so the bar reads as filled/total.
+                <Meter
+                  value={category.filled}
+                  segments={category.total}
+                  aria-label={`${category.name} strictness`}
+                />
+              ) : (
+                <Meter
+                  value={Math.round(category.ratio * 100)}
+                  max={100}
+                  segments={10}
+                  aria-label={`${category.name} strictness`}
+                />
+              )}
             </div>
             <Text as="span" size={Size.Small} tone={TextTone.Muted} mono>
               {category.detail}
