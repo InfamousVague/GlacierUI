@@ -39,7 +39,7 @@ export default [
         {
           noStrings: true,
           ignoreProps: true,
-          allowedStrings: ['·', '×', '-', '–', '-', '*', '/', ':', '%', '+', '−', '→', '←', '↑', '↓', '…'],
+          allowedStrings: ['·', '×', '-', '–', '*', '/', ':', '%', '+', '−', '→', '←', '↑', '↓', '…'],
         },
       ],
       'react-hooks/rules-of-hooks': 'error',
