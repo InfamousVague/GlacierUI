@@ -23,6 +23,7 @@ export const tabbedModalSpec: ComponentSpec = {
     { name: 'defaultValue', type: 'string', description: 'Initial active section id when uncontrolled.' },
     { name: 'onValueChange', type: 'handler', description: 'Called with the next active section id.' },
     { name: 'title', type: 'node', description: 'Heading shown above the two panes.' },
+    { name: 'footer', type: 'node', description: 'Action row passed through to the underlying Modal, rendered below both panes.' },
   ],
   defaults: {},
   dimensions: {

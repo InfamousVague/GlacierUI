@@ -34,6 +34,8 @@ export interface TabbedModalProps {
   onValueChange?: (value: string) => void;
   /** Heading shown above the two panes. */
   title?: ReactNode;
+  /** Action row passed through to the underlying Modal, below both panes. */
+  footer?: ReactNode;
   className?: string;
 }
 
@@ -52,6 +54,7 @@ export function TabbedModal({
   defaultValue,
   onValueChange,
   title,
+  footer,
   className,
 }: TabbedModalProps) {
   const id = useId();
@@ -94,7 +97,7 @@ export function TabbedModal({
   }
 
   return (
-    <Modal open={open} onClose={onClose} title={title} size={Size.Large}>
+    <Modal open={open} onClose={onClose} title={title} footer={footer} size={Size.Large}>
       <div className={cx(styles.layout, className)}>
         <div
           role="tablist"
