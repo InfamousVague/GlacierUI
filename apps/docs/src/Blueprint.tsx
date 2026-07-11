@@ -2002,33 +2002,40 @@ function ToastBlueprint({ size, dimensions }: BlueprintProps) {
   const padIn = fmt(dimensions?.paddingInline);
   const X = 70;
   const W = 260;
-  const Y = 82;
+  const Y = 78;
   const H = 46;
   const rr = H / 2;
-  const iconX = X + 24;
+  // schematic insets kept wide enough that each dimension line has room for
+  // its arrowheads; the two dims stack on separate rows so labels never touch
+  const iconX = X + 30;
+  const msgX = iconX + 30;
   const cyc = Y + H / 2;
+  const dim1 = Y + H + 16;
+  const dim2 = dim1 + 24;
   return (
-    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label="Blueprint of the toast">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the toast">
       <Defs />
-      <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
+      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={X} y={Y} width={W} height={H} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       <circle cx={iconX} cy={cyc} r={9} fill={C.content} fillOpacity={0.4} stroke={C.line} strokeWidth={1} />
-      <Ln x={iconX + 20} y={cyc - 3} w={120} h={6} op={0.5} />
+      <Ln x={msgX} y={cyc - 3} w={110} h={6} op={0.5} />
       {/* dismiss */}
       <g stroke={C.line} strokeWidth={1.4}>
         <line x1={X + W - 26} y1={cyc - 5} x2={X + W - 16} y2={cyc + 5} />
         <line x1={X + W - 26} y1={cyc + 5} x2={X + W - 16} y2={cyc - 5} />
       </g>
       <text x={iconX} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">icon</text>
-      <text x={iconX + 80} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">message</text>
+      <text x={msgX + 55} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">message</text>
       <text x={X + W - 21} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">dismiss</text>
-      {padIn && <HDim x1={X} x2={X + 34} y={Y + H + 16} label={padIn} above={false} />}
-      {gap && <HDim x1={iconX + 9} x2={iconX + 20} y={Y + H + 16} label={gap} above={false} />}
+      {/* padding, then the icon-to-message gap on its own row below */}
+      {padIn && <HDim x1={X} x2={iconX - 9} y={dim1} label={padIn} above={false} />}
+      {gap && <HDim x1={iconX + 9} x2={msgX} y={dim2} label={gap} above={false} />}
       <BpTitle />
-      <Foot y={204} parts={[radius && `radius: ${radius}`]} />
+      <Foot y={216} parts={[radius && `radius: ${radius}`]} />
     </svg>
   );
 }
+
 
 // ScrollArea: a capped viewport with edge fade masks and a thin scrollbar.
 function ScrollAreaBlueprint({ size, dimensions }: BlueprintProps) {
@@ -3239,6 +3246,45 @@ function TimelineBlueprint(_: BlueprintProps) {
   );
 }
 
+// Wizard: the connected Steps progress row, the active step's label, the
+// content panel, the error live region, and the previous/next footer.
+function WizardBlueprint(_: BlueprintProps) {
+  const markers = [
+    { x: 60, state: 'done' },
+    { x: 116, state: 'active' },
+    { x: 172, state: 'todo' },
+  ] as const;
+  return (
+    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label="Blueprint of the wizard">
+      <Defs />
+      <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
+      <rect x={28} y={40} width={344} height={156} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      {/* connected progress markers */}
+      <line x1={69} y1={62} x2={107} y2={62} stroke={C.line} strokeWidth={1.25} />
+      <line x1={125} y1={62} x2={163} y2={62} stroke={C.line} strokeWidth={1.25} strokeDasharray="3 2" />
+      {markers.map(({ x, state }) => (
+        <g key={x}>
+          <circle cx={x} cy={62} r={9} fill={state === 'todo' ? 'none' : C.content} fillOpacity={state === 'todo' ? 1 : 0.55} stroke={C.edge} strokeWidth={state === 'active' ? 1.8 : 1.25} />
+          {state === 'done' && <path d={`M${x - 3.5} 62 l2.4 2.4 L${x + 3.8} 59.2`} fill="none" stroke={C.text} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />}
+          {state === 'active' && <text x={x} y={65.5} textAnchor="middle" className="bpLabel" fill={C.text}>2</text>}
+          {state === 'todo' && <text x={x} y={65.5} textAnchor="middle" className="bpLabel" fill={C.faint}>3</text>}
+        </g>
+      ))}
+      {/* step label + panel */}
+      <text x={44} y={100} fill={C.text} fontSize={14} fontWeight={650}>Account details</text>
+      <rect x={44} y={112} width={312} height={40} rx={8} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <text x={200} y={136} textAnchor="middle" className="bpLabel" fill={C.faint}>panel: role="group", focused on navigation</text>
+      {/* error live region */}
+      <text x={44} y={162} className="bpLabel" fill={C.faint}>error live region</text>
+      {/* footer actions */}
+      <rect x={232} y={166} width={58} height={22} rx={6} fill="none" stroke={C.edge} strokeWidth={1.25} />
+      <rect x={296} y={166} width={58} height={22} rx={6} fill={C.content} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.25} />
+      <BpTitle />
+      <Foot y={222} parts={['progress', 'step label', 'panel', 'error region', 'previous / next']} />
+    </svg>
+  );
+}
+
 // Rating: a row of stars filled to the value (3.5 of 5 here), with a half-filled
 // star to show fractional display and the rest hollow.
 function RatingBlueprint({ size, dimensions }: BlueprintProps) {
@@ -3400,6 +3446,7 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'section') return withFrame(<SectionBlueprint size={size} dimensions={dimensions} />);
   if (id === 'card-group') return withFrame(<CardGroupBlueprint size={size} dimensions={dimensions} />);
   if (id === 'timeline') return withFrame(<TimelineBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'wizard') return withFrame(<WizardBlueprint size={size} dimensions={dimensions} />);
   // organisms
   if (id === 'sidebar') return withFrame(<SidebarBlueprint size={size} dimensions={dimensions} />);
   if (id === 'toolbar') return withFrame(<ToolbarBlueprint size={size} dimensions={dimensions} />);
