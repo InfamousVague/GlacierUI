@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { EmptyState, Heading, Meter, Pill, Row, StatTile, Text, Size, TextTone } from '@glacier/react';
 import { HighlightedCode } from '../../docs-ui.tsx';
 import reportData from '../../generated/test-report.json';
@@ -452,7 +453,7 @@ function StrictnessBlock({ data }: { data: unknown }) {
     return <HighlightedCode language="json" code={JSON.stringify(data, null, 2)} />;
   }
   return (
-    <div style={{ marginBlockStart: 'var(--glacier-space-5)' }}>
+    <>
       {overall != null && (
         <Row gap={3} wrap style={{ marginBottom: 'var(--glacier-space-4)' }}>
           <StatTile
@@ -495,8 +496,14 @@ function StrictnessBlock({ data }: { data: unknown }) {
           </Row>
         ))}
       </div>
-    </div>
+    </>
   );
+}
+
+// Every report section is a Heading, a muted subtext line, then its content
+// block; this wrapper gives the content a consistent gap below the subtext.
+function SectionBody({ children }: { children: ReactNode }) {
+  return <div style={{ marginBlockStart: 'var(--glacier-space-5)' }}>{children}</div>;
 }
 
 function AxeBlock({ data }: { data: AxeSection | null }) {
@@ -530,35 +537,45 @@ export function TestReportPage() {
       </Text>
 
       <Heading level={2}>Unit tests</Heading>
-      <VitestBlock data={report.vitest} />
+      <SectionBody>
+        <VitestBlock data={report.vitest} />
+      </SectionBody>
 
       <Heading level={2}>Coverage</Heading>
       <Text tone={TextTone.Muted}>
         Istanbul summary per workspace package, aggregated from{' '}
         <code>coverage/coverage-summary.json</code>.
       </Text>
-      <CoverageBlock data={report.coverage} />
+      <SectionBody>
+        <CoverageBlock data={report.coverage} />
+      </SectionBody>
 
       <Heading level={2}>Contrast audit</Heading>
       <Text tone={TextTone.Muted}>
         WCAG contrast ratios for the token pairings the kit relies on, checked per theme by{' '}
         <code>@glacier/tokens</code>.
       </Text>
-      <ContrastBlock data={report.contrast} />
+      <SectionBody>
+        <ContrastBlock data={report.contrast} />
+      </SectionBody>
 
       <Heading level={2}>Spec strictness</Heading>
       <Text tone={TextTone.Muted}>
         How much of the component contract in <code>@glacier/spec</code> is pinned down strictly,
         per category.
       </Text>
-      <StrictnessBlock data={report.specStrictness} />
+      <SectionBody>
+        <StrictnessBlock data={report.specStrictness} />
+      </SectionBody>
 
       <Heading level={2}>Accessibility suite</Heading>
       <Text tone={TextTone.Muted}>
         Static counts over <code>packages/react/test</code>: every component suite renders into
         axe-core and asserts zero violations.
       </Text>
-      <AxeBlock data={report.axe} />
+      <SectionBody>
+        <AxeBlock data={report.axe} />
+      </SectionBody>
     </>
   );
 }

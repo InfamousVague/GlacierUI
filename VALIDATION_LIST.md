@@ -94,9 +94,9 @@ live documentation example has been reviewed as a user would use it.
 - [x] Breadcrumbs - Verify current-page semantics, long path truncation, and mobile wrapping.
 - [x] Pagination - Verify page changes, ellipsis, disabled edges, and accessible current-page state.
 - [x] Accordion - Verify disclosure semantics, keyboard behavior, multiple/single expansion, and motion.
-- [ ] Date Picker - Verify calendar keyboard navigation, range selection, locale-aware month and value formatting, disabled dates, Field wiring, and form submission value.
-- [ ] File Upload - Verify chooser and drag-and-drop entry, type/size/count rejections, file list removals, disabled state, and native form participation.
-- [ ] Fieldset and Form Section - Verify legend naming, description wiring, the native disabled cascade, actions placement, bordered variant, and stacked sections.
+- [x] Date Picker - Verify calendar keyboard navigation, range selection, locale-aware month and value formatting, disabled dates, Field wiring, and form submission value.
+- [x] File Upload - Verify chooser and drag-and-drop entry, type/size/count rejections, file list removals, disabled state, and native form participation.
+- [x] Fieldset and Form Section - Verify legend naming, description wiring, the native disabled cascade, actions placement, bordered variant, and stacked sections.
 
 ### Overlays And Data Displays
 
