@@ -42,11 +42,11 @@ export const modalSpec: ComponentSpec = {
     radius: token('radius-2xl'),
     border: token('hairline'),
     overlayPadding: token('space-6'),
-    panelPadding: token('space-8'),
+    panelPadding: token('space-6'),
     headerGap: token('space-2'),
     headerMargin: token('space-6'),
     footerGap: token('space-3'),
-    footerMargin: token('space-8'),
+    footerMargin: token('space-6'),
   },
   states: [
     { name: 'open', description: 'Overlay fades in and the panel springs up from scale 0.95, y 12; body scroll is locked and focus moves into the panel.', tokens: { overlay: token('overlay'), background: token('glass-thick') } },
