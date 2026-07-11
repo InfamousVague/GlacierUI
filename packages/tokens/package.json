@@ -9,7 +9,7 @@
     "./json/tokens.json": "./json/tokens.json"
   },
   "scripts": {
-    "gen": "node src/generate.ts"
+    "gen": "node --experimental-transform-types src/generate.ts"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
