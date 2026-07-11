@@ -1,7 +1,10 @@
 .layout {
   display: grid;
   grid-template-columns: 12rem minmax(0, 1fr);
-  gap: var(--glacier-space-6);
+  /* space-4 here plus the pane's space-2 interior padding lands the same
+     space-6 rail-to-content distance while giving the scroll box breathing
+     room, so focus rings and selection halos at its edges are not clipped */
+  gap: var(--glacier-space-4);
   min-height: 18rem;
   font-family: var(--glacier-font-sans);
 }
@@ -100,7 +103,10 @@
   min-width: 0;
   max-height: 28rem;
   overflow: auto;
-  padding-inline-end: var(--glacier-space-2);
+  /* interior padding on every side: the pane clips at its box, and edge
+     content like the accent swatches' selection ring paints 4px outside
+     its own bounds */
+  padding: var(--glacier-space-2);
   color: var(--glacier-text);
   font-size: var(--glacier-font-size-sm);
   line-height: var(--glacier-leading-md);
