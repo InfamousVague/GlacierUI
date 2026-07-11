@@ -38,6 +38,12 @@ export const spotlightSpec: ComponentSpec = {
     gap: token('space-2'),
     cutoutRadius: token('radius-lg'),
   },
+  // the ring belongs to the callout's Button/IconButton controls (2px
+  // focus-ring outline, offset 2px); the callout itself takes programmatic
+  // focus with its own outline suppressed
+  focusRing: { ring: token('focus-ring'), offset: '2px' },
+  // the cutout ring eases its box as it tracks between steps
+  transition: { duration: token('duration-normal'), ease: token('ease-out') },
   a11y: {
     role: 'dialog',
     focusable: true,

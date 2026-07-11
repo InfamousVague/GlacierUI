@@ -35,6 +35,19 @@ export const resizableSplitPaneSpec: ComponentSpec = {
     thickness: token('hairline'),
     gripHeight: token('space-6'),
   },
+  states: [
+    { name: 'hover', description: 'The hairline divider fills to accent-solid and reveals its grip pill (a white 6px-thick pill, opacity 0 to 1); dragging holds this paint via pointer capture.', paint: { background: token('accent-solid') } },
+    { name: 'focus-visible', description: 'Same accent-solid fill and grip reveal as hover, plus the 2px focus-ring outline offset 1px.', paint: { background: token('accent-solid') }, tokens: { ring: token('focus-ring') } },
+    { name: 'clamped', description: 'During a drag, a medium haptic tick fires once each time the split reaches its min or max clamp and re-arms when it leaves the bound; no paint change.', behavioral: true },
+  ],
+  // 2px focus-ring outline offset 1px around the divider hairline
+  focusRing: { ring: token('focus-ring'), offset: '1px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
+  tokens: [
+    'radius-lg', 'radius-full', 'hairline', 'space-1', 'space-6',
+    'surface', 'text', 'font-sans', 'border-subtle', 'accent-solid',
+    'focus-ring', 'duration-fast', 'ease-out',
+  ],
   a11y: {
     role: 'separator',
     focusable: true,
@@ -47,6 +60,7 @@ export const resizableSplitPaneSpec: ComponentSpec = {
       'The divider is a role="separator" with aria-orientation and aria-valuemin/valuemax/valuenow expressed as percentages.',
       'Double-clicking the divider resets the ratio to resetRatio (or defaultRatio).',
       'Sizes are clamped to [min, max] on every drag, keyboard step, and reset.',
+      'During a drag, a medium haptic tick fires once each time the split reaches its min or max clamp and re-arms when it leaves the bound; data-haptic="none" on the pane opts out.',
     ],
   },
   motion: {

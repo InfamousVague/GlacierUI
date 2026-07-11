@@ -28,10 +28,12 @@ export const radioSpec: ComponentSpec = {
     border: token('hairline'),
   },
   states: [
-    { name: 'checked', description: 'Border shifts to accent and the inner dot scales in.', tokens: { border: token('accent-solid'), dot: token('accent-solid') } },
+    { name: 'checked', description: 'Border shifts to accent and the inner dot scales in.', paint: { border: token('accent-solid') }, tokens: { dot: token('accent-solid') } },
     { name: 'focus-visible', description: 'A 2px accent focus ring blooms outward from the indicator.', tokens: { ring: token('focus-ring') } },
     { name: 'disabled', description: 'Halved opacity and not-allowed cursor.' },
   ],
+  focusRing: { ring: token('focus-ring'), offset: '2px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'space-2', 'font-sans', 'font-size-sm', 'text', 'hairline', 'border-strong', 'surface',
     'radius-full', 'accent-solid', 'focus-ring', 'duration-fast', 'ease-out', 'ease-spring',

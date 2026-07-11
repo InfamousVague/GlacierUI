@@ -50,12 +50,22 @@ export const modalSpec: ComponentSpec = {
   },
   states: [
     { name: 'open', description: 'Overlay fades in and the panel springs up from scale 0.95, y 12; body scroll is locked and focus moves into the panel.', tokens: { overlay: token('overlay'), background: token('glass-thick') } },
-    { name: 'overlay-hover', description: 'The blurred backdrop; pressing it anywhere outside the panel calls onClose.' },
+    {
+      name: 'overlay-hover',
+      description:
+        'Pressing the backdrop anywhere outside the panel calls onClose. The overlay paint is constant while open - the CSS declares no hover rule, so there is no repaint.',
+      behavioral: true,
+    },
   ],
+  // The panel suppresses its own outline (.panel:focus-visible { outline: none };
+  // focus is managed on open). The ring belongs to the interior controls - the
+  // close IconButton and footer actions draw the kit-wide 2px focus-ring outline
+  // at a 2px offset.
+  focusRing: { ring: token('focus-ring'), offset: '2px' },
   tokens: [
-    'space-2', 'space-3', 'space-4', 'space-6', 'space-8', 'space-10', 'space-16',
+    'space-2', 'space-3', 'space-4', 'space-6', 'space-10', 'space-16',
     'overlay', 'blur-sm', 'blur-lg', 'glass-thick', 'glass-border', 'glass-highlight', 'glass-saturate',
-    'hairline', 'radius-2xl', 'shadow-5', 'text', 'font-sans',
+    'hairline', 'radius-2xl', 'shadow-5', 'text', 'font-sans', 'focus-ring',
   ],
   a11y: {
     role: 'dialog',

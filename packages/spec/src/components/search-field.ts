@@ -32,11 +32,14 @@ export const searchFieldSpec: ComponentSpec = {
   defaults: { defaultValue: '', placeholder: 'Search', size: 'md', skeleton: false, glass: false },
   dimensions: { radius: token('radius-lg'), border: token('hairline') },
   states: [
-    { name: 'hover', description: 'Border strengthens when not focused or disabled.', tokens: { border: token('border-strong') } },
-    { name: 'focus', description: 'Border switches to the focus ring and a 3px accent-soft ring blooms.', tokens: { border: token('focus-ring') } },
-    { name: 'disabled', description: 'Halved opacity, sunken surface, not-allowed cursor.', tokens: { background: token('surface-sunken') } },
-    { name: 'invalid', description: 'aria-invalid paints a danger border; on focus a danger ring.', tokens: { border: token('danger-border') } },
+    { name: 'hover', description: 'Border strengthens when not focused or disabled.', paint: { border: token('border-strong') } },
+    { name: 'focus', description: 'Border switches to the focus ring and a 3px accent-soft ring blooms.', paint: { border: token('focus-ring') }, tokens: { ring: token('accent-soft') } },
+    { name: 'disabled', description: 'Halved opacity, sunken surface, not-allowed cursor.', paint: { background: token('surface-sunken') } },
+    { name: 'invalid', description: 'aria-invalid paints a danger border; on focus a danger ring.', paint: { border: token('danger-border') }, tokens: { ring: token('danger-soft') } },
   ],
+  // a 3px accent-soft glow hugging the border, which itself turns focus-ring
+  focusRing: { ring: token('accent-soft'), offset: '0' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'space-2', 'space-3', 'space-4', 'space-8', 'space-10',
     'control-height-sm', 'control-height-md', 'control-height-lg',

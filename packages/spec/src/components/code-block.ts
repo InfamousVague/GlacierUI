@@ -41,8 +41,10 @@ export const codeBlockSpec: ComponentSpec = {
   },
   states: [
     { name: 'copy-hover', description: 'The copy button fills with the hover token.', tokens: { background: token('hover') } },
-    { name: 'copied', description: 'After a successful copy the button reads "Copied" for 1.5s, then resets to "Copy".' },
+    // a label swap on a 1.5s timer; the button's paint does not change
+    { name: 'copied', description: 'After a successful copy the button reads "Copied" for 1.5s, then resets to "Copy".', behavioral: true },
   ],
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'hairline', 'radius-lg', 'radius-sm', 'surface-sunken', 'border-subtle',
     'space-1', 'space-2', 'space-3', 'space-4',

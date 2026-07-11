@@ -35,9 +35,22 @@ export const floatingPanelSpec: ComponentSpec = {
     gap: token('space-3'),
   },
   states: [
-    { name: 'open', description: 'Panel mounts, portals to the body, and animates in at its position.' },
-    { name: 'dragging', description: 'A pointer-drag on the handle moves the panel; the position stays clamped inside the viewport.' },
-    { name: 'closed', description: 'Panel unmounts on close; the page underneath is never blocked.' },
+    {
+      name: 'open',
+      description: 'Panel mounts, portals to the body, and animates in at its position: a glass-thick surface with a glass-border hairline, glass-highlight inset, and shadow-4.',
+      tokens: { background: token('glass-thick'), border: token('glass-border'), shadow: token('shadow-4') },
+    },
+    {
+      name: 'dragging',
+      description:
+        'A pointer-drag on the handle moves the panel, its position clamped inside the viewport. The only style delta is the handle cursor swapping grab to grabbing (literal values, .handle:active) - nothing repaints.',
+      behavioral: true,
+    },
+    {
+      name: 'closed',
+      description: 'Panel unmounts on close; the page underneath is never blocked. Nothing is painted.',
+      behavioral: true,
+    },
   ],
   tokens: [
     'hairline',

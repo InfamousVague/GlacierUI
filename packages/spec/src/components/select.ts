@@ -68,9 +68,12 @@ export const selectSpec: ComponentSpec = {
     { name: 'invalid', description: 'Danger border when the field context reports an error.', tokens: { border: token('danger-border') } },
     { name: 'placeholder', description: 'The value text dims when no option is selected.', tokens: { text: token('text-subtle') } },
     { name: 'active', description: 'The highlighted option (hovered or arrow-navigated) fills with the accent.', tokens: { background: token('accent-solid'), text: token('accent-contrast') } },
-    { name: 'selected', description: 'The chosen option shows a leading check.' },
+    { name: 'selected', description: 'The chosen option shows a leading check that inherits the option text color (accent-contrast while the option is active).', tokens: { check: token('text') } },
     { name: 'option-disabled', description: 'A non-selectable option dims and shows a not-allowed cursor.', tokens: { text: token('text-disabled') } },
   ],
+  // a 3px accent-soft glow hugging the trigger border, which itself turns focus-ring (shared by focus-visible and open)
+  focusRing: { ring: token('accent-soft'), offset: '0' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'font-sans', 'space-1', 'space-2', 'space-3', 'space-4', 'space-5',
     'control-height-sm', 'control-height-md', 'control-height-lg',

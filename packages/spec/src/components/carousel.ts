@@ -27,6 +27,10 @@ export const carouselSpec: ComponentSpec = {
     radius: token('radius-md'),
     controlShadow: token('shadow-3'),
   },
+  // a 2px focus-ring outline around the scroller, offset 2px
+  focusRing: { ring: token('focus-ring'), offset: '2px' },
+  // the overlaid control slots ease opacity and visibility as overflow changes
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'space-1', 'space-4', 'radius-md', 'shadow-3',
     'focus-ring', 'duration-fast', 'ease-out',

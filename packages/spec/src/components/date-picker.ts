@@ -1,0 +1,96 @@
+import type { ComponentSpec } from '../schema.ts';
+import { controlSize, controlSizes, token } from '../vocab.ts';
+
+export const datePickerSizes = controlSizes;
+
+export const datePickerSpec: ComponentSpec = {
+  name: 'DatePicker',
+  id: 'date-picker',
+  category: 'molecule',
+  status: 'draft',
+  summary:
+    'A single-date field: an Input-metric trigger with a calendar glyph that opens a portaled Calendar in an anchored glass panel and submits an ISO value with native forms.',
+  element: 'div',
+  anatomy: [
+    { name: 'trigger', description: 'The Input-metric button that shows the formatted value and opens the panel.', required: true },
+    { name: 'icon', description: 'The leading calendar glyph inside the trigger, hidden from assistive tech.' },
+    { name: 'value', description: 'The selected date formatted with Intl.DateTimeFormat in the kit locale, or the localized placeholder.' },
+    { name: 'panel', description: 'The portaled role="dialog" glass panel anchored under the trigger; flips, clamps, and tracks scroll.' },
+    { name: 'grid', description: 'The embedded Calendar month grid, rendered bare so the panel provides the chrome.' },
+    { name: 'day', description: 'A selectable day inside the grid; choosing one commits the value, closes the panel, and refocuses the trigger.' },
+    { name: 'hiddenInput', description: 'A hidden form input carrying the ISO yyyy-MM-dd value when name is set.' },
+  ],
+  props: [
+    { name: 'value', type: 'object', description: 'Controlled selected date (a Date).' },
+    { name: 'defaultValue', type: 'object', description: 'Uncontrolled initial date.' },
+    { name: 'onValueChange', type: 'handler', description: 'Called with the next date, or nothing when the selected day is unpicked.' },
+    { name: 'placeholder', type: 'string', description: 'Hint shown while no date is selected; defaults to the localized prompt.' },
+    { name: 'size', type: 'enum', values: datePickerSizes, default: 'md', description: 'Control size step.' },
+    { name: 'fullWidth', type: 'boolean', default: false, description: 'Stretches the control to its container width.' },
+    { name: 'disabled', type: 'boolean', default: false, description: 'Blocks opening the panel.' },
+    { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the control geometry.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Uses the frosted glass material for the trigger surface.' },
+    { name: 'min', type: 'object', description: 'Earliest selectable date.' },
+    { name: 'max', type: 'object', description: 'Latest selectable date.' },
+    { name: 'disabledDates', type: 'handler', description: 'Predicate (date) => boolean; matching dates render disabled in the panel.' },
+    { name: 'dateFnsLocale', type: 'object', description: 'date-fns locale override for the panel month and weekday names.' },
+    { name: 'name', type: 'string', description: 'Submitted with forms through a hidden ISO yyyy-MM-dd input when set.' },
+    { name: 'id', type: 'string', description: 'Id for the trigger; falls back to the surrounding Field id.' },
+    { name: 'aria-label', type: 'string', description: 'Accessible name when no surrounding Field label is present.' },
+  ],
+  sizes: [
+    controlSize('sm', { paddingInline: token('space-3'), gap: token('space-2') }),
+    controlSize('md', { paddingInline: token('space-4'), gap: token('space-2') }),
+    controlSize('lg', { paddingInline: token('space-5'), gap: token('space-2') }),
+  ],
+  defaults: { size: 'md', fullWidth: false, disabled: false, skeleton: false, glass: false },
+  dimensions: {
+    radius: token('radius-lg'),
+    border: token('hairline'),
+    panelPadding: token('space-3'),
+    panelRadius: token('radius-lg'),
+  },
+  states: [
+    { name: 'hover', description: 'The trigger border strengthens when not disabled.', tokens: { border: token('border-strong') } },
+    { name: 'focus', description: 'The trigger border turns to the focus ring with an accent-soft ring.', tokens: { border: token('focus-ring'), ring: token('accent-soft') } },
+    { name: 'open', description: 'The panel fades and scales in from the trigger edge; the trigger keeps the focus paint while expanded.', tokens: { border: token('focus-ring') } },
+    { name: 'placeholder', description: 'With no value the trigger text uses the subtle tone.', tokens: { text: token('text-subtle') } },
+    { name: 'selected', description: 'The chosen day fills as a solid accent disc (hovering it steps to the accent hover), and the committed date is submitted through the hidden ISO input when name is set.', paint: { background: token('accent-solid'), text: token('accent-contrast') }, tokens: { 'hover-background': token('accent-solid-hover') } },
+    { name: 'disabled', description: 'The trigger dims and uses the sunken surface.', tokens: { background: token('surface-sunken') } },
+    { name: 'invalid', description: 'A surrounding Field error paints a danger border.', tokens: { border: token('danger-border') } },
+  ],
+  focusRing: { ring: token('accent-soft'), offset: '0' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
+  tokens: [
+    'font-sans', 'space-2', 'space-3', 'space-4', 'space-5',
+    'control-height-sm', 'control-height-md', 'control-height-lg',
+    'font-size-xs', 'font-size-sm', 'font-size-md', 'leading-sm',
+    'radius-lg', 'hairline',
+    'border', 'border-strong', 'focus-ring', 'danger-border',
+    'surface', 'surface-sunken', 'text', 'text-subtle',
+    'accent-soft',
+    'glass-regular', 'glass-thick', 'glass-border', 'glass-highlight', 'glass-saturate', 'blur-sm', 'blur-lg', 'shadow-4',
+    'duration-fast', 'ease-out',
+  ],
+  a11y: {
+    role: 'button',
+    focusable: true,
+    keyboard: [
+      { keys: 'Enter, Space', action: 'Opens the panel and moves focus onto the calendar; on a focused day, selects it, closes the panel, and restores focus to the trigger.' },
+      { keys: 'ArrowLeft, ArrowRight, ArrowUp, ArrowDown', action: 'Inside the panel, moves the focused day by one day or one week (from the embedded Calendar).' },
+      { keys: 'PageUp, PageDown', action: 'Inside the panel, moves the focused day to the previous or next month; with Shift, by a year.' },
+      { keys: 'Home, End', action: 'Inside the panel, moves the focused day to the first or last day of the week.' },
+      { keys: 'Escape', action: 'Closes the panel without changing the value and restores focus to the trigger.' },
+    ],
+    notes: [
+      'The trigger is a button with aria-haspopup="dialog" and aria-expanded; the portaled panel is a labelled non-modal role="dialog" that closes on Escape or an outside press.',
+      'Reads id, aria-describedby, and aria-invalid from a surrounding Field when present.',
+      'Single-date only by design: a range needs visible month context across both endpoints while it is being picked, so ranges are selected with an inline Calendar in range mode instead of this popover.',
+      'The panel positions through the shared anchored-position engine: portaled to the body, flipping to the top when space runs out, clamped to the viewport, tracking scroll and resize.',
+    ],
+  },
+  motion: {
+    description: 'The panel fades and scales in from the trigger edge and closes instantly; motion is disabled when reduced motion is preferred.',
+    transition: { speed: 'fast', ease: 'out' },
+  },
+};

@@ -23,15 +23,32 @@ export const tabStripSpec: ComponentSpec = {
     { name: 'onValueChange', type: 'handler', description: 'Called with the id of the tab that becomes active.' },
     { name: 'onClose', type: 'handler', description: 'Called with the id of the tab whose close button is pressed.' },
     { name: 'spring', type: 'enum', values: ['snappy', 'smooth', 'bouncy', 'gentle'], default: 'snappy', description: 'Spring preset for the active indicator.' },
+    { name: 'showScrollbar', type: 'boolean', default: false, description: 'Shows the horizontal scrollbar beneath overflowing tabs; hidden by default so the baseline hairline stays flush.' },
     { name: 'aria-label', type: 'string', description: 'Accessible name for the strip.' },
   ],
-  defaults: { spring: 'snappy' },
+  defaults: { spring: 'snappy', showScrollbar: false },
   dimensions: {
     radius: token('radius-md'),
     gap: token('space-1'),
     paddingInline: token('space-3'),
     paddingBlock: token('space-2'),
   },
+  states: [
+    { name: 'hover', description: 'A hovered tab washes to the hover background and full text color; the hovered close control washes to the active background.', paint: { background: token('hover'), text: token('text') } },
+    { name: 'selected', description: 'The active tab keeps a transparent fill but takes the full text color, lifts its icon to text-muted, and carries the 2px accent-solid underline indicator.', paint: { text: token('text') }, tokens: { icon: token('text-muted'), indicator: token('accent-solid') } },
+    { name: 'close-hover', description: 'The per-tab close control washes to the active background with full text color on hover.', paint: { background: token('active'), text: token('text') } },
+    { name: 'overflowing', description: 'With showScrollbar, an overflowing strip reserves a space-2 band beneath the tabs, hides its real border-bottom, and repaints the baseline hairline as a border-subtle gradient at the tab baseline; the scrollbar thumb is border, border-strong on hover.', tokens: { baseline: token('border-subtle'), thumb: token('border'), 'thumb-hover': token('border-strong') } },
+  ],
+  // 2px focus-ring outline inset into the tab (outline-offset: -2px)
+  focusRing: { ring: token('focus-ring'), offset: '-2px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
+  tokens: [
+    'space-1', 'space-2', 'space-3', 'hairline', 'border-subtle', 'border', 'border-strong',
+    'font-sans', 'font-size-sm', 'font-weight-medium',
+    'radius-md', 'radius-sm', 'radius-full',
+    'text', 'text-muted', 'text-subtle', 'hover', 'active', 'accent-solid',
+    'focus-ring', 'duration-fast', 'ease-out',
+  ],
   a11y: {
     role: 'tablist',
     focusable: true,

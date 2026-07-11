@@ -1,5 +1,15 @@
-import type { ComponentSpec } from '../schema.ts';
+import type { ComponentSpec, PaintSpec } from '../schema.ts';
 import { compactSizes, toneSpecs, token } from '../vocab.ts';
+
+/** Per-tone dot fill, transcribed from StatusDot.module.css; only background is painted. */
+const dotTonePaint: Record<string, PaintSpec> = {
+  neutral: { background: token('text-subtle') },
+  accent: { background: token('accent-solid') },
+  success: { background: token('success-solid') },
+  warning: { background: token('warning-solid') },
+  danger: { background: token('danger-solid') },
+  info: { background: token('info-solid') },
+};
 
 export const statusDotSpec: ComponentSpec = {
   name: 'StatusDot',
@@ -15,14 +25,29 @@ export const statusDotSpec: ComponentSpec = {
     { name: 'label', type: 'string', description: 'Accessible name; when set the dot becomes a status region, otherwise it is decorative.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
   ],
-  tones: toneSpecs(),
+  tones: toneSpecs().map((tone) => ({ ...tone, paint: dotTonePaint[tone.name] })),
   sizes: [
     { name: 'sm', diameter: token('size-2xs') },
     { name: 'md', diameter: token('size-xs') },
   ],
   defaults: { tone: 'neutral', size: 'md', pulse: false, skeleton: false },
   dimensions: { radius: token('radius-full') },
-  states: [{ name: 'pulse', description: 'An expanding, fading ring in the dot color loops while pulse is set.' }],
+  states: [
+    {
+      name: 'pulse',
+      description:
+        'An expanding, fading ring loops while pulse is set: a ::after in the dot color (background: inherit) scales 1 to 2.6 and fades 0.55 to 0 over 1.6s ease-out.',
+      // keyed by tone: the ring inherits the dot fill, so it takes the tone's background token
+      tokens: {
+        'neutral-ring': token('text-subtle'),
+        'accent-ring': token('accent-solid'),
+        'success-ring': token('success-solid'),
+        'warning-ring': token('warning-solid'),
+        'danger-ring': token('danger-solid'),
+        'info-ring': token('info-solid'),
+      },
+    },
+  ],
   tokens: [
     'radius-full', 'text-subtle', 'accent-solid', 'success-solid', 'warning-solid', 'danger-solid', 'info-solid',
   ],

@@ -5,7 +5,15 @@
  */
 
 const measure = { type: 'string', description: 'A `$token-name` reference or a raw CSS value.' };
-const tokenMap = { type: 'object', additionalProperties: { type: 'string', pattern: '^\\$' } };
+const tokenRef = { type: 'string', pattern: '^\\$' };
+const tokenMap = { type: 'object', additionalProperties: tokenRef };
+const paint = {
+  type: 'object',
+  description: 'Structured paint bindings: which token fills each canonical paint role.',
+  additionalProperties: false,
+  properties: { background: tokenRef, text: tokenRef, border: tokenRef },
+};
+const propTypes = ['enum', 'boolean', 'string', 'number', 'node', 'token', 'element', 'handler', 'array', 'object'];
 
 export const schemaJson = {
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -32,19 +40,7 @@ export const schemaJson = {
     },
     props: {
       type: 'array',
-      items: {
-        type: 'object',
-        required: ['name', 'type', 'description'],
-        additionalProperties: false,
-        properties: {
-          name: { type: 'string' },
-          type: { enum: ['enum', 'boolean', 'string', 'number', 'node', 'token', 'element', 'handler'] },
-          values: { type: 'array', items: { type: 'string' } },
-          default: { type: ['string', 'number', 'boolean'] },
-          required: { type: 'boolean' },
-          description: { type: 'string' },
-        },
-      },
+      items: { $ref: '#/definitions/propSpec' },
     },
     variants: { $ref: '#/definitions/styleList' },
     tones: { $ref: '#/definitions/styleList' },
@@ -77,8 +73,26 @@ export const schemaJson = {
         type: 'object',
         required: ['name', 'description'],
         additionalProperties: false,
-        properties: { name: { type: 'string' }, description: { type: 'string' }, tokens: tokenMap },
+        properties: {
+          name: { type: 'string' },
+          description: { type: 'string' },
+          paint,
+          tokens: tokenMap,
+          behavioral: { type: 'boolean' },
+        },
       },
+    },
+    focusRing: {
+      type: 'object',
+      required: ['ring'],
+      additionalProperties: false,
+      properties: { ring: tokenRef, offset: { type: 'string' } },
+    },
+    transition: {
+      type: 'object',
+      required: ['duration', 'ease'],
+      additionalProperties: false,
+      properties: { duration: tokenRef, ease: tokenRef },
     },
     tokens: { type: 'array', items: { type: 'string' } },
     a11y: {
@@ -115,13 +129,54 @@ export const schemaJson = {
     },
   },
   definitions: {
+    valueSpec: {
+      type: 'object',
+      required: ['type', 'description'],
+      additionalProperties: false,
+      properties: {
+        type: { enum: propTypes },
+        values: { type: 'array', items: { type: 'string' } },
+        description: { type: 'string' },
+        item: { $ref: '#/definitions/valueSpec' },
+        fields: { type: 'array', items: { $ref: '#/definitions/objectFieldSpec' } },
+      },
+    },
+    objectFieldSpec: {
+      type: 'object',
+      required: ['name', 'type', 'description'],
+      additionalProperties: false,
+      properties: {
+        name: { type: 'string' },
+        type: { enum: propTypes },
+        values: { type: 'array', items: { type: 'string' } },
+        required: { type: 'boolean' },
+        description: { type: 'string' },
+        item: { $ref: '#/definitions/valueSpec' },
+        fields: { type: 'array', items: { $ref: '#/definitions/objectFieldSpec' } },
+      },
+    },
+    propSpec: {
+      type: 'object',
+      required: ['name', 'type', 'description'],
+      additionalProperties: false,
+      properties: {
+        name: { type: 'string' },
+        type: { enum: propTypes },
+        values: { type: 'array', items: { type: 'string' } },
+        default: { type: ['string', 'number', 'boolean'] },
+        required: { type: 'boolean' },
+        description: { type: 'string' },
+        item: { $ref: '#/definitions/valueSpec' },
+        fields: { type: 'array', items: { $ref: '#/definitions/objectFieldSpec' } },
+      },
+    },
     styleList: {
       type: 'array',
       items: {
         type: 'object',
         required: ['name', 'description'],
         additionalProperties: false,
-        properties: { name: { type: 'string' }, description: { type: 'string' }, tokens: tokenMap },
+        properties: { name: { type: 'string' }, description: { type: 'string' }, paint, tokens: tokenMap },
       },
     },
   },

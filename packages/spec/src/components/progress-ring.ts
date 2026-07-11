@@ -1,5 +1,5 @@
 import type { ComponentSpec } from '../schema.ts';
-import { toneSpecs, token } from '../vocab.ts';
+import { token } from '../vocab.ts';
 
 /** Tone families the ring arc supports, a subset of the shared tones. */
 export const progressRingTones = ['accent', 'success', 'warning', 'danger'] as const;
@@ -27,9 +27,17 @@ export const progressRingSpec: ComponentSpec = {
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a circular placeholder with the exact geometry.' },
     { name: 'aria-label', type: 'string', description: 'Accessible name for the ring.' },
   ],
-  tones: toneSpecs(progressRingTones),
+  tones: [
+    // the tone paints the arc: background here is the arc's SVG stroke color,
+    // while the track circle always strokes segment-track
+    { name: 'accent', description: 'The brand accent family, for primary emphasis.', paint: { background: token('accent-solid') }, tokens: { stroke: token('accent-solid') } },
+    { name: 'success', description: 'Positive or complete states.', paint: { background: token('success-solid') }, tokens: { stroke: token('success-solid') } },
+    { name: 'warning', description: 'Caution states that still let the user proceed.', paint: { background: token('warning-solid') }, tokens: { stroke: token('warning-solid') } },
+    { name: 'danger', description: 'Errors and destructive states.', paint: { background: token('danger-solid') }, tokens: { stroke: token('danger-solid') } },
+  ],
   defaults: { max: 100, size: 48, thickness: 4, tone: 'accent', showValue: false, skeleton: false },
   dimensions: { fontSize: token('font-size-sm') },
+  transition: { duration: token('duration-normal'), ease: token('ease-out') },
   tokens: [
     'segment-track', 'accent-solid', 'success-solid', 'warning-solid', 'danger-solid',
     'text', 'font-size-sm', 'duration-normal', 'ease-out',

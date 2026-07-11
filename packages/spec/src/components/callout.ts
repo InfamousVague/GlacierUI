@@ -25,11 +25,12 @@ export const calloutSpec: ComponentSpec = {
     { name: 'children', type: 'node', description: 'Callout body content.' },
   ],
   tones: [
-    { name: 'note', description: 'Neutral, sunken surface, the default.', tokens: { background: token('surface-sunken'), border: token('border-subtle'), title: token('text') } },
-    { name: 'info', description: 'Neutral-informational tint.', tokens: { background: token('info-soft'), border: token('info-border'), title: token('info-text') } },
-    { name: 'success', description: 'Positive or complete states.', tokens: { background: token('success-soft'), border: token('success-border'), title: token('success-text') } },
-    { name: 'warning', description: 'Caution states, rendered as an alert.', tokens: { background: token('warning-soft'), border: token('warning-border'), title: token('warning-text') } },
-    { name: 'danger', description: 'Errors and destructive states, rendered as an alert.', tokens: { background: token('danger-soft'), border: token('danger-border'), title: token('danger-text') } },
+    // body text stays text-muted in every tone; the title and icon carry the tone color
+    { name: 'note', description: 'Neutral, sunken surface, the default.', paint: { background: token('surface-sunken'), border: token('border-subtle'), text: token('text-muted') }, tokens: { title: token('text'), icon: token('text-muted') } },
+    { name: 'info', description: 'Neutral-informational tint.', paint: { background: token('info-soft'), border: token('info-border'), text: token('text-muted') }, tokens: { title: token('info-text'), icon: token('info-text') } },
+    { name: 'success', description: 'Positive or complete states.', paint: { background: token('success-soft'), border: token('success-border'), text: token('text-muted') }, tokens: { title: token('success-text'), icon: token('success-text') } },
+    { name: 'warning', description: 'Caution states, rendered as an alert.', paint: { background: token('warning-soft'), border: token('warning-border'), text: token('text-muted') }, tokens: { title: token('warning-text'), icon: token('warning-text') } },
+    { name: 'danger', description: 'Errors and destructive states, rendered as an alert.', paint: { background: token('danger-soft'), border: token('danger-border'), text: token('text-muted') }, tokens: { title: token('danger-text'), icon: token('danger-text') } },
   ],
   defaults: { tone: 'note', skeleton: false, glass: false },
   dimensions: {

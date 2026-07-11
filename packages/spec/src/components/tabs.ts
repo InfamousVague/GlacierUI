@@ -44,6 +44,10 @@ export const tabsSpec: ComponentSpec = {
     { name: 'focus-visible', description: 'A 2px inset accent ring on the focused tab or panel.', tokens: { ring: token('focus-ring') } },
     { name: 'disabled', description: 'A disabled tab dims to the disabled text color and blocks activation.', tokens: { text: token('text-disabled') } },
   ],
+  // a 2px focus-ring outline inset into the tab (offset -2px); the panel draws
+  // the same ring outset 2px
+  focusRing: { ring: token('focus-ring'), offset: '-2px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'space-1', 'space-2', 'space-3', 'space-4', 'space-5',
     'hairline', 'border-subtle', 'font-sans', 'font-size-sm', 'font-weight-medium',

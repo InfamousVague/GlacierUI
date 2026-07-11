@@ -40,10 +40,12 @@ export const switchSpec: ComponentSpec = {
     trackPadding: '0.125rem',
   },
   states: [
-    { name: 'checked', description: 'Track fills with accent and the thumb slides to the far edge.', tokens: { track: token('accent-solid') } },
+    { name: 'checked', description: 'Track fills with accent and the thumb slides to the far edge.', paint: { background: token('accent-solid') }, tokens: { track: token('accent-solid') } },
     { name: 'focus-visible', description: 'A 2px accent outline rings the track.', tokens: { ring: token('focus-ring') } },
     { name: 'disabled', description: 'Halved opacity and not-allowed cursor.' },
   ],
+  focusRing: { ring: token('focus-ring'), offset: '2px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'space-2', 'font-sans', 'font-size-sm', 'text', 'hairline', 'border-strong', 'border',
     'radius-full', 'surface', 'accent-solid', 'accent-contrast', 'glass-highlight', 'shadow-2',

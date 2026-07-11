@@ -23,13 +23,13 @@ export const toolbarSpec: ComponentSpec = {
   ],
   defaults: { sticky: false, border: false, surface: false },
   // even padding on every side; the middle grows so no slot needs a margin
-  dimensions: { padding: token('space-2'), gap: token('space-3') },
+  dimensions: { padding: token('space-3'), gap: token('space-3') },
   states: [
-    { name: 'sticky', description: 'Pins to the top of the scroll container.' },
-    { name: 'border', description: 'Adds a bottom hairline.', tokens: { border: token('border-subtle') } },
-    { name: 'surface', description: 'Adds a translucent glass background.', tokens: { background: token('glass-thin') } },
+    { name: 'sticky', description: 'Pins to the top of the scroll container (position: sticky, top 0, z-index 20). Pure positioning with zero paint of its own - pair it with surface so content scrolling under it stays legible.', behavioral: true },
+    { name: 'border', description: 'Adds a hairline border-subtle bottom rule.', paint: { border: token('border-subtle') } },
+    { name: 'surface', description: 'Adds the translucent glass-thin background with a blur-md, glass-saturate backdrop filter.', paint: { background: token('glass-thin') }, tokens: { blur: token('blur-md'), saturate: token('glass-saturate') } },
   ],
-  tokens: ['space-2', 'space-3', 'font-family-sans', 'hairline', 'border-subtle', 'glass-thin', 'blur-md', 'glass-saturate'],
+  tokens: ['space-3', 'font-sans', 'hairline', 'border-subtle', 'glass-thin', 'blur-md', 'glass-saturate'],
   a11y: {
     notes: ['Give an icon-only control in the start or end slot an aria-label; the toolbar adds no labels of its own.'],
   },

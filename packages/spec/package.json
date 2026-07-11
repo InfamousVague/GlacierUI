@@ -8,7 +8,7 @@
     "./dist/schema.json": "./dist/schema.json"
   },
   "scripts": {
-    "gen": "node src/generate.ts"
+    "gen": "node --experimental-transform-types src/generate.ts"
   },
   "dependencies": {
     "@glacier/tokens": "*"

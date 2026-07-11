@@ -1,8 +1,40 @@
-import type { ComponentSpec } from '../schema.ts';
+import type { ComponentSpec, PaintSpec, TokenRef } from '../schema.ts';
 import { toneSpecs, token } from '../vocab.ts';
 
 /** Tone families, exported so the React kit derives its union from here. */
 export const bannerTones = ['neutral', 'accent', 'success', 'warning', 'danger', 'info'] as const;
+
+/**
+ * Per-tone paint, transcribed from Banner.module.css. The message text stays
+ * text-muted in every tone; the icon and the dismiss control's hover tint
+ * carry the tone color.
+ */
+const bannerTonePaint: Record<string, { paint: PaintSpec; tokens: Record<string, TokenRef> }> = {
+  neutral: {
+    paint: { background: token('hover'), border: token('border-subtle'), text: token('text-muted') },
+    tokens: { icon: token('text-muted') },
+  },
+  accent: {
+    paint: { background: token('accent-soft'), border: token('accent-border'), text: token('text-muted') },
+    tokens: { icon: token('accent-text'), dismissHover: token('accent-soft-hover') },
+  },
+  success: {
+    paint: { background: token('success-soft'), border: token('success-border'), text: token('text-muted') },
+    tokens: { icon: token('success-text'), dismissHover: token('success-soft-hover') },
+  },
+  warning: {
+    paint: { background: token('warning-soft'), border: token('warning-border'), text: token('text-muted') },
+    tokens: { icon: token('warning-text'), dismissHover: token('warning-soft-hover') },
+  },
+  danger: {
+    paint: { background: token('danger-soft'), border: token('danger-border'), text: token('text-muted') },
+    tokens: { icon: token('danger-text'), dismissHover: token('danger-soft-hover') },
+  },
+  info: {
+    paint: { background: token('info-soft'), border: token('info-border'), text: token('text-muted') },
+    tokens: { icon: token('info-text'), dismissHover: token('info-soft-hover') },
+  },
+};
 
 export const bannerSpec: ComponentSpec = {
   name: 'Banner',
@@ -26,7 +58,7 @@ export const bannerSpec: ComponentSpec = {
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a full-width placeholder with the banner geometry instead of content.' },
     { name: 'children', type: 'node', description: 'Banner message content, placed in the message slot.' },
   ],
-  tones: toneSpecs(bannerTones),
+  tones: toneSpecs(bannerTones).map((tone) => ({ ...tone, ...(bannerTonePaint[tone.name] ?? {}) })),
   defaults: { tone: 'info', skeleton: false },
   dimensions: {
     radius: token('radius-lg'),
@@ -45,11 +77,11 @@ export const bannerSpec: ComponentSpec = {
     'space-1', 'space-3', 'space-4', 'hairline', 'radius-lg',
     'font-sans', 'font-size-sm', 'leading-md',
     'hover', 'text-muted', 'border-subtle',
-    'accent-soft', 'accent-border', 'accent-text',
-    'success-soft', 'success-border', 'success-text',
-    'warning-soft', 'warning-border', 'warning-text',
-    'danger-soft', 'danger-border', 'danger-text',
-    'info-soft', 'info-border', 'info-text',
+    'accent-soft', 'accent-soft-hover', 'accent-border', 'accent-text',
+    'success-soft', 'success-soft-hover', 'success-border', 'success-text',
+    'warning-soft', 'warning-soft-hover', 'warning-border', 'warning-text',
+    'danger-soft', 'danger-soft-hover', 'danger-border', 'danger-text',
+    'info-soft', 'info-soft-hover', 'info-border', 'info-text',
   ],
   a11y: {
     role: 'status',

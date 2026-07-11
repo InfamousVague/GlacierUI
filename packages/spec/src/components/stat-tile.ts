@@ -38,7 +38,7 @@ export const statTileSpec: ComponentSpec = {
   },
   states: [
     { name: 'default', description: 'A row: an optional sunken icon disc, then a column of the value (2xl, semibold, primary text) with an optional trailing hint, and a secondary-text label below.' },
-    { name: 'glass', description: 'Swaps the solid raised card for the frosted glass material with a top highlight.' },
+    { name: 'glass', description: 'Swaps the solid raised card for the frosted glass material (blur-sm, glass-saturate) with an inset top highlight.', paint: { background: token('glass-regular'), border: token('glass-border') }, tokens: { highlight: token('glass-highlight') } },
     { name: 'skeleton', description: 'Replaces the content with two text-line placeholders sized to the value (2xl) and label (sm), holding the same vertical rhythm.' },
   ],
   tokens: [

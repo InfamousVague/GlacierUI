@@ -43,10 +43,13 @@ export const segmentedControlSpec: ComponentSpec = {
   dimensions: { radius: token('control-radius'), padding: '0.1875rem', gap: token('space-2'), border: token('hairline') },
   states: [
     { name: 'selected', description: 'The thumb slides under the segment and its label goes to full text weight and color.', tokens: { thumb: token('segment-thumb'), text: token('text') } },
-    { name: 'active', description: 'The pressed segment label scales down to 0.96.' },
+    { name: 'active', description: 'The pressed segment label scales down to 0.96, easing its transform on the fast/out pair; no repaint.', tokens: { duration: token('duration-fast'), ease: token('ease-out') } },
     { name: 'focus-visible', description: 'A 2px accent ring outlines the focused segment label.', tokens: { ring: token('focus-ring') } },
     { name: 'disabled', description: 'Muted label color and a not-allowed cursor; the input is blocked.', tokens: { text: token('text-disabled') } },
   ],
+  // a 2px focus-ring outline drawn by the label's ::after, offset 1px
+  focusRing: { ring: token('focus-ring'), offset: '1px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'space-1', 'space-2', 'space-3', 'space-4', 'space-5',
     'control-height-sm', 'control-height-md', 'control-height-lg', 'control-radius',

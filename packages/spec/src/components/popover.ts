@@ -4,7 +4,10 @@ import { token } from '../vocab.ts';
 /**
  * Placement of the panel relative to its trigger: a side, optionally suffixed
  * with an alignment. Exported so the React kit derives its Placement union and
- * any binding shares the same list.
+ * any binding shares the same list. The inline sides are writing-direction
+ * relative: inline-end resolves to right in LTR and left in RTL, while the
+ * physical left and right stay put in every direction. Start and end
+ * alignments on the block sides are logical too.
  */
 export const popoverPlacements = [
   'top',
@@ -23,6 +26,14 @@ export const popoverPlacements = [
   'right-start',
   'right-center',
   'right-end',
+  'inline-start',
+  'inline-start-start',
+  'inline-start-center',
+  'inline-start-end',
+  'inline-end',
+  'inline-end-start',
+  'inline-end-center',
+  'inline-end-end',
 ] as const;
 
 export const popoverSpec: ComponentSpec = {
@@ -34,6 +45,12 @@ export const popoverSpec: ComponentSpec = {
     'A floating glass panel anchored to a trigger; it portals to the body, flips and clamps on screen, and closes on outside press or Escape.',
   element: 'div',
   anatomy: [
+    {
+      name: 'arrow',
+      description:
+        'A small rotated-square pointer wearing the panel material, poking out of the edge that faces the trigger and following the resolved placement, including start and end alignments.',
+      required: true,
+    },
     { name: 'trigger', description: 'The element that toggles the panel. Its ref and click are wired up, and it gains aria-haspopup, aria-expanded, and aria-controls.', required: true },
     { name: 'panel', description: 'The portalled floating dialog holding the popover content.', required: true },
     { name: 'content', description: 'The children rendered inside the panel.' },
@@ -56,13 +73,30 @@ export const popoverSpec: ComponentSpec = {
     padding: token('space-3'),
     radius: token('radius-lg'),
     border: token('hairline'),
-    offset: '8px',
+    offset: '12px',
   },
   states: [
-    { name: 'open', description: 'Panel mounts, portals to the body, animates in, and takes focus.' },
-    { name: 'closed', description: 'Panel animates out and unmounts on animation complete.' },
-    { name: 'focus-visible', description: 'The focused panel suppresses its outline; focus is managed, not ringed.' },
+    {
+      name: 'open',
+      description: 'Panel mounts, portals to the body, animates in, and takes focus; the one-piece glass surface (panel plus arrow) paints glass-thick behind the content with a glass-border hairline stroke.',
+      tokens: { background: token('glass-thick'), border: token('glass-border') },
+    },
+    {
+      name: 'closed',
+      description: 'Panel animates out (motion-driven opacity and scale, no token repaint) and unmounts on animation complete.',
+      behavioral: true,
+    },
+    {
+      name: 'focus-visible',
+      description: 'The focused panel suppresses its outline (.positioner:focus-visible { outline: none }); focus is managed, not ringed - zero paint delta.',
+      behavioral: true,
+    },
   ],
+  // The panel itself never rings: its outline is suppressed and focus is
+  // managed on open. The ring belongs to the trigger and to any focusable
+  // content inside, which draw the kit-wide 2px focus-ring outline at a 2px
+  // offset.
+  focusRing: { ring: token('focus-ring'), offset: '2px' },
   tokens: [
     'space-3',
     'hairline',
@@ -71,10 +105,9 @@ export const popoverSpec: ComponentSpec = {
     'glass-thick',
     'blur-lg',
     'glass-saturate',
-    'glass-highlight',
-    'shadow-4',
     'text',
     'font-sans',
+    'focus-ring',
   ],
   a11y: {
     role: 'dialog',

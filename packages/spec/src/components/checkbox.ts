@@ -25,10 +25,12 @@ export const checkboxSpec: ComponentSpec = {
   defaults: { defaultChecked: false, skeleton: false, glass: false },
   dimensions: { radius: token('radius-sm'), gap: token('space-2'), border: token('hairline'), size: '1.375rem', iconSize: '0.875rem' },
   states: [
-    { name: 'checked', description: 'Box fills with the accent and shows the check.', tokens: { background: token('accent-solid'), border: token('accent-solid'), check: token('accent-contrast') } },
+    { name: 'checked', description: 'Box fills with the accent and shows the check.', paint: { background: token('accent-solid'), border: token('accent-solid') }, tokens: { check: token('accent-contrast') } },
     { name: 'focus-visible', description: 'A 2px accent focus ring rings the box.', tokens: { ring: token('focus-ring') } },
     { name: 'disabled', description: 'Halved opacity and not-allowed cursor.' },
   ],
+  focusRing: { ring: token('focus-ring'), offset: '2px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'space-2', 'font-sans', 'font-size-sm', 'text', 'hairline', 'border-strong',
     'duration-fast', 'ease-out', 'focus-ring', 'radius-sm', 'surface', 'accent-contrast', 'accent-solid',

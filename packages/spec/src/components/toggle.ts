@@ -35,6 +35,8 @@ export const toggleSpec: ComponentSpec = {
     { name: 'focus-visible', description: 'A 2px accent focus ring blooms outward.', tokens: { ring: token('focus-ring') } },
     { name: 'disabled', description: 'Halved opacity and not-allowed cursor.' },
   ],
+  focusRing: { ring: token('focus-ring'), offset: '2px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'space-2', 'space-3', 'space-4', 'space-5', 'control-height-sm', 'control-height-md', 'control-height-lg',
     'control-radius', 'hairline', 'font-sans', 'font-weight-medium', 'font-size-xs', 'font-size-sm', 'font-size-md',

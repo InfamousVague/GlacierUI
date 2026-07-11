@@ -49,7 +49,7 @@ export const tooltipSpec: ComponentSpec = {
     {
       name: 'bubble',
       description:
-        'The portalled role="tooltip" glass surface holding the content, positioned above, below, or beside the trigger. It carries a thick-glass background, hairline border, backdrop blur and saturation, an inset top highlight and a drop shadow, and is fixed to the viewport with pointer-events disabled so it can never trap the cursor.',
+        'The portalled role="tooltip" glass surface holding the content, positioned above, below, or beside the trigger. It carries a thick-glass background, hairline border, backdrop blur and saturation, and a soft blurred drop shadow, and is fixed to the viewport with pointer-events disabled so it can never trap the cursor.',
       required: true,
     },
   ],
@@ -76,20 +76,18 @@ export const tooltipSpec: ComponentSpec = {
     offset: '10px',
   },
   states: [
-    { name: 'shown', description: 'Bubble is mounted and portalled to the body, fades and scales up with a small upward drift from the trigger-anchored transform origin, and the trigger carries aria-describedby pointing at it.' },
-    { name: 'hidden', description: 'Bubble fades and scales back down, then unmounts once the exit animation completes; the trigger drops aria-describedby.' },
+    { name: 'shown', description: 'Bubble is mounted and portalled to the body, fades and scales up with a small upward drift from the trigger-anchored transform origin, and the trigger carries aria-describedby pointing at it. Motion and announcement only; the bubble paint never changes.', behavioral: true },
+    { name: 'hidden', description: 'Bubble fades and scales back down, then unmounts once the exit animation completes; the trigger drops aria-describedby. Motion and announcement only; the bubble paint never changes.', behavioral: true },
   ],
   tokens: [
-    'space-1',
     'space-2',
+    'space-3',
     'hairline',
     'radius-md',
     'glass-border',
     'glass-thick',
-    'glass-highlight',
     'glass-saturate',
     'blur-md',
-    'shadow-3',
     'text',
     'font-sans',
     'font-size-xs',

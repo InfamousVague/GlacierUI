@@ -34,11 +34,14 @@ export const inputSpec: ComponentSpec = {
   defaults: { size: 'md', skeleton: false, glass: false, disabled: false },
   dimensions: { radius: token('radius-lg'), border: token('hairline') },
   states: [
-    { name: 'hover', description: 'Border strengthens when not focused or disabled.', tokens: { border: token('border-strong') } },
-    { name: 'focus', description: 'Border shifts to the focus ring color with a 3px accent-soft glow.', tokens: { border: token('focus-ring'), ring: token('accent-soft') } },
-    { name: 'disabled', description: 'Halved opacity, sunken surface, not-allowed cursor.', tokens: { background: token('surface-sunken') } },
-    { name: 'invalid', description: 'aria-invalid recolors the border to danger; on focus the ring turns danger.', tokens: { border: token('danger-border'), ring: token('danger-soft') } },
+    { name: 'hover', description: 'Border strengthens when not focused or disabled.', paint: { border: token('border-strong') } },
+    { name: 'focus', description: 'Border shifts to the focus ring color with a 3px accent-soft glow.', paint: { border: token('focus-ring') }, tokens: { ring: token('accent-soft') } },
+    { name: 'disabled', description: 'Halved opacity, sunken surface, not-allowed cursor.', paint: { background: token('surface-sunken') } },
+    { name: 'invalid', description: 'aria-invalid recolors the border to danger; on focus the ring turns danger.', paint: { border: token('danger-border') }, tokens: { ring: token('danger-soft') } },
   ],
+  // a 3px accent-soft glow hugging the border, which itself turns focus-ring
+  focusRing: { ring: token('accent-soft'), offset: '0' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'hairline', 'border', 'border-strong', 'radius-lg', 'surface', 'surface-sunken', 'text', 'text-subtle',
     'font-sans', 'control-height-sm', 'control-height-md', 'control-height-lg',

@@ -1,5 +1,5 @@
 import type { ComponentSpec } from '../schema.ts';
-import { toneSpecs, token } from '../vocab.ts';
+import { token } from '../vocab.ts';
 
 /** Size steps, exported so the React kit derives its union from here. */
 export const progressBarSizes = ['sm', 'md'] as const;
@@ -27,7 +27,13 @@ export const progressBarSpec: ComponentSpec = {
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
     { name: 'aria-label', type: 'string', description: 'Accessible name for the bar.' },
   ],
-  tones: toneSpecs(progressBarTones),
+  tones: [
+    // each tone's paint is the fill; the track always paints segment-track
+    { name: 'accent', description: 'The brand accent family, for primary emphasis.', paint: { background: token('accent-solid') } },
+    { name: 'success', description: 'Positive or complete states.', paint: { background: token('success-solid') } },
+    { name: 'warning', description: 'Caution states that still let the user proceed.', paint: { background: token('warning-solid') } },
+    { name: 'danger', description: 'Errors and destructive states.', paint: { background: token('danger-solid') } },
+  ],
   sizes: [
     { name: 'sm', height: '0.375rem' },
     { name: 'md', height: '0.625rem' },
@@ -35,9 +41,10 @@ export const progressBarSpec: ComponentSpec = {
   defaults: { max: 100, indeterminate: false, size: 'md', tone: 'accent', skeleton: false },
   dimensions: { radius: token('radius-full') },
   states: [
-    { name: 'determinate', description: 'Fill width is (clamped value / max) as a percentage.' },
-    { name: 'indeterminate', description: 'A 40%-wide fill sweeps left to right on a loop; value is omitted.' },
+    { name: 'determinate', description: 'Fill width is (clamped value / max) as a percentage, eased on change; the width is geometry, not a repaint, and aria-valuenow announces the value.', behavioral: true },
+    { name: 'indeterminate', description: 'A 40%-wide fill sweeps left to right on a 1.4s loop; value and aria-valuenow are omitted. The sweep keeps the fill paint and animates position only.', tokens: { ease: token('ease-in-out') } },
   ],
+  transition: { duration: token('duration-normal'), ease: token('ease-out') },
   tokens: [
     'radius-full', 'segment-track', 'accent-solid', 'success-solid', 'warning-solid', 'danger-solid',
     'duration-normal', 'ease-out', 'ease-in-out',

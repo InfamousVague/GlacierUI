@@ -18,9 +18,10 @@ export const spinnerSpec: ComponentSpec = {
     { name: 'aria-label', type: 'string', default: 'Loading', description: 'Accessible name; pass an empty string when a parent already announces loading.' },
   ],
   tones: [
-    { name: 'subtle', description: 'The default, low-emphasis gray ring.', tokens: { color: token('text-subtle') } },
-    { name: 'accent', description: 'The brand accent ring, for primary emphasis.', tokens: { color: token('accent-solid') } },
-    { name: 'inherit', description: 'Takes the current text color.' },
+    // the ring is a currentColor border, so each tone paints via the text role
+    { name: 'subtle', description: 'The default, low-emphasis gray ring.', paint: { text: token('text-subtle') }, tokens: { color: token('text-subtle') } },
+    { name: 'accent', description: 'The brand accent ring, for primary emphasis.', paint: { text: token('accent-solid') }, tokens: { color: token('accent-solid') } },
+    { name: 'inherit', description: 'Takes the current text color; paints no token of its own (color: currentColor).', paint: {} },
   ],
   sizes: [
     { name: 'sm', diameter: '1em', border: '2px' },
@@ -29,7 +30,7 @@ export const spinnerSpec: ComponentSpec = {
   ],
   defaults: { size: 'md', tone: 'subtle', skeleton: false, 'aria-label': 'Loading' },
   dimensions: { radius: token('radius-full'), border: '2px' },
-  tokens: ['radius-full', 'text-subtle', 'accent-solid'],
+  tokens: ['radius-full', 'text-subtle', 'accent-solid', 'size-md'],
   a11y: {
     role: 'status',
     focusable: false,

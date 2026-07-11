@@ -22,11 +22,17 @@ export const meterSpec: ComponentSpec = {
     { name: 'aria-label', type: 'string', description: 'Accessible name for the meter.' },
   ],
   tones: [
-    { name: 'auto', description: 'Grades by level: bottom third danger, middle third warning, top third success.' },
-    { name: 'accent', description: 'The brand accent family.' },
-    { name: 'success', description: 'Positive or complete states.' },
-    { name: 'warning', description: 'Caution states.' },
-    { name: 'danger', description: 'Errors and low states.' },
+    // each tone's paint is the filled-segment fill; empty segments always paint the track
+    {
+      name: 'auto',
+      description: 'Grades by level, so it has no single rest fill: the bottom third paints danger, the middle third warning, the top third success.',
+      paint: {},
+      tokens: { 'low-background': token('danger-solid'), 'mid-background': token('warning-solid'), 'high-background': token('success-solid') },
+    },
+    { name: 'accent', description: 'The brand accent family.', paint: { background: token('accent-solid') } },
+    { name: 'success', description: 'Positive or complete states.', paint: { background: token('success-solid') } },
+    { name: 'warning', description: 'Caution states.', paint: { background: token('warning-solid') } },
+    { name: 'danger', description: 'Errors and low states.', paint: { background: token('danger-solid') } },
   ],
   sizes: [
     { name: 'sm', height: '0.25rem' },
@@ -38,6 +44,7 @@ export const meterSpec: ComponentSpec = {
     { name: 'filled', description: 'A segment below the filled count paints with the resolved tone solid.', tokens: { background: token('accent-solid') } },
     { name: 'empty', description: 'A segment at or above the filled count paints the track.', tokens: { background: token('segment-track') } },
   ],
+  transition: { duration: token('duration-normal'), ease: token('ease-out') },
   tokens: [
     'space-1', 'radius-full', 'segment-track',
     'accent-solid', 'danger-solid', 'warning-solid', 'success-solid',

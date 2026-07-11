@@ -26,11 +26,11 @@ export const segmentedBarSpec: ComponentSpec = {
     { name: 'aria-label', type: 'string', description: 'Accessible name for the bar. Falls back to a generated percentage breakdown.' },
   ],
   tones: [
-    { name: 'accent', description: 'The brand accent family.', tokens: { background: token('accent-solid') } },
-    { name: 'success', description: 'Positive or complete states.', tokens: { background: token('success-solid') } },
-    { name: 'warning', description: 'Caution states.', tokens: { background: token('warning-solid') } },
-    { name: 'danger', description: 'Errors and low states.', tokens: { background: token('danger-solid') } },
-    { name: 'neutral', description: 'Unclassified slices; paints the track color, indistinct from the empty remainder.', tokens: { background: token('segment-track') } },
+    { name: 'accent', description: 'The brand accent family.', paint: { background: token('accent-solid') } },
+    { name: 'success', description: 'Positive or complete states.', paint: { background: token('success-solid') } },
+    { name: 'warning', description: 'Caution states.', paint: { background: token('warning-solid') } },
+    { name: 'danger', description: 'Errors and low states.', paint: { background: token('danger-solid') } },
+    { name: 'neutral', description: 'Unclassified slices; paints the track color, indistinct from the empty remainder.', paint: { background: token('segment-track') } },
   ],
   sizes: [
     { name: 'sm', height: '0.375rem' },

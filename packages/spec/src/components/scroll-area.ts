@@ -32,10 +32,14 @@ export const scrollAreaSpec: ComponentSpec = {
     radius: token('radius-full'),
   },
   states: [
-    { name: 'fade-start', description: 'Once scrolled off the start edge, the leading edge dissolves to signal hidden content.', tokens: {} },
-    { name: 'fade-end', description: 'While more content remains, the trailing edge dissolves; it clears at the end.', tokens: {} },
+    // the masks are untinted (a transparent-to-#000 mask-image ramp); their only
+    // tokenized value is the fade width on the space scale
+    { name: 'fade-start', description: 'Once scrolled off the start edge, a space-6-wide transparent-to-opaque mask ramp dissolves the leading edge to signal hidden content.', tokens: { fade: token('space-6') } },
+    { name: 'fade-end', description: 'While more content remains, a space-6-wide transparent-to-opaque mask ramp dissolves the trailing edge; it clears at the end.', tokens: { fade: token('space-6') } },
     { name: 'focus-visible', description: 'A 2px inset accent ring on the keyboard-focused viewport.', tokens: { ring: token('focus-ring') } },
   ],
+  // a 2px focus-ring outline inset into the viewport (offset -2px)
+  focusRing: { ring: token('focus-ring'), offset: '-2px' },
   tokens: [
     'space-2', 'space-6',
     'font-sans', 'text',

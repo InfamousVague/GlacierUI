@@ -37,9 +37,14 @@ export const numberInputSpec: ComponentSpec = {
     { name: 'hover', description: 'Border strengthens to border-strong when not focused or disabled.', tokens: { border: token('border-strong') } },
     { name: 'focus-within', description: 'Border switches to the focus ring with a 3px accent-soft bloom.', tokens: { border: token('focus-ring'), ring: token('accent-soft') } },
     { name: 'disabled', description: 'Halved opacity on a sunken surface; both step buttons and the input are blocked.', tokens: { background: token('surface-sunken') } },
-    { name: 'at-min', description: 'The decrement button disables when the value reaches min.' },
-    { name: 'at-max', description: 'The increment button disables when the value reaches max.' },
+    { name: 'at-min', description: 'The decrement button disables when the value reaches min: its glyph dims to the subtle text color and the cursor turns not-allowed.', paint: { text: token('text-subtle') } },
+    { name: 'at-max', description: 'The increment button disables when the value reaches max: its glyph dims to the subtle text color and the cursor turns not-allowed.', paint: { text: token('text-subtle') } },
+    { name: 'holding', description: 'Pressing and holding a step button steps once, pauses, then auto-repeats on an accelerating interval until release or a bound.', behavioral: true },
+    { name: 'haptic', description: 'Every committed step fires a selection tick, whether from a button tap, each hold-repeat step, or ArrowUp/ArrowDown in the field, all riding the existing step amount; a step that clamps at min or max bumps medium once (re-armed after leaving the bound); typed digits are silent and their blur-commit fires one light; data-haptic="none" opts the stepper out.', behavioral: true },
   ],
+  // a 3px accent-soft glow hugging the group border, which itself turns focus-ring on :focus-within
+  focusRing: { ring: token('accent-soft'), offset: '0' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'hairline', 'border', 'border-strong', 'radius-lg', 'surface', 'surface-sunken', 'text', 'text-muted', 'text-subtle',
     'font-sans', 'font-size-xs', 'font-size-sm', 'font-size-md', 'font-size-lg', 'font-size-xl',

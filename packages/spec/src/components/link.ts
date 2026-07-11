@@ -16,9 +16,12 @@ export const linkSpec: ComponentSpec = {
   defaults: { skeleton: false },
   dimensions: { radius: token('radius-xs') },
   states: [
-    { name: 'hover', description: 'Text underline appears; underline offset is 0.2em.' },
+    // the underline is text-decoration in currentColor, i.e. the link's own accent-text
+    { name: 'hover', description: 'Text underline appears in the link color (currentColor); underline offset is 0.2em.', tokens: { underline: token('accent-text') } },
     { name: 'focus-visible', description: 'A 2px accent outline at 2px offset.', tokens: { ring: token('focus-ring') } },
   ],
+  focusRing: { ring: token('focus-ring'), offset: '2px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'accent-text',
     'font-weight-medium',

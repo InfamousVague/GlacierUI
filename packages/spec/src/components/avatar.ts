@@ -37,10 +37,11 @@ export const avatarSpec: ComponentSpec = {
   defaults: { size: 'md', shape: 'circle', skeleton: false, glass: false },
   dimensions: { radius: token('radius-full') },
   states: [
-    { name: 'image', description: 'src present and not errored; renders the img.' },
-    { name: 'errored', description: 'img onError falls the component through to the initials or placeholder branch.' },
-    { name: 'initials', description: 'No image but a name; renders up to two uppercased initials on an accent-soft fill.', tokens: { background: token('accent-soft'), text: token('accent-text') } },
-    { name: 'placeholder', description: 'Neither image nor name; a blank sunken fill, aria-hidden.', tokens: { background: token('surface-sunken') } },
+    { name: 'image', description: 'src present and not errored; the img covers the base sunken fill (object-fit cover), which shows while the image loads.', paint: { background: token('surface-sunken') } },
+    // a branch switch only: onError re-renders as the initials or placeholder state, which carry the paint
+    { name: 'errored', description: 'img onError falls the component through to the initials or placeholder branch.', behavioral: true },
+    { name: 'initials', description: 'No image but a name; renders up to two uppercased initials on an accent-soft fill.', paint: { background: token('accent-soft'), text: token('accent-text') } },
+    { name: 'placeholder', description: 'Neither image nor name; a blank sunken fill, aria-hidden.', paint: { background: token('surface-sunken') } },
   ],
   tokens: [
     'surface-sunken', 'accent-soft', 'accent-text', 'radius-full', 'radius-md',

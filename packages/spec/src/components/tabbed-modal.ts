@@ -31,6 +31,28 @@ export const tabbedModalSpec: ComponentSpec = {
     gap: token('space-6'),
     rail: token('space-4'),
   },
+  states: [
+    { name: 'hover', description: 'A hovered, enabled, non-active rail item washes with the hover token and strengthens its label from text-muted to text.', paint: { background: token('hover'), text: token('text') } },
+    {
+      name: 'selected',
+      description: 'The active rail item recolors to accent-text at medium weight and carries the sliding accent-soft pill behind its content.',
+      paint: { text: token('accent-text') },
+      tokens: { indicator: token('accent-soft') },
+    },
+    { name: 'disabled', description: 'A disabled rail item dims to half opacity (opacity: 0.5, a literal - no token) with a not-allowed cursor and is skipped by arrow navigation.' },
+  ],
+  // .railItem:focus-visible draws a 2px focus-ring outline inset by 2px
+  // (outline-offset: -2px); the pane rings outward instead
+  // (.pane:focus-visible, offset 2px) so its ring clears the scroll box.
+  focusRing: { ring: token('focus-ring'), offset: '-2px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
+  tokens: [
+    'space-2', 'space-3', 'space-4', 'space-6',
+    'hairline', 'border-subtle', 'radius-md', 'radius-sm',
+    'hover', 'text', 'text-muted', 'accent-text', 'accent-soft',
+    'font-sans', 'font-size-sm', 'font-weight-medium', 'leading-sm', 'leading-md',
+    'focus-ring', 'duration-fast', 'ease-out',
+  ],
   a11y: {
     role: 'dialog',
     focusable: true,

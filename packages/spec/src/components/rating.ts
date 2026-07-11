@@ -1,5 +1,5 @@
 import type { ComponentSpec } from '../schema.ts';
-import { controlSizes } from '../vocab.ts';
+import { controlSizes, token } from '../vocab.ts';
 
 /** Star size steps the rating supports. */
 export const ratingSizes = controlSizes;
@@ -33,6 +33,14 @@ export const ratingSpec: ComponentSpec = {
   ],
   defaults: { max: 5, readOnly: false, disabled: false, size: 'md', skeleton: false },
   dimensions: { gap: '0.1em' },
+  states: [
+    { name: 'active', description: 'The pressed star scales to 0.9, easing there on the fast duration.', tokens: { duration: token('duration-fast'), ease: token('ease-out') } },
+    { name: 'focus-visible', description: 'Keyboard focus on a star\'s hidden radio draws a 2px accent-solid outline around the cell, rounded to radius-sm, with a 2px offset.', tokens: { ring: token('accent-solid'), radius: token('radius-sm') } },
+    { name: 'haptic', description: 'Scrubbing the pointer across the stars fires a selection tick each time the previewed star changes (the preview falling back to the committed value on pointer leave is silent), committing a value with a click fires light, and keyboard arrows tick selection per change; data-haptic="none" opts the rating out.', behavioral: true },
+  ],
+  // a 2px outline on the focused star cell; it paints accent-solid, not the shared focus-ring token
+  focusRing: { ring: token('accent-solid'), offset: '2px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: ['warning-solid', 'border-strong', 'accent-solid', 'radius-sm', 'duration-fast', 'ease-out'],
   a11y: {
     role: 'radiogroup',

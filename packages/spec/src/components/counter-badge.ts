@@ -23,10 +23,10 @@ export const counterBadgeSpec: ComponentSpec = {
     { name: 'aria-label', type: 'string', description: 'Overrides the status label; defaults to `${count} items`, or `New activity` in dot mode.' },
   ],
   tones: [
-    { name: 'danger', description: 'Errors and destructive states, the default.', tokens: { background: token('danger-solid'), text: token('danger-contrast') } },
-    { name: 'accent', description: 'The brand accent family, for primary emphasis.', tokens: { background: token('accent-solid'), text: token('accent-contrast') } },
-    { name: 'neutral', description: 'The default, low-emphasis gray family.', tokens: { background: token('gray-9'), text: token('accent-contrast') } },
-    { name: 'success', description: 'Positive or complete states.', tokens: { background: token('success-solid'), text: token('success-contrast') } },
+    { name: 'danger', description: 'Errors and destructive states, the default.', paint: { background: token('danger-solid'), text: token('danger-contrast') } },
+    { name: 'accent', description: 'The brand accent family, for primary emphasis.', paint: { background: token('accent-solid'), text: token('accent-contrast') } },
+    { name: 'neutral', description: 'The default, low-emphasis gray family.', paint: { background: token('gray-9'), text: token('accent-contrast') } },
+    { name: 'success', description: 'Positive or complete states.', paint: { background: token('success-solid'), text: token('success-contrast') } },
   ],
   sizes: [
     { name: 'sm', height: token('size-sm'), paddingInline: token('space-1'), fontSize: token('font-size-xs'), diameter: token('size-2xs') },

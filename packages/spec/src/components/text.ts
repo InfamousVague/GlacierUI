@@ -33,14 +33,15 @@ export const textSpec: ComponentSpec = {
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
     { name: 'children', type: 'node', description: 'Text content.' },
   ],
+  // each tone paints only the text color; background and border are never touched
   tones: [
-    { name: 'default', description: 'Primary body color.', tokens: { text: token('text') } },
-    { name: 'muted', description: 'Lower-emphasis secondary text.', tokens: { text: token('text-muted') } },
-    { name: 'subtle', description: 'Faintest text, for captions and hints.', tokens: { text: token('text-subtle') } },
-    { name: 'accent', description: 'Brand accent text.', tokens: { text: token('accent-text') } },
-    { name: 'danger', description: 'Error text.', tokens: { text: token('danger-text') } },
-    { name: 'success', description: 'Positive text.', tokens: { text: token('success-text') } },
-    { name: 'warning', description: 'Caution text.', tokens: { text: token('warning-text') } },
+    { name: 'default', description: 'Primary body color.', paint: { text: token('text') } },
+    { name: 'muted', description: 'Lower-emphasis secondary text.', paint: { text: token('text-muted') } },
+    { name: 'subtle', description: 'Faintest text, for captions and hints.', paint: { text: token('text-subtle') } },
+    { name: 'accent', description: 'Brand accent text.', paint: { text: token('accent-text') } },
+    { name: 'danger', description: 'Error text.', paint: { text: token('danger-text') } },
+    { name: 'success', description: 'Positive text.', paint: { text: token('success-text') } },
+    { name: 'warning', description: 'Caution text.', paint: { text: token('warning-text') } },
   ],
   sizes: [
     { name: 'xs', fontSize: token('font-size-xs') },

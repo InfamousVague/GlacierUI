@@ -17,10 +17,11 @@ export const skeletonSpec: ComponentSpec = {
     { name: 'height', type: 'string', description: 'Box height; defaults to the width for circle, otherwise unset.' },
     { name: 'radius', type: 'string', description: 'Corner radius override, e.g. var(--glacier-control-radius).' },
   ],
+  // every shape shares the same wash: a hover-token base swept by an active-token highlight band
   variants: [
-    { name: 'text', description: 'A 1em-tall line with a small radius, for placeholder text.' },
-    { name: 'rect', description: 'A rounded block, the default, for images and cards.' },
-    { name: 'circle', description: 'A full-radius disc; height falls back to width.' },
+    { name: 'text', description: 'A 1em-tall line with a small radius, for placeholder text.', paint: { background: token('hover') }, tokens: { highlight: token('active') } },
+    { name: 'rect', description: 'A rounded block, the default, for images and cards.', paint: { background: token('hover') }, tokens: { highlight: token('active') } },
+    { name: 'circle', description: 'A full-radius disc; height falls back to width.', paint: { background: token('hover') }, tokens: { highlight: token('active') } },
   ],
   defaults: { variant: 'rect' },
   dimensions: {

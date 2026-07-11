@@ -42,9 +42,14 @@ export const titleBarSpec: ComponentSpec = {
     border: token('hairline'),
   },
   states: [
-    { name: 'surface', description: 'Paints the translucent glass background.', tokens: { background: token('glass-thin') } },
-    { name: 'border', description: 'Adds the bottom hairline.', tokens: { border: token('border-subtle') } },
-    { name: 'trafficLightInset', description: 'Pads the inline start by the 88px gutter so content clears the macOS window controls.' },
+    { name: 'surface', description: 'Paints the translucent glass-thin background with a blur-md, glass-saturate backdrop filter.', paint: { background: token('glass-thin') }, tokens: { blur: token('blur-md'), saturate: token('glass-saturate') } },
+    { name: 'border', description: 'Adds the hairline border-subtle bottom rule.', paint: { border: token('border-subtle') } },
+    {
+      name: 'trafficLightInset',
+      description:
+        'Pads the inline start by the fixed 88px gutter (padding-inline-start: 88px) so content clears the macOS window controls. Pure layout - it moves content without repainting anything, so behavioral is the closest schema fit.',
+      behavioral: true,
+    },
   ],
   tokens: [
     'font-sans', 'font-size-sm', 'font-weight-medium', 'text-muted',

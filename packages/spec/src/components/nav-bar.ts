@@ -77,8 +77,8 @@ export const navBarSpec: ComponentSpec = {
   states: [
     {
       name: 'hover',
-      description: 'A non-active item washes to the hover background; active items keep the pill instead.',
-      tokens: { background: token('hover'), text: token('text') },
+      description: 'A non-active item washes to the hover background and full text color; active items keep the pill instead.',
+      paint: { background: token('hover'), text: token('text') },
     },
     {
       name: 'focus-visible',
@@ -87,11 +87,15 @@ export const navBarSpec: ComponentSpec = {
     },
     {
       name: 'active',
-      description: 'The current item shows the soft accent pill and accent text; aria-current is page.',
-      tokens: { background: token('accent-soft'), text: token('accent-text') },
+      description: 'The current item shows the sliding accent-soft pill behind it and takes accent text at medium weight; aria-current is page.',
+      paint: { background: token('accent-soft'), text: token('accent-text') },
+      tokens: { weight: token('font-weight-medium') },
     },
     { name: 'disabled', description: 'Halved opacity, not-allowed cursor, and hover suppressed.' },
   ],
+  // 2px focus-ring outline inset into the item (outline-offset: -2px)
+  focusRing: { ring: token('focus-ring'), offset: '-2px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'font-sans',
     'space-1', 'space-2', 'space-3', 'space-12',

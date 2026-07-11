@@ -58,25 +58,41 @@ export * from './components/textarea.ts';
 export * from './components/toast.ts';
 export * from './components/toggle.ts';
 export * from './components/toolbar.ts';
+export * from './components/nav-bar.ts';
+export * from './components/title-bar.ts';
 export * from './components/tooltip.ts';
 export * from './components/stat-tile.ts';
 export * from './components/device-frame.ts';
 export * from './components/filter-chip.ts';
 export * from './components/scroll-area.ts';
 export * from './components/carousel.ts';
+export * from './components/combobox.ts';
+export * from './components/multi-select.ts';
+export * from './components/list.ts';
 export * from './components/heatmap.ts';
 export * from './components/breadcrumbs.ts';
 export * from './components/pagination.ts';
 export * from './components/accordion.ts';
 export * from './components/table.ts';
+export * from './components/drawer.ts';
+export * from './components/alert-dialog.ts';
 export * from './components/spotlight.ts';
 export * from './components/floating-panel.ts';
 export * from './components/tabbed-panel.ts';
 export * from './components/tabbed-modal.ts';
 export * from './components/tab-strip.ts';
+export * from './components/tree-view.ts';
+export * from './components/data-grid.ts';
 export * from './components/resizable-split-pane.ts';
+export * from './components/icon.ts';
 export * from './components/image.ts';
 export * from './components/rating.ts';
+export * from './components/otp-field.ts';
+export * from './components/calendar.ts';
+export * from './components/date-picker.ts';
+export * from './components/file-upload.ts';
+export * from './components/fieldset.ts';
+export * from './components/form-section.ts';
 
 import type { ComponentSpec } from './schema.ts';
 import { appShellSpec } from './components/app-shell.ts';
@@ -125,25 +141,41 @@ import { textareaSpec } from './components/textarea.ts';
 import { toastSpec } from './components/toast.ts';
 import { toggleSpec } from './components/toggle.ts';
 import { toolbarSpec } from './components/toolbar.ts';
+import { navBarSpec } from './components/nav-bar.ts';
+import { titleBarSpec } from './components/title-bar.ts';
 import { tooltipSpec } from './components/tooltip.ts';
 import { statTileSpec } from './components/stat-tile.ts';
 import { deviceFrameSpec } from './components/device-frame.ts';
 import { filterChipSpec } from './components/filter-chip.ts';
 import { scrollAreaSpec } from './components/scroll-area.ts';
 import { carouselSpec } from './components/carousel.ts';
+import { comboboxSpec } from './components/combobox.ts';
+import { multiSelectSpec } from './components/multi-select.ts';
+import { calendarSpec } from './components/calendar.ts';
+import { datePickerSpec } from './components/date-picker.ts';
+import { fileUploadSpec } from './components/file-upload.ts';
+import { fieldsetSpec } from './components/fieldset.ts';
+import { formSectionSpec } from './components/form-section.ts';
+import { listItemSpec, listSpec } from './components/list.ts';
 import { heatmapSpec } from './components/heatmap.ts';
 import { breadcrumbsSpec } from './components/breadcrumbs.ts';
 import { paginationSpec } from './components/pagination.ts';
 import { accordionSpec } from './components/accordion.ts';
 import { tableSpec } from './components/table.ts';
+import { drawerSpec } from './components/drawer.ts';
+import { alertDialogSpec } from './components/alert-dialog.ts';
 import { spotlightSpec } from './components/spotlight.ts';
 import { floatingPanelSpec } from './components/floating-panel.ts';
 import { tabbedPanelSpec } from './components/tabbed-panel.ts';
 import { tabbedModalSpec } from './components/tabbed-modal.ts';
 import { tabStripSpec } from './components/tab-strip.ts';
+import { treeViewSpec } from './components/tree-view.ts';
+import { dataGridSpec } from './components/data-grid.ts';
 import { resizableSplitPaneSpec } from './components/resizable-split-pane.ts';
+import { iconSpec } from './components/icon.ts';
 import { imageSpec } from './components/image.ts';
 import { ratingSpec } from './components/rating.ts';
+import { otpFieldSpec } from './components/otp-field.ts';
 
 /** Bump when the schema shape changes in a breaking way. */
 export const SPEC_VERSION = '0.1.0';
@@ -156,6 +188,7 @@ export const specs: ComponentSpec[] = [
   labelSpec,
   linkSpec,
   kbdSpec,
+  iconSpec,
   codeBlockSpec,
   // actions
   buttonSpec,
@@ -209,24 +242,40 @@ export const specs: ComponentSpec[] = [
   filterChipSpec,
   imageSpec,
   ratingSpec,
+  otpFieldSpec,
   // new molecules
   scrollAreaSpec,
   carouselSpec,
+  comboboxSpec,
+  multiSelectSpec,
+  calendarSpec,
+  datePickerSpec,
+  fileUploadSpec,
+  fieldsetSpec,
+  formSectionSpec,
+  listSpec,
+  listItemSpec,
   heatmapSpec,
   breadcrumbsSpec,
   paginationSpec,
   accordionSpec,
   tableSpec,
+  drawerSpec,
+  alertDialogSpec,
   spotlightSpec,
   // new organisms
   floatingPanelSpec,
   tabbedPanelSpec,
   tabbedModalSpec,
   tabStripSpec,
+  treeViewSpec,
+  dataGridSpec,
   resizableSplitPaneSpec,
   // structures
   sidebarSpec,
   toolbarSpec,
+  navBarSpec,
+  titleBarSpec,
 ];
 
 /** Specs keyed by id for O(1) lookup. */

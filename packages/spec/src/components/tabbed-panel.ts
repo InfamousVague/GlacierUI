@@ -32,6 +32,28 @@ export const tabbedPanelSpec: ComponentSpec = {
     border: token('hairline'),
     bodyPadding: token('space-5'),
   },
+  states: [
+    { name: 'hover', description: 'A hovered, enabled tab strengthens its label from text-muted to text.', paint: { text: token('text') } },
+    {
+      name: 'selected',
+      description: 'The active tab strengthens its label to text and carries the sliding accent underline (2px tall, a literal) on the header hairline; its count badge flips to the accent tone.',
+      paint: { text: token('text') },
+      tokens: { indicator: token('accent-solid') },
+    },
+    { name: 'disabled', description: 'A disabled tab fades its label to text-disabled with a not-allowed cursor and is skipped by arrow navigation.', paint: { text: token('text-disabled') } },
+  ],
+  // .tab:focus-visible and .body:focus-visible both draw a 2px focus-ring
+  // outline inset by 2px (outline-offset: -2px) so it survives the panel's
+  // overflow clipping.
+  focusRing: { ring: token('focus-ring'), offset: '-2px' },
+  transition: { duration: token('duration-fast'), ease: token('ease-out') },
+  tokens: [
+    'space-1', 'space-2', 'space-3', 'space-4', 'space-5',
+    'hairline', 'border-subtle', 'radius-xl', 'radius-md', 'radius-sm', 'radius-full',
+    'surface', 'surface-raised', 'shadow-1', 'text', 'text-muted', 'text-disabled',
+    'font-sans', 'font-size-sm', 'font-weight-medium', 'accent-solid', 'focus-ring',
+    'duration-fast', 'ease-out',
+  ],
   a11y: {
     role: 'tablist',
     focusable: true,

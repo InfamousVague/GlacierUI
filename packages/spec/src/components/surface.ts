@@ -23,11 +23,12 @@ export const surfaceSpec: ComponentSpec = {
     { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid surface.' },
     { name: 'children', type: 'node', description: 'Surface content.' },
   ],
+  // every level paints the primary text color; only the background steps
   variants: [
-    { name: '0', description: 'App background plane.', tokens: { background: token('bg') } },
-    { name: '1', description: 'Default surface, one step above the background.', tokens: { background: token('surface') } },
-    { name: '2', description: 'Raised surface for layered content.', tokens: { background: token('surface-raised') } },
-    { name: 'sunken', description: 'Inset well recessed below the surface.', tokens: { background: token('surface-sunken') } },
+    { name: '0', description: 'App background plane.', paint: { background: token('bg'), text: token('text') } },
+    { name: '1', description: 'Default surface, one step above the background.', paint: { background: token('surface'), text: token('text') } },
+    { name: '2', description: 'Raised surface for layered content.', paint: { background: token('surface-raised'), text: token('text') } },
+    { name: 'sunken', description: 'Inset well recessed below the surface.', paint: { background: token('surface-sunken'), text: token('text') } },
   ],
   defaults: { level: '1', skeleton: false, glass: false },
   tokens: ['font-sans', 'text', 'bg', 'surface', 'surface-raised', 'surface-sunken', 'radius-lg'],
