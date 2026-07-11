@@ -1,0 +1,40 @@
+/* The invisible mount point. It carries the panel's corner radius (set by the
+   host through --arrow-glass-radius) purely as a data channel: the component
+   reads the resolved px value off this element to build the shape path. */
+.host {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: var(--arrow-glass-radius, 0px);
+}
+
+/* Soft ambient shadow: the same clipped shape, solid, blurred. A filter on
+   this SIBLING leaves the glass layer's backdrop sampling intact; on an
+   ancestor it would destroy it. */
+.shadow {
+  position: absolute;
+  background: oklch(0.1 0.01 260 / 0.55);
+  filter: blur(14px);
+  transform: translateY(6px);
+}
+
+/* THE glass: one element, one backdrop sample, one tint, panel and tip in a
+   single clip path, so no seam between them can exist. */
+.glass {
+  position: absolute;
+  background: var(--glacier-glass-thick);
+  /* hosts can soften the material: tooltips blur less than popovers */
+  backdrop-filter: blur(var(--arrow-glass-blur, var(--glacier-blur-lg))) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--arrow-glass-blur, var(--glacier-blur-lg))) saturate(var(--glacier-glass-saturate));
+}
+
+/* The hairline, stroked along the identical path. */
+.outline {
+  position: absolute;
+  overflow: visible;
+}
+
+.outline path {
+  stroke: var(--glacier-glass-border);
+  stroke-width: var(--glacier-hairline);
+}
