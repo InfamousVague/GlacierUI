@@ -1,0 +1,21 @@
+{
+  "name": "create-glacier-app",
+  "version": "0.1.0",
+  "description": "Scaffold a desktop app skeleton built with Glacier UI, with an optional Tauri backend.",
+  "type": "module",
+  "bin": {
+    "create-glacier-app": "index.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "template",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node build.mjs",
+    "prepack": "node build.mjs"
+  }
+}
