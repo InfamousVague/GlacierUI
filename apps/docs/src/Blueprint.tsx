@@ -2951,9 +2951,9 @@ function DeviceFrameBlueprint({ size, dimensions }: BlueprintProps) {
   const notchY = sy;
   const screenCorner = 12;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the device frame">
+    <svg viewBox="0 0 400 250" className="bpSvg" role="img" aria-label="Blueprint of the device frame">
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
+      <rect x={0} y={0} width={400} height={250} fill="url(#bpGrid)" />
       <rect x={px} y={py} width={pw} height={ph} rx={18} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       <path
         d={`M ${sx} ${sy + screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx + screenCorner} ${sy} H ${notchX} V ${notchY + notchH - 2} a 2 2 0 0 1 2 2 H ${notchX + notchW - 2} a 2 2 0 0 1 2 -2 V ${notchY} H ${sx + sw - screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx + sw} ${sy + screenCorner} V ${sy + sh - screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx + sw - screenCorner} ${sy + sh} H ${sx + screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx} ${sy + sh - screenCorner} Z`}
@@ -2974,7 +2974,7 @@ function DeviceFrameBlueprint({ size, dimensions }: BlueprintProps) {
       <text x={px - 12} y={py + 46} textAnchor="end" className="bpLabel bpMuted">buttons</text>
       <text x={px + pw + 14} y={py + ph / 2 + 24} className="bpLabel bpMuted">screen</text>
       <BpTitle />
-      <Foot parts={[radius && `radius: ${radius}`, screenRadius && `screen: ${screenRadius}`, bezel && `bezel: ${bezel}`]} />
+      <Foot y={244} parts={[radius && `radius: ${radius}`, screenRadius && `screen: ${screenRadius}`, bezel && `bezel: ${bezel}`]} />
     </svg>
   );
 }
