@@ -1,0 +1,9 @@
+/*
+ * Component styles placeholder.
+ *
+ * In the monorepo the app imports @glacier/react's raw TypeScript source (see
+ * vite.config alias), so component styles arrive through CSS modules and this
+ * file stays empty. When create-glacier-app vendors the built kit, it replaces
+ * this file with @glacier/react/dist/styles.css so the standalone app is fully
+ * styled without the source.
+ */

@@ -1,0 +1,174 @@
+/*
+ * App-level layout. Component look comes from Glacier; this file only arranges
+ * the shell and styles the two things the kit does not own: the custom window
+ * controls and the drag region. Every value is a Glacier token.
+ */
+
+/* App reset so padded, full-width layout containers behave predictably no
+   matter how the kit styles are delivered. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+/* Full-height root so the AppShell can own the viewport. */
+#root {
+  min-height: 100vh;
+}
+
+/* Window chrome on top, the app shell filling the rest. overflow-hidden keeps
+   the outer window from scrolling; the page content scrolls on its own. */
+.appRoot {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.appShell {
+  flex: 1;
+  min-height: 0;
+}
+
+/* The title bar doubles as the window drag handle under Tauri. Interactive
+   children opt back out with data-no-drag so clicks are not swallowed. */
+.titleBarDrag {
+  -webkit-app-region: drag;
+  app-region: drag;
+  user-select: none;
+}
+
+.titleBarDrag button,
+.titleBarDrag a,
+.titleBarDrag [data-no-drag] {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+
+/* Custom minimize / maximize / close controls, shown in the title bar end
+   slot. Kept minimal so they read as OS chrome rather than app buttons. */
+.windowControls {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-1);
+}
+
+.windowControl {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 0;
+  border-radius: var(--glacier-radius-sm);
+  background: transparent;
+  color: var(--glacier-text-muted);
+  cursor: pointer;
+  transition:
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.windowControl:hover {
+  background: var(--glacier-hover);
+  color: var(--glacier-text);
+}
+
+.windowControl[data-variant='close']:hover {
+  background: var(--glacier-danger-solid);
+  color: var(--glacier-danger-contrast);
+}
+
+.windowControl:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: -2px;
+}
+
+/* Page scaffolding: a comfortable reading column with room to breathe. */
+.page {
+  width: 100%;
+  max-width: 64rem;
+  margin-inline: auto;
+  padding-inline: var(--glacier-space-6);
+  padding-block: var(--glacier-space-6) var(--glacier-space-10);
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-6);
+}
+
+.pageLede {
+  max-width: 42rem;
+}
+
+/* A brand lockup for the sidebar header. */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  padding-inline: var(--glacier-space-2);
+  font-weight: var(--glacier-font-weight-semibold);
+  color: var(--glacier-text);
+}
+
+.brandMark {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--glacier-radius-md);
+  background: var(--glacier-accent-solid);
+  color: var(--glacier-accent-contrast);
+}
+
+/* A responsive metric row for the dashboard. Tiles carry an icon and a trailing
+   hint, so the floor leaves room for the value between them before wrapping. */
+.statRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--glacier-space-4);
+}
+
+/* Two-column split that collapses on narrow widths. */
+.split {
+  display: grid;
+  gap: var(--glacier-space-6);
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  align-items: start;
+}
+
+/* A stack of labelled form controls for the settings page. */
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-2);
+}
+
+.accentSwatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--glacier-space-2);
+}
+
+.accentSwatch {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-full);
+  cursor: pointer;
+  padding: 0;
+  transition: transform var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.accentSwatch[data-selected] {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: 2px;
+}
+
+.accentSwatch:hover {
+  transform: scale(1.08);
+}

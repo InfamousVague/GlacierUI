@@ -1,0 +1,25 @@
+{
+  "name": "@glacier/starter",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "An agnostic desktop app skeleton built with Glacier UI: it is the live source for the create-glacier-app template.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@glacier/icons": "*",
+    "@glacier/motion": "*",
+    "@glacier/react": "*",
+    "@glacier/tokens": "*",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.0",
+    "vite": "^7.0.0"
+  }
+}
