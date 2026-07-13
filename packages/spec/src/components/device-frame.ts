@@ -38,6 +38,8 @@ export const deviceFrameSpec: ComponentSpec = {
     screenRadius: '14% of frame width minus the bezel',
     bezel: token('space-2'),
   },
+  // the bezel is a literal black; the screen inset frames its children
+  paint: {},
   tokens: [
     'gray-9', 'surface-sunken', 'border', 'border-strong', 'hairline',
     'radius-md', 'radius-full',

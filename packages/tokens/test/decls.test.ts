@@ -128,8 +128,10 @@ describe('CSS declaration emitters', () => {
       expectWellFormed(elevationOverlayDecls(theme));
     }
     expect(rampDecls('light').map(([name]) => name)).toEqual(rampDecls('dark').map(([name]) => name));
-    // light surfaces are the :root defaults, so only dark carries overrides
-    expect(themeOverrideDecls('light')).toEqual([]);
+    // light surfaces are mostly the :root defaults; the one exception is the
+    // text-subtle contrast override, which lifts subtle text to pass WCAG AA.
+    expect(themeOverrideDecls('light').map(([name]) => name)).toEqual(['text-subtle']);
+    expectWellFormed(themeOverrideDecls('light'));
     expectWellFormed(themeOverrideDecls('dark'));
   });
 

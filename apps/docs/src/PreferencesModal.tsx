@@ -1,7 +1,8 @@
 import { accentOptions, accentSteps, type SansFont, type MonoFont } from '@glacier/tokens';
-import { Button, Divider, Label, SegmentedControl, Slider, Switch, TabbedModal, Text, useT, Size, TextTone, Variant } from '@glacier/react';
+import { Button, Divider, Label, SegmentedControl, Select, Slider, Switch, TabbedModal, Text, useT, Size, TextTone, Variant, type Locale, type VisualFeedbackVariant, type VisualFeedbackIntensity } from '@glacier/react';
 import { LayoutTemplate, Palette, Sparkles, Type } from '@glacier/icons';
-import { m } from './i18n.ts';
+import { FlagSquircle } from './FlagSquircle.tsx';
+import { LANGUAGES, m } from './i18n.ts';
 
 export interface Preferences {
   theme: 'system' | 'light' | 'dark';
@@ -10,6 +11,10 @@ export interface Preferences {
   direction: 'ltr' | 'rtl';
   /** Vibration feedback on tap, on supported touch devices. */
   haptics: boolean;
+  /** The on-screen counterpart to haptics; fires for every pointer type. */
+  visualFeedback: boolean;
+  visualFeedbackVariant: VisualFeedbackVariant;
+  visualFeedbackIntensity: VisualFeedbackIntensity;
   accent: string;
   font: SansFont;
   mono: MonoFont;
@@ -24,6 +29,9 @@ export const DEFAULT_PREFERENCES: Preferences = {
   layout: 'floating',
   direction: 'ltr',
   haptics: false,
+  visualFeedback: false,
+  visualFeedbackVariant: 'shockwave',
+  visualFeedbackIntensity: 'subtle',
   accent: accentOptions[0]!.name,
   font: 'inter',
   mono: 'jetbrains',
@@ -31,22 +39,13 @@ export const DEFAULT_PREFERENCES: Preferences = {
   frostedness: 1,
 };
 
-const SANS_OPTIONS: Array<{ value: SansFont; label: string }> = [
-  { value: 'inter', label: 'Inter' },
-  { value: 'noto', label: 'Noto Sans' },
-  { value: 'plex', label: 'IBM Plex' },
-];
-
-const MONO_OPTIONS: Array<{ value: MonoFont; label: string }> = [
-  { value: 'jetbrains', label: 'JetBrains' },
-  { value: 'plex', label: 'IBM Plex' },
-];
-
 interface PreferencesModalProps {
   open: boolean;
   onClose: () => void;
   preferences: Preferences;
   onChange: (patch: Partial<Preferences>) => void;
+  locale: Locale;
+  onLocaleChange: (locale: Locale) => void;
 }
 
 /**
@@ -55,11 +54,54 @@ interface PreferencesModalProps {
  * direction), and Effects (rounding, frost, haptics). Every control drives a
  * design token, so changes apply to the whole kit at once.
  */
-export function PreferencesModal({ open, onClose, preferences, onChange }: PreferencesModalProps) {
+export function PreferencesModal({ open, onClose, preferences, onChange, locale, onLocaleChange }: PreferencesModalProps) {
   const t = useT();
+
+  const VISUAL_FEEDBACK_VARIANTS: Array<{ value: VisualFeedbackVariant; label: string }> = [
+    { value: 'shockwave', label: t(m.prefsShockwave) },
+    { value: 'pulse', label: t(m.prefsPulse) },
+    { value: 'glow', label: t(m.prefsGlow) },
+    { value: 'nudge', label: t(m.prefsNudge) },
+  ];
+
+  const VISUAL_FEEDBACK_INTENSITIES: Array<{ value: VisualFeedbackIntensity; label: string }> = [
+    { value: 'subtle', label: t(m.prefsSubtle) },
+    { value: 'normal', label: t(m.prefsNormal) },
+    { value: 'strong', label: t(m.prefsStrong) },
+  ];
+
+  const SANS_OPTIONS: Array<{ value: SansFont; label: string }> = [
+    { value: 'inter', label: t(m.prefsInter) },
+    { value: 'noto', label: t(m.prefsNotoSans) },
+    { value: 'plex', label: t(m.prefsIbmPlex) },
+  ];
+
+  const MONO_OPTIONS: Array<{ value: MonoFont; label: string }> = [
+    { value: 'jetbrains', label: t(m.prefsJetBrains) },
+    { value: 'plex', label: t(m.prefsIbmPlex) },
+  ];
 
   const appearance = (
     <div className="prefsBody">
+      <div className="prefsSection">
+        <Label>{t(m.language)}</Label>
+        <Select
+          fullWidth
+          aria-label={t(m.language)}
+          value={locale}
+          onValueChange={(value) => onLocaleChange(value as Locale)}
+          options={LANGUAGES.map((language) => ({
+            value: language.code,
+            label: (
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--glacier-space-2)' }}>
+                <FlagSquircle code={language.code} />
+                {language.label}
+              </span>
+            ),
+          }))}
+        />
+      </div>
+      <Divider />
       <div className="prefsSection">
         <Label>{t(m.theme)}</Label>
         <SegmentedControl
@@ -230,6 +272,35 @@ export function PreferencesModal({ open, onClose, preferences, onChange }: Prefe
         <Text size={Size.XSmall} tone={TextTone.Subtle}>
           {t(m.hapticsHelp)}
         </Text>
+      </div>
+      <Divider />
+      <div className="prefsSection">
+        <Label htmlFor="prefs-visual-feedback">{t(m.visualFeedback)}</Label>
+        <Switch
+          id="prefs-visual-feedback"
+          checked={preferences.visualFeedback}
+          onCheckedChange={(visualFeedback) => onChange({ visualFeedback })}
+        />
+        <Text size={Size.XSmall} tone={TextTone.Subtle}>
+          {t(m.visualFeedbackHelp)}
+        </Text>
+        {preferences.visualFeedback && (
+          <div style={{ display: 'grid', gap: 'var(--glacier-space-3)', marginBlockStart: 'var(--glacier-space-2)' }}>
+            <SegmentedControl
+              aria-label={t(m.visualFeedback)}
+              value={preferences.visualFeedbackVariant}
+              onValueChange={(value) => onChange({ visualFeedbackVariant: value as VisualFeedbackVariant })}
+              options={VISUAL_FEEDBACK_VARIANTS}
+            />
+            <SegmentedControl
+              size={Size.Small}
+              aria-label={t(m.visualFeedbackHelp)}
+              value={preferences.visualFeedbackIntensity}
+              onValueChange={(value) => onChange({ visualFeedbackIntensity: value as VisualFeedbackIntensity })}
+              options={VISUAL_FEEDBACK_INTENSITIES}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

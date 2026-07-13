@@ -1,77 +1,81 @@
 import { useState } from 'react';
-import { FilterChip, Heading, Text, Size, TextTone } from '@glacier/react';
+import { FilterChip, Heading, Text, Size, TextTone, useT } from '@glacier/react';
 import { Star } from '@glacier/icons';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 const starIcon = <Star size={14} />;
 
 function ControlledFilters() {
+  const t = useT();
   const [active, setActive] = useState<Record<string, boolean>>({ open: true });
   const toggle = (key: string) => (next: boolean) => setActive((prev) => ({ ...prev, [key]: next }));
   return (
     <div style={{ display: 'flex', gap: 'var(--glacier-space-2)', flexWrap: 'wrap' }}>
       <FilterChip selected={active.open} onSelectedChange={toggle('open')} count={12}>
-        Open
+        {t(m.filterchipOpen)}
       </FilterChip>
       <FilterChip selected={active.closed} onSelectedChange={toggle('closed')} count={48}>
-        Closed
+        {t(m.filterchipClosed)}
       </FilterChip>
       <FilterChip selected={active.mine} onSelectedChange={toggle('mine')} count={3}>
-        Assigned to me
+        {t(m.filterchipAssignedToMe)}
       </FilterChip>
     </div>
   );
 }
 
 export function FilterChipPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>FilterChip</Heading>
+      <Heading level={1}>{t(m.fcName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A toggleable filter pill for faceted filtering. It renders as a button with{' '}
-        <code>aria-pressed</code>; the selected state paints the accent soft tint, with an optional
-        leading icon and a trailing count. Controlled <code>selected</code> +{' '}
-        <code>onSelectedChange</code>, like the kit's other toggles.
+        {prose(t(m.fcLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntro)}</Text>
       <ComponentBlueprint specId="filter-chip" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="An uncontrolled chip toggles its own selected state. Selected fills with the accent soft tint."
+        title={t(m.exBasic)}
+        description={t(m.fcEx1Desc)}
+        component="FilterChip"
+        render={(K) => (
+          <div style={{ display: 'flex', gap: 'var(--glacier-space-2)' }}>
+            <K.FilterChip defaultSelected>{t(m.filterchipAvailable)}</K.FilterChip>
+            <K.FilterChip>{t(m.filterchipOnSale)}</K.FilterChip>
+          </div>
+        )}
         code={`import { FilterChip } from '@glacier/react';
 
 <FilterChip defaultSelected>Available</FilterChip>
 <FilterChip>On sale</FilterChip>`}
-      >
-        <div style={{ display: 'flex', gap: 'var(--glacier-space-2)' }}>
-          <FilterChip defaultSelected>Available</FilterChip>
-          <FilterChip>On sale</FilterChip>
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Icon and count"
-        description="Add a leading icon and a trailing count. The count is a CounterBadge that follows the accent tone when the chip is selected."
+        title={t(m.fcEx2Title)}
+        description={t(m.fcEx2Desc)}
+        component="FilterChip"
+        render={(K) => (
+          <div style={{ display: 'flex', gap: 'var(--glacier-space-2)' }}>
+            <K.FilterChip icon={starIcon} count={7} defaultSelected>
+              {t(m.filterchipFeatured)}
+            </K.FilterChip>
+            <K.FilterChip count={24}>{t(m.filterchipArchived)}</K.FilterChip>
+          </div>
+        )}
         code={`<FilterChip icon={starIcon} count={7} defaultSelected>Featured</FilterChip>
 <FilterChip count={24}>Archived</FilterChip>`}
-      >
-        <div style={{ display: 'flex', gap: 'var(--glacier-space-2)' }}>
-          <FilterChip icon={starIcon} count={7} defaultSelected>
-            Featured
-          </FilterChip>
-          <FilterChip count={24}>Archived</FilterChip>
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Controlled group"
-        description="Drive selection from state to build a filter bar. Each chip reports the next state through onSelectedChange."
+        title={t(m.fcEx3Title)}
+        description={t(m.fcEx3Desc)}
         code={`const [active, setActive] = useState({ open: true });
 
 <FilterChip selected={active.open} onSelectedChange={(v) => setActive((p) => ({ ...p, open: v }))} count={12}>
@@ -82,55 +86,51 @@ export function FilterChipPage() {
       </Example>
 
       <Example
-        title="Sizes and disabled"
-        description="Two compact sizes match Pill; a disabled chip is dimmed and cannot be toggled."
+        title={t(m.fcEx4Title)}
+        description={t(m.fcEx4Desc)}
+        component="FilterChip"
+        render={(K) => (
+          <div style={{ display: 'flex', gap: 'var(--glacier-space-2)', alignItems: 'center' }}>
+            <K.FilterChip size={Size.Small} count={4}>
+              {t(m.filterchipSmall)}
+            </K.FilterChip>
+            <K.FilterChip size={Size.Medium} count={4}>
+              {t(m.filterchipMedium)}
+            </K.FilterChip>
+            <K.FilterChip disabled>{t(m.filterchipDisabled)}</K.FilterChip>
+          </div>
+        )}
         code={`<FilterChip size={Size.Small} count={4}>Small</FilterChip>
 <FilterChip size={Size.Medium} count={4}>Medium</FilterChip>
 <FilterChip disabled count={0}>Disabled</FilterChip>`}
-      >
-        <div style={{ display: 'flex', gap: 'var(--glacier-space-2)', alignItems: 'center' }}>
-          <FilterChip size={Size.Small} count={4}>
-            Small
-          </FilterChip>
-          <FilterChip size={Size.Medium} count={4}>
-            Medium
-          </FilterChip>
-          <FilterChip disabled>Disabled</FilterChip>
-        </div>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'selected', type: 'boolean', description: 'Controlled selected state.' },
-          { name: 'defaultSelected', type: 'boolean', default: 'false', description: 'Initial selected state when uncontrolled.' },
-          { name: 'onSelectedChange', type: '(selected: boolean) => void', description: 'Called with the next selected state when the chip is toggled.' },
-          { name: 'icon', type: 'ReactNode', description: 'Leading glyph, hidden from assistive tech.' },
-          { name: 'count', type: 'number', description: 'Trailing count, rendered as a CounterBadge; hidden when 0 or less.' },
-          { name: 'size', type: "'sm' | 'md'", default: "'md'", description: 'Compact size step.' },
-          { name: 'disabled', type: 'boolean', default: 'false', description: 'Dims the chip and blocks toggling.' },
-          { name: 'children', type: 'ReactNode', description: 'Required. Chip label.' },
+          { name: 'selected', type: 'boolean', description: t(m.fcPropSelected) },
+          { name: 'defaultSelected', type: 'boolean', default: 'false', description: t(m.fcPropDefaultSelected) },
+          { name: 'onSelectedChange', type: '(selected: boolean) => void', description: t(m.fcPropOnSelectedChange) },
+          { name: 'icon', type: 'ReactNode', description: t(m.fcPropIcon) },
+          { name: 'count', type: 'number', description: t(m.fcPropCount) },
+          { name: 'size', type: "'sm' | 'md'", default: "'md'", description: t(m.fcPropSize) },
+          { name: 'disabled', type: 'boolean', default: 'false', description: t(m.fcPropDisabled) },
+          { name: 'children', type: 'ReactNode', description: t(m.fcPropChildren) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The chip is a <code>button</code> with <code>aria-pressed</code> reflecting the selected
-          state, so assistive tech announces it as a toggle.
-        </li>
-        <li>Enter and Space toggle the chip; it participates in the tab order like any button.</li>
-        <li>
-          The leading icon is <code>aria-hidden</code>; the trailing count is a{' '}
-          <code>role="status"</code> CounterBadge that announces its value.
-        </li>
+        <li>{prose(t(m.fcA11y1))}</li>
+        <li>{prose(t(m.fcA11y2))}</li>
+        <li>{prose(t(m.fcA11y3))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use FilterChips for a row of togglable filters or facets; reach for a Segmented control when the options are mutually exclusive.</li>
-        <li>Keep labels to a noun or short phrase and add a count when the number of matches is useful.</li>
-        <li>Drive a group from state with <code>selected</code> + <code>onSelectedChange</code> so the active set is a single source of truth.</li>
+        <li>{prose(t(m.fcUse1))}</li>
+        <li>{prose(t(m.fcUse2))}</li>
+        <li>{prose(t(m.fcUse3))}</li>
       </ul>
     </>
   );

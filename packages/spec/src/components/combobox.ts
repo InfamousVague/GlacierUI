@@ -80,6 +80,7 @@ export const comboboxSpec: ComponentSpec = {
     { name: 'invalid', description: 'A surrounding Field error paints a danger border.', tokens: { border: token('danger-border') } },
   ],
   // a 3px accent-soft glow hugging the border, which itself turns focus-ring
+  paint: { background: '$surface', text: '$text', border: '$border' },
   focusRing: { ring: token('accent-soft'), offset: '0' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

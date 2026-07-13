@@ -30,6 +30,7 @@ export const imageSpec: ComponentSpec = {
     { name: 'loading', type: 'enum', values: ['lazy', 'eager'], default: 'lazy', description: 'Native lazy/eager loading hint.' },
   ],
   defaults: { fit: 'cover', radius: 'md', skeleton: false, loading: 'lazy' },
+  paint: { background: '$surface-sunken' },
   tokens: [
     'surface-sunken', 'text-subtle', 'duration-normal', 'ease-out',
     'radius-none', 'radius-sm', 'radius-md', 'radius-lg', 'radius-xl', 'radius-2xl', 'radius-full',

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useT } from '../i18n.ts';
 import {
   AlertDialog,
   Button,
@@ -37,6 +38,7 @@ const SEED: Project[] = [
 ];
 
 export function LibraryPage() {
+  const t = useT();
   const { toast } = useToast();
   const [rows, setRows] = useState<Project[]>(SEED);
   const [creating, setCreating] = useState(false);
@@ -100,10 +102,9 @@ export function LibraryPage() {
     <div className="page">
       <Row justify="between" align="center" wrap gap={3}>
         <div>
-          <Heading level={1}>Library</Heading>
+          <Heading level={1}>{t('libTitle')}</Heading>
           <Text tone={TextTone.Muted} className="pageLede">
-            A sortable, selectable data grid backed by local state. Create and delete rows to see the
-            modal, the confirm dialog, and the toast system.
+            {t('libLede')}
           </Text>
         </div>
         <Button onClick={() => setCreating(true)}>

@@ -1,13 +1,15 @@
-import { Callout, Heading, Text, Size, TextTone } from '@glacier/react';
+import { Callout, Heading, Text, Size, TextTone, useT } from '@glacier/react';
 import type { CSSProperties } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 // A small static illustration of the shell layout. AppShell itself is a
 // full-height frame (min-height 100vh with its own sticky sidebar), so it can
 // not be nested inside a bounded doc example, and this page already lives
 // inside one. This mock shows the composition; the living example is the site.
 function ShellMock({ floating = false }: { floating?: boolean }) {
+  const t = useT();
   const gap = floating ? 'var(--glacier-space-3)' : '0';
   const block: CSSProperties = {
     background: 'var(--glacier-surface-raised)',
@@ -33,40 +35,37 @@ function ShellMock({ floating = false }: { floating?: boolean }) {
         overflow: 'hidden',
       }}
     >
-      <div style={{ ...block, borderRight: floating ? block.border : 'var(--glacier-hairline) solid var(--glacier-border-subtle)' }}>sidebar</div>
+      <div style={{ ...block, borderRight: floating ? block.border : 'var(--glacier-hairline) solid var(--glacier-border-subtle)' }}>{t(m.appshellSidebar)}</div>
       <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap, minWidth: 0 }}>
-        <div style={{ ...block, height: '2.25rem', borderBottom: floating ? block.border : 'var(--glacier-hairline) solid var(--glacier-border-subtle)' }}>header</div>
-        <div style={block}>main</div>
+        <div style={{ ...block, height: '2.25rem', borderBottom: floating ? block.border : 'var(--glacier-hairline) solid var(--glacier-border-subtle)' }}>{t(m.appshellHeader)}</div>
+        <div style={block}>{t(m.appshellMain)}</div>
       </div>
     </div>
   );
 }
 
 export function AppShellPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>AppShell</Heading>
+      <Heading level={1}>{t(m.shellName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        The application frame: a sticky sidebar beside a scrollable main column with an optional
-        sticky header. It is the top-level layout you build a whole app inside. Below the lg
-        breakpoint the sidebar collapses to an off-canvas drawer with a built-in menu button.
+        {t(m.shellLede)}
       </Text>
 
-      <Callout tone="info" title="Built on AppShell" style={{ marginBlockStart: 'var(--glacier-space-6)' }}>
-        This whole site is a single AppShell: the sidebar, the top bar, and this scrolling column
-        are its slots. Resize the window past the lg breakpoint to watch the sidebar collapse into a
-        drawer.
+      <Callout tone="info" title={t(m.shellCalloutTitle)} style={{ marginBlockStart: 'var(--glacier-space-6)' }}>
+        {t(m.shellCalloutBody)}
       </Callout>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the desktop grid with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.shellAnatomyIntro)}</Text>
       <ComponentBlueprint specId="app-shell" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Composition"
-        description="Pass the sidebar and optional header as slots; children fill the scrollable main column. The sidebar sticks as the main content scrolls."
+        title={t(m.shellEx1Title)}
+        description={t(m.shellEx1Desc)}
         code={`import { AppShell, Sidebar, SidebarItem, Toolbar } from '@glacier/react';
 
 <AppShell
@@ -85,8 +84,8 @@ export function AppShellPage() {
       </Example>
 
       <Example
-        title="Floating"
-        description="Set floating to detach the desktop sidebar and header into rounded cards inset by a gutter, so the page shows through around the chrome."
+        title={t(m.shellEx2Title)}
+        description={t(m.shellEx2Desc)}
         code={`<AppShell floating sidebar={sidebar} header={header}>
   {content}
 </AppShell>`}
@@ -95,8 +94,8 @@ export function AppShellPage() {
       </Example>
 
       <Example
-        title="Resizable sidebar"
-        description="Set resizable to let the user drag the divider, or arrow-key it, to change the sidebar width. Persist the reported width to restore it across sessions."
+        title={t(m.shellEx3Title)}
+        description={t(m.shellEx3Desc)}
         code={`const [width, setWidth] = useState('16rem');
 
 <AppShell
@@ -113,36 +112,36 @@ export function AppShellPage() {
         <ShellMock />
       </Example>
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'sidebar', type: 'ReactNode', description: 'Required. The persistent side navigation content.' },
-          { name: 'header', type: 'ReactNode', description: 'Optional top bar content, placed right of the mobile menu button.' },
-          { name: 'sidebarWidth', type: 'string', default: "'16rem'", description: 'Sidebar width on desktop.' },
-          { name: 'sidebarLabel', type: 'string', default: "'Navigation'", description: 'Accessible name for the sidebar landmark.' },
-          { name: 'floating', type: 'boolean', default: 'false', description: 'Detaches the desktop sidebar and header into floating, rounded cards with a gutter.' },
-          { name: 'resizable', type: 'boolean', default: 'false', description: 'Lets the user drag or arrow-key the divider to resize the sidebar.' },
-          { name: 'onSidebarWidthChange', type: '(width: string) => void', description: 'Called with the next sidebar width (a px string) while resizing.' },
-          { name: 'minSidebarWidth', type: 'number', description: 'Lower clamp for the resize drag, in pixels.' },
-          { name: 'maxSidebarWidth', type: 'number', description: 'Upper clamp for the resize drag, in pixels.' },
-          { name: 'children', type: 'ReactNode', description: 'The main content rendered in the scrollable column.' },
+          { name: 'sidebar', type: 'ReactNode', description: t(m.shellPropSidebar) },
+          { name: 'header', type: 'ReactNode', description: t(m.shellPropHeader) },
+          { name: 'sidebarWidth', type: 'string', default: "'16rem'", description: t(m.shellPropSidebarWidth) },
+          { name: 'sidebarLabel', type: 'string', default: "'Navigation'", description: t(m.shellPropSidebarLabel) },
+          { name: 'floating', type: 'boolean', default: 'false', description: t(m.shellPropFloating) },
+          { name: 'resizable', type: 'boolean', default: 'false', description: t(m.shellPropResizable) },
+          { name: 'onSidebarWidthChange', type: '(width: string) => void', description: t(m.shellPropOnWidthChange) },
+          { name: 'minSidebarWidth', type: 'number', description: t(m.shellPropMinWidth) },
+          { name: 'maxSidebarWidth', type: 'number', description: t(m.shellPropMaxWidth) },
+          { name: 'children', type: 'ReactNode', description: t(m.shellPropChildren) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>The sidebar is an <code>aside</code> landmark named by <code>sidebarLabel</code> (default &ldquo;Navigation&rdquo;).</li>
-        <li>The built-in menu button carries <code>aria-label</code> &ldquo;Open navigation&rdquo; and shows only below the lg breakpoint.</li>
-        <li>On small screens, clicking the backdrop or any link or button inside the sidebar closes the drawer, and Escape closes it.</li>
-        <li>The drawer is a persistent aside that becomes off-canvas, not a modal dialog, so it is not a focus trap.</li>
-        <li>The slide animation respects reduced motion.</li>
+        <li>{prose(t(m.shellA11y1))}</li>
+        <li>{prose(t(m.shellA11y2))}</li>
+        <li>{prose(t(m.shellA11y3))}</li>
+        <li>{prose(t(m.shellA11y4))}</li>
+        <li>{prose(t(m.shellA11y5))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use one AppShell at the root of the app; fill its <code>sidebar</code> with a <code>Sidebar</code> structure and its <code>header</code> with a <code>Toolbar</code>.</li>
-        <li>Reach for <code>floating</code> when the page has an ambient background worth showing around the chrome; keep it flush (default) for dense, utilitarian apps.</li>
-        <li>Turn on <code>resizable</code> for content-heavy sidebars (file trees, long nav) and persist the width so it survives a reload.</li>
+        <li>{prose(t(m.shellUse1))}</li>
+        <li>{prose(t(m.shellUse2))}</li>
+        <li>{prose(t(m.shellUse3))}</li>
       </ul>
     </>
   );

@@ -66,6 +66,7 @@ export const pageHeaderSpec: ComponentSpec = {
       description: 'Replaces each provided slot with a Skeleton line in the same container inside an aria-hidden header; the actions collapse to one control-height block.',
     },
   ],
+  paint: { text: '$text' },
   tokens: [
     'text', 'text-muted', 'font-sans',
     'font-size-2xl', 'leading-2xl', 'tracking-2xl', 'font-weight-semibold',

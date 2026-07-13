@@ -42,6 +42,7 @@ export const emptyStateSpec: ComponentSpec = {
     { name: 'default', description: 'A centered column: the sunken icon disc, an h2 title in the primary text color, a secondary-text description, then the action.' },
     { name: 'skeleton', description: 'Replaces the content with a 4rem circle placeholder and two text-line placeholders sized to the title (lg) and description (sm), holding the same vertical rhythm.' },
   ],
+  paint: { text: '$text-muted' },
   tokens: [
     'space-2', 'space-3', 'space-4', 'space-6', 'space-8',
     'radius-full', 'surface-sunken',

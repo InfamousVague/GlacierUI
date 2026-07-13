@@ -29,6 +29,7 @@ export const checkboxSpec: ComponentSpec = {
     { name: 'focus-visible', description: 'A 2px accent focus ring rings the box.', tokens: { ring: token('focus-ring') } },
     { name: 'disabled', description: 'Halved opacity and not-allowed cursor.' },
   ],
+  paint: { background: '$surface', border: '$border-strong' },
   focusRing: { ring: token('focus-ring'), offset: '2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

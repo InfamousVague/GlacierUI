@@ -1,7 +1,9 @@
-import { Heading, Text, TextTone, TimelineScrubber, Size, Pill } from '@glacier/react';
+import { Heading, Text, TextTone, Size, Pill, useT } from '@glacier/react';
 import { useEffect, useRef, useState } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
+import { type PlatformKit } from '../../platforms.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 /** A deterministic activity silhouette so every reload draws the same docs. */
 const ACTIVITY = Array.from({ length: 120 }, (_, i) => {
@@ -14,33 +16,37 @@ const WINDOW_MS = 15 * 60 * 1000;
 const DOC_END = Date.UTC(2026, 6, 11, 14, 30, 0);
 const DOC_START = DOC_END - WINDOW_MS;
 
-const MARKERS = [
-  { time: DOC_START + WINDOW_MS * 0.37, tone: 'danger' as const, label: 'CPU spike: WindowServer 340%' },
-  { time: DOC_START + WINDOW_MS * 0.43, tone: 'warning' as const, label: 'Memory pressure turned yellow' },
-  { time: DOC_START + WINDOW_MS * 0.75, tone: 'accent' as const, label: 'Build started' },
-];
+function buildMarkers(t: ReturnType<typeof useT>) {
+  return [
+    { time: DOC_START + WINDOW_MS * 0.37, tone: 'danger' as const, label: t(m.scrubMarker1) },
+    { time: DOC_START + WINDOW_MS * 0.43, tone: 'warning' as const, label: t(m.scrubMarker2) },
+    { time: DOC_START + WINDOW_MS * 0.75, tone: 'accent' as const, label: t(m.scrubMarker3) },
+  ];
+}
 
-function ScrubberDemo() {
+function ScrubberDemo({ K }: { K: PlatformKit }) {
+  const t = useT();
   const [value, setValue] = useState<number | undefined>(undefined);
   return (
     <div style={{ display: 'grid', gap: 'var(--glacier-space-3)', width: '100%' }}>
-      <TimelineScrubber
+      <K.TimelineScrubber
         start={DOC_START}
         end={DOC_END}
         value={value}
         onChange={(t) => setValue(t ?? undefined)}
         activity={ACTIVITY}
-        markers={MARKERS}
-        aria-label="Recorded activity"
+        markers={buildMarkers(t)}
+        aria-label={t(m.scrubAriaRecorded)}
       />
       <Text size={Size.XSmall} tone={TextTone.Muted}>
-        Inspecting: {value === undefined ? 'live' : new Date(value).toLocaleTimeString()}
+        {t(m.scrubInspecting)} {value === undefined ? t(m.scrubLive) : new Date(value).toLocaleTimeString()}
       </Text>
     </div>
   );
 }
 
-function LiveDemo() {
+function LiveDemo({ K }: { K: PlatformKit }) {
+  const t = useT();
   const [now, setNow] = useState(() => Date.now());
   const [value, setValue] = useState<number | undefined>(undefined);
   const activityRef = useRef<number[]>(Array.from({ length: 90 }, (_, i) => 0.25 + 0.15 * Math.sin(i / 7)));
@@ -48,43 +54,43 @@ function LiveDemo() {
     const id = setInterval(() => {
       setNow(Date.now());
       const a = activityRef.current;
-      activityRef.current = [...a.slice(1), Math.min(Math.max(a[a.length - 1] + (Math.sin(Date.now() / 3000) * 0.08), 0.05), 1)];
+      activityRef.current = [...a.slice(1), Math.min(Math.max((a[a.length - 1] ?? 0.25) + (Math.sin(Date.now() / 3000) * 0.08), 0.05), 1)];
     }, 1000);
     return () => clearInterval(id);
   }, []);
   return (
-    <TimelineScrubber
+    <K.TimelineScrubber
       start={now - 90_000}
       end={now}
       value={value}
       onChange={(t) => setValue(t ?? undefined)}
       activity={activityRef.current}
       size="sm"
-      aria-label="Last 90 seconds"
+      aria-label={t(m.scrubAriaLast90)}
     />
   );
 }
 
 export function TimelineScrubberPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Timeline Scrubber</Heading>
+      <Heading level={1}>{t(m.scrubName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A flight-recorder control: a horizontal band over a recorded time window with an activity
-        backdrop, event markers, and a draggable playhead. Scrub to inspect any recorded moment, or
-        pin the playhead to the live edge and let new time stream in. Built for monitoring
-        surfaces where "what just happened?" matters as much as "what is happening?".
+        {t(m.scrubLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntro)}</Text>
       <ComponentBlueprint specId="timeline-scrubber" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Scrubbing a recording"
-        description="The activity silhouette shows where the interesting moments are; markers flag them precisely. Drag the playhead, click anywhere on the track, or use the arrow keys. The component is controlled: value is the inspected time, and onChange reports null when the user returns to live."
+        title={t(m.scrubEx1Title)}
+        description={t(m.scrubEx1Desc)}
+        component="TimelineScrubber"
+        render={(K) => <ScrubberDemo K={K} />}
         code={`const [value, setValue] = useState<number | undefined>();
 
 <TimelineScrubber
@@ -96,13 +102,13 @@ export function TimelineScrubberPage() {
   markers={[{ time: spikeAt, tone: 'danger', label: 'CPU spike' }]}
   aria-label="Recorded activity"
 />`}
-      >
-        <ScrubberDemo />
-      </Example>
+      />
 
       <Example
-        title="Live and compact"
-        description="While live, the window advances every second and the playhead rides the trailing edge; the live button fills solid. Scrub back and it hollows, inviting the jump back. The sm size suits a status-bar placement."
+        title={t(m.scrubEx2Title)}
+        description={t(m.scrubEx2Desc)}
+        component="TimelineScrubber"
+        render={(K) => <LiveDemo K={K} />}
         code={`<TimelineScrubber
   start={now - 90_000}
   end={now}
@@ -112,70 +118,73 @@ export function TimelineScrubberPage() {
   size="sm"
   aria-label="Last 90 seconds"
 />`}
-      >
-        <LiveDemo />
-      </Example>
+      />
 
       <Example
-        title="Glass"
-        description="glass swaps the sunken track and soft button for the frosted material - for scrubbers floating over content, like a video surface or a dashboard backdrop."
+        title={t(m.exGlass)}
+        description={t(m.scrubEx3Desc)}
+        component="TimelineScrubber"
+        render={(K) => (
+          <div
+            style={{
+              width: '100%',
+              padding: 'var(--glacier-space-5)',
+              borderRadius: 'var(--glacier-radius-lg)',
+              background: 'linear-gradient(120deg, var(--glacier-accent-soft), var(--glacier-purple-4), var(--glacier-teal-4))',
+            }}
+          >
+            <K.TimelineScrubber start={DOC_START} end={DOC_END} activity={ACTIVITY} markers={buildMarkers(t)} glass aria-label={t(m.scrubAriaRecordedGlass)} />
+          </div>
+        )}
         code={`<TimelineScrubber start={start} end={end} activity={activity} glass aria-label="Recorded activity" />`}
-      >
-        <div
-          style={{
-            width: '100%',
-            padding: 'var(--glacier-space-5)',
-            borderRadius: 'var(--glacier-radius-lg)',
-            background: 'linear-gradient(120deg, var(--glacier-accent-soft), var(--glacier-purple-4), var(--glacier-teal-4))',
-          }}
-        >
-          <TimelineScrubber start={DOC_START} end={DOC_END} activity={ACTIVITY} markers={MARKERS} glass aria-label="Recorded activity, glass" />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description="skeleton renders the exact track and button geometry while the recording loads."
+        title={t(m.exSkeleton)}
+        description={t(m.scrubEx4Desc)}
+        component="TimelineScrubber"
+        render={(K) => <K.TimelineScrubber start={0} end={1} skeleton aria-label={t(m.scrubAriaLoading)} />}
         code={`<TimelineScrubber start={0} end={1} skeleton aria-label="Recorded activity" />`}
-      >
-        <TimelineScrubber start={0} end={1} skeleton aria-label="Recorded activity loading" />
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'start', type: 'number', description: 'Required. Window start, epoch ms.' },
-          { name: 'end', type: 'number', description: 'Required. Window end, epoch ms; advances while live.' },
-          { name: 'value', type: 'number', description: 'The inspected time. Omit to pin to the live edge.' },
-          { name: 'onChange', type: '(time: number | null) => void', description: 'Scrub reports; null means "back to live".' },
-          { name: 'activity', type: 'number[]', description: 'Normalized 0-1 context series drawn as the track backdrop.' },
-          { name: 'markers', type: '{ time, tone?, label? }[]', description: 'Flagged instants drawn as thin ticks.' },
-          { name: 'step', type: 'number', default: '1000', description: 'Arrow-key step in ms; PageUp/Down move ten steps.' },
-          { name: 'formatTime', type: '(time: number) => string', description: 'Formats the readout, ticks, and aria-valuetext.' },
-          { name: 'liveLabel', type: 'string', default: "'Live'", description: 'Label for the live button.' },
-          { name: 'size', type: "'sm' | 'md'", default: "'md'", description: 'Track height step; the handle adds its overhang above the track.' },
-          { name: 'glass', type: 'boolean', default: 'false', description: 'Renders the track and live button on the frosted glass material.' },
-          { name: 'disabled', type: 'boolean', default: 'false', description: 'Blocks scrubbing and dims the control.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders a placeholder with the exact geometry.' },
-          { name: 'aria-label', type: 'string', description: 'Required. Accessible name for the scrubber.' },
+          { name: 'start', type: 'number', description: t(m.scrubPropStart) },
+          { name: 'end', type: 'number', description: t(m.scrubPropEnd) },
+          { name: 'value', type: 'number', description: t(m.scrubPropValue) },
+          { name: 'onChange', type: '(time: number | null) => void', description: t(m.scrubPropOnChange) },
+          { name: 'activity', type: 'number[]', description: t(m.scrubPropActivity) },
+          { name: 'markers', type: '{ time, tone?, label? }[]', description: t(m.scrubPropMarkers) },
+          { name: 'step', type: 'number', default: '1000', description: t(m.scrubPropStep) },
+          { name: 'formatTime', type: '(time: number) => string', description: t(m.scrubPropFormatTime) },
+          { name: 'liveLabel', type: 'string', default: "'Live'", description: t(m.scrubPropLiveLabel) },
+          { name: 'size', type: "'sm' | 'md'", default: "'md'", description: t(m.scrubPropSize) },
+          { name: 'glass', type: 'boolean', default: 'false', description: t(m.scrubPropGlass) },
+          { name: 'disabled', type: 'boolean', default: 'false', description: t(m.scrubPropDisabled) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.scrubPropSkeleton) },
+          { name: 'aria-label', type: 'string', description: t(m.scrubPropAriaLabel) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>The playhead is a real <code>slider</code>: <code>aria-valuemin/max</code> are the window bounds, and <code>aria-valuetext</code> speaks the formatted time — or the live label when pinned.</li>
-        <li>ArrowLeft/ArrowRight step, PageUp/PageDown leap, Home jumps to the window start, End returns to live. Stepping past the trailing edge also pins to live.</li>
-        <li>Markers are decorative ticks with tooltips; surface the flagged events somewhere textual too (a list, a feed) for non-pointer users.</li>
-        <li>The live button is a plain button reflecting its state with <code>aria-pressed</code>.</li>
-        <li>Playhead motion respects reduced motion: glides become snaps.</li>
+        <li>{prose(t(m.scrubA11y1))}</li>
+        <li>{prose(t(m.scrubA11y2))}</li>
+        <li>{prose(t(m.scrubA11y3))}</li>
+        <li>{prose(t(m.scrubA11y4))}</li>
+        <li>{prose(t(m.scrubA11y5))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Feed <code>activity</code> a cheap aggregate (overall CPU, event density) — its job is to make anomalies findable before scrubbing, not to be precise.</li>
-        <li>Reserve marker tones for severity: <Pill size={Size.Small} tone="danger">danger</Pill> for incidents, <Pill size={Size.Small} tone="warning">warning</Pill> for pressure, accent for lifecycle events.</li>
-        <li>Scrubbing should repaint the whole surface to that moment (tables, charts, tiles) — the scrubber is the time authority, not a decoration.</li>
-        <li>Keep the window bounded (minutes to hours). For long archives, page the window and let the scrubber work within it.</li>
+        <li>{prose(t(m.scrubUse1))}</li>
+        <li>
+          {t(m.scrubUse2a)} <Pill size={Size.Small} tone="danger">{t(m.timelinescrubberDanger)}</Pill> {t(m.scrubUse2b)}{' '}
+          <Pill size={Size.Small} tone="warning">{t(m.timelinescrubberWarning)}</Pill> {t(m.scrubUse2c)}
+        </li>
+        <li>{prose(t(m.scrubUse3))}</li>
+        <li>{prose(t(m.scrubUse4))}</li>
       </ul>
     </>
   );

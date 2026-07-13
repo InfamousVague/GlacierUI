@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render } from '@testing-library/react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useDialogLayer } from '../src/internal/useDialogLayer.ts';
 
 /**
@@ -53,6 +53,31 @@ describe('useDialogLayer', () => {
   it('focuses the dialog itself when no initial focus ref is given', () => {
     const { getByRole } = render(<Layer />);
     expect(getByRole('dialog')).toHaveFocus();
+  });
+
+  it('keeps focus inside on re-render, even when onClose is a fresh function each render', () => {
+    // Mirrors the common call site: an inline `onClose` arrow, plus local state
+    // (a text field) whose updates re-render the dialog on every keystroke.
+    function Harness() {
+      const [text, setText] = useState('');
+      const dialogRef = useRef<HTMLDivElement>(null);
+      useDialogLayer({ open: true, onClose: () => {}, dialogRef });
+      return (
+        <div ref={dialogRef} role="dialog" aria-label="Layer" tabIndex={-1}>
+          <input aria-label="name" value={text} onChange={(e) => setText(e.target.value)} />
+        </div>
+      );
+    }
+    const { getByLabelText } = render(<Harness />);
+    const input = getByLabelText('name') as HTMLInputElement;
+    input.focus();
+    expect(input).toHaveFocus();
+    // Each change re-renders with a brand-new onClose identity; the layer must
+    // not tear down and re-focus the dialog, or typing would drop focus.
+    fireEvent.change(input, { target: { value: 'a' } });
+    expect(input).toHaveFocus();
+    fireEvent.change(input, { target: { value: 'ab' } });
+    expect(input).toHaveFocus();
   });
 
   it('focuses the initial focus ref when given', () => {

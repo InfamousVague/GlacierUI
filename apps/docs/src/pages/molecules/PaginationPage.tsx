@@ -1,25 +1,31 @@
-import { Heading, Pagination, Text, Size, TextTone } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Heading, Text, Size, TextTone, useT } from '@glacier/react';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 export function PaginationPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Pagination</Heading>
+      <Heading level={1}>{t(m.pagName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A compact pager for moving across sets of results or content pages.
+        {prose(t(m.pagLede))}
       </Text>
-      <Heading level={2}>Anatomy</Heading>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
       <ComponentBlueprint specId="pagination" />
-      <Heading level={2}>Examples</Heading>
-      <Example title="Basic" description="Move through pages with previous and next controls." code={`<Pagination page={2} total={42} pageSize={10} onPageChange={() => {}} />`}>
-        <Pagination page={2} total={42} pageSize={10} onPageChange={() => {}} />
-      </Example>
-      <Example title="Large range" description="Keep edge pages visible for very large result sets." code={`<Pagination page={5000} total={100000} pageSize={10} boundaryCount={2} siblingCount={1} onPageChange={() => {}} />`}>
-        <Pagination page={5000} total={100000} pageSize={10} boundaryCount={2} siblingCount={1} onPageChange={() => {}} />
-      </Example>
-      <Heading level={2}>Props</Heading>
-      <PropsTable props={[{ name: 'page', type: 'number', description: 'The current page, one-based.' }, { name: 'total', type: 'number', description: 'Total items across all pages.' }, { name: 'pageSize', type: 'number', default: '10', description: 'Items per page.' }, { name: 'onPageChange', type: 'function', description: 'Called with the next selected page.' }, { name: 'siblingCount', type: 'number', default: '1', description: 'Number of pages rendered around the active one.' }, { name: 'boundaryCount', type: 'number', default: '1', description: 'Number of edge pages kept visible for large ranges.' }]} />
+      <Heading level={2}>{t(m.secExamples)}</Heading>
+      <Example title={t(m.exBasic)} description={t(m.pagEx1Desc)}
+        component="Pagination"
+        render={(K) => (<K.Pagination page={2} total={42} pageSize={10} onPageChange={() => {}} />)}
+        code={`<Pagination page={2} total={42} pageSize={10} onPageChange={() => {}} />`}
+      />
+      <Example title={t(m.pagEx2Title)} description={t(m.pagEx2Desc)}
+        component="Pagination"
+        render={(K) => (<K.Pagination page={5000} total={100000} pageSize={10} boundaryCount={2} siblingCount={1} onPageChange={() => {}} />)}
+        code={`<Pagination page={5000} total={100000} pageSize={10} boundaryCount={2} siblingCount={1} onPageChange={() => {}} />`}
+      />
+      <Heading level={2}>{t(m.secProps)}</Heading>
+      <PropsTable props={[{ name: 'page', type: 'number', description: t(m.pagPropPage) }, { name: 'total', type: 'number', description: t(m.pagPropTotal) }, { name: 'pageSize', type: 'number', default: '10', description: t(m.pagPropPageSize) }, { name: 'onPageChange', type: 'function', description: t(m.pagPropOnPageChange) }, { name: 'siblingCount', type: 'number', default: '1', description: t(m.pagPropSiblingCount) }, { name: 'boundaryCount', type: 'number', default: '1', description: t(m.pagPropBoundaryCount) }]} />
     </>
   );
 }

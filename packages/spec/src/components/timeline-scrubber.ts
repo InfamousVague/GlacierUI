@@ -99,6 +99,8 @@ export const timelineScrubberSpec: ComponentSpec = {
     { name: 'disabled', description: 'Dims to the disabled text color and ignores pointer and keyboard input.' },
     { name: 'skeleton', description: 'A pulse placeholder with the exact track geometry.' },
   ],
+  // the track, fill, and handle children paint
+  paint: {},
   focusRing: { ring: token('focus-ring'), offset: '2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

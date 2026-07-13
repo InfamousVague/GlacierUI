@@ -133,6 +133,7 @@ export const fileUploadSpec: ComponentSpec = {
     { name: 'invalid', description: 'A surrounding Field error paints a danger border.', paint: { border: token('danger-border') } },
     { name: 'disabled', description: 'The zone dims, uses the sunken surface, and ignores clicks and drops.', tokens: { background: token('surface-sunken') } },
   ],
+  paint: { text: '$text' },
   focusRing: { ring: token('focus-ring'), offset: '0' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

@@ -3,43 +3,70 @@ import {
   Breadcrumbs,
   Button,
   Heading,
-  PageHeader,
   Pill,
   Size,
   StatusDot,
   Text,
   TextTone,
   Variant,
+  useT,
 } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
-
-const CRUMBS = [
-  { label: 'Acme', href: '#' },
-  { label: 'Platform', href: '#' },
-  { label: 'Deployments' },
-];
+import { m } from '../../i18n.ts';
 
 export function PageHeaderPage() {
+  const t = useT();
+  const CRUMBS = [
+    { label: t(m.pageheaderAcme), href: '#' },
+    { label: t(m.pageheaderPlatform), href: '#' },
+    { label: t(m.pageheaderDeployments) },
+  ];
   return (
     <>
-      <Heading level={1}>PageHeader</Heading>
+      <Heading level={1}>{t(m.phName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        The page masthead: breadcrumbs over an <code>h1</code> or <code>h2</code> title with a muted
-        description and metadata row, primary actions end-aligned, and an overflow menu of secondary
-        actions behind an ellipsis button. The title block and the actions share one wrapping row,
-        so the actions drop below the title on narrow widths without any JS measurement.
+        {prose(t(m.phLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntro)}</Text>
       <ComponentBlueprint specId="page-header" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Operational header"
-        description="The full arrangement: breadcrumbs, title, description, meta pills, primary actions, and an overflow menu."
+        title={t(m.phEx1Title)}
+        description={t(m.phEx1Desc)}
+        component="PageHeader"
+        render={(K) => (
+          <Box width="full" border radius="lg" paddingX={6}>
+            <K.PageHeader
+              breadcrumbs={<Breadcrumbs items={CRUMBS} />}
+              title={t(m.pageheaderDeployments)}
+              headingLevel={2}
+              description={t(m.phDemoDesc)}
+              meta={
+                <>
+                  <Pill tone="success" size={Size.Small}>{t(m.pageheaderHealthy)}</Pill>
+                  <Pill size={Size.Small}>{t(m.pageheaderX12Environments)}</Pill>
+                  <StatusDot tone="success" label={t(m.pageheaderAllSystemsLive)} />
+                </>
+              }
+              actions={
+                <>
+                  <Button variant={Variant.Ghost}>{t(m.pageheaderExport)}</Button>
+                  <Button>{t(m.pageheaderNewDeployment)}</Button>
+                </>
+              }
+              secondaryActions={[
+                { id: 'settings', label: t(m.pageheaderPipelineSettings) },
+                { id: 'archive', label: t(m.pageheaderArchiveProject) },
+                { id: 'delete', label: t(m.pageheaderDeleteProject), disabled: true },
+              ]}
+            />
+          </Box>
+        )}
         code={`<PageHeader
   breadcrumbs={
     <Breadcrumbs
@@ -72,38 +99,27 @@ export function PageHeaderPage() {
     { id: 'delete', label: 'Delete project', disabled: true },
   ]}
 />`}
-      >
-        <Box width="full" border radius="lg" paddingX={6}>
-          <PageHeader
-            breadcrumbs={<Breadcrumbs items={CRUMBS} />}
-            title="Deployments"
-            headingLevel={2}
-            description="Everything the platform team has shipped to production, newest first."
-            meta={
-              <>
-                <Pill tone="success" size={Size.Small}>Healthy</Pill>
-                <Pill size={Size.Small}>12 environments</Pill>
-                <StatusDot tone="success" label="All systems live" />
-              </>
-            }
-            actions={
-              <>
-                <Button variant={Variant.Ghost}>Export</Button>
-                <Button>New deployment</Button>
-              </>
-            }
-            secondaryActions={[
-              { id: 'settings', label: 'Pipeline settings' },
-              { id: 'archive', label: 'Archive project' },
-              { id: 'delete', label: 'Delete project', disabled: true },
-            ]}
-          />
-        </Box>
-      </Example>
+      />
 
       <Example
-        title="Compact density"
-        description="Compact trims the block padding and stack gap for dense or nested screens, keeping the same type scale. Use headingLevel={2} when the page already owns its h1."
+        title={t(m.phEx2Title)}
+        description={t(m.phEx2Desc)}
+        component="PageHeader"
+        render={(K) => (
+          <Box width="full" border radius="lg" paddingX={6}>
+            <K.PageHeader
+              density="compact"
+              headingLevel={2}
+              title={t(m.pageheaderEnvironmentVariables)}
+              meta={<Pill size={Size.Small}>{t(m.pageheaderX48Keys)}</Pill>}
+              actions={<Button variant={Variant.Soft}>{t(m.pageheaderAddVariable)}</Button>}
+              secondaryActions={[
+                { id: 'import', label: t(m.pageheaderImportEnv) },
+                { id: 'export', label: t(m.pageheaderExportAsJson) },
+              ]}
+            />
+          </Box>
+        )}
         code={`<PageHeader
   density="compact"
   headingLevel={2}
@@ -115,35 +131,36 @@ export function PageHeaderPage() {
     { id: 'export', label: 'Export as JSON' },
   ]}
 />`}
-      >
-        <Box width="full" border radius="lg" paddingX={6}>
-          <PageHeader
-            density="compact"
-            headingLevel={2}
-            title="Environment variables"
-            meta={<Pill size={Size.Small}>48 keys</Pill>}
-            actions={<Button variant={Variant.Soft}>Add variable</Button>}
-            secondaryActions={[
-              { id: 'import', label: 'Import .env' },
-              { id: 'export', label: 'Export as JSON' },
-            ]}
-          />
-        </Box>
-      </Example>
+      />
 
       <Example
-        title="Title and actions"
-        description="The minimum useful header: a title with its primary action. The title block grows, so the action hugs the trailing edge, then wraps below on narrow widths."
+        title={t(m.phEx3Title)}
+        description={t(m.phEx3Desc)}
+        component="PageHeader"
+        render={(K) => (
+          <Box width="full" border radius="lg" paddingX={6}>
+            <K.PageHeader title={t(m.pageheaderBilling)} headingLevel={2} actions={<Button>{t(m.pageheaderUpgradePlan)}</Button>} />
+          </Box>
+        )}
         code={`<PageHeader title="Billing" headingLevel={2} actions={<Button>Upgrade plan</Button>} />`}
-      >
-        <Box width="full" border radius="lg" paddingX={6}>
-          <PageHeader title="Billing" headingLevel={2} actions={<Button>Upgrade plan</Button>} />
-        </Box>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description="skeleton mirrors each provided slot with a placeholder line in the same container, so nothing shifts when the real content arrives. The placeholder is aria-hidden."
+        title={t(m.exSkeleton)}
+        description={t(m.phEx4Desc)}
+        component="PageHeader"
+        render={(K) => (
+          <Box width="full" border radius="lg" paddingX={6}>
+            <K.PageHeader
+              skeleton
+              title={t(m.pageheaderDeployments)}
+              description={t(m.pageheaderLoading)}
+              breadcrumbs={<Breadcrumbs items={CRUMBS} />}
+              meta={<Pill size={Size.Small}>{t(m.pageheaderMeta)}</Pill>}
+              actions={<Button>{t(m.pageheaderAction)}</Button>}
+            />
+          </Box>
+        )}
         code={`<PageHeader
   skeleton
   title="Deployments"
@@ -152,68 +169,38 @@ export function PageHeaderPage() {
   meta={<Pill size={Size.Small}>meta</Pill>}
   actions={<Button>Action</Button>}
 />`}
-      >
-        <Box width="full" border radius="lg" paddingX={6}>
-          <PageHeader
-            skeleton
-            title="Deployments"
-            description="Loading"
-            breadcrumbs={<Breadcrumbs items={CRUMBS} />}
-            meta={<Pill size={Size.Small}>meta</Pill>}
-            actions={<Button>Action</Button>}
-          />
-        </Box>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'title', type: 'ReactNode', description: 'Required. The page title, rendered as an h1 or h2 per headingLevel.' },
-          { name: 'description', type: 'ReactNode', description: 'Muted supporting copy under the title.' },
-          { name: 'breadcrumbs', type: 'ReactNode', description: 'Slot above the title; compose the kit Breadcrumbs.' },
-          { name: 'meta', type: 'ReactNode', description: 'Inline metadata row under the title and description: pills, status dots, counts.' },
-          { name: 'actions', type: 'ReactNode', description: 'Primary actions, end-aligned on wide layouts and wrapping below the title on narrow widths.' },
-          { name: 'secondaryActions', type: 'PageHeaderAction[]', description: 'Secondary actions in an overflow menu behind a localized ellipsis button: { id, label, onSelect?, disabled? }. The button is omitted when empty.' },
-          { name: 'headingLevel', type: '1 | 2', default: '1', description: 'The heading element used for the title. The visual size stays the same.' },
-          { name: 'density', type: "'comfortable' | 'compact'", default: "'comfortable'", description: 'Vertical rhythm; compact trims the block padding and stack gap.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders a placeholder with the header exact geometry.' },
+          { name: 'title', type: 'ReactNode', description: t(m.phPropTitle) },
+          { name: 'description', type: 'ReactNode', description: t(m.phPropDescription) },
+          { name: 'breadcrumbs', type: 'ReactNode', description: t(m.phPropBreadcrumbs) },
+          { name: 'meta', type: 'ReactNode', description: t(m.phPropMeta) },
+          { name: 'actions', type: 'ReactNode', description: t(m.phPropActions) },
+          { name: 'secondaryActions', type: 'PageHeaderAction[]', description: t(m.phPropSecondaryActions) },
+          { name: 'headingLevel', type: '1 | 2', default: '1', description: t(m.phPropHeadingLevel) },
+          { name: 'density', type: "'comfortable' | 'compact'", default: "'comfortable'", description: t(m.phPropDensity) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.phPropSkeleton) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The host is a <code>header</code> element: a banner landmark at the top of the page, or a
-          plain group when nested inside <code>main</code>, <code>article</code>, or{' '}
-          <code>section</code>.
-        </li>
-        <li>
-          The title renders as a real <code>h1</code> or <code>h2</code> per{' '}
-          <code>headingLevel</code>, so the document outline stays honest. Keep one h1 per page and
-          switch to <code>headingLevel={'{'}2{'}'}</code> when the page already owns its h1.
-        </li>
-        <li>
-          The overflow trigger is an icon-only button with a localized "More actions" name, and Menu
-          wires its <code>aria-haspopup</code>, <code>aria-expanded</code>, and{' '}
-          <code>aria-controls</code>.
-        </li>
-        <li>
-          Overflow keyboard behavior is inherited from Menu: the arrow keys rove the rows, Home and
-          End jump to the edges, Enter or Space selects, and Escape closes and restores focus to the
-          trigger.
-        </li>
-        <li>
-          The skeleton placeholder is <code>aria-hidden</code>; mark the loading region{' '}
-          <code>aria-busy</code> at the app level.
-        </li>
+        <li>{prose(t(m.phA11y1))}</li>
+        <li>{prose(t(m.phA11y2))}</li>
+        <li>{prose(t(m.phA11y3))}</li>
+        <li>{prose(t(m.phA11y4))}</li>
+        <li>{prose(t(m.phA11y5))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use one PageHeader per page, at the top of the content region; reach for Toolbar when you need a slim control bar instead of a masthead.</li>
-        <li>Keep one or two primary actions in <code>actions</code> and move everything else into <code>secondaryActions</code> so the header stays scannable.</li>
-        <li>Put short, glanceable facts in <code>meta</code> (pills, status dots, counts), and full sentences in <code>description</code>.</li>
-        <li>Use compact density on dashboards and nested screens where vertical space is scarce.</li>
+        <li>{prose(t(m.phUse1))}</li>
+        <li>{prose(t(m.phUse2))}</li>
+        <li>{prose(t(m.phUse3))}</li>
+        <li>{prose(t(m.phUse4))}</li>
       </ul>
     </>
   );

@@ -58,13 +58,6 @@ export * from './components/textarea.ts';
 export * from './components/toast.ts';
 export * from './components/toggle.ts';
 export * from './components/toolbar.ts';
-export * from './components/nav-bar.ts';
-export * from './components/title-bar.ts';
-export * from './components/page-header.ts';
-export * from './components/section.ts';
-export * from './components/card-group.ts';
-export * from './components/timeline.ts';
-export * from './components/wizard.ts';
 export * from './components/tooltip.ts';
 export * from './components/stat-tile.ts';
 export * from './components/device-frame.ts';
@@ -87,21 +80,13 @@ export * from './components/tabbed-panel.ts';
 export * from './components/tabbed-modal.ts';
 export * from './components/tab-strip.ts';
 export * from './components/tree-view.ts';
-export * from './components/data-grid.ts';
+export * from './components/title-bar.ts';
+export * from './components/nav-bar.ts';
 export * from './components/resizable-split-pane.ts';
 export * from './components/icon.ts';
 export * from './components/image.ts';
 export * from './components/rating.ts';
 export * from './components/otp-field.ts';
-export * from './components/calendar.ts';
-export * from './components/date-picker.ts';
-export * from './components/file-upload.ts';
-export * from './components/fieldset.ts';
-export * from './components/form-section.ts';
-// monitoring (Permafrost)
-export * from './components/sparkline.ts';
-export * from './components/timeline-scrubber.ts';
-export * from './components/time-series-chart.ts';
 
 import type { ComponentSpec } from './schema.ts';
 import { appShellSpec } from './components/app-shell.ts';
@@ -150,13 +135,6 @@ import { textareaSpec } from './components/textarea.ts';
 import { toastSpec } from './components/toast.ts';
 import { toggleSpec } from './components/toggle.ts';
 import { toolbarSpec } from './components/toolbar.ts';
-import { navBarSpec } from './components/nav-bar.ts';
-import { titleBarSpec } from './components/title-bar.ts';
-import { pageHeaderSpec } from './components/page-header.ts';
-import { sectionSpec } from './components/section.ts';
-import { cardGroupSpec } from './components/card-group.ts';
-import { timelineSpec } from './components/timeline.ts';
-import { wizardSpec } from './components/wizard.ts';
 import { tooltipSpec } from './components/tooltip.ts';
 import { statTileSpec } from './components/stat-tile.ts';
 import { deviceFrameSpec } from './components/device-frame.ts';
@@ -165,11 +143,6 @@ import { scrollAreaSpec } from './components/scroll-area.ts';
 import { carouselSpec } from './components/carousel.ts';
 import { comboboxSpec } from './components/combobox.ts';
 import { multiSelectSpec } from './components/multi-select.ts';
-import { calendarSpec } from './components/calendar.ts';
-import { datePickerSpec } from './components/date-picker.ts';
-import { fileUploadSpec } from './components/file-upload.ts';
-import { fieldsetSpec } from './components/fieldset.ts';
-import { formSectionSpec } from './components/form-section.ts';
 import { listItemSpec, listSpec } from './components/list.ts';
 import { heatmapSpec } from './components/heatmap.ts';
 import { breadcrumbsSpec } from './components/breadcrumbs.ts';
@@ -184,15 +157,12 @@ import { tabbedPanelSpec } from './components/tabbed-panel.ts';
 import { tabbedModalSpec } from './components/tabbed-modal.ts';
 import { tabStripSpec } from './components/tab-strip.ts';
 import { treeViewSpec } from './components/tree-view.ts';
-import { dataGridSpec } from './components/data-grid.ts';
+import { titleBarSpec } from './components/title-bar.ts';
 import { resizableSplitPaneSpec } from './components/resizable-split-pane.ts';
 import { iconSpec } from './components/icon.ts';
 import { imageSpec } from './components/image.ts';
 import { ratingSpec } from './components/rating.ts';
 import { otpFieldSpec } from './components/otp-field.ts';
-import { sparklineSpec } from './components/sparkline.ts';
-import { timelineScrubberSpec } from './components/timeline-scrubber.ts';
-import { timeSeriesChartSpec } from './components/time-series-chart.ts';
 
 /** Bump when the schema shape changes in a breaking way. */
 export const SPEC_VERSION = '0.1.0';
@@ -265,11 +235,6 @@ export const specs: ComponentSpec[] = [
   carouselSpec,
   comboboxSpec,
   multiSelectSpec,
-  calendarSpec,
-  datePickerSpec,
-  fileUploadSpec,
-  fieldsetSpec,
-  formSectionSpec,
   listSpec,
   listItemSpec,
   heatmapSpec,
@@ -286,23 +251,11 @@ export const specs: ComponentSpec[] = [
   tabbedModalSpec,
   tabStripSpec,
   treeViewSpec,
-  dataGridSpec,
+  titleBarSpec,
   resizableSplitPaneSpec,
   // structures
   sidebarSpec,
   toolbarSpec,
-  navBarSpec,
-  titleBarSpec,
-  pageHeaderSpec,
-  sectionSpec,
-  // product composition
-  cardGroupSpec,
-  timelineSpec,
-  wizardSpec,
-  // monitoring
-  sparklineSpec,
-  timelineScrubberSpec,
-  timeSeriesChartSpec,
 ];
 
 /** Specs keyed by id for O(1) lookup. */

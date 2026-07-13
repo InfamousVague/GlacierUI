@@ -1,23 +1,23 @@
 import { typeScale, TYPE_RATIO_MIN, TYPE_RATIO_MAX } from '@glacier/tokens';
-import { Stack, Heading, Text, Size, TextTone } from '@glacier/react';
+import { Stack, Heading, Text, Size, TextTone, useT } from '@glacier/react';
+import { m } from '../../i18n.ts';
 
 export function TypographyPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Typography</Heading>
+      <Heading level={1}>{t(m.typoName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A modular scale: minor third ({TYPE_RATIO_MIN}) at 320px, growing to major third (
-        {TYPE_RATIO_MAX}) at 1536px. Headings get more room on large screens while body text stays
-        steady. Line-height and tracking tighten as sizes grow.
+        {t(m.typoLede, { min: TYPE_RATIO_MIN, max: TYPE_RATIO_MAX })}
       </Text>
 
-      <Heading level={2}>Scale</Heading>
+      <Heading level={2}>{t(m.typoSecScale)}</Heading>
       <table className="tokenTable">
         <thead>
           <tr>
-            <th>Token</th>
-            <th>Range</th>
-            <th>Sample</th>
+            <th>{t(m.typoColToken)}</th>
+            <th>{t(m.typoColRange)}</th>
+            <th>{t(m.typoColSample)}</th>
           </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@ export function TypographyPage() {
                 <code>--glacier-font-size-{step.name}</code>
               </td>
               <td style={{ whiteSpace: 'nowrap', color: 'var(--glacier-text-subtle)' }}>
-                {(step.size.min * 16).toFixed(1)}px → {(step.size.max * 16).toFixed(1)}px
+                {(step.size.min * 16).toFixed(1)}{t(m.typographyPx)} {(step.size.max * 16).toFixed(1)}{t(m.typographyPx2)}
               </td>
               <td>
                 <span
@@ -39,7 +39,7 @@ export function TypographyPage() {
                       step.step > 0 ? 'var(--glacier-font-weight-semibold)' : undefined,
                   }}
                 >
-                  Perfectly measured
+                  {t(m.typoSample)}
                 </span>
               </td>
             </tr>
@@ -47,22 +47,22 @@ export function TypographyPage() {
         </tbody>
       </table>
 
-      <Heading level={2}>Weights & families</Heading>
+      <Heading level={2}>{t(m.typoSecWeights)}</Heading>
       <Stack gap={4} padding={8} background="glass" radius="xl" border>
         <span style={{ fontWeight: 'var(--glacier-font-weight-regular)' }}>
-          Regular 400 for body text and long-form reading
+          {t(m.typoWeightRegular)}
         </span>
         <span style={{ fontWeight: 'var(--glacier-font-weight-medium)' }}>
-          Medium 500 for labels, buttons, and emphasis
+          {t(m.typoWeightMedium)}
         </span>
         <span style={{ fontWeight: 'var(--glacier-font-weight-semibold)' }}>
-          Semibold 600 for headings and section titles
+          {t(m.typoWeightSemibold)}
         </span>
         <span style={{ fontWeight: 'var(--glacier-font-weight-bold)' }}>
-          Bold 700 for display text
+          {t(m.typoWeightBold)}
         </span>
         <span style={{ fontFamily: 'var(--glacier-font-mono)' }}>
-          Mono for code, tokens, and tabular data
+          {t(m.typoWeightMono)}
         </span>
       </Stack>
     </>

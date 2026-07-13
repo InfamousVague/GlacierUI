@@ -62,6 +62,7 @@ export const radioCardSpec: ComponentSpec = {
     },
     { name: 'disabled', description: 'Halved opacity and a not-allowed cursor; the native input is disabled so it cannot be selected.' },
   ],
+  paint: { background: '$surface-raised', text: '$text', border: '$border-subtle' },
   focusRing: { ring: token('focus-ring'), offset: '2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

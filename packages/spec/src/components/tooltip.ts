@@ -79,6 +79,7 @@ export const tooltipSpec: ComponentSpec = {
     { name: 'shown', description: 'Bubble is mounted and portalled to the body, fades and scales up with a small upward drift from the trigger-anchored transform origin, and the trigger carries aria-describedby pointing at it. Motion and announcement only; the bubble paint never changes.', behavioral: true },
     { name: 'hidden', description: 'Bubble fades and scales back down, then unmounts once the exit animation completes; the trigger drops aria-describedby. Motion and announcement only; the bubble paint never changes.', behavioral: true },
   ],
+  paint: { background: '$glass-regular', text: '$text', border: '$glass-border' },
   tokens: [
     'space-2',
     'space-3',

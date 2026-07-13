@@ -15,29 +15,103 @@
 html,
 body {
   margin: 0;
+  /* The base typeface and text color for any plain content outside a kit
+     component. Components pin their own font, so this is just the backstop. */
+  font-family: var(--glacier-font-sans);
+  color: var(--glacier-text);
+  background: var(--glacier-bg);
 }
 
-/* Full-height root so the AppShell can own the viewport. */
+/* The shell owns the viewport and scrolls its own content, so the root fills
+   the height exactly and never adds a window scrollbar. */
 #root {
-  min-height: 100vh;
+  height: 100vh;
 }
 
-/* Window chrome on top, the app shell filling the rest. overflow-hidden keeps
-   the outer window from scrolling; the page content scrolls on its own. */
-.appRoot {
+/*
+ * The full-window desktop shell, composed by hand like GhostWire or Libre:
+ *   appWindow  = a vertical stack that fills the viewport
+ *     titleBar = a full-width strip spanning the very top, above the sidebar
+ *     appBody  = the row below it: the sidebar plus the scrolling content
+ */
+.appWindow {
   display: flex;
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  background: var(--glacier-bg);
+  color: var(--glacier-text);
 }
 
-.appShell {
+.appTitleBar {
+  flex: none;
+  /* Sits above the body so the sidebar preview flyout can spill over content. */
+  position: relative;
+  z-index: 60;
+}
+
+.appBody {
   flex: 1;
   min-height: 0;
+  display: flex;
 }
 
-/* The title bar doubles as the window drag handle under Tauri. Interactive
-   children opt back out with data-no-drag so clicks are not swallowed. */
+/* The far-left activity rail: a slim icon column. The kit NavBar already sizes
+   itself (inline-size: space-12, block-size: 100%) and pins its end slot to the
+   bottom; this only adds the surface and a trailing hairline. */
+.appRail {
+  flex: none;
+  background: var(--glacier-surface);
+  border-inline-end: var(--glacier-hairline) solid var(--glacier-glass-border);
+  padding-block: var(--glacier-space-3);
+}
+
+/* The contextual sidebar: a fixed-width, full-height column with a trailing
+   hairline. The kit Sidebar fills it (width/height: 100%) and scrolls itself. */
+.appSidebar {
+  flex: none;
+  width: 15rem;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--glacier-surface);
+  border-inline-end: var(--glacier-hairline) solid var(--glacier-glass-border);
+}
+
+/* The content column: the only thing that scrolls. */
+.appContent {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* Floating layout: the rail and the contextual sidebar both detach into
+   rounded cards, echoing the kit AppShell's floating mode. Content stays flush
+   and remains the scroll area. Logical margins keep the single gutter between
+   the panels correct under RTL. */
+.appWindow[data-layout='floating'] .appRail,
+.appWindow[data-layout='floating'] .appSidebar {
+  margin-block: var(--glacier-space-4);
+  height: calc(100% - var(--glacier-space-4) * 2);
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-radius: var(--glacier-radius-xl);
+  box-shadow: var(--glacier-shadow-3);
+  overflow: hidden;
+}
+
+/* rail: outer gutter on the start edge, a single gutter to the sidebar */
+.appWindow[data-layout='floating'] .appRail {
+  margin-inline: var(--glacier-space-4);
+}
+
+/* sidebar: sits against the rail's trailing gutter (start margin 0), its own
+   gutter to the content on the end edge */
+.appWindow[data-layout='floating'] .appSidebar {
+  margin-inline-start: 0;
+  margin-inline-end: var(--glacier-space-4);
+}
+
 .titleBarDrag {
   -webkit-app-region: drag;
   app-region: drag;
@@ -46,47 +120,84 @@ body {
 
 .titleBarDrag button,
 .titleBarDrag a,
+.titleBarDrag input,
 .titleBarDrag [data-no-drag] {
   -webkit-app-region: no-drag;
   app-region: no-drag;
 }
 
-/* Custom minimize / maximize / close controls, shown in the title bar end
-   slot. Kept minimal so they read as OS chrome rather than app buttons. */
-.windowControls {
+/* The mock command search in the center of the title bar: a comfortable width
+   that yields on narrow windows. The field fills the wrapper. */
+.titleBarSearch {
+  display: flex;
+  width: min(24rem, 42vw);
+}
+
+.titleBarSearch > * {
+  width: 100%;
+}
+
+/* Notification and account details on the end of the title bar. */
+.titleBarActions {
   display: inline-flex;
   align-items: center;
-  gap: var(--glacier-space-1);
+  gap: var(--glacier-space-2);
 }
 
-.windowControl {
-  display: inline-grid;
-  place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border: 0;
-  border-radius: var(--glacier-radius-sm);
-  background: transparent;
-  color: var(--glacier-text-muted);
-  cursor: pointer;
+/* Collapsed sidebar: hidden, with the content taking its place. It stays
+   reachable through the title bar toggle's hover preview. */
+.appWindow[data-sidebar='collapsed'] .appSidebar {
+  display: none;
+}
+
+/* The toggle and its hover preview share one hover region, so the pointer can
+   travel from the button into the preview without it closing. */
+.sidebarToggleWrap {
+  position: relative;
+  display: inline-flex;
+}
+
+/* The preview flyout: a floating copy of the sidebar that fades in below the
+   toggle while the sidebar is collapsed. The transparent top padding keeps the
+   hover region continuous across the visual gap. */
+.sidebarPreview {
+  position: absolute;
+  top: 100%;
+  inset-inline-start: 0;
+  padding-top: var(--glacier-space-2);
+  z-index: 70;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-0.25rem);
+  pointer-events: none;
   transition:
-    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
-    color var(--glacier-duration-fast) var(--glacier-ease-out);
+    opacity var(--glacier-duration-fast) var(--glacier-ease-out),
+    transform var(--glacier-duration-fast) var(--glacier-ease-out),
+    visibility 0s linear var(--glacier-duration-fast);
 }
 
-.windowControl:hover {
-  background: var(--glacier-hover);
-  color: var(--glacier-text);
+.sidebarPreview[data-open] {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition-delay: 0s;
 }
 
-.windowControl[data-variant='close']:hover {
-  background: var(--glacier-danger-solid);
-  color: var(--glacier-danger-contrast);
+.sidebarPreviewCard {
+  width: 15rem;
+  height: min(26rem, calc(100vh - 5rem));
+  overflow: hidden;
+  background: var(--glacier-surface);
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-radius: var(--glacier-radius-xl);
+  box-shadow: var(--glacier-shadow-4);
 }
 
-.windowControl:focus-visible {
-  outline: 2px solid var(--glacier-focus-ring);
-  outline-offset: -2px;
+@media (prefers-reduced-motion: reduce) {
+  .sidebarPreview {
+    transition: none;
+  }
 }
 
 /* Page scaffolding: a comfortable reading column with room to breathe. */
@@ -99,6 +210,15 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--glacier-space-6);
+}
+
+/* A titled block: the kit Heading carries no margin, so space it from the
+   content that follows it (the timeline, the card group). */
+.page section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-4);
+  min-width: 0;
 }
 
 .pageLede {
@@ -145,7 +265,17 @@ body {
 .control {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--glacier-space-2);
+}
+
+/* The kit SegmentedControl is content-width (inline-flex); in a stretching
+   column it would blow out to full width with the options packed left, so the
+   items keep their natural size. align-items above already prevents the
+   stretch; this guards it if a control is dropped somewhere that stretches. */
+.control > * {
+  align-self: flex-start;
+  max-width: 100%;
 }
 
 .accentSwatches {

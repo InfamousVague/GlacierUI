@@ -19,6 +19,7 @@ export const labelSpec: ComponentSpec = {
   ],
   defaults: { required: false, skeleton: false },
   dimensions: { fontSize: token('font-size-sm'), lineHeight: token('leading-sm') },
+  paint: { text: '$text' },
   tokens: ['font-sans', 'font-size-sm', 'leading-sm', 'font-weight-medium', 'text', 'danger-text'],
   a11y: {
     focusable: false,

@@ -96,6 +96,7 @@ export const sectionSpec: ComponentSpec = {
         'Mirrors each provided header slot (title, description, actions) with a placeholder at the same scale and stands text lines in for the content, so nothing shifts on arrival; the whole placeholder is aria-hidden.',
     },
   ],
+  paint: { text: '$text' },
   tokens: [
     'font-sans', 'font-size-sm', 'leading-sm', 'text', 'text-muted',
     'hairline', 'border-subtle',

@@ -61,6 +61,7 @@ export const treeViewSpec: ComponentSpec = {
   ],
   // 2px focus-ring outline inset into the row (outline-offset: -2px), painted
   // on the row rather than the whole subtree the li owns
+  paint: { text: '$text-muted' },
   focusRing: { ring: token('focus-ring'), offset: '-2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

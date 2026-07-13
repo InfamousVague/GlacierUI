@@ -1,8 +1,10 @@
 import { Motion, Speed, Ease, Spring, motionProps, press, lift, springTransition } from '@glacier/motion';
 import { durations } from '@glacier/tokens';
-import { Select, Row, Stack, Heading, Text, Size, TextTone } from '@glacier/react';
+import { Select, Row, Stack, Heading, Text, Size, TextTone, useT } from '@glacier/react';
 import { motion } from 'motion/react';
 import { useState } from 'react';
+import { prose } from '../../docs-ui.tsx';
+import { m } from '../../i18n.ts';
 
 const ENTRANCES = [
   Motion.FadeIn,
@@ -17,26 +19,24 @@ const ENTRANCES = [
 const ATTENTION = [Motion.Shake, Motion.Pulse, Motion.Bounce, Motion.Shimmer];
 
 export function MotionPage() {
+  const t = useT();
   const [speed, setSpeed] = useState<Speed>(Speed.Normal);
   const [ease, setEase] = useState<Ease>(Ease.Out);
   const [replay, setReplay] = useState(0);
 
   return (
     <>
-      <Heading level={1}>Motion</Heading>
+      <Heading level={1}>{t(m.motName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        Micro-animations are enums: <code>Motion.ScaleIn</code>, <code>Speed.Fast</code>,{' '}
-        <code>Ease.Spring</code>. Spread <code>motionProps(...)</code> onto any framer-motion
-        element and it animates using the motion tokens. Everything honors{' '}
-        <code>prefers-reduced-motion</code>.
+        {prose(t(m.motLede))}
       </Text>
 
-      <Heading level={2}>Entrances & exits</Heading>
+      <Heading level={2}>{t(m.motSecEntrances)}</Heading>
       <Row gap={4} wrap style={{ marginBottom: 'var(--glacier-space-5)' }}>
         <span className="topbarControl">
-          Speed{' '}
+          {t(m.motSpeedLabel)}{' '}
           <Select
-            aria-label="Speed"
+            aria-label={t(m.motSpeedLabel)}
             size={Size.Small}
             value={speed}
             onValueChange={(v) => setSpeed(v as Speed)}
@@ -47,9 +47,9 @@ export function MotionPage() {
           />
         </span>
         <span className="topbarControl">
-          Ease{' '}
+          {t(m.motEaseLabel)}{' '}
           <Select
-            aria-label="Ease"
+            aria-label={t(m.motEaseLabel)}
             size={Size.Small}
             value={ease}
             onValueChange={(v) => setEase(v as Ease)}
@@ -57,7 +57,7 @@ export function MotionPage() {
           />
         </span>
         <button className="select" onClick={() => setReplay((n) => n + 1)} style={{ cursor: 'pointer' }}>
-          Replay all
+          {t(m.motReplayAll)}
         </button>
       </Row>
       <Row gap={4} wrap>
@@ -96,7 +96,7 @@ export function MotionPage() {
         ))}
       </Row>
 
-      <Heading level={2}>Attention</Heading>
+      <Heading level={2}>{t(m.motSecAttention)}</Heading>
       <Row gap={4} wrap>
         {ATTENTION.map((kind) => (
           <div key={kind} style={{ textAlign: 'center' }}>
@@ -132,21 +132,18 @@ export function MotionPage() {
         ))}
       </Row>
 
-      <Heading level={2}>Springs</Heading>
+      <Heading level={2}>{t(m.motSecSprings)}</Heading>
       <SpringsDemo />
 
-      <Heading level={2}>Gesture presets</Heading>
-      <Text tone={TextTone.Muted}>
-        <code>press</code> and <code>lift</code> are spreadable gesture presets. Every kit control
-        uses the same feedback.
-      </Text>
+      <Heading level={2}>{t(m.motSecGestures)}</Heading>
+      <Text tone={TextTone.Muted}>{prose(t(m.motGestureIntro))}</Text>
       <Row gap={4} wrap>
         <motion.button
           {...press}
           className="select"
           style={{ height: 'var(--glacier-control-height-md)', paddingInline: 'var(--glacier-space-5)', cursor: 'pointer' }}
         >
-          press me
+          {t(m.motPressMe)}
         </motion.button>
         <motion.div
           {...lift}
@@ -158,7 +155,7 @@ export function MotionPage() {
             boxShadow: 'var(--glacier-shadow-2)',
           }}
         >
-          hover me
+          {t(m.motHoverMe)}
         </motion.div>
       </Row>
     </>
@@ -170,6 +167,7 @@ function enumKey(value: Motion): string {
 }
 
 function SpringsDemo() {
+  const t = useT();
   const [side, setSide] = useState(false);
   const presets = [
     { preset: Spring.Snappy, name: 'Spring.Snappy' },
@@ -178,10 +176,7 @@ function SpringsDemo() {
   ];
   return (
     <>
-      <Text tone={TextTone.Muted}>
-        Physics springs for interruptible motion: thumbs, reordering, layout moves. Build one with{' '}
-        <code>springTransition(Spring.Snappy)</code>. The segmented control and switch use these.
-      </Text>
+      <Text tone={TextTone.Muted}>{prose(t(m.motSpringsIntro))}</Text>
       <Stack gap={4} maxWidth="sm">
         {presets.map(({ preset, name }) => (
           <Row gap={4} wrap key={name}>
@@ -210,7 +205,7 @@ function SpringsDemo() {
         ))}
         <div>
           <button className="select" style={{ cursor: 'pointer' }} onClick={() => setSide((s) => !s)}>
-            Toggle
+            {t(m.motionToggle)}
           </button>
         </div>
       </Stack>

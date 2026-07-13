@@ -6,11 +6,12 @@ import {
   Size,
   Text,
   TextTone,
-  Timeline,
+  useT,
   type TimelineItem,
 } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 function RocketIcon() {
   return (
@@ -37,137 +38,142 @@ function AlertIcon() {
   );
 }
 
-const DEPLOY_FEED: TimelineItem[] = [
-  {
-    id: 1,
-    title: 'Deployed v2.1.0 to production',
-    tone: 'success',
-    icon: <CheckIcon />,
-    timestamp: '2h ago',
-    description: 'Rolled out to all regions in 4 minutes.',
-  },
-  {
-    id: 2,
-    title: 'Canary released',
-    tone: 'accent',
-    icon: <RocketIcon />,
-    timestamp: '3h ago',
-    description: '5% of traffic routed to the new build.',
-  },
-  {
-    id: 3,
-    title: 'Error budget warning',
-    tone: 'warning',
-    icon: <AlertIcon />,
-    timestamp: '5h ago',
-    description: 'p99 latency crossed the alert threshold for 10 minutes, then recovered.',
-  },
-  {
-    id: 4,
-    title: 'Build #4127 queued',
-    timestamp: 'yesterday',
-  },
-];
-
-const COMMENT_THREAD: TimelineItem[] = [
-  {
-    id: 'c1',
-    title: 'Ada Lovelace',
-    actor: <Avatar size="sm" name="Ada Lovelace" />,
-    timestamp: <time dateTime="2026-07-11T09:30">9:30</time>,
-    description: 'The migration plan looks right, but stage the index build first.',
-    tone: 'accent',
-  },
-  {
-    id: 'c2',
-    title: 'Grace Hopper',
-    actor: <Avatar size="sm" name="Grace Hopper" />,
-    timestamp: <time dateTime="2026-07-11T09:41">9:41</time>,
-    description: 'Agreed. I split it into two migrations and re-ran the benchmark.',
-    tone: 'accent',
-  },
-  {
-    id: 'c3',
-    title: 'Alan Turing',
-    actor: <Avatar size="sm" name="Alan Turing" />,
-    timestamp: <time dateTime="2026-07-11T10:02">10:02</time>,
-    description: 'Benchmarks are flat. Shipping it.',
-    tone: 'success',
-  },
-];
-
-const RICH_FEED: TimelineItem[] = [
-  {
-    id: 'r1',
-    title: 'Screenshot attached to the bug report',
-    actor: <Avatar size="sm" name="Ada Lovelace" />,
-    tone: 'info',
-    timestamp: '10m ago',
-    description: 'The overflow happens on narrow viewports only.',
-    media: (
-      <div
-        style={{
-          display: 'grid',
-          placeItems: 'center',
-          height: '6rem',
-          maxWidth: '20rem',
-          background: 'var(--glacier-accent-soft)',
-          color: 'var(--glacier-accent-text)',
-          fontSize: 'var(--glacier-font-size-sm)',
-        }}
-      >
-        media preview
-      </div>
-    ),
-    actions: (
-      <>
-        <Button size="sm" variant="soft">
-          Reply
-        </Button>
-        <Button size="sm" variant="ghost">
-          Assign
-        </Button>
-      </>
-    ),
-  },
-  {
-    id: 'r2',
-    title: 'Issue labelled',
-    tone: 'neutral',
-    timestamp: '1h ago',
-    actions: (
-      <>
-        <Pill size={Size.Small} tone="danger">
-          bug
-        </Pill>
-        <Pill size={Size.Small} tone="info">
-          ui
-        </Pill>
-      </>
-    ),
-  },
-];
-
 export function TimelinePage() {
+  const t = useT();
+
+  const DEPLOY_FEED: TimelineItem[] = [
+    {
+      id: 1,
+      title: t(m.tlDeploy1Title),
+      tone: 'success',
+      icon: <CheckIcon />,
+      timestamp: t(m.tlDeploy1Time),
+      description: t(m.tlDeploy1Desc),
+    },
+    {
+      id: 2,
+      title: t(m.tlDeploy2Title),
+      tone: 'accent',
+      icon: <RocketIcon />,
+      timestamp: t(m.tlDeploy2Time),
+      description: t(m.tlDeploy2Desc),
+    },
+    {
+      id: 3,
+      title: t(m.tlDeploy3Title),
+      tone: 'warning',
+      icon: <AlertIcon />,
+      timestamp: t(m.tlDeploy3Time),
+      description: t(m.tlDeploy3Desc),
+    },
+    {
+      id: 4,
+      title: t(m.tlDeploy4Title),
+      timestamp: t(m.tlDeploy4Time),
+    },
+  ];
+
+  const COMMENT_THREAD: TimelineItem[] = [
+    {
+      id: 'c1',
+      title: 'Ada Lovelace',
+      actor: <Avatar size="sm" name="Ada Lovelace" />,
+      timestamp: <time dateTime="2026-07-11T09:30">9:30</time>,
+      description: t(m.tlComment1Desc),
+      tone: 'accent',
+    },
+    {
+      id: 'c2',
+      title: 'Grace Hopper',
+      actor: <Avatar size="sm" name="Grace Hopper" />,
+      timestamp: <time dateTime="2026-07-11T09:41">9:41</time>,
+      description: t(m.tlComment2Desc),
+      tone: 'accent',
+    },
+    {
+      id: 'c3',
+      title: 'Alan Turing',
+      actor: <Avatar size="sm" name="Alan Turing" />,
+      timestamp: <time dateTime="2026-07-11T10:02">10:02</time>,
+      description: t(m.tlComment3Desc),
+      tone: 'success',
+    },
+  ];
+
+  const RICH_FEED: TimelineItem[] = [
+    {
+      id: 'r1',
+      title: t(m.tlRich1Title),
+      actor: <Avatar size="sm" name="Ada Lovelace" />,
+      tone: 'info',
+      timestamp: t(m.tlRich1Time),
+      description: t(m.tlRich1Desc),
+      media: (
+        <div
+          style={{
+            display: 'grid',
+            placeItems: 'center',
+            height: '6rem',
+            maxWidth: '20rem',
+            background: 'var(--glacier-accent-soft)',
+            color: 'var(--glacier-accent-text)',
+            fontSize: 'var(--glacier-font-size-sm)',
+          }}
+        >
+          {t(m.tlMediaPreview)}
+        </div>
+      ),
+      actions: (
+        <>
+          <Button size="sm" variant="soft">
+            {t(m.timelineReply)}
+          </Button>
+          <Button size="sm" variant="ghost">
+            {t(m.timelineAssign)}
+          </Button>
+        </>
+      ),
+    },
+    {
+      id: 'r2',
+      title: t(m.tlRich2Title),
+      tone: 'neutral',
+      timestamp: t(m.tlRich2Time),
+      actions: (
+        <>
+          <Pill size={Size.Small} tone="danger">
+            {t(m.timelineBug)}
+          </Pill>
+          <Pill size={Size.Small} tone="info">
+            {t(m.timelineUi)}
+          </Pill>
+        </>
+      ),
+    },
+  ];
+
   return (
     <>
-      <Heading level={1}>Timeline</Heading>
+      <Heading level={1}>{t(m.tlName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A vertical activity feed: a semantic ordered list of events, each with a tone-colored
-        marker on a connector rail and a content column of actor, title, timestamp, description,
-        media, and actions. The DOM order is the reading order, so pass items newest-first or
-        oldest-first and that chronology carries straight into assistive tech.
+        {t(m.tlLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntro)}</Text>
       <ComponentBlueprint specId="timeline" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Activity feed with tones and icons"
-        description="Each event colors its marker with a semantic tone and can hold a glyph inside the disc. Events without an icon fall back to a plain dot, and events without a tone stay neutral."
+        title={t(m.tlEx1Title)}
+        description={t(m.tlEx1Desc)}
+        component="Timeline"
+        render={(K) => (
+          <div style={{ width: '100%', maxWidth: '32rem' }}>
+            <K.Timeline aria-label={t(m.tlAriaDeploy)} items={DEPLOY_FEED} />
+          </div>
+        )}
         code={`const items: TimelineItem[] = [
   { id: 1, title: 'Deployed v2.1.0 to production', tone: 'success', icon: <CheckIcon />, timestamp: '2h ago' },
   { id: 2, title: 'Canary released', tone: 'accent', icon: <RocketIcon />, timestamp: '3h ago' },
@@ -176,15 +182,17 @@ export function TimelinePage() {
 ];
 
 <Timeline aria-label="Deploy activity" items={items} />`}
-      >
-        <div style={{ width: '100%', maxWidth: '32rem' }}>
-          <Timeline aria-label="Deploy activity" items={DEPLOY_FEED} />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Compact comment thread"
-        description="Compose the actor slot from the kit Avatar and pass a time element as the timestamp. Compact density trims the space between events for dense threads."
+        title={t(m.tlEx2Title)}
+        description={t(m.tlEx2Desc)}
+        component="Timeline"
+        render={(K) => (
+          <div style={{ width: '100%', maxWidth: '32rem' }}>
+            <K.Timeline aria-label={t(m.tlAriaReview)} items={COMMENT_THREAD} density="compact" />
+          </div>
+        )}
         code={`const items: TimelineItem[] = [
   {
     id: 'c1',
@@ -198,15 +206,17 @@ export function TimelinePage() {
 ];
 
 <Timeline aria-label="Review thread" items={items} density="compact" />`}
-      >
-        <div style={{ width: '100%', maxWidth: '32rem' }}>
-          <Timeline aria-label="Review thread" items={COMMENT_THREAD} density="compact" />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Media and actions"
-        description="An event can carry a media block under its description (clipped to the medium radius) and a trailing action row of small buttons, links, or pills."
+        title={t(m.tlEx3Title)}
+        description={t(m.tlEx3Desc)}
+        component="Timeline"
+        render={(K) => (
+          <div style={{ width: '100%', maxWidth: '32rem' }}>
+            <K.Timeline aria-label={t(m.tlAriaIssue)} items={RICH_FEED} />
+          </div>
+        )}
         code={`{
   id: 'r1',
   title: 'Screenshot attached to the bug report',
@@ -222,67 +232,48 @@ export function TimelinePage() {
     </>
   ),
 }`}
-      >
-        <div style={{ width: '100%', maxWidth: '32rem' }}>
-          <Timeline aria-label="Issue activity" items={RICH_FEED} />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description="skeleton renders marker discs and text lines with the exact rail geometry while the feed loads; skeletonCount sets how many placeholder rows it draws."
+        title={t(m.exSkeleton)}
+        description={t(m.tlEx4Desc)}
+        component="Timeline"
+        render={(K) => (
+          <div style={{ width: '100%', maxWidth: '32rem' }}>
+            <K.Timeline aria-label={t(m.tlAriaLoading)} items={[]} skeleton skeletonCount={3} />
+          </div>
+        )}
         code={`<Timeline aria-label="Activity" items={[]} skeleton skeletonCount={3} />`}
-      >
-        <div style={{ width: '100%', maxWidth: '32rem' }}>
-          <Timeline aria-label="Activity loading" items={[]} skeleton skeletonCount={3} />
-        </div>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'items', type: 'TimelineItem[]', description: 'Required. The events, in reading order: { id, title, description?, timestamp?, actor?, icon?, tone?, media?, actions? }.' },
-          { name: 'aria-label', type: 'string', description: 'Required. Accessible name for the feed.' },
-          { name: 'density', type: "'comfortable' | 'compact'", default: "'comfortable'", description: 'Vertical rhythm; compact trims the space between events.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders a placeholder with the component exact geometry.' },
-          { name: 'skeletonCount', type: 'number', default: '4', description: 'How many placeholder rows the skeleton draws.' },
+          { name: 'items', type: 'TimelineItem[]', description: t(m.tlPropItems) },
+          { name: 'aria-label', type: 'string', description: t(m.tlPropAriaLabel) },
+          { name: 'density', type: "'comfortable' | 'compact'", default: "'comfortable'", description: t(m.tlPropDensity) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.tlPropSkeleton) },
+          { name: 'skeletonCount', type: 'number', default: '4', description: t(m.tlPropSkeletonCount) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The host is a native <code>ol</code> with a required <code>aria-label</code>: the
-          ordered-list semantics tell assistive tech the sequence is meaningful, and the DOM order
-          is the reading order you choose (newest-first or oldest-first).
-        </li>
-        <li>
-          The marker rail (dot, icon, and connector) is <code>aria-hidden</code> and purely
-          decorative. Never encode meaning only in the marker tone; say it in the title or
-          description too.
-        </li>
-        <li>
-          Timestamps render as plain text. Pass a <code>time</code> element with a{' '}
-          <code>dateTime</code> attribute for machine-readable dates.
-        </li>
-        <li>
-          Interactive content in the actions slot keeps its own semantics and tab order; the
-          timeline itself takes no focus.
-        </li>
-        <li>
-          The skeleton placeholder is <code>aria-hidden</code>; mark the surrounding region{' '}
-          <code>aria-busy</code> at the app level while it loads.
-        </li>
+        <li>{prose(t(m.tlA11y1))}</li>
+        <li>{prose(t(m.tlA11y2))}</li>
+        <li>{prose(t(m.tlA11y3))}</li>
+        <li>{prose(t(m.tlA11y4))}</li>
+        <li>{prose(t(m.tlA11y5))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Pick one chronology per feed (newest-first for activity streams, oldest-first for narratives) and keep it consistent; the component renders items exactly in the order given.</li>
-        <li>Give every event a stable <code>id</code> so rows keep their identity when the feed grows.</li>
-        <li>Reserve tones and icons for events worth scanning for (deploys, failures, approvals); let routine events stay neutral dots.</li>
-        <li>Compose the actor slot from the kit Avatar plus a name, and keep titles to a single line where possible; the timestamp hugs the end of the header row.</li>
-        <li>Use compact density for dense comment threads and audit logs; keep comfortable for dashboards.</li>
-        <li>For long feeds, paginate or window the items yourself; the timeline renders whatever slice it is given.</li>
+        <li>{prose(t(m.tlUse1))}</li>
+        <li>{prose(t(m.tlUse2))}</li>
+        <li>{prose(t(m.tlUse3))}</li>
+        <li>{prose(t(m.tlUse4))}</li>
+        <li>{prose(t(m.tlUse5))}</li>
+        <li>{prose(t(m.tlUse6))}</li>
       </ul>
     </>
   );

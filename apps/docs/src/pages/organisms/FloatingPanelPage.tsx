@@ -1,31 +1,30 @@
-import { Button, FloatingPanel, Row, Text, Heading, Size, TextTone, Variant } from '@glacier/react';
+import { Button, FloatingPanel, Row, Text, Heading, Size, TextTone, Variant, useT } from '@glacier/react';
 import { useState } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 export function FloatingPanelPage() {
+  const t = useT();
   const [basicOpen, setBasicOpen] = useState(false);
   const [inspectorOpen, setInspectorOpen] = useState(false);
 
   return (
     <>
-      <Heading level={1}>FloatingPanel</Heading>
+      <Heading level={1}>{t(m.fpName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A draggable, dismissable non-modal panel. Grab its header bar to move it anywhere on
-        screen, and it stays clamped inside the viewport. Unlike Modal it renders no overlay,
-        locks no scroll, and traps no focus - it floats above the page while you keep working
-        underneath.
+        {t(m.fpLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.fpAnatomy)}</Text>
       <ComponentBlueprint specId="floating-panel" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="A controlled panel. Drag the title bar to move it; the built-in close button and Escape both dismiss it."
+        title={t(m.exBasic)}
+        description={t(m.fpExBasicDesc)}
         code={`import { Button, FloatingPanel, Text } from '@glacier/react';
 
 const [open, setOpen] = useState(false);
@@ -36,16 +35,16 @@ const [open, setOpen] = useState(false);
 </FloatingPanel>`}
       >
         <Row gap={4} wrap>
-          <Button onClick={() => setBasicOpen(true)}>Open panel</Button>
-          <FloatingPanel open={basicOpen} title="Notes" onClose={() => setBasicOpen(false)}>
-            <Text>Drag me by the header bar. I stay inside the viewport.</Text>
+          <Button onClick={() => setBasicOpen(true)}>{t(m.fpOpenPanel)}</Button>
+          <FloatingPanel open={basicOpen} title={t(m.fpTitleNotes)} onClose={() => setBasicOpen(false)}>
+            <Text>{t(m.fpBasicBody)}</Text>
           </FloatingPanel>
         </Row>
       </Example>
 
       <Example
-        title="Custom start position"
-        description="defaultPosition places the panel's top-left corner in viewport pixels on open. Here it opens toward the right edge as a side inspector."
+        title={t(m.fpExPositionTitle)}
+        description={t(m.fpExPositionDesc)}
         code={`<FloatingPanel
   open={open}
   title="Inspector"
@@ -57,50 +56,46 @@ const [open, setOpen] = useState(false);
       >
         <Row gap={4} wrap>
           <Button variant={Variant.Soft} onClick={() => setInspectorOpen(true)}>
-            Open inspector
+            {t(m.fpOpenInspector)}
           </Button>
           <FloatingPanel
             open={inspectorOpen}
-            title="Inspector"
+            title={t(m.fpTitleInspector)}
             defaultPosition={{ x: 480, y: 120 }}
             onClose={() => setInspectorOpen(false)}
           >
-            <Text>A non-modal inspector you can keep open while editing.</Text>
+            <Text>{t(m.fpInspectorBody)}</Text>
           </FloatingPanel>
         </Row>
       </Example>
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'open', type: 'boolean', description: 'Required. Whether the panel is shown; it unmounts when false.' },
-          { name: 'title', type: 'ReactNode', description: 'Required. Title rendered in the drag handle bar; it labels the dialog.' },
-          { name: 'onClose', type: '() => void', description: 'Required. Called when dismissed via the close button or Escape.' },
-          { name: 'defaultPosition', type: '{ x: number; y: number }', default: '{ x: 24, y: 24 }', description: "Initial top-left position in viewport pixels." },
-          { name: 'className', type: 'string', description: 'Extra class names merged onto the panel.' },
-          { name: 'children', type: 'ReactNode', description: 'The panel body content.' },
+          { name: 'open', type: 'boolean', description: t(m.fpPropOpen) },
+          { name: 'title', type: 'ReactNode', description: t(m.fpPropTitle) },
+          { name: 'onClose', type: '() => void', description: t(m.fpPropOnClose) },
+          { name: 'defaultPosition', type: '{ x: number; y: number }', default: '{ x: 24, y: 24 }', description: t(m.fpPropDefaultPosition) },
+          { name: 'className', type: 'string', description: t(m.fpPropClassName) },
+          { name: 'children', type: 'ReactNode', description: t(m.fpPropChildren) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
+        <li>{prose(t(m.fpA11y1))}</li>
         <li>
-          The panel portals to <code>document.body</code> and renders as <code>role="dialog"</code>,
-          labelled by its title through <code>aria-labelledby</code>.
+          {t(m.fpA11y2Lead)} <strong>{t(m.fpA11y2Term)}</strong>{prose(t(m.fpA11y2Rest))}
         </li>
-        <li>
-          It is <strong>non-modal</strong>: no <code>aria-modal</code>, no scroll lock, no focus
-          trap, and no overlay - the page underneath stays fully interactive.
-        </li>
-        <li>Escape closes the panel. Dragging is pointer-only, and the panel's position is never load-bearing.</li>
-        <li>The grab-bar sets <code>touch-action: none</code> so a drag on touch moves the panel instead of scrolling the page.</li>
+        <li>{prose(t(m.fpA11y3))}</li>
+        <li>{prose(t(m.fpA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Reach for a FloatingPanel when the user needs to reference or tweak something while the main view stays usable - an inspector, a tool palette, a detached note.</li>
-        <li>When the task demands the user's full attention or a decision before proceeding, use a Modal instead.</li>
-        <li>Keep the body compact; the panel scrolls internally but is meant to sit beside the work, not dominate it.</li>
+        <li>{prose(t(m.fpUse1))}</li>
+        <li>{prose(t(m.fpUse2))}</li>
+        <li>{prose(t(m.fpUse3))}</li>
       </ul>
     </>
   );

@@ -292,6 +292,9 @@
   --glacier-info-text: var(--glacier-blue-11);
   --glacier-info-contrast: oklch(0.995 0 0);
 
+  /* Light theme surfaces */
+  --glacier-text-subtle: oklch(0.535 0.012 260);
+
 }
 
 /* Dark theme - data-theme="dark", or prefers-color-scheme with no explicit light */

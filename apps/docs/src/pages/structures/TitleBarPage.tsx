@@ -1,8 +1,9 @@
-import { Box, Button, IconButton, SearchField, Text, TitleBar, Heading, Size, TextTone, Variant } from '@glacier/react';
+import { Box, Button, IconButton, SearchField, Text, TitleBar, Heading, Size, TextTone, Variant, useT } from '@glacier/react';
 import { PanelLeft, Share } from '@glacier/icons';
 import type { ReactNode } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 const panelIcon = <PanelLeft size={16} />;
 const shareIcon = <Share size={16} />;
@@ -72,37 +73,37 @@ function Window({ children, trafficLights = false }: { children: ReactNode; traf
 }
 
 export function TitleBarPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>TitleBar</Heading>
+      <Heading level={1}>{t(m.tbName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        The standardized window bar for Tauri and Electron style desktop apps: the fixed 3.25rem
-        strip at the very top of the window. It owns window dragging through{' '}
-        <code>data-tauri-drag-region</code>, centers a one-line title, and can reserve the gutter
-        where macOS paints its window controls.
+        {prose(t(m.tbLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.tbAnatomyIntro)}</Text>
       <ComponentBlueprint specId="title-bar" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Plain window bar"
-        description="The default bar: glass surface, bottom hairline, and a small muted title centered in the window. The whole strip is a drag region, so grabbing it moves the window."
+        title={t(m.tbEx1Title)}
+        description={t(m.tbEx1Desc)}
+        component="TitleBar"
+        render={(K) => (
+          <Window>
+            <K.TitleBar title={t(m.titlebarUntitledMd)} />
+          </Window>
+        )}
         code={`import { TitleBar } from '@glacier/react';
 
 <TitleBar title="Untitled.md" />`}
-      >
-        <Window>
-          <TitleBar title="Untitled.md" />
-        </Window>
-      </Example>
+      />
 
       <Example
-        title="Traffic-light inset with actions"
-        description="trafficLightInset reserves an 88px inline-start gutter for the macOS close, minimize, and zoom buttons that a titleBarStyle Overlay window paints over the bar. The dots here are a mock of those macOS window controls: in a real window the OS draws them. Slot buttons are not drag regions, so they stay clickable."
+        title={t(m.tbEx2Title)}
+        description={t(m.tbEx2Desc)}
         code={`import { PanelLeft, Share } from '@glacier/icons';
 
 <TitleBar
@@ -115,15 +116,15 @@ export function TitleBarPage() {
         <Window trafficLights>
           <TitleBar
             trafficLightInset
-            title="Quarterly notes"
+            title={t(m.titlebarQuarterlyNotes)}
             start={
-              <IconButton variant={Variant.Ghost} aria-label="Toggle sidebar">
+              <IconButton variant={Variant.Ghost} aria-label={t(m.tbAriaToggleSidebar)}>
                 {panelIcon}
               </IconButton>
             }
             end={
               <Button size={Size.Small} variant={Variant.Soft}>
-                Share
+                {t(m.titlebarShare)}
               </Button>
             }
           />
@@ -131,8 +132,8 @@ export function TitleBarPage() {
       </Example>
 
       <Example
-        title="Centered search"
-        description="Children render beside the title in the centered middle, which is where a library or browser style window puts its search. The field is interactive, so it does not take the drag attribute; drag from the space around it."
+        title={t(m.tbEx3Title)}
+        description={t(m.tbEx3Desc)}
         code={`<TitleBar
   trafficLightInset
   end={<IconButton variant={Variant.Ghost} aria-label="Share"><Share size={16} /></IconButton>}
@@ -144,115 +145,92 @@ export function TitleBarPage() {
           <TitleBar
             trafficLightInset
             end={
-              <IconButton variant={Variant.Ghost} aria-label="Share">
+              <IconButton variant={Variant.Ghost} aria-label={t(m.tbAriaShare)}>
                 {shareIcon}
               </IconButton>
             }
           >
-            <SearchField size={Size.Small} aria-label="Search library" style={{ width: '18rem' }} />
+            <SearchField size={Size.Small} aria-label={t(m.tbAriaSearchLibrary)} style={{ width: '18rem' }} />
           </TitleBar>
         </Window>
       </Example>
 
       <Example
-        title="Skeleton"
-        description="skeleton renders the same bar geometry with a shimmer where the title sits, so nothing shifts when the window content arrives. The bar keeps its drag attribute, so the window stays movable while loading."
+        title={t(m.exSkeleton)}
+        description={t(m.tbEx4Desc)}
+        component="TitleBar"
+        render={(K) => (
+          <Window trafficLights>
+            <K.TitleBar skeleton trafficLightInset />
+          </Window>
+        )}
         code={`<TitleBar skeleton trafficLightInset />`}
-      >
-        <Window trafficLights>
-          <TitleBar skeleton trafficLightInset />
-        </Window>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
           {
             name: 'title',
             type: 'ReactNode',
-            description: 'One-line centered title, small and muted. It truncates instead of wrapping.',
+            description: t(m.tbPropTitle),
           },
           {
             name: 'start',
             type: 'ReactNode',
-            description: 'Content pinned to the start, after the traffic-light gutter. Stays clickable.',
+            description: t(m.tbPropStart),
           },
           {
             name: 'end',
             type: 'ReactNode',
-            description: 'Content pinned to the end, such as window-level actions. Stays clickable.',
+            description: t(m.tbPropEnd),
           },
           {
             name: 'children',
             type: 'ReactNode',
-            description: 'Extra centered content beside the title, such as a search field.',
+            description: t(m.tbPropChildren),
           },
           {
             name: 'trafficLightInset',
             type: 'boolean',
             default: 'false',
-            description: 'Reserves an 88px inline-start gutter for the macOS window controls painted by an overlay window.',
+            description: t(m.tbPropTrafficLightInset),
           },
           {
             name: 'surface',
             type: 'boolean',
             default: 'true',
-            description: 'The translucent glass background with backdrop blur, like the app header.',
+            description: t(m.tbPropSurface),
           },
           {
             name: 'border',
             type: 'boolean',
             default: 'true',
-            description: 'A bottom hairline separating the bar from the window content.',
+            description: t(m.tbPropBorder),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: 'Renders a placeholder with the exact bar geometry.',
+            description: t(m.tbPropSkeleton),
           },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The bar is a <code>banner</code> landmark by default; pass a <code>role</code> to
-          override it when the page already has one.
-        </li>
-        <li>
-          <code>data-tauri-drag-region</code> is a plain string attribute, harmless outside Tauri,
-          and it never lands on interactive slot children, so buttons and fields keep their normal
-          pointer and keyboard behavior.
-        </li>
-        <li>
-          Give icon-only controls in <code>start</code> and <code>end</code> an{' '}
-          <code>aria-label</code>, since the bar adds no labels of its own.
-        </li>
-        <li>
-          Text selection is disabled on the bar because it is window chrome; keep body copy out of
-          it.
-        </li>
+        <li>{prose(t(m.tbA11y1))}</li>
+        <li>{prose(t(m.tbA11y2))}</li>
+        <li>{prose(t(m.tbA11y3))}</li>
+        <li>{prose(t(m.tbA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>
-          Use TitleBar only for the real window strip in a desktop shell; inside the page, reach
-          for Toolbar instead.
-        </li>
-        <li>
-          Turn on <code>trafficLightInset</code> when the window uses a transparent or overlay
-          title bar on macOS, so content clears the close, minimize, and zoom buttons.
-        </li>
-        <li>
-          Keep the title to one short line; it truncates rather than wraps, and long names belong
-          in the document, not the chrome.
-        </li>
-        <li>
-          Put at most a couple of quiet controls in each slot; the bar should read as chrome, not
-          as a toolbar.
-        </li>
+        <li>{prose(t(m.tbUse1))}</li>
+        <li>{prose(t(m.tbUse2))}</li>
+        <li>{prose(t(m.tbUse3))}</li>
+        <li>{prose(t(m.tbUse4))}</li>
       </ul>
     </>
   );

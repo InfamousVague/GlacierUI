@@ -82,6 +82,7 @@ export const schemaJson = {
         },
       },
     },
+    paint,
     focusRing: {
       type: 'object',
       required: ['ring'],

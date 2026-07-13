@@ -1,26 +1,27 @@
-import { Box, Button, ProgressBar, Row, Stack, Text, Heading, Size, TextTone, Tone, Variant } from '@glacier/react';
+import { Box, Button, ProgressBar, Row, Stack, Text, Heading, Size, TextTone, Tone, Variant, useT } from '@glacier/react';
 import { useEffect, useState } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 export function ProgressBarPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Progress Bar</Heading>
+      <Heading level={1}>{t(m.pbName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        Shows how far a known task has gotten. When the duration is unknown, use the indeterminate
-        sweep, or reach for Spinner. For a level rather than progress, use Meter.
+        {prose(t(m.pbLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.pbAnatomyIntro)}</Text>
       <ComponentBlueprint specId="progress-bar" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Determinate"
-        description="Pass value from 0 to max. The fill animates between values on the motion tokens."
+        title={t(m.pbEx1Title)}
+        description={t(m.pbEx1Desc)}
         code={`import { ProgressBar } from '@glacier/react';
 
 <ProgressBar aria-label="Course progress" value={65} />`}
@@ -29,95 +30,91 @@ export function ProgressBarPage() {
       </Example>
 
       <Example
-        title="Indeterminate"
-        description="Set indeterminate (or omit value) when the duration is unknown. The bar sweeps until you switch it to a value."
+        title={t(m.pbEx2Title)}
+        description={t(m.pbEx2Desc)}
         code={`<ProgressBar aria-label="Preparing" indeterminate />`}
       >
         <Box maxWidth="xs" width="full">
-          <ProgressBar aria-label="Preparing" indeterminate />
+          <ProgressBar aria-label={t(m.progressbarPreparing)} indeterminate />
         </Box>
       </Example>
 
       <Example
-        title="Sizes and tones"
-        description="Two thicknesses and four tones. The accent tone follows the active accent ramp."
+        title={t(m.pbEx3Title)}
+        description={t(m.pbEx3Desc)}
+        component="ProgressBar"
+        render={(K) => (
+          <Stack gap={4} maxWidth="xs" width="full">
+            <K.ProgressBar aria-label={t(m.progressbarAccent)} value={70} size={Size.Small} />
+            <K.ProgressBar aria-label={t(m.progressbarSuccess)} value={100} tone={Tone.Success} />
+            <K.ProgressBar aria-label={t(m.progressbarWarning)} value={45} tone={Tone.Warning} />
+            <K.ProgressBar aria-label={t(m.progressbarDanger)} value={15} tone={Tone.Danger} />
+          </Stack>
+        )}
         code={`<ProgressBar aria-label="Accent" value={70} size={Size.Small} />
 <ProgressBar aria-label="Success" value={100} tone={Tone.Success} />
 <ProgressBar aria-label="Warning" value={45} tone={Tone.Warning} />
 <ProgressBar aria-label="Danger" value={15} tone={Tone.Danger} />`}
-      >
-        <Stack gap={4} maxWidth="xs" width="full">
-          <ProgressBar aria-label="Accent" value={70} size={Size.Small} />
-          <ProgressBar aria-label="Success" value={100} tone={Tone.Success} />
-          <ProgressBar aria-label="Warning" value={45} tone={Tone.Warning} />
-          <ProgressBar aria-label="Danger" value={15} tone={Tone.Danger} />
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Steps with a custom max"
-        description="max recalibrates the range, which suits lesson or wizard steps."
+        title={t(m.pbEx4Title)}
+        description={t(m.pbEx4Desc)}
         code={`<ProgressBar aria-label="Lesson 3 of 4" value={3} max={4} />`}
       >
         <Stack gap={4} maxWidth="xs" width="full">
-          <ProgressBar aria-label="Lesson 3 of 4" value={3} max={4} />
+          <ProgressBar aria-label={t(m.pbLesson)} value={3} max={4} />
           <Text size={Size.Small} tone={TextTone.Muted}>
-            Lesson 3 of 4
+            {t(m.pbLesson)}
           </Text>
         </Stack>
       </Example>
 
       <Example
-        title="Skeleton"
-        description="Set skeleton while the value is still loading. The placeholder keeps the track geometry for the size, so nothing shifts when the real bar arrives."
+        title={t(m.exSkeleton)}
+        description={t(m.pbEx5Desc)}
         code={`<ProgressBar skeleton />
 <ProgressBar aria-label="Course progress" value={65} />
 <ProgressBar skeleton size={Size.Small} />`}
       >
         <Stack gap={4} maxWidth="xs" width="full">
           <ProgressBar skeleton />
-          <ProgressBar aria-label="Course progress" value={65} />
+          <ProgressBar aria-label={t(m.pbAriaCourseProgress)} value={65} />
           <ProgressBar skeleton size={Size.Small} />
         </Stack>
       </Example>
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'value', type: 'number', description: 'Progress from 0 to max. Omit for indeterminate.' },
-          { name: 'max', type: 'number', default: '100', description: 'Upper bound of the range.' },
-          { name: 'indeterminate', type: 'boolean', default: 'false', description: 'Sweeping animation for unknown durations.' },
-          { name: 'size', type: "'sm' | 'md'", default: "'md'", description: 'Track thickness.' },
-          { name: 'tone', type: "'accent' | 'success' | 'warning' | 'danger'", default: "'accent'", description: 'Fill color from the status ramps.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: "Renders a placeholder with the component's exact geometry." },
-          { name: 'aria-label', type: 'string', description: 'Accessible name for the bar.' },
+          { name: 'value', type: 'number', description: t(m.pbPropValue) },
+          { name: 'max', type: 'number', default: '100', description: t(m.pbPropMax) },
+          { name: 'indeterminate', type: 'boolean', default: 'false', description: t(m.pbPropIndeterminate) },
+          { name: 'size', type: "'sm' | 'md'", default: "'md'", description: t(m.pbPropSize) },
+          { name: 'tone', type: "'accent' | 'success' | 'warning' | 'danger'", default: "'accent'", description: t(m.pbPropTone) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.pbPropSkeleton) },
+          { name: 'aria-label', type: 'string', description: t(m.pbPropAriaLabel) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          Renders <code>role="progressbar"</code> with <code>aria-valuemin</code>,{' '}
-          <code>aria-valuemax</code>, and <code>aria-valuenow</code>. Indeterminate bars omit{' '}
-          <code>aria-valuenow</code>, which is the signal for an unknown amount.
-        </li>
-        <li>
-          Under prefers-reduced-motion the sweep becomes an opacity pulse, so state is still visible
-          without movement.
-        </li>
+        <li>{prose(t(m.pbA11y1))}</li>
+        <li>{prose(t(m.pbA11y2))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Prefer a determinate bar whenever real progress is measurable.</li>
-        <li>Use the indeterminate sweep, or a Spinner, when you cannot measure progress.</li>
-        <li>Values clamp to the range, so feed raw numbers without guarding.</li>
+        <li>{prose(t(m.pbUse1))}</li>
+        <li>{prose(t(m.pbUse2))}</li>
+        <li>{prose(t(m.pbUse3))}</li>
       </ul>
     </>
   );
 }
 
 function LiveProgress() {
+  const t = useT();
   const [value, setValue] = useState(65);
 
   useEffect(() => {
@@ -128,10 +125,10 @@ function LiveProgress() {
 
   return (
     <Stack gap={4} maxWidth="xs" width="full">
-      <ProgressBar aria-label="Course progress" value={value} />
+      <ProgressBar aria-label={t(m.pbAriaCourseProgress)} value={value} />
       <Row gap={4} wrap>
         <Button size={Size.Small} variant={Variant.Soft} onClick={() => setValue((v) => Math.min(v + 15, 100))}>
-          Advance
+          {t(m.progressbarAdvance)}
         </Button>
         <Text as="span" size={Size.Small} tone={TextTone.Muted}>
           {value}%

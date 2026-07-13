@@ -1,46 +1,48 @@
-import { Kbd, Text, Heading, Size, TextTone } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Kbd, Text, Heading, Size, TextTone, useT } from '@glacier/react';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 export function KbdPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Kbd</Heading>
+      <Heading level={1}>{t(m.kbdName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A monospace key cap that renders a keyboard key or shortcut inline with a raised bottom
-        edge. It sizes in <code>em</code> units, so it scales with the surrounding text, and it can
-        swap its solid surface for the frosted glass material when it sits on glass.
+        {prose(t(m.kbdLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntro)}</Text>
       <ComponentBlueprint specId="kbd" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="Single keys and combinations. Render one Kbd per key so each cap reads as its own key."
+        title={t(m.exBasic)}
+        description={t(m.kbdEx1Desc)}
+        component="Kbd"
+        render={(K) => (
+          <div style={{ display: 'flex', gap: 'var(--glacier-space-4)', alignItems: 'center', flexWrap: 'wrap' }}>
+            <K.Kbd>Esc</K.Kbd>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--glacier-space-1)' }}>
+              <K.Kbd>Cmd</K.Kbd> <K.Kbd>K</K.Kbd>
+            </span>
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--glacier-space-1)' }}>
+              <K.Kbd>Ctrl</K.Kbd> <K.Kbd>Shift</K.Kbd> <K.Kbd>P</K.Kbd>
+            </span>
+          </div>
+        )}
         code={`import { Kbd } from '@glacier/react';
 
 <Kbd>Esc</Kbd>
 <Kbd>Cmd</Kbd> <Kbd>K</Kbd>
 <Kbd>Ctrl</Kbd> <Kbd>Shift</Kbd> <Kbd>P</Kbd>`}
-      >
-        <div style={{ display: 'flex', gap: 'var(--glacier-space-4)', alignItems: 'center', flexWrap: 'wrap' }}>
-          <Kbd>Esc</Kbd>
-          <span>
-            <Kbd>Cmd</Kbd> <Kbd>K</Kbd>
-          </span>
-          <span>
-            <Kbd>Ctrl</Kbd> <Kbd>Shift</Kbd> <Kbd>P</Kbd>
-          </span>
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Inline with text"
-        description="Kbd inherits the surrounding font size, so a shortcut mentioned mid-sentence stays on the text's rhythm at any size."
+        title={t(m.kbdEx2Title)}
+        description={t(m.kbdEx2Desc)}
         code={`<Text>
   Press <Kbd>Cmd</Kbd> <Kbd>K</Kbd> to open the command palette.
 </Text>
@@ -50,58 +52,59 @@ export function KbdPage() {
       >
         <div style={{ display: 'grid', gap: 'var(--glacier-space-2)' }}>
           <Text>
-            Press <Kbd>Cmd</Kbd> <Kbd>K</Kbd> to open the command palette.
+            {t(m.kbdPress)} <Kbd>Cmd</Kbd> <Kbd>K</Kbd> {t(m.kbdToOpenTheCommandPalette)}
           </Text>
           <Text size={Size.Small} tone={TextTone.Muted}>
-            Press <Kbd>?</Kbd> to see all shortcuts.
+            {t(m.kbdPress)} <Kbd>?</Kbd> {t(m.kbdToSeeAllShortcuts)}
           </Text>
         </div>
       </Example>
 
       <Example
-        title="Glass"
-        description="On a frosted surface, the glass variant keeps the key legible without stacking a solid chip on the material. The docs search field uses this for its shortcut hint."
+        title={t(m.exGlass)}
+        description={t(m.kbdEx3Desc)}
+        component="Kbd"
+        render={(K) => (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--glacier-space-1)' }}>
+            <K.Kbd glass>Cmd</K.Kbd> <K.Kbd glass>K</K.Kbd>
+          </span>
+        )}
         code={`<Kbd glass>Cmd</Kbd> <Kbd glass>K</Kbd>`}
-      >
-        <span>
-          <Kbd glass>Cmd</Kbd> <Kbd glass>K</Kbd>
-        </span>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description="The loading placeholder keeps the key cap's exact footprint."
+        title={t(m.exSkeleton)}
+        description={t(m.kbdEx4Desc)}
+        component="Kbd"
+        render={(K) => (
+          <span>
+            <K.Kbd skeleton />
+          </span>
+        )}
         code={`<Kbd skeleton />`}
-      >
-        <span>
-          <Kbd skeleton />
-        </span>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'glass', type: 'boolean', default: 'false', description: 'Renders the frosted glass material instead of a solid surface.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders a placeholder with the exact geometry.' },
-          { name: 'children', type: 'ReactNode', description: 'Required. Key label or shortcut text, kept to one line.' },
+          { name: 'glass', type: 'boolean', default: 'false', description: t(m.kbdPropGlass) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.kbdPropSkeleton) },
+          { name: 'children', type: 'ReactNode', description: t(m.kbdPropChildren) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          Renders the semantic <code>kbd</code> element, so assistive tech announces the content as
-          keyboard input.
-        </li>
-        <li>The key text itself carries the meaning; no extra labelling is needed.</li>
-        <li>It is not focusable and adds nothing to the tab order.</li>
+        <li>{prose(t(m.kbdA11y1))}</li>
+        <li>{prose(t(m.kbdA11y2))}</li>
+        <li>{prose(t(m.kbdA11y3))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use one Kbd per key and write modifier names out (Cmd, Ctrl, Shift) so combos read key by key.</li>
-        <li>Pair it with SearchField's <code>shortcut</code> slot to hint the focus shortcut inside the field.</li>
-        <li>For documenting code or commands rather than key presses, reach for <code>CodeBlock</code> or inline <code>code</code> instead.</li>
+        <li>{prose(t(m.kbdUse1))}</li>
+        <li>{prose(t(m.kbdUse2))}</li>
+        <li>{prose(t(m.kbdUse3))}</li>
       </ul>
     </>
   );

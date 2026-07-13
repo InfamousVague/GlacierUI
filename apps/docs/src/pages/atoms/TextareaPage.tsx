@@ -1,54 +1,59 @@
-import { Field, Stack, Textarea, Heading, Text, Size, TextTone } from '@glacier/react';
+import { Field, Stack, Textarea, Heading, Text, Size, TextTone, useT } from '@glacier/react';
 import { useState } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 export function TextareaPage() {
+  const t = useT();
   const [bio, setBio] = useState('');
 
   return (
     <>
-      <Heading level={1}>Textarea</Heading>
+      <Heading level={1}>{t(m.txaName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A multi-line text input that mirrors Input's surface, hairline border, and focus ring. It
-        grows on demand and can be resized vertically.
+        {prose(t(m.txaLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.txaAnatomyIntro)}</Text>
       <ComponentBlueprint specId="textarea" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="A plain multi-line field. Drag the bottom edge to resize."
+        title={t(m.exBasic)}
+        description={t(m.txaEx1Desc)}
+        component="Textarea"
+        render={(K) => (
+          <div style={{ width: '22rem' }}>
+            <K.Textarea aria-label={t(m.textareaMessage)} placeholder={t(m.textareaWriteAMessage)} />
+          </div>
+        )}
         code={`import { Textarea } from '@glacier/react';
 
 <Textarea aria-label="Message" placeholder="Write a message" />`}
-      >
-        <div style={{ width: '22rem' }}>
-          <Textarea aria-label="Message" placeholder="Write a message" />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Sizes"
-        description="size scales the font-size and padding to sm, md, or lg."
+        title={t(m.secSizes)}
+        description={t(m.txaEx2Desc)}
+        component="Textarea"
+        render={(K) => (
+          <Stack gap={4} style={{ width: '22rem' }}>
+            <K.Textarea aria-label={t(m.textareaSmall)} size={Size.Small} placeholder={t(m.textareaSmall)} />
+            <K.Textarea aria-label={t(m.textareaMedium)} size={Size.Medium} placeholder={t(m.textareaMedium)} />
+            <K.Textarea aria-label={t(m.textareaLarge)} size={Size.Large} placeholder={t(m.textareaLarge)} />
+          </Stack>
+        )}
         code={`<Textarea aria-label="Small" size={Size.Small} placeholder="Small" />
 <Textarea aria-label="Medium" size={Size.Medium} placeholder="Medium" />
 <Textarea aria-label="Large" size={Size.Large} placeholder="Large" />`}
-      >
-        <Stack gap={4} style={{ width: '22rem' }}>
-          <Textarea aria-label="Small" size={Size.Small} placeholder="Small" />
-          <Textarea aria-label="Medium" size={Size.Medium} placeholder="Medium" />
-          <Textarea aria-label="Large" size={Size.Large} placeholder="Large" />
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Controlled"
-        description="Drive the value with state, the same as a native textarea."
+        title={t(m.txaEx3Title)}
+        description={t(m.txaEx3Desc)}
         code={`const [bio, setBio] = useState('');
 
 <Textarea
@@ -60,92 +65,88 @@ export function TextareaPage() {
       >
         <div style={{ width: '22rem' }}>
           <Textarea
-            aria-label="Bio"
+            aria-label={t(m.textareaBio)}
             value={bio}
             onChange={(event) => setBio(event.target.value)}
-            placeholder="Tell us about yourself"
+            placeholder={t(m.textareaTellUsAboutYourself)}
           />
         </div>
       </Example>
 
       <Example
-        title="In a Field"
-        description="Inside a Field the textarea inherits the label, hint, and invalid wiring."
+        title={t(m.txaEx4Title)}
+        description={t(m.txaEx4Desc)}
         code={`<Field label="Feedback" hint="Tell us what could be better.">
   <Textarea placeholder="Your thoughts" />
 </Field>`}
       >
         <div style={{ width: '22rem' }}>
-          <Field label="Feedback" hint="Tell us what could be better.">
-            <Textarea placeholder="Your thoughts" />
+          <Field label={t(m.textareaFeedback)} hint={t(m.textareaTellUsWhatCouldBe)}>
+            <Textarea placeholder={t(m.textareaYourThoughts)} />
           </Field>
         </div>
       </Example>
 
       <Example
-        title="Skeleton"
-        description="Set skeleton while the backing value loads. The placeholder matches the field's block height, so nothing shifts when the real control arrives."
+        title={t(m.exSkeleton)}
+        description={t(m.txaEx5Desc)}
+        component="Textarea"
+        render={(K) => (
+          <Stack gap={4} style={{ width: '22rem' }}>
+            <K.Textarea skeleton />
+            <K.Textarea aria-label={t(m.textareaMessage)} placeholder={t(m.textareaWriteAMessage)} />
+          </Stack>
+        )}
         code={`<Textarea skeleton />
 <Textarea aria-label="Message" placeholder="Write a message" />`}
-      >
-        <Stack gap={4} style={{ width: '22rem' }}>
-          <Textarea skeleton />
-          <Textarea aria-label="Message" placeholder="Write a message" />
-        </Stack>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
           {
             name: 'size',
             type: "'sm' | 'md' | 'lg'",
             default: "'md'",
-            description: 'Scales the font-size and padding.',
+            description: t(m.txaPropSize),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: "Renders a placeholder with the component's exact geometry.",
+            description: t(m.txaPropSkeleton),
           },
           {
             name: 'value',
             type: 'string',
-            description: 'Controlled value. Pair with onChange, as with a native textarea.',
+            description: t(m.txaPropValue),
           },
           {
             name: 'disabled',
             type: 'boolean',
             default: 'false',
-            description: 'Disables the control.',
+            description: t(m.txaPropDisabled),
           },
           {
             name: 'aria-label',
             type: 'string',
-            description: 'Accessible name. Not needed inside a Field with a label.',
+            description: t(m.txaPropAriaLabel),
           },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          Renders a native <code>textarea</code>, so it exposes the textbox role and the multiline
-          state without extra wiring.
-        </li>
-        <li>Inside a Field the control inherits the label, hint, and invalid ids.</li>
-        <li>
-          Give it an <code>aria-label</code> when used on its own, or wrap it in a Field with a
-          visible label.
-        </li>
+        <li>{prose(t(m.txaA11y1))}</li>
+        <li>{prose(t(m.txaA11y2))}</li>
+        <li>{prose(t(m.txaA11y3))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Reach for a Textarea when the answer can run to more than one line: notes, bios, feedback.</li>
-        <li>Use a single-line Input for short values like a name or an email.</li>
-        <li>Keep the default resize vertical so the layout width stays stable.</li>
+        <li>{prose(t(m.txaUse1))}</li>
+        <li>{prose(t(m.txaUse2))}</li>
+        <li>{prose(t(m.txaUse3))}</li>
       </ul>
     </>
   );

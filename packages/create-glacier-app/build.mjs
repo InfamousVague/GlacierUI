@@ -12,7 +12,7 @@
  */
 import { execFileSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -179,9 +179,20 @@ write('vendor/@glacier/icons/package.json', {
 });
 
 // ---- 5. the Tauri crate ---------------------------------------------------
-// Always vendored into the template; the CLI keeps it for the Tauri backend
-// option and drops it for the web-only option.
-cpSync(join(HERE, 'src-tauri-template'), join(TEMPLATE, 'src-tauri'), { recursive: true });
+// apps/starter/src-tauri is the runnable reference crate; copy it in and put
+// the per-app identifier back to a placeholder so the CLI can fill it. The
+// productName / window title stay "Glacier Starter" and are replaced with the
+// chosen app name by the CLI's global rename. The target dir is excluded so a
+// local `cargo build` never leaks into the template. The CLI keeps this crate
+// for the Tauri backend option and drops it for the web-only option.
+cpSync(join(STARTER, 'src-tauri'), join(TEMPLATE, 'src-tauri'), {
+  recursive: true,
+  filter: (src) => !src.includes(`${sep}target${sep}`) && !src.endsWith(`${sep}target`),
+});
+{
+  const conf = join(TEMPLATE, 'src-tauri', 'tauri.conf.json');
+  writeFileSync(conf, readFileSync(conf, 'utf8').replace('com.glacier.starter', '__APP_IDENTIFIER__'));
+}
 
 // ---- 6. project files -----------------------------------------------------
 write('_gitignore', 'node_modules\ndist\n.DS_Store\nsrc-tauri/target\n');

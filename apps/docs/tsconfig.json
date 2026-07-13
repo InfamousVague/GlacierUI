@@ -2,7 +2,9 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "paths": {
-      "@glacier/react": ["../../packages/react/src/index.ts"]
+      "@glacier/react": ["../../packages/react/src/index.ts"],
+      "@glacier/native": ["../../packages/native/src/index.ts"],
+      "@glacier/commons": ["../../packages/commons/src/index.ts"]
     }
   },
   "include": [
@@ -10,6 +12,7 @@
     "tests",
     "vite.config.ts",
     "playwright.config.ts",
-    "../../packages/react/src/css-modules.d.ts"
+    "../../packages/react/src/css-modules.d.ts",
+    "../../packages/native/src/react-native.d.ts"
   ]
 }

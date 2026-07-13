@@ -34,6 +34,8 @@ export const iconSpec: ComponentSpec = {
   ],
   defaults: { size: 24, color: 'currentColor', strokeWidth: 2, absoluteStrokeWidth: false },
   dimensions: { strokeWidth: '2px' },
+  // strokes currentColor, so it carries no paint of its own
+  paint: {},
   tokens: [],
   a11y: {
     focusable: false,

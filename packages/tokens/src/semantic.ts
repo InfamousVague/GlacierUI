@@ -53,7 +53,12 @@ export const semantic: Record<string, string> = {
 };
 
 export const themeOverrides: Record<'light' | 'dark', Record<string, string>> = {
-  light: {},
+  light: {
+    // gray-9 only reaches ~3.5:1 on the light surfaces; this sits between
+    // gray-10 and gray-11 so subtle text clears WCAG AA (4.5:1) everywhere,
+    // worst case 4.6:1 on the sunken surface. Dark gray-9 already passes.
+    'text-subtle': 'oklch(0.535 0.012 260)',
+  },
   dark: {
     surface: g(2),
     'surface-raised': g(3),

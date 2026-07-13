@@ -41,6 +41,7 @@ export const filterChipSpec: ComponentSpec = {
     { name: 'focus-visible', description: 'A 2px accent focus ring blooms outward.', tokens: { ring: token('focus-ring') } },
     { name: 'disabled', description: 'Halved opacity and not-allowed cursor.' },
   ],
+  paint: { text: '$text-muted', border: '$border-strong' },
   focusRing: { ring: token('focus-ring'), offset: '2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

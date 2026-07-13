@@ -18,6 +18,7 @@ export const tableSpec: ComponentSpec = {
     { name: 'caption', type: 'element', description: 'Optional caption shown above the table.' },
     { name: 'emptyState', type: 'element', description: 'Content shown when there are no rows.' },
   ],
+  paint: { background: '$surface', text: '$text' },
   a11y: {
     role: 'table',
     focusable: false,

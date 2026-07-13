@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-/** The routes the app ships. Add a page by extending this and the nav config. */
-export const ROUTES = ['dashboard', 'library', 'settings', 'about'] as const;
+/** The routed pages. Settings is not here: it opens in a modal, not a route. */
+export const ROUTES = ['dashboard', 'library', 'about'] as const;
 export type Route = (typeof ROUTES)[number];
 
 const DEFAULT_ROUTE: Route = 'dashboard';

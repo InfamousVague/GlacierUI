@@ -59,6 +59,7 @@ export const datePickerSpec: ComponentSpec = {
     { name: 'disabled', description: 'The trigger dims and uses the sunken surface.', tokens: { background: token('surface-sunken') } },
     { name: 'invalid', description: 'A surrounding Field error paints a danger border.', tokens: { border: token('danger-border') } },
   ],
+  paint: { background: '$surface', text: '$text', border: '$border' },
   focusRing: { ring: token('accent-soft'), offset: '0' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

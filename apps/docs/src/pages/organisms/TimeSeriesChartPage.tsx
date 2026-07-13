@@ -1,7 +1,9 @@
-import { Heading, Text, TextTone, TimeSeriesChart, Size } from '@glacier/react';
+import { Heading, Text, TextTone, Size, useT } from '@glacier/react';
 import { useEffect, useState } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
+import { type PlatformKit } from '../../platforms.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 const DOC_END = Date.UTC(2026, 6, 11, 14, 30, 0);
 
@@ -25,50 +27,51 @@ function formatBytesPerSecond(v: number): string {
   return `${Math.round(v)} B/s`;
 }
 
-function StreamingDemo() {
+function StreamingDemo({ K }: { K: PlatformKit }) {
+  const t = useT();
   const [tick, setTick] = useState(0);
   useEffect(() => {
-    const id = setInterval(() => setTick((t) => t + 1), 1000);
+    const id = setInterval(() => setTick((n) => n + 1), 1000);
     return () => clearInterval(id);
   }, []);
   const now = DOC_END + tick * 1000;
   const times = Array.from({ length: 60 }, (_, i) => now - (59 - i) * 1000);
-  const shift = (arr: number[]) => arr.map((_, i) => arr[(i + tick) % arr.length]);
+  const shift = (arr: number[]) => arr.map((_, i) => arr[(i + tick) % arr.length] ?? 0);
   return (
-    <TimeSeriesChart
+    <K.TimeSeriesChart
       times={times}
       series={[
-        { id: 'user', label: 'User', values: shift(USER) },
-        { id: 'system', label: 'System', values: shift(SYSTEM) },
+        { id: 'user', label: t(m.timeseriesUser), values: shift(USER) },
+        { id: 'system', label: t(m.timeseriesSystem), values: shift(SYSTEM) },
       ]}
       max={60}
       formatValue={(v) => `${v}%`}
       height="10rem"
-      aria-label="CPU usage, streaming, last minute"
+      aria-label={t(m.tscAriaStreaming)}
     />
   );
 }
 
 export function TimeSeriesChartPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Time Series Chart</Heading>
+      <Heading level={1}>{t(m.tscName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A streaming time-series plot for telemetry: one shared time axis, a handful of series drawn
-        as thin lines or soft areas, a crosshair with a value readout on hover, and a legend that
-        never repaints survivors when series toggle. Canvas-rendered via uPlot, so a one-second
-        feed stays cheap. For a word-sized trend with no axes, use Sparkline instead.
+        {prose(t(m.tscLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntro)}</Text>
       <ComponentBlueprint specId="time-series-chart" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Streaming"
-        description="New samples slide in without rebuilding the plot. Pin max (here 60%) so successive frames share one scale — a calm minute and a busy one must not look identical. Hover for the crosshair and per-series readout."
+        title={t(m.tscEx1Title)}
+        description={t(m.tscEx1Desc)}
+        component="TimeSeriesChart"
+        render={(K) => <StreamingDemo K={K} />}
         code={`<TimeSeriesChart
   times={lastMinute}
   series={[
@@ -79,13 +82,25 @@ export function TimeSeriesChartPage() {
   formatValue={(v) => \`\${v}%\`}
   aria-label="CPU usage, last minute"
 />`}
-      >
-        <StreamingDemo />
-      </Example>
+      />
 
       <Example
-        title="Areas and unit formatting"
-        description="The area shape grounds a dominant series; formatValue owns the axis and readout units. Series take inks from the fixed categorical order — hiding one never recolors the rest."
+        title={t(m.tscEx2Title)}
+        description={t(m.tscEx2Desc)}
+        component="TimeSeriesChart"
+        render={(K) => (
+          <K.TimeSeriesChart
+            times={TIMES}
+            series={[
+              { id: 'in', label: t(m.timeseriesReceived), values: NET_IN },
+              { id: 'out', label: t(m.timeseriesSent), values: NET_OUT },
+            ]}
+            shape="area"
+            formatValue={formatBytesPerSecond}
+            height="10rem"
+            aria-label={t(m.tscAriaNetwork)}
+          />
+        )}
         code={`<TimeSeriesChart
   times={times}
   series={[
@@ -96,93 +111,85 @@ export function TimeSeriesChartPage() {
   formatValue={formatBytesPerSecond}
   aria-label="Network throughput, last minute"
 />`}
-      >
-        <TimeSeriesChart
-          times={TIMES}
-          series={[
-            { id: 'in', label: 'Received', values: NET_IN },
-            { id: 'out', label: 'Sent', values: NET_OUT },
-          ]}
-          shape="area"
-          formatValue={formatBytesPerSecond}
-          height="10rem"
-          aria-label="Network throughput, last minute"
-        />
-      </Example>
+      />
 
       <Example
-        title="Glass"
-        description="glass frames the plot on the frosted material, for charts floating over imagery or a tinted dashboard."
+        title={t(m.exGlass)}
+        description={t(m.tscEx3Desc)}
+        component="TimeSeriesChart"
+        render={(K) => (
+          <div
+            style={{
+              width: '100%',
+              padding: 'var(--glacier-space-5)',
+              borderRadius: 'var(--glacier-radius-lg)',
+              background: 'linear-gradient(120deg, var(--glacier-accent-soft), var(--glacier-purple-4), var(--glacier-teal-4))',
+            }}
+          >
+            <K.TimeSeriesChart
+              times={TIMES}
+              series={[
+                { id: 'user', label: t(m.timeseriesUser), values: USER },
+                { id: 'system', label: t(m.timeseriesSystem), values: SYSTEM },
+              ]}
+              max={60}
+              formatValue={(v) => `${v}%`}
+              height="9rem"
+              glass
+              aria-label={t(m.tscAriaGlass)}
+            />
+          </div>
+        )}
         code={`<TimeSeriesChart times={times} series={series} glass aria-label="CPU usage" />`}
-      >
-        <div
-          style={{
-            width: '100%',
-            padding: 'var(--glacier-space-5)',
-            borderRadius: 'var(--glacier-radius-lg)',
-            background: 'linear-gradient(120deg, var(--glacier-accent-soft), var(--glacier-purple-4), var(--glacier-teal-4))',
-          }}
-        >
-          <TimeSeriesChart
-            times={TIMES}
-            series={[
-              { id: 'user', label: 'User', values: USER },
-              { id: 'system', label: 'System', values: SYSTEM },
-            ]}
-            max={60}
-            formatValue={(v) => `${v}%`}
-            height="9rem"
-            glass
-            aria-label="CPU usage, glass"
-          />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Empty and skeleton"
-        description="Before the first sample the plot keeps its box and says so; skeleton mirrors the exact geometry while a recording loads."
+        title={t(m.tscEx4Title)}
+        description={t(m.tscEx4Desc)}
+        component="TimeSeriesChart"
+        render={(K) => (
+          <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', width: '100%' }}>
+            <K.TimeSeriesChart times={[]} series={[]} height="6rem" emptyLabel={t(m.tscDemoEmptyLabel)} aria-label={t(m.tscAriaEmpty)} />
+            <K.TimeSeriesChart times={[]} series={[]} height="6rem" skeleton aria-label={t(m.tscAriaLoading)} />
+          </div>
+        )}
         code={`<TimeSeriesChart times={[]} series={[]} emptyLabel="No samples yet" aria-label="CPU usage" />
 <TimeSeriesChart times={[]} series={[]} skeleton aria-label="CPU usage" />`}
-      >
-        <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', width: '100%' }}>
-          <TimeSeriesChart times={[]} series={[]} height="6rem" emptyLabel="No samples yet" aria-label="Empty chart" />
-          <TimeSeriesChart times={[]} series={[]} height="6rem" skeleton aria-label="Loading chart" />
-        </div>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'times', type: 'number[]', description: 'Required. Shared time axis, epoch ms, oldest first.' },
-          { name: 'series', type: '{ id, label, values, tone? }[]', description: 'Required. The plotted series, values aligned to times (null for gaps).' },
-          { name: 'shape', type: "'line' | 'area'", default: "'line'", description: 'Thin lines, or lines over a translucent soft fill.' },
-          { name: 'min', type: 'number', default: '0', description: 'Fixed lower bound of the value axis.' },
-          { name: 'max', type: 'number', description: 'Fixed upper bound; pin it so frames share one scale.' },
-          { name: 'formatValue', type: '(v: number) => string', description: 'Formats the y axis and readout values.' },
-          { name: 'formatTime', type: '(t: number) => string', description: 'Formats the x axis and readout times.' },
-          { name: 'showLegend', type: 'boolean', default: 'true', description: 'Legend appears for two or more series.' },
-          { name: 'height', type: 'string', default: "'12rem'", description: 'Plot height; width follows the container.' },
-          { name: 'emptyLabel', type: 'string', default: "'No samples yet'", description: 'Message while times is empty.' },
-          { name: 'glass', type: 'boolean', default: 'false', description: 'Frames the plot on the frosted glass material.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders a placeholder with the exact geometry.' },
-          { name: 'aria-label', type: 'string', description: 'Required. What the chart plots.' },
+          { name: 'times', type: 'number[]', description: t(m.tscPropTimes) },
+          { name: 'series', type: '{ id, label, values, tone? }[]', description: t(m.tscPropSeries) },
+          { name: 'shape', type: "'line' | 'area'", default: "'line'", description: t(m.tscPropShape) },
+          { name: 'min', type: 'number', default: '0', description: t(m.tscPropMin) },
+          { name: 'max', type: 'number', description: t(m.tscPropMax) },
+          { name: 'formatValue', type: '(v: number) => string', description: t(m.tscPropFormatValue) },
+          { name: 'formatTime', type: '(t: number) => string', description: t(m.tscPropFormatTime) },
+          { name: 'showLegend', type: 'boolean', default: 'true', description: t(m.tscPropShowLegend) },
+          { name: 'height', type: 'string', default: "'12rem'", description: t(m.tscPropHeight) },
+          { name: 'emptyLabel', type: 'string', default: "'No samples yet'", description: t(m.tscPropEmptyLabel) },
+          { name: 'glass', type: 'boolean', default: 'false', description: t(m.tscPropGlass) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.tscPropSkeleton) },
+          { name: 'aria-label', type: 'string', description: t(m.tscPropAriaLabel) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>The plot is a single <code>img</code>-role graphic named by the required <code>aria-label</code>; the hover readout is a visual affordance, not the accessible surface.</li>
-        <li>Values must be reachable without the pointer — pair the chart with stat tiles or a table carrying the current figures.</li>
-        <li>Series identity never rides on color alone: the legend and readout name every series.</li>
-        <li>Legend toggles are real buttons with <code>aria-pressed</code>; hiding a series never recolors the others.</li>
+        <li>{prose(t(m.tscA11y1))}</li>
+        <li>{prose(t(m.tscA11y2))}</li>
+        <li>{prose(t(m.tscA11y3))}</li>
+        <li>{prose(t(m.tscA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Keep it to a handful of series; roll the tail into an "other" series in gray.</li>
-        <li>Never plot two units on one chart — two measures of different scale want two charts, not a second axis.</li>
-        <li>Pin <code>max</code> for bounded units (percent), and let unbounded units (bytes/s) autoscale from zero.</li>
-        <li>One-second feeds: keep <code>times</code> a sliding window (a few hundred samples) rather than an unbounded array.</li>
+        <li>{prose(t(m.tscUse1))}</li>
+        <li>{prose(t(m.tscUse2))}</li>
+        <li>{prose(t(m.tscUse3))}</li>
+        <li>{prose(t(m.tscUse4))}</li>
       </ul>
     </>
   );

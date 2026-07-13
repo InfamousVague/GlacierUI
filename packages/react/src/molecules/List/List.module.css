@@ -1,15 +1,11 @@
 .list {
   display: grid;
-  gap: var(--glacier-space-2);
+  gap: var(--glacier-space-1);
   margin: 0;
   padding: 0;
   list-style: none;
   color: var(--glacier-text);
   font-family: var(--glacier-font-sans);
-}
-
-.list.sm {
-  gap: var(--glacier-space-1);
 }
 
 .divided {
@@ -31,19 +27,13 @@
   gap: var(--glacier-space-3);
   width: 100%;
   box-sizing: border-box;
-  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border: 0;
   border-radius: inherit;
-  background: var(--glacier-surface-raised);
+  background: transparent;
   color: inherit;
   font: inherit;
   text-align: start;
   text-decoration: none;
-}
-
-/* divided lists separate rows with the hairline dividers instead: flat rows */
-.divided .row {
-  border: 0;
-  background: transparent;
 }
 
 button.row {
@@ -52,11 +42,6 @@ button.row {
 
 a.row:hover,
 button.row:hover:not(:disabled) {
-  background: var(--glacier-active);
-}
-
-.divided a.row:hover,
-.divided button.row:hover:not(:disabled) {
   background: var(--glacier-hover);
 }
 
@@ -72,7 +57,6 @@ button.row:disabled {
 
 .item[data-selected] .row {
   background: var(--glacier-accent-soft);
-  border-color: var(--glacier-accent-border);
   color: var(--glacier-accent-text);
 }
 

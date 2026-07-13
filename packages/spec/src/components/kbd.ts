@@ -23,6 +23,7 @@ export const kbdSpec: ComponentSpec = {
     paddingBlock: '0.25em',
     paddingInline: '0.5em',
   },
+  paint: { background: '$surface-sunken', text: '$text-muted', border: '$border' },
   tokens: ['font-mono', 'text-muted', 'surface-sunken', 'hairline', 'border', 'radius-sm'],
   a11y: {
     focusable: false,

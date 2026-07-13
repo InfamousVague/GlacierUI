@@ -41,6 +41,8 @@ export const spotlightSpec: ComponentSpec = {
   // the ring belongs to the callout's Button/IconButton controls (2px
   // focus-ring outline, offset 2px); the callout itself takes programmatic
   // focus with its own outline suppressed
+  // the portaled backdrop and callout paint
+  paint: {},
   focusRing: { ring: token('focus-ring'), offset: '2px' },
   // the cutout ring eases its box as it tracks between steps
   transition: { duration: token('duration-normal'), ease: token('ease-out') },

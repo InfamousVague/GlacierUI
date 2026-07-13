@@ -41,6 +41,7 @@ export const statTileSpec: ComponentSpec = {
     { name: 'glass', description: 'Swaps the solid raised card for the frosted glass material (blur-sm, glass-saturate) with an inset top highlight.', paint: { background: token('glass-regular'), border: token('glass-border') }, tokens: { highlight: token('glass-highlight') } },
     { name: 'skeleton', description: 'Replaces the content with two text-line placeholders sized to the value (2xl) and label (sm), holding the same vertical rhythm.' },
   ],
+  paint: { background: '$surface-raised', text: '$text', border: '$border-subtle' },
   tokens: [
     'space-1', 'space-2', 'space-3', 'space-4', 'space-5',
     'radius-md', 'radius-lg', 'hairline', 'border-subtle',

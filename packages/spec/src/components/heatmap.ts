@@ -29,6 +29,7 @@ export const heatmapSpec: ComponentSpec = {
     gap: token('space-1'),
     cell: token('space-4'),
   },
+  paint: { text: '$text-subtle' },
   tokens: [
     'surface-sunken',
     'border-subtle',

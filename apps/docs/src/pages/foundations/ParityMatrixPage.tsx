@@ -1,4 +1,4 @@
-import { Button, Card, Heading, Pill, Size, Text, TextTone } from '@glacier/react';
+import { Button, Card, Heading, Pill, Size, Text, TextTone, useT } from '@glacier/react';
 import {
   buttonVariants,
   cardVariants,
@@ -8,6 +8,7 @@ import {
   tones,
 } from '@glacier/spec';
 import type { CSSProperties, ReactNode } from 'react';
+import { m } from '../../i18n.ts';
 
 // Every sample on this page is addressed by the spec-parity harness
 // (tests/parity.spec.ts) through its data-parity key, so the grids must stay
@@ -58,36 +59,30 @@ function Sample({
 }
 
 export function ParityMatrixPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Parity Matrix</Heading>
+      <Heading level={1}>{t(m.pmName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A machine-readable render of the beachhead components in every variant, tone, and size their
-        specs declare. The browser parity test walks this page and asserts that each sample&rsquo;s
-        computed geometry and paint equal the spec&rsquo;s resolved token values, so any framework
-        port can be held to the same pixels.
+        {t(m.pmLede)}
       </Text>
 
-      <Heading level={2}>Button</Heading>
-      <Text tone={TextTone.Muted}>
-        Every spec variant crossed with the three control sizes. Button has no tone axis.
-      </Text>
+      <Heading level={2}>{t(m.pmSecButton)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.pmButtonDesc)}</Text>
       <div style={GRID}>
         {buttonVariants.map((variant) =>
           controlSizes.map((size) => (
             <Sample key={`${variant}-${size}`} id="button" variant={variant} size={size}>
               <Button variant={variant} size={size} {...PART_ROOT}>
-                Button
+                {t(m.paritymatrixButton)}
               </Button>
             </Sample>
           )),
         )}
       </div>
 
-      <Heading level={2}>Pill</Heading>
-      <Text tone={TextTone.Muted}>
-        Every spec variant crossed with every semantic tone and both compact sizes.
-      </Text>
+      <Heading level={2}>{t(m.pmSecPill)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.pmPillDesc)}</Text>
       <div style={GRID}>
         {pillVariants.map((variant) =>
           tones.map((tone) =>
@@ -100,7 +95,7 @@ export function ParityMatrixPage() {
                 size={size}
               >
                 <Pill variant={variant} tone={tone} size={size} {...PART_ROOT}>
-                  Pill
+                  {t(m.paritymatrixPill)}
                 </Pill>
               </Sample>
             )),
@@ -108,16 +103,14 @@ export function ParityMatrixPage() {
         )}
       </div>
 
-      <Heading level={2}>Card</Heading>
-      <Text tone={TextTone.Muted}>
-        Both surface materials at the default elevation. Card has no tone or size axis.
-      </Text>
+      <Heading level={2}>{t(m.pmSecCard)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.pmCardDesc)}</Text>
       <div style={GRID}>
         {cardVariants.map((variant) => (
           <Sample key={variant} id="card" variant={variant}>
             <Card variant={variant} style={{ maxWidth: '16rem' }} {...PART_ROOT}>
               <Text size={Size.Small} tone={TextTone.Muted}>
-                A resting card sample for the parity harness.
+                {t(m.pmCardSample)}
               </Text>
             </Card>
           </Sample>

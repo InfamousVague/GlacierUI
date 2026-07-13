@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Rating, Heading, Text, Size, TextTone } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Rating, Heading, Text, Size, TextTone, useT } from '@glacier/react';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 function ControlledRating() {
+  const t = useT();
   const [value, setValue] = useState(3);
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--glacier-space-3)' }}>
-      <Rating value={value} onChange={setValue} aria-label="Rate this book" />
+      <Rating value={value} onChange={setValue} aria-label={t(m.ratAriaRateBook)} />
       <span style={{ color: 'var(--glacier-text-muted)', fontVariantNumeric: 'tabular-nums' }}>
         {value} / 5
       </span>
@@ -16,34 +18,37 @@ function ControlledRating() {
 }
 
 export function RatingPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Rating</Heading>
+      <Heading level={1}>{t(m.ratName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A star rating. Interactive by default - a native radio group, so arrow keys move between
-        stars and the value participates in forms - or <code>readOnly</code> for a display badge that
-        supports fractional fill, like a 4.3 average.
+        {prose(t(m.ratLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntro)}</Text>
       <ComponentBlueprint specId="rating" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Interactive"
-        description="Uncontrolled with defaultValue. Click a star to rate; the group is a native radiogroup, so arrow keys select as well."
+        title={t(m.ratEx1Title)}
+        description={t(m.ratEx1Desc)}
+        component="Rating"
+        render={(K) => (
+          <>
+            <K.Rating defaultValue={4} aria-label={t(m.ratAriaRateTitle)} />
+          </>
+        )}
         code={`import { Rating } from '@glacier/react';
 
 <Rating defaultValue={4} aria-label="Rate this title" />`}
-      >
-        <Rating defaultValue={4} aria-label="Rate this title" />
-      </Example>
+      />
 
       <Example
-        title="Controlled"
-        description="Drive the value from state to show it alongside or persist it."
+        title={t(m.ratEx2Title)}
+        description={t(m.ratEx2Desc)}
         code={`const [value, setValue] = useState(3);
 
 <Rating value={value} onChange={setValue} aria-label="Rate this book" />`}
@@ -52,95 +57,86 @@ export function RatingPage() {
       </Example>
 
       <Example
-        title="Read-only and fractional"
-        description="readOnly renders role='img' with the value as its label and supports fractional fill for an average score."
+        title={t(m.ratEx3Title)}
+        description={t(m.ratEx3Desc)}
+        component="Rating"
+        render={(K) => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--glacier-space-2)' }}>
+            <K.Rating readOnly value={4.3} aria-label={t(m.ratAriaRated43)} />
+            <K.Rating readOnly value={2.5} aria-label={t(m.ratAriaRated25)} />
+            <K.Rating readOnly value={5} aria-label={t(m.ratAriaRated5)} />
+          </div>
+        )}
         code={`<Rating readOnly value={4.3} aria-label="Rated 4.3 of 5" />
 <Rating readOnly value={5} aria-label="Rated 5 of 5" />`}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--glacier-space-2)' }}>
-          <Rating readOnly value={4.3} aria-label="Rated 4.3 of 5" />
-          <Rating readOnly value={2.5} aria-label="Rated 2.5 of 5" />
-          <Rating readOnly value={5} aria-label="Rated 5 of 5" />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Sizes"
-        description="Three sizes step the star size from sm to lg."
+        title={t(m.secSizes)}
+        description={t(m.ratEx4Desc)}
+        component="Rating"
+        render={(K) => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--glacier-space-2)' }}>
+            <K.Rating readOnly value={4} size={Size.Small} aria-label={t(m.ratAriaRated4)} />
+            <K.Rating readOnly value={4} size={Size.Medium} aria-label={t(m.ratAriaRated4)} />
+            <K.Rating readOnly value={4} size={Size.Large} aria-label={t(m.ratAriaRated4)} />
+          </div>
+        )}
         code={`<Rating readOnly value={4} size={Size.Small} aria-label="Rated 4 of 5" />
 <Rating readOnly value={4} size={Size.Medium} aria-label="Rated 4 of 5" />
 <Rating readOnly value={4} size={Size.Large} aria-label="Rated 4 of 5" />`}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--glacier-space-2)' }}>
-          <Rating readOnly value={4} size={Size.Small} aria-label="Rated 4 of 5" />
-          <Rating readOnly value={4} size={Size.Medium} aria-label="Rated 4 of 5" />
-          <Rating readOnly value={4} size={Size.Large} aria-label="Rated 4 of 5" />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Custom max, disabled, and skeleton"
-        description="Set max for a different scale; disabled dims and blocks input; skeleton reserves the geometry with one star-shaped bone per star."
+        title={t(m.ratEx5Title)}
+        description={t(m.ratEx5Desc)}
+        component="Rating"
+        render={(K) => (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--glacier-space-2)' }}>
+            <K.Rating readOnly value={7} max={10} aria-label={t(m.ratAriaRated7of10)} />
+            <K.Rating defaultValue={3} disabled aria-label={t(m.ratAriaRatingDisabled)} />
+            <K.Rating skeleton />
+          </div>
+        )}
         code={`<Rating readOnly value={7} max={10} aria-label="Rated 7 of 10" />
 <Rating defaultValue={3} disabled aria-label="Rating (disabled)" />
 <Rating skeleton />`}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--glacier-space-2)' }}>
-          <Rating readOnly value={7} max={10} aria-label="Rated 7 of 10" />
-          <Rating defaultValue={3} disabled aria-label="Rating (disabled)" />
-          <Rating skeleton />
-        </div>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'value', type: 'number', description: 'Controlled rating value, 0 to max.' },
-          { name: 'defaultValue', type: 'number', description: 'Initial value when uncontrolled.' },
-          { name: 'max', type: 'number', default: '5', description: 'Number of stars.' },
-          { name: 'onChange', type: '(value: number) => void', description: 'Called with the new value when the user picks a star.' },
-          { name: 'readOnly', type: 'boolean', default: 'false', description: 'Display-only; renders fractional fill and no controls.' },
-          { name: 'disabled', type: 'boolean', default: 'false', description: 'Dim and disable interaction.' },
-          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Star size step.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Render a placeholder with the component geometry.' },
-          { name: 'aria-label', type: 'string', description: 'Accessible name for the rating group.' },
+          { name: 'value', type: 'number', description: t(m.ratPropValue) },
+          { name: 'defaultValue', type: 'number', description: t(m.ratPropDefaultValue) },
+          { name: 'max', type: 'number', default: '5', description: t(m.ratPropMax) },
+          { name: 'onChange', type: '(value: number) => void', description: t(m.ratPropOnChange) },
+          { name: 'readOnly', type: 'boolean', default: 'false', description: t(m.ratPropReadOnly) },
+          { name: 'disabled', type: 'boolean', default: 'false', description: t(m.ratPropDisabled) },
+          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: t(m.ratPropSize) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.ratPropSkeleton) },
+          { name: 'aria-label', type: 'string', description: t(m.ratPropAriaLabel) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          Interactive ratings render a native radio group. Arrow keys move between and select stars,
-          and the value participates in forms for free.
-        </li>
-        <li>Provide an <code>aria-label</code> to name the group, e.g. &ldquo;Rate this book&rdquo;.</li>
-        <li>
-          Read-only ratings expose <code>role="img"</code> with the value as their accessible label,
-          so assistive tech announces the score rather than five separate stars.
-        </li>
+        <li>{prose(t(m.ratA11y1))}</li>
+        <li>{prose(t(m.ratA11y2))}</li>
+        <li>{prose(t(m.ratA11y3))}</li>
       </ul>
 
-      <Heading level={2}>Haptics</Heading>
+      <Heading level={2}>{t(m.ratSecHaptics)}</Heading>
       <ul>
-        <li>
-          Scrubbing across the stars fires a <code>selection</code> tick each time the previewed
-          star changes; the preview falling back to the committed value on pointer leave is silent.
-        </li>
-        <li>
-          Committing a value with a click fires <code>light</code>, and keyboard arrows tick{' '}
-          <code>selection</code> per change.
-        </li>
-        <li>
-          Feedback only fires when a <code>HapticsProvider</code> enables it; pass{' '}
-          <code>data-haptic="none"</code> to opt a rating out.
-        </li>
+        <li>{prose(t(m.ratHap1))}</li>
+        <li>{prose(t(m.ratHap2))}</li>
+        <li>{prose(t(m.ratHap3))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use an interactive Rating to collect a score and a read-only one to display an average.</li>
-        <li>Read-only supports fractional values; interactive input snaps to whole stars.</li>
-        <li>Keep the default 5-star scale unless your data genuinely uses another <code>max</code>.</li>
+        <li>{prose(t(m.ratUse1))}</li>
+        <li>{prose(t(m.ratUse2))}</li>
+        <li>{prose(t(m.ratUse3))}</li>
       </ul>
     </>
   );

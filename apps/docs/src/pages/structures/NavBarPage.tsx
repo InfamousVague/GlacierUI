@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Box, NavBar, NavBarItem, Text, Heading, Size, TextTone } from '@glacier/react';
+import { Box, Text, Heading, Size, TextTone, useT } from '@glacier/react';
 import { Award, Compass, Library, Route, Settings } from '@glacier/icons';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { type PlatformKit } from '../../platforms.tsx';
+import { m } from '../../i18n.ts';
 
 const libraryIcon = <Library size={18} />;
 const compassIcon = <Compass size={18} />;
@@ -11,10 +13,11 @@ const awardIcon = <Award size={18} />;
 const settingsIcon = <Settings size={18} />;
 
 /** A live demo bar whose active item follows clicks, so the pill slides. */
-function DemoNav({ orientation }: { orientation?: 'horizontal' | 'vertical' }) {
+function DemoNav({ K, orientation }: { K: PlatformKit; orientation?: 'horizontal' | 'vertical' }) {
+  const t = useT();
   const [active, setActive] = useState('library');
   const item = (id: string, icon: typeof libraryIcon, label: string, badge?: number) => (
-    <NavBarItem
+    <K.NavBarItem
       icon={icon}
       label={label}
       badge={badge}
@@ -24,36 +27,36 @@ function DemoNav({ orientation }: { orientation?: 'horizontal' | 'vertical' }) {
   );
   return (
     <Box style={orientation === 'vertical' ? { height: '18rem' } : undefined}>
-      <NavBar orientation={orientation} aria-label="Primary" end={item('settings', settingsIcon, 'Settings')}>
+      <K.NavBar orientation={orientation} aria-label={t(m.navAriaPrimary)} end={item('settings', settingsIcon, 'Settings')}>
         {item('library', libraryIcon, 'Library')}
         {item('discover', compassIcon, 'Discover', 3)}
         {item('paths', routeIcon, 'Paths')}
         {item('certificates', awardIcon, 'Certificates')}
-      </NavBar>
+      </K.NavBar>
     </Box>
   );
 }
 
 export function NavBarPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>NavBar</Heading>
+      <Heading level={1}>{t(m.navName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        An app-level primary navigation bar. Horizontal it is a row of icon-and-label items for a
-        top nav or a bottom tab bar; vertical it is a slim icon rail of square buttons whose labels
-        collapse into tooltips. The active pill slides between items, and an <code>end</code> slot
-        pins a settings item to the far edge.
+        {prose(t(m.navLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntro)}</Text>
       <ComponentBlueprint specId="nav-bar" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Horizontal"
-        description="A row of destinations with visible labels. Click around: one shared pill slides to the active item."
+        title={t(m.navEx1Title)}
+        description={t(m.navEx1Desc)}
+        component="NavBar"
+        render={(K) => <DemoNav K={K} />}
         code={`import { NavBar, NavBarItem } from '@glacier/react';
 
 <NavBar aria-label="Primary" end={<NavBarItem icon={settingsIcon} label="Settings" />}>
@@ -61,76 +64,70 @@ export function NavBarPage() {
   <NavBarItem icon={compassIcon} label="Discover" badge={3} />
   <NavBarItem icon={routeIcon} label="Paths" />
 </NavBar>`}
-      >
-        <DemoNav />
-      </Example>
+      />
 
       <Example
-        title="Vertical rail"
-        description="orientation vertical turns the bar into a slim icon rail: items become square icon buttons, labels move into right-placed tooltips, and badges pin to the icon corner. The end slot pins to the bottom."
+        title={t(m.navEx2Title)}
+        description={t(m.navEx2Desc)}
+        component="NavBar"
+        render={(K) => <DemoNav K={K} orientation="vertical" />}
         code={`<NavBar orientation="vertical" aria-label="Primary"
   end={<NavBarItem icon={settingsIcon} label="Settings" />}>
   <NavBarItem icon={libraryIcon} label="Library" active />
   <NavBarItem icon={compassIcon} label="Discover" badge={3} />
 </NavBar>`}
-      >
-        <DemoNav orientation="vertical" />
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description="The loading placeholder keeps the bar's geometry: item-sized bones plus the pinned end slot."
+        title={t(m.exSkeleton)}
+        description={t(m.navEx3Desc)}
+        component="NavBar"
+        render={(K) => (
+          <div style={{ display: 'flex', gap: 'var(--glacier-space-6)', alignItems: 'flex-start' }}>
+            <K.NavBar skeleton aria-label={t(m.navAriaPrimary)} />
+            <Box style={{ height: '14rem' }}>
+              <K.NavBar skeleton orientation="vertical" aria-label={t(m.navAriaPrimary)} />
+            </Box>
+          </div>
+        )}
         code={`<NavBar skeleton aria-label="Primary" />
 <NavBar skeleton orientation="vertical" aria-label="Primary" />`}
-      >
-        <div style={{ display: 'flex', gap: 'var(--glacier-space-6)', alignItems: 'flex-start' }}>
-          <NavBar skeleton aria-label="Primary" />
-          <Box style={{ height: '14rem' }}>
-            <NavBar skeleton orientation="vertical" aria-label="Primary" />
-          </Box>
-        </div>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'orientation', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: 'Row of labeled items, or a slim vertical icon rail.' },
-          { name: 'aria-label', type: 'string', description: 'Required. Names the nav landmark; apps often carry more than one.' },
-          { name: 'end', type: 'ReactNode', description: 'Pinned to the far end: bottom when vertical, trailing edge when horizontal.' },
-          { name: 'spring', type: 'Spring', default: 'Spring.Snappy', description: 'Spring preset for the active pill as it slides.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders a placeholder with the exact geometry.' },
+          { name: 'orientation', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: t(m.navPropOrientation) },
+          { name: 'aria-label', type: 'string', description: t(m.navPropAriaLabel) },
+          { name: 'end', type: 'ReactNode', description: t(m.navPropEnd) },
+          { name: 'spring', type: 'Spring', default: 'Spring.Snappy', description: t(m.navPropSpring) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.navPropSkeleton) },
         ]}
       />
-      <Heading level={3}>NavBarItem</Heading>
+      <Heading level={3}>{t(m.navGroupItem)}</Heading>
       <PropsTable
         props={[
-          { name: 'icon', type: 'ReactNode', description: 'Required leading glyph, hidden from assistive tech.' },
-          { name: 'label', type: 'string', description: 'Required. Visible text when horizontal; aria-label plus tooltip when vertical.' },
-          { name: 'active', type: 'boolean', default: 'false', description: 'Marks the current destination and hosts the sliding pill.' },
-          { name: 'badge', type: 'number', description: 'Count rendered as a CounterBadge: icon-corner when vertical, inline when horizontal.' },
-          { name: 'as / href', type: "ElementType / string", description: "Render as 'a' with an href for real links; defaults to a button." },
-          { name: 'disabled', type: 'boolean', default: 'false', description: 'Dims the item and blocks activation.' },
+          { name: 'icon', type: 'ReactNode', description: t(m.navItemIcon) },
+          { name: 'label', type: 'string', description: t(m.navItemLabel) },
+          { name: 'active', type: 'boolean', default: 'false', description: t(m.navItemActive) },
+          { name: 'badge', type: 'number', description: t(m.navItemBadge) },
+          { name: 'as / href', type: "ElementType / string", description: t(m.navItemAsHref) },
+          { name: 'disabled', type: 'boolean', default: 'false', description: t(m.navItemDisabled) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The bar is a <code>nav</code> landmark named by the required <code>aria-label</code>; the
-          active item carries <code>aria-current="page"</code>.
-        </li>
-        <li>
-          In the vertical rail each item keeps its label as an <code>aria-label</code> and shows it
-          in a tooltip on hover and focus, so icon-only never means unlabeled.
-        </li>
-        <li>The sliding pill is decorative and hidden from assistive tech; reduced motion renders it without animation.</li>
+        <li>{prose(t(m.navA11y1))}</li>
+        <li>{prose(t(m.navA11y2))}</li>
+        <li>{prose(t(m.navA11y3))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use NavBar for app-level destinations; use Tabs to switch content panels within a page, and Sidebar when destinations need grouping under headings.</li>
-        <li>Vertical rails pair well with a Sidebar beside them: the rail holds top-level sections, the sidebar holds the section's contents.</li>
-        <li>Reserve badges for actionable counts, and pin utility destinations like Settings in the <code>end</code> slot.</li>
+        <li>{prose(t(m.navUse1))}</li>
+        <li>{prose(t(m.navUse2))}</li>
+        <li>{prose(t(m.navUse3))}</li>
       </ul>
     </>
   );

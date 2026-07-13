@@ -10,6 +10,9 @@
     border-collapse: collapse;
     background: var(--glacier-surface);
     color: var(--glacier-text);
+    /* Tables do not inherit the sans font on a host that leaves the root font
+       unset, so pin it like every other component root. */
+    font-family: var(--glacier-font-sans);
 }
 
 .caption {

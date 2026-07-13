@@ -21,6 +21,8 @@ export const paginationSpec: ComponentSpec = {
     { name: 'boundaryCount', type: 'number', default: 1, description: 'How many pages to keep visible at the start and end for very large ranges.' },
   ],
   defaults: { pageSize: 10, siblingCount: 1, boundaryCount: 1 },
+  // the page buttons paint
+  paint: {},
   a11y: {
     role: 'navigation',
     focusable: false,

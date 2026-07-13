@@ -1,4 +1,5 @@
 import { Select, useT, type Locale } from '@glacier/react';
+import { FlagSquircle } from './FlagSquircle.tsx';
 import { LANGUAGES, m } from './i18n.ts';
 
 interface LanguageSelectProps {
@@ -17,7 +18,15 @@ export function LanguageSelect({ locale, onChange }: LanguageSelectProps) {
         aria-label={t(m.language)}
         value={locale}
         onValueChange={(value) => onChange(value as Locale)}
-        options={LANGUAGES.map((language) => ({ value: language.code, label: language.label }))}
+        options={LANGUAGES.map((language) => ({
+          value: language.code,
+          label: (
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--glacier-space-2)' }}>
+              <FlagSquircle code={language.code} />
+              {language.label}
+            </span>
+          ),
+        }))}
       />
     </div>
   );

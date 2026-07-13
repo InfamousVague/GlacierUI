@@ -24,31 +24,35 @@
   line-height: var(--glacier-leading-lg);
 }
 
-.tone-default {
+/* Tone colors are qualified with `.text` (like the size rules above) so the
+   component stays authoritative over its own color: a bare single-class rule
+   loses to a host element selector like `.content p` (specificity 0,1,1), which
+   would silently mute every colored tone. */
+.text.tone-default {
   color: var(--glacier-text);
 }
 
-.tone-muted {
+.text.tone-muted {
   color: var(--glacier-text-muted);
 }
 
-.tone-subtle {
+.text.tone-subtle {
   color: var(--glacier-text-subtle);
 }
 
-.tone-accent {
+.text.tone-accent {
   color: var(--glacier-accent-text);
 }
 
-.tone-danger {
+.text.tone-danger {
   color: var(--glacier-danger-text);
 }
 
-.tone-success {
+.text.tone-success {
   color: var(--glacier-success-text);
 }
 
-.tone-warning {
+.text.tone-warning {
   color: var(--glacier-warning-text);
 }
 

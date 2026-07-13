@@ -3,7 +3,6 @@ import {
   Button,
   Field,
   Fieldset,
-  FormSection,
   Heading,
   Input,
   Size,
@@ -12,52 +11,54 @@ import {
   Text,
   TextTone,
   Variant,
+  useT,
 } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { type PlatformKit } from '../../platforms.tsx';
+import { m } from '../../i18n.ts';
 
-function DisabledCascade() {
+function DisabledCascade({ K }: { K: PlatformKit }) {
+  const t = useT();
   const [locked, setLocked] = useState(true);
   return (
     <Stack gap={5} maxWidth="xs" width="full">
-      <Switch label="Lock shipping details" checked={locked} onCheckedChange={setLocked} />
-      <Fieldset
-        legend="Shipping address"
-        description="One disabled attribute on the fieldset disables every control inside."
+      <Switch label={t(m.fsSwitchLock)} checked={locked} onCheckedChange={setLocked} />
+      <K.Fieldset
+        legend={t(m.fsLegendShipping)}
+        description={t(m.fsDescShipping)}
         disabled={locked}
       >
-        <Field label="Street">
-          <Input placeholder="123 Fjord Lane" />
+        <Field label={t(m.fsLabelStreet)}>
+          <Input placeholder={t(m.fieldsetX123FjordLane)} />
         </Field>
-        <Field label="City">
-          <Input placeholder="Reykjavik" />
+        <Field label={t(m.fsLabelCity)}>
+          <Input placeholder={t(m.fieldsetReykjavik)} />
         </Field>
-      </Fieldset>
+      </K.Fieldset>
     </Stack>
   );
 }
 
 export function FieldsetPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Fieldset &amp; Form Section</Heading>
+      <Heading level={1}>{t(m.fsName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        Fieldset groups related Fields under a styled native <code>legend</code>, and because it is
-        a real <code>fieldset</code> element, its <code>disabled</code> attribute disables every
-        nested control for free. FormSection is the heavier page-level grouping for settings and
-        long forms; a FormSection often contains Fieldsets.
+        {prose(t(m.fsLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.fsAnatomyIntro)}</Text>
       <ComponentBlueprint specId="fieldset" />
       <ComponentBlueprint specId="form-section" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="A borderless group: the legend names the group, the description is announced with it through aria-describedby, and the Fields stack with an even token gap."
+        title={t(m.exBasic)}
+        description={t(m.fsEx1Desc)}
         code={`import { Fieldset, Field, Input } from '@glacier/react';
 
 <Fieldset legend="Contact" description="How we reach you about your order.">
@@ -68,40 +69,44 @@ export function FieldsetPage() {
     <Input type="tel" placeholder="+354 555 0100" />
   </Field>
 </Fieldset>`}
-      >
-        <Stack gap={4} maxWidth="xs" width="full">
-          <Fieldset legend="Contact" description="How we reach you about your order.">
-            <Field label="Email" hint="Used for receipts.">
-              <Input type="email" placeholder="you@example.com" />
-            </Field>
-            <Field label="Phone">
-              <Input type="tel" placeholder="+354 555 0100" />
-            </Field>
-          </Fieldset>
-        </Stack>
-      </Example>
+        component="Fieldset"
+        render={(K) => (
+          <Stack gap={4} maxWidth="xs" width="full">
+            <K.Fieldset legend={t(m.fsLegendContact)} description={t(m.fsDescContact)}>
+              <Field label={t(m.fsLabelEmail)} hint={t(m.fsHintReceipts)}>
+                <Input type="email" placeholder={t(m.fieldsetYouExampleCom)} />
+              </Field>
+              <Field label={t(m.fsLabelPhone)}>
+                <Input type="tel" placeholder="+354 555 0100" />
+              </Field>
+            </K.Fieldset>
+          </Stack>
+        )}
+      />
 
       <Example
-        title="Bordered"
-        description="The bordered variant draws the classic hairline box with the legend floating on the border. The borderless default reads better in modern single-column forms; reach for the box when groups sit side by side."
+        title={t(m.fsEx2Title)}
+        description={t(m.fsEx2Desc)}
         code={`<Fieldset bordered legend="Billing" description="Charged at the end of each cycle.">
   <Field label="Cardholder">
     <Input autoComplete="cc-name" />
   </Field>
 </Fieldset>`}
-      >
-        <Stack gap={4} maxWidth="xs" width="full">
-          <Fieldset bordered legend="Billing" description="Charged at the end of each cycle.">
-            <Field label="Cardholder">
-              <Input autoComplete="cc-name" />
-            </Field>
-          </Fieldset>
-        </Stack>
-      </Example>
+        component="Fieldset"
+        render={(K) => (
+          <Stack gap={4} maxWidth="xs" width="full">
+            <K.Fieldset bordered legend={t(m.fsLegendBilling)} description={t(m.fsDescBilling)}>
+              <Field label={t(m.fsLabelCardholder)}>
+                <Input autoComplete="cc-name" />
+              </Field>
+            </K.Fieldset>
+          </Stack>
+        )}
+      />
 
       <Example
-        title="Native disabled cascade"
-        description="Toggle the Switch: the fieldset's native disabled attribute removes every nested control from the tab order and blocks interaction, with no per-control wiring. This is the whole point of using the real element."
+        title={t(m.fsEx3Title)}
+        description={t(m.fsEx3Desc)}
         code={`const [locked, setLocked] = useState(true);
 
 <Switch label="Lock shipping details" checked={locked} onCheckedChange={setLocked} />
@@ -113,13 +118,13 @@ export function FieldsetPage() {
     <Input placeholder="Reykjavik" />
   </Field>
 </Fieldset>`}
-      >
-        <DisabledCascade />
-      </Example>
+        component="Fieldset"
+        render={(K) => <DisabledCascade K={K} />}
+      />
 
       <Example
-        title="Form sections"
-        description="FormSection is the page-level tier: a labelled section with a title row, optional actions aligned to it, and a divider prop that separates stacked sections. Its content is often one or more Fieldsets."
+        title={t(m.fsEx4Title)}
+        description={t(m.fsEx4Desc)}
         code={`import { FormSection, Fieldset, Field, Input, Button, Variant } from '@glacier/react';
 
 <FormSection
@@ -139,34 +144,36 @@ export function FieldsetPage() {
     </Field>
   </Fieldset>
 </FormSection>`}
-      >
-        <Stack gap={8} maxWidth="sm" width="full">
-          <FormSection
-            title="Profile"
-            description="How you appear across the workspace."
-            actions={
-              <Button variant={Variant.Outline} size={Size.Small}>
-                Reset
-              </Button>
-            }
-          >
-            <Field label="Display name">
-              <Input placeholder="Ada Lovelace" />
-            </Field>
-          </FormSection>
-          <FormSection divider title="Notifications" description="What we send and where.">
-            <Fieldset legend="Email">
-              <Field label="Address">
-                <Input type="email" placeholder="you@example.com" />
+        component="FormSection"
+        render={(K) => (
+          <Stack gap={8} maxWidth="sm" width="full">
+            <K.FormSection
+              title={t(m.fsTitleProfile)}
+              description={t(m.fsDescProfile)}
+              actions={
+                <Button variant={Variant.Outline} size={Size.Small}>
+                  {t(m.fsReset)}
+                </Button>
+              }
+            >
+              <Field label={t(m.fsLabelDisplayName)}>
+                <Input placeholder={t(m.fieldsetAdaLovelace)} />
               </Field>
-            </Fieldset>
-          </FormSection>
-        </Stack>
-      </Example>
+            </K.FormSection>
+            <K.FormSection divider title={t(m.fsTitleNotifications)} description={t(m.fsDescNotifications)}>
+              <Fieldset legend={t(m.fsLabelEmail)}>
+                <Field label={t(m.fsLabelAddress)}>
+                  <Input type="email" placeholder={t(m.fieldsetYouExampleCom)} />
+                </Field>
+              </Fieldset>
+            </K.FormSection>
+          </Stack>
+        )}
+      />
 
       <Example
-        title="Skeleton"
-        description="Set skeleton on the group to swap the legend, title, and description for shimmer lines; nested Fields and Inputs render their own skeletons, so nothing shifts when data arrives."
+        title={t(m.exSkeleton)}
+        description={t(m.fsEx5Desc)}
         code={`<FormSection skeleton title="Profile" description="How you appear across the workspace.">
   <Fieldset skeleton legend="Contact" description="How we reach you.">
     <Field skeleton label="Email" hint="Used for receipts.">
@@ -174,149 +181,126 @@ export function FieldsetPage() {
     </Field>
   </Fieldset>
 </FormSection>`}
-      >
-        <Stack gap={4} maxWidth="xs" width="full">
-          <FormSection skeleton title="Profile" description="How you appear across the workspace.">
-            <Fieldset skeleton legend="Contact" description="How we reach you.">
-              <Field skeleton label="Email" hint="Used for receipts.">
-                <Input skeleton />
-              </Field>
-            </Fieldset>
-          </FormSection>
-        </Stack>
-      </Example>
+        component="FormSection"
+        render={(K) => (
+          <Stack gap={4} maxWidth="xs" width="full">
+            <K.FormSection skeleton title={t(m.fsTitleProfile)} description={t(m.fsDescProfile)}>
+              <Fieldset skeleton legend={t(m.fsLegendContact)} description={t(m.fsDescReach)}>
+                <Field skeleton label={t(m.fsLabelEmail)} hint={t(m.fsHintReceipts)}>
+                  <Input skeleton />
+                </Field>
+              </Fieldset>
+            </K.FormSection>
+          </Stack>
+        )}
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
 
-      <Heading level={3}>Fieldset</Heading>
+      <Heading level={3}>{t(m.fsPropsFieldset)}</Heading>
       <PropsTable
         props={[
           {
             name: 'legend',
             type: 'ReactNode',
-            description: 'Required. The group label, rendered as a native legend element.',
+            description: t(m.fsPropLegend),
           },
           {
             name: 'description',
             type: 'ReactNode',
-            description:
-              'Muted supporting line under the legend, tied to the group through aria-describedby.',
+            description: t(m.fsPropDescription),
           },
           {
             name: 'actions',
             type: 'ReactNode',
-            description: 'Actions pinned to the end of the legend line.',
+            description: t(m.fsPropActions),
           },
           {
             name: 'disabled',
             type: 'boolean',
             default: 'false',
-            description:
-              'The native fieldset attribute: the browser disables every nested control, no per-control wiring.',
+            description: t(m.fsPropDisabled),
           },
           {
             name: 'bordered',
             type: 'boolean',
             default: 'false',
-            description:
-              'Draws the classic hairline box with the legend floating on the border. Borderless by default.',
+            description: t(m.fsPropBordered),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: "Renders a placeholder with the component's exact geometry.",
+            description: t(m.fsPropSkeleton),
           },
           {
             name: 'children',
             type: 'ReactNode',
-            description: 'The grouped controls, usually Fields.',
+            description: t(m.fsPropChildren),
           },
         ]}
       />
 
-      <Heading level={3}>FormSection</Heading>
+      <Heading level={3}>{t(m.fsPropsFormSection)}</Heading>
       <PropsTable
         props={[
           {
             name: 'title',
             type: 'ReactNode',
-            description: 'Required. The section title, rendered as a Heading that labels the section.',
+            description: t(m.fsPropTitle),
           },
           {
             name: 'level',
             type: '1 | 2 | 3 | 4 | 5 | 6',
             default: '3',
-            description: 'Semantic heading level for the title.',
+            description: t(m.fsPropLevel),
           },
           {
             name: 'description',
             type: 'ReactNode',
-            description: 'Muted supporting line under the title.',
+            description: t(m.fsPropFsDescription),
           },
           {
             name: 'actions',
             type: 'ReactNode',
-            description: 'Actions aligned to the end of the title row.',
+            description: t(m.fsPropFsActions),
           },
           {
             name: 'divider',
             type: 'boolean',
             default: 'false',
-            description: 'Draws a hairline Divider above the section, for stacking multiple sections.',
+            description: t(m.fsPropDivider),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: "Renders a placeholder with the component's exact geometry.",
+            description: t(m.fsPropSkeleton),
           },
           {
             name: 'children',
             type: 'ReactNode',
-            description: 'The section content, often Fieldsets.',
+            description: t(m.fsPropFsChildren),
           },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          Fieldset renders a real <code>fieldset</code> with a native <code>legend</code>, so
-          screen readers announce the group name when focus enters any nested control.
-        </li>
-        <li>
-          The Fieldset description has a generated id referenced from the fieldset through{' '}
-          <code>aria-describedby</code>; a consumer-supplied <code>aria-describedby</code> is
-          merged, not replaced.
-        </li>
-        <li>
-          <code>disabled</code> is the native attribute: nested controls leave the tab order and
-          block interaction without touching each control.
-        </li>
-        <li>
-          The actions slot renders outside the <code>legend</code>, so button text never pollutes
-          the group's accessible name.
-        </li>
-        <li>
-          FormSection is a <code>section</code> with <code>aria-labelledby</code> pointing at its
-          Heading, so each section is a named landmark region.
-        </li>
+        <li>{prose(t(m.fsA11y1))}</li>
+        <li>{prose(t(m.fsA11y2))}</li>
+        <li>{prose(t(m.fsA11y3))}</li>
+        <li>{prose(t(m.fsA11y4))}</li>
+        <li>{prose(t(m.fsA11y5))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use Fieldset to group a handful of related Fields that share one label, such as an
-          address or a card. Use FormSection for the page-level tier above it; a section often
-          contains several fieldsets.</li>
-        <li>Prefer the borderless default in single-column forms; the bordered box earns its ink
-          when groups sit next to unrelated content.</li>
-        <li>Disable a whole group with the fieldset's <code>disabled</code> prop instead of
-          disabling each control; the browser does the cascade for you.</li>
-        <li>Pick the <code>level</code> that fits the page outline rather than the size you want;
-          the visual size follows the level.</li>
-        <li>Set <code>divider</code> on every stacked FormSection after the first so long settings
-          pages separate cleanly.</li>
+        <li>{t(m.fsUse1)}</li>
+        <li>{t(m.fsUse2)}</li>
+        <li>{prose(t(m.fsUse3))}</li>
+        <li>{prose(t(m.fsUse4))}</li>
+        <li>{prose(t(m.fsUse5))}</li>
       </ul>
     </>
   );

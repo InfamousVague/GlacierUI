@@ -197,6 +197,14 @@ export interface ComponentSpec {
   /** Size-independent measurements. */
   dimensions?: Dimensions;
   states?: readonly StateSpec[];
+  /**
+   * The rest paint for components without variant or tone styling; expected on
+   * every spec that declares neither, so plain atoms (heading, kbd, icon) still
+   * carry a machine-readable color contract. Roles the CSS leaves to
+   * inheritance (currentColor) are omitted, and a deliberately empty object
+   * documents a component that paints nothing of its own.
+   */
+  paint?: PaintSpec;
   /** The focus-visible ring binding; expected on every focusable component. */
   focusRing?: FocusRingSpec;
   /** The base paint transition; expected wherever the CSS declares one. */
@@ -364,6 +372,11 @@ export function auditStrictness(spec: ComponentSpec): StrictnessReport {
     checks += 1;
     if (!state.paint && Object.keys(state.tokens ?? {}).length === 0)
       missing.push(`states[${state.name}]: no paint or tokens binding`);
+  }
+
+  if ((spec.variants ?? []).length === 0 && (spec.tones ?? []).length === 0) {
+    checks += 1;
+    if (!spec.paint) missing.push('paint: no top-level rest paint for a variantless component');
   }
 
   const role = spec.a11y?.role;

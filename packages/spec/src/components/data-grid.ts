@@ -99,6 +99,7 @@ export const dataGridSpec: ComponentSpec = {
     { name: 'hover', description: 'Pointer over a sortable header.', tokens: { text: '$accent-text' } },
     { name: 'loading', description: 'Skeleton rows stand in while data loads; the grid is aria-busy.' },
   ],
+  paint: { background: '$surface', border: '$border' },
   focusRing: { ring: token('focus-ring'), offset: '-2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

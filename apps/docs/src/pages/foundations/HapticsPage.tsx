@@ -1,5 +1,6 @@
-import { Button, Heading, Row, Size, Text, TextTone, Variant, useHaptics, type HapticKind } from '@glacier/react';
-import { Example } from '../../docs-ui.tsx';
+import { Button, Heading, Row, Size, Text, TextTone, Variant, useHaptics, useT, type HapticKind } from '@glacier/react';
+import { Example, prose } from '../../docs-ui.tsx';
+import { m } from '../../i18n.ts';
 
 const KINDS: HapticKind[] = ['selection', 'light', 'medium', 'heavy', 'success', 'warning', 'error'];
 
@@ -19,75 +20,63 @@ function KindButtons() {
 }
 
 export function HapticsPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Haptics</Heading>
+      <Heading level={1}>{t(m.hapName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        Components describe feedback with semantic kinds - <code>selection</code>, <code>light</code>,{' '}
-        <code>success</code> - and <code>HapticsProvider</code> decides whether and how to buzz. The
-        whole engine is gated behind one user preference (off by default), so call sites fire
-        unconditionally and stay silent until the user opts in.
+        {prose(t(m.hapLede))}
       </Text>
 
-      <Heading level={2}>What actually vibrates</Heading>
+      <Heading level={2}>{t(m.hapSecVibrates)}</Heading>
       <Text tone={TextTone.Muted}>
-        The web platform is honest about very little here, so the kit is honest instead. Rich impact
-        haptics only exist in native shells; on the web the engine degrades per platform and is a
-        clean no-op where nothing can vibrate.
+        {t(m.hapVibratesIntro)}
       </Text>
       <div className="propsTableWrap">
         <table className="tokenTable">
           <thead>
             <tr>
-              <th>Platform</th>
-              <th>Mechanism</th>
-              <th>Fidelity</th>
+              <th>{t(m.hapTh1Platform)}</th>
+              <th>{t(m.hapTh1Mechanism)}</th>
+              <th>{t(m.hapTh1Fidelity)}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Android (Chrome, Firefox)</td>
-              <td>
-                <code>navigator.vibrate()</code> with per-kind durations and patterns
-              </td>
-              <td>Intensity approximated by duration; patterns for success, warning, and error.</td>
+              <td>{t(m.hapPlatAndroid)}</td>
+              <td>{prose(t(m.hapAndroidMech))}</td>
+              <td>{t(m.hapAndroidFidelity)}</td>
             </tr>
             <tr>
-              <td>iOS Safari 17.4+</td>
-              <td>
-                Toggling a hidden <code>&lt;input switch&gt;</code> pulses the Taptic Engine
-              </td>
-              <td>A single fixed tap. Every kind feels the same; patterns are ignored.</td>
+              <td>{t(m.hapPlatIos)}</td>
+              <td>{prose(t(m.hapIosMech))}</td>
+              <td>{t(m.hapIosFidelity)}</td>
             </tr>
             <tr>
-              <td>Desktop</td>
-              <td>None</td>
-              <td>A no-op. No motor, no buzz, no errors.</td>
+              <td>{t(m.hapPlatDesktop)}</td>
+              <td>{t(m.hapDesktopMech)}</td>
+              <td>{t(m.hapDesktopFidelity)}</td>
             </tr>
             <tr>
-              <td>Native shells</td>
-              <td>
-                An injected <code>impl</code> replaces the web engine
-              </td>
-              <td>Real impact haptics (UIKit, Vibrator, and so on) with no call-site changes.</td>
+              <td>{t(m.hapPlatNative)}</td>
+              <td>{prose(t(m.hapNativeMech))}</td>
+              <td>{t(m.hapNativeFidelity)}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <Heading level={2}>The seven kinds</Heading>
+      <Heading level={2}>{t(m.hapSecKinds)}</Heading>
       <Text tone={TextTone.Muted}>
-        Kinds are semantic, not physical. The web engine maps them to Vibration API durations and
-        patterns (milliseconds, alternating buzz and pause); a native shell maps them to whatever its
-        platform calls an impact.
+        {t(m.hapKindsIntro)}
       </Text>
       <div className="propsTableWrap">
         <table className="tokenTable">
           <thead>
             <tr>
-              <th>Kind</th>
-              <th>Pattern (ms)</th>
-              <th>Meant for</th>
+              <th>{t(m.hapTh2Kind)}</th>
+              <th>{t(m.hapTh2Pattern)}</th>
+              <th>{t(m.hapTh2MeantFor)}</th>
             </tr>
           </thead>
           <tbody>
@@ -98,7 +87,7 @@ export function HapticsPage() {
               <td>
                 <code>8</code>
               </td>
-              <td>The faintest tick. Value changes while scrubbing: slider steps, stars, steppers.</td>
+              <td>{t(m.hapKindSelection)}</td>
             </tr>
             <tr>
               <td>
@@ -107,7 +96,7 @@ export function HapticsPage() {
               <td>
                 <code>10</code>
               </td>
-              <td>A press. The default for any pressable element.</td>
+              <td>{t(m.hapKindLight)}</td>
             </tr>
             <tr>
               <td>
@@ -116,7 +105,7 @@ export function HapticsPage() {
               <td>
                 <code>18</code>
               </td>
-              <td>Hitting a boundary: a slider end, a min or max, a resize clamp.</td>
+              <td>{t(m.hapKindMedium)}</td>
             </tr>
             <tr>
               <td>
@@ -125,7 +114,7 @@ export function HapticsPage() {
               <td>
                 <code>26</code>
               </td>
-              <td>A significant, deliberate action. Rare by design.</td>
+              <td>{t(m.hapKindHeavy)}</td>
             </tr>
             <tr>
               <td>
@@ -134,7 +123,7 @@ export function HapticsPage() {
               <td>
                 <code>12, 40, 14</code>
               </td>
-              <td>A double tap for a completed operation.</td>
+              <td>{t(m.hapKindSuccess)}</td>
             </tr>
             <tr>
               <td>
@@ -143,7 +132,7 @@ export function HapticsPage() {
               <td>
                 <code>16, 60, 16</code>
               </td>
-              <td>A slower double tap for something needing attention.</td>
+              <td>{t(m.hapKindWarning)}</td>
             </tr>
             <tr>
               <td>
@@ -152,96 +141,65 @@ export function HapticsPage() {
               <td>
                 <code>22, 40, 22, 40, 22</code>
               </td>
-              <td>A triple buzz for a failure.</td>
+              <td>{t(m.hapKindError)}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <Heading level={2}>What each component does</Heading>
+      <Heading level={2}>{t(m.hapSecComponents)}</Heading>
       <Text tone={TextTone.Muted}>
-        Presses are free: <code>HapticsProvider</code> installs one delegated <code>pointerdown</code>{' '}
-        listener that fires <code>light</code> for any touch press on a pressable element, so no
-        component wires its own press feedback. Components only add ticks for value changes and
-        refine the kind where the interaction has real semantics.
+        {prose(t(m.hapComponentsIntro))}
       </Text>
       <div className="propsTableWrap">
         <table className="tokenTable">
           <thead>
             <tr>
-              <th>Interaction</th>
-              <th>Haptic</th>
+              <th>{t(m.hapTh3Interaction)}</th>
+              <th>{t(m.hapTh3Haptic)}</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Any pressable (buttons, links, menu items, options, tabs...)</td>
-              <td>
-                <code>light</code> on touch press, via the delegated listener
-              </td>
+              <td>{t(m.hapIntPressable)}</td>
+              <td>{prose(t(m.hapHapPressable))}</td>
             </tr>
             <tr>
-              <td>State toggles: Checkbox, Radio, Switch, Toggle, Filter Chip, Segmented Control, Tabs</td>
-              <td>
-                <code>selection</code> when the value changes
-              </td>
+              <td>{t(m.hapIntToggles)}</td>
+              <td>{prose(t(m.hapHapToggles))}</td>
             </tr>
             <tr>
-              <td>Slider</td>
-              <td>
-                <code>selection</code> every <code>hapticStep</code> percent while dragging (default{' '}
-                <code>10</code>), <code>medium</code> at the ends
-              </td>
+              <td>{t(m.hapticsSlider)}</td>
+              <td>{prose(t(m.hapHapSlider))}</td>
             </tr>
             <tr>
-              <td>Number Input</td>
-              <td>
-                <code>selection</code> per integer step, including hold-to-repeat; <code>light</code>{' '}
-                when a typed value commits; <code>medium</code> at min or max
-              </td>
+              <td>{t(m.hapticsNumberInput)}</td>
+              <td>{prose(t(m.hapHapNumberInput))}</td>
             </tr>
             <tr>
-              <td>Rating</td>
-              <td>
-                <code>selection</code> per star while scrubbing, <code>light</code> on commit
-              </td>
+              <td>{t(m.hapticsRating)}</td>
+              <td>{prose(t(m.hapHapRating))}</td>
             </tr>
             <tr>
-              <td>Resizable Split Pane</td>
-              <td>
-                <code>medium</code> when the drag hits the clamp
-              </td>
+              <td>{t(m.hapticsResizableSplitPane)}</td>
+              <td>{prose(t(m.hapHapSplitPane))}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <Heading level={2}>Opting out and overriding</Heading>
+      <Heading level={2}>{t(m.hapSecOptOut)}</Heading>
       <Text tone={TextTone.Muted}>
-        The <code>data-haptic</code> attribute tunes a single element without touching the engine.{' '}
-        <code>data-haptic=&quot;none&quot;</code> silences it entirely - both the delegated press
-        feedback and the component&rsquo;s own programmatic ticks. Any kind name (
-        <code>data-haptic=&quot;heavy&quot;</code>) changes what the press fires instead. The
-        attribute also marks otherwise unrecognized elements as pressable, so a custom control can
-        opt in with it too.
+        {prose(t(m.hapOptOut1))}
       </Text>
       <Text tone={TextTone.Muted}>
-        Native shells replace the whole web engine through the provider&rsquo;s <code>impl</code>{' '}
-        prop: pass a <code>(kind) =&gt; void</code> that calls the platform&rsquo;s real haptics
-        (Capacitor, React Native, a Tauri plugin) and every component in the kit fires it instead of{' '}
-        <code>navigator.vibrate</code>, with no call-site changes.
+        {prose(t(m.hapOptOut2))}
       </Text>
 
-      <Heading level={2}>Try it</Heading>
+      <Heading level={2}>{t(m.hapSecTryIt)}</Heading>
       <Example
-        title="Fire each kind"
-        description={
-          <>
-            These buttons call <code>fire(kind)</code> from <code>useHaptics()</code>. You will feel
-            nothing on a desktop - there is no motor - and on iOS every kind is the same single tap.
-            Enable Haptics in Preferences first, then try it on a phone.
-          </>
-        }
+        title={t(m.hapExTitle)}
+        description={prose(t(m.hapExDesc))}
         code={`import { Button, useHaptics, type HapticKind } from '@glacier/react';
 
 const KINDS: HapticKind[] = ['selection', 'light', 'medium', 'heavy', 'success', 'warning', 'error'];

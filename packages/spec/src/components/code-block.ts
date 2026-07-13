@@ -44,6 +44,7 @@ export const codeBlockSpec: ComponentSpec = {
     // a label swap on a 1.5s timer; the button's paint does not change
     { name: 'copied', description: 'After a successful copy the button reads "Copied" for 1.5s, then resets to "Copy".', behavioral: true },
   ],
+  paint: { background: '$surface-sunken', border: '$border-subtle' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
     'hairline', 'radius-lg', 'radius-sm', 'surface-sunken', 'border-subtle',

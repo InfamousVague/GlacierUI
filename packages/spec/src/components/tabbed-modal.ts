@@ -44,6 +44,8 @@ export const tabbedModalSpec: ComponentSpec = {
   // .railItem:focus-visible draws a 2px focus-ring outline inset by 2px
   // (outline-offset: -2px); the pane rings outward instead
   // (.pane:focus-visible, offset 2px) so its ring clears the scroll box.
+  // composed of Modal chrome around a rail and pane
+  paint: {},
   focusRing: { ring: token('focus-ring'), offset: '-2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

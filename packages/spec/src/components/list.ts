@@ -21,11 +21,11 @@ export const listSpec: ComponentSpec = {
     { name: 'children', type: 'node', description: 'ListItem rows or other semantic list content.' },
   ],
   sizes: [
-    { name: 'sm', height: token('control-height-sm'), paddingInline: token('space-3'), gap: token('space-1') },
-    { name: 'md', height: token('control-height-md'), paddingInline: token('space-4'), gap: token('space-2') },
+    { name: 'sm', height: token('control-height-sm'), paddingInline: token('space-3') },
+    { name: 'md', height: token('control-height-md'), paddingInline: token('space-4') },
   ],
   defaults: { size: 'md', divided: false },
-  dimensions: { gap: token('space-2'), border: token('hairline'), radius: token('radius-lg') },
+  dimensions: { gap: token('space-1'), border: token('hairline'), radius: token('radius-lg') },
   states: [
     { name: 'divided', description: 'Direct rows are separated by a hairline.', tokens: { border: token('border') } },
   ],
@@ -65,14 +65,14 @@ export const listItemSpec: ComponentSpec = {
   defaults: { selected: false, disabled: false },
   dimensions: { gap: token('space-3'), radius: token('radius-lg') },
   states: [
-    { name: 'hover', description: 'Interactive card rows step to the active surface; divided rows use the lighter hover wash.', tokens: { background: token('active') } },
+    { name: 'hover', description: 'Interactive anchor and button rows use the hover surface.', tokens: { background: token('hover') } },
     { name: 'focus-visible', description: 'Interactive rows receive an accent focus ring.', tokens: { ring: token('focus-ring') } },
-    { name: 'selected', description: 'Selected rows use the accent-soft surface, an accent border, and accent text.', tokens: { background: token('accent-soft'), border: token('accent-border'), text: token('accent-text') } },
+    { name: 'selected', description: 'Selected rows use the accent-soft surface and accent text.', tokens: { background: token('accent-soft'), text: token('accent-text') } },
     { name: 'disabled', description: 'Disabled rows use the disabled text token and block button activation.', tokens: { text: token('text-disabled') } },
   ],
   tokens: [
     'space-1', 'space-2', 'space-3', 'space-4', 'font-size-xs', 'leading-sm', 'radius-lg',
-    'hover', 'active', 'surface-raised', 'border-subtle', 'accent-border', 'focus-ring', 'accent-soft', 'accent-text', 'text', 'text-muted', 'text-disabled',
+    'hover', 'focus-ring', 'accent-soft', 'accent-text', 'text', 'text-muted', 'text-disabled',
   ],
   a11y: {
     role: 'listitem',

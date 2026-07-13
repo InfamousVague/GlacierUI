@@ -1,28 +1,29 @@
-import { Button, Field, IconButton, Input, Popover, Row, SidebarItem, Stack, Text, Heading, Size, TextTone, Variant } from '@glacier/react';
+import { Button, Field, IconButton, Input, Popover, Row, SidebarItem, Stack, Text, Heading, Size, TextTone, Variant, useT } from '@glacier/react';
 import { useState } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 export function PopoverPage() {
+  const t = useT();
   const [controlledOpen, setControlledOpen] = useState(false);
 
   return (
     <>
-      <Heading level={1}>Popover</Heading>
+      <Heading level={1}>{t(m.popName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        Popover is a floating panel anchored to a trigger. Use it for menus, filters, and rich
-        tooltips that need real content instead of a single line of text.
+        {t(m.popLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.popAnatomy)}</Text>
       <ComponentBlueprint specId="popover" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="Pass the trigger as a single element. Its ref, click, and aria attributes are wired for you, and the panel holds any content you like."
+        title={t(m.exBasic)}
+        description={t(m.popExBasicDesc)}
         code={`import { Button, Popover, Stack, Text } from '@glacier/react';
 
 <Popover
@@ -37,17 +38,17 @@ export function PopoverPage() {
   </Stack>
 </Popover>`}
       >
-        <Popover aria-label="About this release" trigger={<Button>What's new</Button>}>
+        <Popover aria-label={t(m.popoverAboutThisRelease)} trigger={<Button>{t(m.popWhatsNew)}</Button>}>
           <Stack gap={2}>
-            <Text weight="semibold">Version 2.4</Text>
-            <Text tone={TextTone.Muted}>Fluid spacing and a hover step on every color ramp.</Text>
+            <Text weight="semibold">{t(m.popVersion24)}</Text>
+            <Text tone={TextTone.Muted}>{t(m.popBasicBody)}</Text>
           </Stack>
         </Popover>
       </Example>
 
       <Example
-        title="Placements"
-        description="The placement prop sets the side the panel opens from. Each panel still flips and clamps if it would run past the edge of the screen."
+        title={t(m.popExPlacementsTitle)}
+        description={t(m.popExPlacementsDesc)}
         code={`<Popover placement="bottom" aria-label="Opens below" trigger={<Button>Bottom</Button>}>
   <Text>Opens below the trigger.</Text>
 </Popover>
@@ -62,24 +63,24 @@ export function PopoverPage() {
 </Popover>`}
       >
         <Row gap={3} wrap>
-          <Popover placement="bottom" aria-label="Opens below" trigger={<Button>Bottom</Button>}>
-            <Text>Opens below the trigger.</Text>
+          <Popover placement="bottom" aria-label={t(m.popoverOpensBelow)} trigger={<Button>{t(m.popoverBottom)}</Button>}>
+            <Text>{t(m.popOpensBelow)}</Text>
           </Popover>
-          <Popover placement="top" aria-label="Opens above" trigger={<Button>Top</Button>}>
-            <Text>Opens above the trigger.</Text>
+          <Popover placement="top" aria-label={t(m.popoverOpensAbove)} trigger={<Button>{t(m.popoverTop)}</Button>}>
+            <Text>{t(m.popOpensAbove)}</Text>
           </Popover>
-          <Popover placement="right" aria-label="Opens to the right" trigger={<Button>Right</Button>}>
-            <Text>Opens to the right.</Text>
+          <Popover placement="right" aria-label={t(m.popoverOpensToTheRight)} trigger={<Button>{t(m.popoverRight)}</Button>}>
+            <Text>{t(m.popOpensRight)}</Text>
           </Popover>
-          <Popover placement="left" aria-label="Opens to the left" trigger={<Button>Left</Button>}>
-            <Text>Opens to the left.</Text>
+          <Popover placement="left" aria-label={t(m.popoverOpensToTheLeft)} trigger={<Button>{t(m.popoverLeft)}</Button>}>
+            <Text>{t(m.popOpensLeft)}</Text>
           </Popover>
         </Row>
       </Example>
 
       <Example
-        title="Menu"
-        description="A panel of SidebarItem rows makes a compact action menu. Because the panel portals to the body, it opens over anything, including a scrolling list."
+        title={t(m.popExMenuTitle)}
+        description={t(m.popExMenuDesc)}
         code={`<Popover
   aria-label="Row actions"
   trigger={<IconButton aria-label="Open actions">...</IconButton>}
@@ -92,19 +93,19 @@ export function PopoverPage() {
   </Stack>
 </Popover>`}
       >
-        <Popover aria-label="Row actions" trigger={<IconButton aria-label="Open actions">•••</IconButton>}>
+        <Popover aria-label={t(m.popoverRowActions)} trigger={<IconButton aria-label={t(m.popoverOpenActions)}>•••</IconButton>}>
           <Stack gap={0}>
-            <SidebarItem>Rename</SidebarItem>
-            <SidebarItem>Duplicate</SidebarItem>
-            <SidebarItem>Move to folder</SidebarItem>
-            <SidebarItem>Delete</SidebarItem>
+            <SidebarItem>{t(m.popoverRename)}</SidebarItem>
+            <SidebarItem>{t(m.popoverDuplicate)}</SidebarItem>
+            <SidebarItem>{t(m.popoverMoveToFolder)}</SidebarItem>
+            <SidebarItem>{t(m.popoverDelete)}</SidebarItem>
           </Stack>
         </Popover>
       </Example>
 
       <Example
-        title="Form"
-        description="A small form fits inside the panel with no extra wiring. Field and Input work exactly as they do on a page."
+        title={t(m.popExFormTitle)}
+        description={t(m.popExFormDesc)}
         code={`<Popover
   aria-label="Rename item"
   trigger={<Button variant={Variant.Outline}>Rename</Button>}
@@ -117,19 +118,19 @@ export function PopoverPage() {
   </Stack>
 </Popover>`}
       >
-        <Popover aria-label="Rename item" trigger={<Button variant={Variant.Outline}>Rename</Button>}>
+        <Popover aria-label={t(m.popoverRenameItem)} trigger={<Button variant={Variant.Outline}>{t(m.popoverRename)}</Button>}>
           <Stack gap={3} style={{ minWidth: 240 }}>
-            <Field label="Name" hint="Up to 60 characters.">
+            <Field label={t(m.popFieldName)} hint={t(m.popHint60Chars)}>
               <Input defaultValue="Untitled" />
             </Field>
-            <Button>Save</Button>
+            <Button>{t(m.popoverSave)}</Button>
           </Stack>
         </Popover>
       </Example>
 
       <Example
-        title="Controlled"
-        description="Drive the open state yourself with open and onOpenChange. Here the trigger label reflects the current state, and outside press and Escape still update it."
+        title={t(m.popExControlledTitle)}
+        description={t(m.popExControlledDesc)}
         code={`const [open, setOpen] = useState(false);
 
 <Popover
@@ -150,110 +151,49 @@ export function PopoverPage() {
         <Popover
           open={controlledOpen}
           onOpenChange={setControlledOpen}
-          aria-label="Filters"
-          trigger={<Button>{controlledOpen ? 'Close filters' : 'Open filters'}</Button>}
+          aria-label={t(m.popoverFilters)}
+          trigger={<Button>{controlledOpen ? t(m.popCloseFilters) : t(m.popOpenFilters)}</Button>}
         >
           <Stack gap={2}>
-            <Text weight="semibold">Filters</Text>
-            <Text tone={TextTone.Muted}>The trigger label tracks the open state.</Text>
+            <Text weight="semibold">{t(m.popFiltersHeading)}</Text>
+            <Text tone={TextTone.Muted}>{t(m.popControlledBody)}</Text>
             <Button variant={Variant.Ghost} onClick={() => setControlledOpen(false)}>
-              Done
+              {t(m.popoverDone)}
             </Button>
           </Stack>
         </Popover>
       </Example>
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          {
-            name: 'trigger',
-            type: 'ReactElement',
-            description:
-              'The single element that toggles the panel. Its ref, click handler, and aria-haspopup, aria-expanded, and aria-controls are wired automatically.',
-          },
-          {
-            name: 'placement',
-            type: "Side | `${Side}-${Alignment}`",
-            default: "'bottom-start'",
-            description:
-              'Side and alignment the panel opens from, such as top, right, or bottom-end. The panel flips and clamps if it would leave the viewport.',
-          },
-          {
-            name: 'open',
-            type: 'boolean',
-            description: 'Controlled open state. Pair with onOpenChange to drive it yourself.',
-          },
-          {
-            name: 'defaultOpen',
-            type: 'boolean',
-            default: 'false',
-            description: 'Initial open state when the popover is uncontrolled.',
-          },
-          {
-            name: 'onOpenChange',
-            type: '(open: boolean) => void',
-            description:
-              'Called whenever the open state changes, including outside press and Escape. Update your state here in the controlled case.',
-          },
-          {
-            name: 'aria-label',
-            type: 'string',
-            description: 'Accessible name for the panel. Set it when the panel has no heading of its own.',
-          },
-          {
-            name: 'children',
-            type: 'ReactNode',
-            description: 'The content rendered inside the floating panel.',
-          },
-          {
-            name: 'className',
-            type: 'string',
-            description: 'Extra class applied to the panel.',
-          },
+          { name: 'trigger', type: 'ReactElement', description: t(m.popPropTrigger) },
+          { name: 'placement', type: "Side | `${Side}-${Alignment}`", default: "'bottom-start'", description: t(m.popPropPlacement) },
+          { name: 'open', type: 'boolean', description: t(m.popPropOpen) },
+          { name: 'defaultOpen', type: 'boolean', default: 'false', description: t(m.popPropDefaultOpen) },
+          { name: 'onOpenChange', type: '(open: boolean) => void', description: t(m.popPropOnOpenChange) },
+          { name: 'aria-label', type: 'string', description: t(m.popPropAriaLabel) },
+          { name: 'children', type: 'ReactNode', description: t(m.popPropChildren) },
+          { name: 'className', type: 'string', description: t(m.popPropClassName) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The panel renders with <code>role="dialog"</code> and is named by the{' '}
-          <code>aria-label</code> you pass.
-        </li>
-        <li>
-          The trigger gets <code>aria-haspopup="dialog"</code>, <code>aria-expanded</code> that
-          tracks the open state, and <code>aria-controls</code> pointing at the panel while it is
-          open.
-        </li>
-        <li>Focus moves into the panel when it opens so the keyboard lands on the content.</li>
-        <li>
-          Escape closes the panel and returns focus to the trigger, and a press outside the panel
-          closes it too.
-        </li>
-        <li>
-          Under <code>prefers-reduced-motion</code> the panel fades in place instead of scaling.
-        </li>
+        <li>{prose(t(m.popA11y1))}</li>
+        <li>{prose(t(m.popA11y2))}</li>
+        <li>{prose(t(m.popA11y3))}</li>
+        <li>{prose(t(m.popA11y4))}</li>
+        <li>{prose(t(m.popA11y5))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>
-          Reach for Popover as the base for menus, filters, and rich tooltips. It is the
-          anchored-overlay bone that those patterns build on.
-        </li>
-        <li>
-          The panel portals to the body, so it never gets clipped by an overflow-hidden ancestor
-          like a card or a scrolling list.
-        </li>
-        <li>Pass a single element as the trigger. Wrapping it in a fragment or extra div breaks the ref and aria wiring.</li>
-        <li>
-          Give every panel an <code>aria-label</code> unless it starts with its own visible
-          heading.
-        </li>
-        <li>
-          Keep the panel focused on one task. For a full form or a destructive confirm, use Modal
-          instead.
-        </li>
+        <li>{prose(t(m.popUse1))}</li>
+        <li>{prose(t(m.popUse2))}</li>
+        <li>{prose(t(m.popUse3))}</li>
+        <li>{prose(t(m.popUse4))}</li>
+        <li>{prose(t(m.popUse5))}</li>
       </ul>
     </>
   );

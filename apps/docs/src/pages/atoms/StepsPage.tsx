@@ -1,54 +1,44 @@
-import { Stack, Steps, Heading, Text, Size, TextTone, Tone } from '@glacier/react';
+import { Stack, Steps, Heading, Text, Size, TextTone, Tone, useT } from '@glacier/react';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
+import { m } from '../../i18n.ts';
 
 export function StepsPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Steps</Heading>
+      <Heading level={1}>{t(m.stpName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A row of progress dots that marks how far along a tour, wizard, or quiz has gone. Completed
-        steps fill solid, the current step stands out larger, and upcoming steps sit hollow, so a
-        glance shows both position and how much is left.
+        {prose(t(m.stpLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.stpAnatomyIntro)}</Text>
       <ComponentBlueprint specId="steps" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Progress"
-        description={
-          <>
-            <code>count</code> sets the number of dots and <code>active</code> is the zero-based
-            current step. Dots before <code>active</code> read as completed, the one at{' '}
-            <code>active</code> is the enlarged current step, and the rest are upcoming.
-          </>
-        }
+        title={t(m.stpEx1Title)}
+        description={prose(t(m.stpEx1Desc))}
+        component="Steps"
+        render={(K) => (
+          <Stack gap={4}>
+            <K.Steps count={5} active={0} />
+            <K.Steps count={5} active={2} />
+            <K.Steps count={5} active={4} />
+          </Stack>
+        )}
         code={`import { Steps } from '@glacier/react';
 
 <Steps count={5} active={0} />
 <Steps count={5} active={2} />
 <Steps count={5} active={4} />`}
-      >
-        <Stack gap={4}>
-          <Steps count={5} active={0} />
-          <Steps count={5} active={2} />
-          <Steps count={5} active={4} />
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Connected"
-        description={
-          <>
-            The <code>connected</code> variant joins larger circular markers with connector lines.
-            Completed steps draw a check, the current step rings itself in the tone, and{' '}
-            <code>numbered</code> writes the 1-based step number in the remaining markers.
-          </>
-        }
+        title={t(m.stpEx2Title)}
+        description={prose(t(m.stpEx2Desc))}
         code={`<Steps variant="connected" count={4} active={2} />
 <Steps variant="connected" numbered count={4} active={2} />`}
       >
@@ -59,140 +49,110 @@ export function StepsPage() {
       </Example>
 
       <Example
-        title="Tones"
-        description={
-          <>
-            <code>tone</code> colors the completed and current dots. It defaults to{' '}
-            <code>accent</code>; pick a semantic family to match the surrounding flow. Upcoming dots
-            stay neutral in every tone.
-          </>
-        }
+        title={t(m.secTones)}
+        description={prose(t(m.stpEx3Desc))}
+        component="Steps"
+        render={(K) => (
+          <Stack gap={4}>
+            <K.Steps count={4} active={2} tone={Tone.Accent} />
+            <K.Steps count={4} active={2} tone={Tone.Success} />
+            <K.Steps count={4} active={2} tone={Tone.Warning} />
+            <K.Steps count={4} active={2} tone={Tone.Danger} />
+          </Stack>
+        )}
         code={`<Steps count={4} active={2} tone={Tone.Accent} />
 <Steps count={4} active={2} tone={Tone.Success} />
 <Steps count={4} active={2} tone={Tone.Warning} />
 <Steps count={4} active={2} tone={Tone.Danger} />`}
-      >
-        <Stack gap={4}>
-          <Steps count={4} active={2} tone={Tone.Accent} />
-          <Steps count={4} active={2} tone={Tone.Success} />
-          <Steps count={4} active={2} tone={Tone.Warning} />
-          <Steps count={4} active={2} tone={Tone.Danger} />
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Sizes"
-        description={
-          <>
-            Two size steps set the dot diameter and the gap between dots. <code>sm</code> suits dense
-            toolbars and captions; <code>md</code> is the default.
-          </>
-        }
+        title={t(m.secSizes)}
+        description={prose(t(m.stpEx4Desc))}
+        component="Steps"
+        render={(K) => (
+          <Stack gap={4}>
+            <K.Steps count={5} active={2} size={Size.Small} />
+            <K.Steps count={5} active={2} size={Size.Medium} />
+          </Stack>
+        )}
         code={`<Steps count={5} active={2} size={Size.Small} />
 <Steps count={5} active={2} size={Size.Medium} />`}
-      >
-        <Stack gap={4}>
-          <Steps count={5} active={2} size={Size.Small} />
-          <Steps count={5} active={2} size={Size.Medium} />
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description={
-          <>
-            <code>skeleton</code> renders the same number of dots as shimmer discs at the exact
-            diameter and gap, so the row holds its place while content loads.
-          </>
-        }
+        title={t(m.exSkeleton)}
+        description={prose(t(m.stpEx5Desc))}
+        component="Steps"
+        render={(K) => (
+          <Stack gap={4}>
+            <K.Steps count={5} skeleton />
+            <K.Steps count={5} active={2} />
+          </Stack>
+        )}
         code={`<Steps count={5} skeleton />
 <Steps count={5} active={2} />`}
-      >
-        <Stack gap={4}>
-          <Steps count={5} skeleton />
-          <Steps count={5} active={2} />
-        </Stack>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
           {
             name: 'count',
             type: 'number',
-            description: 'Total number of steps. Renders this many dots.',
+            description: t(m.stpPropCount),
           },
           {
             name: 'active',
             type: 'number',
             default: '0',
-            description:
-              'Zero-based index of the current step. Earlier dots read as completed, later ones as upcoming.',
+            description: t(m.stpPropActive),
           },
           {
             name: 'variant',
             type: "'dots' | 'connected'",
             default: "'dots'",
-            description:
-              'dots renders the compact dot row; connected joins circular markers with lines and draws a check on completed steps.',
+            description: t(m.stpPropVariant),
           },
           {
             name: 'numbered',
             type: 'boolean',
             default: 'false',
-            description: 'Numbers the connected markers from 1. Ignored by the dots variant.',
+            description: t(m.stpPropNumbered),
           },
           {
             name: 'tone',
             type: "'accent' | 'success' | 'warning' | 'danger' | 'neutral' | 'info'",
             default: "'accent'",
-            description: 'Semantic color of the completed and current dots.',
+            description: t(m.stpPropTone),
           },
           {
             name: 'size',
             type: "'sm' | 'md'",
             default: "'md'",
-            description: 'Compact size step. Sets the dot diameter and the gap between dots.',
+            description: t(m.stpPropSize),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: "Renders a placeholder with the component's exact geometry.",
+            description: t(m.stpPropSkeleton),
           },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The row is a <code>role="group"</code> labelled <code>Step {'{active + 1}'} of{' '}
-          {'{count}'}</code>, so assistive technology announces position without reading each dot.
-        </li>
-        <li>
-          Individual dots are decorative and <code>aria-hidden</code>. Position is carried by the
-          group label text, never by color alone.
-        </li>
-        <li>
-          The current dot grows with a transform so it does not nudge its neighbors. That growth is
-          removed under reduced motion.
-        </li>
+        <li>{prose(t(m.stpA11y1))}</li>
+        <li>{prose(t(m.stpA11y2))}</li>
+        <li>{prose(t(m.stpA11y3))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>
-          Reach for Steps to show position in a short, linear sequence: an onboarding tour, a
-          multi-step form, a quiz. For a single continuous value, use Progress instead.
-        </li>
-        <li>
-          Keep the count small. Past roughly seven or eight dots the row reads as noise; summarize
-          with a Progress bar or a step counter instead.
-        </li>
-        <li>
-          Pair Steps with a heading or caption that names the current step. The dots show where you
-          are; the text says what it is.
-        </li>
+        <li>{prose(t(m.stpUse1))}</li>
+        <li>{prose(t(m.stpUse2))}</li>
+        <li>{prose(t(m.stpUse3))}</li>
       </ul>
     </>
   );

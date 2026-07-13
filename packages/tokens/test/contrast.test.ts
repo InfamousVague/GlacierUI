@@ -70,12 +70,9 @@ describe('token resolution', () => {
  * normal-text requirement. A palette decision for the design owner, not the
  * test suite.
  */
-const KNOWN_EXCEPTIONS: ReadonlyArray<{ pair: string; theme: string }> = [
-  { pair: 'text-subtle on bg', theme: 'light' },
-  { pair: 'text-subtle on surface', theme: 'light' },
-  { pair: 'text-subtle on surface-raised', theme: 'light' },
-  { pair: 'text-subtle on surface-sunken', theme: 'light' },
-];
+// Empty: every audited pair passes. If a palette change makes a pair fail,
+// list it here deliberately rather than recoloring in a panic.
+const KNOWN_EXCEPTIONS: ReadonlyArray<{ pair: string; theme: string }> = [];
 
 const isKnownException = (row: { pair: string; theme: string }): boolean =>
   KNOWN_EXCEPTIONS.some((e) => e.pair === row.pair && e.theme === row.theme);

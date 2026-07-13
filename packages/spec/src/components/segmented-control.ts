@@ -48,6 +48,7 @@ export const segmentedControlSpec: ComponentSpec = {
     { name: 'disabled', description: 'Muted label color and a not-allowed cursor; the input is blocked.', tokens: { text: token('text-disabled') } },
   ],
   // a 2px focus-ring outline drawn by the label's ::after, offset 1px
+  paint: { background: '$segment-track', border: '$glass-border' },
   focusRing: { ring: token('focus-ring'), offset: '1px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

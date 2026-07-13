@@ -1,4 +1,4 @@
-import { useEffect, type RefObject } from 'react';
+import { useEffect, useRef, type RefObject } from 'react';
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -30,6 +30,13 @@ export function useDialogLayer({
   initialFocusRef,
   dismissible = true,
 }: DialogLayerOptions) {
+  // Keep the latest callback and options in a ref so the setup below runs once
+  // per open, not on every render. Callers routinely pass a fresh inline
+  // onClose each render; if the effect depended on it, it would re-run and
+  // re-focus the dialog on every keystroke, yanking focus out of an input.
+  const latest = useRef({ onClose, dismissible, initialFocusRef });
+  latest.current = { onClose, dismissible, initialFocusRef };
+
   useEffect(() => {
     if (!open) return;
 
@@ -39,13 +46,13 @@ export function useDialogLayer({
     document.body.style.overflow = 'hidden';
 
     const dialog = dialogRef.current;
-    (initialFocusRef?.current ?? dialog)?.focus();
+    (latest.current.initialFocusRef?.current ?? dialog)?.focus();
 
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
       if (event.key === 'Escape') {
-        if (dismissible) {
+        if (latest.current.dismissible) {
           event.preventDefault();
-          onClose();
+          latest.current.onClose();
         }
         return;
       }
@@ -78,5 +85,8 @@ export function useDialogLayer({
       document.removeEventListener('keydown', onKeyDown);
       opener?.focus();
     };
-  }, [dialogRef, dismissible, initialFocusRef, onClose, open]);
+    // Set up once per open. onClose/dismissible/initialFocusRef are read live
+    // from the ref above, so their identity changing between renders must not
+    // tear down and rebuild this layer (which would steal focus).
+  }, [dialogRef, open]);
 }

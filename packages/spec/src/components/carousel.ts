@@ -28,6 +28,8 @@ export const carouselSpec: ComponentSpec = {
     controlShadow: token('shadow-3'),
   },
   // a 2px focus-ring outline around the scroller, offset 2px
+  // the card children paint
+  paint: {},
   focusRing: { ring: token('focus-ring'), offset: '2px' },
   // the overlaid control slots ease opacity and visibility as overflow changes
   transition: { duration: token('duration-fast'), ease: token('ease-out') },

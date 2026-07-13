@@ -1,21 +1,7 @@
 import { ramps, rampSteps, type Theme } from '@glacier/tokens';
-import { Select, Text, Row, Stack, Heading, Size, TextTone } from '@glacier/react';
+import { Select, Text, Row, Stack, Heading, Size, TextTone, useT } from '@glacier/react';
 import { useState } from 'react';
-
-const STEP_ROLES = [
-  'app bg',
-  'subtle bg',
-  'component bg',
-  'hover bg',
-  'active bg',
-  'subtle border',
-  'border',
-  'strong border',
-  'solid',
-  'solid hover',
-  'text low',
-  'text high',
-];
+import { m } from '../../i18n.ts';
 
 const SEMANTIC_TOKENS = [
   'bg',
@@ -52,31 +38,45 @@ function currentTheme(): Theme {
 }
 
 export function ColorsPage() {
+  const t = useT();
+  const STEP_ROLES = [
+    t(m.colRoleAppBg),
+    t(m.colRoleSubtleBg),
+    t(m.colRoleComponentBg),
+    t(m.colRoleHoverBg),
+    t(m.colRoleActiveBg),
+    t(m.colRoleSubtleBorder),
+    t(m.colRoleBorder),
+    t(m.colRoleStrongBorder),
+    t(m.colRoleSolid),
+    t(m.colRoleSolidHover),
+    t(m.colRoleTextLow),
+    t(m.colRoleTextHigh),
+  ];
+
   // default the ramp preview to the theme in use; the Select still overrides it
   const [theme, setTheme] = useState<Theme>(currentTheme);
 
   return (
     <>
-      <Heading level={1}>Colors & Tints</Heading>
+      <Heading level={1}>{t(m.colName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        Eight 12-step ramps generated in OKLCH, so every hue keeps the same apparent lightness at
-        the same step. Step numbers have fixed roles, which is why the semantic layer never changes
-        between themes.
+        {t(m.colLede)}
       </Text>
 
-      <Heading level={2}>Ramps</Heading>
+      <Heading level={2}>{t(m.colRamps)}</Heading>
       <Row gap={4} wrap style={{ marginBottom: 'var(--glacier-space-4)' }}>
         <Text as="span" tone={TextTone.Muted}>
-          Preview ramp values for:
+          {t(m.colPreviewRampValues)}
         </Text>
         <Select
-          aria-label="Ramp theme"
+          aria-label={t(m.colRampThemeAria)}
           size={Size.Small}
           value={theme}
           onValueChange={(v) => setTheme(v as Theme)}
           options={[
-            { value: 'light', label: 'Light theme' },
-            { value: 'dark', label: 'Dark theme' },
+            { value: 'light', label: t(m.colOptLight) },
+            { value: 'dark', label: t(m.colOptDark) },
           ]}
         />
       </Row>
@@ -100,17 +100,16 @@ export function ColorsPage() {
         ))}
       </Stack>
 
-      <Heading level={2}>Semantic layer</Heading>
+      <Heading level={2}>{t(m.colSemanticLayer)}</Heading>
       <Text tone={TextTone.Muted}>
-        Components consume these aliases instead of ramp steps. The swatches render from the live
-        CSS variables, so they follow the theme toggle in the top bar.
+        {t(m.colSemanticIntro)}
       </Text>
       <table className="tokenTable">
         <thead>
           <tr>
-            <th>Token</th>
-            <th>Swatch</th>
-            <th>Value</th>
+            <th>{t(m.colThToken)}</th>
+            <th>{t(m.colThSwatch)}</th>
+            <th>{t(m.colThValue)}</th>
           </tr>
         </thead>
         <tbody>

@@ -153,8 +153,20 @@ describe('validateSpec paint bindings', () => {
 });
 
 describe('strictness audit', () => {
-  it('scores a spec with no applicable checks as fully complete', () => {
-    expect(auditStrictness(base)).toEqual({ missing: [], checks: 0, completeness: 1 });
+  it('flags a variantless spec that declares no top-level rest paint', () => {
+    expect(auditStrictness(base)).toEqual({
+      missing: ['paint: no top-level rest paint for a variantless component'],
+      checks: 1,
+      completeness: 0,
+    });
+  });
+
+  it('scores a variantless spec with declared rest paint as complete', () => {
+    expect(auditStrictness({ ...base, paint: { text: '$text' } })).toEqual({
+      missing: [],
+      checks: 1,
+      completeness: 1,
+    });
   });
 
   it('scores a fully paint-bound box control as complete', () => {
@@ -199,6 +211,7 @@ describe('strictness audit', () => {
       element: 'textarea',
       a11y: { role: 'textbox', focusable: true },
       focusRing: { ring: '$focus-ring' },
+      paint: { background: '$surface', text: '$text', border: '$border' },
       sizes: [{ name: 'md' }],
     });
     expect(report.missing).toEqual([]);

@@ -1,95 +1,129 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import {
-  AppShell,
+  Avatar,
   HapticsProvider,
+  IconButton,
+  Kbd,
   LocaleProvider,
-  Sidebar,
-  SidebarItem,
-  SidebarSection,
+  NavBar,
+  NavBarItem,
+  SearchField,
   TitleBar,
   ToastProvider,
-  Toolbar,
+  VisualFeedbackProvider,
+  direction,
+  useToast,
 } from '@glacier/react';
-import { Info, LayoutDashboard, Library, Minus, Settings, Snowflake, Square, X } from '@glacier/icons';
+import { Bell, Info, Library, LayoutDashboard, PanelLeft, Settings } from '@glacier/icons';
 import {
   applyPreferences,
   loadPreferences,
   savePreferences,
   type Preferences,
 } from './preferences.ts';
+import { useT } from './i18n.ts';
 import { useRoute, type Route } from './router.ts';
-import { closeWindow, minimizeWindow, toggleMaximizeWindow } from './tauri.ts';
+import { isTauri } from './tauri.ts';
+import { RouteSidebar } from './RouteSidebar.tsx';
 import { DashboardPage } from './pages/DashboardPage.tsx';
 import { LibraryPage } from './pages/LibraryPage.tsx';
-import { SettingsPage } from './pages/SettingsPage.tsx';
 import { AboutPage } from './pages/AboutPage.tsx';
+import { SettingsModal } from './SettingsModal.tsx';
 
 const APP_NAME = 'Glacier Starter';
 
-const NAV: { id: Route; label: string; icon: ReactNode }[] = [
-  { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
-  { id: 'library', label: 'Library', icon: <Library size={18} /> },
-];
+// Window chrome (title bar + traffic lights) only makes sense as a desktop
+// window, so it is off in the browser and on under Tauri.
+const DESKTOP = isTauri();
 
-const SECONDARY: { id: Route; label: string; icon: ReactNode }[] = [
-  { id: 'settings', label: 'Settings', icon: <Settings size={18} /> },
-  { id: 'about', label: 'About', icon: <Info size={18} /> },
-];
-
-const PAGE_TITLES: Record<Route, string> = {
-  dashboard: 'Dashboard',
-  library: 'Library',
-  settings: 'Settings',
-  about: 'About',
+const SIDEBAR_LABEL: Record<Route, 'navDashboard' | 'navLibrary' | 'navAbout'> = {
+  dashboard: 'navDashboard',
+  library: 'navLibrary',
+  about: 'navAbout',
 };
 
-/** Minimize / maximize / close, wired to the Tauri window and inert in a browser. */
-function WindowControls() {
+/**
+ * The sidebar toggle that lives in the title bar, just after the traffic
+ * lights. Clicking it collapses or expands the contextual sidebar. While the
+ * sidebar is collapsed, hovering the button reveals a floating preview of it
+ * (the same RouteSidebar), so it stays reachable without expanding, exactly
+ * like Libre. The preview is a pure-CSS hover flyout: it and the button share
+ * one hover region, so moving the pointer into the preview keeps it open.
+ */
+function SidebarToggle({
+  route,
+  collapsed,
+  onToggle,
+}: {
+  route: Route;
+  collapsed: boolean;
+  onToggle: () => void;
+}) {
+  const t = useT();
+  const [hovering, setHovering] = useState(false);
+  const previewOpen = collapsed && hovering;
   return (
-    <div className="windowControls" data-no-drag>
-      <button type="button" className="windowControl" aria-label="Minimize" onClick={() => void minimizeWindow()}>
-        <Minus size={15} />
-      </button>
-      <button type="button" className="windowControl" aria-label="Maximize" onClick={() => void toggleMaximizeWindow()}>
-        <Square size={13} />
-      </button>
-      <button type="button" className="windowControl" data-variant="close" aria-label="Close" onClick={() => void closeWindow()}>
-        <X size={15} />
-      </button>
+    <div
+      className="sidebarToggleWrap"
+      data-no-drag
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => setHovering(false)}
+    >
+      <IconButton variant="ghost" size="sm" aria-label={t('toggleSidebar')} onClick={onToggle}>
+        <PanelLeft size={18} />
+      </IconButton>
+      <div className="sidebarPreview" data-open={previewOpen || undefined} aria-hidden={!previewOpen}>
+        <div className="sidebarPreviewCard">
+          <RouteSidebar key={route} route={route} desktop={false} />
+        </div>
+      </div>
     </div>
   );
 }
 
-/** The persistent left navigation. */
-function AppSidebar({ route, onNavigate }: { route: Route; onNavigate: (route: Route) => void }) {
+/**
+ * The far-left activity rail: an icon-only vertical NavBar that switches the
+ * top-level route, with Settings pinned to the bottom via the end slot. The
+ * contextual sidebar to its right reacts to the selected route.
+ */
+function AppRail({
+  route,
+  onNavigate,
+  onOpenSettings,
+}: {
+  route: Route;
+  onNavigate: (route: Route) => void;
+  onOpenSettings: () => void;
+}) {
+  const t = useT();
   return (
-    <Sidebar
-      header={
-        <div className="brand">
-          <span className="brandMark">
-            <Snowflake size={17} />
-          </span>
-          {APP_NAME}
-        </div>
-      }
-      footer={
-        <SidebarSection>
-          {SECONDARY.map((item) => (
-            <SidebarItem key={item.id} icon={item.icon} active={route === item.id} onClick={() => onNavigate(item.id)}>
-              {item.label}
-            </SidebarItem>
-          ))}
-        </SidebarSection>
+    <NavBar
+      orientation="vertical"
+      aria-label={t('navPrimary')}
+      className="appRail"
+      end={
+        <NavBarItem icon={<Settings size={20} />} label={t('navSettings')} onClick={onOpenSettings} />
       }
     >
-      <SidebarSection title="Workspace">
-        {NAV.map((item) => (
-          <SidebarItem key={item.id} icon={item.icon} active={route === item.id} onClick={() => onNavigate(item.id)}>
-            {item.label}
-          </SidebarItem>
-        ))}
-      </SidebarSection>
-    </Sidebar>
+      <NavBarItem
+        icon={<LayoutDashboard size={20} />}
+        label={t('navDashboard')}
+        active={route === 'dashboard'}
+        onClick={() => onNavigate('dashboard')}
+      />
+      <NavBarItem
+        icon={<Library size={20} />}
+        label={t('navLibrary')}
+        active={route === 'library'}
+        onClick={() => onNavigate('library')}
+      />
+      <NavBarItem
+        icon={<Info size={20} />}
+        label={t('navAbout')}
+        active={route === 'about'}
+        onClick={() => onNavigate('about')}
+      />
+    </NavBar>
   );
 }
 
@@ -100,46 +134,84 @@ function Shell({
   preferences: Preferences;
   onPreferencesChange: (patch: Partial<Preferences>) => void;
 }) {
+  const t = useT();
+  const { toast } = useToast();
   const [route, navigate] = useRoute();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const page =
-    route === 'dashboard' ? (
-      <DashboardPage />
-    ) : route === 'library' ? (
-      <LibraryPage />
-    ) : route === 'settings' ? (
-      <SettingsPage preferences={preferences} onChange={onPreferencesChange} />
-    ) : (
-      <AboutPage />
-    );
+    route === 'dashboard' ? <DashboardPage /> : route === 'library' ? <LibraryPage /> : <AboutPage />;
+
+  // A hand-composed desktop shell (like Libre): a full-width title bar across
+  // the top, then a body row of the activity rail, the contextual sidebar, and
+  // a content column that scrolls on its own. The title bar is window chrome,
+  // so it is desktop-only.
+  // The sidebar can only be collapsed where there is a toggle to reopen it (the
+  // desktop title bar), so the web build always keeps it open.
+  const collapsed = DESKTOP && preferences.sidebarCollapsed;
 
   return (
-    <div className="appRoot">
-      <TitleBar
-        data-tauri-drag-region
-        className="titleBarDrag"
-        title={APP_NAME}
-        surface
-        border
-        end={<WindowControls />}
+    <div className="appWindow" data-layout={preferences.layout} data-sidebar={collapsed ? 'collapsed' : 'open'}>
+      {DESKTOP && (
+        // The window title bar doubles as an app header: a sidebar toggle after
+        // the traffic lights, a mock command search in the center, and account
+        // details on the end. Every interactive child opts out of the drag
+        // region.
+        <TitleBar
+          className="appTitleBar titleBarDrag"
+          data-tauri-drag-region
+          surface
+          border
+          trafficLightInset
+          start={
+            <SidebarToggle
+              route={route}
+              collapsed={preferences.sidebarCollapsed}
+              onToggle={() => onPreferencesChange({ sidebarCollapsed: !preferences.sidebarCollapsed })}
+            />
+          }
+          end={
+            <div className="titleBarActions" data-no-drag>
+              <IconButton
+                variant="ghost"
+                size="sm"
+                aria-label={t('notifications')}
+                onClick={() => toast({ tone: 'neutral', message: t('caughtUp') })}
+              >
+                <Bell size={18} />
+              </IconButton>
+              <Avatar name="Ada Lovelace" size="sm" />
+            </div>
+          }
+        >
+          <div className="titleBarSearch" data-no-drag>
+            <SearchField size="sm" placeholder={t('searchPlaceholder')} shortcut={<Kbd>⌘K</Kbd>} />
+          </div>
+        </TitleBar>
+      )}
+      <div className="appBody">
+        <AppRail route={route} onNavigate={navigate} onOpenSettings={() => setSettingsOpen(true)} />
+        <aside className="appSidebar" aria-label={t(SIDEBAR_LABEL[route])}>
+          {/* keyed on the route so the mock selection resets per section */}
+          <RouteSidebar key={route} route={route} desktop={DESKTOP} />
+        </aside>
+        <main className="appContent">{page}</main>
+      </div>
+      <SettingsModal
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        preferences={preferences}
+        onChange={onPreferencesChange}
       />
-      <AppShell
-        className="appShell"
-        floating={preferences.layout === 'floating'}
-        sidebarLabel="Primary navigation"
-        sidebar={<AppSidebar route={route} onNavigate={navigate} />}
-        header={<Toolbar surface border>{PAGE_TITLES[route]}</Toolbar>}
-      >
-        {page}
-      </AppShell>
     </div>
   );
 }
 
 /**
- * The application root: the token look-and-feel is driven by persisted
- * preferences (applied to the document element), and the kit's cross-cutting
- * providers wrap the whole tree.
+ * The application root: persisted preferences drive the token look (stamped on
+ * the document element) and the active language (through LocaleProvider, which
+ * localizes the kit components and, for the app's own strings, backs useT). The
+ * cross-cutting providers wrap the whole tree.
  */
 export function App() {
   const [preferences, setPreferences] = useState<Preferences>(loadPreferences);
@@ -149,14 +221,27 @@ export function App() {
     savePreferences(preferences);
   }, [preferences]);
 
+  // The document language and writing direction follow the locale, so a
+  // right-to-left language (Arabic) flips the whole shell.
+  useEffect(() => {
+    document.documentElement.lang = preferences.locale;
+    document.documentElement.dir = direction(preferences.locale);
+  }, [preferences.locale]);
+
   const update = (patch: Partial<Preferences>) => setPreferences((prev) => ({ ...prev, ...patch }));
 
   return (
-    <LocaleProvider locale="en">
+    <LocaleProvider locale={preferences.locale}>
       <HapticsProvider enabled={preferences.haptics}>
-        <ToastProvider>
-          <Shell preferences={preferences} onPreferencesChange={update} />
-        </ToastProvider>
+        <VisualFeedbackProvider
+          enabled={preferences.visualFeedback}
+          variant={preferences.visualFeedbackVariant}
+          intensity={preferences.visualFeedbackIntensity}
+        >
+          <ToastProvider>
+            <Shell preferences={preferences} onPreferencesChange={update} />
+          </ToastProvider>
+        </VisualFeedbackProvider>
       </HapticsProvider>
     </LocaleProvider>
   );

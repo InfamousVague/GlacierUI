@@ -1,133 +1,130 @@
-import { StatTile, Pill, Heading, Text, Size, TextTone, Tone } from '@glacier/react';
+import { StatTile, Pill, Heading, Text, Size, TextTone, Tone, useT } from '@glacier/react';
 import { DollarSign, TrendingUp, Users } from '@glacier/icons';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 const usersIcon = <Users size={18} />;
 const revenueIcon = <DollarSign size={18} />;
 const bounceIcon = <TrendingUp size={18} />;
 
 export function StatTilePage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>StatTile</Heading>
+      <Heading level={1}>{t(m.sttName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A compact stat micro-card: an optional leading icon, a prominent value, and a muted label,
-        with an optional trailing delta or hint. Sits in rows and grids on the card surface tokens so
-        a dashboard of tiles reads as one consistent panel.
+        {prose(t(m.sttLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntro)}</Text>
       <ComponentBlueprint specId="stat-tile" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="A prominent value over a muted label. That is the whole tile."
+        title={t(m.exBasic)}
+        description={t(m.sttEx1Desc)}
+        component="StatTile"
+        render={(K) => <K.StatTile value="12,480" label={t(m.stattileTotalUsers)} />}
         code={`import { StatTile } from '@glacier/react';
 
 <StatTile value="12,480" label="Total users" />`}
-      >
-        <StatTile value="12,480" label="Total users" />
-      </Example>
+      />
 
       <Example
-        title="Leading icon"
-        description="Pass an icon and it renders in a muted, sunken disc to the left of the value."
+        title={t(m.sttEx2Title)}
+        description={t(m.sttEx2Desc)}
+        component="StatTile"
+        render={(K) => <K.StatTile icon={usersIcon} value="12,480" label={t(m.stattileTotalUsers)} />}
         code={`<StatTile icon={usersIcon} value="12,480" label="Total users" />`}
-      >
-        <StatTile icon={usersIcon} value="12,480" label="Total users" />
-      </Example>
+      />
 
       <Example
-        title="Trailing hint"
-        description="A hint sits on the value baseline - a Pill reads well as a change chip. Pair direction with a glyph or sign, not color alone."
+        title={t(m.sttEx3Title)}
+        description={t(m.sttEx3Desc)}
+        component="StatTile"
+        render={(K) => (
+          <K.StatTile
+            icon={revenueIcon}
+            value="$48.2k"
+            label={t(m.stattileRevenueThisMonth)}
+            hint={<Pill tone={Tone.Success} size={Size.Small}>↑ 12%</Pill>}
+          />
+        )}
         code={`<StatTile
   icon={revenueIcon}
   value="$48.2k"
   label="Revenue this month"
   hint={<Pill tone={Tone.Success} size={Size.Small}>↑ 12%</Pill>}
 />`}
-      >
-        <StatTile
-          icon={revenueIcon}
-          value="$48.2k"
-          label="Revenue this month"
-          hint={<Pill tone={Tone.Success} size={Size.Small}>↑ 12%</Pill>}
-        />
-      </Example>
+      />
 
       <Example
-        title="Row of tiles"
-        description="Tiles line up in a flex or grid row; each keeps the same rhythm so the row reads as one panel."
+        title={t(m.sttEx4Title)}
+        description={t(m.sttEx4Desc)}
+        component="StatTile"
+        render={(K) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--glacier-space-4)' }}>
+            <K.StatTile icon={usersIcon} value="12,480" label={t(m.stattileUsers)} hint={<Pill tone={Tone.Success} size={Size.Small}>↑ 4%</Pill>} />
+            <K.StatTile icon={revenueIcon} value="$48.2k" label={t(m.stattileRevenue)} hint={<Pill tone={Tone.Success} size={Size.Small}>↑ 12%</Pill>} />
+            <K.StatTile icon={bounceIcon} value="38%" label={t(m.stattileBounceRate)} hint={<Pill tone={Tone.Danger} size={Size.Small}>↑ 2%</Pill>} />
+          </div>
+        )}
         code={`<div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--glacier-space-4)' }}>
   <StatTile icon={usersIcon} value="12,480" label="Users" hint={<Pill tone={Tone.Success} size={Size.Small}>↑ 4%</Pill>} />
   <StatTile icon={revenueIcon} value="$48.2k" label="Revenue" hint={<Pill tone={Tone.Success} size={Size.Small}>↑ 12%</Pill>} />
   <StatTile icon={bounceIcon} value="38%" label="Bounce rate" hint={<Pill tone={Tone.Danger} size={Size.Small}>↑ 2%</Pill>} />
 </div>`}
-      >
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--glacier-space-4)' }}>
-          <StatTile icon={usersIcon} value="12,480" label="Users" hint={<Pill tone={Tone.Success} size={Size.Small}>↑ 4%</Pill>} />
-          <StatTile icon={revenueIcon} value="$48.2k" label="Revenue" hint={<Pill tone={Tone.Success} size={Size.Small}>↑ 12%</Pill>} />
-          <StatTile icon={bounceIcon} value="38%" label="Bounce rate" hint={<Pill tone={Tone.Danger} size={Size.Small}>↑ 2%</Pill>} />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Glass"
-        description="Over imagery or a gradient, the glass material frosts the tile instead of painting a solid card."
+        title={t(m.exGlass)}
+        description={t(m.sttEx5Desc)}
+        component="StatTile"
+        render={(K) => <K.StatTile glass icon={usersIcon} value="12,480" label={t(m.stattileTotalUsers)} />}
         code={`<StatTile glass icon={usersIcon} value="12,480" label="Total users" />`}
-      >
-        <StatTile glass icon={usersIcon} value="12,480" label="Total users" />
-      </Example>
+      />
 
       <Example
-        title="Loading"
-        description="The skeleton mirrors the tile it will become: pass the same icon and hint presence and it renders the disc bone, the value and label lines, and a hint bone, so nothing shifts when the data lands."
+        title={t(m.sttEx6Title)}
+        description={t(m.sttEx6Desc)}
+        component="StatTile"
+        render={(K) => (
+          <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', maxWidth: '16rem' }}>
+            <K.StatTile skeleton icon={usersIcon} hint="+12%" value="" label="" />
+            <K.StatTile skeleton value="" label="" />
+          </div>
+        )}
         code={`<StatTile skeleton icon={usersIcon} hint="+12%" value="" label="" />
 <StatTile skeleton value="" label="" />`}
-      >
-        <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', maxWidth: '16rem' }}>
-          <StatTile skeleton icon={usersIcon} hint="+12%" value="" label="" />
-          <StatTile skeleton value="" label="" />
-        </div>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'value', type: 'ReactNode', description: 'Required. The prominent value - a number, currency, or short string.' },
-          { name: 'label', type: 'ReactNode', description: 'Required. The muted label naming what the value measures.' },
-          { name: 'icon', type: 'ReactNode', description: 'Decorative leading glyph rendered in a muted disc; the disc is omitted when unset.' },
-          { name: 'hint', type: 'ReactNode', description: 'Trailing delta or hint aligned to the value baseline, e.g. a Pill change chip.' },
-          { name: 'glass', type: 'boolean', default: 'false', description: 'Renders the frosted glass material instead of a solid card.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders a placeholder mirroring the anatomy: icon disc and hint bones follow the icon and hint props.' },
+          { name: 'value', type: 'ReactNode', description: t(m.sttPropValue) },
+          { name: 'label', type: 'ReactNode', description: t(m.sttPropLabel) },
+          { name: 'icon', type: 'ReactNode', description: t(m.sttPropIcon) },
+          { name: 'hint', type: 'ReactNode', description: t(m.sttPropHint) },
+          { name: 'glass', type: 'boolean', default: 'false', description: t(m.sttPropGlass) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.sttPropSkeleton) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The tile is a presentational container with no role of its own; the value and label are read
-          in source order, so keep the label a short, literal phrase.
-        </li>
-        <li>
-          The leading icon disc is decorative and marked <code>aria-hidden</code>, so it is not
-          announced - the value and label carry the meaning.
-        </li>
-        <li>
-          When a hint conveys direction, do not rely on color alone: include a glyph or sign (↑ / ↓, +
-          / −) so the change is legible without color.
-        </li>
+        <li>{prose(t(m.sttA11y1))}</li>
+        <li>{prose(t(m.sttA11y2))}</li>
+        <li>{prose(t(m.sttA11y3))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use a StatTile for a single at-a-glance metric; line several up in a row or grid for a dashboard summary.</li>
-        <li>Keep the value short - abbreviate large numbers (48.2k, 1.2M) so the tile stays compact.</li>
-        <li>Reach for a Pill as the hint to show a delta, and match its tone to the direction of the change.</li>
+        <li>{prose(t(m.sttUse1))}</li>
+        <li>{prose(t(m.sttUse2))}</li>
+        <li>{prose(t(m.sttUse3))}</li>
       </ul>
     </>
   );

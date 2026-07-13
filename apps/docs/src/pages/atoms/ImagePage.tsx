@@ -1,6 +1,7 @@
-import { Image, Heading, Text, Size, TextTone } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Image, Heading, Text, Size, TextTone, useT } from '@glacier/react';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 /** A deterministic, offline SVG "cover" so the docs render without network images. */
 function cover(title: string, from: string, to: string, w = 200, h = 300): string {
@@ -19,25 +20,23 @@ const wide = cover('Panorama', '%230ea5e9', '%236366f1', 320, 180);
 const square = cover('LP', '%23db2777', '%239333ea', 240, 240);
 
 export function ImagePage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Image</Heading>
+      <Heading level={1}>{t(m.imgName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A framed image with a fixed aspect ratio. It holds its box while the source loads (showing a
-        skeleton), fits the image with <code>object-fit</code>, rounds its corners, and swaps in a
-        fallback if the source fails. Built for content imagery like cover art, thumbnails, and hero
-        shots.
+        {prose(t(m.imgLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntro)}</Text>
       <ComponentBlueprint specId="image" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Aspect ratio"
-        description="Set aspectRatio to reserve the box before the image decodes, so a grid of covers never shifts. Book covers are 2 / 3."
+        title={t(m.imgEx1Title)}
+        description={t(m.imgEx1Desc)}
         code={`import { Image } from '@glacier/react';
 
 <Image src={cover} alt="Dune" aspectRatio="2 / 3" />
@@ -45,15 +44,15 @@ export function ImagePage() {
 <Image src={art} alt="Album" aspectRatio={1} />`}
       >
         <div style={{ display: 'flex', gap: 'var(--glacier-space-4)', alignItems: 'flex-start' }}>
-          <Image src={dune} alt="Dune" aspectRatio="2 / 3" style={{ width: 120 }} />
-          <Image src={wide} alt="Panorama" aspectRatio="16 / 9" style={{ width: 200 }} />
-          <Image src={square} alt="Album art" aspectRatio={1} style={{ width: 120 }} />
+          <Image src={dune} alt={t(m.imageDune)} aspectRatio="2 / 3" style={{ width: 120 }} />
+          <Image src={wide} alt={t(m.imagePanorama)} aspectRatio="16 / 9" style={{ width: 200 }} />
+          <Image src={square} alt={t(m.imageAlbumArt)} aspectRatio={1} style={{ width: 120 }} />
         </div>
       </Example>
 
       <Example
-        title="Fit"
-        description="object-fit controls how the image fills its frame. cover crops to fill (the default); contain letterboxes to show the whole image."
+        title={t(m.imgEx2Title)}
+        description={t(m.imgEx2Desc)}
         code={`<Image src={art} alt="" aspectRatio="2 / 3" fit="cover" />
 <Image src={art} alt="" aspectRatio="2 / 3" fit="contain" />`}
       >
@@ -64,8 +63,8 @@ export function ImagePage() {
       </Example>
 
       <Example
-        title="Radius"
-        description="Round the corners from the radius scale. Use full with a square ratio for a circular avatar-style crop."
+        title={t(m.imgEx3Title)}
+        description={t(m.imgEx3Desc)}
         code={`<Image src={art} alt="" aspectRatio={1} radius="lg" />
 <Image src={art} alt="" aspectRatio={1} radius="full" />`}
       >
@@ -76,46 +75,43 @@ export function ImagePage() {
       </Example>
 
       <Example
-        title="Fallback and skeleton"
-        description="A source that fails to load is replaced by a muted broken-image glyph (or your own fallback). Pass skeleton to hold the frame while data is still loading."
+        title={t(m.imgEx4Title)}
+        description={t(m.imgEx4Desc)}
         code={`<Image src="/missing.jpg" alt="Missing cover" aspectRatio="2 / 3" />
 <Image src={cover} alt="Loading" aspectRatio="2 / 3" skeleton />`}
       >
         <div style={{ display: 'flex', gap: 'var(--glacier-space-4)' }}>
-          <Image src="/missing-cover.jpg" alt="Missing cover" aspectRatio="2 / 3" style={{ width: 120 }} />
-          <Image src={dune} alt="Loading" aspectRatio="2 / 3" skeleton style={{ width: 120 }} />
+          <Image src="/missing-cover.jpg" alt={t(m.imageMissingCover)} aspectRatio="2 / 3" style={{ width: 120 }} />
+          <Image src={dune} alt={t(m.imageLoading)} aspectRatio="2 / 3" skeleton style={{ width: 120 }} />
         </div>
       </Example>
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'src', type: 'string', description: 'Required. Image source URL.' },
-          { name: 'alt', type: 'string', description: 'Required. Alternative text; pass an empty string for a decorative image.' },
-          { name: 'aspectRatio', type: 'string | number', description: 'Aspect ratio of the frame, e.g. "2 / 3" or 1.' },
-          { name: 'fit', type: "'cover' | 'contain' | 'fill' | 'none' | 'scale-down'", default: "'cover'", description: 'How the image fills its frame (object-fit).' },
-          { name: 'radius', type: "'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'", default: "'md'", description: 'Corner radius from the radius scale.' },
-          { name: 'fallback', type: 'ReactNode', description: 'Rendered when the image fails to load. Defaults to a muted broken-image glyph.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Render a placeholder with the frame geometry.' },
-          { name: 'loading', type: "'lazy' | 'eager'", default: "'lazy'", description: 'Native loading hint.' },
+          { name: 'src', type: 'string', description: t(m.imgPropSrc) },
+          { name: 'alt', type: 'string', description: t(m.imgPropAlt) },
+          { name: 'aspectRatio', type: 'string | number', description: t(m.imgPropAspectRatio) },
+          { name: 'fit', type: "'cover' | 'contain' | 'fill' | 'none' | 'scale-down'", default: "'cover'", description: t(m.imgPropFit) },
+          { name: 'radius', type: "'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'", default: "'md'", description: t(m.imgPropRadius) },
+          { name: 'fallback', type: 'ReactNode', description: t(m.imgPropFallback) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.imgPropSkeleton) },
+          { name: 'loading', type: "'lazy' | 'eager'", default: "'lazy'", description: t(m.imgPropLoading) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          <code>alt</code> is required. Describe the image for content imagery, or pass an empty
-          string for purely decorative pictures so screen readers skip them.
-        </li>
-        <li>While the source loads a skeleton holds the frame; on error a muted broken-image glyph replaces it.</li>
-        <li>Images are lazy-loaded by default; pass <code>loading="eager"</code> for above-the-fold hero art.</li>
+        <li>{prose(t(m.imgA11y1))}</li>
+        <li>{prose(t(m.imgA11y2))}</li>
+        <li>{prose(t(m.imgA11y3))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Always set an <code>aspectRatio</code> in a grid so covers reserve their box and the layout never jumps.</li>
-        <li>Use <code>fit="cover"</code> for art that can crop and <code>fit="contain"</code> when the whole image must stay visible.</li>
-        <li>Reach for <code>Avatar</code> instead when you need initials and a status ring for a person.</li>
+        <li>{prose(t(m.imgUse1))}</li>
+        <li>{prose(t(m.imgUse2))}</li>
+        <li>{prose(t(m.imgUse3))}</li>
       </ul>
     </>
   );

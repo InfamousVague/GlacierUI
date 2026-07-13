@@ -20,6 +20,7 @@ export const linkSpec: ComponentSpec = {
     { name: 'hover', description: 'Text underline appears in the link color (currentColor); underline offset is 0.2em.', tokens: { underline: token('accent-text') } },
     { name: 'focus-visible', description: 'A 2px accent outline at 2px offset.', tokens: { ring: token('focus-ring') } },
   ],
+  paint: { text: '$accent-text' },
   focusRing: { ring: token('focus-ring'), offset: '2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

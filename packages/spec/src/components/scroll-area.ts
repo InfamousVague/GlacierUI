@@ -39,6 +39,7 @@ export const scrollAreaSpec: ComponentSpec = {
     { name: 'focus-visible', description: 'A 2px inset accent ring on the keyboard-focused viewport.', tokens: { ring: token('focus-ring') } },
   ],
   // a 2px focus-ring outline inset into the viewport (offset -2px)
+  paint: { text: '$text' },
   focusRing: { ring: token('focus-ring'), offset: '-2px' },
   tokens: [
     'space-2', 'space-6',

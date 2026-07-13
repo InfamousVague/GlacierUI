@@ -1,47 +1,59 @@
 import { useState } from 'react';
-import { Button, TabbedPanel, Heading, Text, Size, TextTone, Variant } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Button, Heading, Text, Size, TextTone, Variant, useT } from '@glacier/react';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { type PlatformKit } from '../../platforms.tsx';
+import { m } from '../../i18n.ts';
 
-const overview = <Text tone={TextTone.Muted}>Traffic is up 12% week over week, with mobile leading the gain.</Text>;
-const activity = <Text tone={TextTone.Muted}>Six new comments and two mentions since you last checked in.</Text>;
-const settings = <Text tone={TextTone.Muted}>Notifications, visibility, and export options live here.</Text>;
-
-function ControlledExample() {
+function ControlledExample({ K }: { K: PlatformKit }) {
+  const t = useT();
   const [value, setValue] = useState('inbox');
   return (
-    <TabbedPanel
-      aria-label="Messages"
+    <K.TabbedPanel
+      aria-label={t(m.tbpAriaMessages)}
       value={value}
       onValueChange={setValue}
       tabs={[
-        { id: 'inbox', label: 'Inbox', count: 8, content: <Text tone={TextTone.Muted}>Eight unread threads.</Text> },
-        { id: 'archive', label: 'Archive', content: <Text tone={TextTone.Muted}>Everything you have filed away.</Text> },
-        { id: 'spam', label: 'Spam', count: 132, content: <Text tone={TextTone.Muted}>Filtered senders.</Text> },
+        { id: 'inbox', label: t(m.tabbedpanelInbox), count: 8, content: <Text tone={TextTone.Muted}>{t(m.tbpInboxBody)}</Text> },
+        { id: 'archive', label: t(m.tabbedpanelArchive), content: <Text tone={TextTone.Muted}>{t(m.tbpArchiveBody)}</Text> },
+        { id: 'spam', label: t(m.tabbedpanelSpam), count: 132, content: <Text tone={TextTone.Muted}>{t(m.tbpSpamBody)}</Text> },
       ]}
     />
   );
 }
 
 export function TabbedPanelPage() {
+  const t = useT();
+  const overview = <Text tone={TextTone.Muted}>{t(m.tbpOverviewBody)}</Text>;
+  const activity = <Text tone={TextTone.Muted}>{t(m.tbpActivityBody)}</Text>;
+  const settings = <Text tone={TextTone.Muted}>{t(m.tbpSettingsBody)}</Text>;
   return (
     <>
-      <Heading level={1}>TabbedPanel</Heading>
+      <Heading level={1}>{t(m.tbpName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A framed panel with a header row of tabs and a bounded content body that switches per active
-        tab. Each tab can carry a count as a CounterBadge, and the header keeps an end slot for
-        actions. It follows the WAI-ARIA tabs pattern with automatic activation.
+        {prose(t(m.tbpLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.tbpAnatomyIntro)}</Text>
       <ComponentBlueprint specId="tabbed-panel" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="A list of tabs and their content. The first enabled tab is active by default."
+        title={t(m.exBasic)}
+        description={t(m.tbpEx1Desc)}
+        component="TabbedPanel"
+        render={(K) => (
+          <K.TabbedPanel
+            aria-label={t(m.tbpAriaReport)}
+            tabs={[
+              { id: 'overview', label: t(m.tabbedpanelOverview), content: overview },
+              { id: 'activity', label: t(m.tabbedpanelActivity), content: activity },
+              { id: 'settings', label: t(m.tabbedpanelSettings), content: settings },
+            ]}
+          />
+        )}
         code={`import { TabbedPanel } from '@glacier/react';
 
 <TabbedPanel
@@ -52,20 +64,26 @@ export function TabbedPanelPage() {
     { id: 'settings', label: 'Settings', content: settings },
   ]}
 />`}
-      >
-        <TabbedPanel
-          aria-label="Report"
-          tabs={[
-            { id: 'overview', label: 'Overview', content: overview },
-            { id: 'activity', label: 'Activity', content: activity },
-            { id: 'settings', label: 'Settings', content: settings },
-          ]}
-        />
-      </Example>
+      />
 
       <Example
-        title="Counts and actions"
-        description="Give a tab a count to render a CounterBadge, and pass actions for the header end slot."
+        title={t(m.tbpEx2Title)}
+        description={t(m.tbpEx2Desc)}
+        component="TabbedPanel"
+        render={(K) => (
+          <K.TabbedPanel
+            aria-label={t(m.tbpAriaQueue)}
+            actions={
+              <Button variant={Variant.Soft} size={Size.Small}>
+                {t(m.tabbedpanelRefresh)}
+              </Button>
+            }
+            tabs={[
+              { id: 'open', label: t(m.tabbedpanelOpen), count: 3, content: <Text tone={TextTone.Muted}>{t(m.tbpOpenBody)}</Text> },
+              { id: 'done', label: t(m.tabbedpanelDone), count: 128, content: <Text tone={TextTone.Muted}>{t(m.tbpDoneBody)}</Text> },
+            ]}
+          />
+        )}
         code={`<TabbedPanel
   aria-label="Queue"
   actions={<Button variant={Variant.Soft} size={Size.Small}>Refresh</Button>}
@@ -74,24 +92,13 @@ export function TabbedPanelPage() {
     { id: 'done', label: 'Done', count: 128, content: doneWork },
   ]}
 />`}
-      >
-        <TabbedPanel
-          aria-label="Queue"
-          actions={
-            <Button variant={Variant.Soft} size={Size.Small}>
-              Refresh
-            </Button>
-          }
-          tabs={[
-            { id: 'open', label: 'Open', count: 3, content: <Text tone={TextTone.Muted}>Three items need attention.</Text> },
-            { id: 'done', label: 'Done', count: 128, content: <Text tone={TextTone.Muted}>Completed this week.</Text> },
-          ]}
-        />
-      </Example>
+      />
 
       <Example
-        title="Controlled"
-        description="Drive the active tab from your own state with value and onValueChange."
+        title={t(m.tbpEx3Title)}
+        description={t(m.tbpEx3Desc)}
+        component="TabbedPanel"
+        render={(K) => <ControlledExample K={K} />}
         code={`const [value, setValue] = useState('inbox');
 
 <TabbedPanel
@@ -104,13 +111,21 @@ export function TabbedPanelPage() {
     { id: 'spam', label: 'Spam', count: 132, content: spam },
   ]}
 />`}
-      >
-        <ControlledExample />
-      </Example>
+      />
 
       <Example
-        title="Disabled tab"
-        description="A disabled tab stays visible for discoverability but is skipped by pointer and arrow navigation."
+        title={t(m.tbpEx4Title)}
+        description={t(m.tbpEx4Desc)}
+        component="TabbedPanel"
+        render={(K) => (
+          <K.TabbedPanel
+            aria-label={t(m.tbpAriaPlan)}
+            tabs={[
+              { id: 'usage', label: t(m.tabbedpanelUsage), content: <Text tone={TextTone.Muted}>{t(m.tbpUsageBody)}</Text> },
+              { id: 'billing', label: t(m.tabbedpanelBilling), disabled: true, content: <Text tone={TextTone.Muted}>{t(m.tbpBillingBody)}</Text> },
+            ]}
+          />
+        )}
         code={`<TabbedPanel
   aria-label="Plan"
   tabs={[
@@ -118,49 +133,34 @@ export function TabbedPanelPage() {
     { id: 'billing', label: 'Billing', disabled: true, content: billing },
   ]}
 />`}
-      >
-        <TabbedPanel
-          aria-label="Plan"
-          tabs={[
-            { id: 'usage', label: 'Usage', content: <Text tone={TextTone.Muted}>Current period usage.</Text> },
-            { id: 'billing', label: 'Billing', disabled: true, content: <Text tone={TextTone.Muted}>Upgrade to manage billing.</Text> },
-          ]}
-        />
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'tabs', type: 'TabbedPanelTab[]', description: 'Required. Each tab is { id, label, count?, content, disabled? }.' },
-          { name: 'value', type: 'string', description: 'Controlled active tab id.' },
-          { name: 'defaultValue', type: 'string', description: 'Initial active tab id when uncontrolled; defaults to the first enabled tab.' },
-          { name: 'onValueChange', type: '(id: string) => void', description: 'Called with the id of the newly activated tab.' },
-          { name: 'actions', type: 'ReactNode', description: 'Content for the header end slot, e.g. a Button or Menu.' },
-          { name: 'aria-label', type: 'string', description: 'Accessible name for the tab list.' },
+          { name: 'tabs', type: 'TabbedPanelTab[]', description: t(m.tbpPropTabs) },
+          { name: 'value', type: 'string', description: t(m.tbpPropValue) },
+          { name: 'defaultValue', type: 'string', description: t(m.tbpPropDefaultValue) },
+          { name: 'onValueChange', type: '(id: string) => void', description: t(m.tbpPropOnValueChange) },
+          { name: 'actions', type: 'ReactNode', description: t(m.tbpPropActions) },
+          { name: 'aria-label', type: 'string', description: t(m.tbpPropAriaLabel) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The header is a <code>role="tablist"</code> of <code>role="tab"</code> buttons; the body is a{' '}
-          <code>role="tabpanel"</code> linked to its tab with <code>aria-controls</code> and{' '}
-          <code>aria-labelledby</code>.
-        </li>
-        <li>
-          Activation is automatic: Arrow Left/Right move and activate tabs, wrapping and skipping
-          disabled ones; Home and End jump to the extremes.
-        </li>
-        <li>Only the active tab is in the tab order; Tab then moves focus into the content body.</li>
-        <li>A tab's count renders as a CounterBadge inside the button, so its number is announced with the tab.</li>
+        <li>{prose(t(m.tbpA11y1))}</li>
+        <li>{prose(t(m.tbpA11y2))}</li>
+        <li>{prose(t(m.tbpA11y3))}</li>
+        <li>{prose(t(m.tbpA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Reach for a TabbedPanel when related views share a frame and you want the surrounding chrome to persist; use plain Tabs when you need bare tabs with no panel.</li>
-        <li>Keep tab labels to a word or two, and lead with the view users land on most.</li>
-        <li>Use the count for at-a-glance backlogs (unread, open, flagged); hide it when the count is zero.</li>
-        <li>Put panel-wide controls - refresh, filter, an overflow Menu - in the actions slot, not inside every tab body.</li>
+        <li>{prose(t(m.tbpUse1))}</li>
+        <li>{prose(t(m.tbpUse2))}</li>
+        <li>{prose(t(m.tbpUse3))}</li>
+        <li>{prose(t(m.tbpUse4))}</li>
       </ul>
     </>
   );

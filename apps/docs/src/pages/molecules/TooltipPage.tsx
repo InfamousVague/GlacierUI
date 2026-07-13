@@ -1,41 +1,60 @@
-import { Button, IconButton, Kbd, Row, Tooltip, Heading, Text, Size, TextTone, Variant } from '@glacier/react';
+import { Button, IconButton, Kbd, Row, Tooltip, Heading, Text, Size, TextTone, Variant, useT } from '@glacier/react';
 import { Link2 } from '@glacier/icons';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 export function TooltipPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Tooltip</Heading>
+      <Heading level={1}>{t(m.tipName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        Tooltip is a short hover and focus label anchored to a trigger. Use it for a name, a
-        keyboard shortcut, or a one-line hint. The bubble portals to the body so it is never clipped,
-        and it stays non-interactive so it can never trap the cursor.
+        {t(m.tipLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.tipAnatomyIntro)}</Text>
       <ComponentBlueprint specId="tooltip" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="Wrap any single element and pass the label as content. Hovering or focusing the trigger reveals the bubble; leaving, blurring, or pressing Escape hides it."
+        title={t(m.exBasic)}
+        description={t(m.tipEx1Desc)}
+        component="Tooltip"
+        render={(K) => (
+          <K.Tooltip content={t(m.tipContentSaved)}>
+            <Button>{t(m.tooltipSave)}</Button>
+          </K.Tooltip>
+        )}
         code={`import { Button, Tooltip } from '@glacier/react';
 
 <Tooltip content="Saved to your library">
   <Button>Save</Button>
 </Tooltip>`}
-      >
-        <Tooltip content="Saved to your library">
-          <Button>Save</Button>
-        </Tooltip>
-      </Example>
+      />
 
       <Example
-        title="Placements"
-        description="The placement prop sets the side the bubble opens from. Each bubble still flips and clamps if it would run past the edge of the screen."
+        title={t(m.tipEx2Title)}
+        description={t(m.tipEx2Desc)}
+        component="Tooltip"
+        render={(K) => (
+          <Row gap={3} wrap>
+            <K.Tooltip content={t(m.tipContentTop)} placement="top">
+              <Button>{t(m.tooltipTop)}</Button>
+            </K.Tooltip>
+            <K.Tooltip content={t(m.tipContentBottom)} placement="bottom">
+              <Button>{t(m.tooltipBottom)}</Button>
+            </K.Tooltip>
+            <K.Tooltip content={t(m.tipContentLeft)} placement="left">
+              <Button>{t(m.tooltipLeft)}</Button>
+            </K.Tooltip>
+            <K.Tooltip content={t(m.tipContentRight)} placement="right">
+              <Button>{t(m.tooltipRight)}</Button>
+            </K.Tooltip>
+          </Row>
+        )}
         code={`<Tooltip content="Opens above" placement="top">
   <Button>Top</Button>
 </Tooltip>
@@ -48,38 +67,25 @@ export function TooltipPage() {
 <Tooltip content="Opens to the right" placement="right">
   <Button>Right</Button>
 </Tooltip>`}
-      >
-        <Row gap={3} wrap>
-          <Tooltip content="Opens above" placement="top">
-            <Button>Top</Button>
-          </Tooltip>
-          <Tooltip content="Opens below" placement="bottom">
-            <Button>Bottom</Button>
-          </Tooltip>
-          <Tooltip content="Opens to the left" placement="left">
-            <Button>Left</Button>
-          </Tooltip>
-          <Tooltip content="Opens to the right" placement="right">
-            <Button>Right</Button>
-          </Tooltip>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="On an icon button"
-        description="An icon-only control is the classic case for a tooltip: the bubble supplies the visible label to sighted pointer users, while aria-label still names the button for assistive tech."
+        title={t(m.tipEx3Title)}
+        description={t(m.tipEx3Desc)}
+        component="Tooltip"
+        render={(K) => (
+          <K.Tooltip content={t(m.tipContentCopyLink)}>
+            <IconButton aria-label={t(m.tipContentCopyLink)}><Link2 size={18} /></IconButton>
+          </K.Tooltip>
+        )}
         code={`<Tooltip content="Copy link">
   <IconButton aria-label="Copy link"><Link2 size={18} /></IconButton>
 </Tooltip>`}
-      >
-        <Tooltip content="Copy link">
-          <IconButton aria-label="Copy link"><Link2 size={18} /></IconButton>
-        </Tooltip>
-      </Example>
+      />
 
       <Example
-        title="Rich content"
-        description="content takes any node, so a hint can pair text with a Kbd for a shortcut. Keep it to a line or two; anything richer or interactive belongs in a Popover."
+        title={t(m.tipEx4Title)}
+        description={t(m.tipEx4Desc)}
         code={`<Tooltip
   content={
     <span>
@@ -93,120 +99,89 @@ export function TooltipPage() {
         <Tooltip
           content={
             <span>
-              Open the palette <Kbd>⌘K</Kbd>
+              {t(m.tooltipOpenThePalette)} <Kbd>⌘K</Kbd>
             </span>
           }
         >
-          <Button variant={Variant.Outline}>Commands</Button>
+          <Button variant={Variant.Outline}>{t(m.tooltipCommands)}</Button>
         </Tooltip>
       </Example>
 
       <Example
-        title="Instant open"
-        description="delay is the hover intent in milliseconds before the bubble opens. Set it to 0 for an immediate tooltip; focus always opens without delay."
+        title={t(m.tipEx5Title)}
+        description={t(m.tipEx5Desc)}
+        component="Tooltip"
+        render={(K) => (
+          <K.Tooltip content={t(m.tipContentNoWait)} delay={0}>
+            <Button variant={Variant.Ghost}>{t(m.tooltipInstant)}</Button>
+          </K.Tooltip>
+        )}
         code={`<Tooltip content="No wait" delay={0}>
   <Button variant={Variant.Ghost}>Instant</Button>
 </Tooltip>`}
-      >
-        <Tooltip content="No wait" delay={0}>
-          <Button variant={Variant.Ghost}>Instant</Button>
-        </Tooltip>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
           {
             name: 'content',
             type: 'ReactNode',
-            description: 'The bubble content: a short label, a shortcut, or a one-line hint.',
+            description: t(m.tipPropContent),
           },
           {
             name: 'children',
             type: 'ReactElement',
-            description:
-              'The single element the tooltip describes. Its ref, pointer and focus handlers, and aria-describedby are wired automatically.',
+            description: t(m.tipPropChildren),
           },
           {
             name: 'placement',
             type: 'Side | `${Side}-${Alignment}`',
             default: "'top'",
-            description:
-              'Side and alignment the bubble opens from, such as top, right, or bottom-end. The bubble flips and clamps if it would leave the viewport.',
+            description: t(m.tipPropPlacement),
           },
           {
             name: 'delay',
             type: 'number',
             default: '300',
-            description:
-              'Milliseconds of hover intent before the bubble opens. Focus opens the bubble immediately regardless of this value.',
+            description: t(m.tipPropDelay),
           },
           {
             name: 'disabled',
             type: 'boolean',
             default: 'false',
-            description: 'Suppresses the tooltip entirely. The trigger renders untouched.',
+            description: t(m.tipPropDisabled),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: "Renders a placeholder with the component's exact geometry.",
+            description: t(m.tipPropSkeleton),
           },
           {
             name: 'className',
             type: 'string',
-            description: 'Extra class applied to the bubble.',
+            description: t(m.tipPropClassName),
           },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The bubble renders with <code>role="tooltip"</code>, and the trigger gains{' '}
-          <code>aria-describedby</code> pointing at it while it is shown, so assistive technology
-          announces the content as a description of the control.
-        </li>
-        <li>
-          The tooltip opens on focus as well as hover, so keyboard users reach it. It hides on blur,
-          on pointer leave, and on <code>Escape</code>.
-        </li>
-        <li>
-          A tooltip only supplements the trigger. Never make it the only place a control is named or
-          its meaning stated; an icon button still needs its own <code>aria-label</code>.
-        </li>
-        <li>
-          The bubble is non-interactive, so it holds no links or buttons and never traps the cursor.
-          For content that needs interaction, use a Popover.
-        </li>
-        <li>
-          Under <code>prefers-reduced-motion</code> the bubble fades in place instead of scaling.
-        </li>
+        <li>{prose(t(m.tipA11y1))}</li>
+        <li>{prose(t(m.tipA11y2))}</li>
+        <li>{prose(t(m.tipA11y3))}</li>
+        <li>{prose(t(m.tipA11y4))}</li>
+        <li>{prose(t(m.tipA11y5))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>
-          Reach for a Tooltip to name an icon-only control or to add a short hint or shortcut. For
-          anything that needs real content or interaction, use a Popover.
-        </li>
-        <li>
-          The bubble portals to the body, so it is never clipped by an overflow-hidden ancestor like
-          a card or a scrolling toolbar.
-        </li>
-        <li>
-          Pass a single element as the child. Wrapping it in a fragment or extra element breaks the
-          ref and event wiring.
-        </li>
-        <li>
-          Keep the label to a line or two. If the message needs a heading or several sentences, it
-          belongs in the page, not a tooltip.
-        </li>
-        <li>
-          Tooltips do not open reliably on touch, so never hide essential information behind one on a
-          mobile-first surface.
-        </li>
+        <li>{prose(t(m.tipUse1))}</li>
+        <li>{prose(t(m.tipUse2))}</li>
+        <li>{prose(t(m.tipUse3))}</li>
+        <li>{prose(t(m.tipUse4))}</li>
+        <li>{prose(t(m.tipUse5))}</li>
       </ul>
     </>
   );

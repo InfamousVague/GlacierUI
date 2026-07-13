@@ -41,6 +41,7 @@ export const resizableSplitPaneSpec: ComponentSpec = {
     { name: 'clamped', description: 'During a drag, a medium haptic tick fires once each time the split reaches its min or max clamp and re-arms when it leaves the bound; no paint change.', behavioral: true },
   ],
   // 2px focus-ring outline offset 1px around the divider hairline
+  paint: { background: '$surface', text: '$text' },
   focusRing: { ring: token('focus-ring'), offset: '1px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
