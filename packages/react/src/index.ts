@@ -46,9 +46,20 @@ export { FilterChip, type FilterChipProps } from './atoms/inputs/FilterChip/Filt
 export { Image, type ImageProps, type ImageFit, type ImageRadius } from './atoms/display/Image/Image.tsx';
 export { Rating, type RatingProps } from './atoms/inputs/Rating/Rating.tsx';
 export { OtpField, type OtpFieldProps, type OtpFieldType } from './atoms/inputs/OtpField/OtpField.tsx';
+export { Sparkline, type SparklineProps, type SparklineShape, type SparklineTone } from './atoms/display/Sparkline/Sparkline.tsx';
 
 // molecules
 export { Field, type FieldProps } from './molecules/Field/Field.tsx';
+export { Fieldset, type FieldsetProps } from './molecules/Fieldset/Fieldset.tsx';
+export { FormSection, type FormSectionProps } from './molecules/Fieldset/FormSection.tsx';
+export { Calendar, type CalendarProps, type CalendarMode, type CalendarRange } from './molecules/DatePicker/Calendar.tsx';
+export { DatePicker, type DatePickerProps } from './molecules/DatePicker/DatePicker.tsx';
+export {
+  FileUpload,
+  type FileUploadProps,
+  type FileUploadRejection,
+  type FileUploadRejectionReason,
+} from './molecules/FileUpload/FileUpload.tsx';
 export { useField } from './internal/FieldContext.ts';
 export {
   SegmentedControl,
@@ -86,6 +97,13 @@ export { Grid, type GridProps } from './layout/Grid.tsx';
 export { Center, type CenterProps } from './layout/Center.tsx';
 export { Spacer, type SpacerProps } from './layout/Spacer.tsx';
 export { Container, type ContainerProps } from './layout/Container.tsx';
+export {
+  CardGroup,
+  type CardGroupProps,
+  type CardGroupMode,
+  type CardGroupGap,
+  type CardGroupDensity,
+} from './layout/CardGroup/CardGroup.tsx';
 export type {
   Responsive,
   Align,
@@ -107,6 +125,21 @@ export {
 } from './structures/Sidebar/Sidebar.tsx';
 export { Toolbar, type ToolbarProps } from './structures/Toolbar/Toolbar.tsx';
 export { TitleBar, type TitleBarProps } from './structures/TitleBar/TitleBar.tsx';
+export {
+  Section,
+  type SectionProps,
+  type SectionGap,
+  type SectionDensity,
+  type SectionHeadingLevel,
+} from './structures/Section/Section.tsx';
+export { PageHeader, type PageHeaderProps, type PageHeaderAction } from './structures/PageHeader/PageHeader.tsx';
+export {
+  NavBar,
+  NavBarItem,
+  type NavBarProps,
+  type NavBarItemProps,
+  type NavBarOrientation,
+} from './structures/NavBar/NavBar.tsx';
 
 // organisms
 export { Modal, type ModalProps } from './organisms/Modal/Modal.tsx';
@@ -137,6 +170,30 @@ export {
   type SplitOrientation,
 } from './organisms/ResizableSplitPane/ResizableSplitPane.tsx';
 export { Table, type TableProps, type TableColumn } from './organisms/Table/Table.tsx';
+export { Timeline, type TimelineProps, type TimelineItem, type TimelineTone } from './organisms/Timeline/Timeline.tsx';
+export {
+  TimelineScrubber,
+  type TimelineScrubberProps,
+  type TimelineScrubberMarker,
+  type TimelineScrubberMarkerTone,
+} from './organisms/TimelineScrubber/TimelineScrubber.tsx';
+export {
+  TimeSeriesChart,
+  type TimeSeriesChartProps,
+  type TimeSeriesChartSeries,
+  type TimeSeriesChartShape,
+  type ChartSeriesTone,
+} from './organisms/TimeSeriesChart/TimeSeriesChart.tsx';
+export {
+  DataGrid,
+  type DataGridProps,
+  type DataGridColumn,
+  type DataGridRow,
+  type DataGridRowId,
+  type DataGridSort,
+  type SortDirection,
+} from './organisms/DataGrid/DataGrid.tsx';
+export { Wizard, type WizardProps, type WizardStep } from './organisms/Wizard/Wizard.tsx';
 export type { Placement } from './internal/useAnchoredPosition.ts';
 
 // i18n - the translation mandate: every user-facing string resolves through a
@@ -165,3 +222,11 @@ export {
 // by a native shell. See haptics.ts for the platform reality.
 export { HapticsProvider, useHaptics } from './haptics/HapticsProvider.tsx';
 export { haptic, setHapticsEnabled, hapticsEnabled, type HapticKind, type HapticFn } from './haptics/haptics.ts';
+export {
+  VisualFeedbackProvider,
+  useVisualFeedback,
+  type VisualFeedbackVariant,
+  type VisualFeedbackIntensity,
+  type VisualFeedbackFn,
+} from './haptics/VisualFeedbackProvider.tsx';
+export { emitFeedback, subscribeFeedback, type FeedbackEvent } from './haptics/feedback.ts';
