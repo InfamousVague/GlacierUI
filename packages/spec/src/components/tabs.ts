@@ -46,6 +46,7 @@ export const tabsSpec: ComponentSpec = {
   ],
   // a 2px focus-ring outline inset into the tab (offset -2px); the panel draws
   // the same ring outset 2px
+  paint: { border: '$border-subtle' },
   focusRing: { ring: token('focus-ring'), offset: '-2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

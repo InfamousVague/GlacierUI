@@ -47,6 +47,8 @@ export const formSectionSpec: ComponentSpec = {
   states: [
     { name: 'skeleton', description: 'Swaps the title and description for placeholder lines; the content renders its own skeletons.' },
   ],
+  // the heading and grouped fields paint
+  paint: {},
   tokens: [
     'font-sans', 'font-size-sm', 'leading-sm',
     'space-1', 'space-2', 'space-4', 'space-5', 'space-6',

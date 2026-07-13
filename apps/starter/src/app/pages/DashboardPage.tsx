@@ -1,5 +1,6 @@
 import { CardGroup, Heading, Pill, Size, StatTile, Text, TextTone, Timeline } from '@glacier/react';
 import { Activity, GitCommitHorizontal, Rocket, TriangleAlert, Users } from '@glacier/icons';
+import { useT } from '../i18n.ts';
 
 const STATS = [
   { icon: <Users size={18} />, value: '2,481', label: 'Active users', hint: <Pill tone="success" size={Size.Small}>+12%</Pill> },
@@ -16,13 +17,13 @@ const ACTIVITY = [
 ];
 
 export function DashboardPage() {
+  const t = useT();
   return (
     <div className="page">
       <div>
-        <Heading level={1}>Good morning</Heading>
+        <Heading level={1}>{t('dashTitle')}</Heading>
         <Text size={Size.Large} tone={TextTone.Muted} className="pageLede">
-          A quick read on how things are trending. Swap these tiles and the feed for your own data;
-          the layout and every component come from Glacier.
+          {t('dashLede')}
         </Text>
       </div>
 
@@ -34,11 +35,11 @@ export function DashboardPage() {
 
       <div className="split">
         <section>
-          <Heading level={2}>Recent activity</Heading>
-          <Timeline aria-label="Recent activity" items={ACTIVITY} />
+          <Heading level={2}>{t('recentActivity')}</Heading>
+          <Timeline aria-label={t('recentActivity')} items={ACTIVITY} />
         </section>
         <section>
-          <Heading level={2}>Shortcuts</Heading>
+          <Heading level={2}>{t('shortcuts')}</Heading>
           <CardGroup minItemWidth="12rem">
             <StatTile value="Docs" label="Read the guides" />
             <StatTile value="API" label="Reference and SDKs" />

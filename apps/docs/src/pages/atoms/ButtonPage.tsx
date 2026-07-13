@@ -1,37 +1,43 @@
 import { useState } from 'react';
-import { Button, IconButton, Row, Stack, Heading, Text, Size, TextTone, Variant } from '@glacier/react';
+import { Button, IconButton, Row, Stack, Heading, Text, Size, TextTone, Variant, useT } from '@glacier/react';
 import { Plus } from '@glacier/icons';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 const plusIcon = <Plus size={16} />;
 
 export function ButtonPage() {
+  const t = useT();
   const [saving, setSaving] = useState(false);
 
   return (
     <>
-      <Heading level={1}>Button</Heading>
+      <Heading level={1}>{t(m.btnName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        Buttons trigger actions. Use <code>Button</code> for labeled actions and{' '}
-        <code>IconButton</code> for compact, icon-only controls such as toolbars and card corners.
+        {prose(t(m.btnLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntroBox)}</Text>
       <ComponentBlueprint specId="button" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Variants"
-        description={
+        title={t(m.secVariants)}
+        description={prose(t(m.btnEx1Desc))}
+        component="Button"
+        render={(K) => (
           <>
-            Six variants cover the full emphasis range. <code>solid</code> is the default and marks
-            the primary action. <code>glass</code> is a translucent blurred material for use over
-            imagery or other glass surfaces.
+            <K.Button>{t(m.buttonSolid)}</K.Button>
+            <K.Button variant={Variant.Soft}>{t(m.buttonSoft)}</K.Button>
+            <K.Button variant={Variant.Outline}>{t(m.buttonOutline)}</K.Button>
+            <K.Button variant={Variant.Ghost}>{t(m.buttonGhost)}</K.Button>
+            <K.Button variant={Variant.Glass}>{t(m.buttonGlass)}</K.Button>
+            <K.Button variant={Variant.Danger}>{t(m.buttonDanger)}</K.Button>
           </>
-        }
+        )}
         code={`import { Button, IconButton } from '@glacier/react';
 
 <Button>Solid</Button>
@@ -40,45 +46,27 @@ export function ButtonPage() {
 <Button variant={Variant.Ghost}>Ghost</Button>
 <Button variant={Variant.Glass}>Glass</Button>
 <Button variant={Variant.Danger}>Danger</Button>`}
-      >
-        <Row gap={4} wrap>
-          <Button>Solid</Button>
-          <Button variant={Variant.Soft}>Soft</Button>
-          <Button variant={Variant.Outline}>Outline</Button>
-          <Button variant={Variant.Ghost}>Ghost</Button>
-          <Button variant={Variant.Glass}>Glass</Button>
-          <Button variant={Variant.Danger}>Danger</Button>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Sizes"
-        description={
+        title={t(m.secSizes)}
+        description={prose(t(m.btnEx2Desc))}
+        component="Button"
+        render={(K) => (
           <>
-            Three sizes share one height scale with every other control. <code>md</code> is the
-            default.
+            <K.Button size={Size.Small}>{t(m.buttonSmall)}</K.Button>
+            <K.Button size={Size.Medium}>{t(m.buttonMedium)}</K.Button>
+            <K.Button size={Size.Large}>{t(m.buttonLarge)}</K.Button>
           </>
-        }
+        )}
         code={`<Button size={Size.Small}>Small</Button>
 <Button size={Size.Medium}>Medium</Button>
 <Button size={Size.Large}>Large</Button>`}
-      >
-        <Row gap={4} wrap>
-          <Button size={Size.Small}>Small</Button>
-          <Button size={Size.Medium}>Medium</Button>
-          <Button size={Size.Large}>Large</Button>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Loading and disabled"
-        description={
-          <>
-            <code>loading</code> shows a spinner and disables the button so it cannot be activated
-            while an async action is pending. Click the first button to see the state. Disabled
-            buttons skip the press animation.
-          </>
-        }
+        title={t(m.btnEx3Title)}
+        description={prose(t(m.btnEx3Desc))}
         code={`const [saving, setSaving] = useState(false);
 
 <Button
@@ -101,66 +89,58 @@ export function ButtonPage() {
               setTimeout(() => setSaving(false), 1500);
             }}
           >
-            Save changes
+            {t(m.btnDemoSave)}
           </Button>
-          <Button loading>Loading</Button>
-          <Button disabled>Disabled</Button>
+          <Button loading>{t(m.buttonLoading)}</Button>
+          <Button disabled>{t(m.buttonDisabled)}</Button>
         </Row>
       </Example>
 
       <Example
-        title="Full width"
-        description={
-          <>
-            <code>fullWidth</code> stretches the button to its container. Use it in narrow layouts
-            such as forms, dialogs, and mobile sheets.
-          </>
-        }
+        title={t(m.btnEx4Title)}
+        description={prose(t(m.btnEx4Desc))}
         code={`<Button fullWidth>Create account</Button>
 <Button variant={Variant.Soft} fullWidth>
   Sign in instead
 </Button>`}
       >
         <Stack gap={4} maxWidth="xs" width="full">
-          <Button fullWidth>Create account</Button>
+          <Button fullWidth>{t(m.btnDemoCreate)}</Button>
           <Button variant={Variant.Soft} fullWidth>
-            Sign in instead
+            {t(m.btnDemoSignIn)}
           </Button>
         </Stack>
       </Example>
 
       <Example
-        title="IconButton"
-        description={
-          <>
-            A square button for a single icon. <code>aria-label</code> is required because there is
-            no visible text. The default variant is <code>ghost</code>.
-          </>
-        }
+        title={t(m.btnIconButton)}
+        description={prose(t(m.btnEx5Desc))}
+        component="IconButton"
+        render={(K) => (
+          <Row gap={4} wrap>
+            <K.IconButton aria-label={t(m.buttonAddItem)}>{plusIcon}</K.IconButton>
+            <K.IconButton aria-label={t(m.buttonAddItem)} variant={Variant.Solid}>
+              {plusIcon}
+            </K.IconButton>
+            <K.IconButton aria-label={t(m.buttonAddItem)} variant={Variant.Outline} size={Size.Small}>
+              {plusIcon}
+            </K.IconButton>
+            <K.IconButton aria-label={t(m.buttonAddItem)} variant={Variant.Soft} size={Size.Large}>
+              {plusIcon}
+            </K.IconButton>
+          </Row>
+        )}
         code={`import { Plus } from '@glacier/icons';
 
 <IconButton aria-label="Add item"><Plus size={16} /></IconButton>
 <IconButton aria-label="Add item" variant={Variant.Solid}><Plus size={16} /></IconButton>
 <IconButton aria-label="Add item" variant={Variant.Outline} size={Size.Small}><Plus size={16} /></IconButton>
 <IconButton aria-label="Add item" variant={Variant.Soft} size={Size.Large}><Plus size={16} /></IconButton>`}
-      >
-        <Row gap={4} wrap>
-          <IconButton aria-label="Add item">{plusIcon}</IconButton>
-          <IconButton aria-label="Add item" variant={Variant.Solid}>
-            {plusIcon}
-          </IconButton>
-          <IconButton aria-label="Add item" variant={Variant.Outline} size={Size.Small}>
-            {plusIcon}
-          </IconButton>
-          <IconButton aria-label="Add item" variant={Variant.Soft} size={Size.Large}>
-            {plusIcon}
-          </IconButton>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description="The skeleton prop renders a placeholder with the button's exact geometry, so nothing shifts when the real control mounts."
+        title={t(m.exSkeleton)}
+        description={t(m.btnEx6Desc)}
         code={`<Button skeleton />
 <Button skeleton size={Size.Large} />
 <Button skeleton fullWidth />
@@ -168,133 +148,103 @@ export function ButtonPage() {
       >
         <Button skeleton />
         <Button skeleton size={Size.Large} />
-        <IconButton skeleton aria-label="Add item" />
+        <IconButton skeleton aria-label={t(m.buttonAddItem)} />
       </Example>
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
 
-      <Heading level={3}>Button</Heading>
+      <Heading level={3}>{t(m.btnName)}</Heading>
       <PropsTable
         props={[
           {
             name: 'variant',
             type: "'solid' | 'soft' | 'outline' | 'ghost' | 'glass' | 'danger'",
             default: "'solid'",
-            description: 'Visual emphasis. glass is a translucent blurred material.',
+            description: t(m.btnPropVariant),
           },
           {
             name: 'size',
             type: "'sm' | 'md' | 'lg'",
             default: "'md'",
-            description: 'Control height and padding, shared with the other form controls.',
+            description: t(m.btnPropSize),
           },
           {
             name: 'loading',
             type: 'boolean',
             default: 'false',
-            description: 'Shows a spinner and disables the button while pending.',
+            description: t(m.btnPropLoading),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: "Renders a placeholder with the component's exact geometry.",
+            description: t(m.btnPropSkeleton),
           },
           {
             name: 'fullWidth',
             type: 'boolean',
             default: 'false',
-            description: 'Stretches the button to fill its container.',
+            description: t(m.btnPropFullWidth),
           },
           {
             name: 'disabled',
             type: 'boolean',
             default: 'false',
-            description: 'Disables the button. All other native button props are forwarded.',
+            description: t(m.btnPropDisabled),
           },
         ]}
       />
 
-      <Heading level={3}>IconButton</Heading>
+      <Heading level={3}>{t(m.btnIconButton)}</Heading>
       <PropsTable
         props={[
           {
             name: 'aria-label',
             type: 'string',
-            description: 'Required. Names the control for assistive technology.',
+            description: t(m.btnIbPropAriaLabel),
           },
           {
             name: 'variant',
             type: "'solid' | 'soft' | 'outline' | 'ghost' | 'glass' | 'danger'",
             default: "'ghost'",
-            description: 'Visual emphasis, same set as Button.',
+            description: t(m.btnIbPropVariant),
           },
           {
             name: 'size',
             type: "'sm' | 'md' | 'lg'",
             default: "'md'",
-            description: 'Square dimension matching the Button height scale.',
+            description: t(m.btnIbPropSize),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: "Renders a placeholder with the component's exact geometry.",
+            description: t(m.btnPropSkeleton),
           },
           {
             name: 'disabled',
             type: 'boolean',
             default: 'false',
-            description: 'Disables the button. All other native button props are forwarded.',
+            description: t(m.btnPropDisabled),
           },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          Both components render a native <code>button</code> element with{' '}
-          <code>type="button"</code>, so Enter and Space activate them and focus follows platform
-          conventions.
-        </li>
-        <li>
-          <code>loading</code> sets the native <code>disabled</code> attribute, which prevents
-          activation and removes the button from the tab order while pending. The spinner is{' '}
-          <code>aria-hidden</code>.
-        </li>
-        <li>
-          <code>IconButton</code> requires <code>aria-label</code> because it has no visible text.
-          Pass icons with <code>aria-hidden</code> so screen readers announce only the label.
-        </li>
-        <li>
-          The press micro-animation is skipped when <code>prefers-reduced-motion</code> is set, and
-          for disabled or loading buttons.
-        </li>
+        <li>{prose(t(m.btnA11y1))}</li>
+        <li>{prose(t(m.btnA11y2))}</li>
+        <li>{prose(t(m.btnA11y3))}</li>
+        <li>{prose(t(m.btnA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>
-          Use <code>solid</code> for the primary action and keep one primary action per view. Use{' '}
-          <code>soft</code> or <code>outline</code> for secondary actions next to it.
-        </li>
-        <li>
-          Use <code>ghost</code> for low-emphasis actions in dense areas such as toolbars and table
-          rows. Use <code>glass</code> only over imagery or other translucent surfaces where a
-          solid fill would look heavy.
-        </li>
-        <li>
-          Reserve <code>danger</code> for destructive actions, and pair it with a confirmation step
-          when the action cannot be undone.
-        </li>
-        <li>
-          Prefer <code>loading</code> over manually disabling the button during async work. It
-          keeps the label visible and communicates progress.
-        </li>
-        <li>
-          Use <code>IconButton</code> only when the icon meaning is unambiguous, for example close,
-          add, or settings. Otherwise use a <code>Button</code> with a text label.
-        </li>
+        <li>{prose(t(m.btnUse1))}</li>
+        <li>{prose(t(m.btnUse2))}</li>
+        <li>{prose(t(m.btnUse3))}</li>
+        <li>{prose(t(m.btnUse4))}</li>
+        <li>{prose(t(m.btnUse5))}</li>
       </ul>
     </>
   );

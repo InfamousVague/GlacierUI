@@ -1,39 +1,48 @@
-import { Carousel, Card, Heading, Text, Size, TextTone } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Carousel, Card, Heading, Text, Size, TextTone, useT } from '@glacier/react';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 const cards = ['Nebula', 'Aurora', 'Comet', 'Eclipse', 'Meridian', 'Quasar', 'Zephyr'];
 
-function DemoCard({ title }: { title: string }) {
-  return (
-    <Card style={{ width: '12rem' }}>
-      <Heading level={4}>{title}</Heading>
-      <Text tone={TextTone.Muted} size={Size.Small}>
-        A card in the strip.
-      </Text>
-    </Card>
-  );
-}
-
 export function CarouselPage() {
+  const t = useT();
+
+  function DemoCard({ title }: { title: string }) {
+    return (
+      <Card style={{ width: '12rem' }}>
+        <Heading level={4}>{title}</Heading>
+        <Text tone={TextTone.Muted} size={Size.Small}>
+          {t(m.carDemoCardText)}
+        </Text>
+      </Card>
+    );
+  }
+
   return (
     <>
-      <Heading level={1}>Carousel</Heading>
+      <Heading level={1}>{t(m.carName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A horizontal snap-scroll strip for arbitrary card children. It uses CSS scroll-snap for tidy
-        per-card stops, turns vertical wheel gestures into horizontal scroll, and can overlay prev/next
-        controls that appear only while the strip overflows.
+        {t(m.carLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.carAnatomyIntro)}</Text>
       <ComponentBlueprint specId="carousel" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="Drop any cards in as children. The strip scrolls horizontally and snaps to each card; the scrollbar is hidden."
+        title={t(m.exBasic)}
+        description={t(m.carEx1Desc)}
+        component="Carousel"
+        render={(K) => (
+          <K.Carousel aria-label={t(m.carAriaFeatured)}>
+            {cards.map((title) => (
+              <DemoCard key={title} title={title} />
+            ))}
+          </K.Carousel>
+        )}
         code={`import { Carousel, Card } from '@glacier/react';
 
 <Carousel aria-label="Featured">
@@ -41,73 +50,65 @@ export function CarouselPage() {
   <Card style={{ width: '12rem' }}>Aurora</Card>
   <Card style={{ width: '12rem' }}>Comet</Card>
 </Carousel>`}
-      >
-        <Carousel aria-label="Featured">
-          {cards.map((title) => (
-            <DemoCard key={title} title={title} />
-          ))}
-        </Carousel>
-      </Example>
+      />
 
       <Example
-        title="With controls"
-        description="Set showControls to overlay prev/next buttons. They appear only while the strip overflows and disable at each end."
+        title={t(m.carEx2Title)}
+        description={t(m.carEx2Desc)}
+        component="Carousel"
+        render={(K) => (
+          <K.Carousel showControls aria-label={t(m.carAriaFeaturedControls)}>
+            {cards.map((title) => (
+              <DemoCard key={title} title={title} />
+            ))}
+          </K.Carousel>
+        )}
         code={`<Carousel showControls aria-label="Featured">
   {items.map((item) => (
     <Card key={item.id} style={{ width: '12rem' }}>{item.title}</Card>
   ))}
 </Carousel>`}
-      >
-        <Carousel showControls aria-label="Featured with controls">
-          {cards.map((title) => (
-            <DemoCard key={title} title={title} />
-          ))}
-        </Carousel>
-      </Example>
+      />
 
       <Example
-        title="Custom gap"
-        description="Tune the space between cards with the gap prop - any CSS length or a space token."
+        title={t(m.carEx3Title)}
+        description={t(m.carEx3Desc)}
+        component="Carousel"
+        render={(K) => (
+          <K.Carousel gap="var(--glacier-space-6)" aria-label={t(m.carAriaRoomy)}>
+            {cards.map((title) => (
+              <DemoCard key={title} title={title} />
+            ))}
+          </K.Carousel>
+        )}
         code={`<Carousel gap="var(--glacier-space-6)" aria-label="Roomy">
   {/* cards */}
 </Carousel>`}
-      >
-        <Carousel gap="var(--glacier-space-6)" aria-label="Roomy strip">
-          {cards.map((title) => (
-            <DemoCard key={title} title={title} />
-          ))}
-        </Carousel>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'children', type: 'ReactNode', description: 'Required. The card children; each becomes a snap target that keeps its intrinsic width.' },
-          { name: 'showControls', type: 'boolean', default: 'false', description: 'Overlays prev/next controls that appear when the strip overflows and disable at each end.' },
-          { name: 'gap', type: 'string', default: "'var(--glacier-space-4)'", description: 'Space between cards; any CSS length or a space token.' },
-          { name: 'aria-label', type: 'string', description: 'Accessible name for the scrollable region.' },
-          { name: 'className', type: 'string', description: 'Extra class on the root wrapper.' },
+          { name: 'children', type: 'ReactNode', description: t(m.carPropChildren) },
+          { name: 'showControls', type: 'boolean', default: 'false', description: t(m.carPropShowControls) },
+          { name: 'gap', type: 'string', default: "'var(--glacier-space-4)'", description: t(m.carPropGap) },
+          { name: 'aria-label', type: 'string', description: t(m.carPropAriaLabel) },
+          { name: 'className', type: 'string', description: t(m.carPropClassName) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The track is a focusable <code>role="group"</code>, so keyboard users can Tab to it, scroll it with
-          the arrow keys, and reach cards that are off screen.
-        </li>
-        <li>
-          Prev/next controls are labelled IconButtons kept out of the tab order - the scroller is the keyboard
-          entry point - and they disable at each end.
-        </li>
-        <li>The scrollbar is visually hidden for a clean strip, but pointer, trackpad, and keyboard scrolling all remain available.</li>
+        <li>{prose(t(m.carA11y1))}</li>
+        <li>{t(m.carA11y2)}</li>
+        <li>{t(m.carA11y3)}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Give each card an explicit or intrinsic width; the strip does not stretch children to fill.</li>
-        <li>Always pass an <code>aria-label</code> describing the collection, e.g. "Featured shows".</li>
-        <li>Reach for controls on pointer-first surfaces with many items; a short strip can rely on native scroll alone.</li>
+        <li>{t(m.carUse1)}</li>
+        <li>{prose(t(m.carUse2))}</li>
+        <li>{t(m.carUse3)}</li>
       </ul>
     </>
   );

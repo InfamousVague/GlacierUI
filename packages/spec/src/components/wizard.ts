@@ -83,6 +83,7 @@ export const wizardSpec: ComponentSpec = {
     },
   ],
   // Painted on the panel when navigation moves focus into it, not on the host.
+  paint: { text: '$text' },
   focusRing: { ring: token('focus-ring'), offset: '2px' },
   tokens: [
     'text', 'danger-text', 'font-size-sm',

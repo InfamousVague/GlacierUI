@@ -42,6 +42,7 @@ export const menuSpec: ComponentSpec = {
   ],
   // keyboard focus paints the item with the hover fill; there is no outline
   // ring inside the panel (the menu suppresses its own outline)
+  paint: { background: '$glass-thick', text: '$text', border: '$glass-border' },
   focusRing: { ring: token('hover'), offset: '0' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   a11y: {

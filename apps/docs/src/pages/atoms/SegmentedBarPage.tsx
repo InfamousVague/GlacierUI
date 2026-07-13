@@ -1,26 +1,42 @@
-import { SegmentedBar, Stack, Text, Heading, Size, TextTone } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { SegmentedBar, Stack, Text, Heading, Size, TextTone, useT } from '@glacier/react';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 export function SegmentedBarPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Segmented Bar</Heading>
+      <Heading level={1}>{t(m.segName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A single proportional bar split into slices sized by share of the total, for a breakdown of
-        parts such as a storage or budget split. Unlike Meter, which is discrete equal pips for a
-        level, SegmentedBar shows a continuous composition.
+        {t(m.segLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.segAnatomyIntro)}</Text>
       <ComponentBlueprint specId="segmented-bar" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Proportional slices"
-        description="Each slice takes a width equal to its share of the total. The remaining track shows through as the background."
+        title={t(m.segEx1Title)}
+        description={t(m.segEx1Desc)}
+        component="SegmentedBar"
+        render={(K) => (
+          <Stack gap={4} maxWidth="xs" width="full">
+            <K.SegmentedBar
+              aria-label={t(m.segmentedbarStorageByType)}
+              data={[
+                { value: 40, tone: 'accent', label: t(m.segmentedbarPhotos) },
+                { value: 25, tone: 'success', label: t(m.segmentedbarVideo) },
+                { value: 15, tone: 'warning', label: t(m.segmentedbarDocs) },
+              ]}
+            />
+            <Text size={Size.XSmall} tone={TextTone.Subtle}>
+              {t(m.segDemoUsage)}
+            </Text>
+          </Stack>
+        )}
         code={`import { SegmentedBar } from '@glacier/react';
 
 <SegmentedBar
@@ -31,25 +47,23 @@ export function SegmentedBarPage() {
     { value: 15, tone: 'warning', label: 'Docs' },
   ]}
 />`}
-      >
-        <Stack gap={4} maxWidth="xs" width="full">
-          <SegmentedBar
-            aria-label="Storage by type"
-            data={[
-              { value: 40, tone: 'accent', label: 'Photos' },
-              { value: 25, tone: 'success', label: 'Video' },
-              { value: 15, tone: 'warning', label: 'Docs' },
-            ]}
-          />
-          <Text size={Size.XSmall} tone={TextTone.Subtle}>
-            80 of 100 GB used
-          </Text>
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Neutral remainder"
-        description="A neutral slice renders in the track color, which reads as unused or unallocated space alongside the colored parts."
+        title={t(m.segEx2Title)}
+        description={t(m.segEx2Desc)}
+        component="SegmentedBar"
+        render={(K) => (
+          <Stack gap={4} maxWidth="xs" width="full">
+            <K.SegmentedBar
+              aria-label={t(m.segmentedbarBudgetSpent)}
+              data={[
+                { value: 60, tone: 'accent', label: t(m.segmentedbarSpent) },
+                { value: 40, tone: 'neutral', label: t(m.segmentedbarRemaining) },
+              ]}
+            />
+          </Stack>
+        )}
         code={`<SegmentedBar
   aria-label="Budget spent"
   data={[
@@ -57,88 +71,76 @@ export function SegmentedBarPage() {
     { value: 40, tone: 'neutral', label: 'Remaining' },
   ]}
 />`}
-      >
-        <Stack gap={4} maxWidth="xs" width="full">
-          <SegmentedBar
-            aria-label="Budget spent"
-            data={[
-              { value: 60, tone: 'accent', label: 'Spent' },
-              { value: 40, tone: 'neutral', label: 'Remaining' },
-            ]}
-          />
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Sizes and square ends"
-        description="size sets the thickness, and rounded toggles the full-radius ends. Slices with a value of 0 are omitted."
+        title={t(m.segEx3Title)}
+        description={t(m.segEx3Desc)}
+        component="SegmentedBar"
+        render={(K) => (
+          <Stack gap={4} maxWidth="xs" width="full">
+            <K.SegmentedBar
+              aria-label={t(m.segmentedbarSmallBreakdown)}
+              size={Size.Small}
+              data={[
+                { value: 50, tone: 'success' },
+                { value: 30, tone: 'warning' },
+                { value: 20, tone: 'danger' },
+              ]}
+            />
+            <K.SegmentedBar
+              aria-label={t(m.segmentedbarSquareBreakdown)}
+              rounded={false}
+              data={[
+                { value: 50, tone: 'success' },
+                { value: 30, tone: 'warning' },
+                { value: 20, tone: 'danger' },
+              ]}
+            />
+          </Stack>
+        )}
         code={`<SegmentedBar aria-label="Small" size={Size.Small} data={data} />
 <SegmentedBar aria-label="Square" rounded={false} data={data} />`}
-      >
-        <Stack gap={4} maxWidth="xs" width="full">
-          <SegmentedBar
-            aria-label="Small breakdown"
-            size={Size.Small}
-            data={[
-              { value: 50, tone: 'success' },
-              { value: 30, tone: 'warning' },
-              { value: 20, tone: 'danger' },
-            ]}
-          />
-          <SegmentedBar
-            aria-label="Square breakdown"
-            rounded={false}
-            data={[
-              { value: 50, tone: 'success' },
-              { value: 30, tone: 'warning' },
-              { value: 20, tone: 'danger' },
-            ]}
-          />
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description="The skeleton prop reserves a full-width bar at the same thickness, so the row holds its space while data loads."
+        title={t(m.exSkeleton)}
+        description={t(m.segEx4Desc)}
+        component="SegmentedBar"
+        render={(K) => (
+          <Stack gap={4} maxWidth="xs" width="full">
+            <K.SegmentedBar skeleton data={[]} />
+            <K.SegmentedBar skeleton size={Size.Small} data={[]} />
+          </Stack>
+        )}
         code={`<SegmentedBar skeleton data={[]} />
 <SegmentedBar skeleton size={Size.Small} data={[]} />`}
-      >
-        <Stack gap={4} maxWidth="xs" width="full">
-          <SegmentedBar skeleton data={[]} />
-          <SegmentedBar skeleton size={Size.Small} data={[]} />
-        </Stack>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'data', type: 'Array<{ value: number; tone?: SegmentedBarTone; label?: string }>', description: 'Slices sized by proportion of the total. Zero-value slices are omitted.' },
-          { name: 'size', type: "'sm' | 'md'", default: "'md'", description: 'Bar thickness: sm 0.375rem, md 0.625rem.' },
-          { name: 'rounded', type: 'boolean', default: 'true', description: 'Round the bar ends with a full radius.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: "Renders a placeholder with the component's exact geometry." },
-          { name: 'aria-label', type: 'string', description: 'Accessible name. Falls back to a generated breakdown of the slices.' },
+          { name: 'data', type: 'Array<{ value: number; tone?: SegmentedBarTone; label?: string }>', description: t(m.segPropData) },
+          { name: 'size', type: "'sm' | 'md'", default: "'md'", description: t(m.segPropSize) },
+          { name: 'rounded', type: 'boolean', default: 'true', description: t(m.segPropRounded) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.segPropSkeleton) },
+          { name: 'aria-label', type: 'string', description: t(m.segPropAriaLabel) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          SegmentedBar renders <code>role="img"</code> with an <code>aria-label</code>. Without one,
-          it generates a summary of the slice percentages.
-        </li>
-        <li>Label each slice in the data so the generated summary reads meaningfully.</li>
-        <li>
-          Tone alone should not carry meaning; pair the bar with a legend or the numbers it
-          summarizes.
-        </li>
+        <li>{prose(t(m.segA11y1))}</li>
+        <li>{t(m.segA11y2)}</li>
+        <li>{t(m.segA11y3)}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use SegmentedBar for a continuous breakdown of parts of a whole, like a storage or budget split.</li>
-        <li>Use Meter instead for a single level shown as discrete equal pips, such as password strength.</li>
-        <li>Give the neutral tone to a remainder or unallocated slice so it recedes into the track.</li>
-        <li>Keep the slice count low so each share stays wide enough to read.</li>
+        <li>{t(m.segUse1)}</li>
+        <li>{t(m.segUse2)}</li>
+        <li>{t(m.segUse3)}</li>
+        <li>{t(m.segUse4)}</li>
       </ul>
     </>
   );

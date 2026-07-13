@@ -17,6 +17,8 @@ export const breadcrumbsSpec: ComponentSpec = {
     { name: 'separator', type: 'element', default: '/', description: 'Separator rendered between items.' },
   ],
   defaults: { separator: '/' },
+  // the links and separators paint
+  paint: {},
   a11y: {
     role: 'navigation',
     focusable: false,

@@ -45,6 +45,7 @@ export const tabbedPanelSpec: ComponentSpec = {
   // .tab:focus-visible and .body:focus-visible both draw a 2px focus-ring
   // outline inset by 2px (outline-offset: -2px) so it survives the panel's
   // overflow clipping.
+  paint: { background: '$surface-raised', text: '$text', border: '$border-subtle' },
   focusRing: { ring: token('focus-ring'), offset: '-2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

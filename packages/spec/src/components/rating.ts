@@ -39,6 +39,7 @@ export const ratingSpec: ComponentSpec = {
     { name: 'haptic', description: 'Scrubbing the pointer across the stars fires a selection tick each time the previewed star changes (the preview falling back to the committed value on pointer leave is silent), committing a value with a click fires light, and keyboard arrows tick selection per change; data-haptic="none" opts the rating out.', behavioral: true },
   ],
   // a 2px outline on the focused star cell; it paints accent-solid, not the shared focus-ring token
+  paint: { text: '$warning-solid' },
   focusRing: { ring: token('accent-solid'), offset: '2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: ['warning-solid', 'border-strong', 'accent-solid', 'radius-sm', 'duration-fast', 'ease-out'],

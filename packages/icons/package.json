@@ -3,9 +3,21 @@
   "version": "0.1.0",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "react-native": "./src/index.native.ts",
+      "default": "./src/index.ts"
+    }
   },
   "dependencies": {
-    "lucide-react": "^1.23.0"
+    "lucide-react": "^1.23.0",
+    "lucide-react-native": "^1.23.0"
+  },
+  "peerDependencies": {
+    "react-native-svg": "*"
+  },
+  "peerDependenciesMeta": {
+    "react-native-svg": {
+      "optional": true
+    }
   }
 }

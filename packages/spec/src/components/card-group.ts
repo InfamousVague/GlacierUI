@@ -119,6 +119,8 @@ export const cardGroupSpec: ComponentSpec = {
         'skeletonCount rounded rect placeholders (radius-xl, 8rem tall) fill the same tracks as the live cards, so columns and gaps do not shift when content arrives. The whole group is aria-hidden.',
     },
   ],
+  // the grouped cards paint
+  paint: {},
   tokens: ['space-2', 'space-3', 'space-4', 'space-6', 'radius-xl'],
   a11y: {
     focusable: false,

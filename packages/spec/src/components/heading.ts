@@ -27,6 +27,7 @@ export const headingSpec: ComponentSpec = {
     { name: 'h6', fontSize: token('font-size-sm') },
   ],
   defaults: { level: 2, skeleton: false },
+  paint: { text: '$text' },
   tokens: [
     'font-sans', 'font-weight-semibold', 'font-weight-bold', 'text', 'text-subtle',
     'font-size-3xl', 'font-size-2xl', 'font-size-xl', 'font-size-lg', 'font-size-md', 'font-size-sm',

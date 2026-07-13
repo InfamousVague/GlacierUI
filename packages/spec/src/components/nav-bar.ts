@@ -94,6 +94,8 @@ export const navBarSpec: ComponentSpec = {
     { name: 'disabled', description: 'Halved opacity, not-allowed cursor, and hover suppressed.' },
   ],
   // 2px focus-ring outline inset into the item (outline-offset: -2px)
+  // the nav items paint
+  paint: {},
   focusRing: { ring: token('focus-ring'), offset: '-2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

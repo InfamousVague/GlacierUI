@@ -218,7 +218,7 @@ export function TimeSeriesChart({
           series: [
             {},
             ...series.map((s, i) => {
-              const [ink, soft] = theme.tone(tones[i]);
+              const [ink, soft] = theme.tone(tones[i] ?? 'accent');
               return {
                 label: s.label,
                 stroke: ink,
@@ -290,7 +290,7 @@ export function TimeSeriesChart({
         <div className={styles.readout} data-active={readoutIdx !== null || undefined} aria-hidden="true">
           {readoutIdx !== null && (
             <>
-              <span className={styles.readoutTime}>{formatTime(times[readoutIdx])}</span>
+              <span className={styles.readoutTime}>{formatTime(times[readoutIdx] ?? 0)}</span>
               {series.map(
                 (s, i) =>
                   !hidden.has(s.id) && (

@@ -69,6 +69,7 @@ export const otpFieldSpec: ComponentSpec = {
     },
   ],
   // a 3px accent-soft glow hugging the active cell border, which itself turns focus-ring
+  paint: { background: '$surface', text: '$text', border: '$border' },
   focusRing: { ring: token('accent-soft'), offset: '0' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

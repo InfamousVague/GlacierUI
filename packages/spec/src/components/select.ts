@@ -72,6 +72,7 @@ export const selectSpec: ComponentSpec = {
     { name: 'option-disabled', description: 'A non-selectable option dims and shows a not-allowed cursor.', tokens: { text: token('text-disabled') } },
   ],
   // a 3px accent-soft glow hugging the trigger border, which itself turns focus-ring (shared by focus-visible and open)
+  paint: { background: '$surface', text: '$text', border: '$border' },
   focusRing: { ring: token('accent-soft'), offset: '0' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

@@ -33,6 +33,7 @@ export const textareaSpec: ComponentSpec = {
     { name: 'invalid', description: 'aria-invalid recolors the border to danger; on focus the ring turns danger.', paint: { border: token('danger-border') }, tokens: { ring: token('danger-soft') } },
   ],
   // a 3px accent-soft glow hugging the border, which itself turns focus-ring
+  paint: { background: '$surface', text: '$text', border: '$border' },
   focusRing: { ring: token('accent-soft'), offset: '0' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

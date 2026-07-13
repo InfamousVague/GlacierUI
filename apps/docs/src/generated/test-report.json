@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-11T03:14:35.732Z",
+  "generatedAt": "2026-07-12T01:16:10.719Z",
   "vitest": {
-    "total": 820,
-    "passed": 820,
+    "total": 936,
+    "passed": 936,
     "failed": 0,
     "skipped": 0,
-    "files": 205,
+    "files": 222,
     "success": true,
-    "durationMs": 24935,
+    "durationMs": 26528,
     "projects": {
       "tokens": {
         "files": 3,
@@ -18,15 +18,15 @@
       },
       "spec": {
         "files": 2,
-        "tests": 33,
-        "passed": 33,
+        "tests": 34,
+        "passed": 34,
         "failed": 0,
         "skipped": 0
       },
       "react": {
-        "files": 69,
-        "tests": 752,
-        "passed": 752,
+        "files": 76,
+        "tests": 867,
+        "passed": 867,
         "failed": 0,
         "skipped": 0
       }
@@ -255,38 +255,38 @@
     {
       "pair": "text-subtle on bg",
       "theme": "light",
-      "foreground": "oklch(0.627 0.012 260)",
+      "foreground": "oklch(0.535 0.012 260)",
       "background": "oklch(0.993 0.0007 260)",
-      "ratio": 3.47,
+      "ratio": 5.06,
       "required": 4.5,
-      "passes": false
+      "passes": true
     },
     {
       "pair": "text-subtle on surface",
       "theme": "light",
-      "foreground": "oklch(0.627 0.012 260)",
+      "foreground": "oklch(0.535 0.012 260)",
       "background": "oklch(0.995 0 0)",
-      "ratio": 3.49,
+      "ratio": 5.09,
       "required": 4.5,
-      "passes": false
+      "passes": true
     },
     {
       "pair": "text-subtle on surface-raised",
       "theme": "light",
-      "foreground": "oklch(0.627 0.012 260)",
+      "foreground": "oklch(0.535 0.012 260)",
       "background": "oklch(0.995 0 0)",
-      "ratio": 3.49,
+      "ratio": 5.09,
       "required": 4.5,
-      "passes": false
+      "passes": true
     },
     {
       "pair": "text-subtle on surface-sunken",
       "theme": "light",
-      "foreground": "oklch(0.627 0.012 260)",
+      "foreground": "oklch(0.535 0.012 260)",
       "background": "oklch(0.96 0.003 260)",
-      "ratio": 3.15,
+      "ratio": 4.6,
       "required": 4.5,
-      "passes": false
+      "passes": true
     },
     {
       "pair": "danger-text on danger-soft",
@@ -543,37 +543,37 @@
       {
         "id": "heading",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "label",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "link",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "kbd",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "icon",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "code-block",
         "missing": [],
-        "checks": 1,
+        "checks": 2,
         "completeness": 1
       },
       {
@@ -591,61 +591,61 @@
       {
         "id": "toggle",
         "missing": [],
-        "checks": 11,
+        "checks": 12,
         "completeness": 1
       },
       {
         "id": "input",
         "missing": [],
-        "checks": 10,
+        "checks": 11,
         "completeness": 1
       },
       {
         "id": "textarea",
         "missing": [],
-        "checks": 4,
+        "checks": 5,
         "completeness": 1
       },
       {
         "id": "number-input",
         "missing": [],
-        "checks": 5,
+        "checks": 6,
         "completeness": 1
       },
       {
         "id": "search-field",
         "missing": [],
-        "checks": 10,
+        "checks": 11,
         "completeness": 1
       },
       {
         "id": "checkbox",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "radio",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "radio-card",
         "missing": [],
-        "checks": 4,
+        "checks": 5,
         "completeness": 1
       },
       {
         "id": "switch",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "slider",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
@@ -669,7 +669,7 @@
       {
         "id": "avatar",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
@@ -723,7 +723,7 @@
       {
         "id": "empty-state",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
@@ -747,37 +747,37 @@
       {
         "id": "divider",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "field",
         "missing": [],
-        "checks": 2,
+        "checks": 3,
         "completeness": 1
       },
       {
         "id": "select",
         "missing": [],
-        "checks": 9,
+        "checks": 10,
         "completeness": 1
       },
       {
         "id": "segmented-control",
         "missing": [],
-        "checks": 4,
+        "checks": 5,
         "completeness": 1
       },
       {
         "id": "tabs",
         "missing": [],
-        "checks": 4,
+        "checks": 5,
         "completeness": 1
       },
       {
         "id": "tooltip",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
@@ -789,163 +789,163 @@
       {
         "id": "modal",
         "missing": [],
-        "checks": 2,
+        "checks": 3,
         "completeness": 1
       },
       {
         "id": "popover",
         "missing": [],
-        "checks": 2,
+        "checks": 3,
         "completeness": 1
       },
       {
         "id": "menu",
         "missing": [],
-        "checks": 6,
+        "checks": 7,
         "completeness": 1
       },
       {
         "id": "app-shell",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "stat-tile",
         "missing": [],
-        "checks": 1,
+        "checks": 2,
         "completeness": 1
       },
       {
         "id": "device-frame",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "filter-chip",
         "missing": [],
-        "checks": 9,
+        "checks": 10,
         "completeness": 1
       },
       {
         "id": "image",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "rating",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "otp-field",
         "missing": [],
-        "checks": 4,
+        "checks": 5,
         "completeness": 1
       },
       {
         "id": "scroll-area",
         "missing": [],
-        "checks": 4,
+        "checks": 5,
         "completeness": 1
       },
       {
         "id": "carousel",
         "missing": [],
-        "checks": 1,
+        "checks": 2,
         "completeness": 1
       },
       {
         "id": "combobox",
         "missing": [],
-        "checks": 14,
+        "checks": 15,
         "completeness": 1
       },
       {
         "id": "multi-select",
         "missing": [],
-        "checks": 14,
+        "checks": 15,
         "completeness": 1
       },
       {
         "id": "calendar",
         "missing": [],
-        "checks": 6,
+        "checks": 7,
         "completeness": 1
       },
       {
         "id": "date-picker",
         "missing": [],
-        "checks": 13,
+        "checks": 14,
         "completeness": 1
       },
       {
         "id": "file-upload",
         "missing": [],
-        "checks": 5,
+        "checks": 6,
         "completeness": 1
       },
       {
         "id": "fieldset",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "form-section",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "list",
         "missing": [],
-        "checks": 1,
+        "checks": 2,
         "completeness": 1
       },
       {
         "id": "list-item",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "heatmap",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "breadcrumbs",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "pagination",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "accordion",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "table",
         "missing": [],
-        "checks": 0,
+        "checks": 1,
         "completeness": 1
       },
       {
         "id": "drawer",
         "missing": [],
-        "checks": 2,
+        "checks": 3,
         "completeness": 1
       },
       {
@@ -957,83 +957,131 @@
       {
         "id": "spotlight",
         "missing": [],
-        "checks": 1,
+        "checks": 2,
         "completeness": 1
       },
       {
         "id": "floating-panel",
         "missing": [],
-        "checks": 1,
+        "checks": 2,
         "completeness": 1
       },
       {
         "id": "tabbed-panel",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "tabbed-modal",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "tab-strip",
         "missing": [],
-        "checks": 5,
+        "checks": 6,
         "completeness": 1
       },
       {
         "id": "tree-view",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "data-grid",
         "missing": [],
-        "checks": 4,
+        "checks": 5,
         "completeness": 1
       },
       {
         "id": "resizable-split-pane",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "sidebar",
         "missing": [],
-        "checks": 3,
+        "checks": 4,
         "completeness": 1
       },
       {
         "id": "toolbar",
         "missing": [],
-        "checks": 2,
+        "checks": 3,
         "completeness": 1
       },
       {
         "id": "nav-bar",
         "missing": [],
-        "checks": 4,
+        "checks": 5,
         "completeness": 1
       },
       {
         "id": "title-bar",
         "missing": [],
+        "checks": 3,
+        "completeness": 1
+      },
+      {
+        "id": "page-header",
+        "missing": [],
+        "checks": 1,
+        "completeness": 1
+      },
+      {
+        "id": "section",
+        "missing": [],
         "checks": 2,
+        "completeness": 1
+      },
+      {
+        "id": "card-group",
+        "missing": [],
+        "checks": 1,
+        "completeness": 1
+      },
+      {
+        "id": "timeline",
+        "missing": [],
+        "checks": 6,
+        "completeness": 1
+      },
+      {
+        "id": "wizard",
+        "missing": [],
+        "checks": 2,
+        "completeness": 1
+      },
+      {
+        "id": "sparkline",
+        "missing": [],
+        "checks": 7,
+        "completeness": 1
+      },
+      {
+        "id": "timeline-scrubber",
+        "missing": [],
+        "checks": 6,
+        "completeness": 1
+      },
+      {
+        "id": "time-series-chart",
+        "missing": [],
+        "checks": 12,
         "completeness": 1
       }
     ],
-    "checks": 345,
+    "checks": 445,
     "missing": 0,
     "completeness": 1
   },
   "axe": {
-    "testFiles": 69,
-    "axeTestFiles": 58,
-    "axeAssertions": 68
+    "testFiles": 76,
+    "axeTestFiles": 64,
+    "axeAssertions": 76
   }
 }

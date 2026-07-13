@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import { Button, Pill, Row, Stack, Text, Heading, Size, TextTone, Tone, Variant } from '@glacier/react';
+import { Button, Pill, Row, Stack, Text, Heading, Size, TextTone, Tone, Variant, useT } from '@glacier/react';
 import { BookOpen, Hash } from '@glacier/icons';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 const GENRES = ['Fiction', 'History', 'Sci-Fi', 'Poetry'];
 
 function RemovableTags() {
+  const t = useT();
   const [tags, setTags] = useState(GENRES);
   return (
     <Row gap={4} wrap>
@@ -17,7 +19,7 @@ function RemovableTags() {
       ))}
       {tags.length === 0 && (
         <Button variant={Variant.Ghost} size={Size.Small} onClick={() => setTags(GENRES)}>
-          Reset
+          {t(m.pillReset)}
         </Button>
       )}
     </Row>
@@ -25,31 +27,34 @@ function RemovableTags() {
 }
 
 export function PillPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Pill</Heading>
+      <Heading level={1}>{t(m.pillName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A small inline label for statuses, counts, and categories, with an optional leading icon and
-        an optional remove button that turns it into a dismissible tag. Non-interactive by default -
-        for anything the user activates on its own, use a Button.
+        {prose(t(m.pillLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.pillAnatomyIntro)}</Text>
       <ComponentBlueprint specId="pill" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Tones"
-        description={
-          <>
-            Six tones map to the semantic color ramps. <code>neutral</code> is the default and fits
-            most metadata. The others carry meaning: <code>success</code>, <code>warning</code>, and{' '}
-            <code>danger</code> report state, <code>accent</code> and <code>info</code> highlight and
-            annotate.
-          </>
-        }
+        title={t(m.secTones)}
+        description={prose(t(m.pillEx1Desc))}
+        component="Pill"
+        render={(K) => (
+          <Row gap={4} wrap>
+            <K.Pill>{t(m.pillNeutral)}</K.Pill>
+            <K.Pill tone={Tone.Accent}>{t(m.pillAccent)}</K.Pill>
+            <K.Pill tone={Tone.Success}>{t(m.pillSuccess)}</K.Pill>
+            <K.Pill tone={Tone.Warning}>{t(m.pillWarning)}</K.Pill>
+            <K.Pill tone={Tone.Danger}>{t(m.pillDanger)}</K.Pill>
+            <K.Pill tone={Tone.Info}>{t(m.pillInfo)}</K.Pill>
+          </Row>
+        )}
         code={`import { Pill } from '@glacier/react';
 
 <Pill>Neutral</Pill>
@@ -58,26 +63,38 @@ export function PillPage() {
 <Pill tone={Tone.Warning}>Warning</Pill>
 <Pill tone={Tone.Danger}>Danger</Pill>
 <Pill tone={Tone.Info}>Info</Pill>`}
-      >
-        <Row gap={4} wrap>
-          <Pill>Neutral</Pill>
-          <Pill tone={Tone.Accent}>Accent</Pill>
-          <Pill tone={Tone.Success}>Success</Pill>
-          <Pill tone={Tone.Warning}>Warning</Pill>
-          <Pill tone={Tone.Danger}>Danger</Pill>
-          <Pill tone={Tone.Info}>Info</Pill>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Variants"
-        description={
-          <>
-            Three variants set the emphasis. <code>soft</code> is the default tinted fill,{' '}
-            <code>solid</code> uses the full tone color, and <code>outline</code> keeps only a
-            border. Every variant works with every tone.
-          </>
-        }
+        title={t(m.secVariants)}
+        description={prose(t(m.pillEx2Desc))}
+        component="Pill"
+        render={(K) => (
+          <Stack gap={4}>
+            <Row gap={4} wrap>
+              <K.Pill tone={Tone.Accent} variant={Variant.Soft}>
+                {t(m.pillSoft)}
+              </K.Pill>
+              <K.Pill tone={Tone.Accent} variant={Variant.Solid}>
+                {t(m.pillSolid)}
+              </K.Pill>
+              <K.Pill tone={Tone.Accent} variant={Variant.Outline}>
+                {t(m.pillOutline)}
+              </K.Pill>
+            </Row>
+            <Row gap={4} wrap>
+              <K.Pill tone={Tone.Danger} variant={Variant.Soft}>
+                {t(m.pillSoft)}
+              </K.Pill>
+              <K.Pill tone={Tone.Danger} variant={Variant.Solid}>
+                {t(m.pillSolid)}
+              </K.Pill>
+              <K.Pill tone={Tone.Danger} variant={Variant.Outline}>
+                {t(m.pillOutline)}
+              </K.Pill>
+            </Row>
+          </Stack>
+        )}
         code={`<Pill tone={Tone.Accent} variant={Variant.Soft}>Soft</Pill>
 <Pill tone={Tone.Accent} variant={Variant.Solid}>Solid</Pill>
 <Pill tone={Tone.Accent} variant={Variant.Outline}>Outline</Pill>
@@ -85,89 +102,53 @@ export function PillPage() {
 <Pill tone={Tone.Danger} variant={Variant.Soft}>Soft</Pill>
 <Pill tone={Tone.Danger} variant={Variant.Solid}>Solid</Pill>
 <Pill tone={Tone.Danger} variant={Variant.Outline}>Outline</Pill>`}
-      >
-        <Stack gap={4}>
-          <Row gap={4} wrap>
-            <Pill tone={Tone.Accent} variant={Variant.Soft}>
-              Soft
-            </Pill>
-            <Pill tone={Tone.Accent} variant={Variant.Solid}>
-              Solid
-            </Pill>
-            <Pill tone={Tone.Accent} variant={Variant.Outline}>
-              Outline
-            </Pill>
-          </Row>
-          <Row gap={4} wrap>
-            <Pill tone={Tone.Danger} variant={Variant.Soft}>
-              Soft
-            </Pill>
-            <Pill tone={Tone.Danger} variant={Variant.Solid}>
-              Solid
-            </Pill>
-            <Pill tone={Tone.Danger} variant={Variant.Outline}>
-              Outline
-            </Pill>
-          </Row>
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Sizes"
-        description={
-          <>
-            Two sizes. <code>md</code> is the default. Use <code>sm</code> inside table rows, list
-            items, and other tight lines of text.
-          </>
-        }
+        title={t(m.secSizes)}
+        description={prose(t(m.pillEx3Desc))}
+        component="Pill"
+        render={(K) => (
+          <Row gap={4} wrap>
+            <K.Pill size={Size.Small} tone={Tone.Info}>
+              {t(m.pillSm)}
+            </K.Pill>
+            <K.Pill size={Size.Medium} tone={Tone.Info}>
+              {t(m.pillMd)}
+            </K.Pill>
+            <K.Pill size={Size.Small} tone={Tone.Accent} variant={Variant.Solid}>
+              {t(m.pillX3New)}
+            </K.Pill>
+          </Row>
+        )}
         code={`<Pill size={Size.Small} tone={Tone.Info}>sm</Pill>
 <Pill size={Size.Medium} tone={Tone.Info}>md</Pill>
 <Pill size={Size.Small} tone={Tone.Accent} variant={Variant.Solid}>3 new</Pill>`}
-      >
-        <Row gap={4} wrap>
-          <Pill size={Size.Small} tone={Tone.Info}>
-            sm
-          </Pill>
-          <Pill size={Size.Medium} tone={Tone.Info}>
-            md
-          </Pill>
-          <Pill size={Size.Small} tone={Tone.Accent} variant={Variant.Solid}>
-            3 new
-          </Pill>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Icon"
-        description={
-          <>
-            Add a leading <code>icon</code> to categorize a pill. The icon is decorative and hidden
-            from assistive tech, so the label still carries the meaning.
-          </>
-        }
+        title={t(m.pillEx4Title)}
+        description={prose(t(m.pillEx4Desc))}
+        component="Pill"
+        render={(K) => (
+          <Row gap={4} wrap>
+            <K.Pill icon={<Hash size={12} />} tone={Tone.Info}>
+              {t(m.pillTagged)}
+            </K.Pill>
+            <K.Pill icon={<BookOpen size={12} />} tone={Tone.Accent}>
+              {t(m.pillFiction)}
+            </K.Pill>
+          </Row>
+        )}
         code={`import { Hash, BookOpen } from '@glacier/icons';
 
 <Pill icon={<Hash size={12} />} tone={Tone.Info}>Tagged</Pill>
 <Pill icon={<BookOpen size={12} />} tone={Tone.Accent}>Fiction</Pill>`}
-      >
-        <Row gap={4} wrap>
-          <Pill icon={<Hash size={12} />} tone={Tone.Info}>
-            Tagged
-          </Pill>
-          <Pill icon={<BookOpen size={12} />} tone={Tone.Accent}>
-            Fiction
-          </Pill>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Removable tags"
-        description={
-          <>
-            Set <code>onRemove</code> to render a trailing dismiss button, turning a pill into a
-            removable tag. Wire it to state to build an editable set.
-          </>
-        }
+        title={t(m.pillEx5Title)}
+        description={prose(t(m.pillEx5Desc))}
         code={`const [tags, setTags] = useState(genres);
 
 {tags.map((tag) => (
@@ -180,13 +161,8 @@ export function PillPage() {
       </Example>
 
       <Example
-        title="Status row"
-        description={
-          <>
-            The most common composition: a name, a pill that reports state, and muted detail text.
-            The pill label carries the meaning, so the row stays readable without color.
-          </>
-        }
+        title={t(m.pillEx6Title)}
+        description={t(m.pillEx6Desc)}
         code={`<Row gap={4} wrap>
   <Text as="span" weight="medium">api-server</Text>
   <Pill tone={Tone.Success} size={Size.Small}>Build passing</Pill>
@@ -196,38 +172,32 @@ export function PillPage() {
         <Stack gap={4}>
           <Row gap={4} wrap>
             <Text as="span" weight="medium">
-              api-server
+              {t(m.pillApiServer)}
             </Text>
             <Pill tone={Tone.Success} size={Size.Small}>
-              Build passing
+              {t(m.pillDemoBuildPassing)}
             </Pill>
             <Text as="span" size={Size.Small} tone={TextTone.Muted}>
-              Deployed 4 minutes ago
+              {t(m.pillDemoDeployed)}
             </Text>
           </Row>
           <Row gap={4} wrap>
             <Text as="span" weight="medium">
-              worker-queue
+              {t(m.pillWorkerQueue)}
             </Text>
             <Pill tone={Tone.Warning} size={Size.Small}>
-              Degraded
+              {t(m.pillDegraded)}
             </Pill>
             <Text as="span" size={Size.Small} tone={TextTone.Muted}>
-              Retrying 3 jobs
+              {t(m.pillDemoRetrying)}
             </Text>
           </Row>
         </Stack>
       </Example>
 
       <Example
-        title="Skeleton"
-        description={
-          <>
-            <code>skeleton</code> renders a shimmer placeholder with the pill's height and full
-            radius, sized per <code>size</code>, so surrounding text does not shift when the label
-            loads.
-          </>
-        }
+        title={t(m.exSkeleton)}
+        description={prose(t(m.pillEx7Desc))}
         code={`<Pill skeleton size={Size.Small} />
 <Pill size={Size.Small} tone={Tone.Success}>Build passing</Pill>
 <Pill skeleton />
@@ -236,86 +206,65 @@ export function PillPage() {
         <Row gap={4} wrap>
           <Pill skeleton size={Size.Small} />
           <Pill size={Size.Small} tone={Tone.Success}>
-            Build passing
+            {t(m.pillDemoBuildPassing)}
           </Pill>
           <Pill skeleton />
-          <Pill tone={Tone.Info}>In review</Pill>
+          <Pill tone={Tone.Info}>{t(m.pillDemoInReview)}</Pill>
         </Row>
       </Example>
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
           {
             name: 'tone',
             type: "'neutral' | 'accent' | 'success' | 'warning' | 'danger' | 'info'",
             default: "'neutral'",
-            description: 'Semantic color of the pill.',
+            description: t(m.pillPropTone),
           },
           {
             name: 'variant',
             type: "'soft' | 'solid' | 'outline'",
             default: "'soft'",
-            description: 'Fill style: tinted background, full tone color, or border only.',
+            description: t(m.pillPropVariant),
           },
           {
             name: 'size',
             type: "'sm' | 'md'",
             default: "'md'",
-            description: 'Text size and padding. All other native span props are forwarded.',
+            description: t(m.pillPropSize),
           },
           {
             name: 'icon',
             type: 'ReactNode',
-            description: 'Leading glyph, hidden from assistive tech.',
+            description: t(m.pillPropIcon),
           },
           {
             name: 'onRemove',
             type: '() => void',
-            description:
-              'When set, renders a trailing remove button that calls this on click, turning the pill into a removable tag.',
+            description: t(m.pillPropOnRemove),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: "Renders a placeholder with the component's exact geometry.",
+            description: t(m.pillPropSkeleton),
           },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          Pill renders a plain <code>span</code> with no implicit role. Screen readers announce only
-          its text, so the label must state the status on its own. Do not rely on tone color to
-          carry meaning.
-        </li>
-        <li>
-          The pill itself is not focusable. Wrap content in a <code>Button</code> instead of adding a
-          click handler to the whole pill.
-        </li>
-        <li>
-          When <code>onRemove</code> is set, the remove control is a real <code>button</code> labeled
-          from the kit's translatable Dismiss message, focusable and operable with Enter and Space.
-        </li>
+        <li>{prose(t(m.pillA11y1))}</li>
+        <li>{prose(t(m.pillA11y2))}</li>
+        <li>{prose(t(m.pillA11y3))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>
-          Use pills for statuses, counts, and categories. Add <code>onRemove</code> only when the
-          user can actually remove the item. For anything the user activates, use a{' '}
-          <code>Button</code>.
-        </li>
-        <li>
-          Prefer <code>soft</code> in dense UI such as tables and lists. Reserve <code>solid</code>{' '}
-          for the one state per view that must stand out.
-        </li>
-        <li>
-          Keep pill labels to one or two words. Move detail into adjacent <code>Text</code>, as in
-          the status row example.
-        </li>
+        <li>{prose(t(m.pillUse1))}</li>
+        <li>{prose(t(m.pillUse2))}</li>
+        <li>{prose(t(m.pillUse3))}</li>
       </ul>
     </>
   );

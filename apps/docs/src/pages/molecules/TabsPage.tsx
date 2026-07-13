@@ -1,30 +1,73 @@
 import { Spring } from '@glacier/motion';
-import { Pill, Stack, Tabs, Text, Heading, Size, TextTone, Tone } from '@glacier/react';
+import { Pill, Stack, Text, Heading, Size, TextTone, Tone, useT } from '@glacier/react';
 import { useState } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { type PlatformKit } from '../../platforms.tsx';
+import { m } from '../../i18n.ts';
+
+/**
+ * A controlled Tabs demo. Selection is lifted into state here — not into the
+ * Example's `render` (which runs once per pane and cannot hold hooks) — so each
+ * comparison pane manages its own selection and the status line stays in sync.
+ * `K` is the platform kit (the DOM kit or the RN kit) the demo renders through.
+ */
+function TabsControlledDemo({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [section, setSection] = useState('activity');
+  return (
+    <Stack gap={4} style={{ width: '100%', maxWidth: '28rem' }}>
+      <K.Tabs
+        aria-label={t(m.tabsAriaProfile)}
+        value={section}
+        onValueChange={setSection}
+        tabs={[
+          { value: 'posts', label: t(m.tabsPosts), content: <Text>{t(m.tabsCtrlPosts)}</Text> },
+          { value: 'activity', label: t(m.tabsActivity), content: <Text>{t(m.tabsCtrlActivity)}</Text> },
+        ]}
+      />
+      <Text size={Size.XSmall} tone={TextTone.Subtle}>
+        {t(m.tabsActive)}{' '}
+        <Text as="span" size={Size.XSmall} mono>
+          {section}
+        </Text>
+      </Text>
+    </Stack>
+  );
+}
 
 export function TabsPage() {
-  const [section, setSection] = useState('activity');
+  const t = useT();
 
   return (
     <>
-      <Heading level={1}>Tabs</Heading>
+      <Heading level={1}>{t(m.tabsName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A tab menu for switching between content panels. The underline indicator is a shared
-        layout element, so it springs between tabs with the same physics as the segmented
-        control's thumb.
+        {t(m.tabsLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.tabsAnatomyIntro)}</Text>
       <ComponentBlueprint specId="tabs" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="Pass tabs with a value, label, and content. Arrow keys move and activate, wrapping at the ends."
+        title={t(m.exBasic)}
+        description={t(m.tabsEx1Desc)}
+        component="Tabs"
+        render={(K) => (
+          <div style={{ width: '100%', maxWidth: '28rem' }}>
+            <K.Tabs
+              aria-label={t(m.tabsAriaProjectSections)}
+              tabs={[
+                { value: 'overview', label: t(m.tabsOverview), content: <Text>{t(m.tabsBasicOverview)}</Text> },
+                { value: 'files', label: t(m.tabsFiles), content: <Text>{t(m.tabsBasicFiles)}</Text> },
+                { value: 'settings', label: t(m.tabsSettings), content: <Text>{t(m.tabsBasicSettings)}</Text> },
+              ]}
+            />
+          </div>
+        )}
         code={`import { Tabs } from '@glacier/react';
 
 <Tabs
@@ -35,22 +78,54 @@ export function TabsPage() {
     { value: 'settings', label: 'Settings', content: <Text>Configuration and access.</Text> },
   ]}
 />`}
-      >
-        <div style={{ width: '100%', maxWidth: '28rem' }}>
-          <Tabs
-            aria-label="Project sections"
-            tabs={[
-              { value: 'overview', label: 'Overview', content: <Text>The project at a glance.</Text> },
-              { value: 'files', label: 'Files', content: <Text>Everything checked in.</Text> },
-              { value: 'settings', label: 'Settings', content: <Text>Configuration and access.</Text> },
-            ]}
-          />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Rich labels"
-        description="Labels take any content, so counts and status ride along as Pills."
+        title={t(m.tabsEx2Title)}
+        description={t(m.tabsEx2Desc)}
+        component="Tabs"
+        render={(K) => (
+          <div style={{ width: '100%', maxWidth: '28rem' }}>
+            <K.Tabs
+              aria-label={t(m.tabsAriaInbox)}
+              tabs={[
+                {
+                  value: 'open',
+                  label: (
+                    <>
+                      {t(m.tabsOpen)}{' '}
+                      <Pill size={Size.Small} tone={Tone.Accent}>
+                        12
+                      </Pill>
+                    </>
+                  ),
+                  content: <Text>{t(m.tabsRichOpen)}</Text>,
+                },
+                {
+                  value: 'done',
+                  label: (
+                    <>
+                      {t(m.tabsDone)} <Pill size={Size.Small}>248</Pill>
+                    </>
+                  ),
+                  content: <Text>{t(m.tabsRichDone)}</Text>,
+                },
+                {
+                  value: 'failed',
+                  label: (
+                    <>
+                      {t(m.tabsFailed)}{' '}
+                      <Pill size={Size.Small} tone={Tone.Danger}>
+                        3
+                      </Pill>
+                    </>
+                  ),
+                  content: <Text>{t(m.tabsRichFailed)}</Text>,
+                },
+              ]}
+            />
+          </div>
+        )}
         code={`<Tabs
   aria-label="Inbox"
   tabs={[
@@ -59,52 +134,13 @@ export function TabsPage() {
     { value: 'failed', label: <>Failed <Pill size={Size.Small} tone={Tone.Danger}>3</Pill></>, content: <Text>Needs attention.</Text> },
   ]}
 />`}
-      >
-        <div style={{ width: '100%', maxWidth: '28rem' }}>
-          <Tabs
-            aria-label="Inbox"
-            tabs={[
-              {
-                value: 'open',
-                label: (
-                  <>
-                    Open{' '}
-                    <Pill size={Size.Small} tone={Tone.Accent}>
-                      12
-                    </Pill>
-                  </>
-                ),
-                content: <Text>Twelve open items.</Text>,
-              },
-              {
-                value: 'done',
-                label: (
-                  <>
-                    Done <Pill size={Size.Small}>248</Pill>
-                  </>
-                ),
-                content: <Text>Closed out.</Text>,
-              },
-              {
-                value: 'failed',
-                label: (
-                  <>
-                    Failed{' '}
-                    <Pill size={Size.Small} tone={Tone.Danger}>
-                      3
-                    </Pill>
-                  </>
-                ),
-                content: <Text>Needs attention.</Text>,
-              },
-            ]}
-          />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Controlled"
-        description="Drive the active tab with state through value and onValueChange."
+        title={t(m.tabsEx3Title)}
+        description={t(m.tabsEx3Desc)}
+        component="Tabs"
+        render={(K) => <TabsControlledDemo K={K} />}
         code={`const [section, setSection] = useState('activity');
 
 <Tabs
@@ -116,26 +152,26 @@ export function TabsPage() {
     { value: 'activity', label: 'Activity', content: <Text>This week's activity.</Text> },
   ]}
 />`}
-      >
-        <Stack gap={4} style={{ width: '100%', maxWidth: '28rem' }}>
-          <Tabs
-            aria-label="Profile"
-            value={section}
-            onValueChange={setSection}
-            tabs={[
-              { value: 'posts', label: 'Posts', content: <Text>Recent posts.</Text> },
-              { value: 'activity', label: 'Activity', content: <Text>This week's activity.</Text> },
-            ]}
-          />
-          <Text size={Size.XSmall} tone={TextTone.Subtle}>
-            Active: <Text as="span" size={Size.XSmall} mono>{section}</Text>
-          </Text>
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Full width and disabled"
-        description="fullWidth stretches tabs evenly; disabled tabs are skipped by the arrow keys."
+        title={t(m.tabsEx4Title)}
+        description={t(m.tabsEx4Desc)}
+        component="Tabs"
+        render={(K) => (
+          <div style={{ width: '100%', maxWidth: '28rem' }}>
+            <K.Tabs
+              aria-label={t(m.tabsAriaBilling)}
+              fullWidth
+              spring={Spring.Bouncy}
+              tabs={[
+                { value: 'plan', label: t(m.tabsPlan), content: <Text>{t(m.tabsFullPlan)}</Text> },
+                { value: 'invoices', label: t(m.tabsInvoices), content: <Text>{t(m.tabsFullInvoices)}</Text> },
+                { value: 'tax', label: t(m.tabsTax), disabled: true, content: null },
+              ]}
+            />
+          </div>
+        )}
         code={`<Tabs
   aria-label="Billing"
   fullWidth
@@ -146,76 +182,58 @@ export function TabsPage() {
     { value: 'tax', label: 'Tax', disabled: true, content: null },
   ]}
 />`}
-      >
-        <div style={{ width: '100%', maxWidth: '28rem' }}>
-          <Tabs
-            aria-label="Billing"
-            fullWidth
-            spring={Spring.Bouncy}
-            tabs={[
-              { value: 'plan', label: 'Plan', content: <Text>Current plan.</Text> },
-              { value: 'invoices', label: 'Invoices', content: <Text>Past invoices.</Text> },
-              { value: 'tax', label: 'Tax', disabled: true, content: null },
-            ]}
-          />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description="The skeleton prop renders a placeholder tab list on the same hairline plus two panel text lines, so the layout holds while tab data loads."
+        title={t(m.exSkeleton)}
+        description={t(m.tabsEx5Desc)}
+        component="Tabs"
+        render={(K) => (
+          <div style={{ width: '100%', maxWidth: '28rem' }}>
+            <K.Tabs skeleton aria-label={t(m.tabsAriaProjectSections)} tabs={[]} />
+          </div>
+        )}
         code={`<Tabs skeleton aria-label="Project sections" tabs={[]} />`}
-      >
-        <div style={{ width: '100%', maxWidth: '28rem' }}>
-          <Tabs skeleton aria-label="Project sections" tabs={[]} />
-        </div>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
-      <Heading level={3}>Tabs</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
+      <Heading level={3}>{t(m.tabsPropsGroupTabs)}</Heading>
       <PropsTable
         props={[
-          { name: 'tabs', type: 'TabItem[]', description: 'The tabs and their panel content.' },
-          { name: 'value', type: 'string', description: 'Controlled active tab.' },
-          { name: 'defaultValue', type: 'string', description: 'Initial tab for uncontrolled usage. Defaults to the first enabled tab.' },
-          { name: 'onValueChange', type: '(value: string) => void', description: 'Called with the new value when the active tab changes.' },
-          { name: 'spring', type: 'Spring', default: 'Spring.Snappy', description: 'Physics preset for the underline indicator.' },
-          { name: 'fullWidth', type: 'boolean', default: 'false', description: 'Stretches tabs to fill the list.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: "Renders a placeholder with the component's exact geometry." },
-          { name: 'aria-label', type: 'string', description: 'Accessible name for the tab list.' },
+          { name: 'tabs', type: 'TabItem[]', description: t(m.tabsPropTabs) },
+          { name: 'value', type: 'string', description: t(m.tabsPropValue) },
+          { name: 'defaultValue', type: 'string', description: t(m.tabsPropDefaultValue) },
+          { name: 'onValueChange', type: '(value: string) => void', description: t(m.tabsPropOnValueChange) },
+          { name: 'spring', type: 'Spring', default: 'Spring.Snappy', description: t(m.tabsPropSpring) },
+          { name: 'fullWidth', type: 'boolean', default: 'false', description: t(m.tabsPropFullWidth) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.tabsPropSkeleton) },
+          { name: 'aria-label', type: 'string', description: t(m.tabsPropAriaLabel) },
         ]}
       />
-      <Heading level={3}>tabs entries</Heading>
+      <Heading level={3}>{t(m.tabsPropsGroupEntries)}</Heading>
       <PropsTable
         props={[
-          { name: 'value', type: 'string', description: 'Unique value reported through onValueChange.' },
-          { name: 'label', type: 'ReactNode', description: 'Tab content; text, or text with Pills and icons.' },
-          { name: 'content', type: 'ReactNode', description: 'Panel content shown while the tab is active.' },
-          { name: 'disabled', type: 'boolean', default: 'false', description: 'Renders the tab but prevents activating it.' },
+          { name: 'value', type: 'string', description: t(m.tabsEntryValue) },
+          { name: 'label', type: 'ReactNode', description: t(m.tabsEntryLabel) },
+          { name: 'content', type: 'ReactNode', description: t(m.tabsEntryContent) },
+          { name: 'disabled', type: 'boolean', default: 'false', description: t(m.tabsEntryDisabled) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          Follows the WAI-ARIA tabs pattern: <code>role="tablist"</code>, <code>role="tab"</code>{' '}
-          with <code>aria-selected</code> and roving tabindex, and a <code>role="tabpanel"</code>{' '}
-          labeled by its tab.
-        </li>
-        <li>
-          Activation is automatic: arrow keys move focus and select in one step, wrapping at the
-          ends and skipping disabled tabs. Home and End jump to the extremes.
-        </li>
-        <li>The panel is focusable, so keyboard users can scroll long content.</li>
-        <li>The indicator spring and panel fade collapse under prefers-reduced-motion.</li>
+        <li>{prose(t(m.tabsA11y1))}</li>
+        <li>{prose(t(m.tabsA11y2))}</li>
+        <li>{prose(t(m.tabsA11y3))}</li>
+        <li>{prose(t(m.tabsA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use Tabs when panels hold different content; use SegmentedControl for compact view toggles inside toolbars and forms.</li>
-        <li>Keep labels to one or two words so the underline reads as one gesture.</li>
-        <li>Panels mount on activation, so avoid heavy work in panel render paths.</li>
-        <li>2 to 6 tabs work best; beyond that, consider a Select or sidebar navigation.</li>
+        <li>{prose(t(m.tabsUse1))}</li>
+        <li>{prose(t(m.tabsUse2))}</li>
+        <li>{prose(t(m.tabsUse3))}</li>
+        <li>{prose(t(m.tabsUse4))}</li>
       </ul>
     </>
   );

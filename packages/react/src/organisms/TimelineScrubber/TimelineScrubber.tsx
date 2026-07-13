@@ -127,9 +127,9 @@ export function TimelineScrubber({
       Home: start,
       End: null,
     };
-    if (!(event.key in moves)) return;
-    event.preventDefault();
     const next = moves[event.key];
+    if (next === undefined) return;
+    event.preventDefault();
     onChange?.(next === null ? null : Math.min(Math.max(next, start), end));
   };
 

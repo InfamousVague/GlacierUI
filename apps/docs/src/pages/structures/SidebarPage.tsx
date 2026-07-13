@@ -1,12 +1,14 @@
-import { Box, CounterBadge, SegmentedControl, Sidebar, SidebarItem, SidebarSection, Stack, Heading, Text, Size, TextTone, Tone } from '@glacier/react';
+import { Box, CounterBadge, SegmentedControl, Sidebar, SidebarItem, SidebarSection, Stack, Heading, Text, Size, TextTone, Tone, useT } from '@glacier/react';
 import { BarChart2, House, Inbox, Settings, Users } from '@glacier/icons';
 import { Spring } from '@glacier/motion';
 import { useState, type ReactNode } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
+import { m } from '../../i18n.ts';
 
 // A mock app window so each example shows the sidebar at its real width beside a
 // content pane, filling the demo instead of floating in a narrow card.
 function Frame({ children }: { children: ReactNode }) {
+  const t = useT();
   return (
     <Box border radius="lg" width="full" style={{ height: '20rem', overflow: 'hidden', display: 'flex' }}>
       <div
@@ -30,15 +32,13 @@ function Frame({ children }: { children: ReactNode }) {
         }}
       >
         <div style={{ fontSize: 'var(--glacier-font-size-lg)', fontWeight: 'var(--glacier-font-weight-semibold)', color: 'var(--glacier-text-muted)' }}>
-          Overview
+          {t(m.sidebarOverview)}
         </div>
         <p style={{ margin: 0, color: 'var(--glacier-text-subtle)', fontSize: 'var(--glacier-font-size-sm)', lineHeight: 'var(--glacier-leading-md)' }}>
-          The sidebar sits to the left of this main content area. Selecting an item routes the page
-          shown here.
+          {t(m.sbFrameLine1)}
         </p>
         <p style={{ margin: 0, color: 'var(--glacier-text-subtle)', fontSize: 'var(--glacier-font-size-sm)', lineHeight: 'var(--glacier-leading-md)' }}>
-          This pane is a placeholder, so each example shows the sidebar at its real width beside
-          content.
+          {t(m.sbFrameLine2)}
         </p>
       </div>
     </Box>
@@ -53,37 +53,38 @@ const settingsIcon = <Settings size={18} />;
 
 // Interactive: click items to slide the pill, and switch the spring style.
 function SlideDemo() {
+  const t = useT();
   const [active, setActive] = useState('home');
   const [spring, setSpring] = useState<Spring>(Spring.Snappy);
   return (
     <Stack gap={4} align="start">
       <SegmentedControl
         size={Size.Small}
-        aria-label="Animation style"
+        aria-label={t(m.sbAriaAnimStyle)}
         value={spring}
         onValueChange={(value) => setSpring(value as Spring)}
         options={[
-          { value: Spring.Smooth, label: 'Smooth' },
-          { value: Spring.Snappy, label: 'Snappy' },
-          { value: Spring.Bouncy, label: 'Bounce' },
+          { value: Spring.Smooth, label: t(m.sidebarSmooth) },
+          { value: Spring.Snappy, label: t(m.sidebarSnappy) },
+          { value: Spring.Bouncy, label: t(m.sidebarBounce) },
         ]}
       />
       <Frame>
         <Sidebar spring={spring}>
-          <SidebarSection title="Workspace">
+          <SidebarSection title={t(m.sidebarWorkspace)}>
             <SidebarItem icon={homeIcon} active={active === 'home'} onClick={() => setActive('home')}>
-              Home
+              {t(m.sidebarHome)}
             </SidebarItem>
             <SidebarItem icon={inboxIcon} active={active === 'inbox'} onClick={() => setActive('inbox')}>
-              Inbox
+              {t(m.sidebarInbox)}
             </SidebarItem>
             <SidebarItem icon={usersIcon} active={active === 'people'} onClick={() => setActive('people')}>
-              People
+              {t(m.sidebarPeople)}
             </SidebarItem>
           </SidebarSection>
-          <SidebarSection title="Insights">
+          <SidebarSection title={t(m.sidebarInsights)}>
             <SidebarItem icon={chartIcon} active={active === 'reports'} onClick={() => setActive('reports')}>
-              Reports
+              {t(m.sidebarReports)}
             </SidebarItem>
           </SidebarSection>
         </Sidebar>
@@ -93,20 +94,19 @@ function SlideDemo() {
 }
 
 export function SidebarPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Sidebar</Heading>
+      <Heading level={1}>{t(m.sbName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        The frame of a side navigation: an optional pinned header, a scrollable body of grouped
-        items, and an optional pinned footer. Fill it with SidebarSection and SidebarItem, and drop
-        it into AppShell's sidebar slot.
+        {prose(t(m.sbLede))}
       </Text>
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="Group items with SidebarSection and give each SidebarItem an icon and a label. Mark the current location with active."
+        title={t(m.exBasic)}
+        description={t(m.sbEx1Desc)}
         code={`import { Sidebar, SidebarItem, SidebarSection } from '@glacier/react';
 
 <Sidebar>
@@ -119,26 +119,28 @@ export function SidebarPage() {
     <SidebarItem icon={chartIcon}>Reports</SidebarItem>
   </SidebarSection>
 </Sidebar>`}
-      >
-        <Frame>
-          <Sidebar>
-            <SidebarSection title="Workspace">
-              <SidebarItem icon={homeIcon} active>
-                Home
-              </SidebarItem>
-              <SidebarItem icon={inboxIcon}>Inbox</SidebarItem>
-              <SidebarItem icon={usersIcon}>People</SidebarItem>
-            </SidebarSection>
-            <SidebarSection title="Insights">
-              <SidebarItem icon={chartIcon}>Reports</SidebarItem>
-            </SidebarSection>
-          </Sidebar>
-        </Frame>
-      </Example>
+        component="Sidebar"
+        render={(K) => (
+          <Frame>
+            <K.Sidebar>
+              <K.SidebarSection title={t(m.sidebarWorkspace)}>
+                <K.SidebarItem icon={homeIcon} active>
+                  {t(m.sidebarHome)}
+                </K.SidebarItem>
+                <K.SidebarItem icon={inboxIcon}>{t(m.sidebarInbox)}</K.SidebarItem>
+                <K.SidebarItem icon={usersIcon}>{t(m.sidebarPeople)}</K.SidebarItem>
+              </K.SidebarSection>
+              <K.SidebarSection title={t(m.sidebarInsights)}>
+                <K.SidebarItem icon={chartIcon}>{t(m.sidebarReports)}</K.SidebarItem>
+              </K.SidebarSection>
+            </K.Sidebar>
+          </Frame>
+        )}
+      />
 
       <Example
-        title="Sliding active pill"
-        description="The active pill is one layout element that slides between items as the active one changes, even across sections. Choose the spring: smooth, snappy, or bounce. Click the items to move it."
+        title={t(m.sbEx2Title)}
+        description={t(m.sbEx2Desc)}
         code={`import { Sidebar, SidebarItem, SidebarSection } from '@glacier/react';
 import { Spring } from '@glacier/motion';
 
@@ -154,32 +156,34 @@ import { Spring } from '@glacier/motion';
       </Example>
 
       <Example
-        title="Trailing count"
-        description="Put a CounterBadge in an item's trailing slot to flag unread or pending work. The label and count stay on one row."
+        title={t(m.sbEx3Title)}
+        description={t(m.sbEx3Desc)}
         code={`import { CounterBadge } from '@glacier/react';
 
 <SidebarItem icon={inboxIcon} trailing={<CounterBadge count={8} />}>
   Inbox
 </SidebarItem>`}
-      >
-        <Frame>
-          <Sidebar>
-            <SidebarSection title="Workspace">
-              <SidebarItem icon={homeIcon}>Home</SidebarItem>
-              <SidebarItem icon={inboxIcon} active trailing={<CounterBadge count={8} />}>
-                Inbox
-              </SidebarItem>
-              <SidebarItem icon={usersIcon} trailing={<CounterBadge count={128} tone={Tone.Neutral} />}>
-                People
-              </SidebarItem>
-            </SidebarSection>
-          </Sidebar>
-        </Frame>
-      </Example>
+        component="Sidebar"
+        render={(K) => (
+          <Frame>
+            <K.Sidebar>
+              <K.SidebarSection title={t(m.sidebarWorkspace)}>
+                <K.SidebarItem icon={homeIcon}>{t(m.sidebarHome)}</K.SidebarItem>
+                <K.SidebarItem icon={inboxIcon} active trailing={<CounterBadge count={8} />}>
+                  {t(m.sidebarInbox)}
+                </K.SidebarItem>
+                <K.SidebarItem icon={usersIcon} trailing={<CounterBadge count={128} tone={Tone.Neutral} />}>
+                  {t(m.sidebarPeople)}
+                </K.SidebarItem>
+              </K.SidebarSection>
+            </K.Sidebar>
+          </Frame>
+        )}
+      />
 
       <Example
-        title="Header and footer"
-        description="The header and footer slots stay pinned while the body scrolls. Use them for a brand mark up top and a settings link at the bottom."
+        title={t(m.sbEx4Title)}
+        description={t(m.sbEx4Desc)}
         code={`<Sidebar
   header={<div style={{ fontWeight: 700, fontSize: '1.125rem' }}>GlacierUI</div>}
   footer={<SidebarItem icon={settingsIcon}>Settings</SidebarItem>}
@@ -189,96 +193,100 @@ import { Spring } from '@glacier/motion';
     <SidebarItem icon={inboxIcon}>Inbox</SidebarItem>
   </SidebarSection>
 </Sidebar>`}
-      >
-        <Frame>
-          <Sidebar
-            header={<div style={{ fontWeight: 700, fontSize: '1.125rem' }}>GlacierUI</div>}
-            footer={<SidebarItem icon={settingsIcon}>Settings</SidebarItem>}
-          >
-            <SidebarSection title="Workspace">
-              <SidebarItem icon={homeIcon} active>
-                Home
-              </SidebarItem>
-              <SidebarItem icon={inboxIcon}>Inbox</SidebarItem>
-              <SidebarItem icon={usersIcon}>People</SidebarItem>
-              <SidebarItem icon={chartIcon}>Reports</SidebarItem>
-            </SidebarSection>
-          </Sidebar>
-        </Frame>
-      </Example>
+        component="Sidebar"
+        render={(K) => (
+          <Frame>
+            <K.Sidebar
+              header={<div style={{ fontWeight: 700, fontSize: '1.125rem' }}>{t(m.sidebarGlacierui)}</div>}
+              footer={<K.SidebarItem icon={settingsIcon}>{t(m.sidebarSettings)}</K.SidebarItem>}
+            >
+              <K.SidebarSection title={t(m.sidebarWorkspace)}>
+                <K.SidebarItem icon={homeIcon} active>
+                  {t(m.sidebarHome)}
+                </K.SidebarItem>
+                <K.SidebarItem icon={inboxIcon}>{t(m.sidebarInbox)}</K.SidebarItem>
+                <K.SidebarItem icon={usersIcon}>{t(m.sidebarPeople)}</K.SidebarItem>
+                <K.SidebarItem icon={chartIcon}>{t(m.sidebarReports)}</K.SidebarItem>
+              </K.SidebarSection>
+            </K.Sidebar>
+          </Frame>
+        )}
+      />
 
       <Example
-        title="Links and disabled"
-        description="Set as='a' with an href to render an item as a real anchor. A disabled item is dimmed and skipped by pointer and keyboard."
+        title={t(m.sbEx5Title)}
+        description={t(m.sbEx5Desc)}
         code={`<SidebarItem as="a" href="/reports" icon={chartIcon}>Reports</SidebarItem>
 <SidebarItem icon={usersIcon} disabled>People</SidebarItem>`}
-      >
-        <Frame>
-          <Sidebar>
-            <SidebarSection title="Insights">
-              <SidebarItem as="a" href="#reports" icon={chartIcon} active>
-                Reports
-              </SidebarItem>
-              <SidebarItem as="a" href="#inbox" icon={inboxIcon}>
-                Inbox
-              </SidebarItem>
-              <SidebarItem icon={usersIcon} disabled>
-                People
-              </SidebarItem>
-            </SidebarSection>
-          </Sidebar>
-        </Frame>
-      </Example>
+        component="Sidebar"
+        render={(K) => (
+          <Frame>
+            <K.Sidebar>
+              <K.SidebarSection title={t(m.sidebarInsights)}>
+                <K.SidebarItem as="a" href="#reports" icon={chartIcon} active>
+                  {t(m.sidebarReports)}
+                </K.SidebarItem>
+                <K.SidebarItem as="a" href="#inbox" icon={inboxIcon}>
+                  {t(m.sidebarInbox)}
+                </K.SidebarItem>
+                <K.SidebarItem icon={usersIcon} disabled>
+                  {t(m.sidebarPeople)}
+                </K.SidebarItem>
+              </K.SidebarSection>
+            </K.Sidebar>
+          </Frame>
+        )}
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
 
-      <Heading level={3}>Sidebar</Heading>
+      <Heading level={3}>{t(m.sbGroupSidebar)}</Heading>
       <PropsTable
         props={[
-          { name: 'header', type: 'ReactNode', description: 'Pinned region at the top, for a brand mark or a search field.' },
-          { name: 'footer', type: 'ReactNode', description: 'Pinned region at the bottom, for a profile or settings link.' },
-          { name: 'spring', type: 'Spring', default: 'Spring.Snappy', description: 'Spring preset for the active pill as it slides between items.' },
-          { name: 'children', type: 'ReactNode', description: 'The scrollable body, usually one or more SidebarSection.' },
+          { name: 'header', type: 'ReactNode', description: t(m.sbPropHeader) },
+          { name: 'footer', type: 'ReactNode', description: t(m.sbPropFooter) },
+          { name: 'spring', type: 'Spring', default: 'Spring.Snappy', description: t(m.sbPropSpring) },
+          { name: 'children', type: 'ReactNode', description: t(m.sbPropChildren) },
         ]}
       />
 
-      <Heading level={3}>SidebarSection</Heading>
+      <Heading level={3}>{t(m.sbGroupSection)}</Heading>
       <PropsTable
         props={[
-          { name: 'title', type: 'ReactNode', description: 'Optional uppercase group heading shown above the items.' },
-          { name: 'children', type: 'ReactNode', description: 'The rows in the group, usually SidebarItem.' },
+          { name: 'title', type: 'ReactNode', description: t(m.sbSectionTitle) },
+          { name: 'children', type: 'ReactNode', description: t(m.sbSectionChildren) },
         ]}
       />
 
-      <Heading level={3}>SidebarItem</Heading>
+      <Heading level={3}>{t(m.sbGroupItem)}</Heading>
       <PropsTable
         props={[
-          { name: 'as', type: 'ElementType', default: "'button'", description: "Rendered element. Use 'a' for links." },
-          { name: 'href', type: 'string', description: 'Anchor href when rendered as a link.' },
-          { name: 'icon', type: 'ReactNode', description: 'Leading icon, marked aria-hidden.' },
-          { name: 'active', type: 'boolean', default: 'false', description: 'Highlights the item and sets aria-current="page".' },
-          { name: 'trailing', type: 'ReactNode', description: 'Trailing slot, such as a CounterBadge.' },
-          { name: 'disabled', type: 'boolean', default: 'false', description: 'Dims the item and blocks interaction. Only applies to the button form.' },
-          { name: 'onClick', type: '(event) => void', description: 'Handler for a button item.' },
-          { name: 'children', type: 'ReactNode', description: 'The item label.' },
+          { name: 'as', type: 'ElementType', default: "'button'", description: t(m.sbItemAs) },
+          { name: 'href', type: 'string', description: t(m.sbItemHref) },
+          { name: 'icon', type: 'ReactNode', description: t(m.sbItemIcon) },
+          { name: 'active', type: 'boolean', default: 'false', description: t(m.sbItemActive) },
+          { name: 'trailing', type: 'ReactNode', description: t(m.sbItemTrailing) },
+          { name: 'disabled', type: 'boolean', default: 'false', description: t(m.sbItemDisabled) },
+          { name: 'onClick', type: '(event) => void', description: t(m.sbItemOnClick) },
+          { name: 'children', type: 'ReactNode', description: t(m.sbItemChildren) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>The active item sets aria-current="page", so assistive tech announces the current location.</li>
-        <li>Item icons are marked aria-hidden, so the label is the accessible name.</li>
-        <li>A disabled button item sets aria-disabled and is removed from the tab order.</li>
-        <li>Render links with as="a" and an href so they behave as real anchors: focusable, openable in a new tab, and read as links.</li>
+        <li>{prose(t(m.sbA11y1))}</li>
+        <li>{prose(t(m.sbA11y2))}</li>
+        <li>{prose(t(m.sbA11y3))}</li>
+        <li>{prose(t(m.sbA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Sidebar fills AppShell's sidebar slot; give that slot a width and let the body scroll.</li>
-        <li>Group related items with SidebarSection and a short uppercase title; keep one section untitled for top-level links.</li>
-        <li>Keep exactly one item active per view to reflect the current route.</li>
-        <li>Use the trailing slot for a CounterBadge; keep it to a count or a small status, not a second action.</li>
-        <li>Pin persistent controls like a brand mark or settings link in the header and footer so they stay visible as the body scrolls.</li>
+        <li>{prose(t(m.sbUse1))}</li>
+        <li>{prose(t(m.sbUse2))}</li>
+        <li>{prose(t(m.sbUse3))}</li>
+        <li>{prose(t(m.sbUse4))}</li>
+        <li>{prose(t(m.sbUse5))}</li>
       </ul>
     </>
   );

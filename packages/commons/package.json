@@ -1,0 +1,16 @@
+{
+  "name": "@glacier/commons",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Renderer-agnostic logic shared by @glacier/react (DOM) and @glacier/native (React Native): controlled state, interaction constants, and spec-derived helpers. No DOM or React Native imports.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@glacier/spec": "*"
+  },
+  "peerDependencies": {
+    "react": ">=19"
+  }
+}

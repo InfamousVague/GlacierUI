@@ -39,6 +39,8 @@ export const sliderSpec: ComponentSpec = {
     { name: 'disabled', description: 'Halved opacity and not-allowed cursor.' },
   ],
   // a 3px accent-soft halo around the thumb, edged by a 1px focus-ring line (box-shadow layers at 3px and 4px)
+  // the track, fill, and thumb children carry the paint
+  paint: {},
   focusRing: { ring: token('focus-ring'), offset: '3px' },
   transition: { duration: token('duration-fast'), ease: token('ease-spring') },
   tokens: [

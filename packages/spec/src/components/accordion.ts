@@ -17,6 +17,8 @@ export const accordionSpec: ComponentSpec = {
     { name: 'allowMultiple', type: 'boolean', default: false, description: 'Allows more than one panel to be open at a time.' },
   ],
   defaults: { allowMultiple: false },
+  // the item headers and panels paint
+  paint: {},
   a11y: {
     role: 'presentation',
     focusable: false,

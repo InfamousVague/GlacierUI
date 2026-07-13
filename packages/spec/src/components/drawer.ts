@@ -65,6 +65,7 @@ export const drawerSpec: ComponentSpec = {
   // focus is managed on open). The ring belongs to the interior controls - the
   // close IconButton and footer actions draw the kit-wide 2px focus-ring outline
   // at a 2px offset.
+  paint: { background: '$glass-thick', text: '$text', border: '$glass-border' },
   focusRing: { ring: token('focus-ring'), offset: '2px' },
   tokens: [
     'space-2', 'space-3', 'space-4', 'space-5', 'space-6', 'space-8', 'space-12',

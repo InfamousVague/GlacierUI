@@ -14,6 +14,8 @@
  * this web engine with real haptics without any call site changing.
  */
 
+import { emitFeedback } from './feedback.ts';
+
 export type HapticKind = 'selection' | 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error';
 
 /** Vibration API durations / patterns (ms) per kind. iOS ignores these. */
@@ -61,16 +63,30 @@ function iosTaptic(): void {
 }
 
 /**
- * Fire a haptic of the given kind, if haptics are enabled and the device can.
- * Safe to call anywhere: a no-op when disabled or unsupported.
+ * Buzz the device motor for the given kind, if haptics are enabled and the
+ * platform can. Motor only: it drives no on-screen effect, so the delegated
+ * press listener uses it (the visual layer watches presses itself and would
+ * otherwise double up). A no-op when disabled or unsupported.
  */
-export function haptic(kind: HapticKind = 'light'): void {
+export function fireMotor(kind: HapticKind = 'light'): void {
   if (!enabled) return;
   if (canVibrate()) {
     navigator.vibrate(PATTERNS[kind]);
     return;
   }
   iosTaptic();
+}
+
+/**
+ * Fire feedback of the given kind: buzz the motor (when haptics are enabled)
+ * and announce it on the shared bus so the visual-feedback layer can react in
+ * the same frame. This is the programmatic entry point - what useHaptics()
+ * returns and what components call directly - so a single call keeps taptic and
+ * shockwave in lockstep. Safe to call anywhere.
+ */
+export function haptic(kind: HapticKind = 'light'): void {
+  fireMotor(kind);
+  emitFeedback({ kind });
 }
 
 export type HapticFn = (kind?: HapticKind) => void;

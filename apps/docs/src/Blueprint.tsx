@@ -1,6 +1,7 @@
 import { getSpec, type Measure, type SizeSpec } from '@glacier/spec';
 import { createContext, useContext, useState, type ReactElement } from 'react';
-import { SegmentedControl, Select, Stack, Size } from '@glacier/react';
+import { SegmentedControl, Select, Stack, Size, useT } from '@glacier/react';
+import { m } from './i18n.ts';
 
 /**
  * A blueprint-style illustration of a component's box: a schematic drawing with
@@ -114,6 +115,7 @@ function VDim({
 
 /** Circle blueprint for round atoms (dot, avatar, spinner): diameter + radius. */
 function CircleBlueprint({ size, id }: { size: SizeSpec; id?: string }) {
+  const t = useT();
   const cx = 190;
   const cy = 118;
   const r = 44;
@@ -121,7 +123,7 @@ function CircleBlueprint({ size, id }: { size: SizeSpec; id?: string }) {
   const border = fmt(size.border);
   const isAvatar = id === 'avatar';
   return (
-    <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} size`}>
+    <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSize)}`}>
       <Defs />
       <rect x={0} y={0} width={380} height={214} fill="url(#bpGrid)" />
       <circle cx={cx} cy={cy} r={r} fill={C.fill} stroke={C.edge} strokeWidth={border ? 2 : 1} strokeDasharray="4 3" />
@@ -145,8 +147,8 @@ function CircleBlueprint({ size, id }: { size: SizeSpec; id?: string }) {
           <text x={cx + r / 2} y={cy - 5} textAnchor="middle" className="bpLabel">r</text>
         </>
       )}
-      <HDim x1={cx - r} x2={cx + r} y={cy - r - 18} label={`⌀ ${diameter ?? 'auto'}`} />
-      <text x={cx} y={cy + r + 26} textAnchor="middle" className="bpLabel bpMuted">radius: full{border ? `  ·  border: ${border}` : ''}</text>
+      <HDim x1={cx - r} x2={cx + r} y={cy - r - 18} label={`⌀ ${diameter ?? t(m.bpAuto)}`} />
+      <text x={cx} y={cy + r + 26} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpRadiusFull)}{border ? `  ·  ${t(m.bpBorder)}: ${border}` : ''}</text>
       <BpTitle />
     </svg>
   );
@@ -158,6 +160,7 @@ function CircleBlueprint({ size, id }: { size: SizeSpec; id?: string }) {
  * is a dotted circle for context; the dot itself is dimensioned by its diameter.
  */
 function StatusDotBlueprint({ size }: { size: SizeSpec }) {
+  const t = useT();
   const diameter = fmt(size.diameter);
   const hostCx = 190;
   const hostCy = 100;
@@ -166,18 +169,18 @@ function StatusDotBlueprint({ size }: { size: SizeSpec }) {
   const [dx, dy] = polar(hostCx, hostCy, hostR, 135);
   const dotR = 21;
   return (
-    <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} size`}>
+    <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSize)}`}>
       <Defs />
       <rect x={0} y={0} width={380} height={214} fill="url(#bpGrid)" />
       {/* the host element the dot attaches to, drawn as a dotted circle */}
       <circle cx={hostCx} cy={hostCy} r={hostR} fill="none" stroke={C.edge} strokeWidth={1} strokeDasharray="2 4" strokeLinecap="round" />
-      <text x={hostCx} y={hostCy} textAnchor="middle" dominantBaseline="central" stroke="none" className="bpLabel bpMuted">host</text>
+      <text x={hostCx} y={hostCy} textAnchor="middle" dominantBaseline="central" stroke="none" className="bpLabel bpMuted">{t(m.bpHost)}</text>
       {/* the status dot, pinned to the bottom-right of the host */}
       <circle cx={dx} cy={dy} r={dotR} fill={C.fill} stroke={C.edge} strokeWidth={2} strokeDasharray="4 3" />
       {/* the dot's diameter, dimensioned below it */}
-      <HDim x1={dx - dotR} x2={dx + dotR} y={dy + dotR + 22} label={`⌀ ${diameter ?? 'auto'}`} above={false} />
+      <HDim x1={dx - dotR} x2={dx + dotR} y={dy + dotR + 22} label={`⌀ ${diameter ?? t(m.bpAuto)}`} above={false} />
       <BpTitle />
-      <text x={16} y={198} className="bpLabel bpMuted">radius: full</text>
+      <text x={16} y={198} className="bpLabel bpMuted">{t(m.bpRadiusFull)}</text>
     </svg>
   );
 }
@@ -185,13 +188,14 @@ function StatusDotBlueprint({ size }: { size: SizeSpec }) {
 // Icon: the 24-unit glyph grid with a sample stroked glyph, the rendered size,
 // and the shared stroke width called out.
 function IconBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const strokeW = fmt(dimensions?.strokeWidth);
   const px = fmt(size.diameter);
   const X = 152;
   const Y = 52;
   const S = 96; // schematic box; the label carries the real pixel size
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the icon">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheIcon)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       {/* the glyph box (the 24-unit grid) */}
@@ -212,14 +216,14 @@ function IconBlueprint({ size, dimensions }: BlueprintProps) {
         strokeLinejoin="round"
         strokeLinecap="round"
       />
-      <HDim x1={X} x2={X + S} y={Y - 18} label={`size ${px ?? '24px'}`} />
-      <text x={X + S + 14} y={Y + S / 2 - 2} className="bpLabel bpMuted">glyph</text>
+      <HDim x1={X} x2={X + S} y={Y - 18} label={`${t(m.bpSize)} ${px ?? '24px'}`} />
+      <text x={X + S + 14} y={Y + S / 2 - 2} className="bpLabel bpMuted">{t(m.bpGlyph)}</text>
       {strokeW && (
-        <text x={X + S + 14} y={Y + S / 2 + 16} className="bpLabel bpMuted">stroke {strokeW}</text>
+        <text x={X + S + 14} y={Y + S / 2 + 16} className="bpLabel bpMuted">{t(m.bpStroke)} {strokeW}</text>
       )}
-      <text x={X - 12} y={Y + 14} textAnchor="end" className="bpLabel bpMuted">24 grid</text>
+      <text x={X - 12} y={Y + 14} textAnchor="end" className="bpLabel bpMuted">{t(m.bp24Grid)}</text>
       <BpTitle />
-      <Foot parts={['viewBox: 0 0 24 24', 'color: currentColor', strokeW && `stroke: ${strokeW}`]} />
+      <Foot parts={[t(m.bpViewBox002424), t(m.bpColorCurrentColor), strokeW && `${t(m.bpStroke)}: ${strokeW}`]} />
     </svg>
   );
 }
@@ -244,34 +248,35 @@ function arcPath(cx: number, cy: number, r: number, startDeg: number, endDeg: nu
  * component - dimensioned with its diameter and stroke thickness.
  */
 function RingBlueprint({ size }: { size: SizeSpec }) {
+  const t = useT();
   const cx = 200;
   const cy = 114;
   const R = 50; // outer radius (schematic; the label carries the real value)
-  const t = 18; // schematic stroke-band width
-  const rMid = R - t / 2;
-  const rInner = R - t;
+  const bandW = 18; // schematic stroke-band width
+  const rMid = R - bandW / 2;
+  const rInner = R - bandW;
   const diameter = fmt(size.diameter);
   const thickness = fmt(size.thickness) ?? fmt(size.border);
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} size`}>
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSize)}`}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the track band: a stroked circle as wide as the ring thickness */}
-      <circle cx={cx} cy={cy} r={rMid} fill="none" stroke={C.fill} strokeWidth={t} />
+      <circle cx={cx} cy={cy} r={rMid} fill="none" stroke={C.fill} strokeWidth={bandW} />
       {/* the toned arc, drawn over the track the way the component fills */}
-      <path d={arcPath(cx, cy, rMid, 0, 245)} fill="none" stroke={C.line} strokeWidth={t} strokeLinecap="round" opacity={0.9} />
+      <path d={arcPath(cx, cy, rMid, 0, 245)} fill="none" stroke={C.line} strokeWidth={bandW} strokeLinecap="round" opacity={0.9} />
       {/* band edges, dashed, so the skeletal ring reads as an outline too */}
       <circle cx={cx} cy={cy} r={R} fill="none" stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       <circle cx={cx} cy={cy} r={rInner} fill="none" stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
 
       {/* diameter across the top */}
-      <HDim x1={cx - R} x2={cx + R} y={cy - R - 20} label={`⌀ ${diameter ?? 'auto'}`} />
+      <HDim x1={cx - R} x2={cx + R} y={cy - R - 20} label={`⌀ ${diameter ?? t(m.bpAuto)}`} />
       {/* thickness measured across the band at 9 o'clock, clear of the arc */}
       {thickness && <HDim x1={cx - R} x2={cx - rInner} y={cy} label={thickness} />}
 
       <BpTitle />
-      <text x={200} y={212} textAnchor="middle" className="bpLabel bpMuted">radius: full</text>
+      <text x={200} y={212} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpRadiusFull)}</text>
     </svg>
   );
 }
@@ -282,6 +287,7 @@ function RingBlueprint({ size }: { size: SizeSpec }) {
  * thumb riding on it, dimensioned with the thumb diameter and track height.
  */
 function SliderBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const trackH = fmt(dimensions?.trackHeight);
   const thumbDia = fmt(dimensions?.thumbDiameter);
   const radius = fmt(size.radius) ?? fmt(dimensions?.radius);
@@ -295,7 +301,7 @@ function SliderBlueprint({ size, dimensions }: BlueprintProps) {
   const thumbR = 26;
 
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the slider">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSlider)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
@@ -307,13 +313,13 @@ function SliderBlueprint({ size, dimensions }: BlueprintProps) {
       <circle cx={fillX} cy={TY} r={thumbR} fill={C.fill} stroke={C.line} strokeWidth={1.75} strokeDasharray="5 3" />
 
       {/* width across the rail */}
-      <HDim x1={TX} x2={TX + TW} y={TY - thumbR - 18} label="width: auto" />
+      <HDim x1={TX} x2={TX + TW} y={TY - thumbR - 18} label={t(m.bpWidthAuto)} />
       {/* the thumb diameter, below the thumb */}
       {thumbDia && <HDim x1={fillX - thumbR} x2={fillX + thumbR} y={TY + thumbR + 20} label={`⌀ ${thumbDia}`} above={false} />}
 
       <BpTitle />
       <text x={200} y={204} textAnchor="middle" className="bpLabel bpMuted">
-        {[trackH && `track: ${trackH}`, radius && `radius: ${radius}`].filter(Boolean).join('   ·   ')}
+        {[trackH && `${t(m.bpTrack)}: ${trackH}`, radius && `${t(m.bpRadius)}: ${radius}`].filter(Boolean).join('   ·   ')}
       </text>
     </svg>
   );
@@ -321,6 +327,7 @@ function SliderBlueprint({ size, dimensions }: BlueprintProps) {
 
 /** Checkbox blueprint: the rounded box with its checkmark, edge, and radius. */
 function CheckboxBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const edge = fmt(dimensions?.size);
   const icon = fmt(dimensions?.iconSize);
   const radius = fmt(dimensions?.radius);
@@ -335,7 +342,7 @@ function CheckboxBlueprint({ size, dimensions }: BlueprintProps) {
   const check = `M ${BXc + S * 0.26} ${BYc + S * 0.52} L ${BXc + S * 0.44} ${BYc + S * 0.7} L ${BXc + S * 0.74} ${BYc + S * 0.32}`;
 
   return (
-    <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label="Blueprint of the checkbox">
+    <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCheckbox)}>
       <Defs />
       <rect x={0} y={0} width={380} height={214} fill="url(#bpGrid)" />
 
@@ -351,13 +358,13 @@ function CheckboxBlueprint({ size, dimensions }: BlueprintProps) {
       {radius && (
         <>
           <path d={`M ${BXc + S - rr} ${BYc} A ${rr} ${rr} 0 0 1 ${BXc + S} ${BYc + rr}`} fill="none" stroke={C.line} strokeWidth={1.5} />
-          <text x={366} y={BYc - 10} textAnchor="end" className="bpLabel">radius: {radius}</text>
+          <text x={366} y={BYc - 10} textAnchor="end" className="bpLabel">{t(m.bpRadius)}: {radius}</text>
         </>
       )}
 
       <BpTitle />
       <text x={190} y={200} textAnchor="middle" className="bpLabel bpMuted">
-        {[icon && `check: ${icon}`, border && `border: ${border}`].filter(Boolean).join('   ·   ')}
+        {[icon && `${t(m.bpCheck)}: ${icon}`, border && `${t(m.bpBorder)}: ${border}`].filter(Boolean).join('   ·   ')}
       </text>
     </svg>
   );
@@ -365,6 +372,7 @@ function CheckboxBlueprint({ size, dimensions }: BlueprintProps) {
 
 /** Radio blueprint: the hairline ring with its selected dot and diameter. */
 function RadioBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const diameter = fmt(dimensions?.diameter);
   const dot = fmt(dimensions?.dotSize);
   const border = fmt(dimensions?.border);
@@ -375,7 +383,7 @@ function RadioBlueprint({ size, dimensions }: BlueprintProps) {
   const dotR = dot ? R * 0.36 : 0; // dotSize / diameter, kept in proportion
 
   return (
-    <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label="Blueprint of the radio">
+    <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheRadio)}>
       <Defs />
       <rect x={0} y={0} width={380} height={214} fill="url(#bpGrid)" />
 
@@ -387,7 +395,7 @@ function RadioBlueprint({ size, dimensions }: BlueprintProps) {
 
       <BpTitle />
       <text x={190} y={200} textAnchor="middle" className="bpLabel bpMuted">
-        {[dot && `dot: ${dot}`, 'radius: full', border && `border: ${border}`].filter(Boolean).join('   ·   ')}
+        {[dot && `${t(m.bpDot)}: ${dot}`, t(m.bpRadiusFull), border && `${t(m.bpBorder)}: ${border}`].filter(Boolean).join('   ·   ')}
       </text>
     </svg>
   );
@@ -395,6 +403,7 @@ function RadioBlueprint({ size, dimensions }: BlueprintProps) {
 
 /** Switch blueprint: the pill track with the sliding thumb, track size, and thumb diameter. */
 function SwitchBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const cap = size.name.charAt(0).toUpperCase() + size.name.slice(1);
   const trackW = fmt(dimensions?.[`trackWidth${cap}`]);
   const trackH = fmt(size.height);
@@ -413,14 +422,14 @@ function SwitchBlueprint({ size, dimensions }: BlueprintProps) {
   const thumbCy = TY + TH / 2;
 
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} switch`}>
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSwitch)}`}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the pill track, tinted to read as on, with the thumb at the trailing edge */}
       <rect x={TX} y={TY} width={TW} height={TH} rx={TH / 2} fill={C.content} fillOpacity={0.28} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       <circle cx={thumbCx} cy={thumbCy} r={thumbR} fill={C.fill} stroke={C.line} strokeWidth={1.75} />
-      <text x={thumbCx} y={TY - 8} textAnchor="middle" className="bpLabel bpMuted">thumb</text>
+      <text x={thumbCx} y={TY - 8} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpThumb)}</text>
 
       {/* track width on top, track height on the left */}
       {trackW && <HDim x1={TX} x2={TX + TW} y={TY - 24} label={trackW} />}
@@ -433,7 +442,7 @@ function SwitchBlueprint({ size, dimensions }: BlueprintProps) {
 
       <BpTitle />
       <text x={200} y={212} textAnchor="middle" className="bpLabel bpMuted">
-        {['radius: full', border && `border: ${border}`].filter(Boolean).join('   ·   ')}
+        {[t(m.bpRadiusFull), border && `${t(m.bpBorder)}: ${border}`].filter(Boolean).join('   ·   ')}
       </text>
     </svg>
   );
@@ -441,6 +450,7 @@ function SwitchBlueprint({ size, dimensions }: BlueprintProps) {
 
 /** Number input blueprint: the bordered group with its minus/plus step buttons. */
 function NumberInputBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const height = fmt(size.height);
   const radius = fmt(size.radius) ?? fmt(dimensions?.radius);
   const border = fmt(size.border) ?? fmt(dimensions?.border);
@@ -459,7 +469,7 @@ function NumberInputBlueprint({ size, dimensions }: BlueprintProps) {
   const g = 12; // glyph half-length
 
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} number input`}>
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpNumberInput)}`}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
@@ -491,19 +501,19 @@ function NumberInputBlueprint({ size, dimensions }: BlueprintProps) {
 
       {/* height on the left, width on top */}
       {height && <VDim x={BX - 34} y1={BY} y2={BY + BH} label={height} />}
-      <HDim x1={BX} x2={BX + BW} y={BY - 26} label="width: auto" />
+      <HDim x1={BX} x2={BX + BW} y={BY - 26} label={t(m.bpWidthAuto)} />
 
       {/* radius on the top-right corner */}
       {radius && (
         <>
           <path d={`M ${BX + BW - rr} ${BY} A ${rr} ${rr} 0 0 1 ${BX + BW} ${BY + rr}`} fill="none" stroke={C.line} strokeWidth={1.5} />
-          <text x={392} y={BY - 12} textAnchor="end" className="bpLabel">radius: {radius}</text>
+          <text x={392} y={BY - 12} textAnchor="end" className="bpLabel">{t(m.bpRadius)}: {radius}</text>
         </>
       )}
 
       <BpTitle />
       <text x={200} y={212} textAnchor="middle" className="bpLabel bpMuted">
-        {[font && `font: ${font}`, border && `border: ${border}`].filter(Boolean).join('   ·   ')}
+        {[font && `${t(m.bpFont)}: ${font}`, border && `${t(m.bpBorder)}: ${border}`].filter(Boolean).join('   ·   ')}
       </text>
     </svg>
   );
@@ -511,6 +521,7 @@ function NumberInputBlueprint({ size, dimensions }: BlueprintProps) {
 
 /** Radio card blueprint: the tile with its icon, title, description, and corner check. */
 function RadioCardBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const padding = fmt(dimensions?.padding);
   const gap = fmt(dimensions?.gap);
   const border = fmt(dimensions?.border);
@@ -533,7 +544,7 @@ function RadioCardBlueprint({ size, dimensions }: BlueprintProps) {
   const ciy = iy + 11;
 
   return (
-    <svg viewBox="0 0 400 254" className="bpSvg" role="img" aria-label="Blueprint of the radio card">
+    <svg viewBox="0 0 400 254" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheRadioCard)}>
       <Defs />
       <rect x={0} y={0} width={400} height={254} fill="url(#bpGrid)" />
 
@@ -559,7 +570,7 @@ function RadioCardBlueprint({ size, dimensions }: BlueprintProps) {
       {radius && (
         <>
           <path d={`M ${BX + BW - rr} ${BY} A ${rr} ${rr} 0 0 1 ${BX + BW} ${BY + rr}`} fill="none" stroke={C.line} strokeWidth={1.5} />
-          <text x={388} y={BY - 10} textAnchor="end" className="bpLabel">radius: {radius}</text>
+          <text x={388} y={BY - 10} textAnchor="end" className="bpLabel">{t(m.bpRadius)}: {radius}</text>
         </>
       )}
 
@@ -567,13 +578,13 @@ function RadioCardBlueprint({ size, dimensions }: BlueprintProps) {
       <Foot
         y={244}
         parts={[
-          padding && `padding: ${padding}`,
-          gap && `gap: ${gap}`,
-          border && `border: ${border}`,
-          titleSize && `title: ${titleSize}`,
-          descriptionSize && `desc: ${descriptionSize}`,
-          iconSize && `icon: ${iconSize}`,
-          indicator && `check: ${indicator}`,
+          padding && `${t(m.bpPadding)}: ${padding}`,
+          gap && `${t(m.bpGap)}: ${gap}`,
+          border && `${t(m.bpBorder)}: ${border}`,
+          titleSize && `${t(m.bpTitle)}: ${titleSize}`,
+          descriptionSize && `${t(m.bpDesc)}: ${descriptionSize}`,
+          iconSize && `${t(m.bpIcon)}: ${iconSize}`,
+          indicator && `${t(m.bpCheck)}: ${indicator}`,
         ]}
       />
     </svg>
@@ -582,6 +593,7 @@ function RadioCardBlueprint({ size, dimensions }: BlueprintProps) {
 
 /** Search field blueprint: the box with its leading magnifier and trailing clear (backspace) button. */
 function SearchFieldBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const height = fmt(size.height);
   const padIn = fmt(size.paddingInline);
   const radius = fmt(size.radius) ?? fmt(dimensions?.radius);
@@ -598,7 +610,7 @@ function SearchFieldBlueprint({ size, dimensions }: BlueprintProps) {
   const pIn = 48; // schematic inset that clears the leading icon
 
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} search field`}>
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSearchField)}`}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
@@ -613,7 +625,7 @@ function SearchFieldBlueprint({ size, dimensions }: BlueprintProps) {
 
       {/* the placeholder text */}
       <text x={BX + pIn + 4} y={midY} dominantBaseline="central" stroke="none" fill={C.content} style={{ fontSize: 20, fontFamily: 'var(--glacier-font-sans)' }}>
-        Search
+        {t(m.bpSearch)}
       </text>
 
       {/* the trailing clear button, drawn as the backspace glyph */}
@@ -625,20 +637,20 @@ function SearchFieldBlueprint({ size, dimensions }: BlueprintProps) {
 
       {/* height on the left, width on top, the icon inset below */}
       {height && <VDim x={BX - 34} y1={BY} y2={BY + BH} label={height} />}
-      <HDim x1={BX} x2={BX + BW} y={BY - 26} label="width: auto" />
+      <HDim x1={BX} x2={BX + BW} y={BY - 26} label={t(m.bpWidthAuto)} />
       {padIn && <HDim x1={BX} x2={BX + pIn} y={BY + BH + 16} label={padIn} above={false} />}
 
       {/* radius on the top-right corner */}
       {radius && (
         <>
           <path d={`M ${BX + BW - rr} ${BY} A ${rr} ${rr} 0 0 1 ${BX + BW} ${BY + rr}`} fill="none" stroke={C.line} strokeWidth={1.5} />
-          <text x={392} y={BY - 12} textAnchor="end" className="bpLabel">radius: {radius}</text>
+          <text x={392} y={BY - 12} textAnchor="end" className="bpLabel">{t(m.bpRadius)}: {radius}</text>
         </>
       )}
 
       <BpTitle />
       <text x={200} y={212} textAnchor="middle" className="bpLabel bpMuted">
-        {[font && `font: ${font}`, border && `border: ${border}`].filter(Boolean).join('   ·   ')}
+        {[font && `${t(m.bpFont)}: ${font}`, border && `${t(m.bpBorder)}: ${border}`].filter(Boolean).join('   ·   ')}
       </text>
     </svg>
   );
@@ -646,6 +658,7 @@ function SearchFieldBlueprint({ size, dimensions }: BlueprintProps) {
 
 /** Callout blueprint: the bordered block with its leading icon, title, and body. */
 function CalloutBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const paddingInline = fmt(dimensions?.paddingInline);
   const paddingBlock = fmt(dimensions?.paddingBlock);
   const radius = fmt(dimensions?.radius);
@@ -666,7 +679,7 @@ function CalloutBlueprint({ size, dimensions }: BlueprintProps) {
   const colX = BX + pIn + 36; // text column, past the icon and its gap
 
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the callout">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCallout)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
@@ -677,19 +690,19 @@ function CalloutBlueprint({ size, dimensions }: BlueprintProps) {
       <circle cx={icx} cy={icy} r={11} fill="none" stroke={C.line} strokeWidth={2} />
       <circle cx={icx} cy={icy - 4.5} r={1.4} fill={C.line} />
       <line x1={icx} y1={icy - 1} x2={icx} y2={icy + 5} stroke={C.line} strokeWidth={2} strokeLinecap="round" />
-      <text x={icx} y={icy + 24} textAnchor="middle" className="bpLabel bpMuted">icon</text>
+      <text x={icx} y={icy + 24} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpIcon)}</text>
 
       {/* the bold title bar */}
       <rect x={colX} y={BY + pBl} width={80} height={13} rx={3} fill={C.line} />
-      <text x={colX + 88} y={BY + pBl + 7} dominantBaseline="central" className="bpLabel bpMuted">title</text>
+      <text x={colX + 88} y={BY + pBl + 7} dominantBaseline="central" className="bpLabel bpMuted">{t(m.bpTitle)}</text>
 
       {/* the body lines */}
       <rect x={colX} y={BY + pBl + 22} width={104} height={9} rx={3} fill={C.content} />
       <rect x={colX} y={BY + pBl + 38} width={84} height={9} rx={3} fill={C.content} />
-      <text x={colX + 112} y={BY + pBl + 26} dominantBaseline="central" className="bpLabel bpMuted">body</text>
+      <text x={colX + 112} y={BY + pBl + 26} dominantBaseline="central" className="bpLabel bpMuted">{t(m.bpBody)}</text>
 
       {/* width on top, padding-inline below, padding-block on the right */}
-      <HDim x1={BX} x2={BX + BW} y={BY - 24} label="width: auto" />
+      <HDim x1={BX} x2={BX + BW} y={BY - 24} label={t(m.bpWidthAuto)} />
       {paddingInline && <HDim x1={BX} x2={BX + pIn} y={BY + BH + 14} label={paddingInline} above={false} />}
       {paddingBlock && <VDim x={BX + BW + 14} y1={BY} y2={BY + pBl} label={paddingBlock} left={false} horizontal />}
 
@@ -697,13 +710,13 @@ function CalloutBlueprint({ size, dimensions }: BlueprintProps) {
       {radius && (
         <>
           <path d={`M ${BX + BW - rr} ${BY} A ${rr} ${rr} 0 0 1 ${BX + BW} ${BY + rr}`} fill="none" stroke={C.line} strokeWidth={1.5} />
-          <text x={390} y={BY - 10} textAnchor="end" className="bpLabel">radius: {radius}</text>
+          <text x={390} y={BY - 10} textAnchor="end" className="bpLabel">{t(m.bpRadius)}: {radius}</text>
         </>
       )}
 
       <BpTitle />
       <text x={200} y={214} textAnchor="middle" className="bpLabel bpMuted">
-        {[gap && `gap: ${gap}`, font && `font: ${font}`, border && `border: ${border}`].filter(Boolean).join('   ·   ')}
+        {[gap && `${t(m.bpGap)}: ${gap}`, font && `${t(m.bpFont)}: ${font}`, border && `${t(m.bpBorder)}: ${border}`].filter(Boolean).join('   ·   ')}
       </text>
     </svg>
   );
@@ -711,6 +724,7 @@ function CalloutBlueprint({ size, dimensions }: BlueprintProps) {
 
 /** Banner blueprint: the wide full-width strip with its icon, message, action, and dismiss. */
 function BannerBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const paddingInline = fmt(dimensions?.paddingInline);
   const paddingBlock = fmt(dimensions?.paddingBlock);
   const radius = fmt(dimensions?.radius);
@@ -740,7 +754,7 @@ function BannerBlueprint({ size, dimensions }: BlueprintProps) {
   const msgW = btnX - msgX - 16;
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="bpSvg" role="img" aria-label="Blueprint of the banner">
+    <svg viewBox={`0 0 ${W} ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheBanner)}>
       <Defs />
       <rect x={0} y={0} width={W} height={H} fill="url(#bpGrid)" />
 
@@ -751,16 +765,16 @@ function BannerBlueprint({ size, dimensions }: BlueprintProps) {
       <circle cx={icx} cy={midY} r={10} fill="none" stroke={C.line} strokeWidth={2} />
       <circle cx={icx} cy={midY - 4} r={1.3} fill={C.line} />
       <line x1={icx} y1={midY - 1} x2={icx} y2={midY + 5} stroke={C.line} strokeWidth={2} strokeLinecap="round" />
-      <text x={icx} y={BY - 14} textAnchor="middle" className="bpLabel bpMuted">icon</text>
+      <text x={icx} y={BY - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpIcon)}</text>
 
       {/* the flexible message line */}
       <rect x={msgX} y={midY - 5} width={msgW} height={10} rx={3} fill={C.content} />
-      <text x={msgX + msgW / 2} y={BY - 14} textAnchor="middle" className="bpLabel bpMuted">message</text>
+      <text x={msgX + msgW / 2} y={BY - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpMessage)}</text>
 
       {/* the trailing action button */}
       <rect x={btnX} y={btnY} width={btnW} height={30} rx={8} fill={C.content} fillOpacity={0.3} stroke={C.line} strokeWidth={1.5} />
       <rect x={btnX + 16} y={midY - 4} width={btnW - 32} height={8} rx={3} fill={C.line} />
-      <text x={btnX + btnW / 2} y={BY - 14} textAnchor="middle" className="bpLabel bpMuted">action</text>
+      <text x={btnX + btnW / 2} y={BY - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpAction)}</text>
 
       {/* the trailing dismiss control */}
       <path
@@ -769,7 +783,7 @@ function BannerBlueprint({ size, dimensions }: BlueprintProps) {
         strokeWidth={1.75}
         strokeLinecap="round"
       />
-      <text x={dismissCx} y={BY - 14} textAnchor="middle" className="bpLabel bpMuted">dismiss</text>
+      <text x={dismissCx} y={BY - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpDismiss)}</text>
 
       {/* padding-inline below, padding-block on the right */}
       {paddingInline && <HDim x1={BX} x2={BX + pIn} y={BY + BH + 18} label={paddingInline} above={false} />}
@@ -779,7 +793,7 @@ function BannerBlueprint({ size, dimensions }: BlueprintProps) {
       {radius && (
         <>
           <path d={`M ${BX + BW - rr} ${BY} A ${rr} ${rr} 0 0 1 ${BX + BW} ${BY + rr}`} fill="none" stroke={C.line} strokeWidth={1.5} />
-          <text x={W - 8} y={28} textAnchor="end" className="bpLabel">radius: {radius}</text>
+          <text x={W - 8} y={28} textAnchor="end" className="bpLabel">{t(m.bpRadius)}: {radius}</text>
         </>
       )}
 
@@ -787,7 +801,7 @@ function BannerBlueprint({ size, dimensions }: BlueprintProps) {
       <Foot
         y={H - 14}
         x={W / 2}
-        parts={['width: full', gap && `gap: ${gap}`, font && `font: ${font}`, border && `border: ${border}`]}
+        parts={[t(m.bpWidthFull), gap && `${t(m.bpGap)}: ${gap}`, font && `${t(m.bpFont)}: ${font}`, border && `${t(m.bpBorder)}: ${border}`]}
       />
     </svg>
   );
@@ -795,6 +809,7 @@ function BannerBlueprint({ size, dimensions }: BlueprintProps) {
 
 /** Meter blueprint: the row of discrete segments (pips) that fill from the left. */
 function MeterBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const height = fmt(size.height);
   const gap = fmt(dimensions?.gap);
 
@@ -811,7 +826,7 @@ function MeterBlueprint({ size, dimensions }: BlueprintProps) {
   const segX = (i: number) => SX + i * (segW + g);
 
   return (
-    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label="Blueprint of the meter">
+    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheMeter)}>
       <Defs />
       <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
 
@@ -835,17 +850,17 @@ function MeterBlueprint({ size, dimensions }: BlueprintProps) {
       })}
 
       {/* state labels above the two groups */}
-      <text x={(segX(0) + segX(FILLED - 1) + segW) / 2} y={SY - 16} textAnchor="middle" className="bpLabel bpMuted">filled</text>
-      <text x={(segX(FILLED) + segX(N - 1) + segW) / 2} y={SY - 16} textAnchor="middle" className="bpLabel bpMuted">empty</text>
+      <text x={(segX(0) + segX(FILLED - 1) + segW) / 2} y={SY - 16} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpFilled)}</text>
+      <text x={(segX(FILLED) + segX(N - 1) + segW) / 2} y={SY - 16} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpEmpty)}</text>
 
       {/* width on top, one segment's height on the left, the gap between two segments below */}
-      <HDim x1={SX} x2={SX + totalW} y={SY - 34} label="width: auto" />
+      <HDim x1={SX} x2={SX + totalW} y={SY - 34} label={t(m.bpWidthAuto)} />
       {height && <VDim x={SX - 26} y1={SY} y2={SY + segH} label={height} />}
       {gap && <HDim x1={segX(0) + segW} x2={segX(1)} y={SY + segH + 18} label={gap} above={false} />}
 
       <BpTitle />
       <text x={200} y={202} textAnchor="middle" className="bpLabel bpMuted">
-        {['segments: 4 (default)', 'radius: full'].join('   ·   ')}
+        {[t(m.bpSegments4Default), t(m.bpRadiusFull)].join('   ·   ')}
       </text>
     </svg>
   );
@@ -856,6 +871,7 @@ function MeterBlueprint({ size, dimensions }: BlueprintProps) {
 // example slices with their share labelled inside, plus the height, gap, radius
 // and slice-radius measurements.
 function SegmentedBarBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const height = fmt(size.height);
   const gap = fmt(dimensions?.gap);
   const radius = fmt(dimensions?.radius);
@@ -899,7 +915,7 @@ function SegmentedBarBlueprint({ size, dimensions }: BlueprintProps) {
     `M ${x + tl} ${y} L ${x + w - tr} ${y} A ${tr} ${tr} 0 0 1 ${x + w} ${y + tr} L ${x + w} ${y + h - br} A ${br} ${br} 0 0 1 ${x + w - br} ${y + h} L ${x + bl} ${y + h} A ${bl} ${bl} 0 0 1 ${x} ${y + h - bl} L ${x} ${y + tl} A ${tl} ${tl} 0 0 1 ${x + tl} ${y} Z`;
 
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the segmented bar">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSegmentedBar)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
@@ -931,19 +947,19 @@ function SegmentedBarBlueprint({ size, dimensions }: BlueprintProps) {
       })}
 
       {/* anatomy callouts: a slice, and the empty remainder of the track */}
-      <text x={firstMidX} y={SY - 14} textAnchor="middle" className="bpLabel bpMuted">slice</text>
+      <text x={firstMidX} y={SY - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpSlice)}</text>
       {emptyW > 24 && (
-        <text x={emptyX + emptyW / 2} y={SY - 14} textAnchor="middle" className="bpLabel bpMuted">track</text>
+        <text x={emptyX + emptyW / 2} y={SY - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpTrack)}</text>
       )}
 
       {/* width on top, one slice height on the left, the gap between two slices below */}
-      <HDim x1={SX} x2={SX + BW} y={SY - 32} label="width: auto" />
-      {height && <VDim x={SX - 26} y1={SY} y2={SY + BH} label={height} />}
+      <HDim x1={SX} x2={SX + BW} y={SY - 32} label={t(m.bpWidthAuto)} />
+      {height && <VDim x={SX - 22} y1={SY} y2={SY + BH} label={height} />}
       {gap && <HDim x1={firstRight} x2={secondX} y={SY + BH + 18} label={gap} above={false} />}
 
       <BpTitle />
       <text x={200} y={212} textAnchor="middle" className="bpLabel bpMuted">
-        {[radius && `radius: ${radius}`, sliceRadius && `slice radius: ${sliceRadius}`].filter(Boolean).join('   ·   ')}
+        {[radius && `${t(m.bpRadius)}: ${radius}`, sliceRadius && `${t(m.bpSliceRadius)}: ${sliceRadius}`].filter(Boolean).join('   ·   ')}
       </text>
     </svg>
   );
@@ -974,6 +990,7 @@ function IconSlot({ x, cy, placeholder }: { x: number; cy: number; placeholder: 
 }
 
 function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
+  const t = useT();
   // schematic geometry (not to scale; labels carry the exact values)
   const BX = 118;
   const BW = 176;
@@ -1010,7 +1027,7 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
   const trailIconX = inlineIcons ? BX + pIn + cw - 18 : BX + BW - 28;
 
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} size`}>
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSize)}`}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
@@ -1043,7 +1060,7 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
       {id === 'pill' && slots?.includes('icon') && (
         <>
           <IconSlot x={leadIconX} cy={iconY} placeholder />
-          <text x={leadIconX + 14} y={BY + BH + 32} textAnchor="middle" className="bpLabel bpMuted">icon</text>
+          <text x={leadIconX + 14} y={BY + BH + 32} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpIcon)}</text>
         </>
       )}
       {id === 'pill' && slots?.includes('remove') && (
@@ -1052,7 +1069,7 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
             <circle cx={BX + pIn + cw - 10} cy={iconY} r={8} strokeDasharray="2 2" />
             <path d={`M ${BX + pIn + cw - 13} ${iconY - 3} l 6 6 M ${BX + pIn + cw - 7} ${iconY - 3} l -6 6`} />
           </g>
-          <text x={BX + pIn + cw - 10} y={BY + BH + 32} textAnchor="middle" className="bpLabel bpMuted">remove</text>
+          <text x={BX + pIn + cw - 10} y={BY + BH + 32} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpRemove)}</text>
         </>
       )}
 
@@ -1068,7 +1085,7 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
           stroke="none"
           style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 15, fontWeight: 600 }}
         >
-          Button
+          {t(m.bpButton)}
         </text>
       )}
 
@@ -1087,7 +1104,7 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
             fontWeight: id === 'heading' ? 700 : 600,
           }}
         >
-          {id === 'heading' ? 'heading' : id === 'counter-badge' ? '99+' : 'text'}
+          {id === 'heading' ? t(m.bpHeading) : id === 'counter-badge' ? '99+' : t(m.bpText)}
         </text>
       )}
 
@@ -1102,14 +1119,14 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
           stroke="none"
           style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 15, fontWeight: 600 }}
         >
-          Online
+          {t(m.bpOnline)}
         </text>
       )}
 
       {/* height on the left */}
       {height && <VDim x={BX - 34} y1={BY} y2={BY + BH} label={height} />}
       {/* width span on top (content-sized, but the box width is shown) */}
-      <HDim x1={BX} x2={BX + BW} y={BY - 26} label={`width: auto`} />
+      <HDim x1={BX} x2={BX + BW} y={BY - 26} label={t(m.bpWidthAuto)} />
 
       {/* padding-inline: measured across the left gap; the right gap is symmetric */}
       {padIn && <HDim x1={BX} x2={BX + pIn} y={BY + BH + 16} label={padIn} above={false} />}
@@ -1126,7 +1143,7 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
             strokeWidth={1.5}
           />
           <text x={392} y={BY - 12} textAnchor="end" className="bpLabel">
-            radius: {radius}
+            {t(m.bpRadius)}: {radius}
           </text>
         </>
       )}
@@ -1134,7 +1151,7 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
       {/* footnotes for the non-geometric measures */}
       <BpTitle />
       <text x={200} y={212} textAnchor="middle" className="bpLabel bpMuted">
-        {[font && `font: ${font}`, border && `border: ${border}`, gap && `gap: ${gap}`].filter(Boolean).join('   ·   ')}
+        {[font && `${t(m.bpFont)}: ${font}`, border && `${t(m.bpBorder)}: ${border}`, gap && `${t(m.bpGap)}: ${gap}`].filter(Boolean).join('   ·   ')}
       </text>
     </svg>
   );
@@ -1144,6 +1161,7 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
 // Textarea: a multi-line field - a taller, more square box with placeholder
 // lines and the vertical resize grip in the bottom-right corner.
 function TextareaBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const padIn = fmt(size.paddingInline);
   const radius = fmt(dimensions?.radius);
   const border = fmt(dimensions?.border);
@@ -1159,7 +1177,7 @@ function TextareaBlueprint({ size, dimensions }: BlueprintProps) {
   const rx = BX + BW;
   const ry = BY + BH;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the textarea">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTextarea)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={BX} y={BY} w={BW} h={BH} r={rr} />
@@ -1173,11 +1191,11 @@ function TextareaBlueprint({ size, dimensions }: BlueprintProps) {
         <line x1={rx - 7} y1={ry - 11} x2={rx - 11} y2={ry - 7} />
       </g>
       {/* measurements */}
-      <HDim x1={BX} x2={BX + BW} y={BY - 20} label="width: auto" />
-      {minHeight && <VDim x={BX - 24} y1={BY} y2={BY + BH} label={`min ${minHeight}`} />}
-      <text x={rx + 12} y={ry - 8} className="bpLabel bpMuted">resize</text>
+      <HDim x1={BX} x2={BX + BW} y={BY - 20} label={t(m.bpWidthAuto)} />
+      {minHeight && <VDim x={BX - 24} y1={BY} y2={BY + BH} label={`${t(m.bpMin)} ${minHeight}`} />}
+      <text x={rx + 12} y={ry - 8} className="bpLabel bpMuted">{t(m.bpResize)}</text>
       <BpTitle />
-      <Foot y={214} parts={[radius && `radius: ${radius}`, padIn && `padding: ${padIn}`, border && `border: ${border}`]} />
+      <Foot y={214} parts={[radius && `${t(m.bpRadius)}: ${radius}`, padIn && `${t(m.bpPadding)}: ${padIn}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
@@ -1186,6 +1204,7 @@ function TextareaBlueprint({ size, dimensions }: BlueprintProps) {
 // (avatar, lines, image block) with a static blue-to-transparent shimmer on
 // each shape.
 function SkeletonBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const rectRadius = fmt(dimensions?.rectRadius);
   const circleRadius = fmt(dimensions?.circleRadius);
   const g = 'url(#bpSkel)';
@@ -1197,7 +1216,7 @@ function SkeletonBlueprint({ size, dimensions }: BlueprintProps) {
   const Ccy = RY + RH / 2;
   const Cr = 38;
   return (
-    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label="Blueprint of the skeleton">
+    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSkeleton)}>
       <Defs />
       <defs>
         <linearGradient id="bpSkel" x1="0" y1="0" x2="1" y2="0">
@@ -1210,12 +1229,12 @@ function SkeletonBlueprint({ size, dimensions }: BlueprintProps) {
       <rect x={RX} y={RY} width={RW} height={RH} rx={10} fill={g} />
       <circle cx={Ccx} cy={Ccy} r={Cr} fill={g} />
       {/* the width bar over the rect, and the circle's diameter */}
-      <HDim x1={RX} x2={RX + RW} y={RY - 20} label="width: auto" />
-      <HDim x1={Ccx - Cr} x2={Ccx + Cr} y={Ccy - Cr - 18} label="⌀ width" />
-      <text x={RX + RW / 2} y={RY + RH + 20} textAnchor="middle" className="bpLabel bpMuted">rect</text>
-      <text x={Ccx} y={Ccy + Cr + 20} textAnchor="middle" className="bpLabel bpMuted">circle</text>
+      <HDim x1={RX} x2={RX + RW} y={RY - 20} label={t(m.bpWidthAuto)} />
+      <HDim x1={Ccx - Cr} x2={Ccx + Cr} y={Ccy - Cr - 18} label={t(m.bpDiameterWidth)} />
+      <text x={RX + RW / 2} y={RY + RH + 20} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpRect)}</text>
+      <text x={Ccx} y={Ccy + Cr + 20} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpCircle)}</text>
       <BpTitle />
-      <Foot y={202} parts={[rectRadius && `rect: ${rectRadius}`, circleRadius && `circle: ${circleRadius}`]} />
+      <Foot y={202} parts={[rectRadius && `${t(m.bpRect)}: ${rectRadius}`, circleRadius && `${t(m.bpCircle)}: ${circleRadius}`]} />
     </svg>
   );
 }
@@ -1223,6 +1242,7 @@ function SkeletonBlueprint({ size, dimensions }: BlueprintProps) {
 // CodeBlock: a framed code panel with a header (filename, language, copy), a
 // line-number gutter, and the source - a small main() function.
 function CodeBlockBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const border = fmt(dimensions?.border);
   const prePadding = fmt(dimensions?.prePadding);
@@ -1236,16 +1256,16 @@ function CodeBlockBlueprint({ size, dimensions }: BlueprintProps) {
   const mono = 'var(--glacier-font-mono)';
   const lines = ['function main() {', '  render();', '}'];
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the code block">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCodeBlock)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={12} />
       {/* header: filename, language, copy */}
       <line x1={X} y1={bodyY} x2={X + W} y2={bodyY} stroke={C.edge} strokeWidth={1} />
-      <text x={X + 12} y={Y + headerH / 2} dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: mono, fontSize: 11 }}>main.ts</text>
+      <text x={X + 12} y={Y + headerH / 2} dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: mono, fontSize: 11 }}>{t(m.bpMainTs)}</text>
       <text x={X + W - 80} y={Y + headerH / 2} dominantBaseline="central" fill={C.faint} stroke="none" style={{ fontFamily: mono, fontSize: 9 }}>TS</text>
       <rect x={X + W - 52} y={Y + 6} width={42} height={headerH - 12} rx={4} fill={C.content} fillOpacity={0.32} />
-      <text x={X + W - 31} y={Y + headerH / 2} textAnchor="middle" dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: mono, fontSize: 9 }}>Copy</text>
+      <text x={X + W - 31} y={Y + headerH / 2} textAnchor="middle" dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: mono, fontSize: 9 }}>{t(m.bpCopyButton)}</text>
       {/* line-number gutter */}
       <line x1={X + gutterW} y1={bodyY} x2={X + gutterW} y2={Y + H} stroke={C.edge} strokeWidth={1} />
       {lines.map((ln, i) => {
@@ -1257,12 +1277,12 @@ function CodeBlockBlueprint({ size, dimensions }: BlueprintProps) {
           </g>
         );
       })}
-      <text x={X + W + 12} y={Y + headerH / 2} className="bpLabel bpMuted">header</text>
-      <text x={X + W - 31} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">copy</text>
-      <text x={X + W + 12} y={bodyY + 44} className="bpLabel bpMuted">pre</text>
-      <text x={X - 10} y={bodyY + 44} textAnchor="end" className="bpLabel bpMuted">gutter</text>
+      <text x={X + W + 12} y={Y + headerH / 2} className="bpLabel bpMuted">{t(m.bpHeader)}</text>
+      <text x={X + W - 31} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpCopy)}</text>
+      <text x={X + W + 12} y={bodyY + 44} className="bpLabel bpMuted">{t(m.bpPre)}</text>
+      <text x={X - 10} y={bodyY + 44} textAnchor="end" className="bpLabel bpMuted">{t(m.bpGutter)}</text>
       <BpTitle />
-      <Foot parts={[radius && `radius: ${radius}`, prePadding && `padding: ${prePadding}`, border && `border: ${border}`]} />
+      <Foot parts={[radius && `${t(m.bpRadius)}: ${radius}`, prePadding && `${t(m.bpPadding)}: ${prePadding}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
@@ -1270,6 +1290,7 @@ function CodeBlockBlueprint({ size, dimensions }: BlueprintProps) {
 // Steps: a row of progress dots - completed solid, the current one enlarged,
 // upcoming ones hollow with a hairline border.
 function StepsBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const diameter = fmt(size.diameter);
   const gap = fmt(size.gap) ?? fmt(dimensions?.gap);
   const radius = fmt(dimensions?.radius);
@@ -1285,7 +1306,7 @@ function StepsBlueprint({ size, dimensions }: BlueprintProps) {
   const Y = 82;
   const cxOf = (i: number) => SX + i * cgap;
   return (
-    <svg viewBox="0 0 400 174" className="bpSvg" role="img" aria-label="Blueprint of the steps">
+    <svg viewBox="0 0 400 174" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSteps)}>
       <Defs />
       <rect x={0} y={0} width={400} height={174} fill="url(#bpGrid)" />
       {Array.from({ length: N }, (_, i) => {
@@ -1293,19 +1314,20 @@ function StepsBlueprint({ size, dimensions }: BlueprintProps) {
         if (i === active) return <circle key={i} cx={cxOf(i)} cy={Y} r={cr} fill={C.content} fillOpacity={0.95} stroke={C.text} strokeWidth={1} />;
         return <circle key={i} cx={cxOf(i)} cy={Y} r={r} fill={C.fill} stroke={C.edge} strokeWidth={1.25} />;
       })}
-      <text x={(cxOf(0) + cxOf(1)) / 2} y={Y + cr + 16} textAnchor="middle" className="bpLabel bpMuted">completed</text>
-      <text x={cxOf(active)} y={Y - cr - 10} textAnchor="middle" className="bpLabel bpMuted">current ×{currentScale}</text>
-      <text x={(cxOf(3) + cxOf(4)) / 2} y={Y + cr + 16} textAnchor="middle" className="bpLabel bpMuted">upcoming</text>
+      <text x={(cxOf(0) + cxOf(1)) / 2} y={Y + cr + 16} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpCompleted)}</text>
+      <text x={cxOf(active)} y={Y - cr - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpCurrent)} ×{currentScale}</text>
+      <text x={(cxOf(3) + cxOf(4)) / 2} y={Y + cr + 16} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpUpcoming)}</text>
       {diameter && <HDim x1={cxOf(0) - r} x2={cxOf(0) + r} y={Y - r - 12} label={`⌀ ${diameter}`} />}
       {gap && <HDim x1={cxOf(3) + r} x2={cxOf(4) - r} y={Y - r - 12} label={gap} />}
       <BpTitle />
-      <Foot y={162} parts={[radius && `radius: ${radius}`, border && `border: ${border}`, `count ${N} · active ${active}`]} />
+      <Foot y={162} parts={[radius && `${t(m.bpRadius)}: ${radius}`, border && `${t(m.bpBorder)}: ${border}`, `${t(m.bpCount)} ${N} · ${t(m.bpActive)} ${active}`]} />
     </svg>
   );
 }
 
 // ProgressBar: a thin rounded track with a tone fill sized to the value.
 function ProgressBarBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const height = fmt(size.height);
   const radius = fmt(dimensions?.radius);
   const X = 70;
@@ -1315,20 +1337,20 @@ function ProgressBarBlueprint({ size, dimensions }: BlueprintProps) {
   const rr = H / 2;
   const fillW = Math.round(W * 0.6);
   return (
-    <svg viewBox="0 0 400 174" className="bpSvg" role="img" aria-label="Blueprint of the progress bar">
+    <svg viewBox="0 0 400 174" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheProgressBar)}>
       <Defs />
       <rect x={0} y={0} width={400} height={174} fill="url(#bpGrid)" />
       {/* the track */}
       <rect x={X} y={Y} width={W} height={H} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       {/* the fill, sized to the value */}
       <rect x={X} y={Y} width={fillW} height={H} rx={rr} fill={C.content} fillOpacity={0.55} stroke={C.text} strokeWidth={1} />
-      <text x={X + fillW / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">fill</text>
-      <text x={X + fillW + (W - fillW) / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">track</text>
-      <HDim x1={X} x2={X + W} y={Y - 30} label="width: auto" />
+      <text x={X + fillW / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpFill)}</text>
+      <text x={X + fillW + (W - fillW) / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpTrack)}</text>
+      <HDim x1={X} x2={X + W} y={Y - 30} label={t(m.bpWidthAuto)} />
       {height && <VDim x={X - 22} y1={Y} y2={Y + H} label={height} />}
-      <HDim x1={X} x2={X + fillW} y={Y + H + 16} label="value = 60% of max" above={false} />
+      <HDim x1={X} x2={X + fillW} y={Y + H + 16} label={t(m.bpValue60OfMax)} above={false} />
       <BpTitle />
-      <Foot y={162} parts={[height && `height: ${height}`, radius && `radius: ${radius}`, 'indeterminate: 40% sweep']} />
+      <Foot y={162} parts={[height && `${t(m.bpHeight)}: ${height}`, radius && `${t(m.bpRadius)}: ${radius}`, t(m.bpIndeterminate40Sweep)]} />
     </svg>
   );
 }
@@ -1336,6 +1358,7 @@ function ProgressBarBlueprint({ size, dimensions }: BlueprintProps) {
 // Divider: a hairline rule with an optional centered label, drawn as the
 // labelled separator - a rule on each side of a centered "or".
 function DividerBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const thickness = fmt(size.thickness) ?? fmt(dimensions?.thickness);
   const gap = fmt(dimensions?.gap);
   const X = 64;
@@ -1347,26 +1370,27 @@ function DividerBlueprint({ size, dimensions }: BlueprintProps) {
   const leftEnd = cx - half - g;
   const rightStart = cx + half + g;
   return (
-    <svg viewBox="0 0 400 164" className="bpSvg" role="img" aria-label="Blueprint of the divider">
+    <svg viewBox="0 0 400 164" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheDivider)}>
       <Defs />
       <rect x={0} y={0} width={400} height={164} fill="url(#bpGrid)" />
       {/* the two hairline rules with the label between them */}
       <line x1={X} y1={Y} x2={leftEnd} y2={Y} stroke={C.line} strokeWidth={1.5} />
       <line x1={rightStart} y1={Y} x2={X + W} y2={Y} stroke={C.line} strokeWidth={1.5} />
       <text x={cx} y={Y} textAnchor="middle" dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 13, fontWeight: 600 }}>
-        or
+        {t(m.bpOr)}
       </text>
-      <text x={cx} y={Y - 22} textAnchor="middle" className="bpLabel bpMuted">label</text>
-      <text x={X + 44} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">hairline</text>
-      <HDim x1={X} x2={X + W} y={Y - 36} label="width: auto" />
+      <text x={cx} y={Y - 22} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpLabel)}</text>
+      <text x={X + 44} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpHairline)}</text>
+      <HDim x1={X} x2={X + W} y={Y - 36} label={t(m.bpWidthAuto)} />
       {gap && <HDim x1={leftEnd} x2={cx - half} y={Y + 20} label={gap} above={false} />}
       <BpTitle />
-      <Foot y={152} parts={[thickness && `thickness: ${thickness}`, gap && `gap: ${gap}`]} />
+      <Foot y={152} parts={[thickness && `${t(m.bpThickness)}: ${thickness}`, gap && `${t(m.bpGap)}: ${gap}`]} />
     </svg>
   );
 }
 
 function BarBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const BX = 70;
   const BW = 260;
   const BY = 66;
@@ -1377,23 +1401,23 @@ function BarBlueprint({ size, dimensions }: BlueprintProps) {
   const border = fmt(size.border) ?? fmt(dimensions?.border);
   const rr = radius === 'radius-full' || radius === '9999px' ? BH / 2 : radius ? 6 : 3;
   return (
-    <svg viewBox="0 0 400 164" className="bpSvg" role="img" aria-label={`Blueprint of the ${size.name} size`}>
+    <svg viewBox="0 0 400 164" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSize)}`}>
       <Defs />
       <rect x={0} y={0} width={400} height={164} fill="url(#bpGrid)" />
       <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       {thickness && <VDim x={BX - 22} y1={BY} y2={BY + BH} label={thickness} />}
-      <HDim x1={BX} x2={BX + BW} y={BY - 24} label="width: auto" />
+      <HDim x1={BX} x2={BX + BW} y={BY - 24} label={t(m.bpWidthAuto)} />
       {radius && (
         <>
           <path d={`M ${BX + BW - rr} ${BY} A ${rr} ${rr} 0 0 1 ${BX + BW} ${BY + rr}`} fill="none" stroke={C.line} strokeWidth={1.5} />
           <text x={392} y={BY - 10} textAnchor="end" className="bpLabel">
-            radius: {radius}
+            {t(m.bpRadius)}: {radius}
           </text>
         </>
       )}
       <BpTitle />
       <text x={200} y={146} textAnchor="middle" className="bpLabel bpMuted">
-        {[border && `border: ${border}`, gap && `gap: ${gap}`].filter(Boolean).join('   ·   ')}
+        {[border && `${t(m.bpBorder)}: ${border}`, gap && `${t(m.bpGap)}: ${gap}`].filter(Boolean).join('   ·   ')}
       </text>
     </svg>
   );
@@ -1444,6 +1468,7 @@ const Foot = ({ y = 212, x = 200, parts }: { y?: number; x?: number; parts: (str
 
 // Field: label + required marker, the control, and the reserved meta line.
 function FieldBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const gap = fmt(dimensions?.gap) ?? fmt(size.gap);
   const X = 104;
   const W = 192;
@@ -1452,7 +1477,7 @@ function FieldBlueprint({ size, dimensions }: BlueprintProps) {
   const ctrlH = 40;
   const metaY = 126;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the field">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheField)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Ln x={X} y={labelY} w={60} op={0.75} />
@@ -1460,18 +1485,19 @@ function FieldBlueprint({ size, dimensions }: BlueprintProps) {
       <Frame x={X} y={ctrlY} w={W} h={ctrlH} r={8} />
       <Ln x={X + 12} y={ctrlY + ctrlH / 2 - 3} w={104} op={0.5} />
       <Ln x={X} y={metaY} w={140} h={5} op={0.32} />
-      <text x={X - 10} y={labelY + 8} textAnchor="end" className="bpLabel bpMuted">label</text>
-      <text x={X + W + 12} y={ctrlY + ctrlH / 2 + 3} className="bpLabel bpMuted">control</text>
-      <text x={X - 10} y={metaY + 6} textAnchor="end" className="bpLabel bpMuted">meta</text>
+      <text x={X - 10} y={labelY + 8} textAnchor="end" className="bpLabel bpMuted">{t(m.bpLabel)}</text>
+      <text x={X + W + 12} y={ctrlY + ctrlH / 2 + 3} className="bpLabel bpMuted">{t(m.bpControl)}</text>
+      <text x={X - 10} y={metaY + 6} textAnchor="end" className="bpLabel bpMuted">{t(m.bpMeta)}</text>
       {gap && <VDim x={X + W + 30} y1={ctrlY + ctrlH} y2={metaY} label={gap} left={false} />}
       <BpTitle />
-      <Foot parts={['label', 'control', 'hint / error']} />
+      <Foot parts={[t(m.bpLabel), t(m.bpControl), t(m.bpHintError)]} />
     </svg>
   );
 }
 
 // Select: the trigger (value + chevrons) with the portalled option menu below.
 function SelectBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const optionRadius = fmt(dimensions?.optionRadius);
   const padIn = fmt(size.paddingInline);
@@ -1486,7 +1512,7 @@ function SelectBlueprint({ size, dimensions }: BlueprintProps) {
   const pad = 8;
   const menuH = rows * pad * 0 + rows * rowH + pad * 2;
   return (
-    <svg viewBox="0 0 400 234" className="bpSvg" role="img" aria-label="Blueprint of the select">
+    <svg viewBox="0 0 400 234" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSelect)}>
       <Defs />
       <rect x={0} y={0} width={400} height={234} fill="url(#bpGrid)" />
       <Frame x={X} y={trigY} w={W} h={trigH} r={9} />
@@ -1504,11 +1530,11 @@ function SelectBlueprint({ size, dimensions }: BlueprintProps) {
           </g>
         );
       })}
-      <text x={X - 10} y={trigY + trigH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">trigger</text>
-      <text x={X + W + 12} y={menuY + 13} className="bpLabel bpMuted">menu</text>
-      <text x={X + W + 12} y={menuY + pad + rowH / 2 + 3} className="bpLabel bpMuted">option ✓</text>
+      <text x={X - 10} y={trigY + trigH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpTrigger)}</text>
+      <text x={X + W + 12} y={menuY + menuH - 8} className="bpLabel bpMuted">{t(m.bpMenu)}</text>
+      <text x={X + W + 12} y={menuY + pad + rowH / 2 + 3} className="bpLabel bpMuted">{t(m.bpOptionCheck)}</text>
       <BpTitle />
-      <Foot y={224} parts={[radius && `radius: ${radius}`, optionRadius && `option: ${optionRadius}`, padIn && `pad: ${padIn}`, border && `border: ${border}`]} />
+      <Foot y={224} parts={[radius && `${t(m.bpRadius)}: ${radius}`, optionRadius && `${t(m.bpOption)}: ${optionRadius}`, padIn && `${t(m.bpPad)}: ${padIn}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
@@ -1517,6 +1543,7 @@ function SelectBlueprint({ size, dimensions }: BlueprintProps) {
 // listbox below it - an active option, an option with a supporting description,
 // and the input-to-menu offset dimensioned from the spec's gap.
 function ComboboxBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const optionRadius = fmt(dimensions?.optionRadius);
   const menuPadding = fmt(dimensions?.menuPadding);
@@ -1532,7 +1559,7 @@ function ComboboxBlueprint({ size, dimensions }: BlueprintProps) {
   const pad = 7;
   const menuH = 3 * rowH + pad * 2;
   return (
-    <svg viewBox="0 0 400 250" className="bpSvg" role="img" aria-label="Blueprint of the combobox">
+    <svg viewBox="0 0 400 250" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCombobox)}>
       <Defs />
       <rect x={0} y={0} width={400} height={250} fill="url(#bpGrid)" />
 
@@ -1560,20 +1587,20 @@ function ComboboxBlueprint({ size, dimensions }: BlueprintProps) {
         );
       })}
 
-      <text x={X - 10} y={trigY + trigH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">input</text>
-      <text x={X + W + 12} y={trigY + 20} className="bpLabel bpMuted">indicator</text>
-      <text x={X - 10} y={menuY + pad + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">active</text>
-      <text x={X + W + 12} y={menuY + pad + rowH + rowH / 2 + 3} className="bpLabel bpMuted">description</text>
-      <text x={X - 10} y={menuY + pad + 2 * rowH + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">option</text>
+      <text x={X - 10} y={trigY + trigH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpInput)}</text>
+      <text x={X + W + 12} y={trigY + 20} className="bpLabel bpMuted">{t(m.bpIndicator)}</text>
+      <text x={X - 10} y={menuY + pad + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpActive)}</text>
+      <text x={X + W + 12} y={menuY + pad + rowH + rowH / 2 + 3} className="bpLabel bpMuted">{t(m.bpDescription)}</text>
+      <text x={X - 10} y={menuY + pad + 2 * rowH + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpOption)}</text>
       <BpTitle />
       <Foot
         y={240}
         parts={[
-          radius && `radius: ${radius}`,
-          optionRadius && `option: ${optionRadius}`,
-          menuPadding && `menu pad: ${menuPadding}`,
-          padIn && `pad: ${padIn}`,
-          border && `border: ${border}`,
+          radius && `${t(m.bpRadius)}: ${radius}`,
+          optionRadius && `${t(m.bpOption)}: ${optionRadius}`,
+          menuPadding && `${t(m.bpMenuPad)}: ${menuPadding}`,
+          padIn && `${t(m.bpPad)}: ${padIn}`,
+          border && `${t(m.bpBorder)}: ${border}`,
         ]}
       />
     </svg>
@@ -1583,6 +1610,7 @@ function ComboboxBlueprint({ size, dimensions }: BlueprintProps) {
 // MultiSelect: the control shell holding removable tags plus the editable
 // input, and the listbox below with a checked selected row and the active row.
 function MultiSelectBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const tagRadius = fmt(dimensions?.tagRadius);
   const optionRadius = fmt(dimensions?.optionRadius);
@@ -1614,7 +1642,7 @@ function MultiSelectBlueprint({ size, dimensions }: BlueprintProps) {
     </g>
   );
   return (
-    <svg viewBox="0 0 400 250" className="bpSvg" role="img" aria-label="Blueprint of the multi select">
+    <svg viewBox="0 0 400 250" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheMultiSelect)}>
       <Defs />
       <rect x={0} y={0} width={400} height={250} fill="url(#bpGrid)" />
 
@@ -1640,22 +1668,22 @@ function MultiSelectBlueprint({ size, dimensions }: BlueprintProps) {
         );
       })}
 
-      <text x={X - 10} y={tagY + tagH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">tag ×</text>
-      <text x={X + W + 12} y={trigY + 21} className="bpLabel bpMuted">indicator</text>
-      <text x={X - 10} y={menuY + pad + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">selected ✓</text>
-      <text x={X + W + 12} y={menuY + pad + rowH + rowH / 2 + 3} className="bpLabel bpMuted">active</text>
-      <text x={X - 10} y={menuY + pad + 2 * rowH + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">option</text>
+      <text x={X - 10} y={tagY + tagH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpTagX)}</text>
+      <text x={X + W + 12} y={trigY + 21} className="bpLabel bpMuted">{t(m.bpIndicator)}</text>
+      <text x={X - 10} y={menuY + pad + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpSelectedCheck)}</text>
+      <text x={X + W + 12} y={menuY + pad + rowH + rowH / 2 + 3} className="bpLabel bpMuted">{t(m.bpActive)}</text>
+      <text x={X - 10} y={menuY + pad + 2 * rowH + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpOption)}</text>
       <BpTitle />
       <Foot
         y={240}
         parts={[
-          radius && `radius: ${radius}`,
-          tagRadius && `tag: ${tagRadius}`,
-          optionRadius && `option: ${optionRadius}`,
-          gap && `tag gap: ${gap}`,
-          menuPadding && `menu pad: ${menuPadding}`,
-          padIn && `pad: ${padIn}`,
-          border && `border: ${border}`,
+          radius && `${t(m.bpRadius)}: ${radius}`,
+          tagRadius && `${t(m.bpTag)}: ${tagRadius}`,
+          optionRadius && `${t(m.bpOption)}: ${optionRadius}`,
+          gap && `${t(m.bpTagGap)}: ${gap}`,
+          menuPadding && `${t(m.bpMenuPad)}: ${menuPadding}`,
+          padIn && `${t(m.bpPad)}: ${padIn}`,
+          border && `${t(m.bpBorder)}: ${border}`,
         ]}
       />
     </svg>
@@ -1666,6 +1694,7 @@ function MultiSelectBlueprint({ size, dimensions }: BlueprintProps) {
 // List: stacked card rows, each with a leading icon, title and description
 // lines, and a trailing affordance, separated by the size's gap.
 function ListBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const height = fmt(size.height);
   const padIn = fmt(size.paddingInline);
   const gap = fmt(size.gap) ?? fmt(dimensions?.gap);
@@ -1692,23 +1721,23 @@ function ListBlueprint({ size, dimensions }: BlueprintProps) {
     </g>
   );
   return (
-    <svg viewBox="0 0 400 282" className="bpSvg" role="img" aria-label="Blueprint of the list">
+    <svg viewBox="0 0 400 282" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheList)}>
       <Defs />
       <rect x={0} y={0} width={400} height={282} fill="url(#bpGrid)" />
       {row(rows[0]!, true)}
       {row(rows[1]!, false)}
       {row(rows[2]!, false)}
 
-      <HDim x1={X} x2={X + W} y={rows[0]! - 20} label="width: auto" />
+      <HDim x1={X} x2={X + W} y={rows[0]! - 20} label={t(m.bpWidthAuto)} />
       {height && <VDim x={X - 20} y1={rows[0]!} y2={rows[0]! + rowH} label={height} />}
       {gap && <VDim x={X + W + 16} y1={rows[0]! + rowH} y2={rows[1]!} label={gap} left={false} horizontal />}
 
-      <text x={X + W + 12} y={rows[0]! + rowH / 2 + 3} className="bpLabel bpMuted">selected</text>
-      <text x={X - 10} y={rows[1]! + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">leading</text>
-      <text x={X - 10} y={rows[2]! + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">title + desc</text>
-      <text x={X + W + 12} y={rows[2]! + rowH / 2 + 3} className="bpLabel bpMuted">trailing</text>
+      <text x={X + W + 12} y={rows[0]! + rowH / 2 + 3} className="bpLabel bpMuted">{t(m.bpSelected)}</text>
+      <text x={X - 10} y={rows[1]! + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpLeading)}</text>
+      <text x={X - 10} y={rows[2]! + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpTitleDesc)}</text>
+      <text x={X + W + 12} y={rows[2]! + rowH / 2 + 3} className="bpLabel bpMuted">{t(m.bpTrailing)}</text>
       <BpTitle />
-      <Foot y={274} parts={[padIn && `pad: ${padIn}`, radius && `radius: ${radius}`, border && `border: ${border}`]} />
+      <Foot y={274} parts={[padIn && `${t(m.bpPad)}: ${padIn}`, radius && `${t(m.bpRadius)}: ${radius}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
@@ -1716,6 +1745,7 @@ function ListBlueprint({ size, dimensions }: BlueprintProps) {
 
 // SegmentedControl: a glass track of segments with a thumb under the selected one.
 function SegmentedControlBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const padding = fmt(dimensions?.padding);
   const gap = fmt(dimensions?.gap);
@@ -1732,7 +1762,7 @@ function SegmentedControlBlueprint({ size, dimensions }: BlueprintProps) {
   const pad = 6;
   const segX = (i: number) => SX + i * (segW + g);
   return (
-    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label="Blueprint of the segmented control">
+    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSegmentedControl)}>
       <Defs />
       <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
       <rect x={SX - pad} y={SY - pad} width={totalW + pad * 2} height={segH + pad * 2} rx={12} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
@@ -1741,18 +1771,19 @@ function SegmentedControlBlueprint({ size, dimensions }: BlueprintProps) {
       {Array.from({ length: N }, (_, i) => (
         <Ln key={i} x={segX(i) + segW / 2 - 22} y={SY + segH / 2 - 3} w={44} op={i === 0 ? 0.7 : 0.4} />
       ))}
-      <text x={segX(0) + segW / 2} y={SY - pad - 8} textAnchor="middle" className="bpLabel bpMuted">thumb</text>
-      <text x={segX(1) + segW / 2} y={SY + segH + pad + 16} textAnchor="middle" className="bpLabel bpMuted">segment</text>
-      <HDim x1={SX - pad} x2={SX + totalW + pad} y={SY - pad - 20} label="width: auto" />
+      <text x={segX(0) + segW / 2} y={SY - pad - 8} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpThumb)}</text>
+      <text x={segX(1) + segW / 2} y={SY + segH + pad + 16} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpSegment)}</text>
+      <HDim x1={SX - pad} x2={SX + totalW + pad} y={SY - pad - 20} label={t(m.bpWidthAuto)} />
       {gap && <HDim x1={segX(0) + segW} x2={segX(1)} y={SY + segH + 6} label={gap} above={false} />}
       <BpTitle />
-      <Foot y={204} parts={[radius && `radius: ${radius}`, padding && `padding: ${padding}`]} />
+      <Foot y={204} parts={[radius && `${t(m.bpRadius)}: ${radius}`, padding && `${t(m.bpPadding)}: ${padding}`]} />
     </svg>
   );
 }
 
 // Tabs: a tablist underlined by a hairline, the active indicator, and the panel.
 function TabsBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const indicator = fmt(dimensions?.indicatorThickness);
   const radius = fmt(dimensions?.radius);
   const padBl = fmt(dimensions?.paddingBlock);
@@ -1764,7 +1795,7 @@ function TabsBlueprint({ size, dimensions }: BlueprintProps) {
   const panelY = listY + 34;
   const panelH = 84;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the tabs">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTabs)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       {/* tablist labels */}
@@ -1779,17 +1810,18 @@ function TabsBlueprint({ size, dimensions }: BlueprintProps) {
       <Ln x={X + 16} y={panelY + 20} w={150} op={0.4} />
       <Ln x={X + 16} y={panelY + 38} w={200} h={5} op={0.3} />
       <Ln x={X + 16} y={panelY + 52} w={170} h={5} op={0.3} />
-      <text x={X + tabW / 2} y={listY - 8} textAnchor="middle" className="bpLabel bpMuted">tab</text>
-      <text x={X + W + 12} y={listY + 30} className="bpLabel bpMuted">indicator</text>
-      <text x={X + W + 12} y={panelY + panelH / 2} className="bpLabel bpMuted">panel</text>
+      <text x={X + tabW / 2} y={listY - 8} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpTab)}</text>
+      <text x={X + W + 12} y={listY + 30} className="bpLabel bpMuted">{t(m.bpIndicator)}</text>
+      <text x={X + W + 12} y={panelY + panelH / 2} className="bpLabel bpMuted">{t(m.bpPanel)}</text>
       <BpTitle />
-      <Foot parts={[indicator && `indicator: ${indicator}`, radius && `radius: ${radius}`, padBl && `pad: ${padBl}`]} />
+      <Foot parts={[indicator && `${t(m.bpIndicator)}: ${indicator}`, radius && `${t(m.bpRadius)}: ${radius}`, padBl && `${t(m.bpPad)}: ${padBl}`]} />
     </svg>
   );
 }
 
 // Tooltip: a small glass bubble with a pointer, offset above its trigger.
 function TooltipBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const offset = fmt(dimensions?.offset);
   const padIn = fmt(dimensions?.paddingInline);
@@ -1800,7 +1832,7 @@ function TooltipBlueprint({ size, dimensions }: BlueprintProps) {
   const trigY = bubbleY + bubbleH + 26;
   const cx = bubbleX + bubbleW / 2;
   return (
-    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label="Blueprint of the tooltip">
+    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTooltip)}>
       <Defs />
       <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
       {/* the bubble and its pointer as one outline, so the dashes trace around
@@ -1817,11 +1849,11 @@ function TooltipBlueprint({ size, dimensions }: BlueprintProps) {
       {/* the trigger */}
       <rect x={cx - 34} y={trigY} width={68} height={26} rx={6} fill={C.content} fillOpacity={0.22} stroke={C.edge} strokeWidth={1.25} />
       <Ln x={cx - 20} y={trigY + 10} w={40} h={5} op={0.5} />
-      <text x={bubbleX + bubbleW + 12} y={bubbleY + bubbleH / 2 + 3} className="bpLabel bpMuted">bubble</text>
-      <text x={cx + 42} y={trigY + 16} className="bpLabel bpMuted">trigger</text>
-      {offset && <VDim x={bubbleX - 20} y1={bubbleY + bubbleH} y2={trigY} label={`offset ${offset}`} />}
+      <text x={bubbleX + bubbleW + 12} y={bubbleY + bubbleH / 2 + 3} className="bpLabel bpMuted">{t(m.bpBubble)}</text>
+      <text x={cx + 42} y={trigY + 16} className="bpLabel bpMuted">{t(m.bpTrigger)}</text>
+      {offset && <VDim x={bubbleX - 20} y1={bubbleY + bubbleH} y2={trigY} label={`${t(m.bpOffset)} ${offset}`} />}
       <BpTitle />
-      <Foot y={204} parts={[radius && `radius: ${radius}`, padIn && `pad-inline: ${padIn}`, 'glass + blur']} />
+      <Foot y={204} parts={[radius && `${t(m.bpRadius)}: ${radius}`, padIn && `${t(m.bpPadInline)}: ${padIn}`, t(m.bpGlassBlur)]} />
     </svg>
   );
 }
@@ -1832,6 +1864,7 @@ function TooltipBlueprint({ size, dimensions }: BlueprintProps) {
 // dimmed overlay, the sheet's header, body, and footer regions, the slide-in
 // direction, and the gutter and width dimensions for the selected size.
 function DrawerBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const width = fmt(size.diameter);
   const radius = fmt(dimensions?.radius);
   const headerPad = fmt(dimensions?.headerPadding);
@@ -1848,7 +1881,7 @@ function DrawerBlueprint({ size, dimensions }: BlueprintProps) {
   const R = 14;
   const right = PX + PW;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the drawer">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheDrawer)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       {/* the screen, with the overlay wash dimming the page behind the sheet */}
@@ -1876,14 +1909,14 @@ function DrawerBlueprint({ size, dimensions }: BlueprintProps) {
         <polyline points={`${SX + SW + 8},${SY + SH - 40} ${SX + SW + 2},${SY + SH - 36} ${SX + SW + 8},${SY + SH - 32}`} />
       </g>
       {/* labels and dimensions */}
-      <text x={SX + 8} y={SY + 15} className="bpLabel bpMuted">overlay</text>
-      <text x={PX - 10} y={PY + 16} textAnchor="end" className="bpLabel bpMuted">header</text>
-      <text x={PX - 10} y={PY + 56} textAnchor="end" className="bpLabel bpMuted">body</text>
-      <text x={PX - 10} y={PY + PH - 14} textAnchor="end" className="bpLabel bpMuted">footer</text>
-      {width && <HDim x1={PX} x2={right} y={SY - 14} label={`width ${width}`} />}
+      <text x={SX + 8} y={SY + 15} className="bpLabel bpMuted">{t(m.bpOverlay)}</text>
+      <text x={PX - 10} y={PY + 16} textAnchor="end" className="bpLabel bpMuted">{t(m.bpHeader)}</text>
+      <text x={PX - 10} y={PY + 56} textAnchor="end" className="bpLabel bpMuted">{t(m.bpBody)}</text>
+      <text x={PX - 10} y={PY + PH - 14} textAnchor="end" className="bpLabel bpMuted">{t(m.bpFooter)}</text>
+      {width && <HDim x1={PX} x2={right} y={SY - 14} label={`${t(m.bpWidth)} ${width}`} />}
       {gutter && <HDim x1={right} x2={SX + SW} y={PY + 44} label={gutter} above={false} />}
       <BpTitle />
-      <Foot parts={[radius && `radius: ${radius}`, headerPad && `pad: ${headerPad}`, gutter && `gutter: ${gutter}`]} />
+      <Foot parts={[radius && `${t(m.bpRadius)}: ${radius}`, headerPad && `${t(m.bpPad)}: ${headerPad}`, gutter && `${t(m.bpGutter)}: ${gutter}`]} />
     </svg>
   );
 }
@@ -1893,6 +1926,7 @@ function DrawerBlueprint({ size, dimensions }: BlueprintProps) {
 // start midweek, with the outside days dimmed, one day selected, and one
 // ringed as today; the cell metric and paint come from the spec.
 function CalendarBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const pad = fmt(dimensions?.padding);
   const dayCell = fmt(dimensions?.dayCell);
@@ -1919,7 +1953,7 @@ function CalendarBlueprint({ dimensions }: BlueprintProps) {
   });
   const frameH = DAYS_Y + 5 * ROW_H + 14;
   return (
-    <svg viewBox="0 0 400 314" className="bpSvg" role="img" aria-label="Blueprint of the calendar month grid">
+    <svg viewBox="0 0 400 314" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCalendarMonthGrid)}>
       <Defs />
       <rect x={0} y={0} width={400} height={314} fill="url(#bpGrid)" />
       {/* the panel */}
@@ -1971,7 +2005,7 @@ function CalendarBlueprint({ dimensions }: BlueprintProps) {
       {/* the cell metric, measured on the last row's first cell */}
       {dayCell && <HDim x1={GX} x2={GX + CELL} y={DAYS_Y + 5 * ROW_H + 6} label={dayCell} above={false} />}
       <BpTitle />
-      <Foot y={306} parts={[radius && `radius: ${radius}`, pad && `pad: ${pad}`, dayRadius && `day radius: ${dayRadius}`]} />
+      <Foot y={306} parts={[radius && `${t(m.bpRadius)}: ${radius}`, pad && `${t(m.bpPad)}: ${pad}`, dayRadius && `${t(m.bpDayRadius)}: ${dayRadius}`]} />
     </svg>
   );
 }
@@ -1980,6 +2014,7 @@ function CalendarBlueprint({ dimensions }: BlueprintProps) {
 // anchored panel below holding a miniature month; the numbered anatomy lives
 // in the Calendar blueprint that follows it in the docs.
 function DatePickerBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const panelPad = fmt(dimensions?.panelPadding);
   const TX = 96;
@@ -1991,7 +2026,7 @@ function DatePickerBlueprint({ dimensions }: BlueprintProps) {
   const PY = TY + TH + 18;
   const PH = 120;
   return (
-    <svg viewBox="0 0 400 254" className="bpSvg" role="img" aria-label="Blueprint of the date picker">
+    <svg viewBox="0 0 400 254" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheDatePicker)}>
       <Defs />
       <rect x={0} y={0} width={400} height={254} fill="url(#bpGrid)" />
       {/* trigger: calendar glyph, value line, chevron */}
@@ -2018,17 +2053,18 @@ function DatePickerBlueprint({ dimensions }: BlueprintProps) {
         );
       })}
       {/* labels and the trigger-to-panel offset */}
-      <text x={TX - 10} y={TY + TH / 2 + 4} textAnchor="end" className="bpLabel bpMuted">trigger</text>
-      <text x={PX - 10} y={PY + 16} textAnchor="end" className="bpLabel bpMuted">panel</text>
-      <VDim x={PX + PW + 16} y1={TY + TH} y2={PY} label="offset" left={false} />
+      <text x={TX - 10} y={TY + TH / 2 + 4} textAnchor="end" className="bpLabel bpMuted">{t(m.bpTrigger)}</text>
+      <text x={PX - 10} y={PY + 16} textAnchor="end" className="bpLabel bpMuted">{t(m.bpPanel)}</text>
+      <VDim x={PX + PW + 16} y1={TY + TH} y2={PY} label={t(m.bpOffset)} left={false} />
       <BpTitle />
-      <Foot y={246} parts={[radius && `radius: ${radius}`, panelPad && `panel pad: ${panelPad}`]} />
+      <Foot y={246} parts={[radius && `${t(m.bpRadius)}: ${radius}`, panelPad && `${t(m.bpPanelPad)}: ${panelPad}`]} />
     </svg>
   );
 }
 
 // Toast: a rounded-full pill with a leading icon, the message, and a dismiss.
 function ToastBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const gap = fmt(dimensions?.gap);
   const padIn = fmt(dimensions?.paddingInline);
@@ -2045,7 +2081,7 @@ function ToastBlueprint({ size, dimensions }: BlueprintProps) {
   const dim1 = Y + H + 16;
   const dim2 = dim1 + 24;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the toast">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheToast)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={X} y={Y} width={W} height={H} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
@@ -2056,14 +2092,14 @@ function ToastBlueprint({ size, dimensions }: BlueprintProps) {
         <line x1={X + W - 26} y1={cyc - 5} x2={X + W - 16} y2={cyc + 5} />
         <line x1={X + W - 26} y1={cyc + 5} x2={X + W - 16} y2={cyc - 5} />
       </g>
-      <text x={iconX} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">icon</text>
-      <text x={msgX + 55} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">message</text>
-      <text x={X + W - 21} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">dismiss</text>
+      <text x={iconX} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpIcon)}</text>
+      <text x={msgX + 55} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpMessage)}</text>
+      <text x={X + W - 21} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpDismiss)}</text>
       {/* padding, then the icon-to-message gap on its own row below */}
       {padIn && <HDim x1={X} x2={iconX - 9} y={dim1} label={padIn} above={false} />}
       {gap && <HDim x1={iconX + 9} x2={msgX} y={dim2} label={gap} above={false} />}
       <BpTitle />
-      <Foot y={216} parts={[radius && `radius: ${radius}`]} />
+      <Foot y={216} parts={[radius && `${t(m.bpRadius)}: ${radius}`]} />
     </svg>
   );
 }
@@ -2071,6 +2107,7 @@ function ToastBlueprint({ size, dimensions }: BlueprintProps) {
 
 // ScrollArea: a capped viewport with edge fade masks and a thin scrollbar.
 function ScrollAreaBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const fade = fmt(dimensions?.fade);
   const scrollbar = fmt(dimensions?.scrollbar);
   const X = 118;
@@ -2078,7 +2115,7 @@ function ScrollAreaBlueprint({ size, dimensions }: BlueprintProps) {
   const Y = 44;
   const H = 128;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the scroll area">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheScrollArea)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={10} />
@@ -2101,18 +2138,19 @@ function ScrollAreaBlueprint({ size, dimensions }: BlueprintProps) {
       </defs>
       {/* scrollbar */}
       <rect x={X + W - 8} y={Y + 10} width={4} height={54} rx={2} fill={C.line} fillOpacity={0.6} />
-      <text x={X + W / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">fade</text>
-      <text x={X - 10} y={Y + H / 2} textAnchor="end" className="bpLabel bpMuted">viewport</text>
-      <text x={X + W + 12} y={Y + 40} className="bpLabel bpMuted">scrollbar</text>
+      <text x={X + W / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpFade)}</text>
+      <text x={X - 10} y={Y + H / 2} textAnchor="end" className="bpLabel bpMuted">{t(m.bpViewport)}</text>
+      <text x={X + W + 12} y={Y + 40} className="bpLabel bpMuted">{t(m.bpScrollbar)}</text>
       {fade && <VDim x={X + W + 30} y1={Y} y2={Y + 18} label={fade} left={false} />}
       <BpTitle />
-      <Foot parts={[fade && `fade: ${fade}`, scrollbar && `bar: ${scrollbar}`]} />
+      <Foot parts={[fade && `${t(m.bpFade)}: ${fade}`, scrollbar && `${t(m.bpBar)}: ${scrollbar}`]} />
     </svg>
   );
 }
 
 // Carousel: a snap-scrolling track of items with prev/next edge controls.
 function CarouselBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const gap = fmt(dimensions?.gap);
   const radius = fmt(dimensions?.radius);
   const X = 58;
@@ -2122,7 +2160,7 @@ function CarouselBlueprint({ size, dimensions }: BlueprintProps) {
   const itemW = 78;
   const g = 12;
   return (
-    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label="Blueprint of the carousel">
+    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCarousel)}>
       <Defs />
       <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
       {/* items */}
@@ -2132,23 +2170,24 @@ function CarouselBlueprint({ size, dimensions }: BlueprintProps) {
       {/* the fourth item, clipped, hinting the overflow */}
       <rect x={X + 3 * (itemW + g)} y={Y} width={itemW} height={H} rx={8} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1} strokeDasharray="4 3" />
       {/* prev / next controls */}
-      {[{ cx: X + 14, d: 'M 3 -6 l -6 6 l 6 6' }, { cx: X + W - 14, d: 'M -3 -6 l 6 6 l -6 6' }].map((c, i) => (
+      {[{ cx: X + 14, d: 'm 3 -6 l -6 6 l 6 6' }, { cx: X + W - 14, d: 'm -3 -6 l 6 6 l -6 6' }].map((c, i) => (
         <g key={i}>
           <circle cx={c.cx} cy={Y + H / 2} r={13} fill={C.fill} stroke={C.edge} strokeWidth={1.5} />
           <path d={`M ${c.cx} ${Y + H / 2} ${c.d}`} fill="none" stroke={C.line} strokeWidth={1.6} />
         </g>
       ))}
-      <text x={X + itemW / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">item</text>
-      <text x={X + W - 14} y={Y + H + 18} textAnchor="middle" className="bpLabel bpMuted">control</text>
+      <text x={X + itemW / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpItem)}</text>
+      <text x={X + W - 14} y={Y + H + 18} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpControl)}</text>
       {gap && <HDim x1={X + itemW} x2={X + itemW + g} y={Y + H + 14} label={gap} above={false} />}
       <BpTitle />
-      <Foot y={204} parts={[gap && `gap: ${gap}`, radius && `radius: ${radius}`]} />
+      <Foot y={204} parts={[gap && `${t(m.bpGap)}: ${gap}`, radius && `${t(m.bpRadius)}: ${radius}`]} />
     </svg>
   );
 }
 
 // Heatmap: columns of level-shaded cells with a less-to-more legend.
 function HeatmapBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const cell = fmt(dimensions?.cell);
   const gap = fmt(dimensions?.gap);
   const radius = fmt(dimensions?.radius);
@@ -2161,7 +2200,7 @@ function HeatmapBlueprint({ size, dimensions }: BlueprintProps) {
   const Y = 52;
   const levels = [0, 0.18, 0.34, 0.55, 0.8];
   return (
-    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label="Blueprint of the heatmap">
+    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheHeatmap)}>
       <Defs />
       <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
       {Array.from({ length: cols }, (_, c) =>
@@ -2178,22 +2217,23 @@ function HeatmapBlueprint({ size, dimensions }: BlueprintProps) {
         <rect key={i} x={X + gridW - 5 * (cs * 0.7 + 3) + i * (cs * 0.7 + 3)} y={Y + rowsN * (cs + g) + 12} width={cs * 0.7} height={cs * 0.7} rx={2}
           fill={i === 0 ? C.fill : C.content} fillOpacity={i === 0 ? 1 : 0.2 + i * 0.18} stroke={i === 0 ? C.edge : 'none'} strokeWidth={1} />
       ))}
-      <text x={X} y={Y + rowsN * (cs + g) + 12 + cs * 0.55} textAnchor="start" className="bpLabel bpMuted">less</text>
-      <text x={X + gridW} y={Y + rowsN * (cs + g) + 12 + cs * 0.55} textAnchor="end" className="bpLabel bpMuted">more</text>
-      <text x={X + cs / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">cell</text>
-      <text x={200} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">legend →</text>
+      <text x={X} y={Y + rowsN * (cs + g) + 12 + cs * 0.55} textAnchor="start" className="bpLabel bpMuted">{t(m.bpLess)}</text>
+      <text x={X + gridW} y={Y + rowsN * (cs + g) + 12 + cs * 0.55} textAnchor="end" className="bpLabel bpMuted">{t(m.bpMore)}</text>
+      <text x={X + cs / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpCell)}</text>
+      <text x={200} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpLegendArrow)}</text>
       <BpTitle />
-      <Foot y={206} parts={[cell && `cell: ${cell}`, gap && `gap: ${gap}`, radius && `radius: ${radius}`]} />
+      <Foot y={206} parts={[cell && `${t(m.bpCell)}: ${cell}`, gap && `${t(m.bpGap)}: ${gap}`, radius && `${t(m.bpRadius)}: ${radius}`]} />
     </svg>
   );
 }
 
 // Spotlight: a dimmed backdrop, a cutout ring on the target, and the callout.
 function SpotlightBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const cutoutRadius = fmt(dimensions?.cutoutRadius);
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the spotlight">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSpotlight)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       {/* backdrop */}
@@ -2211,11 +2251,11 @@ function SpotlightBlueprint({ size, dimensions }: BlueprintProps) {
       <text x={202} y={142} className="bpLabel bpMuted">2 / 4</text>
       <rect x={264} y={130} width={24} height={16} rx={5} fill={C.content} fillOpacity={0.18} stroke={C.edge} strokeWidth={1} />
       <rect x={294} y={130} width={30} height={16} rx={5} fill={C.content} fillOpacity={0.45} />
-      <text x={105} y={72} textAnchor="middle" className="bpLabel bpMuted">cutout</text>
-      <text x={263} y={56} textAnchor="middle" className="bpLabel bpMuted">callout</text>
-      <text x={52} y={52} className="bpLabel bpMuted">backdrop</text>
+      <text x={105} y={72} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpCutout)}</text>
+      <text x={263} y={56} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpCallout)}</text>
+      <text x={52} y={52} className="bpLabel bpMuted">{t(m.bpBackdrop)}</text>
       <BpTitle />
-      <Foot parts={[radius && `radius: ${radius}`, cutoutRadius && `cutout: ${cutoutRadius}`]} />
+      <Foot parts={[radius && `${t(m.bpRadius)}: ${radius}`, cutoutRadius && `${t(m.bpCutout)}: ${cutoutRadius}`]} />
     </svg>
   );
 }
@@ -2227,6 +2267,7 @@ function SpotlightBlueprint({ size, dimensions }: BlueprintProps) {
 // floating on the border with the actions pinned to its line, the description
 // under it, and the stacked fields one gap step apart.
 function FieldsetBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const gap = fmt(dimensions?.gap);
   const padding = fmt(dimensions?.padding);
   const radius = fmt(dimensions?.radius);
@@ -2245,7 +2286,7 @@ function FieldsetBlueprint({ dimensions }: BlueprintProps) {
     </g>
   );
   return (
-    <svg viewBox="0 0 400 248" className="bpSvg" role="img" aria-label="Blueprint of the fieldset">
+    <svg viewBox="0 0 400 248" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheFieldset)}>
       <Defs />
       <rect x={0} y={0} width={400} height={248} fill="url(#bpGrid)" />
       {/* the bordered group; the legend chip sits on the border line */}
@@ -2262,12 +2303,12 @@ function FieldsetBlueprint({ dimensions }: BlueprintProps) {
       {field(f2)}
       {gap && <VDim x={X + W + 16} y1={f1 + fieldH} y2={f2 - 15} label={gap} left={false} horizontal />}
 
-      <text x={X - 10} y={Y - 2} textAnchor="end" className="bpLabel bpMuted">legend</text>
-      <text x={X + W + 12} y={Y - 2} className="bpLabel bpMuted">actions</text>
-      <text x={X - 10} y={Y + 20} textAnchor="end" className="bpLabel bpMuted">description</text>
-      <text x={X - 10} y={f1 + fieldH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">content</text>
+      <text x={X - 10} y={Y - 2} textAnchor="end" className="bpLabel bpMuted">{t(m.bpLegend)}</text>
+      <text x={X + W + 12} y={Y - 2} className="bpLabel bpMuted">{t(m.bpActions)}</text>
+      <text x={X - 10} y={Y + 20} textAnchor="end" className="bpLabel bpMuted">{t(m.bpDescription)}</text>
+      <text x={X - 10} y={f1 + fieldH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpContent)}</text>
       <BpTitle />
-      <Foot y={240} parts={[padding && `padding: ${padding}`, radius && `radius: ${radius}`, border && `border: ${border}`]} />
+      <Foot y={240} parts={[padding && `${t(m.bpPadding)}: ${padding}`, radius && `${t(m.bpRadius)}: ${radius}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
@@ -2275,6 +2316,7 @@ function FieldsetBlueprint({ dimensions }: BlueprintProps) {
 // FormSection: the page-level grouping - a stacking divider above, the title
 // row with actions at its end, the description, and the content region.
 function FormSectionBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const headerGap = fmt(dimensions?.headerGap);
   const contentOffset = fmt(dimensions?.contentOffset);
   const dividerOffset = fmt(dimensions?.dividerOffset);
@@ -2286,7 +2328,7 @@ function FormSectionBlueprint({ dimensions }: BlueprintProps) {
   const contentY = titleY + 46;
   const contentH = 84;
   return (
-    <svg viewBox="0 0 400 236" className="bpSvg" role="img" aria-label="Blueprint of the form section">
+    <svg viewBox="0 0 400 236" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheFormSection)}>
       <Defs />
       <rect x={0} y={0} width={400} height={236} fill="url(#bpGrid)" />
       {/* the stacking divider above the section */}
@@ -2306,13 +2348,13 @@ function FormSectionBlueprint({ dimensions }: BlueprintProps) {
       {dividerOffset && <VDim x={X + W + 16} y1={divY} y2={titleY - 12} label={dividerOffset} left={false} horizontal />}
       {contentOffset && <VDim x={X + W + 16} y1={titleY + 20} y2={contentY} label={contentOffset} left={false} horizontal />}
 
-      <text x={X - 10} y={divY + 4} textAnchor="end" className="bpLabel bpMuted">divider</text>
-      <text x={X - 10} y={titleY + 2} textAnchor="end" className="bpLabel bpMuted">title</text>
-      <text x={X - 10} y={titleY + 20} textAnchor="end" className="bpLabel bpMuted">description</text>
-      <text x={X - 10} y={contentY + contentH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">content</text>
-      <text x={X + W + 12} y={titleY + 2} className="bpLabel bpMuted">actions</text>
+      <text x={X - 10} y={divY + 4} textAnchor="end" className="bpLabel bpMuted">{t(m.bpDivider)}</text>
+      <text x={X - 10} y={titleY + 2} textAnchor="end" className="bpLabel bpMuted">{t(m.bpTitle)}</text>
+      <text x={X - 10} y={titleY + 20} textAnchor="end" className="bpLabel bpMuted">{t(m.bpDescription)}</text>
+      <text x={X - 10} y={contentY + contentH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpContent)}</text>
+      <text x={X + W + 12} y={titleY + 2} className="bpLabel bpMuted">{t(m.bpActions)}</text>
       <BpTitle />
-      <Foot y={228} parts={[headerGap && `header gap: ${headerGap}`, contentOffset && `content offset: ${contentOffset}`, border && `border: ${border}`]} />
+      <Foot y={228} parts={[headerGap && `${t(m.bpHeaderGap)}: ${headerGap}`, contentOffset && `${t(m.bpContentOffset)}: ${contentOffset}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
@@ -2321,6 +2363,7 @@ function FormSectionBlueprint({ dimensions }: BlueprintProps) {
 // Sidebar: a vertical navigation column - pinned header, section heading, item
 // rows with the sliding active pill, and a pinned footer behind hairlines.
 function SidebarBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const itemRadius = fmt(dimensions?.itemRadius);
   const regionPadding = fmt(dimensions?.regionPadding);
   const itemGap = fmt(dimensions?.itemGap);
@@ -2343,9 +2386,9 @@ function SidebarBlueprint({ dimensions }: BlueprintProps) {
     </g>
   );
   return (
-    <svg viewBox="0 0 400 244" className="bpSvg" role="img" aria-label="Blueprint of the sidebar">
+    <svg viewBox="0 0 400 254" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSidebar)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={244} fill="url(#bpGrid)" />
+      <rect x={0} y={0} width={400} height={254} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={12} />
       {/* pinned header with its hairline */}
       <Ln x={rowX} y={Y + 12} w={64} h={7} op={0.7} />
@@ -2361,13 +2404,13 @@ function SidebarBlueprint({ dimensions }: BlueprintProps) {
       <Ln x={rowX + 22} y={Y + H - 17} w={48} h={5} op={0.4} />
 
       {itemGap && <VDim x={X + W + 14} y1={r1 + rowH} y2={r2} label={itemGap} left={false} horizontal />}
-      <text x={X - 10} y={Y + 18} textAnchor="end" className="bpLabel bpMuted">header</text>
-      <text x={X - 10} y={r1 - 8} textAnchor="end" className="bpLabel bpMuted">section</text>
-      <text x={X - 10} y={r1 + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">indicator</text>
-      <text x={X + W + 12} y={r2 + rowH / 2 + 3} className="bpLabel bpMuted">item</text>
-      <text x={X - 10} y={Y + H - 11} textAnchor="end" className="bpLabel bpMuted">footer</text>
+      <text x={X - 10} y={Y + 18} textAnchor="end" className="bpLabel bpMuted">{t(m.bpHeader)}</text>
+      <text x={X - 10} y={r1 - 8} textAnchor="end" className="bpLabel bpMuted">{t(m.bpSection)}</text>
+      <text x={X - 10} y={r1 + rowH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpIndicator)}</text>
+      <text x={X + W + 12} y={r2 + rowH / 2 + 3} className="bpLabel bpMuted">{t(m.bpItem)}</text>
+      <text x={X - 10} y={Y + H - 11} textAnchor="end" className="bpLabel bpMuted">{t(m.bpFooter)}</text>
       <BpTitle />
-      <Foot y={236} parts={[regionPadding && `region pad: ${regionPadding}`, itemRadius && `item radius: ${itemRadius}`, border && `border: ${border}`]} />
+      <Foot y={246} parts={[regionPadding && `${t(m.bpRegionPad)}: ${regionPadding}`, itemRadius && `${t(m.bpItemRadius)}: ${itemRadius}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
@@ -2375,6 +2418,7 @@ function SidebarBlueprint({ dimensions }: BlueprintProps) {
 // Toolbar: the horizontal action strip - a leading start slot, the growing
 // middle, and end-aligned controls, with the slot gap dimensioned.
 function ToolbarBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const padding = fmt(dimensions?.padding);
   const gap = fmt(dimensions?.gap);
   const X = 62;
@@ -2384,7 +2428,7 @@ function ToolbarBlueprint({ dimensions }: BlueprintProps) {
   const a1 = X + W - 10 - 30;
   const a2 = a1 - 18 - 26;
   return (
-    <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label="Blueprint of the toolbar">
+    <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheToolbar)}>
       <Defs />
       <rect x={0} y={0} width={400} height={200} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={11} />
@@ -2398,12 +2442,12 @@ function ToolbarBlueprint({ dimensions }: BlueprintProps) {
       <rect x={a1} y={Y + H / 2 - 10} width={30} height={20} rx={10} fill={C.content} fillOpacity={0.4} stroke={C.text} strokeWidth={1} />
       {gap && <HDim x1={a2 + 26} x2={a1} y={Y + H + 14} label={gap} above={false} />}
 
-      <HDim x1={X} x2={X + W} y={Y - 18} label="width: auto" />
-      <text x={X - 10} y={Y + H / 2 + 3} textAnchor="end" className="bpLabel bpMuted">start</text>
-      <text x={(X + 108 + a2 - 18) / 2} y={Y + H / 2 - 8} textAnchor="middle" className="bpLabel bpMuted">content</text>
-      <text x={X + W + 12} y={Y + H / 2 + 3} className="bpLabel bpMuted">end</text>
+      <HDim x1={X} x2={X + W} y={Y - 18} label={t(m.bpWidthAuto)} />
+      <text x={X - 10} y={Y + H / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpStart)}</text>
+      <text x={(X + 108 + a2 - 18) / 2} y={Y + H / 2 - 8} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpContent)}</text>
+      <text x={X + W + 12} y={Y + H / 2 + 3} className="bpLabel bpMuted">{t(m.bpEnd)}</text>
       <BpTitle />
-      <Foot y={190} parts={[padding && `padding: ${padding}`, gap && `gap: ${gap}`, 'surface: glass-thin']} />
+      <Foot y={190} parts={[padding && `${t(m.bpPadding)}: ${padding}`, gap && `${t(m.bpGap)}: ${gap}`, t(m.bpSurfaceGlassThin)]} />
     </svg>
   );
 }
@@ -2411,6 +2455,7 @@ function ToolbarBlueprint({ dimensions }: BlueprintProps) {
 // NavBar: the primary navigation row - icon-first items, the sliding active
 // pill behind the current one, a badge on an item, and the end slot.
 function NavBarBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const gap = fmt(dimensions?.gap);
   const padding = fmt(dimensions?.padding);
   const radius = fmt(dimensions?.radius);
@@ -2432,7 +2477,7 @@ function NavBarBlueprint({ dimensions }: BlueprintProps) {
     </g>
   );
   return (
-    <svg viewBox="0 0 400 196" className="bpSvg" role="img" aria-label="Blueprint of the nav bar">
+    <svg viewBox="0 0 400 196" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheNavBar)}>
       <Defs />
       <rect x={0} y={0} width={400} height={196} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={12} />
@@ -2445,12 +2490,12 @@ function NavBarBlueprint({ dimensions }: BlueprintProps) {
       <circle cx={X + W - 20} cy={Y + H / 2} r={9} fill="none" stroke={C.edge} strokeWidth={1.25} strokeDasharray="2 2" />
 
       {gap && <HDim x1={ix(0) + itemW} x2={ix(1)} y={Y + H + 14} label={gap} above={false} />}
-      <text x={X - 6} y={iy + itemH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">indicator</text>
-      <text x={ix(1) + itemW / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">item</text>
-      <text x={ix(2) + itemW + 14} y={iy - 4} className="bpLabel bpMuted">badge</text>
-      <text x={X + W + 12} y={Y + H / 2 + 3} className="bpLabel bpMuted">end</text>
+      <text x={X - 6} y={iy + itemH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpIndicator)}</text>
+      <text x={ix(1) + itemW / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpItem)}</text>
+      <text x={ix(2) + itemW + 14} y={iy - 4} className="bpLabel bpMuted">{t(m.bpBadge)}</text>
+      <text x={X + W + 12} y={Y + H / 2 + 3} className="bpLabel bpMuted">{t(m.bpEnd)}</text>
       <BpTitle />
-      <Foot y={188} parts={[itemSize && `item: ${itemSize}`, padding && `pad: ${padding}`, radius && `radius: ${radius}`]} />
+      <Foot y={188} parts={[itemSize && `${t(m.bpItem)}: ${itemSize}`, padding && `${t(m.bpPad)}: ${padding}`, radius && `${t(m.bpRadius)}: ${radius}`]} />
     </svg>
   );
 }
@@ -2459,6 +2504,7 @@ function NavBarBlueprint({ dimensions }: BlueprintProps) {
 // AppShell: the app frame - a sticky sidebar column beside a scrollable main
 // column with a header bar on top. The figure shows the desktop grid.
 function AppShellBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const gutter = fmt(dimensions?.gutter);
   const radius = fmt(dimensions?.radius);
   const border = fmt(dimensions?.border);
@@ -2476,7 +2522,7 @@ function AppShellBlueprint({ dimensions }: BlueprintProps) {
   const mainW = X + W - P - mainX;
   const contentY = regionY + headerH + G;
   return (
-    <svg viewBox="0 0 400 258" className="bpSvg" role="img" aria-label="Blueprint of the app shell">
+    <svg viewBox="0 0 400 258" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheAppShell)}>
       <Defs />
       <rect x={0} y={0} width={400} height={258} fill="url(#bpGrid)" />
       {/* the app frame */}
@@ -2493,18 +2539,19 @@ function AppShellBlueprint({ dimensions }: BlueprintProps) {
       <Ln x={mainX + 4} y={contentY + 14} w={mainW - 16} h={5} op={0.3} />
       <Ln x={mainX + 4} y={contentY + 28} w={mainW - 64} h={5} op={0.3} />
       {/* sidebar width across the top, kept clear of the title */}
-      <HDim x1={sideX} x2={sideX + sideW} y={Y - 16} label="sidebar: 16rem" />
+      <HDim x1={sideX} x2={sideX + sideW} y={Y - 16} label={t(m.bpSidebar16rem)} />
       {/* region labels */}
-      <text x={mainX + mainW / 2} y={regionY + headerH / 2 + 4} textAnchor="middle" className="bpLabel bpMuted">header</text>
-      <text x={sideX + sideW / 2} y={Y + H - 14} textAnchor="middle" className="bpLabel bpMuted">sidebar</text>
-      <text x={mainX + mainW / 2} y={Y + H - 14} textAnchor="middle" className="bpLabel bpMuted">main</text>
+      <text x={mainX + mainW / 2} y={regionY + headerH / 2 + 4} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpHeader)}</text>
+      <text x={sideX + sideW / 2} y={Y + H - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpSidebar)}</text>
+      <text x={mainX + mainW / 2} y={Y + H - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpMain)}</text>
       <BpTitle />
-      <Foot y={248} parts={[gutter && `gutter: ${gutter}`, radius && `radius: ${radius}`, border && `border: ${border}`]} />
+      <Foot y={248} parts={[gutter && `${t(m.bpGutter)}: ${gutter}`, radius && `${t(m.bpRadius)}: ${radius}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
 
 function ModalBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const panelPad = fmt(dimensions?.panelPadding);
   const diameter = fmt(size.diameter);
@@ -2518,7 +2565,7 @@ function ModalBlueprint({ size, dimensions }: BlueprintProps) {
   const PH = 120;
   const R = PX + PW;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the modal">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheModal)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={OX} y={OY} width={OW} height={OH} rx={10} fill={C.text} fillOpacity={0.06} stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 3" />
@@ -2534,14 +2581,14 @@ function ModalBlueprint({ size, dimensions }: BlueprintProps) {
       <Ln x={PX + 16} y={PY + 70} w={PW - 54} h={5} op={0.3} />
       <rect x={R - 96} y={PY + PH - 26} width={40} height={16} rx={5} fill={C.content} fillOpacity={0.25} />
       <rect x={R - 50} y={PY + PH - 26} width={40} height={16} rx={5} fill={C.content} fillOpacity={0.5} />
-      <text x={OX + 8} y={OY + 15} className="bpLabel bpMuted">overlay</text>
-      <text x={PX - 10} y={PY + PH / 2} textAnchor="end" className="bpLabel bpMuted">panel</text>
-      <text x={R + 10} y={PY + 16} className="bpLabel bpMuted">close</text>
-      <text x={R + 10} y={PY + 32} className="bpLabel bpMuted">header</text>
-      <text x={R + 10} y={PY + 64} className="bpLabel bpMuted">body</text>
-      <text x={R + 10} y={PY + PH - 16} className="bpLabel bpMuted">footer</text>
+      <text x={OX + 8} y={OY + 15} className="bpLabel bpMuted">{t(m.bpOverlay)}</text>
+      <text x={PX - 10} y={PY + PH / 2} textAnchor="end" className="bpLabel bpMuted">{t(m.bpPanel)}</text>
+      <text x={R + 10} y={PY + 16} className="bpLabel bpMuted">{t(m.bpClose)}</text>
+      <text x={R + 10} y={PY + 32} className="bpLabel bpMuted">{t(m.bpHeader)}</text>
+      <text x={R + 10} y={PY + 64} className="bpLabel bpMuted">{t(m.bpBody)}</text>
+      <text x={R + 10} y={PY + PH - 16} className="bpLabel bpMuted">{t(m.bpFooter)}</text>
       <BpTitle />
-      <Foot parts={[diameter && `width: ${diameter}`, radius && `radius: ${radius}`, panelPad && `padding: ${panelPad}`]} />
+      <Foot parts={[diameter && `${t(m.bpWidth)}: ${diameter}`, radius && `${t(m.bpRadius)}: ${radius}`, panelPad && `${t(m.bpPadding)}: ${panelPad}`]} />
     </svg>
   );
 }
@@ -2551,6 +2598,7 @@ function ModalBlueprint({ size, dimensions }: BlueprintProps) {
 // (ringed, focused first on open) and the confirming Action - with the
 // footer gap dimensioned from the spec.
 function AlertDialogBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const panelPad = fmt(dimensions?.panelPadding);
   const footerGap = fmt(dimensions?.footerGap);
@@ -2572,7 +2620,7 @@ function AlertDialogBlueprint({ size, dimensions }: BlueprintProps) {
   const actionX = R - 16 - actionW;
   const cancelX = actionX - gap - cancelW;
   return (
-    <svg viewBox="0 0 400 234" className="bpSvg" role="img" aria-label="Blueprint of the alert dialog">
+    <svg viewBox="0 0 400 234" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheAlertDialog)}>
       <Defs />
       <rect x={0} y={0} width={400} height={234} fill="url(#bpGrid)" />
       <rect x={OX} y={OY} width={OW} height={OH} rx={10} fill={C.text} fillOpacity={0.06} stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 3" />
@@ -2591,20 +2639,21 @@ function AlertDialogBlueprint({ size, dimensions }: BlueprintProps) {
       <Ln x={actionX + 12} y={BY + BH / 2 - 2} w={actionW - 24} h={4} op={0.8} />
       {footerGap && <HDim x1={cancelX + cancelW} x2={actionX} y={BY + BH + 12} label={footerGap} above={false} />}
 
-      <text x={OX + 8} y={OY + 15} className="bpLabel bpMuted">overlay</text>
-      <text x={PX - 10} y={PY + 20} textAnchor="end" className="bpLabel bpMuted">panel</text>
-      <text x={R + 10} y={PY + 20} className="bpLabel bpMuted">title</text>
-      <text x={R + 10} y={PY + 38} className="bpLabel bpMuted">description</text>
-      <text x={PX - 10} y={BY + BH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">cancel ⌖</text>
-      <text x={R + 10} y={BY + BH / 2 + 3} className="bpLabel bpMuted">action</text>
+      <text x={OX + 8} y={OY + 15} className="bpLabel bpMuted">{t(m.bpOverlay)}</text>
+      <text x={PX - 10} y={PY + 20} textAnchor="end" className="bpLabel bpMuted">{t(m.bpPanel)}</text>
+      <text x={R + 10} y={PY + 20} className="bpLabel bpMuted">{t(m.bpTitle)}</text>
+      <text x={R + 10} y={PY + 38} className="bpLabel bpMuted">{t(m.bpDescription)}</text>
+      <text x={PX - 10} y={BY + BH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpCancel)}</text>
+      <text x={R + 10} y={BY + BH / 2 + 3} className="bpLabel bpMuted">{t(m.bpAction)}</text>
       <BpTitle />
-      <Foot y={226} parts={[radius && `radius: ${radius}`, panelPad && `panel pad: ${panelPad}`, footerGap && `footer gap: ${footerGap}`, border && `border: ${border}`]} />
+      <Foot y={226} parts={[radius && `${t(m.bpRadius)}: ${radius}`, panelPad && `${t(m.bpPanelPad)}: ${panelPad}`, footerGap && `${t(m.bpFooterGap)}: ${footerGap}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
 
 // Popover: a trigger with an anchored, arrowed panel offset below it.
 function PopoverBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const padding = fmt(dimensions?.padding);
   const offset = fmt(dimensions?.offset);
@@ -2617,7 +2666,7 @@ function PopoverBlueprint({ size, dimensions }: BlueprintProps) {
   const panelH = 96;
   const panelX = cx - panelW / 2;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the popover">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfThePopover)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={cx - trigW / 2} y={trigY} width={trigW} height={trigH} rx={6} fill={C.content} fillOpacity={0.22} stroke={C.edge} strokeWidth={1.25} />
@@ -2634,18 +2683,19 @@ function PopoverBlueprint({ size, dimensions }: BlueprintProps) {
       <Ln x={panelX + 14} y={panelY + 34} w={panelW - 28} h={5} op={0.32} />
       <Ln x={panelX + 14} y={panelY + 46} w={panelW - 44} h={5} op={0.32} />
       <Ln x={panelX + 14} y={panelY + 58} w={panelW - 60} h={5} op={0.32} />
-      <text x={cx + trigW / 2 + 12} y={trigY + trigH / 2 + 3} className="bpLabel bpMuted">trigger</text>
-      <text x={panelX + panelW + 12} y={panelY + panelH / 2} className="bpLabel bpMuted">content</text>
-      <text x={panelX - 10} y={panelY + 14} textAnchor="end" className="bpLabel bpMuted">panel</text>
-      {offset && <VDim x={panelX - 24} y1={trigY + trigH} y2={panelY} label={`offset ${offset}`} horizontal />}
+      <text x={cx + trigW / 2 + 12} y={trigY + trigH / 2 + 3} className="bpLabel bpMuted">{t(m.bpTrigger)}</text>
+      <text x={panelX + panelW + 12} y={panelY + panelH / 2} className="bpLabel bpMuted">{t(m.bpContent)}</text>
+      <text x={panelX - 10} y={panelY + 14} textAnchor="end" className="bpLabel bpMuted">{t(m.bpPanel)}</text>
+      {offset && <VDim x={panelX - 24} y1={trigY + trigH} y2={panelY} label={`${t(m.bpOffset)} ${offset}`} horizontal />}
       <BpTitle />
-      <Foot parts={[radius && `radius: ${radius}`, padding && `padding: ${padding}`]} />
+      <Foot parts={[radius && `${t(m.bpRadius)}: ${radius}`, padding && `${t(m.bpPadding)}: ${padding}`]} />
     </svg>
   );
 }
 
 // Menu: a trigger with a portalled panel of items, a separator, and a label.
 function MenuBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const gap = fmt(dimensions?.gap);
   const X = 130;
@@ -2658,7 +2708,7 @@ function MenuBlueprint({ size, dimensions }: BlueprintProps) {
   const rowY = (i: number) => menuY + pad + 12 + i * rowH;
   const menuH = pad * 2 + 12 + 4 * rowH - 4;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the menu">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheMenu)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={X} y={trigY} width={W} height={trigH} rx={6} fill={C.content} fillOpacity={0.22} stroke={C.edge} strokeWidth={1.25} />
@@ -2680,18 +2730,19 @@ function MenuBlueprint({ size, dimensions }: BlueprintProps) {
         <rect x={X + 12} y={rowY(3) - 2} width={11} height={11} rx={3} fill={C.content} fillOpacity={0.45} />
         <Ln x={X + 30} y={rowY(3)} w={82} h={5} op={0.5} />
       </g>
-      <text x={X + W + 12} y={menuY + 14} className="bpLabel bpMuted">menu</text>
-      <text x={X + W + 12} y={rowY(0) + 6} className="bpLabel bpMuted">item</text>
-      <text x={X - 10} y={rowY(2) + 4} textAnchor="end" className="bpLabel bpMuted">separator</text>
-      <text x={X - 10} y={trigY + trigH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">trigger</text>
+      <text x={X + W + 12} y={menuY + 14} className="bpLabel bpMuted">{t(m.bpMenu)}</text>
+      <text x={X + W + 12} y={rowY(0) + 6} className="bpLabel bpMuted">{t(m.bpItem)}</text>
+      <text x={X - 10} y={rowY(2) + 4} textAnchor="end" className="bpLabel bpMuted">{t(m.bpSeparator)}</text>
+      <text x={X - 10} y={trigY + trigH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpTrigger)}</text>
       <BpTitle />
-      <Foot parts={[radius && `radius: ${radius}`, gap && `gap: ${gap}`, 'icon · label · shortcut']} />
+      <Foot parts={[radius && `${t(m.bpRadius)}: ${radius}`, gap && `${t(m.bpGap)}: ${gap}`, t(m.bpIconLabelShortcut)]} />
     </svg>
   );
 }
 
 // FloatingPanel: a draggable panel with a grab-bar handle, title, close, body.
 function FloatingPanelBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const gap = fmt(dimensions?.gap);
   const X = 112;
@@ -2700,7 +2751,7 @@ function FloatingPanelBlueprint({ size, dimensions }: BlueprintProps) {
   const H = 126;
   const handleH = 30;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the floating panel">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheFloatingPanel)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={11} />
@@ -2720,17 +2771,18 @@ function FloatingPanelBlueprint({ size, dimensions }: BlueprintProps) {
       <Ln x={X + 16} y={Y + handleH + 16} w={W - 32} h={5} op={0.3} />
       <Ln x={X + 16} y={Y + handleH + 30} w={W - 50} h={5} op={0.3} />
       <Ln x={X + 16} y={Y + handleH + 44} w={W - 40} h={5} op={0.3} />
-      <text x={X - 10} y={Y + handleH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">handle</text>
-      <text x={X + W + 12} y={Y + handleH / 2 + 3} className="bpLabel bpMuted">close</text>
-      <text x={X + W + 12} y={Y + handleH + 34} className="bpLabel bpMuted">body</text>
+      <text x={X - 10} y={Y + handleH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpHandle)}</text>
+      <text x={X + W + 12} y={Y + handleH / 2 + 3} className="bpLabel bpMuted">{t(m.bpClose)}</text>
+      <text x={X + W + 12} y={Y + handleH + 34} className="bpLabel bpMuted">{t(m.bpBody)}</text>
       <BpTitle />
-      <Foot parts={[radius && `radius: ${radius}`, gap && `gap: ${gap}`, 'drag the handle to move']} />
+      <Foot parts={[radius && `${t(m.bpRadius)}: ${radius}`, gap && `${t(m.bpGap)}: ${gap}`, t(m.bpDragTheHandleToMove)]} />
     </svg>
   );
 }
 
 // TabbedPanel: a bordered frame with a tab header (+ actions) and a body.
 function TabbedPanelBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const bodyPad = fmt(dimensions?.bodyPadding);
   const border = fmt(dimensions?.border);
@@ -2741,7 +2793,7 @@ function TabbedPanelBlueprint({ size, dimensions }: BlueprintProps) {
   const headerH = 36;
   const tabW = 58;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the tabbed panel">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTabbedPanel)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={14} />
@@ -2761,18 +2813,19 @@ function TabbedPanelBlueprint({ size, dimensions }: BlueprintProps) {
       <Ln x={X + 18} y={Y + headerH + 18} w={W - 60} h={5} op={0.3} />
       <Ln x={X + 18} y={Y + headerH + 32} w={W - 36} h={5} op={0.3} />
       <Ln x={X + 18} y={Y + headerH + 46} w={W - 80} h={5} op={0.3} />
-      <text x={X + 12 + tabW / 2} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">tab</text>
-      <text x={X + W - 23} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">actions</text>
-      <text x={X + W + 12} y={Y + headerH + 34} className="bpLabel bpMuted">body</text>
-      <text x={X - 10} y={Y + headerH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">header</text>
+      <text x={X + 12 + (tabW + 6) + tabW / 2} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpTab)}</text>
+      <text x={X + W - 23} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpActions)}</text>
+      <text x={X + W + 12} y={Y + headerH + 34} className="bpLabel bpMuted">{t(m.bpBody)}</text>
+      <text x={X - 10} y={Y + headerH / 2 + 3} textAnchor="end" className="bpLabel bpMuted">{t(m.bpHeader)}</text>
       <BpTitle />
-      <Foot parts={[radius && `radius: ${radius}`, bodyPad && `body pad: ${bodyPad}`, border && `border: ${border}`]} />
+      <Foot parts={[radius && `${t(m.bpRadius)}: ${radius}`, bodyPad && `${t(m.bpBodyPad)}: ${bodyPad}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
 
 // TabbedModal: a modal with a fixed left rail of sections and a scrolling pane.
 function TabbedModalBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const gap = fmt(dimensions?.gap);
   const rail = fmt(dimensions?.rail);
@@ -2783,7 +2836,7 @@ function TabbedModalBlueprint({ size, dimensions }: BlueprintProps) {
   const railW = 78;
   const itemH = 24;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the tabbed modal">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTabbedModal)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={16} />
@@ -2801,17 +2854,18 @@ function TabbedModalBlueprint({ size, dimensions }: BlueprintProps) {
       <Ln x={X + railW + 18} y={Y + 42} w={W - railW - 40} h={5} op={0.3} />
       <Ln x={X + railW + 18} y={Y + 56} w={W - railW - 60} h={5} op={0.3} />
       <Ln x={X + railW + 18} y={Y + 70} w={W - railW - 48} h={5} op={0.3} />
-      <text x={X - 10} y={Y + 20} textAnchor="end" className="bpLabel bpMuted">rail</text>
-      <text x={X + railW + (W - railW) / 2} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">pane</text>
-      <text x={X - 10} y={Y + 16 + itemH + 8} textAnchor="end" className="bpLabel bpMuted">rail item</text>
+      <text x={X - 10} y={Y + 20} textAnchor="end" className="bpLabel bpMuted">{t(m.bpRail)}</text>
+      <text x={X + railW + (W - railW) / 2} y={Y - 8} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpPane)}</text>
+      <text x={X - 10} y={Y + 16 + itemH + 8} textAnchor="end" className="bpLabel bpMuted">{t(m.bpRailItem)}</text>
       <BpTitle />
-      <Foot parts={[radius && `radius: ${radius}`, gap && `gap: ${gap}`, rail && `rail: ${rail}`]} />
+      <Foot parts={[radius && `${t(m.bpRadius)}: ${radius}`, gap && `${t(m.bpGap)}: ${gap}`, rail && `${t(m.bpRail)}: ${rail}`]} />
     </svg>
   );
 }
 
 // TabStrip: a scrollable row of closable tabs with a springing underline.
 function TabStripBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const padIn = fmt(dimensions?.paddingInline);
   const gap = fmt(dimensions?.gap);
@@ -2821,7 +2875,7 @@ function TabStripBlueprint({ size, dimensions }: BlueprintProps) {
   const Y = 74;
   const H = 34;
   return (
-    <svg viewBox="0 0 400 204" className="bpSvg" role="img" aria-label="Blueprint of the tab strip">
+    <svg viewBox="0 0 400 204" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTabStrip)}>
       <Defs />
       <rect x={0} y={0} width={400} height={204} fill="url(#bpGrid)" />
       {[0, 1, 2, 3].map((i) => {
@@ -2840,19 +2894,20 @@ function TabStripBlueprint({ size, dimensions }: BlueprintProps) {
           </g>
         );
       })}
-      <text x={X + tabW / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">tab</text>
-      <text x={X + 17} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">icon</text>
-      <text x={X + tabW - 16} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">close</text>
-      <text x={X + tabW / 2} y={Y + H + 22} textAnchor="middle" className="bpLabel bpMuted">indicator</text>
+      <text x={X + tabW / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpTab)}</text>
+      <text x={X + 17} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpIcon)}</text>
+      <text x={X + tabW - 16} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpClose)}</text>
+      <text x={X + tabW / 2} y={Y + H + 22} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpIndicator)}</text>
       {padIn && <HDim x1={X} x2={X + 16} y={Y + H + 30} label={padIn} above={false} />}
       <BpTitle />
-      <Foot y={192} parts={[radius && `radius: ${radius}`, gap && `gap: ${gap}`]} />
+      <Foot y={192} parts={[radius && `${t(m.bpRadius)}: ${radius}`, gap && `${t(m.bpGap)}: ${gap}`]} />
     </svg>
   );
 }
 
 // ResizableSplitPane: two panes divided by a draggable separator grip.
 function ResizableSplitPaneBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const gripHeight = fmt(dimensions?.gripHeight);
   const thickness = fmt(dimensions?.thickness);
@@ -2862,7 +2917,7 @@ function ResizableSplitPaneBlueprint({ size, dimensions }: BlueprintProps) {
   const H = 104;
   const divX = X + Math.round(W * 0.42);
   return (
-    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label="Blueprint of the resizable split pane">
+    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheResizableSplitPane)}>
       <Defs />
       <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
       {/* start pane */}
@@ -2872,12 +2927,12 @@ function ResizableSplitPaneBlueprint({ size, dimensions }: BlueprintProps) {
       {/* divider + grip */}
       <line x1={divX} y1={Y} x2={divX} y2={Y + H} stroke={C.line} strokeWidth={1.5} />
       <rect x={divX - 2.5} y={Y + H / 2 - 16} width={5} height={32} rx={2.5} fill={C.line} />
-      <text x={X + (divX - X) / 2} y={Y + H / 2 + 3} textAnchor="middle" className="bpLabel bpMuted">start</text>
-      <text x={divX + (X + W - divX) / 2} y={Y + H / 2 + 3} textAnchor="middle" className="bpLabel bpMuted">end</text>
-      <text x={divX} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">divider</text>
-      <HDim x1={X} x2={divX} y={Y + H + 16} label="ratio" above={false} />
+      <text x={X + (divX - X) / 2} y={Y + H / 2 + 3} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpStart)}</text>
+      <text x={divX + (X + W - divX) / 2} y={Y + H / 2 + 3} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpEnd)}</text>
+      <text x={divX} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpDivider)}</text>
+      <HDim x1={X} x2={divX} y={Y + H + 16} label={t(m.bpRatio)} above={false} />
       <BpTitle />
-      <Foot y={222} parts={[radius && `radius: ${radius}`, gripHeight && `grip: ${gripHeight}`, thickness && `divider: ${thickness}`]} />
+      <Foot y={222} parts={[radius && `${t(m.bpRadius)}: ${radius}`, gripHeight && `${t(m.bpGrip)}: ${gripHeight}`, thickness && `${t(m.bpDivider)}: ${thickness}`]} />
     </svg>
   );
 }
@@ -2895,6 +2950,7 @@ function Defs() {
 // StatTile: a micro-card with a leading icon disc, a prominent value and trailing
 // hint, and a muted label below.
 function StatTileBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const radius = fmt(dimensions?.radius);
   const padIn = fmt(dimensions?.paddingInline);
   const gap = fmt(dimensions?.gap);
@@ -2907,7 +2963,7 @@ function StatTileBlueprint({ size, dimensions }: BlueprintProps) {
   const iconY = Y + (H - iconS) / 2;
   const colX = iconX + iconS + 20;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the stat tile">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheStatTile)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={14} />
@@ -2919,19 +2975,20 @@ function StatTileBlueprint({ size, dimensions }: BlueprintProps) {
       <rect x={colX + 96} y={Y + 20} width={40} height={18} rx={9} fill={C.content} fillOpacity={0.32} />
       <text x={colX + 116} y={Y + 30} textAnchor="middle" dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 10, fontWeight: 600 }}>+12%</text>
       <Ln x={colX} y={Y + 56} w={96} h={7} op={0.4} />
-      <text x={iconX + iconS / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">icon</text>
-      <text x={colX + 24} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">value</text>
-      <text x={colX + 116} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">hint</text>
-      <text x={colX} y={Y + H + 18} className="bpLabel bpMuted">label</text>
-      <HDim x1={X} x2={X + W} y={Y - 26} label="width: auto" />
+      <text x={iconX + iconS / 2} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpIcon)}</text>
+      <text x={colX + 24} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpValue)}</text>
+      <text x={colX + 116} y={Y - 10} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpHint)}</text>
+      <text x={colX} y={Y + H + 18} className="bpLabel bpMuted">{t(m.bpLabel)}</text>
+      <HDim x1={X} x2={X + W} y={Y - 26} label={t(m.bpWidthAuto)} />
       <BpTitle />
-      <Foot parts={[radius && `radius: ${radius}`, padIn && `padding: ${padIn}`, gap && `gap: ${gap}`]} />
+      <Foot parts={[radius && `${t(m.bpRadius)}: ${radius}`, padIn && `${t(m.bpPadding)}: ${padIn}`, gap && `${t(m.bpGap)}: ${gap}`]} />
     </svg>
   );
 }
 
 // DeviceFrame: a phone bezel with an inset screen, a top notch, and side buttons.
 function DeviceFrameBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const width = fmt(size.diameter);
   const radius = fmt(dimensions?.radius);
   const screenRadius = fmt(dimensions?.screenRadius);
@@ -2951,7 +3008,7 @@ function DeviceFrameBlueprint({ size, dimensions }: BlueprintProps) {
   const notchY = sy;
   const screenCorner = 12;
   return (
-    <svg viewBox="0 0 400 250" className="bpSvg" role="img" aria-label="Blueprint of the device frame">
+    <svg viewBox="0 0 400 250" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheDeviceFrame)}>
       <Defs />
       <rect x={0} y={0} width={400} height={250} fill="url(#bpGrid)" />
       <rect x={px} y={py} width={pw} height={ph} rx={18} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
@@ -2968,13 +3025,13 @@ function DeviceFrameBlueprint({ size, dimensions }: BlueprintProps) {
       <rect x={px - 2.5} y={py + 34} width={2.5} height={14} rx={1.25} fill={C.edge} />
       <rect x={px - 2.5} y={py + 54} width={2.5} height={22} rx={1.25} fill={C.edge} />
       <rect x={px + pw} y={py + 46} width={2.5} height={28} rx={1.25} fill={C.edge} />
-      <HDim x1={sx} x2={sx + sw} y={py - 14} label={width ? `screen: ${width}` : 'screen'} />
-      <text x={px + pw + 14} y={py + 18} className="bpLabel bpMuted">bezel</text>
-      <text x={sx + sw / 2} y={notchY + notchH + 16} textAnchor="middle" className="bpLabel bpMuted">notch</text>
-      <text x={px - 12} y={py + 46} textAnchor="end" className="bpLabel bpMuted">buttons</text>
-      <text x={px + pw + 14} y={py + ph / 2 + 24} className="bpLabel bpMuted">screen</text>
+      <HDim x1={sx} x2={sx + sw} y={py - 14} label={width ? `${t(m.bpScreen)}: ${width}` : t(m.bpScreen)} />
+      <text x={px + pw + 14} y={py + 18} className="bpLabel bpMuted">{t(m.bpBezel)}</text>
+      <text x={sx + sw / 2} y={notchY + notchH + 16} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpNotch)}</text>
+      <text x={px - 12} y={py + 46} textAnchor="end" className="bpLabel bpMuted">{t(m.bpButtons)}</text>
+      <text x={px + pw + 14} y={py + ph / 2 + 24} className="bpLabel bpMuted">{t(m.bpScreen)}</text>
       <BpTitle />
-      <Foot y={244} parts={[radius && `radius: ${radius}`, screenRadius && `screen: ${screenRadius}`, bezel && `bezel: ${bezel}`]} />
+      <Foot y={244} parts={[radius && `${t(m.bpRadius)}: ${radius}`, screenRadius && `${t(m.bpScreen)}: ${screenRadius}`, bezel && `${t(m.bpBezel)}: ${bezel}`]} />
     </svg>
   );
 }
@@ -2982,6 +3039,7 @@ function DeviceFrameBlueprint({ size, dimensions }: BlueprintProps) {
 // FilterChip: a toggle pill shown selected (accent tint) with a leading icon, a
 // label, and a trailing count badge.
 function FilterChipBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const height = fmt(size.height);
   const padIn = fmt(size.paddingInline);
   const radius = fmt(dimensions?.radius);
@@ -2991,7 +3049,7 @@ function FilterChipBlueprint({ size, dimensions }: BlueprintProps) {
   const CX = (400 - CW) / 2;
   const CY = 86;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the filter chip">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheFilterChip)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={CX} y={CY} width={CW} height={CH} rx={CH / 2} fill="var(--glacier-accent-soft)" stroke="var(--glacier-accent-border)" strokeWidth={1.5} />
@@ -3001,14 +3059,14 @@ function FilterChipBlueprint({ size, dimensions }: BlueprintProps) {
       <Ln x={CX + 44} y={CY + CH / 2 - 3.5} w={64} h={7} op={0.6} />
       <circle cx={CX + CW - 26} cy={CY + CH / 2} r={13} fill={C.content} fillOpacity={0.42} stroke={C.text} strokeWidth={1} />
       <text x={CX + CW - 26} y={CY + CH / 2} textAnchor="middle" dominantBaseline="central" fill={C.text} stroke="none" style={{ fontFamily: 'var(--glacier-font-sans)', fontSize: 11, fontWeight: 600 }}>3</text>
-      <text x={CX + 20} y={CY - 12} textAnchor="middle" className="bpLabel bpMuted">icon</text>
-      <text x={CX + 76} y={CY - 12} textAnchor="middle" className="bpLabel bpMuted">label</text>
-      <text x={CX + CW - 26} y={CY - 12} textAnchor="middle" className="bpLabel bpMuted">count</text>
-      <text x={CX + CW / 2} y={CY + CH + 20} textAnchor="middle" className="bpLabel bpMuted">selected</text>
-      <HDim x1={CX} x2={CX + CW} y={CY - 30} label="width: auto" />
+      <text x={CX + 20} y={CY - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpIcon)}</text>
+      <text x={CX + 76} y={CY - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpLabel)}</text>
+      <text x={CX + CW - 26} y={CY - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpCount)}</text>
+      <text x={CX + CW / 2} y={CY + CH + 20} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpSelected)}</text>
+      <HDim x1={CX} x2={CX + CW} y={CY - 30} label={t(m.bpWidthAuto)} />
       {height && <VDim x={CX - 22} y1={CY} y2={CY + CH} label={height} />}
       <BpTitle />
-      <Foot parts={[radius && `radius: ${radius}`, padIn && `padding: ${padIn}`, border && `border: ${border}`]} />
+      <Foot parts={[radius && `${t(m.bpRadius)}: ${radius}`, padIn && `${t(m.bpPadding)}: ${padIn}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
@@ -3016,12 +3074,13 @@ function FilterChipBlueprint({ size, dimensions }: BlueprintProps) {
 // Image: a fixed aspect-ratio frame that clips and rounds an image, with a
 // fallback shown on error.
 function ImageBlueprint({ size }: BlueprintProps) {
+  const t = useT();
   const X = 134;
   const Y = 42;
   const W = 132;
   const H = 126;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the image">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheImage)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={X} y={Y} width={W} height={H} rx={12} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
@@ -3034,37 +3093,39 @@ function ImageBlueprint({ size }: BlueprintProps) {
         strokeLinejoin="round"
         strokeLinecap="round"
       />
-      <text x={X + W / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">frame</text>
-      <text x={X + W + 14} y={Y + H / 2 - 6} className="bpLabel bpMuted">image</text>
-      <text x={X - 14} y={Y + H / 2 + 8} textAnchor="end" className="bpLabel bpMuted">fallback</text>
+      <text x={X + W / 2} y={Y - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpFrame)}</text>
+      <text x={X + W + 14} y={Y + H / 2 - 6} className="bpLabel bpMuted">{t(m.bpImage)}</text>
+      <text x={X - 14} y={Y + H / 2 + 8} textAnchor="end" className="bpLabel bpMuted">{t(m.bpFallback)}</text>
       <BpTitle />
-      <Foot parts={['radius: md', 'fit: cover', 'aspect: auto']} />
+      <Foot parts={[t(m.bpRadiusMd), t(m.bpFitCover), t(m.bpAspectAuto)]} />
     </svg>
   );
 }
 
 // Breadcrumbs: a short chain of linked steps separated by a slash.
 function BreadcrumbsBlueprint({ size }: BlueprintProps) {
+  const t = useT();
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the breadcrumbs">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheBreadcrumbs)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={60} y={78} width={304} height={56} rx={12} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
-      <text x={94} y={110} className="bpLabel" fill={C.text}>Home</text>
+      <text x={94} y={110} className="bpLabel" fill={C.text}>{t(m.bpHome)}</text>
       <text x={164} y={110} className="bpLabel" fill={C.text}>/</text>
-      <text x={196} y={110} className="bpLabel" fill={C.text}>Docs</text>
+      <text x={196} y={110} className="bpLabel" fill={C.text}>{t(m.bpDocs)}</text>
       <text x={248} y={110} className="bpLabel" fill={C.text}>/</text>
-      <text x={278} y={110} className="bpLabel" fill={C.text}>Components</text>
+      <text x={278} y={110} className="bpLabel" fill={C.text}>{t(m.bpComponents)}</text>
       <BpTitle />
-      <Foot parts={['separator: /']} />
+      <Foot parts={[t(m.bpSeparatorSlash)]} />
     </svg>
   );
 }
 
 // Pagination: a previous/next pair around a compact set of page-number buttons.
 function PaginationBlueprint({ size }: BlueprintProps) {
+  const t = useT();
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the pagination">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfThePagination)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={70} y={88} width={72} height={34} rx={17} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
@@ -3072,51 +3133,53 @@ function PaginationBlueprint({ size }: BlueprintProps) {
       <rect x={204} y={88} width={34} height={34} rx={17} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       <rect x={252} y={88} width={34} height={34} rx={17} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       <rect x={300} y={88} width={76} height={34} rx={17} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
-      <text x={106} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>Prev</text>
+      <text x={106} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>{t(m.bpPrev)}</text>
       <text x={173} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>2</text>
       <text x={221} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>3</text>
       <text x={269} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>4</text>
-      <text x={338} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>Next</text>
+      <text x={338} y={105} textAnchor="middle" dominantBaseline="middle" className="bpLabel" fill={C.text}>{t(m.bpNext)}</text>
       <BpTitle />
-      <Foot parts={['page: 2', 'total: 20']} />
+      <Foot parts={[t(m.bpPage2), t(m.bpTotal20)]} />
     </svg>
   );
 }
 
 // Accordion: a row of disclosure headers and one open panel body.
 function AccordionBlueprint({ size }: BlueprintProps) {
+  const t = useT();
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the accordion">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheAccordion)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={72} y={56} width={256} height={42} rx={12} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       <rect x={72} y={108} width={256} height={72} rx={12} fill={C.content} fillOpacity={0.1} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
-      <text x={102} y={82} className="bpLabel" fill={C.text}>Section one</text>
-      <text x={102} y={140} className="bpLabel" fill={C.text}>Details</text>
+      <text x={102} y={82} className="bpLabel" fill={C.text}>{t(m.bpSectionOne)}</text>
+      <text x={102} y={140} className="bpLabel" fill={C.text}>{t(m.bpDetails)}</text>
       <BpTitle />
-      <Foot parts={['open: one', 'collapsed: rest']} />
+      <Foot parts={[t(m.bpOpenOne), t(m.bpCollapsedRest)]} />
     </svg>
   );
 }
 
 // Table: a semantic grid with a header row and two body rows.
 function TableBlueprint({ size }: BlueprintProps) {
+  const t = useT();
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the table">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTable)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={56} y={54} width={288} height={112} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       <line x1={56} y1={90} x2={344} y2={90} stroke={C.line} strokeWidth={1.25} />
       <line x1={56} y1={122} x2={344} y2={122} stroke={C.line} strokeWidth={1.25} />
       <line x1={56} y1={154} x2={344} y2={154} stroke={C.line} strokeWidth={1.25} />
-      <text x={92} y={76} className="bpLabel" fill={C.text}>Name</text>
-      <text x={232} y={76} className="bpLabel" fill={C.text}>Status</text>
-      <text x={92} y={108} className="bpLabel" fill={C.text}>Ada</text>
-      <text x={232} y={108} className="bpLabel" fill={C.text}>Active</text>
-      <text x={92} y={140} className="bpLabel" fill={C.text}>Grace</text>
-      <text x={232} y={140} className="bpLabel" fill={C.text}>Paused</text>
+      <text x={92} y={76} className="bpLabel" fill={C.text}>{t(m.bpName)}</text>
+      <text x={232} y={76} className="bpLabel" fill={C.text}>{t(m.bpStatus)}</text>
+      <text x={92} y={108} className="bpLabel" fill={C.text}>{t(m.bpAda)}</text>
+      <text x={232} y={108} className="bpLabel" fill={C.text}>{t(m.bpActiveCell)}</text>
+      <text x={92} y={140} className="bpLabel" fill={C.text}>{t(m.bpGrace)}</text>
+      <text x={232} y={140} className="bpLabel" fill={C.text}>{t(m.bpPaused)}</text>
       <BpTitle />
-      <Foot parts={['headers', 'rows']} />
+      <Foot parts={[t(m.bpHeaders), t(m.bpRows)]} />
     </svg>
   );
 }
@@ -3124,9 +3187,10 @@ function TableBlueprint({ size }: BlueprintProps) {
 // Data grid: like the table, plus a leading selection column of checkboxes and
 // a sortable header carrying a direction caret.
 function DataGridBlueprint(_: BlueprintProps) {
+  const t = useT();
   const rows = [108, 140];
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the data grid">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheDataGrid)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={40} y={54} width={320} height={112} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
@@ -3141,15 +3205,15 @@ function DataGridBlueprint(_: BlueprintProps) {
         <rect key={y} x={54} y={y - 10} width={12} height={12} rx={3} fill="none" stroke={C.edge} strokeWidth={1.25} />
       ))}
       {/* sortable header with a direction caret */}
-      <text x={100} y={76} className="bpLabel" fill={C.text}>Name</text>
+      <text x={100} y={76} className="bpLabel" fill={C.text}>{t(m.bpName)}</text>
       <path d="M150 70 l4 4 l4 -4" fill="none" stroke={C.text} strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-      <text x={240} y={76} className="bpLabel" fill={C.text}>Status</text>
-      <text x={100} y={108} className="bpLabel" fill={C.text}>Ada</text>
-      <text x={240} y={108} className="bpLabel" fill={C.text}>Active</text>
-      <text x={100} y={140} className="bpLabel" fill={C.text}>Grace</text>
-      <text x={240} y={140} className="bpLabel" fill={C.text}>Paused</text>
+      <text x={240} y={76} className="bpLabel" fill={C.text}>{t(m.bpStatus)}</text>
+      <text x={100} y={108} className="bpLabel" fill={C.text}>{t(m.bpAda)}</text>
+      <text x={240} y={108} className="bpLabel" fill={C.text}>{t(m.bpActiveCell)}</text>
+      <text x={100} y={140} className="bpLabel" fill={C.text}>{t(m.bpGrace)}</text>
+      <text x={240} y={140} className="bpLabel" fill={C.text}>{t(m.bpPaused)}</text>
       <BpTitle />
-      <Foot parts={['select', 'sortable header', 'rows']} />
+      <Foot parts={[t(m.bpSelect), t(m.bpSortableHeader), t(m.bpRows)]} />
     </svg>
   );
 }
@@ -3157,24 +3221,25 @@ function DataGridBlueprint(_: BlueprintProps) {
 // Page header: breadcrumbs above a title block (title, description, meta pills)
 // with the actions cluster and overflow trigger end-aligned.
 function PageHeaderBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const padBlock = fmt(dimensions?.paddingBlock);
   const gap = fmt(dimensions?.sectionGap);
   return (
-    <svg viewBox="0 0 400 220" className="bpSvg" role="img" aria-label="Blueprint of the page header">
+    <svg viewBox="0 0 400 220" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfThePageHeader)}>
       <Defs />
       <rect x={0} y={0} width={400} height={220} fill="url(#bpGrid)" />
       <rect x={28} y={44} width={344} height={140} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       {/* padding-block from the region edge down to the first content */}
-      <VDim x={38} y1={44} y2={58} label={padBlock ? `pad: ${padBlock}` : 'padding-block'} left={false} horizontal />
+      <VDim x={38} y1={44} y2={58} label={padBlock ? `${t(m.bpPad)}: ${padBlock}` : t(m.bpPaddingBlock)} left={false} horizontal />
       {/* breadcrumbs */}
-      <text x={46} y={72} className="bpLabel" fill={C.faint}>Library / Courses</text>
+      <text x={46} y={72} className="bpLabel" fill={C.faint}>{t(m.bpLibraryCourses)}</text>
       {/* title + description + meta */}
-      <text x={46} y={100} fill={C.text} fontSize={15} fontWeight={650}>Page title</text>
+      <text x={46} y={100} fill={C.text} fontSize={15} fontWeight={650}>{t(m.bpPageTitle)}</text>
       <rect x={46} y={110} width={168} height={6} rx={3} fill={C.content} fillOpacity={0.55} />
       <rect x={46} y={132} width={44} height={13} rx={6.5} fill="none" stroke={C.edge} strokeWidth={1.25} />
       <rect x={96} y={132} width={34} height={13} rx={6.5} fill="none" stroke={C.edge} strokeWidth={1.25} />
       {/* stack gap between the description and the meta row */}
-      <VDim x={228} y1={116} y2={132} label={gap ? `gap: ${gap}` : 'gap'} left={false} horizontal />
+      <VDim x={228} y1={116} y2={132} label={gap ? `${t(m.bpGap)}: ${gap}` : t(m.bpGap)} left={false} horizontal />
       {/* actions cluster + overflow trigger */}
       <rect x={232} y={56} width={50} height={22} rx={6} fill="none" stroke={C.edge} strokeWidth={1.25} />
       <rect x={288} y={56} width={50} height={22} rx={6} fill={C.content} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.25} />
@@ -3183,7 +3248,7 @@ function PageHeaderBlueprint({ dimensions }: BlueprintProps) {
       <circle cx={355} cy={67} r={1.1} fill={C.text} />
       <circle cx={359} cy={67} r={1.1} fill={C.text} />
       <BpTitle />
-      <Foot parts={['breadcrumbs', 'title + description', 'meta', 'actions', 'overflow']} />
+      <Foot parts={[t(m.bpBreadcrumbs), t(m.bpTitleDescription), t(m.bpMeta), t(m.bpActions), t(m.bpOverflow)]} />
     </svg>
   );
 }
@@ -3191,23 +3256,24 @@ function PageHeaderBlueprint({ dimensions }: BlueprintProps) {
 // Section: a heading row with an end-aligned action, a description line, then
 // the content region a token gap below; a hairline divider tops stacked sections.
 function SectionBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const gap = fmt(dimensions?.gap);
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the section">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSection)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <line x1={36} y1={44} x2={364} y2={44} stroke={C.line} strokeWidth={1.25} strokeDasharray="5 3" />
-      <text x={370} y={40} textAnchor="end" className="bpLabel" fill={C.faint}>divider</text>
+      <text x={370} y={40} textAnchor="end" className="bpLabel" fill={C.faint}>{t(m.bpDivider)}</text>
       {/* heading row */}
-      <text x={44} y={72} fill={C.text} fontSize={14} fontWeight={650}>Section title</text>
+      <text x={44} y={72} fill={C.text} fontSize={14} fontWeight={650}>{t(m.bpSectionTitle)}</text>
       <rect x={300} y={58} width={56} height={20} rx={6} fill="none" stroke={C.edge} strokeWidth={1.25} />
       <rect x={44} y={82} width={150} height={6} rx={3} fill={C.content} fillOpacity={0.55} />
       {/* gap dimension into the content region */}
-      <VDim x={36} y1={92} y2={116} label={gap ? `gap: ${gap}` : 'gap'} />
+      <VDim x={36} y1={92} y2={116} label={gap ? `${t(m.bpGap)}: ${gap}` : t(m.bpGap)} />
       <rect x={44} y={116} width={312} height={54} rx={8} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
-      <text x={200} y={147} textAnchor="middle" className="bpLabel" fill={C.faint}>content</text>
+      <text x={200} y={147} textAnchor="middle" className="bpLabel" fill={C.faint}>{t(m.bpContent)}</text>
       <BpTitle />
-      <Foot y={216} parts={['aria-labelledby wires the heading', 'header row', 'content']} />
+      <Foot y={216} parts={[t(m.bpAriaLabelledbyWiresTheHeading), t(m.bpHeaderRow), t(m.bpContent)]} />
     </svg>
   );
 }
@@ -3215,11 +3281,12 @@ function SectionBlueprint({ dimensions }: BlueprintProps) {
 // Card group: an auto-fill grid of card slots that wrap at the minimum item
 // width, with the min-width and gap called out.
 function CardGroupBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const gap = fmt(dimensions?.gap);
   const cols = [40, 152, 264];
   const rows = [54, 122];
   return (
-    <svg viewBox="0 0 400 226" className="bpSvg" role="img" aria-label="Blueprint of the card group">
+    <svg viewBox="0 0 400 226" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCardGroup)}>
       <Defs />
       <rect x={0} y={0} width={400} height={226} fill="url(#bpGrid)" />
       {rows.map((y) =>
@@ -3231,10 +3298,10 @@ function CardGroupBlueprint({ dimensions }: BlueprintProps) {
           </g>
         )),
       )}
-      <HDim x1={40} x2={136} y={190} label="min-item: 16rem" />
-      <VDim x={372} y1={106} y2={122} label={gap ?? 'gap'} horizontal />
+      <HDim x1={40} x2={136} y={190} label={t(m.bpMinItem16rem)} />
+      <VDim x={372} y1={106} y2={122} label={gap ?? t(m.bpGap)} horizontal />
       <BpTitle />
-      <Foot y={220} parts={['grid: repeat(auto-fill, minmax(min-item, 1fr))', 'list: one column']} />
+      <Foot y={220} parts={[t(m.bpGridRepeatAutoFillMinmaxMinItem1fr), t(m.bpListOneColumn)]} />
     </svg>
   );
 }
@@ -3242,13 +3309,14 @@ function CardGroupBlueprint({ dimensions }: BlueprintProps) {
 // Timeline: tone-colored markers on a shared connector rail, each event's
 // content block beside it; the last marker ends the rail.
 function TimelineBlueprint(_: BlueprintProps) {
+  const t = useT();
   const items = [
     { y: 64, filled: true, icon: true },
     { y: 118, filled: true, icon: false },
     { y: 172, filled: false, icon: false },
   ];
   return (
-    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label="Blueprint of the timeline">
+    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTimeline)}>
       <Defs />
       <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
       {/* connector segments stop above the last marker */}
@@ -3271,10 +3339,10 @@ function TimelineBlueprint(_: BlueprintProps) {
       ))}
       {/* media slot on the middle event */}
       <rect x={80} y={140} width={110} height={16} rx={5} fill="none" stroke={C.edge} strokeWidth={1.1} strokeDasharray="4 3" />
-      <text x={196} y={151} className="bpLabel" fill={C.faint}>media</text>
-      <text x={26} y={94} className="bpLabel" fill={C.faint} transform="rotate(-90 26 94)">rail</text>
+      <text x={196} y={151} className="bpLabel" fill={C.faint}>{t(m.bpMedia)}</text>
+      <text x={26} y={94} className="bpLabel" fill={C.faint} transform="rotate(-90 26 94)">{t(m.bpRail)}</text>
       <BpTitle />
-      <Foot y={222} parts={['marker + connector rail', 'actor, title, timestamp', 'description, media, actions']} />
+      <Foot y={222} parts={[t(m.bpMarkerConnectorRail), t(m.bpActorTitleTimestamp), t(m.bpDescriptionMediaActions)]} />
     </svg>
   );
 }
@@ -3282,6 +3350,7 @@ function TimelineBlueprint(_: BlueprintProps) {
 // Wizard: the connected Steps progress row, the active step's label, the
 // content panel, the error live region, and the previous/next footer.
 function WizardBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const gap = fmt(dimensions?.gap);
   const radius = fmt(dimensions?.panelRadius);
   const markers = [
@@ -3290,7 +3359,7 @@ function WizardBlueprint({ dimensions }: BlueprintProps) {
     { x: 172, state: 'todo' },
   ] as const;
   return (
-    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label="Blueprint of the wizard">
+    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheWizard)}>
       <Defs />
       <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
       <rect x={28} y={40} width={344} height={156} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
@@ -3306,17 +3375,17 @@ function WizardBlueprint({ dimensions }: BlueprintProps) {
         </g>
       ))}
       {/* step label + panel */}
-      <text x={44} y={100} fill={C.text} fontSize={14} fontWeight={650}>Account details</text>
-      <VDim x={364} y1={104} y2={116} label={gap ? `gap: ${gap}` : 'gap'} horizontal />
+      <text x={44} y={100} fill={C.text} fontSize={14} fontWeight={650}>{t(m.bpAccountDetails)}</text>
+      <VDim x={364} y1={104} y2={116} label={gap ? `${t(m.bpGap)}: ${gap}` : t(m.bpGap)} horizontal />
       <rect x={44} y={116} width={312} height={38} rx={8} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
-      <text x={200} y={139} textAnchor="middle" className="bpLabel" fill={C.faint}>panel: role="group", focused on navigation</text>
+      <text x={200} y={139} textAnchor="middle" className="bpLabel" fill={C.faint}>{t(m.bpPanelRoleGroupFocusedOnNavigation)}</text>
       {/* error live region */}
-      <text x={44} y={162} className="bpLabel" fill={C.faint}>error live region</text>
+      <text x={44} y={162} className="bpLabel" fill={C.faint}>{t(m.bpErrorLiveRegion)}</text>
       {/* footer actions */}
       <rect x={232} y={166} width={58} height={22} rx={6} fill="none" stroke={C.edge} strokeWidth={1.25} />
       <rect x={296} y={166} width={58} height={22} rx={6} fill={C.content} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.25} />
       <BpTitle />
-      <Foot y={222} parts={['progress', radius && `panel radius: ${radius}`, 'error region', 'previous / next']} />
+      <Foot y={222} parts={[t(m.bpProgress), radius && `${t(m.bpPanelRadius)}: ${radius}`, t(m.bpErrorRegion), t(m.bpPreviousNext)]} />
     </svg>
   );
 }
@@ -3324,6 +3393,7 @@ function WizardBlueprint({ dimensions }: BlueprintProps) {
 // Rating: a row of stars filled to the value (3.5 of 5 here), with a half-filled
 // star to show fractional display and the rest hollow.
 function RatingBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const font = fmt(size.fontSize);
   const gap = fmt(dimensions?.gap);
   const N = 5;
@@ -3334,7 +3404,7 @@ function RatingBlueprint({ size, dimensions }: BlueprintProps) {
   const SY = 74;
   const halfX = SX + 3 * (starS + g) + starS / 2;
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the rating">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheRating)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <clipPath id="bpRatingHalf">
@@ -3360,11 +3430,11 @@ function RatingBlueprint({ size, dimensions }: BlueprintProps) {
           </g>
         );
       })}
-      <text x={SX + starS / 2} y={SY - 12} textAnchor="middle" className="bpLabel bpMuted">star</text>
+      <text x={SX + starS / 2} y={SY - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpStar)}</text>
       {gap && <HDim x1={SX + starS} x2={SX + starS + g} y={SY + starS + 16} label={gap} above={false} />}
-      <text x={200} y={SY + starS + 40} textAnchor="middle" className="bpLabel bpMuted">value 3.5 / 5</text>
+      <text x={200} y={SY + starS + 40} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpValue355)}</text>
       <BpTitle />
-      <Foot parts={[font && `star: ${font}`]} />
+      <Foot parts={[font && `${t(m.bpStar)}: ${font}`]} />
     </svg>
   );
 }
@@ -3372,6 +3442,7 @@ function RatingBlueprint({ size, dimensions }: BlueprintProps) {
 // OtpField: the six code cells with three entered digits, the active cell
 // carrying the caret, dimensioned with the cell height, gap, and radius.
 function OtpFieldBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const height = fmt(size.height);
   const font = fmt(size.fontSize);
   const gap = fmt(size.gap);
@@ -3387,7 +3458,7 @@ function OtpFieldBlueprint({ size, dimensions }: BlueprintProps) {
   const SY = 74;
   const DIGITS = ['4', '2', '0'];
   return (
-    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label="Blueprint of the otp field">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheOtpField)}>
       <Defs />
       <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       {Array.from({ length: N }, (_, i) => {
@@ -3426,13 +3497,13 @@ function OtpFieldBlueprint({ size, dimensions }: BlueprintProps) {
             strokeWidth={1.5}
           />
           <text x={392} y={SY - 12} textAnchor="end" className="bpLabel">
-            radius: {radius}
+            {t(m.bpRadius)}: {radius}
           </text>
         </>
       )}
-      <text x={SX + DIGITS.length * (cw + g) + cw / 2} y={SY - 12} textAnchor="middle" className="bpLabel bpMuted">caret</text>
+      <text x={SX + DIGITS.length * (cw + g) + cw / 2} y={SY - 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpCaret)}</text>
       <BpTitle />
-      <Foot parts={[font && `font: ${font}`, border && `border: ${border}`, 'input: invisible overlay']} />
+      <Foot parts={[font && `${t(m.bpFont)}: ${font}`, border && `${t(m.bpBorder)}: ${border}`, t(m.bpInputInvisibleOverlay)]} />
     </svg>
   );
 }
@@ -3440,6 +3511,7 @@ function OtpFieldBlueprint({ size, dimensions }: BlueprintProps) {
 // Sparkline: the word-sized trend box with a real wavy mark, its dashed
 // baseline, and the emphasis dot on the newest sample.
 function SparklineBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const height = fmt(size.height);
   const thickness = fmt(size.thickness);
   const pointDia = fmt(dimensions?.pointDiameter);
@@ -3454,32 +3526,33 @@ function SparklineBlueprint({ size, dimensions }: BlueprintProps) {
   const N = 12;
   const ys = [0.62, 0.5, 0.58, 0.34, 0.42, 0.22, 0.38, 0.55, 0.44, 0.3, 0.4, 0.26];
   const pts = ys.map((v, i) => `${BX + (i / (N - 1)) * BW},${BY + v * BH}`);
-  const last = pts[pts.length - 1].split(',').map(Number);
+  const lastX = BX + BW;
+  const lastY = BY + (ys[ys.length - 1] ?? 0) * BH;
   const baseY = BY + 0.3 * BH;
 
   return (
-    <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label="Blueprint of the sparkline">
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSparkline)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
+      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the box: fluid width, fixed height */}
       <rect x={BX} y={BY} width={BW} height={BH} fill={C.fill} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
 
       {/* dashed baseline at a reference value */}
       <line x1={BX} y1={baseY} x2={BX + BW} y2={baseY} stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 3" />
-      <text x={BX + BW + 8} y={baseY + 3} className="bpLabel" fill={C.faint}>baseline</text>
+      <text x={BX + BW + 8} y={baseY + 3} className="bpLabel" fill={C.faint}>{t(m.bpBaseline)}</text>
 
       {/* the mark: a thin polyline, with the newest sample emphasized */}
       <polyline points={pts.join(' ')} fill="none" stroke={C.line} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" />
-      <circle cx={last[0]} cy={last[1]} r={4} fill={C.line} />
-      <text x={last[0] - 10} y={last[1] - 12} textAnchor="end" className="bpLabel" fill={C.faint}>end point</text>
+      <circle cx={lastX} cy={lastY} r={4} fill={C.line} />
+      <text x={lastX - 10} y={lastY - 12} textAnchor="end" className="bpLabel" fill={C.faint}>{t(m.bpEndPoint)}</text>
 
       {/* dimensions: fluid width above, the size's height on the left */}
-      <HDim x1={BX} x2={BX + BW} y={BY - 20} label="width: auto" />
-      <VDim x={BX - 22} y1={BY} y2={BY + BH} label={`height: ${height ?? 'auto'}`} />
+      <HDim x1={BX} x2={BX + BW} y={BY - 20} label={t(m.bpWidthAuto)} />
+      <VDim x={BX - 22} y1={BY} y2={BY + BH} label={`${t(m.bpHeight)}: ${height ?? t(m.bpAuto)}`} />
 
       <BpTitle />
-      <Foot parts={[thickness && `stroke: ${thickness}`, pointDia && `point: ⌀ ${pointDia}`, baselineW && `baseline: ${baselineW}`]} />
+      <Foot parts={[thickness && `${t(m.bpStroke)}: ${thickness}`, pointDia && `${t(m.bpPoint)}: ⌀ ${pointDia}`, baselineW && `${t(m.bpBaseline)}: ${baselineW}`]} />
     </svg>
   );
 }
@@ -3487,6 +3560,7 @@ function SparklineBlueprint({ size, dimensions }: BlueprintProps) {
 // TimelineScrubber: the recorded window with its activity silhouette, marker
 // ticks, the playhead with its readout, and the live button at the edge.
 function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
   const height = fmt(size.height);
   const radius = fmt(dimensions?.radius);
   const playheadW = fmt(dimensions?.playheadWidth);
@@ -3503,7 +3577,7 @@ function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
   const actPts = act.map((v, i) => `${TX + (i / (act.length - 1)) * TW},${TY + TH - v * TH}`);
 
   return (
-    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label="Blueprint of the timeline scrubber">
+    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTimelineScrubber)}>
       <Defs />
       <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
 
@@ -3514,30 +3588,30 @@ function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
       {/* marker ticks */}
       <line x1={TX + TW * 0.38} y1={TY} x2={TX + TW * 0.38} y2={TY + TH} stroke={C.edge} strokeWidth={2} />
       <line x1={TX + TW * 0.42} y1={TY} x2={TX + TW * 0.42} y2={TY + TH} stroke={C.edge} strokeWidth={2} opacity={0.6} />
-      <text x={TX + TW * 0.4} y={TY - 8} textAnchor="middle" className="bpLabel" fill={C.faint}>markers</text>
+      <text x={TX + TW * 0.4} y={TY - 8} textAnchor="middle" className="bpLabel" fill={C.faint}>{t(m.bpMarkers)}</text>
 
       {/* playhead: the slider, its grab handle riding above the track edge */}
       <line x1={PX} y1={TY - 6} x2={PX} y2={TY + TH} stroke={C.line} strokeWidth={2.5} />
       <circle cx={PX} cy={TY - 10} r={6} fill={C.line} />
       <rect x={PX - 30} y={TY + TH + 10} width={60} height={18} rx={5} fill={C.fill} stroke={C.edge} strokeWidth={1.1} />
       <text x={PX} y={TY + TH + 23} textAnchor="middle" className="bpLabel">14:29:36</text>
-      <text x={PX + 14} y={TY - 12} className="bpLabel">playhead</text>
+      <text x={PX + 14} y={TY - 12} className="bpLabel">{t(m.bpPlayhead)}</text>
 
       {/* sparse time ticks along the bottom edge */}
       <text x={TX + 4} y={TY + TH - 6} className="bpLabel" fill={C.faint}>14:15</text>
-      <text x={TX + TW - 4} y={TY + TH - 6} textAnchor="end" className="bpLabel" fill={C.faint}>now</text>
+      <text x={TX + TW - 4} y={TY + TH - 6} textAnchor="end" className="bpLabel" fill={C.faint}>{t(m.bpNow)}</text>
 
       {/* the live button at the trailing edge */}
       <rect x={TX + TW + 12} y={TY + TH / 2 - 14} width={52} height={28} rx={8} fill={C.content} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.25} />
       <circle cx={TX + TW + 26} cy={TY + TH / 2} r={3} fill={C.text} />
-      <text x={TX + TW + 34} y={TY + TH / 2 + 3.5} className="bpLabel">Live</text>
+      <text x={TX + TW + 34} y={TY + TH / 2 + 3.5} className="bpLabel">{t(m.bpLive)}</text>
 
       {/* dimensions */}
-      <HDim x1={TX} x2={TX + TW} y={TY - 28} label="window: start → end" />
-      <VDim x={TX - 20} y1={TY} y2={TY + TH} label={`height: ${height ?? 'auto'}`} />
+      <HDim x1={TX} x2={TX + TW} y={TY - 28} label={t(m.bpWindowStartEnd)} />
+      <VDim x={TX - 20} y1={TY} y2={TY + TH} label={`${t(m.bpHeight)}: ${height ?? t(m.bpAuto)}`} />
 
       <BpTitle />
-      <Foot y={222} parts={[playheadW && `playhead: ${playheadW}`, handleDia && `handle: ⌀ ${handleDia}`, markerW && `marker: ${markerW}`, radius && `radius: ${radius}`]} />
+      <Foot y={222} parts={[playheadW && `${t(m.bpPlayhead)}: ${playheadW}`, handleDia && `${t(m.bpHandle)}: ⌀ ${handleDia}`, markerW && `${t(m.bpMarker)}: ${markerW}`, radius && `${t(m.bpRadius)}: ${radius}`]} />
     </svg>
   );
 }
@@ -3545,6 +3619,7 @@ function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
 // TimeSeriesChart: the plot with recessive grid and axes, two series, the
 // hover crosshair, and the readout and legend rows above the plot.
 function TimeSeriesChartBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
   const strokeW = fmt(dimensions?.strokeWidth);
   const gridW = fmt(dimensions?.gridWidth);
   const swatch = fmt(dimensions?.swatchDiameter);
@@ -3559,18 +3634,18 @@ function TimeSeriesChartBlueprint({ dimensions }: BlueprintProps) {
   const line = (vals: number[]) => vals.map((v, i) => `${PXx + (i / (vals.length - 1)) * PW},${PY + v * PH}`).join(' ');
 
   return (
-    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label="Blueprint of the time series chart">
+    <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTimeSeriesChart)}>
       <Defs />
       <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
 
       {/* readout (left) and legend (right) rows above the plot */}
       <circle cx={PXx + 4} cy={44} r={3.5} fill={C.line} />
-      <text x={PXx + 12} y={47.5} className="bpLabel">14:29:36 · user 42%</text>
+      <text x={PXx + 12} y={47.5} className="bpLabel">{t(m.bp142936User42)}</text>
       <circle cx={PXx + PW - 92} cy={44} r={3.5} fill={C.line} />
-      <text x={PXx + PW - 84} y={47.5} className="bpLabel">user</text>
+      <text x={PXx + PW - 84} y={47.5} className="bpLabel">{t(m.bpUser)}</text>
       <circle cx={PXx + PW - 48} cy={44} r={3.5} fill={C.edge} />
-      <text x={PXx + PW - 40} y={47.5} className="bpLabel">system</text>
-      <text x={PXx + PW} y={30} textAnchor="end" className="bpLabel" fill={C.faint}>legend</text>
+      <text x={PXx + PW - 40} y={47.5} className="bpLabel">{t(m.bpSystem)}</text>
+      <text x={PXx + PW} y={30} textAnchor="end" className="bpLabel" fill={C.faint}>{t(m.bpLegend)}</text>
 
       {/* plot box with recessive horizontal grid */}
       <rect x={PXx} y={PY} width={PW} height={PH} fill={C.fill} fillOpacity={0.25} stroke={C.edge} strokeWidth={1.1} strokeDasharray="5 3" />
@@ -3590,13 +3665,13 @@ function TimeSeriesChartBlueprint({ dimensions }: BlueprintProps) {
       {/* hover crosshair snapped to a sample */}
       <line x1={CXx} y1={PY} x2={CXx} y2={PY + PH} stroke={C.text} strokeWidth={1} strokeDasharray="3 2" />
       <circle cx={CXx} cy={PY + 0.34 * PH} r={4} fill="none" stroke={C.line} strokeWidth={1.5} />
-      <text x={CXx + 8} y={PY + 14} className="bpLabel" fill={C.faint}>crosshair</text>
+      <text x={CXx + 8} y={PY + 14} className="bpLabel" fill={C.faint}>{t(m.bpCrosshair)}</text>
 
       {/* dimensions */}
-      <VDim x={PXx - 34} y1={PY} y2={PY + PH} label="height: 12rem" />
+      <VDim x={PXx - 34} y1={PY} y2={PY + PH} label={t(m.bpHeight12rem)} />
 
       <BpTitle />
-      <Foot y={222} parts={[strokeW && `stroke: ${strokeW}`, gridW && `grid: ${gridW}`, swatch && `swatch: ⌀ ${swatch}`, 'canvas: uPlot']} />
+      <Foot y={222} parts={[strokeW && `${t(m.bpStroke)}: ${strokeW}`, gridW && `${t(m.bpGrid)}: ${gridW}`, swatch && `${t(m.bpSwatch)}: ⌀ ${swatch}`, t(m.bpCanvasUPlot)]} />
     </svg>
   );
 }
@@ -3697,6 +3772,7 @@ export function ComponentBlueprint({
   /** Show only this size's figure and drop the size picker. */
   fixedSize?: string;
 }) {
+  const t = useT();
   const spec = getSpec(specId);
   const sizes = spec?.sizes ?? [];
   // Ring-type atoms (progress ring) carry their geometry on numeric props, not
@@ -3729,14 +3805,14 @@ export function ComponentBlueprint({
           (items.length <= 4 ? (
             <SegmentedControl
               size={Size.Small}
-              aria-label="Blueprint size"
+              aria-label={t(m.bpBlueprintSize)}
               value={name}
               onValueChange={setName}
               options={options}
             />
           ) : (
             <div style={{ maxWidth: '12rem' }}>
-              <Select aria-label="Blueprint size" value={name} onValueChange={setName} options={options} />
+              <Select aria-label={t(m.bpBlueprintSize)} value={name} onValueChange={setName} options={options} />
             </div>
           ))}
         <TitleContext.Provider value={`<${spec.name} />`}>

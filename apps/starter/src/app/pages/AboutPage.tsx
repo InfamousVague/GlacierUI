@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Button, Callout, Field, Heading, Input, Pill, Row, Size, Text, TextTone } from '@glacier/react';
 import { greet, isTauri } from '../tauri.ts';
+import { useT } from '../i18n.ts';
 
 export function AboutPage() {
+  const t = useT();
   const [name, setName] = useState('');
   const [reply, setReply] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
@@ -21,14 +23,13 @@ export function AboutPage() {
     <div className="page">
       <div>
         <Row align="center" gap={3} wrap>
-          <Heading level={1}>About</Heading>
+          <Heading level={1}>{t('aboutTitle')}</Heading>
           <Pill tone={runningInTauri ? 'success' : 'neutral'} size={Size.Small}>
             {runningInTauri ? 'Running under Tauri' : 'Running in the browser'}
           </Pill>
         </Row>
         <Text tone={TextTone.Muted} className="pageLede">
-          A blank-canvas desktop app skeleton: sidebar navigation, a window title bar, settings,
-          modals, and toasts, all composed from Glacier UI. Delete these pages and build your own.
+          {t('aboutLede')}
         </Text>
       </div>
 

@@ -1,5 +1,7 @@
-import { Row, Slider, Stack, Text, Heading, Size, TextTone } from '@glacier/react';
+import { Row, Slider, Stack, Text, Heading, Size, TextTone, useT } from '@glacier/react';
 import { useState, type CSSProperties } from 'react';
+import { prose } from '../../docs-ui.tsx';
+import { m } from '../../i18n.ts';
 
 // A busy, colourful backdrop so the glass has something to blur and saturate -
 // glass over a flat surface shows almost nothing.
@@ -24,6 +26,7 @@ const STAGE: CSSProperties = {
 };
 
 export function MaterialsPage() {
+  const t = useT();
   const [frost, setFrost] = useState(1);
 
   // The preview computes its blur straight from the slider - the same trick the
@@ -44,27 +47,23 @@ export function MaterialsPage() {
 
   return (
     <>
-      <Heading level={1}>Glass</Heading>
+      <Heading level={1}>{t(m.exGlass)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        The kit&rsquo;s glass surfaces are a lightweight CSS material - a translucent tint over a blurred,
-        saturated backdrop, with a hairline border and a thin top highlight. The{' '}
-        <code>--glacier-glass-blur-scale</code> token tunes the frostedness live across every surface at
-        once.
+        {prose(t(m.matLede))}
       </Text>
 
-      <Heading level={2}>Frostedness</Heading>
+      <Heading level={2}>{t(m.matFrostedness)}</Heading>
       <Text tone={TextTone.Muted}>
-        Drag to preview the glass at another blur. The Preferences dialog in the top bar sets the real
-        knob for the whole site.
+        {t(m.matFrostednessIntro)}
       </Text>
       <Row gap={6} wrap align="center" style={{ marginBottom: 'var(--glacier-space-5)' }}>
         <Row gap={3} align="center">
           <Text as="span" size={Size.Small} tone={TextTone.Muted}>
-            Frostedness
+            {t(m.matFrostedness)}
           </Text>
           <div style={{ width: '14rem' }}>
             <Slider
-              aria-label="Frostedness preview"
+              aria-label={t(m.matFrostednessPreviewAria)}
               min={0}
               max={2}
               step={0.05}
@@ -81,35 +80,33 @@ export function MaterialsPage() {
       <div style={STAGE}>
         <div style={{ ...glass(4), maxWidth: '17rem' }}>
           <Text as="span" weight="semibold">
-            Now playing
+            {t(m.matNowPlaying)}
           </Text>
           <Text size={Size.Small} tone={TextTone.Muted}>
-            Drag the slider to thin or thicken the frost on the panel.
+            {t(m.matPanelHint)}
           </Text>
         </div>
         <div style={{ ...glass(3), placeItems: 'center', textAlign: 'center', minWidth: '9rem' }}>
           <Text as="span" size={Size.Small} weight="semibold">
-            Glass tile
+            {t(m.matGlassTile)}
           </Text>
         </div>
       </div>
 
       <Stack gap={4} style={{ marginTop: 'var(--glacier-space-5)' }}>
         <Text tone={TextTone.Muted}>
-          The Preferences dialog sets the frostedness for the whole site, so every glass surface - the
-          toolbar, menus, popovers, cards - thickens together. This preview drives its own panels locally
-          so you can compare without changing your settings.
+          {t(m.matPreferencesNote)}
         </Text>
       </Stack>
 
-      <Heading level={2}>Tokens</Heading>
+      <Heading level={2}>{t(m.matTokens)}</Heading>
       <div className="propsTableWrap">
         <table className="tokenTable">
           <thead>
             <tr>
-              <th>Token</th>
-              <th>Default</th>
-              <th>Description</th>
+              <th>{t(m.matThToken)}</th>
+              <th>{t(m.matThDefault)}</th>
+              <th>{t(m.matThDescription)}</th>
             </tr>
           </thead>
           <tbody>
@@ -120,7 +117,7 @@ export function MaterialsPage() {
               <td>
                 <code>1</code>
               </td>
-              <td>Frostedness. Every blur token is multiplied by it, so all glass thins or thickens at once.</td>
+              <td>{t(m.matTokenBlurScale)}</td>
             </tr>
             <tr>
               <td>
@@ -129,7 +126,7 @@ export function MaterialsPage() {
               <td>
                 <code>1.8</code>
               </td>
-              <td>Saturation boost applied to the backdrop so colour reads through the glass.</td>
+              <td>{t(m.matTokenSaturate)}</td>
             </tr>
           </tbody>
         </table>

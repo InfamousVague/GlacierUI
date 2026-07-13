@@ -41,6 +41,8 @@ export const fieldSpec: ComponentSpec = {
     },
     { name: 'skeleton', description: 'Swaps the label and hint for placeholder blocks; the control renders its own skeleton.' },
   ],
+  // the label, control, and message children paint
+  paint: {},
   tokens: [
     'space-2', 'font-sans', 'font-size-sm', 'font-size-xs', 'font-weight-medium',
     'leading-sm', 'leading-xs', 'text', 'text-muted', 'danger-text',

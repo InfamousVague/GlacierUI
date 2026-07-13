@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { OtpField, Text, Heading, Size, TextTone } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { OtpField, Text, Heading, Size, TextTone, useT } from '@glacier/react';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 function ControlledCode() {
   const [code, setCode] = useState('');
@@ -24,35 +25,33 @@ function ControlledCode() {
 }
 
 export function OtpFieldPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>OtpField</Heading>
+      <Heading level={1}>{t(m.otpName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A one-time passcode entry. One real text input is stretched invisibly across the visual
-        cells, so typing, backspace, paste, and platform code autofill all behave natively; the
-        caret blinks in the next empty cell. Codes read left to right in every locale, so the row
-        never mirrors under RTL.
+        {prose(t(m.otpLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the figure.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntro)}</Text>
       <ComponentBlueprint specId="otp-field" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="Six numeric cells by default. Focus the field and type; paste a full code and it distributes across the cells."
+        title={t(m.exBasic)}
+        description={t(m.otpEx1Desc)}
+        component="OtpField"
+        render={(K) => <K.OtpField />}
         code={`import { OtpField } from '@glacier/react';
 
 <OtpField onComplete={(code) => verify(code)} />`}
-      >
-        <OtpField />
-      </Example>
+      />
 
       <Example
-        title="Controlled with completion"
-        description="Drive the value from state; onComplete fires once when the last cell fills."
+        title={t(m.otpEx2Title)}
+        description={t(m.otpEx2Desc)}
         code={`const [code, setCode] = useState('');
 
 <OtpField value={code} onValueChange={setCode} onComplete={verify} />`}
@@ -61,108 +60,106 @@ export function OtpFieldPage() {
       </Example>
 
       <Example
-        title="Groups and length"
-        description="groupSize draws a dash between digit groups; length sets the cell count."
+        title={t(m.otpEx3Title)}
+        description={t(m.otpEx3Desc)}
+        component="OtpField"
+        render={(K) => (
+          <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', justifyItems: 'start' }}>
+            <K.OtpField length={6} groupSize={3} defaultValue="123" />
+            <K.OtpField length={4} />
+          </div>
+        )}
         code={`<OtpField length={6} groupSize={3} defaultValue="123" />
 <OtpField length={4} />`}
-      >
-        <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', justifyItems: 'start' }}>
-          <OtpField length={6} groupSize={3} defaultValue="123" />
-          <OtpField length={4} />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Alphanumeric and masked"
-        description="type widens the accepted characters; masked renders dots for codes that should stay private."
+        title={t(m.otpEx4Title)}
+        description={t(m.otpEx4Desc)}
+        component="OtpField"
+        render={(K) => (
+          <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', justifyItems: 'start' }}>
+            <K.OtpField type="alphanumeric" defaultValue="A7" />
+            <K.OtpField masked defaultValue="4207" length={4} />
+          </div>
+        )}
         code={`<OtpField type="alphanumeric" defaultValue="A7" />
 <OtpField masked defaultValue="4207" length={4} />`}
-      >
-        <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', justifyItems: 'start' }}>
-          <OtpField type="alphanumeric" defaultValue="A7" />
-          <OtpField masked defaultValue="4207" length={4} />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Sizes"
-        description="Three cell sizes on the control heights."
+        title={t(m.secSizes)}
+        description={t(m.otpEx5Desc)}
+        component="OtpField"
+        render={(K) => (
+          <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', justifyItems: 'start' }}>
+            <K.OtpField size={Size.Small} length={4} />
+            <K.OtpField size={Size.Medium} length={4} />
+            <K.OtpField size={Size.Large} length={4} />
+          </div>
+        )}
         code={`<OtpField size="sm" length={4} />
 <OtpField size="md" length={4} />
 <OtpField size="lg" length={4} />`}
-      >
-        <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', justifyItems: 'start' }}>
-          <OtpField size={Size.Small} length={4} />
-          <OtpField size={Size.Medium} length={4} />
-          <OtpField size={Size.Large} length={4} />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="States"
-        description="error paints the invalid treatment and sets aria-invalid; disabled dims the cells and blocks input; glass swaps the solid surface for the frosted material."
+        title={t(m.secStates)}
+        description={t(m.otpEx6Desc)}
+        component="OtpField"
+        render={(K) => (
+          <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', justifyItems: 'start' }}>
+            <K.OtpField error defaultValue="99" length={4} />
+            <K.OtpField disabled defaultValue="12" length={4} />
+            <K.OtpField glass length={4} />
+          </div>
+        )}
         code={`<OtpField error defaultValue="99" length={4} />
 <OtpField disabled defaultValue="12" length={4} />
 <OtpField glass length={4} />`}
-      >
-        <div style={{ display: 'grid', gap: 'var(--glacier-space-4)', justifyItems: 'start' }}>
-          <OtpField error defaultValue="99" length={4} />
-          <OtpField disabled defaultValue="12" length={4} />
-          <OtpField glass length={4} />
-        </div>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description="The loading placeholder keeps the exact cell geometry."
+        title={t(m.exSkeleton)}
+        description={t(m.otpEx7Desc)}
+        component="OtpField"
+        render={(K) => <K.OtpField skeleton length={6} />}
         code={`<OtpField skeleton length={6} />`}
-      >
-        <OtpField skeleton length={6} />
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'length', type: 'number', default: '6', description: 'Number of code characters.' },
-          { name: 'value', type: 'string', description: 'Controlled code value.' },
-          { name: 'defaultValue', type: 'string', description: 'Initial value when uncontrolled.' },
-          { name: 'onValueChange', type: '(value: string) => void', description: 'Called with the sanitized code on every change.' },
-          { name: 'onComplete', type: '(value: string) => void', description: 'Called with the full code when the last cell fills.' },
-          { name: 'type', type: "'numeric' | 'alphanumeric'", default: "'numeric'", description: 'Which characters the code accepts; everything else is stripped.' },
-          { name: 'masked', type: 'boolean', default: 'false', description: 'Renders dots instead of the entered characters.' },
-          { name: 'groupSize', type: 'number', description: 'Draws a separator dash after every N cells.' },
-          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Cell size step.' },
-          { name: 'disabled', type: 'boolean', default: 'false', description: 'Blocks input and dims the cells.' },
-          { name: 'error', type: 'boolean', default: 'false', description: 'Paints the invalid treatment and sets aria-invalid.' },
-          { name: 'autoFocus', type: 'boolean', default: 'false', description: 'Focuses the field on mount.' },
-          { name: 'glass', type: 'boolean', default: 'false', description: 'Renders the frosted glass material.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders placeholders with the exact geometry.' },
-          { name: 'aria-label', type: 'string', description: 'Accessible name; defaults to the localized "One-time code".' },
+          { name: 'length', type: 'number', default: '6', description: t(m.otpPropLength) },
+          { name: 'value', type: 'string', description: t(m.otpPropValue) },
+          { name: 'defaultValue', type: 'string', description: t(m.otpPropDefaultValue) },
+          { name: 'onValueChange', type: '(value: string) => void', description: t(m.otpPropOnValueChange) },
+          { name: 'onComplete', type: '(value: string) => void', description: t(m.otpPropOnComplete) },
+          { name: 'type', type: "'numeric' | 'alphanumeric'", default: "'numeric'", description: t(m.otpPropType) },
+          { name: 'masked', type: 'boolean', default: 'false', description: t(m.otpPropMasked) },
+          { name: 'groupSize', type: 'number', description: t(m.otpPropGroupSize) },
+          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: t(m.otpPropSize) },
+          { name: 'disabled', type: 'boolean', default: 'false', description: t(m.otpPropDisabled) },
+          { name: 'error', type: 'boolean', default: 'false', description: t(m.otpPropError) },
+          { name: 'autoFocus', type: 'boolean', default: 'false', description: t(m.otpPropAutoFocus) },
+          { name: 'glass', type: 'boolean', default: 'false', description: t(m.otpPropGlass) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.otpPropSkeleton) },
+          { name: 'aria-label', type: 'string', description: t(m.otpPropAriaLabel) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          One real text input owns focus and editing, with{' '}
-          <code>autocomplete="one-time-code"</code> so SMS and password-manager autofill work
-          natively on every platform.
-        </li>
-        <li>
-          The visual cells are <code>aria-hidden</code> presentation; assistive tech reads and
-          edits the single input, named by <code>aria-label</code> (localized default).
-        </li>
-        <li>
-          <code>error</code> mirrors into <code>aria-invalid</code>; the caret blink is disabled
-          under reduced motion.
-        </li>
+        <li>{prose(t(m.otpA11y1))}</li>
+        <li>{prose(t(m.otpA11y2))}</li>
+        <li>{prose(t(m.otpA11y3))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Verify on <code>onComplete</code> rather than a submit button when the code length is fixed; keep a button fallback for assistive flows.</li>
-        <li>Use <code>groupSize</code> to match how the code is printed in the email or SMS (123-456 reads faster than 123456).</li>
-        <li>Reach for <code>masked</code> only when codes are long-lived secrets; short-lived SMS codes are easier to confirm unmasked.</li>
+        <li>{prose(t(m.otpUse1))}</li>
+        <li>{prose(t(m.otpUse2))}</li>
+        <li>{prose(t(m.otpUse3))}</li>
       </ul>
     </>
   );

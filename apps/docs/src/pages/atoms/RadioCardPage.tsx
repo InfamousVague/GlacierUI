@@ -1,33 +1,100 @@
-import { RadioCard, Row, Heading, Text, Size, TextTone } from '@glacier/react';
+import { useState, type CSSProperties, type ReactNode } from 'react';
+import { Heading, Text, Size, TextTone, useT } from '@glacier/react';
 import { Monitor, Moon, Sun } from '@glacier/icons';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
+import { type PlatformKit } from '../../platforms.tsx';
+import { m } from '../../i18n.ts';
+
+// Equal-width radio cards: auto-fit columns each stretch to fill their track, so
+// every card is the same width and wraps to a new row when it no longer fits.
+// The cards fill their grid cell on both bindings (grid items stretch by
+// default), so the Web and Native panes line up identically.
+const CARD_GRID: CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(12rem, 1fr))',
+  gap: 'var(--glacier-space-3)',
+  width: '100%',
+};
+
+interface DemoCard {
+  value: string;
+  icon?: ReactNode;
+  title: ReactNode;
+  description?: ReactNode;
+  disabled?: boolean;
+}
+
+/**
+ * A controlled radio-card group. A native radio group has no `name`-based DOM
+ * owner to enforce single-select, so exclusivity is driven by lifting the
+ * selected value into state and passing `checked`/`onCheckedChange` to every
+ * card — the parent-owned-group path the web kit documents. Each comparison pane
+ * renders its own instance, so Web and Native each manage their own selection.
+ * `K` is the platform kit (the DOM kit or the RN kit) the demo renders through.
+ */
+function RadioCardGroup({
+  K,
+  name,
+  initial,
+  cards,
+}: {
+  K: PlatformKit;
+  name: string;
+  initial: string;
+  cards: DemoCard[];
+}) {
+  const [selected, setSelected] = useState(initial);
+  return (
+    <div style={CARD_GRID}>
+      {cards.map((c) => (
+        <K.RadioCard
+          key={c.value}
+          name={name}
+          value={c.value}
+          checked={selected === c.value}
+          onCheckedChange={() => setSelected(c.value)}
+          icon={c.icon}
+          title={c.title}
+          description={c.description}
+          disabled={c.disabled}
+        />
+      ))}
+    </div>
+  );
+}
 
 export function RadioCardPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>RadioCard</Heading>
+      <Heading level={1}>{t(m.rcName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A selectable card with radio semantics. RadioCard turns a one-of-many choice into a preview
-        tile with a title, description, and icon, so options like a theme or a provider read as
-        pickable surfaces rather than a plain list of dots.
+        {prose(t(m.rcLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.rcAnatomyIntro)}</Text>
       <ComponentBlueprint specId="radio-card" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="A radio group"
-        description={
-          <>
-            Give every card the same <code>name</code> to group them into one radio set. The browser
-            keeps a single card selected and moves the choice with the arrow keys. Selecting a card
-            tints its surface and drops a check into the corner.
-          </>
-        }
+        title={t(m.rcEx1Title)}
+        description={prose(t(m.rcEx1Desc))}
+        component="RadioCard"
+        render={(K) => (
+          <RadioCardGroup
+            K={K}
+            name="theme"
+            initial="light"
+            cards={[
+              { value: 'light', icon: <Sun size={20} />, title: t(m.radiocardLight), description: t(m.rcDemoLightDesc) },
+              { value: 'dark', icon: <Moon size={20} />, title: t(m.radiocardDark), description: t(m.rcDemoDarkDesc) },
+              { value: 'system', icon: <Monitor size={20} />, title: t(m.radiocardSystem), description: t(m.rcDemoSystemDesc) },
+            ]}
+          />
+        )}
         code={`import { RadioCard } from '@glacier/react';
 import { Sun, Moon, Monitor } from '@glacier/icons';
 
@@ -53,200 +120,138 @@ import { Sun, Moon, Monitor } from '@glacier/icons';
   title="System"
   description="Follow the operating system setting."
 />`}
-      >
-        <Row wrap gap={3} style={{ width: '100%' }}>
-          <RadioCard
-            name="theme"
-            value="light"
-            defaultChecked
-            icon={<Sun size={20} />}
-            title="Light"
-            description="Bright surfaces for well-lit rooms."
-            style={{ flex: '1 1 12rem' }}
-          />
-          <RadioCard
-            name="theme"
-            value="dark"
-            icon={<Moon size={20} />}
-            title="Dark"
-            description="Dim surfaces that are easy on the eyes."
-            style={{ flex: '1 1 12rem' }}
-          />
-          <RadioCard
-            name="theme"
-            value="system"
-            icon={<Monitor size={20} />}
-            title="System"
-            description="Follow the operating system setting."
-            style={{ flex: '1 1 12rem' }}
-          />
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Title only"
-        description="The description and icon are optional. A bare title makes a compact tile for short, self-explanatory options."
+        title={t(m.rcEx2Title)}
+        description={t(m.rcEx2Desc)}
+        component="RadioCard"
+        render={(K) => (
+          <RadioCardGroup
+            K={K}
+            name="plan"
+            initial="yearly"
+            cards={[
+              { value: 'monthly', title: t(m.radiocardMonthly) },
+              { value: 'yearly', title: t(m.radiocardYearly) },
+            ]}
+          />
+        )}
         code={`<RadioCard name="plan" value="monthly" title="Monthly" />
 <RadioCard name="plan" value="yearly" defaultChecked title="Yearly" />`}
-      >
-        <Row wrap gap={3}>
-          <RadioCard name="plan" value="monthly" title="Monthly" style={{ flex: '1 1 10rem' }} />
-          <RadioCard
-            name="plan"
-            value="yearly"
-            defaultChecked
-            title="Yearly"
-            style={{ flex: '1 1 10rem' }}
-          />
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Disabled"
-        description="A disabled card dims and blocks interaction while still holding its place in the group."
+        title={t(m.rcEx3Title)}
+        description={t(m.rcEx3Desc)}
+        component="RadioCard"
+        render={(K) => (
+          <RadioCardGroup
+            K={K}
+            name="tier"
+            initial="pro"
+            cards={[
+              { value: 'pro', title: t(m.radiocardPro), description: t(m.rcDemoProDesc) },
+              { value: 'enterprise', disabled: true, title: t(m.radiocardEnterprise), description: t(m.rcDemoEnterpriseDesc) },
+            ]}
+          />
+        )}
         code={`<RadioCard name="tier" value="pro" title="Pro" description="Everything, unlimited." />
 <RadioCard name="tier" value="enterprise" disabled title="Enterprise" description="Contact sales." />`}
-      >
-        <Row wrap gap={3} style={{ width: '100%' }}>
-          <RadioCard
-            name="tier"
-            value="pro"
-            defaultChecked
-            title="Pro"
-            description="Everything, unlimited."
-            style={{ flex: '1 1 12rem' }}
-          />
-          <RadioCard
-            name="tier"
-            value="enterprise"
-            disabled
-            title="Enterprise"
-            description="Contact sales."
-            style={{ flex: '1 1 12rem' }}
-          />
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description={
-          <>
-            <code>skeleton</code> renders a shimmer block at the card's radius and a representative
-            height, so the grid holds its shape while options load.
-          </>
-        }
+        title={t(m.exSkeleton)}
+        description={prose(t(m.rcEx4Desc))}
+        component="RadioCard"
+        render={(K) => (
+          <div style={CARD_GRID}>
+            <K.RadioCard skeleton title="" />
+            <K.RadioCard skeleton title="" />
+          </div>
+        )}
         code={`<RadioCard skeleton title="" />
 <RadioCard skeleton title="" />`}
-      >
-        <Row wrap gap={3} style={{ width: '100%' }}>
-          <RadioCard skeleton title="" style={{ flex: '1 1 12rem' }} />
-          <RadioCard skeleton title="" style={{ flex: '1 1 12rem' }} />
-        </Row>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
           {
             name: 'title',
             type: 'ReactNode',
-            description: 'The card heading, the primary label of the choice. Required.',
+            description: t(m.rcPropTitle),
           },
           {
             name: 'description',
             type: 'ReactNode',
-            description: 'Optional secondary line under the title.',
+            description: t(m.rcPropDescription),
           },
           {
             name: 'icon',
             type: 'ReactNode',
-            description: 'Optional leading glyph or preview swatch above the title.',
+            description: t(m.rcPropIcon),
           },
           {
             name: 'checked',
             type: 'boolean',
-            description: 'Controlled selected state. Pair with onCheckedChange.',
+            description: t(m.rcPropChecked),
           },
           {
             name: 'defaultChecked',
             type: 'boolean',
             default: 'false',
-            description: 'Initial selected state when uncontrolled.',
+            description: t(m.rcPropDefaultChecked),
           },
           {
             name: 'onCheckedChange',
             type: '(checked: boolean) => void',
-            description: 'Called with the next checked state when the card is selected.',
+            description: t(m.rcPropOnCheckedChange),
           },
           {
             name: 'value',
             type: 'string',
-            description: 'The native radio value submitted with the form.',
+            description: t(m.rcPropValue),
           },
           {
             name: 'name',
             type: 'string',
-            description: 'Groups cards into one radio set; only one card per name is selected.',
+            description: t(m.rcPropName),
           },
           {
             name: 'disabled',
             type: 'boolean',
             default: 'false',
-            description: 'Dims the card and blocks interaction.',
+            description: t(m.rcPropDisabled),
           },
           {
             name: 'children',
             type: 'ReactNode',
-            description: 'Extra content rendered below the description.',
+            description: t(m.rcPropChildren),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: "Renders a placeholder with the component's exact geometry.",
+            description: t(m.rcPropSkeleton),
           },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          Each card wraps a visually hidden native <code>{'<input type="radio">'}</code> inside its{' '}
-          <code>{'<label>'}</code>, so the whole card is clickable and the input carries the
-          accessible state and role.
-        </li>
-        <li>
-          Group related cards with a shared <code>name</code>. The browser then keeps one card
-          selected per group and moves the choice with the arrow keys, exactly like native radios.
-        </li>
-        <li>
-          The corner check is <code>aria-hidden</code>. Do not rely on the accent tint alone to signal
-          selection; the title text names each option on its own.
-        </li>
-        <li>
-          Focus lands on the hidden input, which draws a focus ring around the whole card so keyboard
-          users can see the active choice.
-        </li>
+        <li>{prose(t(m.rcA11y1))}</li>
+        <li>{prose(t(m.rcA11y2))}</li>
+        <li>{prose(t(m.rcA11y3))}</li>
+        <li>{prose(t(m.rcA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>
-          Reach for RadioCard when each option benefits from a preview: a theme swatch, a plan, a
-          provider logo. For a plain one-of-many list, the smaller <code>Radio</code> is enough.
-        </li>
-        <li>
-          Keep the set small. A handful of cards reads as a comparison; a dozen becomes a wall. For
-          long lists, use a <code>Select</code> instead.
-        </li>
-        <li>
-          Lay cards out in a responsive row or grid and let them share width, so the group reads as a
-          set of equals rather than a ranked list.
-        </li>
-        <li>
-          Keep titles short and descriptions to a single line. The card is a chooser, not a place for
-          long-form copy.
-        </li>
+        <li>{prose(t(m.rcUse1))}</li>
+        <li>{prose(t(m.rcUse2))}</li>
+        <li>{prose(t(m.rcUse3))}</li>
+        <li>{prose(t(m.rcUse4))}</li>
       </ul>
     </>
   );

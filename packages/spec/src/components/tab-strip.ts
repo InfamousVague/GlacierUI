@@ -40,6 +40,7 @@ export const tabStripSpec: ComponentSpec = {
     { name: 'overflowing', description: 'With showScrollbar, an overflowing strip reserves a space-2 band beneath the tabs, hides its real border-bottom, and repaints the baseline hairline as a border-subtle gradient at the tab baseline; the scrollbar thumb is border, border-strong on hover.', tokens: { baseline: token('border-subtle'), thumb: token('border'), 'thumb-hover': token('border-strong') } },
   ],
   // 2px focus-ring outline inset into the tab (outline-offset: -2px)
+  paint: { border: '$border-subtle' },
   focusRing: { ring: token('focus-ring'), offset: '-2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

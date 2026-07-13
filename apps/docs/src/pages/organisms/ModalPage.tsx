@@ -1,32 +1,138 @@
-import { Button, Field, Input, Modal, Row, Text, Heading, Size, TextTone, Variant } from '@glacier/react';
+import { Button, Field, Input, Row, Text, Heading, Size, TextTone, Variant, useT } from '@glacier/react';
 import { useState } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
+import { type PlatformKit } from '../../platforms.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
+
+/**
+ * Each Modal demo owns its own open state, so it is lifted into a module-level
+ * wrapper component the render function mounts once per pane (a render callback
+ * cannot hold hooks). The trigger and the footer/body content stay on the web
+ * kit — they are token-identical across bindings and their `onClick` fires in
+ * both panes — while only the overlay under test swaps to `K.Modal`, so the
+ * Native pane exercises the real react-native <Modal> shell. `K` is the platform
+ * kit (the DOM kit or the RN kit) the demo renders through.
+ */
+function BasicModalDemo({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  return (
+    <Row gap={4} wrap>
+      <Button onClick={() => setOpen(true)}>{t(m.modReleaseNotes)}</Button>
+      <K.Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t(m.modReleaseNotes)}
+        description={t(m.modDescV24)}
+        footer={<Button onClick={() => setOpen(false)}>{t(m.modalDone)}</Button>}
+      >
+        <Text>{t(m.modBasicBody)}</Text>
+      </K.Modal>
+    </Row>
+  );
+}
+
+function SizeModalDemo({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [size, setSize] = useState<'sm' | 'md' | 'lg' | null>(null);
+  return (
+    <Row gap={4} wrap>
+      <Button onClick={() => setSize('sm')}>{t(m.modalSmall)}</Button>
+      <Button onClick={() => setSize('md')}>{t(m.modalMedium)}</Button>
+      <Button onClick={() => setSize('lg')}>{t(m.modalLarge)}</Button>
+      <K.Modal
+        open={size !== null}
+        onClose={() => setSize(null)}
+        size={size ?? 'md'}
+        title={'Size: ' + size}
+        footer={<Button onClick={() => setSize(null)}>{t(m.modalDone)}</Button>}
+      >
+        <Text>{t(m.modSizesBody)}</Text>
+      </K.Modal>
+    </Row>
+  );
+}
+
+function FormModalDemo({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  const [projectName, setProjectName] = useState('GlacierUI Kit');
+  return (
+    <Row gap={4} wrap>
+      <Button onClick={() => setOpen(true)}>{t(m.modRenameProject)}</Button>
+      <K.Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t(m.modRenameProject)}
+        description={t(m.modDescRename)}
+        footer={
+          <>
+            <Button variant={Variant.Ghost} onClick={() => setOpen(false)}>
+              {t(m.modalCancel)}
+            </Button>
+            <Button onClick={() => setOpen(false)}>{t(m.modalSave)}</Button>
+          </>
+        }
+      >
+        <Field label={t(m.modFieldProjectName)} hint={t(m.modHint60Chars)}>
+          <Input value={projectName} onChange={(e) => setProjectName(e.target.value)} />
+        </Field>
+      </K.Modal>
+    </Row>
+  );
+}
+
+function ConfirmModalDemo({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  return (
+    <Row gap={4} wrap>
+      <Button variant={Variant.Danger} onClick={() => setOpen(true)}>
+        {t(m.modDeleteWorkspace)}
+      </Button>
+      <K.Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        size={Size.Small}
+        title={t(m.modTitleDeleteWorkspace)}
+        description={t(m.modDescDelete)}
+        footer={
+          <>
+            <Button variant={Variant.Ghost} onClick={() => setOpen(false)}>
+              {t(m.modalCancel)}
+            </Button>
+            <Button variant={Variant.Danger} onClick={() => setOpen(false)}>
+              {t(m.modalDelete)}
+            </Button>
+          </>
+        }
+      />
+    </Row>
+  );
+}
 
 export function ModalPage() {
-  const [basicOpen, setBasicOpen] = useState(false);
-  const [sizeOpen, setSizeOpen] = useState<'sm' | 'md' | 'lg' | null>(null);
-  const [formOpen, setFormOpen] = useState(false);
-  const [projectName, setProjectName] = useState('GlacierUI Kit');
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  const t = useT();
 
   return (
     <>
-      <Heading level={1}>Modal</Heading>
+      <Heading level={1}>{t(m.modName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        Modal is a glass dialog rendered in a portal. It springs open, closes instantly, locks
-        body scroll, traps Tab focus, and returns focus to the element that opened it.
+        {t(m.modLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.modAnatomy)}</Text>
       <ComponentBlueprint specId="modal" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="A controlled dialog. The title and description label the dialog for assistive technology, and the footer holds the actions. A close button is built in."
+        title={t(m.exBasic)}
+        description={t(m.modExBasicDesc)}
+        component="Modal"
+        render={(K) => <BasicModalDemo K={K} />}
         code={`import { Button, Modal, Text } from '@glacier/react';
 
 const [open, setOpen] = useState(false);
@@ -44,27 +150,13 @@ const [open, setOpen] = useState(false);
     gained a dedicated hover step.
   </Text>
 </Modal>`}
-      >
-        <Row gap={4} wrap>
-          <Button onClick={() => setBasicOpen(true)}>Release notes</Button>
-          <Modal
-            open={basicOpen}
-            onClose={() => setBasicOpen(false)}
-            title="Release notes"
-            description="What changed in version 2.4."
-            footer={<Button onClick={() => setBasicOpen(false)}>Done</Button>}
-          >
-            <Text>
-              The spacing scale now uses fluid clamp values, and every color ramp gained a
-              dedicated hover step.
-            </Text>
-          </Modal>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Sizes"
-        description="Three panel widths. Height always follows the content. One state variable holds which size is open, so a single Modal serves all three buttons."
+        title={t(m.secSizes)}
+        description={t(m.modExSizesDesc)}
+        component="Modal"
+        render={(K) => <SizeModalDemo K={K} />}
         code={`const [size, setSize] = useState<'sm' | 'md' | 'lg' | null>(null);
 
 <Button onClick={() => setSize('sm')}>Small</Button>
@@ -79,26 +171,13 @@ const [open, setOpen] = useState(false);
 >
   <Text>The size prop only changes the panel width.</Text>
 </Modal>`}
-      >
-        <Row gap={4} wrap>
-          <Button onClick={() => setSizeOpen('sm')}>Small</Button>
-          <Button onClick={() => setSizeOpen('md')}>Medium</Button>
-          <Button onClick={() => setSizeOpen('lg')}>Large</Button>
-          <Modal
-            open={sizeOpen !== null}
-            onClose={() => setSizeOpen(null)}
-            size={sizeOpen ?? 'md'}
-            title={'Size: ' + sizeOpen}
-            footer={<Button onClick={() => setSizeOpen(null)}>Done</Button>}
-          >
-            <Text>The size prop only changes the panel width.</Text>
-          </Modal>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Form"
-        description="Field and Input work inside the body without extra wiring. Cancel is a ghost button, and the solid Save button sits rightmost as the primary action."
+        title={t(m.modExFormTitle)}
+        description={t(m.modExFormDesc)}
+        component="Modal"
+        render={(K) => <FormModalDemo K={K} />}
         code={`const [open, setOpen] = useState(false);
 const [name, setName] = useState('GlacierUI Kit');
 
@@ -119,33 +198,13 @@ const [name, setName] = useState('GlacierUI Kit');
     <Input value={name} onChange={(e) => setName(e.target.value)} />
   </Field>
 </Modal>`}
-      >
-        <Row gap={4} wrap>
-          <Button onClick={() => setFormOpen(true)}>Rename project</Button>
-          <Modal
-            open={formOpen}
-            onClose={() => setFormOpen(false)}
-            title="Rename project"
-            description="The new name appears everywhere the project is listed."
-            footer={
-              <>
-                <Button variant={Variant.Ghost} onClick={() => setFormOpen(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={() => setFormOpen(false)}>Save</Button>
-              </>
-            }
-          >
-            <Field label="Project name" hint="Up to 60 characters.">
-              <Input value={projectName} onChange={(e) => setProjectName(e.target.value)} />
-            </Field>
-          </Modal>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Destructive confirm"
-        description="A small dialog for irreversible actions. The description states the consequence, and the danger button repeats the verb from the opener."
+        title={t(m.modExConfirmTitle)}
+        description={t(m.modExConfirmDesc)}
+        component="Modal"
+        render={(K) => <ConfirmModalDemo K={K} />}
         code={`const [open, setOpen] = useState(false);
 
 <Button variant={Variant.Danger} onClick={() => setOpen(true)}>Delete workspace</Button>
@@ -162,114 +221,39 @@ const [name, setName] = useState('GlacierUI Kit');
     </>
   }
 />`}
-      >
-        <Row gap={4} wrap>
-          <Button variant={Variant.Danger} onClick={() => setConfirmOpen(true)}>
-            Delete workspace
-          </Button>
-          <Modal
-            open={confirmOpen}
-            onClose={() => setConfirmOpen(false)}
-            size={Size.Small}
-            title="Delete workspace?"
-            description="This removes all projects and members. There is no undo."
-            footer={
-              <>
-                <Button variant={Variant.Ghost} onClick={() => setConfirmOpen(false)}>
-                  Cancel
-                </Button>
-                <Button variant={Variant.Danger} onClick={() => setConfirmOpen(false)}>
-                  Delete
-                </Button>
-              </>
-            }
-          />
-        </Row>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          {
-            name: 'open',
-            type: 'boolean',
-            description: 'Whether the dialog is shown. The component renders nothing when false.',
-          },
-          {
-            name: 'onClose',
-            type: '() => void',
-            description:
-              'Called when the user dismisses via Escape, the built-in close button, or the overlay. Set your open state to false here.',
-          },
-          {
-            name: 'title',
-            type: 'ReactNode',
-            description:
-              'Heading at the top of the panel. Names the dialog through aria-labelledby.',
-          },
-          {
-            name: 'description',
-            type: 'ReactNode',
-            description:
-              'Muted text under the title. Linked to the dialog through aria-describedby.',
-          },
-          {
-            name: 'size',
-            type: "'sm' | 'md' | 'lg'",
-            default: "'md'",
-            description: 'Panel width. Height follows the content in every size.',
-          },
-          {
-            name: 'footer',
-            type: 'ReactNode',
-            description:
-              'Action row at the bottom of the panel. Place the primary action last so it renders rightmost.',
-          },
-          {
-            name: 'children',
-            type: 'ReactNode',
-            description: 'Body content between the header and the footer.',
-          },
+          { name: 'open', type: 'boolean', description: t(m.modPropOpen) },
+          { name: 'onClose', type: '() => void', description: t(m.modPropOnClose) },
+          { name: 'title', type: 'ReactNode', description: t(m.modPropTitle) },
+          { name: 'description', type: 'ReactNode', description: t(m.modPropDescription) },
+          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: t(m.modPropSize) },
+          { name: 'footer', type: 'ReactNode', description: t(m.modPropFooter) },
+          { name: 'children', type: 'ReactNode', description: t(m.modPropChildren) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The panel renders with <code>role="dialog"</code> and <code>aria-modal="true"</code>.
-        </li>
-        <li>
-          The title labels the dialog through <code>aria-labelledby</code>, and the description is
-          linked through <code>aria-describedby</code>.
-        </li>
-        <li>
-          Focus moves into the panel when the dialog opens and returns to the opening element when
-          it closes.
-        </li>
-        <li>Tab and Shift+Tab cycle through the focusable elements inside the panel and cannot
-          leave it while the dialog is open.</li>
-        <li>Escape, the built-in close button, and a press on the overlay all call
-          <code> onClose</code>.</li>
-        <li>Body scroll is locked while the dialog is open and restored on close.</li>
-        <li>
-          Under <code>prefers-reduced-motion</code> the panel appears instantly instead of
-          springing open.
-        </li>
+        <li>{prose(t(m.modA11y1))}</li>
+        <li>{prose(t(m.modA11y2))}</li>
+        <li>{prose(t(m.modA11y3))}</li>
+        <li>{prose(t(m.modA11y4))}</li>
+        <li>{prose(t(m.modA11y5))}</li>
+        <li>{prose(t(m.modA11y6))}</li>
+        <li>{prose(t(m.modA11y7))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Keep to one modal at a time. If a flow needs a second dialog, close the first before
-          opening the next, or move the flow to its own page.</li>
-        <li>
-          Use <code>sm</code> for confirmations, since a short question and two buttons need no
-          more width. Most forms fit <code>md</code>.
-        </li>
-        <li>Avoid nesting modals. Stacked dialogs break the focus trap expectations and bury the
-          original context.</li>
-        <li>Make the rightmost footer button the primary action and give secondary actions the
-          ghost variant.</li>
-        <li>Always pass a title. Without one the dialog has no accessible name.</li>
+        <li>{prose(t(m.modUse1))}</li>
+        <li>{prose(t(m.modUse2))}</li>
+        <li>{prose(t(m.modUse3))}</li>
+        <li>{prose(t(m.modUse4))}</li>
+        <li>{prose(t(m.modUse5))}</li>
       </ul>
     </>
   );

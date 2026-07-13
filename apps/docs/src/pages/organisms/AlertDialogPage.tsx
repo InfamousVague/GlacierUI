@@ -1,31 +1,30 @@
-import { AlertDialog, Button, Heading, Row, Size, Stack, Text, TextTone, Variant } from '@glacier/react';
+import { Button, Heading, Row, Size, Stack, Text, TextTone, Variant, useT } from '@glacier/react';
 import { useState } from 'react';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
+import { type PlatformKit } from '../../platforms.tsx';
+import { m } from '../../i18n.ts';
 
 export function AlertDialogPage() {
-  const [archiveOpen, setArchiveOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-  const [dismissibleOpen, setDismissibleOpen] = useState(false);
-  const [confirmed, setConfirmed] = useState(0);
+  const t = useT();
 
   return (
     <>
-      <Heading level={1}>AlertDialog</Heading>
+      <Heading level={1}>{t(m.adName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        AlertDialog asks for an explicit confirmation before a consequential action. It focuses
-        Cancel first, blocks accidental Escape and backdrop dismissal by default, and makes
-        destructive choices visually unmistakable.
+        {t(m.adLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the required title, consequence text, cancel path, and explicit confirmation action.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.adAnatomyIntro)}</Text>
       <ComponentBlueprint specId="alert-dialog" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
       <Example
-        title="Neutral confirmation"
-        description="Cancel receives initial focus, so an accidental Enter cannot immediately commit the action after the dialog appears."
+        title={t(m.adEx1Title)}
+        description={t(m.adEx1Desc)}
+        component="AlertDialog"
+        render={(K) => <ArchiveAlertExample K={K} />}
         code={`const [open, setOpen] = useState(false);
 
 <Button onClick={() => setOpen(true)}>Archive project</Button>
@@ -37,24 +36,13 @@ export function AlertDialogPage() {
   actionLabel="Archive project"
   onAction={() => setOpen(false)}
 />`}
-      >
-        <Button onClick={() => setArchiveOpen(true)}>Archive project</Button>
-        <AlertDialog
-          open={archiveOpen}
-          onClose={() => setArchiveOpen(false)}
-          title="Archive project?"
-          description="Archived projects remain searchable but become read-only."
-          actionLabel="Archive project"
-          onAction={() => {
-            setConfirmed((count) => count + 1);
-            setArchiveOpen(false);
-          }}
-        />
-      </Example>
+      />
 
       <Example
-        title="Destructive confirmation"
-        description="Use the danger tone only for irreversible or materially harmful actions. Repeat the exact verb in the confirmation button."
+        title={t(m.adEx2Title)}
+        description={t(m.adEx2Desc)}
+        component="AlertDialog"
+        render={(K) => <DeleteAlertExample K={K} />}
         code={`<AlertDialog
   open={open}
   onClose={() => setOpen(false)}
@@ -64,25 +52,13 @@ export function AlertDialogPage() {
   onAction={deleteWorkspace}
   tone="danger"
 />`}
-      >
-        <Button variant={Variant.Danger} onClick={() => setDeleteOpen(true)}>Delete workspace</Button>
-        <AlertDialog
-          open={deleteOpen}
-          onClose={() => setDeleteOpen(false)}
-          title="Delete workspace?"
-          description="This removes all projects and members. There is no undo."
-          actionLabel="Delete workspace"
-          onAction={() => {
-            setConfirmed((count) => count + 1);
-            setDeleteOpen(false);
-          }}
-          tone="danger"
-        />
-      </Example>
+      />
 
       <Example
-        title="Dismissible notice"
-        description="Only allow backdrop or Escape dismissal when abandoning the choice is safe and easy to recover from."
+        title={t(m.adEx3Title)}
+        description={t(m.adEx3Desc)}
+        component="AlertDialog"
+        render={(K) => <DismissibleAlertExample K={K} />}
         code={`<AlertDialog
   open={open}
   onClose={() => setOpen(false)}
@@ -92,87 +68,134 @@ export function AlertDialogPage() {
   onAction={continueSetup}
   dismissible
 />`}
-      >
-        <Row gap={4} wrap>
-          <Button variant={Variant.Outline} onClick={() => setDismissibleOpen(true)}>Continue setup</Button>
-          <Text size={Size.Small} tone={TextTone.Muted}>Confirmed actions: {confirmed}</Text>
-        </Row>
-        <AlertDialog
-          open={dismissibleOpen}
-          onClose={() => setDismissibleOpen(false)}
-          title="Continue setup?"
-          description="You can resume setup later from project settings."
-          actionLabel="Continue"
-          onAction={() => {
-            setConfirmed((count) => count + 1);
-            setDismissibleOpen(false);
-          }}
-          dismissible
-        />
-      </Example>
+      />
 
       <Example
-        title="Supporting content"
-        description="Use the body only for concise evidence that helps people make the decision."
+        title={t(m.adEx4Title)}
+        description={t(m.adEx4Desc)}
+        component="AlertDialog"
+        render={(K) => <SupportingAlertExample K={K} />}
         code={`<AlertDialog ...>
   <Text>3 members will lose access immediately.</Text>
 </AlertDialog>`}
-      >
-        <SupportingAlertExample />
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'open', type: 'boolean', description: 'Whether the alert dialog is mounted and shown.' },
-          { name: 'onClose', type: '() => void', description: 'Called by Cancel and allowed dismissal paths.' },
-          { name: 'title', type: 'ReactNode', description: 'Required heading that names the dialog.' },
-          { name: 'description', type: 'ReactNode', description: 'Consequence text below the title.' },
-          { name: 'actionLabel', type: 'ReactNode', description: 'Visible confirmation action label.' },
-          { name: 'onAction', type: '() => void', description: 'Called when confirmation is activated.' },
-          { name: 'cancelLabel', type: 'ReactNode', default: "'Cancel'", description: 'Visible cancel action label.' },
-          { name: 'tone', type: "'neutral' | 'danger'", default: "'neutral'", description: 'Semantic confirmation tone.' },
-          { name: 'dismissible', type: 'boolean', default: 'false', description: 'Allows Escape and backdrop dismissal.' },
-          { name: 'actionLoading', type: 'boolean', default: 'false', description: 'Shows a spinner and blocks confirmation.' },
+          { name: 'open', type: 'boolean', description: t(m.adPropOpen) },
+          { name: 'onClose', type: '() => void', description: t(m.adPropOnClose) },
+          { name: 'title', type: 'ReactNode', description: t(m.adPropTitle) },
+          { name: 'description', type: 'ReactNode', description: t(m.adPropDescription) },
+          { name: 'actionLabel', type: 'ReactNode', description: t(m.adPropActionLabel) },
+          { name: 'onAction', type: '() => void', description: t(m.adPropOnAction) },
+          { name: 'cancelLabel', type: 'ReactNode', default: "'Cancel'", description: t(m.adPropCancelLabel) },
+          { name: 'tone', type: "'neutral' | 'danger'", default: "'neutral'", description: t(m.adPropTone) },
+          { name: 'dismissible', type: 'boolean', default: 'false', description: t(m.adPropDismissible) },
+          { name: 'actionLoading', type: 'boolean', default: 'false', description: t(m.adPropActionLoading) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>The surface uses <code>role="alertdialog"</code>, <code>aria-modal="true"</code>, and a required labelled title.</li>
-        <li>Focus begins on Cancel, protecting against accidental confirmation after the dialog opens.</li>
-        <li>Backdrop and Escape dismissal are disabled by default; Cancel remains the explicit exit path.</li>
-        <li>The dialog traps Tab focus, locks page scrolling, and restores focus to the opener when it closes.</li>
+        <li>{prose(t(m.adA11y1))}</li>
+        <li>{prose(t(m.adA11y2))}</li>
+        <li>{prose(t(m.adA11y3))}</li>
+        <li>{prose(t(m.adA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use AlertDialog for one consequential decision. Use Modal for a form or a group of related controls.</li>
-        <li>Write a specific confirmation label such as <code>Delete workspace</code>, never a generic <code>Confirm</code>.</li>
-        <li>Reserve the danger tone for real irreversible loss or harm.</li>
+        <li>{prose(t(m.adUse1))}</li>
+        <li>{prose(t(m.adUse2))}</li>
+        <li>{prose(t(m.adUse3))}</li>
       </ul>
     </>
   );
 }
 
-function SupportingAlertExample() {
+function ArchiveAlertExample({ K }: { K: PlatformKit }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Remove member</Button>
-      <AlertDialog
+      <Button onClick={() => setOpen(true)}>{t(m.adArchiveBtn)}</Button>
+      <K.AlertDialog
         open={open}
         onClose={() => setOpen(false)}
-        title="Remove Mina from the workspace?"
-        description="Mina will lose access immediately."
-        actionLabel="Remove member"
+        title={t(m.adArchiveTitle)}
+        description={t(m.adArchiveDesc)}
+        actionLabel={t(m.adArchiveBtn)}
+        onAction={() => setOpen(false)}
+      />
+    </>
+  );
+}
+
+function DeleteAlertExample({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button variant={Variant.Danger} onClick={() => setOpen(true)}>{t(m.adDeleteBtn)}</Button>
+      <K.AlertDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t(m.adDeleteTitle)}
+        description={t(m.adDeleteDesc)}
+        actionLabel={t(m.adDeleteBtn)}
+        onAction={() => setOpen(false)}
+        tone="danger"
+      />
+    </>
+  );
+}
+
+function DismissibleAlertExample({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  const [confirmed, setConfirmed] = useState(0);
+  return (
+    <>
+      <Row gap={4} wrap>
+        <Button variant={Variant.Outline} onClick={() => setOpen(true)}>{t(m.adContinueBtn)}</Button>
+        <Text size={Size.Small} tone={TextTone.Muted}>{t(m.adConfirmedLabel)} {confirmed}</Text>
+      </Row>
+      <K.AlertDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t(m.adContinueTitle)}
+        description={t(m.adContinueDesc)}
+        actionLabel={t(m.adContinueAction)}
+        onAction={() => {
+          setConfirmed((count) => count + 1);
+          setOpen(false);
+        }}
+        dismissible
+      />
+    </>
+  );
+}
+
+function SupportingAlertExample({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>{t(m.adRemoveBtn)}</Button>
+      <K.AlertDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t(m.adRemoveTitle)}
+        description={t(m.adRemoveDesc)}
+        actionLabel={t(m.adRemoveBtn)}
         onAction={() => setOpen(false)}
         tone="danger"
       >
         <Stack gap={2} width="full">
-          <Text size={Size.Small}>Mina owns 2 projects and has 14 assigned issues.</Text>
+          <Text size={Size.Small}>{t(m.adRemoveEvidence)}</Text>
         </Stack>
-      </AlertDialog>
+      </K.AlertDialog>
     </>
   );
 }

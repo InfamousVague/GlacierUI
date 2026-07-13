@@ -61,6 +61,8 @@ export const sidebarSpec: ComponentSpec = {
     },
     { name: 'disabled', description: 'Halved opacity, not-allowed cursor, and hover suppressed.' },
   ],
+  // the section headings and items paint
+  paint: {},
   tokens: [
     'font-sans',
     'space-2', 'space-3', 'space-4', 'space-5',

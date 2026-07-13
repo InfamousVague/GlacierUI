@@ -58,6 +58,8 @@ export const fieldsetSpec: ComponentSpec = {
     },
     { name: 'skeleton', description: 'Swaps the legend and description for placeholder lines; nested controls render their own skeletons.' },
   ],
+  // the legend and grouped fields paint
+  paint: {},
   tokens: [
     'font-sans', 'font-size-md', 'font-size-sm', 'font-weight-semibold', 'leading-sm',
     'space-1', 'space-2', 'space-4', 'space-5',

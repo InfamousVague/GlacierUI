@@ -1,6 +1,8 @@
 import * as Icons from '@glacier/icons';
-import { SearchField, Text, Heading, Size, TextTone } from '@glacier/react';
+import { SearchField, Text, Heading, Size, TextTone, useT } from '@glacier/react';
 import { useMemo, useState, type ComponentType } from 'react';
+import { prose } from '../../docs-ui.tsx';
+import { m } from '../../i18n.ts';
 
 type IconCmp = ComponentType<{ size?: number }>;
 
@@ -29,6 +31,7 @@ const Check = REG.Check;
  * generated originals land.
  */
 export function IconsPage() {
+  const t = useT();
   const [query, setQuery] = useState('');
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -51,19 +54,17 @@ export function IconsPage() {
 
   return (
     <>
-      <Heading level={1}>Icons</Heading>
+      <Heading level={1}>{t(m.iconsName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        The kit&apos;s {NAMES.length}-icon set. Size with <code>1em</code> or the <code>size</code> prop,
-        colour with <code>currentColor</code> click any icon to copy its tag. Imported from{' '}
-        <code>@glacier/icons</code>, which proxies lucide-react until the generated originals land.
+        {prose(t(m.iconsLede, { count: NAMES.length }))}
       </Text>
 
       <div className="iconSearch">
         <SearchField
           value={query}
           onValueChange={setQuery}
-          placeholder="Search icons"
-          aria-label="Search icons"
+          placeholder={t(m.iconsSearchLabel)}
+          aria-label={t(m.iconsSearchLabel)}
         />
         <Text as="span" size={Size.Small} tone={TextTone.Subtle} mono>
           {items.length}
@@ -71,7 +72,7 @@ export function IconsPage() {
       </div>
 
       {items.length === 0 ? (
-        <Text tone={TextTone.Muted}>No icons match “{query}”.</Text>
+        <Text tone={TextTone.Muted}>{t(m.iconsNoMatch, { query })}</Text>
       ) : (
         <div className="iconGrid">
           {items.map(({ name, Cmp }) => (
@@ -86,7 +87,7 @@ export function IconsPage() {
               <span className="iconTileGlyph" aria-hidden="true">
                 {copied === name && Check ? <Check size={22} /> : <Cmp size={22} />}
               </span>
-              <span className="iconTileName">{copied === name ? 'Copied' : name}</span>
+              <span className="iconTileName">{copied === name ? t(m.iconsCopied) : name}</span>
             </button>
           ))}
         </div>

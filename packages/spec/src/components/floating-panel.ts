@@ -52,6 +52,7 @@ export const floatingPanelSpec: ComponentSpec = {
       behavioral: true,
     },
   ],
+  paint: { background: '$glass-thick', text: '$text', border: '$glass-border' },
   tokens: [
     'hairline',
     'glass-border',

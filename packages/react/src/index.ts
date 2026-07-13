@@ -41,15 +41,25 @@ export { EmptyState, type EmptyStateProps } from './atoms/feedback/EmptyState/Em
 export { Steps, type StepsProps, type StepsTone, type StepsSize } from './atoms/feedback/Steps/Steps.tsx';
 export { RadioCard, type RadioCardProps } from './atoms/inputs/RadioCard/RadioCard.tsx';
 export { StatTile, type StatTileProps } from './atoms/display/StatTile/StatTile.tsx';
-export { Sparkline, type SparklineProps, type SparklineShape, type SparklineTone } from './atoms/display/Sparkline/Sparkline.tsx';
 export { DeviceFrame, type DeviceFrameProps, type DeviceFrameSize } from './atoms/display/DeviceFrame/DeviceFrame.tsx';
 export { FilterChip, type FilterChipProps } from './atoms/inputs/FilterChip/FilterChip.tsx';
 export { Image, type ImageProps, type ImageFit, type ImageRadius } from './atoms/display/Image/Image.tsx';
 export { Rating, type RatingProps } from './atoms/inputs/Rating/Rating.tsx';
 export { OtpField, type OtpFieldProps, type OtpFieldType } from './atoms/inputs/OtpField/OtpField.tsx';
+export { Sparkline, type SparklineProps, type SparklineShape, type SparklineTone } from './atoms/display/Sparkline/Sparkline.tsx';
 
 // molecules
 export { Field, type FieldProps } from './molecules/Field/Field.tsx';
+export { Fieldset, type FieldsetProps } from './molecules/Fieldset/Fieldset.tsx';
+export { FormSection, type FormSectionProps } from './molecules/Fieldset/FormSection.tsx';
+export { Calendar, type CalendarProps, type CalendarMode, type CalendarRange } from './molecules/DatePicker/Calendar.tsx';
+export { DatePicker, type DatePickerProps } from './molecules/DatePicker/DatePicker.tsx';
+export {
+  FileUpload,
+  type FileUploadProps,
+  type FileUploadRejection,
+  type FileUploadRejectionReason,
+} from './molecules/FileUpload/FileUpload.tsx';
 export { useField } from './internal/FieldContext.ts';
 export {
   SegmentedControl,
@@ -65,16 +75,6 @@ export { Heatmap, type HeatmapProps, type HeatmapData, type HeatmapPoint } from 
 export { Breadcrumbs, type BreadcrumbsProps, type BreadcrumbItem } from './molecules/Breadcrumbs/Breadcrumbs.tsx';
 export { Pagination, type PaginationProps } from './molecules/Pagination/Pagination.tsx';
 export { Accordion, type AccordionProps, type AccordionItem } from './molecules/Accordion/Accordion.tsx';
-export { Calendar, type CalendarProps, type CalendarMode, type CalendarRange } from './molecules/DatePicker/Calendar.tsx';
-export { DatePicker, type DatePickerProps } from './molecules/DatePicker/DatePicker.tsx';
-export { Fieldset, type FieldsetProps } from './molecules/Fieldset/Fieldset.tsx';
-export { FormSection, type FormSectionProps } from './molecules/Fieldset/FormSection.tsx';
-export {
-  FileUpload,
-  type FileUploadProps,
-  type FileUploadRejection,
-  type FileUploadRejectionReason,
-} from './molecules/FileUpload/FileUpload.tsx';
 export { Spotlight, type SpotlightProps } from './molecules/Spotlight/Spotlight.tsx';
 export { Select, type SelectProps, type SelectOption } from './molecules/Select/Select.tsx';
 export { Tabs, type TabsProps, type TabItem } from './molecules/Tabs/Tabs.tsx';
@@ -124,15 +124,7 @@ export {
   type SidebarItemProps,
 } from './structures/Sidebar/Sidebar.tsx';
 export { Toolbar, type ToolbarProps } from './structures/Toolbar/Toolbar.tsx';
-export {
-  NavBar,
-  NavBarItem,
-  type NavBarProps,
-  type NavBarItemProps,
-  type NavBarOrientation,
-} from './structures/NavBar/NavBar.tsx';
 export { TitleBar, type TitleBarProps } from './structures/TitleBar/TitleBar.tsx';
-export { PageHeader, type PageHeaderProps, type PageHeaderAction } from './structures/PageHeader/PageHeader.tsx';
 export {
   Section,
   type SectionProps,
@@ -140,6 +132,14 @@ export {
   type SectionDensity,
   type SectionHeadingLevel,
 } from './structures/Section/Section.tsx';
+export { PageHeader, type PageHeaderProps, type PageHeaderAction } from './structures/PageHeader/PageHeader.tsx';
+export {
+  NavBar,
+  NavBarItem,
+  type NavBarProps,
+  type NavBarItemProps,
+  type NavBarOrientation,
+} from './structures/NavBar/NavBar.tsx';
 
 // organisms
 export { Modal, type ModalProps } from './organisms/Modal/Modal.tsx';
@@ -170,17 +170,7 @@ export {
   type SplitOrientation,
 } from './organisms/ResizableSplitPane/ResizableSplitPane.tsx';
 export { Table, type TableProps, type TableColumn } from './organisms/Table/Table.tsx';
-export {
-  DataGrid,
-  type DataGridProps,
-  type DataGridColumn,
-  type DataGridRow,
-  type DataGridRowId,
-  type DataGridSort,
-  type SortDirection,
-} from './organisms/DataGrid/DataGrid.tsx';
 export { Timeline, type TimelineProps, type TimelineItem, type TimelineTone } from './organisms/Timeline/Timeline.tsx';
-export { Wizard, type WizardProps, type WizardStep } from './organisms/Wizard/Wizard.tsx';
 export {
   TimelineScrubber,
   type TimelineScrubberProps,
@@ -191,9 +181,19 @@ export {
   TimeSeriesChart,
   type TimeSeriesChartProps,
   type TimeSeriesChartSeries,
-  type ChartSeriesTone,
   type TimeSeriesChartShape,
+  type ChartSeriesTone,
 } from './organisms/TimeSeriesChart/TimeSeriesChart.tsx';
+export {
+  DataGrid,
+  type DataGridProps,
+  type DataGridColumn,
+  type DataGridRow,
+  type DataGridRowId,
+  type DataGridSort,
+  type SortDirection,
+} from './organisms/DataGrid/DataGrid.tsx';
+export { Wizard, type WizardProps, type WizardStep } from './organisms/Wizard/Wizard.tsx';
 export type { Placement } from './internal/useAnchoredPosition.ts';
 
 // i18n - the translation mandate: every user-facing string resolves through a
@@ -222,3 +222,11 @@ export {
 // by a native shell. See haptics.ts for the platform reality.
 export { HapticsProvider, useHaptics } from './haptics/HapticsProvider.tsx';
 export { haptic, setHapticsEnabled, hapticsEnabled, type HapticKind, type HapticFn } from './haptics/haptics.ts';
+export {
+  VisualFeedbackProvider,
+  useVisualFeedback,
+  type VisualFeedbackVariant,
+  type VisualFeedbackIntensity,
+  type VisualFeedbackFn,
+} from './haptics/VisualFeedbackProvider.tsx';
+export { emitFeedback, subscribeFeedback, type FeedbackEvent } from './haptics/feedback.ts';

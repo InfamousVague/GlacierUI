@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
-import { EmptyState, Heading, Meter, Pill, Row, StatTile, Text, Size, TextTone } from '@glacier/react';
-import { HighlightedCode } from '../../docs-ui.tsx';
+import { EmptyState, Heading, Meter, Pill, Row, StatTile, Text, Size, TextTone, useT } from '@glacier/react';
+import { HighlightedCode, prose } from '../../docs-ui.tsx';
+import { m } from '../../i18n.ts';
 import reportData from '../../generated/test-report.json';
 
 // ---------------------------------------------------------------------------
@@ -238,14 +239,15 @@ function formatPct(pct: number): string {
 }
 
 function passPill(pass: boolean | null) {
-  if (pass == null) return <Pill size="sm">unknown</Pill>;
+  const t = useT();
+  if (pass == null) return <Pill size="sm">{t(m.testreportUnknown)}</Pill>;
   return pass ? (
     <Pill size="sm" tone="success">
-      pass
+      {t(m.testreportPass)}
     </Pill>
   ) : (
     <Pill size="sm" tone="danger">
-      fail
+      {t(m.testreportFail)}
     </Pill>
   );
 }
@@ -254,37 +256,36 @@ function sectionEmpty(title: string, description: string) {
   return <EmptyState title={title} description={description} />;
 }
 
-const RERUN_HINT = 'Run npm run report at the repo root and commit the refreshed JSON.';
-
 // --- sections -----------------------------------------------------------------
 
 function VitestBlock({ data }: { data: VitestSection | null }) {
+  const t = useT();
   if (!data) {
-    return sectionEmpty('No unit test data', `The last report run had no vitest results. ${RERUN_HINT}`);
+    return sectionEmpty(t(m.trEmptyVitestTitle), `${t(m.trEmptyVitestDesc)} ${t(m.trRerunHint)}`);
   }
   const projects = Object.entries(data.projects);
   return (
     <>
       <Row gap={3} wrap style={{ marginBottom: 'var(--glacier-space-4)' }}>
-        <StatTile value={data.total} label="Tests" hint={`${data.files} files`} />
-        <StatTile value={data.passed} label="Passed" />
+        <StatTile value={data.total} label={t(m.trTests)} hint={`${data.files} ${t(m.trFilesLower)}`} />
+        <StatTile value={data.passed} label={t(m.trPassed)} />
         <StatTile
           value={data.failed}
-          label="Failed"
+          label={t(m.trFailed)}
           hint={passPill(data.failed === 0)}
         />
-        <StatTile value={formatDuration(data.durationMs)} label="Suite duration" />
+        <StatTile value={formatDuration(data.durationMs)} label={t(m.trSuiteDuration)} />
       </Row>
       <div className="propsTableWrap">
         <table className="tokenTable">
           <thead>
             <tr>
-              <th>Project</th>
-              <th>Files</th>
-              <th>Tests</th>
-              <th>Passed</th>
-              <th>Failed</th>
-              <th>Status</th>
+              <th>{t(m.trThProject)}</th>
+              <th>{t(m.trFiles)}</th>
+              <th>{t(m.trTests)}</th>
+              <th>{t(m.trPassed)}</th>
+              <th>{t(m.trFailed)}</th>
+              <th>{t(m.trThStatus)}</th>
             </tr>
           </thead>
           <tbody>
@@ -306,14 +307,14 @@ function VitestBlock({ data }: { data: VitestSection | null }) {
       {data.failures.length > 0 && (
         <>
           <Text tone={TextTone.Muted} style={{ marginTop: 'var(--glacier-space-3)' }}>
-            Failing tests in the last committed run:
+            {t(m.trFailuresLabel)}
           </Text>
           <div className="propsTableWrap">
             <table className="tokenTable">
               <thead>
                 <tr>
-                  <th>File</th>
-                  <th>Test</th>
+                  <th>{t(m.trThFile)}</th>
+                  <th>{t(m.trThTest)}</th>
                 </tr>
               </thead>
               <tbody>
@@ -335,10 +336,11 @@ function VitestBlock({ data }: { data: VitestSection | null }) {
 }
 
 function CoverageBlock({ data }: { data: CoverageSection | null }) {
+  const t = useT();
   if (!data) {
     return sectionEmpty(
-      'No coverage data',
-      `Generate coverage/coverage-summary.json with a coverage run first. ${RERUN_HINT}`,
+      t(m.trEmptyCoverageTitle),
+      `${t(m.trEmptyCoverageDesc)} ${t(m.trRerunHint)}`,
     );
   }
   const packages = Object.entries(data.packages);
@@ -347,8 +349,8 @@ function CoverageBlock({ data }: { data: CoverageSection | null }) {
       <table className="tokenTable">
         <thead>
           <tr>
-            <th>Package</th>
-            <th>Files</th>
+            <th>{t(m.trThPackage)}</th>
+            <th>{t(m.trFiles)}</th>
             {METRICS.map((metric) => (
               <th key={metric}>{metric[0]?.toUpperCase() + metric.slice(1)}</th>
             ))}
@@ -369,7 +371,7 @@ function CoverageBlock({ data }: { data: CoverageSection | null }) {
           ))}
           <tr>
             <td>
-              <strong>Total</strong>
+              <strong>{t(m.trTotal)}</strong>
             </td>
             <td />
             {METRICS.map((metric) => {
@@ -388,10 +390,11 @@ function CoverageBlock({ data }: { data: CoverageSection | null }) {
 }
 
 function ContrastBlock({ data }: { data: unknown }) {
+  const t = useT();
   if (data == null) {
     return sectionEmpty(
-      'No contrast audit',
-      `The tokens contrast audit was not available when the report was generated. ${RERUN_HINT}`,
+      t(m.trEmptyContrastTitle),
+      `${t(m.trEmptyContrastDesc)} ${t(m.trRerunHint)}`,
     );
   }
   const rows = normalizeContrast(data);
@@ -407,7 +410,7 @@ function ContrastBlock({ data }: { data: unknown }) {
       <table className="tokenTable">
         <thead>
           <tr>
-            <th>Pair</th>
+            <th>{t(m.trThPair)}</th>
             {themes.map((theme) => (
               <th key={theme}>{theme}</th>
             ))}
@@ -442,10 +445,11 @@ function ContrastBlock({ data }: { data: unknown }) {
 }
 
 function StrictnessBlock({ data }: { data: unknown }) {
+  const t = useT();
   if (data == null) {
     return sectionEmpty(
-      'No spec strictness data',
-      `The spec strictness audit was not available when the report was generated. ${RERUN_HINT}`,
+      t(m.trEmptyStrictnessTitle),
+      `${t(m.trEmptyStrictnessDesc)} ${t(m.trRerunHint)}`,
     );
   }
   const { overall, categories } = normalizeStrictness(data);
@@ -458,7 +462,7 @@ function StrictnessBlock({ data }: { data: unknown }) {
         <Row gap={3} wrap style={{ marginBottom: 'var(--glacier-space-4)' }}>
           <StatTile
             value={`${Math.round(overall.ratio * 100)}%`}
-            label="Catalog strictness"
+            label={t(m.trStatCatalogStrictness)}
             hint={overall.detail}
           />
         </Row>
@@ -472,21 +476,21 @@ function StrictnessBlock({ data }: { data: unknown }) {
             <div style={{ flex: 1 }}>
               {category.total === 0 ? (
                 <Text as="span" size={Size.Small} tone={TextTone.Subtle}>
-                  no strict checks
+                  {t(m.trNoStrictChecks)}
                 </Text>
               ) : category.total != null && category.filled != null ? (
                 // One segment per strictness check so the bar reads as filled/total.
                 <Meter
                   value={category.filled}
                   segments={category.total}
-                  aria-label={`${category.name} strictness`}
+                  aria-label={`${category.name} ${t(m.trStrictnessWord)}`}
                 />
               ) : (
                 <Meter
                   value={Math.round(category.ratio * 100)}
                   max={100}
                   segments={10}
-                  aria-label={`${category.name} strictness`}
+                  aria-label={`${category.name} ${t(m.trStrictnessWord)}`}
                 />
               )}
             </div>
@@ -507,14 +511,15 @@ function SectionBody({ children }: { children: ReactNode }) {
 }
 
 function AxeBlock({ data }: { data: AxeSection | null }) {
+  const t = useT();
   if (!data) {
-    return sectionEmpty('No axe stats', `The axe suite scan produced no data. ${RERUN_HINT}`);
+    return sectionEmpty(t(m.trEmptyAxeTitle), `${t(m.trEmptyAxeDesc)} ${t(m.trRerunHint)}`);
   }
   return (
     <Row gap={3} wrap>
-      <StatTile value={data.testFiles} label="Test files" />
-      <StatTile value={data.axeTestFiles} label="Files with axe checks" />
-      <StatTile value={data.axeAssertions} label="Axe assertions" />
+      <StatTile value={data.testFiles} label={t(m.trStatTestFiles)} />
+      <StatTile value={data.axeTestFiles} label={t(m.trStatAxeFiles)} />
+      <StatTile value={data.axeAssertions} label={t(m.trStatAxeAssertions)} />
     </Row>
   );
 }
@@ -522,57 +527,44 @@ function AxeBlock({ data }: { data: AxeSection | null }) {
 // ---------------------------------------------------------------------------
 
 export function TestReportPage() {
+  const t = useT();
   const generated = new Date(report.generatedAt);
   return (
     <>
-      <Heading level={1}>Test Report</Heading>
+      <Heading level={1}>{t(m.trName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A snapshot of the kit&rsquo;s quality gates: the vitest suite, code coverage, the token
-        contrast audit, spec strictness, and the axe accessibility checks, all in one place.
+        {t(m.trLede)}
       </Text>
       <Text size={Size.Small} tone={TextTone.Muted}>
-        This data is regenerated by <code>npm run report</code> and committed alongside the code, so
-        the page shows the last committed run
-        {Number.isNaN(generated.getTime()) ? '' : `, generated ${generated.toISOString().slice(0, 10)}`}.
+        {prose(t(m.trRegenNote))}
+        {Number.isNaN(generated.getTime()) ? '' : `, ${t(m.trGeneratedWord)} ${generated.toISOString().slice(0, 10)}`}.
       </Text>
 
-      <Heading level={2}>Unit tests</Heading>
+      <Heading level={2}>{t(m.trSecUnitTests)}</Heading>
       <SectionBody>
         <VitestBlock data={report.vitest} />
       </SectionBody>
 
-      <Heading level={2}>Coverage</Heading>
-      <Text tone={TextTone.Muted}>
-        Istanbul summary per workspace package, aggregated from{' '}
-        <code>coverage/coverage-summary.json</code>.
-      </Text>
+      <Heading level={2}>{t(m.trSecCoverage)}</Heading>
+      <Text tone={TextTone.Muted}>{prose(t(m.trCoverageDesc))}</Text>
       <SectionBody>
         <CoverageBlock data={report.coverage} />
       </SectionBody>
 
-      <Heading level={2}>Contrast audit</Heading>
-      <Text tone={TextTone.Muted}>
-        WCAG contrast ratios for the token pairings the kit relies on, checked per theme by{' '}
-        <code>@glacier/tokens</code>.
-      </Text>
+      <Heading level={2}>{t(m.trSecContrast)}</Heading>
+      <Text tone={TextTone.Muted}>{prose(t(m.trContrastDesc))}</Text>
       <SectionBody>
         <ContrastBlock data={report.contrast} />
       </SectionBody>
 
-      <Heading level={2}>Spec strictness</Heading>
-      <Text tone={TextTone.Muted}>
-        How much of the component contract in <code>@glacier/spec</code> is pinned down strictly,
-        per category.
-      </Text>
+      <Heading level={2}>{t(m.trSecStrictness)}</Heading>
+      <Text tone={TextTone.Muted}>{prose(t(m.trStrictnessDesc))}</Text>
       <SectionBody>
         <StrictnessBlock data={report.specStrictness} />
       </SectionBody>
 
-      <Heading level={2}>Accessibility suite</Heading>
-      <Text tone={TextTone.Muted}>
-        Static counts over <code>packages/react/test</code>: every component suite renders into
-        axe-core and asserts zero violations.
-      </Text>
+      <Heading level={2}>{t(m.trSecAxe)}</Heading>
+      <Text tone={TextTone.Muted}>{prose(t(m.trAxeDesc))}</Text>
       <SectionBody>
         <AxeBlock data={report.axe} />
       </SectionBody>

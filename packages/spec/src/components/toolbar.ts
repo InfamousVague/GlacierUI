@@ -29,6 +29,8 @@ export const toolbarSpec: ComponentSpec = {
     { name: 'border', description: 'Adds a hairline border-subtle bottom rule.', paint: { border: token('border-subtle') } },
     { name: 'surface', description: 'Adds the translucent glass-thin background with a blur-md, glass-saturate backdrop filter.', paint: { background: token('glass-thin') }, tokens: { blur: token('blur-md'), saturate: token('glass-saturate') } },
   ],
+  // the slotted content paints
+  paint: {},
   tokens: ['space-3', 'font-sans', 'hairline', 'border-subtle', 'glass-thin', 'blur-md', 'glass-saturate'],
   a11y: {
     notes: ['Give an icon-only control in the start or end slot an aria-label; the toolbar adds no labels of its own.'],

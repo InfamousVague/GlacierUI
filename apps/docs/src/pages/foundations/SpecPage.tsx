@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { SPEC_VERSION, cssValue, specs, type ComponentSpec, type Measure, type SizeSpec } from '@glacier/spec';
-import { Pill, Row, Stack, Heading, Text, Size, TextTone, Tone, Variant } from '@glacier/react';
-import { HighlightedCode } from '../../docs-ui.tsx';
+import { Pill, Row, Stack, Heading, Text, Size, TextTone, Tone, Variant, useT } from '@glacier/react';
+import { HighlightedCode, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 // Render a measurement as its token reference plus what it resolves to.
 function MeasureCell({ value }: { value?: Measure }) {
@@ -33,6 +34,7 @@ const SIZE_ROWS: { key: keyof SizeSpec; label: string }[] = [
 ];
 
 function SpecView({ spec }: { spec: ComponentSpec }) {
+  const t = useT();
   const sizeCols = spec.sizes ?? [];
   const usedRows = SIZE_ROWS.filter((row) => sizeCols.some((s) => s[row.key]));
   return (
@@ -55,15 +57,15 @@ function SpecView({ spec }: { spec: ComponentSpec }) {
       </Row>
 
       <div>
-        <Heading level={3}>Props</Heading>
+        <Heading level={3}>{t(m.secProps)}</Heading>
         <div className="propsTableWrap">
           <table className="tokenTable">
             <thead>
               <tr>
-                <th>Prop</th>
-                <th>Type</th>
-                <th>Default</th>
-                <th>Description</th>
+                <th>{t(m.tblProp)}</th>
+                <th>{t(m.tblType)}</th>
+                <th>{t(m.tblDefault)}</th>
+                <th>{t(m.tblDescription)}</th>
               </tr>
             </thead>
             <tbody>
@@ -91,16 +93,16 @@ function SpecView({ spec }: { spec: ComponentSpec }) {
 
       {(sizeCols.length > 0 || spec.dimensions) && (
         <div>
-          <Heading level={3}>Anatomy</Heading>
-          <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+          <Heading level={3}>{t(m.secAnatomy)}</Heading>
+          <Text tone={TextTone.Muted}>{t(m.spAnatomyIntro)}</Text>
           <ComponentBlueprint key={spec.id} specId={spec.id} />
         </div>
       )}
 
       {usedRows.length > 0 && (
         <div>
-          <Heading level={3}>Measurements</Heading>
-          <Text tone={TextTone.Muted}>Every value is a unit of the shared token scale, so any framework builds the same box.</Text>
+          <Heading level={3}>{t(m.spSecMeasurements)}</Heading>
+          <Text tone={TextTone.Muted}>{t(m.spMeasurementsDesc)}</Text>
           <div className="propsTableWrap">
             <table className="tokenTable">
               <thead>
@@ -132,7 +134,7 @@ function SpecView({ spec }: { spec: ComponentSpec }) {
 
       {spec.dimensions && (
         <div>
-          <Heading level={3}>Fixed dimensions</Heading>
+          <Heading level={3}>{t(m.spSecFixedDims)}</Heading>
           <div className="propsTableWrap">
             <table className="tokenTable">
               <tbody>
@@ -154,7 +156,7 @@ function SpecView({ spec }: { spec: ComponentSpec }) {
 
       {spec.variants && (
         <div>
-          <Heading level={3}>Variants</Heading>
+          <Heading level={3}>{t(m.secVariants)}</Heading>
           <Stack gap={2}>
             {spec.variants.map((v) => (
               <div key={v.name}>
@@ -167,11 +169,11 @@ function SpecView({ spec }: { spec: ComponentSpec }) {
 
       {spec.tones && (
         <div>
-          <Heading level={3}>Tones</Heading>
+          <Heading level={3}>{t(m.secTones)}</Heading>
           <Row gap={3} wrap>
-            {spec.tones.map((t) => (
-              <Pill key={t.name} tone={t.name as never} variant={Variant.Soft} size={Size.Small}>
-                {t.name}
+            {spec.tones.map((toneItem) => (
+              <Pill key={toneItem.name} tone={toneItem.name as never} variant={Variant.Soft} size={Size.Small}>
+                {toneItem.name}
               </Pill>
             ))}
           </Row>
@@ -179,19 +181,19 @@ function SpecView({ spec }: { spec: ComponentSpec }) {
       )}
 
       <div>
-        <Heading level={3}>Tokens consumed</Heading>
+        <Heading level={3}>{t(m.spSecTokens)}</Heading>
         <Row gap={2} wrap>
-          {(spec.tokens ?? []).map((t) => (
-            <code key={t}>{t}</code>
+          {(spec.tokens ?? []).map((token) => (
+            <code key={token}>{token}</code>
           ))}
         </Row>
       </div>
 
       <div>
-        <Heading level={3}>Generated JSON</Heading>
+        <Heading level={3}>{t(m.spSecGeneratedJson)}</Heading>
         <Text tone={TextTone.Muted}>
-          This is the language-agnostic artifact at{' '}
-          <code>packages/spec/dist/components/{spec.id}.json</code>, read by any framework binding.
+          {t(m.spGeneratedJsonDesc1)}{' '}
+          <code>packages/spec/dist/components/{spec.id}.json</code>{t(m.spGeneratedJsonDesc2)}
         </Text>
         <HighlightedCode code={JSON.stringify(spec, null, 2)} />
       </div>
@@ -200,19 +202,20 @@ function SpecView({ spec }: { spec: ComponentSpec }) {
 }
 
 const CATEGORY_ORDER = ['atom', 'molecule', 'organism', 'structure', 'layout'] as const;
-const CATEGORY_LABEL: Record<string, string> = {
-  atom: 'Atoms',
-  molecule: 'Molecules',
-  organism: 'Organisms',
-  structure: 'Structures',
-  layout: 'Layout',
-};
 
 // A grouped outline of every spec, so the whole catalog is scannable at a glance
 // and one tap jumps to a component.
 function SpecNav({ activeId, onSelect }: { activeId: string; onSelect: (id: string) => void }) {
+  const t = useT();
+  const CATEGORY_LABEL: Record<string, string> = {
+    atom: t(m.spCatAtoms),
+    molecule: t(m.spCatMolecules),
+    organism: t(m.spCatOrganisms),
+    structure: t(m.spCatStructures),
+    layout: t(m.spCatLayout),
+  };
   return (
-    <Stack gap={4} aria-label="Spec catalog" as="nav">
+    <Stack gap={4} aria-label={t(m.spNavLabel)} as="nav">
       {CATEGORY_ORDER.map((category) => {
         const group = specs.filter((s) => s.category === category);
         if (group.length === 0) return null;
@@ -243,46 +246,29 @@ function SpecNav({ activeId, onSelect }: { activeId: string; onSelect: (id: stri
 }
 
 export function SpecPage() {
+  const t = useT();
   const [id, setId] = useState(specs[0]!.id);
   const spec = specs.find((s) => s.id === id) ?? specs[0]!;
 
   return (
     <>
-      <Heading level={1}>Specification</Heading>
+      <Heading level={1}>{t(m.spName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        Every component has a language-agnostic specification: a single contract that describes its
-        API, its variants, and its measurements in units of the shared token scale rather than raw
-        pixels. React, or a future Angular or Rust kit, reads the same spec and builds the same
-        component.
+        {t(m.spLede)}
       </Text>
 
-      <Heading level={2}>How it works</Heading>
+      <Heading level={2}>{t(m.spSecHowItWorks)}</Heading>
       <ul>
-        <li>
-          Specs are authored in TypeScript in <code>@glacier/spec</code> for type safety, then
-          generated to JSON. The JSON, plus a JSON Schema, is what non-JavaScript consumers read.
-        </li>
-        <li>
-          Measurements are token references like <code>$space-5</code> or <code>$control-height-md</code>,
-          which resolve against the token catalog. A spec never hardcodes a pixel it could name.
-        </li>
-        <li>
-          Shared vocabulary lives once in the spec package: the size steps, the tones, and the
-          mapping from a control size to its height and font size. The React kit imports these
-          instead of redeclaring them.
-        </li>
-        <li>
-          The React kit is held to its spec by a conformance test. Add a variant or change a default
-          in one place without the other and the test fails, so the two never drift.
-        </li>
+        <li>{prose(t(m.spHow1))}</li>
+        <li>{prose(t(m.spHow2))}</li>
+        <li>{t(m.spHow3)}</li>
+        <li>{t(m.spHow4)}</li>
       </ul>
       <Text tone={TextTone.Muted}>
-        Schema version <code>{SPEC_VERSION}</code>. The full catalog is at{' '}
-        <code>packages/spec/dist/spec.json</code> and the schema at{' '}
-        <code>packages/spec/dist/schema.json</code>.
+        {t(m.spSchemaVersion)} <code>{SPEC_VERSION}</code>. {prose(t(m.spCatalogPaths))}
       </Text>
 
-      <Heading level={2}>Browse a spec</Heading>
+      <Heading level={2}>{t(m.spSecBrowse)}</Heading>
       <Stack gap={6}>
         <SpecNav activeId={id} onSelect={setId} />
         <SpecView spec={spec} />

@@ -1,0 +1,28 @@
+{
+  "name": "@glacier/native",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The React Native binding of the Glacier kit. Renders View/Text/Pressable driven by @glacier/spec + @glacier/tokens, so an Expo app looks identical to the web kit. On web (docs) it runs through react-native-web for side-by-side parity.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@glacier/commons": "*",
+    "@glacier/icons": "*",
+    "@glacier/spec": "*",
+    "date-fns": "^4.4.0"
+  },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-native": "*"
+  },
+  "peerDependenciesMeta": {
+    "shiki": {
+      "optional": true
+    }
+  },
+  "optionalDependencies": {
+    "shiki": "*"
+  }
+}

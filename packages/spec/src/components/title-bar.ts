@@ -51,6 +51,8 @@ export const titleBarSpec: ComponentSpec = {
       behavioral: true,
     },
   ],
+  // the glass surface paints via a state; the centered title inherits text
+  paint: {},
   tokens: [
     'font-sans', 'font-size-sm', 'font-weight-medium', 'text-muted',
     'space-2', 'space-3',

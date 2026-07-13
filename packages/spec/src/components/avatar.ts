@@ -43,6 +43,7 @@ export const avatarSpec: ComponentSpec = {
     { name: 'initials', description: 'No image but a name; renders up to two uppercased initials on an accent-soft fill.', paint: { background: token('accent-soft'), text: token('accent-text') } },
     { name: 'placeholder', description: 'Neither image nor name; a blank sunken fill, aria-hidden.', paint: { background: token('surface-sunken') } },
   ],
+  paint: { background: '$surface-sunken' },
   tokens: [
     'surface-sunken', 'accent-soft', 'accent-text', 'radius-full', 'radius-md',
     'font-sans', 'font-weight-semibold', 'font-size-xs', 'font-size-sm', 'font-size-md', 'font-size-lg',

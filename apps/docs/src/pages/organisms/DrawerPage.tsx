@@ -1,32 +1,30 @@
-import { Button, Drawer, Field, Heading, Input, Row, Size, Stack, Text, TextTone, Variant } from '@glacier/react';
+import { Button, Field, Heading, Input, Row, Size, Stack, Text, TextTone, Variant, useT } from '@glacier/react';
 import { useState } from 'react';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
+import { type PlatformKit } from '../../platforms.tsx';
+import { m } from '../../i18n.ts';
 
 export function DrawerPage() {
-  const [basicOpen, setBasicOpen] = useState(false);
-  const [floatingOpen, setFloatingOpen] = useState(false);
-  const [side, setSide] = useState<'left' | 'right' | 'bottom' | null>(null);
-  const [formOpen, setFormOpen] = useState(false);
-  const [filterName, setFilterName] = useState('');
+  const t = useT();
 
   return (
     <>
-      <Heading level={1}>Drawer</Heading>
+      <Heading level={1}>{t(m.drwName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        Drawer is a modal sheet for supporting work that benefits from preserving page context. It
-        enters from a viewport edge, locks background scrolling, traps focus, and restores the
-        opener when it closes.
+        {t(m.drwLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the modal sheet, header, scrollable body, and optional action footer.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.drwAnatomy)}</Text>
       <ComponentBlueprint specId="drawer" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
       <Example
-        title="Basic"
-        description="The default right-side sheet suits filters, inspectors, and secondary workflows that need more space than a Popover."
+        title={t(m.exBasic)}
+        description={t(m.drwExBasicDesc)}
+        component="Drawer"
+        render={(K) => <BasicDrawerExample K={K} />}
         code={`import { Button, Drawer, Text } from '@glacier/react';
 
 const [open, setOpen] = useState(false);
@@ -41,42 +39,23 @@ const [open, setOpen] = useState(false);
 >
   <Text>Drawer content scrolls independently from the page.</Text>
 </Drawer>`}
-      >
-        <Button onClick={() => setBasicOpen(true)}>Open filters</Button>
-        <Drawer
-          open={basicOpen}
-          onClose={() => setBasicOpen(false)}
-          title="Filters"
-          description="Narrow the visible results."
-          footer={<Button onClick={() => setBasicOpen(false)}>Apply filters</Button>}
-        >
-          <Text>Drawer content scrolls independently from the page beneath the sheet.</Text>
-        </Drawer>
-      </Example>
+      />
 
       <Example
-        title="Floating"
-        description="With the docs' Floating layout preference (the default) every drawer already floats: a gutter on all edges and all corners rounded. The floating prop forces the mode per drawer regardless of the app layout; in the Full layout, drawers sit flush unless forced."
+        title={t(m.drwExFloatingTitle)}
+        description={t(m.drwExFloatingDesc)}
+        component="Drawer"
+        render={(K) => <FloatingDrawerExample K={K} />}
         code={`<Drawer floating open={open} onClose={() => setOpen(false)} title="Filters">
   <Text>The same sheet, floated off the edges.</Text>
 </Drawer>`}
-      >
-        <Button onClick={() => setFloatingOpen(true)}>Open floating</Button>
-        <Drawer
-          floating
-          open={floatingOpen}
-          onClose={() => setFloatingOpen(false)}
-          title="Filters"
-          description="Narrow the visible results."
-          footer={<Button onClick={() => setFloatingOpen(false)}>Apply filters</Button>}
-        >
-          <Text>The same sheet, floated off the edges with a gutter all around.</Text>
-        </Drawer>
-      </Example>
+      />
 
       <Example
-        title="Sides"
-        description="Use left or right for navigation and detail. Bottom creates a full-width mobile-friendly sheet with a capped height."
+        title={t(m.drwExSidesTitle)}
+        description={t(m.drwExSidesDesc)}
+        component="Drawer"
+        render={(K) => <SidesDrawerExample K={K} />}
         code={`const [side, setSide] = useState<'left' | 'right' | 'bottom' | null>(null);
 
 <Button onClick={() => setSide('left')}>Left</Button>
@@ -85,20 +64,13 @@ const [open, setOpen] = useState(false);
 <Drawer open={side !== null} onClose={() => setSide(null)} side={side ?? 'right'} title="Panel">
   <Text>Content</Text>
 </Drawer>`}
-      >
-        <Row gap={4} wrap>
-          <Button variant={Variant.Outline} onClick={() => setSide('left')}>Left</Button>
-          <Button variant={Variant.Outline} onClick={() => setSide('right')}>Right</Button>
-          <Button variant={Variant.Outline} onClick={() => setSide('bottom')}>Bottom</Button>
-          <Drawer open={side !== null} onClose={() => setSide(null)} side={side ?? 'right'} title="Panel">
-            <Text>Choose the edge that preserves the most useful context for the work at hand.</Text>
-          </Drawer>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Form workflow"
-        description="The footer remains reachable beneath a scrollable body. Pair a ghost cancel action with the primary action on the right."
+        title={t(m.drwExFormTitle)}
+        description={t(m.drwExFormDesc)}
+        component="Drawer"
+        render={(K) => <FormDrawerExample K={K} />}
         code={`<Drawer
   open={open}
   onClose={() => setOpen(false)}
@@ -112,80 +84,149 @@ const [open, setOpen] = useState(false);
 >
   <Field label="Filter name"><Input /></Field>
 </Drawer>`}
-      >
-        <Button onClick={() => setFormOpen(true)}>Save a filter</Button>
-        <Drawer
-          open={formOpen}
-          onClose={() => setFormOpen(false)}
-          title="Save filter"
-          description="Name this view so the team can reuse it."
-          footer={
-            <>
-              <Button variant={Variant.Ghost} onClick={() => setFormOpen(false)}>Cancel</Button>
-              <Button onClick={() => setFormOpen(false)}>Save filter</Button>
-            </>
-          }
-        >
-          <Field label="Filter name" hint="Visible to everyone with access to this project.">
-            <Input value={filterName} onChange={(event) => setFilterName(event.target.value)} placeholder="Open issues" />
-          </Field>
-        </Drawer>
-      </Example>
+      />
 
       <Example
-        title="Persistent workflow"
-        description="Set dismissible to false only when leaving would lose work or violate a workflow rule. Always provide a clear internal way forward."
+        title={t(m.drwExPersistTitle)}
+        description={t(m.drwExPersistDesc)}
+        component="Drawer"
+        render={(K) => <PersistentDrawerExample K={K} />}
         code={`<Drawer open={open} onClose={() => setOpen(false)} dismissible={false} title="Finish setup">
   <Button onClick={() => setOpen(false)}>Continue</Button>
 </Drawer>`}
-      >
-        <PersistentDrawerExample />
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'open', type: 'boolean', description: 'Whether the sheet is mounted and shown.' },
-          { name: 'onClose', type: '() => void', description: 'Called by permitted dismissal paths and the close action.' },
-          { name: 'title', type: 'ReactNode', description: 'Heading that names the dialog.' },
-          { name: 'description', type: 'ReactNode', description: 'Supporting text linked through aria-describedby.' },
-          { name: 'side', type: "'left' | 'right' | 'bottom'", default: "'right'", description: 'Viewport edge from which the sheet enters.' },
-          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Maximum width for left and right sheets.' },
-          { name: 'floating', type: 'boolean', description: 'Forces the floating card per drawer. Unset, drawers follow the app layout via a root data-layout=\'floating\' attribute.' },
-          { name: 'footer', type: 'ReactNode', description: 'Action row below the scrollable body.' },
-          { name: 'dismissible', type: 'boolean', default: 'true', description: 'Enables Escape, backdrop press, and the close action.' },
+          { name: 'open', type: 'boolean', description: t(m.drwPropOpen) },
+          { name: 'onClose', type: '() => void', description: t(m.drwPropOnClose) },
+          { name: 'title', type: 'ReactNode', description: t(m.drwPropTitle) },
+          { name: 'description', type: 'ReactNode', description: t(m.drwPropDescription) },
+          { name: 'side', type: "'left' | 'right' | 'bottom'", default: "'right'", description: t(m.drwPropSide) },
+          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: t(m.drwPropSize) },
+          { name: 'floating', type: 'boolean', description: t(m.drwPropFloating) },
+          { name: 'footer', type: 'ReactNode', description: t(m.drwPropFooter) },
+          { name: 'dismissible', type: 'boolean', default: 'true', description: t(m.drwPropDismissible) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>Drawer uses <code>role="dialog"</code> and <code>aria-modal="true"</code>, labelled by its title when present.</li>
-        <li>Focus moves into the sheet, Tab remains trapped, document scroll locks, and focus returns to the opener after close.</li>
-        <li>A persistent drawer ignores Escape and backdrop presses and omits the close action.</li>
-        <li>Entry motion becomes instant for users who prefer reduced motion.</li>
+        <li>{prose(t(m.drwA11y1))}</li>
+        <li>{prose(t(m.drwA11y2))}</li>
+        <li>{prose(t(m.drwA11y3))}</li>
+        <li>{prose(t(m.drwA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use Drawer for secondary work that benefits from retaining page context. Use Modal for a short centered decision.</li>
-        <li>Do not stack drawers or combine a Drawer with another modal layer.</li>
-        <li>Keep persistent drawers rare and always give people a clearly named action inside the sheet.</li>
+        <li>{prose(t(m.drwUse1))}</li>
+        <li>{prose(t(m.drwUse2))}</li>
+        <li>{prose(t(m.drwUse3))}</li>
       </ul>
     </>
   );
 }
 
-function PersistentDrawerExample() {
+// The Drawer holds open/selected state, which cannot live in an Example's
+// `render` (it runs once per pane and must not call hooks). Each demo lifts its
+// state into a small wrapper that takes the platform kit `K`, so every
+// comparison pane manages its own drawer through its own binding.
+
+function BasicDrawerExample({ K }: { K: PlatformKit }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   return (
     <>
-      <Button onClick={() => setOpen(true)}>Open required setup</Button>
-      <Drawer open={open} onClose={() => setOpen(false)} dismissible={false} title="Finish setup">
+      <Button onClick={() => setOpen(true)}>{t(m.drwOpenFilters)}</Button>
+      <K.Drawer
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t(m.drwTitleFilters)}
+        description={t(m.drwDescNarrow)}
+        footer={<Button onClick={() => setOpen(false)}>{t(m.drwApplyFilters)}</Button>}
+      >
+        <Text>{t(m.drwBasicBody)}</Text>
+      </K.Drawer>
+    </>
+  );
+}
+
+function FloatingDrawerExample({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>{t(m.drwOpenFloating)}</Button>
+      <K.Drawer
+        floating
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t(m.drwTitleFilters)}
+        description={t(m.drwDescNarrow)}
+        footer={<Button onClick={() => setOpen(false)}>{t(m.drwApplyFilters)}</Button>}
+      >
+        <Text>{t(m.drwFloatingBody)}</Text>
+      </K.Drawer>
+    </>
+  );
+}
+
+function SidesDrawerExample({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [side, setSide] = useState<'left' | 'right' | 'bottom' | null>(null);
+  return (
+    <Row gap={4} wrap>
+      <Button variant={Variant.Outline} onClick={() => setSide('left')}>{t(m.drawerLeft)}</Button>
+      <Button variant={Variant.Outline} onClick={() => setSide('right')}>{t(m.drawerRight)}</Button>
+      <Button variant={Variant.Outline} onClick={() => setSide('bottom')}>{t(m.drawerBottom)}</Button>
+      <K.Drawer open={side !== null} onClose={() => setSide(null)} side={side ?? 'right'} title={t(m.drwTitlePanel)}>
+        <Text>{t(m.drwSidesBody)}</Text>
+      </K.Drawer>
+    </Row>
+  );
+}
+
+function FormDrawerExample({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  const [filterName, setFilterName] = useState('');
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>{t(m.drwSaveAFilter)}</Button>
+      <K.Drawer
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t(m.drwSaveFilter)}
+        description={t(m.drwDescNameView)}
+        footer={
+          <>
+            <Button variant={Variant.Ghost} onClick={() => setOpen(false)}>{t(m.drawerCancel)}</Button>
+            <Button onClick={() => setOpen(false)}>{t(m.drwSaveFilter)}</Button>
+          </>
+        }
+      >
+        <Field label={t(m.drwFieldFilterName)} hint={t(m.drwHintVisible)}>
+          <Input value={filterName} onChange={(event) => setFilterName(event.target.value)} placeholder={t(m.drawerOpenIssues)} />
+        </Field>
+      </K.Drawer>
+    </>
+  );
+}
+
+function PersistentDrawerExample({ K }: { K: PlatformKit }) {
+  const t = useT();
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>{t(m.drwOpenRequiredSetup)}</Button>
+      <K.Drawer open={open} onClose={() => setOpen(false)} dismissible={false} title={t(m.drwTitleFinishSetup)}>
         <Stack gap={4} width="full">
-          <Text>Complete the required step to continue. Escape and the backdrop cannot close this sheet.</Text>
-          <Button onClick={() => setOpen(false)}>Continue</Button>
+          <Text>{t(m.drwPersistBody)}</Text>
+          <Button onClick={() => setOpen(false)}>{t(m.drawerContinue)}</Button>
         </Stack>
-      </Drawer>
+      </K.Drawer>
     </>
   );
 }

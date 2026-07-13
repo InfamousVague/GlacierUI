@@ -1,32 +1,33 @@
 import { radii, SCALED_RADII, type RadiusStep } from '@glacier/tokens';
-import { Slider, Text, Row, Heading, Size, TextTone } from '@glacier/react';
+import { Slider, Text, Row, Heading, Size, TextTone, useT } from '@glacier/react';
 import { useState } from 'react';
+import { prose } from '../../docs-ui.tsx';
+import { m } from '../../i18n.ts';
 
 const ELEVATIONS = [0, 1, 2, 3, 4, 5];
 
 export function ShapePage() {
+  const t = useT();
   const [scale, setScale] = useState(1);
 
   return (
     <>
-      <Heading level={1}>Shape & Elevation</Heading>
+      <Heading level={1}>{t(m.shpName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A radius ramp with a single global knob: every step except <code>none</code> and{' '}
-        <code>full</code> multiplies by <code>--glacier-radius-scale</code>, so the entire kit
-        sharpens or softens together.
+        {prose(t(m.shpLede))}
       </Text>
 
-      <Heading level={2}>Radius ramp</Heading>
+      <Heading level={2}>{t(m.shpSecRadius)}</Heading>
       <Row gap={4} wrap style={{ marginBottom: 'var(--glacier-space-5)' }}>
         <Text as="span" size={Size.Small} tone={TextTone.Muted}>
-          radius-scale:
+          {t(m.shapeRadiusScale)}
         </Text>
         <Text as="span" size={Size.Small} weight="semibold" mono>
           {scale.toFixed(2)}
         </Text>
         <div style={{ width: '14rem' }}>
           <Slider
-            aria-label="Radius scale preview"
+            aria-label={t(m.shpRadiusSliderLabel)}
             min={0}
             max={2}
             step={0.05}
@@ -35,10 +36,7 @@ export function ShapePage() {
           />
         </div>
       </Row>
-      <Text tone={TextTone.Muted}>
-        Drag to preview the ramp at another scale. The Preferences dialog in the top bar sets the
-        real knob for the whole site.
-      </Text>
+      <Text tone={TextTone.Muted}>{t(m.shpRadiusHint)}</Text>
       <Row gap={4} wrap>
         {(Object.keys(radii) as RadiusStep[]).map((name) => (
           <div key={name} style={{ textAlign: 'center' }}>
@@ -72,17 +70,10 @@ export function ShapePage() {
           <code>squircle</code>
         </div>
       </Row>
-      <Text tone={TextTone.Muted}>
-        The <code>squircle</code> keeps the same radius but bends the corner into a superellipse
-        with <code>corner-shape</code>, for the continuous curve iOS and macOS use. Browsers without{' '}
-        <code>corner-shape</code> fall back to a plain rounded corner.
-      </Text>
+      <Text tone={TextTone.Muted}>{prose(t(m.shpSquircleDesc))}</Text>
 
-      <Heading level={2}>Elevation</Heading>
-      <Text tone={TextTone.Muted}>
-        Six shadow levels, tuned separately per theme. Dark mode uses stronger shadows and lighter
-        surface steps to show elevation.
-      </Text>
+      <Heading level={2}>{t(m.shpSecElevation)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.shpElevationDesc)}</Text>
       <Row gap={4} wrap>
         {ELEVATIONS.map((level) => (
           <div

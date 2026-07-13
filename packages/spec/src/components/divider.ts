@@ -19,6 +19,7 @@ export const dividerSpec: ComponentSpec = {
   ],
   defaults: { orientation: 'horizontal', skeleton: false },
   dimensions: { thickness: token('hairline'), gap: token('space-3') },
+  paint: { background: '$border-subtle' },
   tokens: ['hairline', 'border-subtle', 'space-3', 'font-family-sans', 'font-size-xs', 'text-subtle'],
   a11y: {
     role: 'separator',

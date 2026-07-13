@@ -1,7 +1,8 @@
-import { Button, Card, ContextMenu, Menu, MenuItem, MenuSeparator, MenuLabel, MenuSub, Kbd, Heading, Text, Size, TextTone } from '@glacier/react';
+import { Button, Card, ContextMenu, Menu, MenuItem, MenuSeparator, MenuSub, Kbd, Heading, Text, Size, TextTone, useT } from '@glacier/react';
 import { Pencil, Copy, Trash2, Share2, Mail, Link } from '@glacier/icons';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 const editIcon = <Pencil size={16} />;
 const copyIcon = <Copy size={16} />;
@@ -11,24 +12,31 @@ const mailIcon = <Mail size={16} />;
 const linkIcon = <Link size={16} />;
 
 export function MenuPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Menu</Heading>
+      <Heading level={1}>{t(m.menuName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A dropdown list of actions anchored to a trigger. It rides the same anchored overlay as
-        Popover - portalled, flipping and clamping on screen, dismiss-on-outside - with menu
-        semantics: arrow-key roving focus and select-to-close.
+        {t(m.menuLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.menuAnatomy)}</Text>
       <ComponentBlueprint specId="menu" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="A trigger and a list of actions. Choosing an item runs its onSelect and closes the menu."
+        title={t(m.exBasic)}
+        description={t(m.menuExBasicDesc)}
+        component="Menu"
+        render={(K) => (
+          <K.Menu trigger={<K.Button>{t(m.menuActions)}</K.Button>}>
+            <K.MenuItem onSelect={() => {}}>{t(m.menuRename)}</K.MenuItem>
+            <K.MenuItem onSelect={() => {}}>{t(m.menuDuplicate)}</K.MenuItem>
+            <K.MenuItem onSelect={() => {}}>{t(m.menuArchive)}</K.MenuItem>
+          </K.Menu>
+        )}
         code={`import { Button, Menu, MenuItem } from '@glacier/react';
 
 <Menu trigger={<Button>Actions</Button>}>
@@ -36,35 +44,47 @@ export function MenuPage() {
   <MenuItem onSelect={() => duplicate()}>Duplicate</MenuItem>
   <MenuItem onSelect={() => archive()}>Archive</MenuItem>
 </Menu>`}
-      >
-        <Menu trigger={<Button>Actions</Button>}>
-          <MenuItem onSelect={() => {}}>Rename</MenuItem>
-          <MenuItem onSelect={() => {}}>Duplicate</MenuItem>
-          <MenuItem onSelect={() => {}}>Archive</MenuItem>
-        </Menu>
-      </Example>
+      />
 
       <Example
-        title="Icons and shortcuts"
-        description="Items take a leading icon and a trailing shortcut hint - a Kbd reads well there."
+        title={t(m.menuExIconsTitle)}
+        description={t(m.menuExIconsDesc)}
+        component="Menu"
+        render={(K) => (
+          <K.Menu trigger={<K.Button>{t(m.menuEdit)}</K.Button>}>
+            <K.MenuItem icon={editIcon} shortcut={<Kbd>⌘E</Kbd>} onSelect={() => {}}>
+              {t(m.menuEdit)}
+            </K.MenuItem>
+            <K.MenuItem icon={copyIcon} shortcut={<Kbd>⌘C</Kbd>} onSelect={() => {}}>
+              {t(m.menuCopy)}
+            </K.MenuItem>
+          </K.Menu>
+        )}
         code={`<Menu trigger={<Button>Edit</Button>}>
   <MenuItem icon={editIcon} shortcut={<Kbd>⌘E</Kbd>} onSelect={edit}>Edit</MenuItem>
   <MenuItem icon={copyIcon} shortcut={<Kbd>⌘C</Kbd>} onSelect={copy}>Copy</MenuItem>
 </Menu>`}
-      >
-        <Menu trigger={<Button>Edit</Button>}>
-          <MenuItem icon={editIcon} shortcut={<Kbd>⌘E</Kbd>} onSelect={() => {}}>
-            Edit
-          </MenuItem>
-          <MenuItem icon={copyIcon} shortcut={<Kbd>⌘C</Kbd>} onSelect={() => {}}>
-            Copy
-          </MenuItem>
-        </Menu>
-      </Example>
+      />
 
       <Example
-        title="Sections, separators, and danger"
-        description="Group items with a MenuLabel heading and a MenuSeparator; mark destructive actions with danger."
+        title={t(m.menuExSectionsTitle)}
+        description={t(m.menuExSectionsDesc)}
+        component="Menu"
+        render={(K) => (
+          <K.Menu trigger={<K.Button>{t(m.menuOptions)}</K.Button>}>
+            <K.MenuLabel>{t(m.menuEdit)}</K.MenuLabel>
+            <K.MenuItem icon={editIcon} onSelect={() => {}}>
+              {t(m.menuRename)}
+            </K.MenuItem>
+            <K.MenuItem icon={copyIcon} onSelect={() => {}}>
+              {t(m.menuDuplicate)}
+            </K.MenuItem>
+            <K.MenuSeparator />
+            <K.MenuItem icon={trashIcon} danger onSelect={() => {}}>
+              {t(m.menuDelete)}
+            </K.MenuItem>
+          </K.Menu>
+        )}
         code={`<Menu trigger={<Button>Options</Button>}>
   <MenuLabel>Edit</MenuLabel>
   <MenuItem icon={editIcon} onSelect={rename}>Rename</MenuItem>
@@ -72,39 +92,27 @@ export function MenuPage() {
   <MenuSeparator />
   <MenuItem icon={trashIcon} danger onSelect={remove}>Delete</MenuItem>
 </Menu>`}
-      >
-        <Menu trigger={<Button>Options</Button>}>
-          <MenuLabel>Edit</MenuLabel>
-          <MenuItem icon={editIcon} onSelect={() => {}}>
-            Rename
-          </MenuItem>
-          <MenuItem icon={copyIcon} onSelect={() => {}}>
-            Duplicate
-          </MenuItem>
-          <MenuSeparator />
-          <MenuItem icon={trashIcon} danger onSelect={() => {}}>
-            Delete
-          </MenuItem>
-        </Menu>
-      </Example>
+      />
 
       <Example
-        title="Disabled item"
-        description="A disabled item stays visible for discoverability but is skipped by pointer and arrow navigation."
+        title={t(m.menuExDisabledTitle)}
+        description={t(m.menuExDisabledDesc)}
+        component="Menu"
+        render={(K) => (
+          <K.Menu trigger={<K.Button>{t(m.menuMore)}</K.Button>}>
+            <K.MenuItem onSelect={() => {}}>{t(m.menuShare)}</K.MenuItem>
+            <K.MenuItem disabled>{t(m.menuExportPro)}</K.MenuItem>
+          </K.Menu>
+        )}
         code={`<Menu trigger={<Button>More</Button>}>
   <MenuItem onSelect={share}>Share</MenuItem>
   <MenuItem disabled>Export (Pro)</MenuItem>
 </Menu>`}
-      >
-        <Menu trigger={<Button>More</Button>}>
-          <MenuItem onSelect={() => {}}>Share</MenuItem>
-          <MenuItem disabled>Export (Pro)</MenuItem>
-        </Menu>
-      </Example>
+      />
 
       <Example
-        title="Context menu"
-        description="Wrap any surface in a ContextMenu. Right-click - or long-press on touch - opens the same panel at the pointer; Escape, an outside press, or scrolling away dismisses it."
+        title={t(m.menuExContextTitle)}
+        description={t(m.menuExContextDesc)}
         code={`import { ContextMenu, MenuItem, MenuSeparator } from '@glacier/react';
 
 <ContextMenu
@@ -122,29 +130,29 @@ export function MenuPage() {
 </ContextMenu>`}
       >
         <ContextMenu
-          aria-label="Canvas actions"
+          aria-label={t(m.menuCanvasActions)}
           content={
             <>
               <MenuItem icon={copyIcon} onSelect={() => {}}>
-                Copy
+                {t(m.menuCopy)}
               </MenuItem>
               <MenuItem icon={editIcon} onSelect={() => {}}>
-                Rename
+                {t(m.menuRename)}
               </MenuItem>
               <MenuSeparator />
               <MenuItem icon={trashIcon} danger onSelect={() => {}}>
-                Delete
+                {t(m.menuDelete)}
               </MenuItem>
             </>
           }
         >
-          <Card>Right-click or long-press this area</Card>
+          <Card>{t(m.menuCardHint)}</Card>
         </ContextMenu>
       </Example>
 
       <Example
-        title="Flyout submenu"
-        description="A MenuSub row opens its child panel beside the row - on hover with an intent delay, or with ArrowRight/Enter. ArrowLeft steps back to the row."
+        title={t(m.menuExFlyoutTitle)}
+        description={t(m.menuExFlyoutDesc)}
         code={`import { Menu, MenuItem, MenuSub } from '@glacier/react';
 
 <Menu trigger={<Button>Actions</Button>}>
@@ -155,24 +163,24 @@ export function MenuPage() {
   </MenuSub>
 </Menu>`}
       >
-        <Menu trigger={<Button>Actions</Button>}>
+        <Menu trigger={<Button>{t(m.menuActions)}</Button>}>
           <MenuItem icon={editIcon} onSelect={() => {}}>
-            Rename
+            {t(m.menuRename)}
           </MenuItem>
-          <MenuSub label="Share" icon={shareIcon}>
+          <MenuSub label={t(m.menuShare)} icon={shareIcon}>
             <MenuItem icon={mailIcon} onSelect={() => {}}>
-              Email
+              {t(m.menuEmail)}
             </MenuItem>
             <MenuItem icon={linkIcon} onSelect={() => {}}>
-              Copy link
+              {t(m.menuCopyLink)}
             </MenuItem>
           </MenuSub>
         </Menu>
       </Example>
 
       <Example
-        title="Nested flyouts"
-        description="Submenus nest: each level flies out beside its row and flips to the other side near the viewport edge. Escape closes the whole stack."
+        title={t(m.menuExNestedTitle)}
+        description={t(m.menuExNestedDesc)}
         code={`<Menu trigger={<Button>Export</Button>}>
   <MenuSub label="Export as">
     <MenuItem onSelect={pdf}>PDF</MenuItem>
@@ -183,86 +191,75 @@ export function MenuPage() {
   </MenuSub>
 </Menu>`}
       >
-        <Menu trigger={<Button>Export</Button>}>
-          <MenuSub label="Export as">
-            <MenuItem onSelect={() => {}}>PDF</MenuItem>
-            <MenuSub label="Image">
-              <MenuItem onSelect={() => {}}>PNG</MenuItem>
-              <MenuItem onSelect={() => {}}>JPEG</MenuItem>
+        <Menu trigger={<Button>{t(m.menuExport)}</Button>}>
+          <MenuSub label={t(m.menuExportAs)}>
+            <MenuItem onSelect={() => {}}>{t(m.menuPdf)}</MenuItem>
+            <MenuSub label={t(m.menuImage)}>
+              <MenuItem onSelect={() => {}}>{t(m.menuPng)}</MenuItem>
+              <MenuItem onSelect={() => {}}>{t(m.menuJpeg)}</MenuItem>
             </MenuSub>
           </MenuSub>
         </Menu>
       </Example>
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'trigger', type: 'ReactElement', description: 'Required. Element that opens the menu; its ref and click are wired up.' },
-          { name: 'placement', type: 'Placement', default: "'bottom-start'", description: 'Menu position relative to the trigger; flips when it would overflow.' },
-          { name: 'open', type: 'boolean', description: 'Controlled open state.' },
-          { name: 'defaultOpen', type: 'boolean', default: 'false', description: 'Initial open state when uncontrolled.' },
-          { name: 'onOpenChange', type: '(open: boolean) => void', description: 'Called with the next open state.' },
-          { name: 'aria-label', type: 'string', description: 'Accessible name for the menu.' },
+          { name: 'trigger', type: 'ReactElement', description: t(m.menuPropTrigger) },
+          { name: 'placement', type: 'Placement', default: "'bottom-start'", description: t(m.menuPropPlacement) },
+          { name: 'open', type: 'boolean', description: t(m.menuPropOpen) },
+          { name: 'defaultOpen', type: 'boolean', default: 'false', description: t(m.menuPropDefaultOpen) },
+          { name: 'onOpenChange', type: '(open: boolean) => void', description: t(m.menuPropOnOpenChange) },
+          { name: 'aria-label', type: 'string', description: t(m.menuPropAriaLabel) },
         ]}
       />
-      <Heading level={3}>MenuItem</Heading>
+      <Heading level={3}>{t(m.menuMenuitem)}</Heading>
       <PropsTable
         props={[
-          { name: 'onSelect', type: '() => void', description: 'Runs when the item is chosen; the menu then closes.' },
-          { name: 'icon', type: 'ReactNode', description: 'Leading glyph.' },
-          { name: 'shortcut', type: 'ReactNode', description: 'Trailing shortcut hint, e.g. a Kbd.' },
-          { name: 'danger', type: 'boolean', default: 'false', description: 'Paints the row in the danger tone.' },
-          { name: 'disabled', type: 'boolean', default: 'false', description: 'Dims the row and skips it in navigation.' },
+          { name: 'onSelect', type: '() => void', description: t(m.menuItemPropOnSelect) },
+          { name: 'icon', type: 'ReactNode', description: t(m.menuItemPropIcon) },
+          { name: 'shortcut', type: 'ReactNode', description: t(m.menuItemPropShortcut) },
+          { name: 'danger', type: 'boolean', default: 'false', description: t(m.menuItemPropDanger) },
+          { name: 'disabled', type: 'boolean', default: 'false', description: t(m.menuItemPropDisabled) },
         ]}
       />
-      <Heading level={3}>ContextMenu</Heading>
+      <Heading level={3}>{t(m.menuContextmenu)}</Heading>
       <PropsTable
         props={[
-          { name: 'content', type: 'ReactNode', description: 'Required. The menu content: MenuItem, MenuSub, MenuSeparator, MenuLabel rows.' },
-          { name: 'children', type: 'ReactNode', description: 'The target the menu is summoned over; the wrapper adds no box of its own.' },
-          { name: 'onOpenChange', type: '(open: boolean) => void', description: 'Called with the next open state.' },
-          { name: 'aria-label', type: 'string', description: 'Accessible name for the menu panel.' },
-          { name: 'menuClassName', type: 'string', description: 'Class for the portalled panel; className styles the target wrapper.' },
+          { name: 'content', type: 'ReactNode', description: t(m.menuCtxPropContent) },
+          { name: 'children', type: 'ReactNode', description: t(m.menuCtxPropChildren) },
+          { name: 'onOpenChange', type: '(open: boolean) => void', description: t(m.menuPropOnOpenChange) },
+          { name: 'aria-label', type: 'string', description: t(m.menuCtxPropAriaLabel) },
+          { name: 'menuClassName', type: 'string', description: t(m.menuCtxPropMenuClassName) },
         ]}
       />
-      <Heading level={3}>MenuSub</Heading>
+      <Heading level={3}>{t(m.menuMenusub)}</Heading>
       <PropsTable
         props={[
-          { name: 'label', type: 'ReactNode', description: 'Required. The row label.' },
-          { name: 'icon', type: 'ReactNode', description: 'Leading glyph.' },
-          { name: 'disabled', type: 'boolean', default: 'false', description: 'Dims the row and keeps the flyout shut.' },
-          { name: 'children', type: 'ReactNode', description: 'The flyout content: MenuItem rows, separators, or deeper MenuSubs.' },
-          { name: 'menuClassName', type: 'string', description: 'Class for the flyout panel; className styles the row.' },
+          { name: 'label', type: 'ReactNode', description: t(m.menuSubPropLabel) },
+          { name: 'icon', type: 'ReactNode', description: t(m.menuItemPropIcon) },
+          { name: 'disabled', type: 'boolean', default: 'false', description: t(m.menuSubPropDisabled) },
+          { name: 'children', type: 'ReactNode', description: t(m.menuSubPropChildren) },
+          { name: 'menuClassName', type: 'string', description: t(m.menuSubPropMenuClassName) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The trigger gains <code>aria-haspopup="menu"</code> and <code>aria-expanded</code>; the panel
-          is a <code>role="menu"</code> of <code>role="menuitem"</code> rows.
-        </li>
-        <li>The first enabled item is focused on open. Arrow Up/Down move between items and wrap; Home and End jump to the ends.</li>
-        <li>Enter or Space activates the focused item; Escape closes and returns focus to the trigger.</li>
-        <li>
-          A MenuSub row carries <code>aria-haspopup="menu"</code> and <code>aria-expanded</code>.
-          ArrowRight or Enter opens its flyout and focuses the first child item; ArrowLeft closes it
-          and returns focus to the row; Escape closes the whole stack.
-        </li>
-        <li>
-          A ContextMenu focuses its first item on open and restores focus to the previously focused
-          element on close. On touch, a ~500ms long-press opens it; moving the pointer more than a
-          few pixels cancels.
-        </li>
+        <li>{prose(t(m.menuA11y1))}</li>
+        <li>{prose(t(m.menuA11y2))}</li>
+        <li>{prose(t(m.menuA11y3))}</li>
+        <li>{prose(t(m.menuA11y4))}</li>
+        <li>{prose(t(m.menuA11y5))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use a Menu for a short list of actions on an object; reach for a Select when the control sets a value.</li>
-        <li>Keep labels to a verb or short phrase, and put the most common action first.</li>
-        <li>Group with a MenuLabel and separate destructive actions with a MenuSeparator; mark them danger.</li>
-        <li>Every action in a ContextMenu should also be reachable somewhere visible; a right-click menu is a shortcut, not the only path.</li>
-        <li>Prefer one level of flyout; go to two only when the grouping genuinely earns it.</li>
+        <li>{prose(t(m.menuUse1))}</li>
+        <li>{prose(t(m.menuUse2))}</li>
+        <li>{prose(t(m.menuUse3))}</li>
+        <li>{prose(t(m.menuUse4))}</li>
+        <li>{prose(t(m.menuUse5))}</li>
       </ul>
     </>
   );

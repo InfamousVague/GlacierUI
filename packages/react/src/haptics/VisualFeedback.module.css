@@ -1,0 +1,114 @@
+/*
+ * The visual-feedback effect layer. A single fixed, non-interactive overlay
+ * sits above everything and paints short-lived effects. Everything animates on
+ * transform and opacity only (GPU compositor friendly, and no mix-blend-mode so
+ * it never flattens or blanks inside a WKWebView / Tauri shell).
+ */
+.overlay {
+    position: fixed;
+    inset: 0;
+    /* Above every app surface and portal; harmless because it never takes pointer events. */
+    z-index: 2147483000;
+    pointer-events: none;
+    overflow: hidden;
+    contain: strict;
+}
+
+/* ---- shockwave: an expanding ring from the press point --------------------- */
+
+.shockwave {
+    position: absolute;
+    width: var(--fb-size);
+    height: var(--fb-size);
+    margin-inline-start: calc(var(--fb-size) / -2);
+    margin-block-start: calc(var(--fb-size) / -2);
+    border-radius: var(--glacier-radius-full);
+    border: 2px solid var(--fb-color);
+    opacity: 0;
+    will-change: transform, opacity;
+    animation: fbShockwave 520ms var(--glacier-ease-out) forwards;
+}
+
+@keyframes fbShockwave {
+    0% {
+        transform: scale(0.12);
+        opacity: var(--fb-opacity);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+/* ---- pulse: a soft radial tint that blooms from the point and fades -------- */
+
+.pulse {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at var(--fb-x) var(--fb-y),
+        var(--fb-color) 0%,
+        transparent 55%
+    );
+    opacity: 0;
+    will-change: opacity;
+    animation: fbPulse 380ms var(--glacier-ease-out) forwards;
+}
+
+@keyframes fbPulse {
+    0% {
+        opacity: var(--fb-opacity);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* ---- glow: a brief inset edge glow around the whole viewport --------------- */
+
+.glow {
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 5rem 0.5rem var(--fb-color);
+    opacity: 0;
+    will-change: opacity;
+    animation: fbGlow 460ms var(--glacier-ease-out) forwards;
+}
+
+@keyframes fbGlow {
+    0% {
+        opacity: var(--fb-opacity);
+    }
+    45% {
+        opacity: calc(var(--fb-opacity) * 0.85);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* The nudge host wrapper: the whole app content, kicked imperatively via the
+   Web Animations API. Only needs a compositor hint here. */
+.nudgeHost {
+    will-change: transform;
+}
+
+/* ---- reduced motion: keep the color cue, drop the movement ----------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    .shockwave {
+        /* No expansion: a static ring that fades, so there is still a cue. */
+        transform: scale(0.85);
+        animation-name: fbFade;
+        animation-duration: 300ms;
+    }
+}
+
+@keyframes fbFade {
+    from {
+        opacity: var(--fb-opacity);
+    }
+    to {
+        opacity: 0;
+    }
+}

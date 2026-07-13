@@ -1,16 +1,18 @@
 import { useRef, useState } from 'react';
-import { Button, Spotlight, Heading, Text, Size, TextTone, Variant } from '@glacier/react';
+import { Button, Spotlight, Heading, Text, Size, TextTone, Variant, useT } from '@glacier/react';
 import { Bell } from '@glacier/icons';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
-
-const STEPS = [
-  { title: 'Your dashboard', description: 'Everything you track lives here. Let’s walk through the essentials.' },
-  { title: 'Create anything', description: 'This button starts a new project, note, or task in one place.' },
-  { title: 'Stay in the loop', description: 'Alerts and mentions collect here so nothing slips by.' },
-];
+import { m } from '../../i18n.ts';
 
 function TourDemo() {
+  const t = useT();
+  const STEPS = [
+    { title: t(m.spotStep1Title), description: t(m.spotStep1Desc) },
+    { title: t(m.spotStep2Title), description: t(m.spotStep2Desc) },
+    { title: t(m.spotStep3Title), description: t(m.spotStep3Desc) },
+  ];
+
   const startRef = useRef<HTMLButtonElement>(null);
   const createRef = useRef<HTMLButtonElement>(null);
   const bellRef = useRef<HTMLButtonElement>(null);
@@ -21,12 +23,12 @@ function TourDemo() {
   return (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
       <Button ref={startRef} onClick={() => setIndex(0)}>
-        Start tour
+        {t(m.spotStartTour)}
       </Button>
       <Button ref={createRef} variant={Variant.Soft}>
-        New
+        {t(m.spotlightNew)}
       </Button>
-      <Button ref={bellRef} variant={Variant.Ghost} aria-label="Notifications">
+      <Button ref={bellRef} variant={Variant.Ghost} aria-label={t(m.spotNotifications)}>
         <Bell size={16} />
       </Button>
 
@@ -48,19 +50,20 @@ function TourDemo() {
 }
 
 function SingleStepDemo() {
+  const t = useT();
   const ref = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
   return (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
       <Button ref={ref} variant={Variant.Soft} onClick={() => setOpen(true)}>
-        Highlight me
+        {t(m.spotHighlightMe)}
       </Button>
       <Spotlight
         open={open}
         targetRef={ref}
         placement="right"
-        title="One highlight"
-        description="A single-step Spotlight makes a great “what’s new” pointer - no step count, no Back, just a Next that dismisses."
+        title={t(m.spotOneHighlight)}
+        description={t(m.spotSingleDesc)}
         onNext={() => setOpen(false)}
         onClose={() => setOpen(false)}
       />
@@ -69,24 +72,23 @@ function SingleStepDemo() {
 }
 
 export function SpotlightPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Spotlight</Heading>
+      <Heading level={1}>{t(m.spotName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A guided-tour step. It dims the whole screen, punches a highlighted cutout around a target
-        element, and anchors a callout to it - carrying a title, body, step count, and Back / Next /
-        Close controls. The cutout is click-through, so the highlighted control stays usable.
+        {t(m.spotLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.spotAnatomyIntro)}</Text>
       <ComponentBlueprint specId="spotlight" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="A multi-step tour"
-        description="Point targetRef at each step’s element and drive step / total from state. Back and Next appear only when you pass their handlers; the cutout eases from one target to the next."
+        title={t(m.spotEx1Title)}
+        description={t(m.spotEx1Desc)}
         code={`const startRef = useRef(null);
 const [index, setIndex] = useState(null);
 
@@ -110,8 +112,8 @@ const [index, setIndex] = useState(null);
       </Example>
 
       <Example
-        title="A single highlight"
-        description="Omit step and total for a one-off pointer. With only onNext, the callout shows a single Next that dismisses; placement moves the callout to any side."
+        title={t(m.spotEx2Title)}
+        description={t(m.spotEx2Desc)}
         code={`const ref = useRef(null);
 const [open, setOpen] = useState(false);
 
@@ -129,39 +131,36 @@ const [open, setOpen] = useState(false);
         <SingleStepDemo />
       </Example>
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'open', type: 'boolean', description: 'Required. Whether the tour step is shown.' },
-          { name: 'targetRef', type: 'RefObject<HTMLElement>', description: 'Required. Ref to the element to highlight; the cutout and callout are positioned against it.' },
-          { name: 'title', type: 'ReactNode', description: 'Step heading.' },
-          { name: 'description', type: 'ReactNode', description: 'Step body copy.' },
-          { name: 'placement', type: 'Placement', default: "'bottom'", description: 'Callout position relative to the target; flips when it would overflow.' },
-          { name: 'cutoutPadding', type: 'number', default: '8', description: 'Padding around the target inside the cutout, in pixels.' },
-          { name: 'step', type: 'number', description: '1-based index of this step; with total, renders the count.' },
-          { name: 'total', type: 'number', description: 'Total number of steps in the tour.' },
-          { name: 'onNext', type: '() => void', description: 'Advances to the next step; the Next button is hidden when omitted.' },
-          { name: 'onBack', type: '() => void', description: 'Returns to the previous step; the Back button is hidden when omitted.' },
-          { name: 'onClose', type: '() => void', description: 'Required. Dismisses the tour, via the close button, Escape, or a backdrop press.' },
+          { name: 'open', type: 'boolean', description: t(m.spotPropOpen) },
+          { name: 'targetRef', type: 'RefObject<HTMLElement>', description: t(m.spotPropTargetRef) },
+          { name: 'title', type: 'ReactNode', description: t(m.spotPropTitle) },
+          { name: 'description', type: 'ReactNode', description: t(m.spotPropDescription) },
+          { name: 'placement', type: 'Placement', default: "'bottom'", description: t(m.spotPropPlacement) },
+          { name: 'cutoutPadding', type: 'number', default: '8', description: t(m.spotPropCutoutPadding) },
+          { name: 'step', type: 'number', description: t(m.spotPropStep) },
+          { name: 'total', type: 'number', description: t(m.spotPropTotal) },
+          { name: 'onNext', type: '() => void', description: t(m.spotPropOnNext) },
+          { name: 'onBack', type: '() => void', description: t(m.spotPropOnBack) },
+          { name: 'onClose', type: '() => void', description: t(m.spotPropOnClose) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The callout is a <code>role="dialog"</code> with <code>aria-modal</code>. It labels itself
-          from the title and describes itself from the body, and focus moves into it on open.
-        </li>
-        <li>Tab and Shift+Tab cycle within the callout’s controls; Escape dismisses and restores focus to the opener.</li>
-        <li>The step count is announced via an <code>aria-label</code> such as “Step 2 of 4”.</li>
-        <li>The highlighted target stays interactive - the cutout ring is click-through while the surrounding backdrop dismisses on press.</li>
+        <li>{prose(t(m.spotA11y1))}</li>
+        <li>{prose(t(m.spotA11y2))}</li>
+        <li>{prose(t(m.spotA11y3))}</li>
+        <li>{prose(t(m.spotA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use a Spotlight to onboard a user through a few key controls; keep a tour to a handful of steps.</li>
-        <li>Point <code>targetRef</code> at the element the step is about so the cutout frames exactly it; pass <code>cutoutPadding</code> to loosen the frame.</li>
-        <li>Drive <code>step</code> / <code>total</code> and the <code>onBack</code> / <code>onNext</code> handlers from your own step state; omit them for a single what’s-new pointer.</li>
+        <li>{prose(t(m.spotUse1))}</li>
+        <li>{prose(t(m.spotUse2))}</li>
+        <li>{prose(t(m.spotUse3))}</li>
       </ul>
     </>
   );

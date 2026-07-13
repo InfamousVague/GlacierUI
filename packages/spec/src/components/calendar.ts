@@ -62,6 +62,7 @@ export const calendarSpec: ComponentSpec = {
     { name: 'today', description: 'Today renders in the accent text tone at semibold weight.', tokens: { text: token('accent-text') } },
     { name: 'disabled', description: 'Disabled and out-of-bounds days dim to the disabled text tone and cannot be picked.' },
   ],
+  paint: { text: '$text' },
   focusRing: { ring: token('accent-soft'), offset: '0' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

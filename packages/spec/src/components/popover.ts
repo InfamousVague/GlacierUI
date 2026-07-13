@@ -96,6 +96,7 @@ export const popoverSpec: ComponentSpec = {
   // managed on open. The ring belongs to the trigger and to any focusable
   // content inside, which draw the kit-wide 2px focus-ring outline at a 2px
   // offset.
+  paint: { background: '$glass-regular', text: '$text', border: '$glass-border' },
   focusRing: { ring: token('focus-ring'), offset: '2px' },
   tokens: [
     'space-3',

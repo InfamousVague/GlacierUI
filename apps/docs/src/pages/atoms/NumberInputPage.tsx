@@ -1,156 +1,144 @@
-import { Field, NumberInput, Row, Stack, Text, Heading, Size, TextTone } from '@glacier/react';
+import { Field, NumberInput, Row, Stack, Text, Heading, Size, TextTone, useT } from '@glacier/react';
 import { useState } from 'react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 export function NumberInputPage() {
+  const t = useT();
   const [quantity, setQuantity] = useState(1);
 
   return (
     <>
-      <Heading level={1}>NumberInput</Heading>
+      <Heading level={1}>{t(m.niName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A numeric stepper: a minus button, a centered native number input with tabular figures, and a
-        plus button, wrapped in one bordered group at control height. Results clamp to the bounds and
-        the step buttons disable at the ends.
+        {prose(t(m.niLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.niAnatomyIntro)}</Text>
       <ComponentBlueprint specId="number-input" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="An uncontrolled stepper. Click the buttons or type a value directly."
+        title={t(m.exBasic)}
+        description={t(m.niEx1Desc)}
+        component="NumberInput"
+        render={(K) => <K.NumberInput aria-label={t(m.numberinputQuantity)} defaultValue={1} />}
         code={`import { NumberInput } from '@glacier/react';
 
 <NumberInput aria-label="Quantity" defaultValue={1} />`}
-      >
-        <NumberInput aria-label="Quantity" defaultValue={1} />
-      </Example>
+      />
 
       <Example
-        title="Controlled with a readout"
-        description="Drive it with state through value and onValueChange. Use mono Text for the readout so digits do not shift."
+        title={t(m.niEx2Title)}
+        description={t(m.niEx2Desc)}
         code={`const [quantity, setQuantity] = useState(1);
 
 <NumberInput aria-label="Quantity" value={quantity} onValueChange={setQuantity} />
 <Text as="span" size={Size.Small} tone={TextTone.Muted} mono>{quantity} in cart</Text>`}
       >
-        <NumberInput aria-label="Quantity" value={quantity} onValueChange={setQuantity} />
+        <NumberInput aria-label={t(m.numberinputQuantity)} value={quantity} onValueChange={setQuantity} />
         <Text as="span" size={Size.Small} tone={TextTone.Muted} mono>
-          {quantity} in cart
+          {quantity} {t(m.numberinputInCart)}
         </Text>
       </Example>
 
       <Example
-        title="Bounds and step"
-        description="min, max, and step map straight to the native attributes. The buttons clamp to the range and disable at the ends."
+        title={t(m.niEx3Title)}
+        description={t(m.niEx3Desc)}
+        component="NumberInput"
+        render={(K) => <K.NumberInput aria-label={t(m.numberinputServings)} defaultValue={2} min={1} max={8} step={1} />}
         code={`<NumberInput aria-label="Servings" defaultValue={2} min={1} max={8} step={1} />`}
-      >
-        <NumberInput aria-label="Servings" defaultValue={2} min={1} max={8} step={1} />
-      </Example>
+      />
 
       <Example
-        title="Press and hold"
-        description="Tap a step button for one increment, or press and hold to auto-repeat: it pauses, then ramps from slow to rapid, and stops at a bound. Handy for a wide range. Try holding a button here."
+        title={t(m.niEx4Title)}
+        description={t(m.niEx4Desc)}
+        component="NumberInput"
+        render={(K) => <K.NumberInput aria-label={t(m.numberinputAmount)} defaultValue={0} min={0} max={500} />}
         code={`<NumberInput aria-label="Amount" defaultValue={0} min={0} max={500} />`}
-      >
-        <NumberInput aria-label="Amount" defaultValue={0} min={0} max={500} />
-      </Example>
+      />
 
       <Example
-        title="Sizes"
-        description="sm, md, and lg match the shared control heights, so a stepper lines up with inputs and buttons on the same row."
+        title={t(m.secSizes)}
+        description={t(m.niEx5Desc)}
+        component="NumberInput"
+        render={(K) => (
+          <Row gap={3} wrap>
+            <K.NumberInput aria-label={t(m.numberinputSmall)} size={Size.Small} defaultValue={1} />
+            <K.NumberInput aria-label={t(m.numberinputMedium)} size={Size.Medium} defaultValue={1} />
+            <K.NumberInput aria-label={t(m.numberinputLarge)} size={Size.Large} defaultValue={1} />
+          </Row>
+        )}
         code={`<NumberInput aria-label="Small" size={Size.Small} defaultValue={1} />
 <NumberInput aria-label="Medium" size={Size.Medium} defaultValue={1} />
 <NumberInput aria-label="Large" size={Size.Large} defaultValue={1} />`}
-      >
-        <Row gap={3} wrap>
-          <NumberInput aria-label="Small" size={Size.Small} defaultValue={1} />
-          <NumberInput aria-label="Medium" size={Size.Medium} defaultValue={1} />
-          <NumberInput aria-label="Large" size={Size.Large} defaultValue={1} />
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="In a Field"
-        description="Inside a Field the input picks up the label and hint wiring."
+        title={t(m.niEx6Title)}
+        description={t(m.niEx6Desc)}
         code={`<Field label="Guests" hint="Up to eight per reservation.">
   <NumberInput defaultValue={2} min={1} max={8} />
 </Field>`}
       >
-        <Field label="Guests" hint="Up to eight per reservation.">
+        <Field label={t(m.numberinputGuests)} hint={t(m.niHintGuests)}>
           <NumberInput defaultValue={2} min={1} max={8} />
         </Field>
       </Example>
 
       <Example
-        title="Skeleton"
-        description="Set skeleton while the backing value loads. The placeholder is the stepper's exact geometry, so the control does not shift when the real value arrives."
+        title={t(m.exSkeleton)}
+        description={t(m.niEx7Desc)}
+        component="NumberInput"
+        render={(K) => (
+          <Stack gap={4}>
+            <K.NumberInput skeleton />
+            <K.NumberInput aria-label={t(m.numberinputQuantity)} defaultValue={1} />
+          </Stack>
+        )}
         code={`<NumberInput skeleton />
 <NumberInput aria-label="Quantity" defaultValue={1} />`}
-      >
-        <Stack gap={4}>
-          <NumberInput skeleton />
-          <NumberInput aria-label="Quantity" defaultValue={1} />
-        </Stack>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'value', type: 'number', description: 'Controlled value.' },
-          { name: 'defaultValue', type: 'number', default: '0', description: 'Initial value for uncontrolled usage.' },
-          { name: 'min', type: 'number', description: 'Lower bound. Clamps results and disables the minus button.' },
-          { name: 'max', type: 'number', description: 'Upper bound. Clamps results and disables the plus button.' },
-          { name: 'step', type: 'number', default: '1', description: 'Increment for the step buttons.' },
-          { name: 'onValueChange', type: '(value: number) => void', description: 'Called with the clamped number on every change.' },
-          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: 'Control height.' },
-          { name: 'disabled', type: 'boolean', default: 'false', description: 'Disables the input and both buttons.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: "Renders a placeholder with the component's exact geometry." },
-          { name: 'aria-label', type: 'string', description: 'Accessible name. Not needed inside a Field with a label.' },
+          { name: 'value', type: 'number', description: t(m.niPropValue) },
+          { name: 'defaultValue', type: 'number', default: '0', description: t(m.niPropDefaultValue) },
+          { name: 'min', type: 'number', description: t(m.niPropMin) },
+          { name: 'max', type: 'number', description: t(m.niPropMax) },
+          { name: 'step', type: 'number', default: '1', description: t(m.niPropStep) },
+          { name: 'onValueChange', type: '(value: number) => void', description: t(m.niPropOnValueChange) },
+          { name: 'size', type: "'sm' | 'md' | 'lg'", default: "'md'", description: t(m.niPropSize) },
+          { name: 'disabled', type: 'boolean', default: 'false', description: t(m.niPropDisabled) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.niPropSkeleton) },
+          { name: 'aria-label', type: 'string', description: t(m.niPropAriaLabel) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The centered control is a native <code>input type="number"</code>, so it exposes the
-          spinbutton role and value to assistive tech.
-        </li>
-        <li>The step buttons are plain buttons labeled Decrease and Increase, and disable at the matching bound.</li>
-        <li>Inside a Field the input inherits the label and hint ids.</li>
+        <li>{prose(t(m.niA11y1))}</li>
+        <li>{prose(t(m.niA11y2))}</li>
+        <li>{prose(t(m.niA11y3))}</li>
       </ul>
 
-      <Heading level={2}>Haptics</Heading>
+      <Heading level={2}>{t(m.niSecHaptics)}</Heading>
       <ul>
-        <li>
-          Under an enabled <code>HapticsProvider</code>, every committed step fires a selection
-          tick: a button tap, each tick of a press-and-hold auto-repeat, and ArrowUp or ArrowDown in
-          the field.
-        </li>
-        <li>
-          A step that clamps at min or max bumps medium once, and re-arms after the value leaves the
-          bound.
-        </li>
-        <li>
-          Typed digits are silent; committing a typed value on blur fires one light tap.
-        </li>
-        <li>
-          Pass <code>data-haptic="none"</code> to silence the whole control. The step buttons opt out
-          of the provider's delegated press haptic themselves, so a tap buzzes once, from the value
-          change.
-        </li>
+        <li>{prose(t(m.niHap1))}</li>
+        <li>{prose(t(m.niHap2))}</li>
+        <li>{prose(t(m.niHap3))}</li>
+        <li>{prose(t(m.niHap4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Reach for it when exact numeric entry matters; use a Slider when an approximate value read from position is enough.</li>
-        <li>Set min and max whenever the value is bounded, so both entry paths stay in range.</li>
-        <li>Keep step meaningful to the unit: whole guests, but tenths of a kilogram.</li>
+        <li>{prose(t(m.niUse1))}</li>
+        <li>{prose(t(m.niUse2))}</li>
+        <li>{prose(t(m.niUse3))}</li>
       </ul>
     </>
   );

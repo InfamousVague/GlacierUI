@@ -1,51 +1,44 @@
-import { Button, Divider, Row, Stack, Text, Heading, Size, TextTone, Variant } from '@glacier/react';
+import { Button, Divider, Row, Stack, Text, Heading, Size, TextTone, Variant, useT } from '@glacier/react';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
+import { m } from '../../i18n.ts';
 
 export function DividerPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Divider</Heading>
+      <Heading level={1}>{t(m.divName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A hairline break between groups of content, horizontally, vertically, or with a centered
-        label. Reach for it only when spacing alone does not separate two groups clearly enough.
+        {t(m.divLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.anatomyIntroBox)}</Text>
       <ComponentBlueprint specId="divider" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Horizontal"
-        description={
-          <>
-            The default orientation renders a native <code>hr</code> as a one pixel hairline. Place
-            it between blocks that need a firmer break than spacing provides.
-          </>
-        }
+        title={t(m.divEx1Title)}
+        description={prose(t(m.divEx1Desc))}
+        component="Divider"
+        render={(K) => (
+          <Stack gap={4} style={{ maxWidth: 420, width: '100%' }}>
+            <Text>{t(m.divDemoTokens)}</Text>
+            <K.Divider />
+            <Text tone={TextTone.Muted}>{t(m.divDemoOverride)}</Text>
+          </Stack>
+        )}
         code={`import { Divider } from '@glacier/react';
 
 <Text>Tokens are generated from the OKLCH ramps at build time.</Text>
 <Divider />
 <Text tone={TextTone.Muted}>Override any token per theme with a CSS custom property.</Text>`}
-      >
-        <Stack gap={4} style={{ maxWidth: 420, width: '100%' }}>
-          <Text>Tokens are generated from the OKLCH ramps at build time.</Text>
-          <Divider />
-          <Text tone={TextTone.Muted}>Override any token per theme with a CSS custom property.</Text>
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Labeled"
-        description={
-          <>
-            <code>label</code> renders a centered caption between two hairlines, useful for alternate
-            paths in forms such as an "or" between sign up and sign in.
-          </>
-        }
+        title={t(m.divEx2Title)}
+        description={prose(t(m.divEx2Desc))}
         code={`<Stack gap={4} style={{ maxWidth: 280 }}>
   <Button fullWidth>Create account</Button>
   <Divider label="or" />
@@ -53,22 +46,33 @@ export function DividerPage() {
 </Stack>`}
       >
         <Stack gap={4} style={{ maxWidth: 280, width: '100%' }}>
-          <Button fullWidth>Create account</Button>
-          <Divider label="or" />
+          <Button fullWidth>{t(m.divDemoCreate)}</Button>
+          <Divider label={t(m.dividerOr)} />
           <Button variant={Variant.Soft} fullWidth>
-            Sign in
+            {t(m.divDemoSignIn)}
           </Button>
         </Stack>
       </Example>
 
       <Example
-        title="Vertical"
-        description={
-          <>
-            <code>orientation="vertical"</code> separates inline items in a flex row and stretches to
-            the row height.
-          </>
-        }
+        title={t(m.divEx3Title)}
+        description={prose(t(m.divEx3Desc))}
+        component="Divider"
+        render={(K) => (
+          <Row gap={4} wrap>
+            <Text as="span" size={Size.Small}>
+              {t(m.dividerDocs)}
+            </Text>
+            <K.Divider orientation="vertical" />
+            <Text as="span" size={Size.Small}>
+              {t(m.dividerChangelog)}
+            </Text>
+            <K.Divider orientation="vertical" />
+            <Text as="span" size={Size.Small}>
+              {t(m.dividerSupport)}
+            </Text>
+          </Row>
+        )}
         code={`<Row gap={4}>
   <Text as="span" size={Size.Small}>Docs</Text>
   <Divider orientation="vertical" />
@@ -76,82 +80,54 @@ export function DividerPage() {
   <Divider orientation="vertical" />
   <Text as="span" size={Size.Small}>Support</Text>
 </Row>`}
-      >
-        <Row gap={4} wrap>
-          <Text as="span" size={Size.Small}>
-            Docs
-          </Text>
-          <Divider orientation="vertical" />
-          <Text as="span" size={Size.Small}>
-            Changelog
-          </Text>
-          <Divider orientation="vertical" />
-          <Text as="span" size={Size.Small}>
-            Support
-          </Text>
-        </Row>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description="A skeleton Divider keeps the same hairline geometry, so surrounding blocks do not shift while content loads."
+        title={t(m.exSkeleton)}
+        description={t(m.divEx4Desc)}
         code={`<Divider skeleton />`}
       >
         <Stack gap={4} style={{ maxWidth: 420, width: '100%' }}>
-          <Text>Loading section</Text>
+          <Text>{t(m.divDemoLoading)}</Text>
           <Divider skeleton />
-          <Text tone={TextTone.Muted}>More to come</Text>
+          <Text tone={TextTone.Muted}>{t(m.divDemoMore)}</Text>
         </Stack>
       </Example>
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
           {
             name: 'orientation',
             type: "'horizontal' | 'vertical'",
             default: "'horizontal'",
-            description:
-              'Direction of the line. Vertical dividers stretch to the height of their flex row.',
+            description: t(m.divPropOrientation),
           },
           {
             name: 'label',
             type: 'ReactNode',
-            description:
-              'Centered caption between two hairlines. When set, orientation is ignored and the divider is always horizontal.',
+            description: t(m.divPropLabel),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: "Renders a placeholder with the component's exact geometry.",
+            description: t(m.divPropSkeleton),
           },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          An unlabeled horizontal <code>Divider</code> renders a native <code>hr</code>, which
-          exposes the separator role by default.
-        </li>
-        <li>
-          Labeled and vertical dividers render a <code>div</code> with <code>role="separator"</code>.
-          The vertical form also sets <code>aria-orientation="vertical"</code>.
-        </li>
+        <li>{prose(t(m.divA11y1))}</li>
+        <li>{prose(t(m.divA11y2))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>
-          Add a divider only when spacing alone fails to separate two groups. If a gap already reads
-          as a break, the extra line is noise.
-        </li>
-        <li>
-          Use the labeled form for alternate paths, for example <code>label="or"</code> between a
-          sign up action and a sign in action.
-        </li>
-        <li>Reach for vertical dividers to separate inline items in a toolbar or meta row.</li>
+        <li>{prose(t(m.divUse1))}</li>
+        <li>{prose(t(m.divUse2))}</li>
+        <li>{prose(t(m.divUse3))}</li>
       </ul>
     </>
   );

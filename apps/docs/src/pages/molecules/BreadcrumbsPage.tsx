@@ -1,22 +1,28 @@
-import { Breadcrumbs, Heading, Text, Size, TextTone } from '@glacier/react';
+import { Heading, Text, Size, TextTone, useT } from '@glacier/react';
 import { Example, PropsTable } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 export function BreadcrumbsPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Breadcrumbs</Heading>
+      <Heading level={1}>{t(m.bcName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A compact path trail for showing where the current view sits within a hierarchy.
+        {t(m.bcLede)}
       </Text>
-      <Heading level={2}>Anatomy</Heading>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
       <ComponentBlueprint specId="breadcrumbs" />
-      <Heading level={2}>Examples</Heading>
-      <Example title="Basic" description="Show the current path with a simple separator." code={`<Breadcrumbs items={[{ label: 'Home', href: '#' }, { label: 'Docs', href: '#' }, { label: 'Components', current: true }]} />`}>
-        <Breadcrumbs items={[{ label: 'Home', href: '#' }, { label: 'Docs', href: '#' }, { label: 'Components', current: true }]} />
-      </Example>
-      <Heading level={2}>Props</Heading>
-      <PropsTable props={[{ name: 'items', type: 'BreadcrumbItem[]', description: 'Breadcrumb entries with label, href, and current state.' }, { name: 'separator', type: 'ReactNode', default: '/', description: 'Separator rendered between items.' }]} />
+      <Heading level={2}>{t(m.secExamples)}</Heading>
+      <Example title={t(m.exBasic)} description={t(m.bcEx1Desc)}
+        component="Breadcrumbs"
+        render={(K) => (
+          <K.Breadcrumbs items={[{ label: t(m.breadcrumbsHome), href: '#' }, { label: t(m.breadcrumbsDocs), href: '#' }, { label: t(m.breadcrumbsComponents), current: true }]} />
+        )}
+        code={`<Breadcrumbs items={[{ label: 'Home', href: '#' }, { label: 'Docs', href: '#' }, { label: 'Components', current: true }]} />`}
+      />
+      <Heading level={2}>{t(m.secProps)}</Heading>
+      <PropsTable props={[{ name: 'items', type: 'BreadcrumbItem[]', description: t(m.bcPropItems) }, { name: 'separator', type: 'ReactNode', default: '/', description: t(m.bcPropSeparator) }]} />
     </>
   );
 }

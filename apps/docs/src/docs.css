@@ -66,6 +66,16 @@ body::before {
   padding: 0;
 }
 
+/* The header TitleBar fills the AppShell header slot and defers its fixed
+   window-chrome height and inline padding to that wrapper, which already sets
+   them (and the glass surface, border, and banner role). */
+.docsTitleBar {
+  flex: 1;
+  min-width: 0;
+  block-size: auto;
+  padding-inline: 0;
+}
+
 .brandLogo {
   position: relative;
   width: 100%;
@@ -240,7 +250,7 @@ code {
 
 .swatchGrid {
   display: grid;
-  grid-template-columns: 6rem repeat(12, 1fr);
+  grid-template-columns: 6rem repeat(12, minmax(0, 1fr));
   gap: var(--glacier-space-1);
   align-items: center;
   font-size: var(--glacier-font-size-xs);
@@ -323,6 +333,7 @@ code {
   font-size: 0.6875rem;
   line-height: 1.2;
   color: var(--glacier-text-subtle);
+  white-space: nowrap;
 }
 
 .rampName {
@@ -429,7 +440,7 @@ code {
 /* the top-bar language switcher: keep the Select compact instead of stretching */
 .langSelect {
   flex: none;
-  width: 8.5rem;
+  width: 10.625rem;
 }
 
 /* the switcher's glass trigger sits inside the already-blurred glass toolbar, so
@@ -583,6 +594,22 @@ code {
 @media (max-width: 720px) {
   .bpGalleryGrid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The header row is tight on phones: the standalone language switcher moves
+     into Preferences, the search field fills the row, and Preferences collapses
+     to its gear icon so the three controls never overflow the viewport. */
+  .langSelect {
+    display: none;
+  }
+
+  .docSearch {
+    max-width: none;
+    flex-grow: 999;
+  }
+
+  .prefsLabel {
+    display: none;
   }
 }
 

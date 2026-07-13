@@ -61,6 +61,8 @@ export const appShellSpec: ComponentSpec = {
       tokens: { grip: token('accent-solid'), 'grip-rest': token('border-strong') },
     },
   ],
+  // the sidebar and main children paint
+  paint: {},
   transition: { duration: token('duration-normal'), ease: token('ease-out') },
   tokens: [
     'space-2', 'space-3', 'space-4', 'space-6', 'space-8',

@@ -1,6 +1,7 @@
-import { Heatmap, Heading, Text, Size, TextTone } from '@glacier/react';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Heading, Text, Size, TextTone, useT } from '@glacier/react';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
+import { m } from '../../i18n.ts';
 
 // A pseudo-random but stable year of daily counts, laid out as weeks (7 rows).
 const weeks = 26;
@@ -21,25 +22,27 @@ const grid = [
 ];
 
 export function HeatmapPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Heatmap</Heading>
+      <Heading level={1}>{t(m.hmName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A GitHub-contribution-style intensity grid. It takes values - a 2D array or a flat list of{' '}
-        <code>{'{ date, value }'}</code> points - and buckets each onto the accent ramp, from a bare
-        track at level 0 up through saturated tiles. Every cell is titled with its value, and an
-        optional legend spells out the less→more scale.
+        {prose(t(m.hmLede))}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>A schematic of the anatomy with the exact spec measurements labelled.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.hmAnatomyIntro)}</Text>
       <ComponentBlueprint specId="heatmap" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Contribution grid"
-        description="A flat { date, value } list chunks into weekly columns of seven cells. Hover a cell to read its date and count."
+        title={t(m.hmEx1Title)}
+        description={t(m.hmEx1Desc)}
+        component="Heatmap"
+        render={(K) => (
+          <K.Heatmap aria-label={t(m.hmAriaContributions)} data={days} legend />
+        )}
         code={`import { Heatmap } from '@glacier/react';
 
 const days = [
@@ -50,13 +53,15 @@ const days = [
 ];
 
 <Heatmap aria-label="Contributions in the last 26 weeks" data={days} legend />`}
-      >
-        <Heatmap aria-label="Contributions in the last 26 weeks" data={days} legend />
-      </Example>
+      />
 
       <Example
-        title="2D array"
-        description="A number[][] grid reads across (a row per series) and down (a column per bucket); the top value in the data sets full intensity."
+        title={t(m.hmEx2Title)}
+        description={t(m.hmEx2Desc)}
+        component="Heatmap"
+        render={(K) => (
+          <K.Heatmap aria-label={t(m.hmAriaActivityMetric)} data={grid} legend />
+        )}
         code={`const grid = [
   [0, 2, 5, 9, 6, 3],
   [1, 1, 4, 8, 12, 7],
@@ -65,70 +70,57 @@ const days = [
 ];
 
 <Heatmap aria-label="Activity by metric and week" data={grid} legend />`}
-      >
-        <Heatmap aria-label="Activity by metric and week" data={grid} legend />
-      </Example>
+      />
 
       <Example
-        title="Fewer levels"
-        description="levels controls how many buckets the scale is quantised into - three here for a coarse cold / warm / hot read."
+        title={t(m.hmEx3Title)}
+        description={t(m.hmEx3Desc)}
+        component="Heatmap"
+        render={(K) => (
+          <K.Heatmap aria-label={t(m.hmAriaLoad)} data={grid} levels={3} legend />
+        )}
         code={`<Heatmap aria-label="Load" data={grid} levels={3} legend />`}
-      >
-        <Heatmap aria-label="Load" data={grid} levels={3} legend />
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description={
-          <>
-            <code>skeleton</code> renders one shimmer square per cell at the exact cell size and
-            gap, so the grid holds its place while the data loads. Size the placeholder to the
-            grid it will become with <code>skeletonColumns</code> and <code>rows</code>; with data
-            already present the bones mirror it instead.
-          </>
-        }
+        title={t(m.exSkeleton)}
+        description={prose(t(m.hmEx4Desc))}
+        component="Heatmap"
+        render={(K) => (
+          <div style={{ display: 'grid', gap: 'var(--glacier-space-4)' }}>
+            <K.Heatmap skeleton data={[]} aria-label={t(m.hmAriaActivity)} />
+            <K.Heatmap skeleton skeletonColumns={26} rows={5} data={[]} aria-label={t(m.hmAriaHalfYear)} />
+          </div>
+        )}
         code={`<Heatmap skeleton data={[]} aria-label="Activity" />
 <Heatmap skeleton skeletonColumns={26} rows={5} data={[]} aria-label="Half a year" />`}
-      >
-        <div style={{ display: 'grid', gap: 'var(--glacier-space-4)' }}>
-          <Heatmap skeleton data={[]} aria-label="Activity" />
-          <Heatmap skeleton skeletonColumns={26} rows={5} data={[]} aria-label="Half a year" />
-        </div>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'data', type: 'number[][] | { date: string; value: number }[]', description: 'Required. Values to plot: a 2D grid or a flat dated list.' },
-          { name: 'levels', type: 'number', default: '5', description: 'Number of intensity steps, including the empty step 0.' },
-          { name: 'legend', type: 'boolean', default: 'false', description: 'Show a less→more legend under the grid.' },
-          { name: 'rows', type: 'number', default: '7', description: 'Cells per column when data is a flat list.' },
-          { name: 'skeleton', type: 'boolean', default: 'false', description: 'Renders one shimmer square per cell with the exact grid geometry.' },
-          { name: 'skeletonColumns', type: 'number', default: '12', description: 'Columns the skeleton grid renders while there is no data; rows follow rows.' },
-          { name: 'aria-label', type: 'string', description: 'Accessible name for the grid.' },
+          { name: 'data', type: 'number[][] | { date: string; value: number }[]', description: t(m.hmPropData) },
+          { name: 'levels', type: 'number', default: '5', description: t(m.hmPropLevels) },
+          { name: 'legend', type: 'boolean', default: 'false', description: t(m.hmPropLegend) },
+          { name: 'rows', type: 'number', default: '7', description: t(m.hmPropRows) },
+          { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.hmPropSkeleton) },
+          { name: 'skeletonColumns', type: 'number', default: '12', description: t(m.hmPropSkeletonColumns) },
+          { name: 'aria-label', type: 'string', description: t(m.hmPropAriaLabel) },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          The grid is a single <code>role="img"</code> named by <code>aria-label</code>; pass one so the
-          picture has a name. When a legend is shown it describes the grid via <code>aria-describedby</code>.
-        </li>
-        <li>
-          Every cell carries a native <code>title</code> and a visually-hidden text node, so its date and
-          value are legible to both pointer and screen-reader users.
-        </li>
-        <li>
-          Intensity is never conveyed by colour alone - the underlying value is always available as text.
-        </li>
+        <li>{prose(t(m.hmA11y1))}</li>
+        <li>{prose(t(m.hmA11y2))}</li>
+        <li>{t(m.hmA11y3)}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Reach for a Heatmap to show the shape of activity over time or across two axes, not exact figures.</li>
-        <li>Use a flat dated list for a calendar-style grid; use a 2D array when rows and columns are your own axes.</li>
-        <li>Keep the level count low (3–5) so the buckets stay distinguishable; the legend then reads at a glance.</li>
+        <li>{t(m.hmUse1)}</li>
+        <li>{t(m.hmUse2)}</li>
+        <li>{t(m.hmUse3)}</li>
       </ul>
     </>
   );

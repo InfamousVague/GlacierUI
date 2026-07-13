@@ -1,6 +1,6 @@
 import { accentOptions } from '@glacier/tokens';
 import {
-  AppShell, Button, Container, HapticsProvider, LocaleProvider, Row, Sidebar, SidebarItem, SidebarSection, Spacer, locales, direction, useT, type Locale, Size, Variant } from '@glacier/react';
+  AppShell, Button, Container, HapticsProvider, VisualFeedbackProvider, LocaleProvider, Sidebar, SidebarItem, SidebarSection, TitleBar, locales, direction, useT, type Locale, Size, Variant } from '@glacier/react';
 import { Settings } from '@glacier/icons';
 import glacierLogoFull from '../../../packages/assets/glacier_logo_blue.png';
 import glacierLogoText from '../../../packages/assets/logo_text.png';
@@ -21,6 +21,8 @@ import { LayoutPage } from './pages/foundations/LayoutPage.tsx';
 import { ShapePage } from './pages/foundations/ShapePage.tsx';
 import { MaterialsPage } from './pages/foundations/MaterialsPage.tsx';
 import { HapticsPage } from './pages/foundations/HapticsPage.tsx';
+import { NativePage } from './pages/foundations/NativePage.tsx';
+import { VisualFeedbackPage } from './pages/foundations/VisualFeedbackPage.tsx';
 import { MotionPage } from './pages/foundations/MotionPage.tsx';
 import { SpecPage } from './pages/foundations/SpecPage.tsx';
 import { IconsPage } from './pages/foundations/IconsPage.tsx';
@@ -116,99 +118,101 @@ import { TimelineScrubberPage } from './pages/organisms/TimelineScrubberPage.tsx
 import { TimeSeriesChartPage } from './pages/organisms/TimeSeriesChartPage.tsx';
 
 const PAGES = {
-  overview: { title: 'Overview', group: 'Start', el: <OverviewPage /> },
-  colors: { title: 'Colors & Tints', group: 'Foundations', el: <ColorsPage /> },
-  typography: { title: 'Typography', group: 'Foundations', el: <TypographyPage /> },
-  spacing: { title: 'Spacing', group: 'Foundations', el: <SpacingPage /> },
-  layout: { title: 'Layout', group: 'Foundations', el: <LayoutPage /> },
-  shape: { title: 'Shape & Elevation', group: 'Foundations', el: <ShapePage /> },
-  materials: { title: 'Glass', group: 'Foundations', el: <MaterialsPage /> },
-  haptics: { title: 'Haptics', group: 'Foundations', el: <HapticsPage /> },
-  motion: { title: 'Motion', group: 'Foundations', el: <MotionPage /> },
-  spec: { title: 'Specification', group: 'Foundations', el: <SpecPage /> },
-  icons: { title: 'Icons', group: 'Foundations', el: <IconsPage /> },
-  testing: { title: 'Testing', group: 'Foundations', el: <TestingPage /> },
-  testreport: { title: 'Test Report', group: 'Foundations', el: <TestReportPage /> },
-  paritymatrix: { title: 'Parity Matrix', group: 'Foundations', el: <ParityMatrixPage /> },
-  button: { title: 'Button', group: 'Atoms', el: <ButtonPage /> },
-  icon: { title: 'Icon', group: 'Atoms', el: <IconPage /> },
-  text: { title: 'Text & Headings', group: 'Atoms', el: <TextPage /> },
-  kbd: { title: 'Keyboard Key', group: 'Atoms', el: <KbdPage /> },
-  pill: { title: 'Pill', group: 'Atoms', el: <PillPage /> },
-  counterbadge: { title: 'Counter Badge', group: 'Atoms', el: <CounterBadgePage /> },
-  statusdot: { title: 'Status Dot', group: 'Atoms', el: <StatusDotPage /> },
-  avatar: { title: 'Avatar', group: 'Atoms', el: <AvatarPage /> },
-  divider: { title: 'Divider', group: 'Atoms', el: <DividerPage /> },
-  callout: { title: 'Callout', group: 'Atoms', el: <CalloutPage /> },
-  banner: { title: 'Banner', group: 'Atoms', el: <BannerPage /> },
-  codeblock: { title: 'Code Block', group: 'Atoms', el: <CodeBlockPage /> },
-  selection: { title: 'Selection', group: 'Atoms', el: <SelectionPage /> },
-  radiocard: { title: 'Radio Card', group: 'Atoms', el: <RadioCardPage /> },
-  textarea: { title: 'Textarea', group: 'Atoms', el: <TextareaPage /> },
-  searchfield: { title: 'Search Field', group: 'Atoms', el: <SearchFieldPage /> },
-  numberinput: { title: 'Number Input', group: 'Atoms', el: <NumberInputPage /> },
-  otpfield: { title: 'OTP Field', group: 'Atoms', el: <OtpFieldPage /> },
-  slider: { title: 'Slider', group: 'Atoms', el: <SliderPage /> },
-  toggle: { title: 'Toggle', group: 'Atoms', el: <TogglePage /> },
-  meter: { title: 'Meter', group: 'Atoms', el: <MeterPage /> },
-  progress: { title: 'Progress Bar', group: 'Atoms', el: <ProgressBarPage /> },
-  spinner: { title: 'Spinner', group: 'Atoms', el: <SpinnerPage /> },
-  progressring: { title: 'Progress Ring', group: 'Atoms', el: <ProgressRingPage /> },
-  steps: { title: 'Steps', group: 'Atoms', el: <StepsPage /> },
-  segmentedbar: { title: 'Segmented Bar', group: 'Atoms', el: <SegmentedBarPage /> },
-  skeleton: { title: 'Skeleton', group: 'Atoms', el: <SkeletonPage /> },
-  emptystate: { title: 'Empty State', group: 'Atoms', el: <EmptyStatePage /> },
-  surfaces: { title: 'Card & Surface', group: 'Atoms', el: <SurfacesPage /> },
-  field: { title: 'Field & Input', group: 'Molecules', el: <FieldPage /> },
-  select: { title: 'Select', group: 'Molecules', el: <SelectPage /> },
-  combobox: { title: 'Combobox', group: 'Molecules', el: <ComboboxPage /> },
-  multiselect: { title: 'MultiSelect', group: 'Molecules', el: <MultiSelectPage /> },
-  segmented: { title: 'Segmented Control', group: 'Molecules', el: <SegmentedPage /> },
-  tabs: { title: 'Tabs', group: 'Molecules', el: <TabsPage /> },
-  tooltip: { title: 'Tooltip', group: 'Molecules', el: <TooltipPage /> },
-  toast: { title: 'Toast', group: 'Molecules', el: <ToastPage /> },
-  appshell: { title: 'App Shell', group: 'Organisms', el: <AppShellPage /> },
-  modal: { title: 'Modal', group: 'Organisms', el: <ModalPage /> },
-  drawer: { title: 'Drawer', group: 'Organisms', el: <DrawerPage /> },
-  alertdialog: { title: 'AlertDialog', group: 'Organisms', el: <AlertDialogPage /> },
-  popover: { title: 'Popover', group: 'Organisms', el: <PopoverPage /> },
-  menu: { title: 'Menu', group: 'Organisms', el: <MenuPage /> },
-  treeview: { title: 'Tree View', group: 'Organisms', el: <TreeViewPage /> },
-  stattile: { title: 'Stat Tile', group: 'Atoms', el: <StatTilePage /> },
-  sparkline: { title: 'Sparkline', group: 'Atoms', el: <SparklinePage /> },
-  deviceframe: { title: 'Device Frame', group: 'Atoms', el: <DeviceFramePage /> },
-  filterchip: { title: 'Filter Chip', group: 'Atoms', el: <FilterChipPage /> },
-  image: { title: 'Image', group: 'Atoms', el: <ImagePage /> },
-  rating: { title: 'Rating', group: 'Atoms', el: <RatingPage /> },
-  scrollarea: { title: 'Scroll Area', group: 'Molecules', el: <ScrollAreaPage /> },
-  carousel: { title: 'Carousel', group: 'Molecules', el: <CarouselPage /> },
-  heatmap: { title: 'Heatmap', group: 'Molecules', el: <HeatmapPage /> },
-  spotlight: { title: 'Spotlight', group: 'Molecules', el: <SpotlightPage /> },
-  breadcrumbs: { title: 'Breadcrumbs', group: 'Molecules', el: <BreadcrumbsPage /> },
-  pagination: { title: 'Pagination', group: 'Molecules', el: <PaginationPage /> },
-  accordion: { title: 'Accordion', group: 'Molecules', el: <AccordionPage /> },
-  datepicker: { title: 'Date Picker', group: 'Molecules', el: <DatePickerPage /> },
-  fileupload: { title: 'File Upload', group: 'Molecules', el: <FileUploadPage /> },
-  fieldset: { title: 'Fieldset & Form Section', group: 'Molecules', el: <FieldsetPage /> },
-  list: { title: 'List', group: 'Molecules', el: <ListPage /> },
-  table: { title: 'Table', group: 'Organisms', el: <TablePage /> },
-  datagrid: { title: 'Data Grid', group: 'Organisms', el: <DataGridPage /> },
-  timeline: { title: 'Timeline', group: 'Organisms', el: <TimelinePage /> },
-  wizard: { title: 'Wizard', group: 'Organisms', el: <WizardPage /> },
-  timelinescrubber: { title: 'Timeline Scrubber', group: 'Organisms', el: <TimelineScrubberPage /> },
-  timeserieschart: { title: 'Time Series Chart', group: 'Organisms', el: <TimeSeriesChartPage /> },
-  floatingpanel: { title: 'Floating Panel', group: 'Organisms', el: <FloatingPanelPage /> },
-  tabbedpanel: { title: 'Tabbed Panel', group: 'Organisms', el: <TabbedPanelPage /> },
-  tabbedmodal: { title: 'Tabbed Modal', group: 'Organisms', el: <TabbedModalPage /> },
-  tabstrip: { title: 'Tab Strip', group: 'Organisms', el: <TabStripPage /> },
-  resizablesplitpane: { title: 'Resizable Split Pane', group: 'Organisms', el: <ResizableSplitPanePage /> },
-  sidebar: { title: 'Sidebar', group: 'Structures', el: <SidebarPage /> },
-  toolbar: { title: 'Toolbar', group: 'Structures', el: <ToolbarPage /> },
-  titlebar: { title: 'Title Bar', group: 'Structures', el: <TitleBarPage /> },
-  navbar: { title: 'Nav Bar', group: 'Structures', el: <NavBarPage /> },
-  pageheader: { title: 'Page Header', group: 'Structures', el: <PageHeaderPage /> },
-  section: { title: 'Section', group: 'Structures', el: <SectionPage /> },
-  cardgroup: { title: 'Card Group', group: 'Structures', el: <CardGroupPage /> },
+  overview: { group: 'Start', el: <OverviewPage /> },
+  colors: { group: 'Foundations', el: <ColorsPage /> },
+  typography: { group: 'Foundations', el: <TypographyPage /> },
+  spacing: { group: 'Foundations', el: <SpacingPage /> },
+  layout: { group: 'Foundations', el: <LayoutPage /> },
+  shape: { group: 'Foundations', el: <ShapePage /> },
+  materials: { group: 'Foundations', el: <MaterialsPage /> },
+  haptics: { group: 'Foundations', el: <HapticsPage /> },
+  native: { group: 'Foundations', el: <NativePage /> },
+  visualfeedback: { group: 'Foundations', el: <VisualFeedbackPage /> },
+  motion: { group: 'Foundations', el: <MotionPage /> },
+  spec: { group: 'Foundations', el: <SpecPage /> },
+  icons: { group: 'Foundations', el: <IconsPage /> },
+  testing: { group: 'Foundations', el: <TestingPage /> },
+  testreport: { group: 'Foundations', el: <TestReportPage /> },
+  paritymatrix: { group: 'Foundations', el: <ParityMatrixPage /> },
+  button: { group: 'Atoms', el: <ButtonPage /> },
+  icon: { group: 'Atoms', el: <IconPage /> },
+  text: { group: 'Atoms', el: <TextPage /> },
+  kbd: { group: 'Atoms', el: <KbdPage /> },
+  pill: { group: 'Atoms', el: <PillPage /> },
+  counterbadge: { group: 'Atoms', el: <CounterBadgePage /> },
+  statusdot: { group: 'Atoms', el: <StatusDotPage /> },
+  avatar: { group: 'Atoms', el: <AvatarPage /> },
+  divider: { group: 'Atoms', el: <DividerPage /> },
+  callout: { group: 'Atoms', el: <CalloutPage /> },
+  banner: { group: 'Atoms', el: <BannerPage /> },
+  codeblock: { group: 'Atoms', el: <CodeBlockPage /> },
+  selection: { group: 'Atoms', el: <SelectionPage /> },
+  radiocard: { group: 'Atoms', el: <RadioCardPage /> },
+  textarea: { group: 'Atoms', el: <TextareaPage /> },
+  searchfield: { group: 'Atoms', el: <SearchFieldPage /> },
+  numberinput: { group: 'Atoms', el: <NumberInputPage /> },
+  otpfield: { group: 'Atoms', el: <OtpFieldPage /> },
+  slider: { group: 'Atoms', el: <SliderPage /> },
+  toggle: { group: 'Atoms', el: <TogglePage /> },
+  meter: { group: 'Atoms', el: <MeterPage /> },
+  progress: { group: 'Atoms', el: <ProgressBarPage /> },
+  spinner: { group: 'Atoms', el: <SpinnerPage /> },
+  progressring: { group: 'Atoms', el: <ProgressRingPage /> },
+  steps: { group: 'Atoms', el: <StepsPage /> },
+  segmentedbar: { group: 'Atoms', el: <SegmentedBarPage /> },
+  skeleton: { group: 'Atoms', el: <SkeletonPage /> },
+  emptystate: { group: 'Atoms', el: <EmptyStatePage /> },
+  surfaces: { group: 'Atoms', el: <SurfacesPage /> },
+  field: { group: 'Molecules', el: <FieldPage /> },
+  select: { group: 'Molecules', el: <SelectPage /> },
+  combobox: { group: 'Molecules', el: <ComboboxPage /> },
+  multiselect: { group: 'Molecules', el: <MultiSelectPage /> },
+  segmented: { group: 'Molecules', el: <SegmentedPage /> },
+  tabs: { group: 'Molecules', el: <TabsPage /> },
+  tooltip: { group: 'Molecules', el: <TooltipPage /> },
+  toast: { group: 'Molecules', el: <ToastPage /> },
+  appshell: { group: 'Organisms', el: <AppShellPage /> },
+  modal: { group: 'Organisms', el: <ModalPage /> },
+  drawer: { group: 'Organisms', el: <DrawerPage /> },
+  alertdialog: { group: 'Organisms', el: <AlertDialogPage /> },
+  popover: { group: 'Organisms', el: <PopoverPage /> },
+  menu: { group: 'Organisms', el: <MenuPage /> },
+  treeview: { group: 'Organisms', el: <TreeViewPage /> },
+  stattile: { group: 'Atoms', el: <StatTilePage /> },
+  sparkline: { group: 'Atoms', el: <SparklinePage /> },
+  deviceframe: { group: 'Atoms', el: <DeviceFramePage /> },
+  filterchip: { group: 'Atoms', el: <FilterChipPage /> },
+  image: { group: 'Atoms', el: <ImagePage /> },
+  rating: { group: 'Atoms', el: <RatingPage /> },
+  scrollarea: { group: 'Molecules', el: <ScrollAreaPage /> },
+  carousel: { group: 'Molecules', el: <CarouselPage /> },
+  heatmap: { group: 'Molecules', el: <HeatmapPage /> },
+  spotlight: { group: 'Molecules', el: <SpotlightPage /> },
+  breadcrumbs: { group: 'Molecules', el: <BreadcrumbsPage /> },
+  pagination: { group: 'Molecules', el: <PaginationPage /> },
+  accordion: { group: 'Molecules', el: <AccordionPage /> },
+  datepicker: { group: 'Molecules', el: <DatePickerPage /> },
+  fileupload: { group: 'Molecules', el: <FileUploadPage /> },
+  fieldset: { group: 'Molecules', el: <FieldsetPage /> },
+  list: { group: 'Molecules', el: <ListPage /> },
+  table: { group: 'Organisms', el: <TablePage /> },
+  datagrid: { group: 'Organisms', el: <DataGridPage /> },
+  timeline: { group: 'Organisms', el: <TimelinePage /> },
+  wizard: { group: 'Organisms', el: <WizardPage /> },
+  timelinescrubber: { group: 'Organisms', el: <TimelineScrubberPage /> },
+  timeserieschart: { group: 'Organisms', el: <TimeSeriesChartPage /> },
+  floatingpanel: { group: 'Organisms', el: <FloatingPanelPage /> },
+  tabbedpanel: { group: 'Organisms', el: <TabbedPanelPage /> },
+  tabbedmodal: { group: 'Organisms', el: <TabbedModalPage /> },
+  tabstrip: { group: 'Organisms', el: <TabStripPage /> },
+  resizablesplitpane: { group: 'Organisms', el: <ResizableSplitPanePage /> },
+  sidebar: { group: 'Structures', el: <SidebarPage /> },
+  toolbar: { group: 'Structures', el: <ToolbarPage /> },
+  titlebar: { group: 'Structures', el: <TitleBarPage /> },
+  navbar: { group: 'Structures', el: <NavBarPage /> },
+  pageheader: { group: 'Structures', el: <PageHeaderPage /> },
+  section: { group: 'Structures', el: <SectionPage /> },
+  cardgroup: { group: 'Structures', el: <CardGroupPage /> },
 } as const;
 
 type PageId = keyof typeof PAGES;
@@ -254,6 +258,17 @@ function loadPreferences(): Preferences {
       layout: saved.layout === 'full' ? 'full' : 'floating',
       direction: saved.direction === 'rtl' ? 'rtl' : 'ltr',
       haptics: saved.haptics === true,
+      visualFeedback: saved.visualFeedback === true,
+      visualFeedbackVariant:
+        saved.visualFeedbackVariant === 'pulse' ||
+        saved.visualFeedbackVariant === 'glow' ||
+        saved.visualFeedbackVariant === 'nudge'
+          ? saved.visualFeedbackVariant
+          : 'shockwave',
+      visualFeedbackIntensity:
+        saved.visualFeedbackIntensity === 'normal' || saved.visualFeedbackIntensity === 'strong'
+          ? saved.visualFeedbackIntensity
+          : 'subtle',
       accent: accentValid ? saved.accent! : DEFAULT_PREFERENCES.accent,
       font: saved.font === 'noto' || saved.font === 'plex' ? saved.font : 'inter',
       mono: saved.mono === 'plex' ? 'plex' : 'jetbrains',
@@ -300,6 +315,7 @@ export function App() {
 }
 
 function SidebarBrand() {
+  const t = useT();
   const [scrolled, setScrolled] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -318,8 +334,8 @@ function SidebarBrand() {
 
   return (
     <div ref={rootRef} className={`brandLogo${scrolled ? ' scrolled' : ''}`}>
-      <img src={glacierLogoFull} alt="Glacier logo" className="brandLogoFull" />
-      <img src={glacierLogoText} alt="Glacier text logo" className="brandLogoText" />
+      <img src={glacierLogoFull} alt={t(m.appGlacierLogo)} className="brandLogoFull" />
+      <img src={glacierLogoText} alt={t(m.appGlacierTextLogo)} className="brandLogoText" />
     </div>
   );
 }
@@ -444,45 +460,71 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
     </Sidebar>
   );
 
+  // The app controls live in a TitleBar (start = search, end = language +
+  // preferences). It renders chrome-light and non-landmark because the AppShell
+  // header it sits in already owns the sticky glass surface, the bottom
+  // hairline, and the banner role.
   const header = (
-    <Row width="full" gap={4}>
-      <DocSearch
-        items={searchItems}
-        onSelect={(id) => {
-          window.location.hash = hashFor(id as PageId);
-          setPage(id as PageId);
-        }}
-      />
-      <Spacer />
-      <LanguageSelect locale={locale} onChange={onLocaleChange} />
-      <Button variant={Variant.Glass} size={Size.Medium} onClick={() => setPreferencesOpen(true)}>
-        {GearIcon}
-        {t(m.preferences)}
-      </Button>
-    </Row>
+    <TitleBar
+      className="docsTitleBar"
+      role="presentation"
+      surface={false}
+      border={false}
+      start={
+        <DocSearch
+          items={searchItems}
+          onSelect={(id) => {
+            window.location.hash = hashFor(id as PageId);
+            setPage(id as PageId);
+          }}
+        />
+      }
+      end={
+        <>
+          <LanguageSelect locale={locale} onChange={onLocaleChange} />
+          <Button
+            variant={Variant.Glass}
+            size={Size.Medium}
+            aria-label={t(m.preferences)}
+            onClick={() => setPreferencesOpen(true)}
+          >
+            {GearIcon}
+            <span className="prefsLabel">{t(m.preferences)}</span>
+          </Button>
+        </>
+      }
+    />
   );
 
   return (
     <HapticsProvider enabled={preferences.haptics}>
-      <AppShell
-        floating={preferences.layout === 'floating'}
-        sidebar={sidebar}
-        header={header}
-        sidebarLabel={t(m.sidebarLabel)}
-        resizable
-        sidebarWidth={sidebarWidth}
-        onSidebarWidthChange={setSidebarWidth}
+      <VisualFeedbackProvider
+        enabled={preferences.visualFeedback}
+        variant={preferences.visualFeedbackVariant}
+        intensity={preferences.visualFeedbackIntensity}
       >
-        <Container size={Size.XLarge} paddingY={8} as="main" className="content">
-          {PAGES[page].el}
-        </Container>
-      </AppShell>
-      <PreferencesModal
-        open={preferencesOpen}
-        onClose={() => setPreferencesOpen(false)}
-        preferences={preferences}
-        onChange={(patch) => setPreferences((current) => ({ ...current, ...patch }))}
-      />
+        <AppShell
+          floating={preferences.layout === 'floating'}
+          sidebar={sidebar}
+          header={header}
+          sidebarLabel={t(m.sidebarLabel)}
+          resizable
+          sidebarWidth={sidebarWidth}
+          onSidebarWidthChange={setSidebarWidth}
+        >
+          <Container size={Size.XLarge} paddingY={8} as="main" className="content">
+            {PAGES[page].el}
+          </Container>
+        </AppShell>
+        <PreferencesModal
+          open={preferencesOpen}
+          onClose={() => setPreferencesOpen(false)}
+          preferences={preferences}
+          onChange={(patch) => setPreferences((current) => ({ ...current, ...patch }))}
+          locale={locale}
+          onLocaleChange={onLocaleChange}
+        />
+      </VisualFeedbackProvider>
     </HapticsProvider>
   );
 }

@@ -85,6 +85,7 @@ export const multiSelectSpec: ComponentSpec = {
   ],
   // a 3px accent-soft glow hugging the control border, which itself turns
   // focus-ring while the inner input holds focus (focus-within)
+  paint: { background: '$surface', text: '$text', border: '$border' },
   focusRing: { ring: token('accent-soft'), offset: '0' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [

@@ -1,23 +1,24 @@
 import { SPACE_STEPS, space } from '@glacier/tokens';
-import { Box, Row, Heading, Text, Size, TextTone } from '@glacier/react';
+import { Box, Row, Heading, Text, Size, TextTone, useT } from '@glacier/react';
+import { prose } from '../../docs-ui.tsx';
+import { m } from '../../i18n.ts';
 
 export function SpacingPage() {
+  const t = useT();
   return (
     <>
-      <Heading level={1}>Spacing</Heading>
+      <Heading level={1}>{t(m.spcName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        One fluid scale for every margin, padding, and gap. Each step is 1 unit = 4px at a 320px
-        viewport, growing linearly to 5px at 1536px via <code>clamp()</code>. Resize the window to
-        see the bars change size. Everything shares the scale, so everything stays aligned.
+        {prose(t(m.spcLede))}
       </Text>
 
-      <Heading level={2}>Scale</Heading>
+      <Heading level={2}>{t(m.spcSecScale)}</Heading>
       <table className="tokenTable">
         <thead>
           <tr>
-            <th>Token</th>
-            <th>Range</th>
-            <th style={{ width: '55%' }}>Live size</th>
+            <th>{t(m.spcThToken)}</th>
+            <th>{t(m.spcThRange)}</th>
+            <th style={{ width: '55%' }}>{t(m.spcThLiveSize)}</th>
           </tr>
         </thead>
         <tbody>
@@ -27,7 +28,7 @@ export function SpacingPage() {
                 <code>--glacier-space-{n}</code>
               </td>
               <td style={{ whiteSpace: 'nowrap', color: 'var(--glacier-text-subtle)' }}>
-                {space[n].min * 16}px → {space[n].max * 16}px
+                {space[n].min * 16}{t(m.spacingPx)} {space[n].max * 16}{t(m.spacingPx2)}
               </td>
               <td>
                 <div
@@ -44,11 +45,8 @@ export function SpacingPage() {
         </tbody>
       </table>
 
-      <Heading level={2}>Alignment in practice</Heading>
-      <Text tone={TextTone.Muted}>
-        Controls of the same size share heights and horizontal rhythm, so mixed rows line up
-        without manual adjustment:
-      </Text>
+      <Heading level={2}>{t(m.spcSecAlignment)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.spcAlignmentDesc)}</Text>
       <Box padding={8} background="glass" radius="xl" border>
         <Row gap={4} wrap>
           <div
@@ -62,7 +60,7 @@ export function SpacingPage() {
               color: 'var(--glacier-accent-text)',
             }}
           >
-            control-height-md
+            {t(m.spacingControlHeightMd)}
           </div>
           <div
             style={{
@@ -74,7 +72,7 @@ export function SpacingPage() {
               borderRadius: 'var(--glacier-radius-md)',
             }}
           >
-            same height
+            {t(m.spcSameHeight)}
           </div>
           <div
             style={{

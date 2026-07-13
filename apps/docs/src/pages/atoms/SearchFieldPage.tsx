@@ -1,153 +1,153 @@
-import { Box, Kbd, SearchField, Stack, Heading, Text, Size, TextTone } from '@glacier/react';
+import { Box, Kbd, SearchField, Stack, Heading, Text, Size, TextTone, useT } from '@glacier/react';
 import { useState } from 'react';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
-import { Example, PropsTable } from '../../docs-ui.tsx';
+import { Example, PropsTable, prose } from '../../docs-ui.tsx';
+import { m } from '../../i18n.ts';
 
 export function SearchFieldPage() {
+  const t = useT();
   const [query, setQuery] = useState('');
 
   return (
     <>
-      <Heading level={1}>SearchField</Heading>
+      <Heading level={1}>{t(m.sfName)}</Heading>
       <Text size={Size.Large} tone={TextTone.Muted} className="lede">
-        A search input with a leading magnifier, a clear button that appears once there is a value,
-        and an optional slot for a keyboard shortcut hint.
+        {t(m.sfLede)}
       </Text>
 
-      <Heading level={2}>Anatomy</Heading>
-      <Text tone={TextTone.Muted}>An inspection with the exact spec measurements labelled on the box.</Text>
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.sfAnatomyIntro)}</Text>
       <ComponentBlueprint specId="search-field" />
 
-      <Heading level={2}>Examples</Heading>
+      <Heading level={2}>{t(m.secExamples)}</Heading>
 
       <Example
-        title="Basic"
-        description="A search box with the default placeholder. Type to reveal the clear button."
+        title={t(m.exBasic)}
+        description={t(m.sfEx1Desc)}
+        component="SearchField"
+        render={(K) => (
+          <Box style={{ width: '22rem' }}>
+            <K.SearchField aria-label={t(m.searchfieldSearch)} />
+          </Box>
+        )}
         code={`import { SearchField } from '@glacier/react';
 
 <SearchField aria-label="Search" />`}
-      >
-        <Box style={{ width: '22rem' }}>
-          <SearchField aria-label="Search" />
-        </Box>
-      </Example>
+      />
 
       <Example
-        title="Controlled"
-        description="Drive it with value and onValueChange. Clearing reports an empty string."
+        title={t(m.sfEx2Title)}
+        description={t(m.sfEx2Desc)}
         code={`const [query, setQuery] = useState('');
 
 <SearchField aria-label="Search" value={query} onValueChange={setQuery} />`}
       >
         <Box style={{ width: '22rem' }}>
-          <SearchField aria-label="Search" value={query} onValueChange={setQuery} />
+          <SearchField aria-label={t(m.searchfieldSearch)} value={query} onValueChange={setQuery} />
         </Box>
       </Example>
 
       <Example
-        title="With a shortcut hint"
-        description="Pass a shortcut node, such as a Kbd, to hint at the key that focuses the field."
+        title={t(m.sfEx3Title)}
+        description={t(m.sfEx3Desc)}
+        component="SearchField"
+        render={(K) => (
+          <Box style={{ width: '22rem' }}>
+            <K.SearchField aria-label={t(m.searchfieldSearch)} shortcut={<Kbd>/</Kbd>} />
+          </Box>
+        )}
         code={`<SearchField aria-label="Search" shortcut={<Kbd>/</Kbd>} />`}
-      >
-        <Box style={{ width: '22rem' }}>
-          <SearchField aria-label="Search" shortcut={<Kbd>/</Kbd>} />
-        </Box>
-      </Example>
+      />
 
       <Example
-        title="Sizes"
-        description="size scales the height and font-size to sm, md, or lg."
+        title={t(m.secSizes)}
+        description={t(m.sfEx4Desc)}
+        component="SearchField"
+        render={(K) => (
+          <Stack gap={4} style={{ width: '22rem' }}>
+            <K.SearchField aria-label={t(m.searchfieldSmall)} size={Size.Small} />
+            <K.SearchField aria-label={t(m.searchfieldMedium)} size={Size.Medium} />
+            <K.SearchField aria-label={t(m.searchfieldLarge)} size={Size.Large} />
+          </Stack>
+        )}
         code={`<SearchField aria-label="Small" size={Size.Small} />
 <SearchField aria-label="Medium" size={Size.Medium} />
 <SearchField aria-label="Large" size={Size.Large} />`}
-      >
-        <Stack gap={4} style={{ width: '22rem' }}>
-          <SearchField aria-label="Small" size={Size.Small} />
-          <SearchField aria-label="Medium" size={Size.Medium} />
-          <SearchField aria-label="Large" size={Size.Large} />
-        </Stack>
-      </Example>
+      />
 
       <Example
-        title="Skeleton"
-        description="Set skeleton while results load. The placeholder is the full control shape, so the field does not shift when the real input arrives."
+        title={t(m.exSkeleton)}
+        description={t(m.sfEx5Desc)}
+        component="SearchField"
+        render={(K) => (
+          <Stack gap={4} style={{ width: '22rem' }}>
+            <K.SearchField skeleton />
+            <K.SearchField aria-label={t(m.searchfieldSearch)} />
+          </Stack>
+        )}
         code={`<SearchField skeleton />
 <SearchField aria-label="Search" />`}
-      >
-        <Stack gap={4} style={{ width: '22rem' }}>
-          <SearchField skeleton />
-          <SearchField aria-label="Search" />
-        </Stack>
-      </Example>
+      />
 
-      <Heading level={2}>Props</Heading>
+      <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
-          { name: 'value', type: 'string', description: 'Controlled value.' },
+          { name: 'value', type: 'string', description: t(m.sfPropValue) },
           {
             name: 'defaultValue',
             type: 'string',
             default: "''",
-            description: 'Initial value for uncontrolled usage.',
+            description: t(m.sfPropDefaultValue),
           },
           {
             name: 'onValueChange',
             type: '(value: string) => void',
-            description: 'Called with the current text on every change, and with an empty string when cleared.',
+            description: t(m.sfPropOnValueChange),
           },
           {
             name: 'placeholder',
             type: 'string',
             default: "'Search'",
-            description: 'Placeholder text.',
+            description: t(m.sfPropPlaceholder),
           },
           {
             name: 'size',
             type: "'sm' | 'md' | 'lg'",
             default: "'md'",
-            description: 'Scales the height and font-size.',
+            description: t(m.sfPropSize),
           },
           {
             name: 'shortcut',
             type: 'ReactNode',
-            description: 'Right-aligned slot for a keyboard shortcut hint, e.g. a Kbd.',
+            description: t(m.sfPropShortcut),
           },
           {
             name: 'skeleton',
             type: 'boolean',
             default: 'false',
-            description: "Renders a placeholder with the component's exact geometry.",
+            description: t(m.sfPropSkeleton),
           },
           {
             name: 'aria-label',
             type: 'string',
-            description: 'Accessible name. Not needed inside a Field with a label.',
+            description: t(m.sfPropAriaLabel),
           },
         ]}
       />
 
-      <Heading level={2}>Accessibility</Heading>
+      <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>
-          Renders a native <code>input type="search"</code>, so it exposes the searchbox role. The
-          native clear affordance is hidden in favor of the styled clear button.
-        </li>
-        <li>
-          The clear button carries an <code>aria-label</code> of "Clear search" and only mounts when
-          there is a value to clear.
-        </li>
-        <li>The magnifier is decorative and marked aria-hidden.</li>
-        <li>
-          Give it an <code>aria-label</code> when used on its own, or wrap it in a Field with a
-          visible label.
-        </li>
+        <li>{prose(t(m.sfA11y1))}</li>
+        <li>{prose(t(m.sfA11y2))}</li>
+        <li>{t(m.sfA11y3)}</li>
+        <li>{prose(t(m.sfA11y4))}</li>
       </ul>
 
-      <Heading level={2}>Usage</Heading>
+      <Heading level={2}>{t(m.secUsage)}</Heading>
       <ul>
-        <li>Use it for filtering a list or querying results, not for arbitrary short text.</li>
-        <li>Add a shortcut hint when a keyboard accelerator focuses the field.</li>
-        <li>Read onValueChange to filter as the user types, and treat the empty string as cleared.</li>
+        <li>{t(m.sfUse1)}</li>
+        <li>{t(m.sfUse2)}</li>
+        <li>{t(m.sfUse3)}</li>
       </ul>
     </>
   );

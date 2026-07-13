@@ -43,6 +43,7 @@ export const numberInputSpec: ComponentSpec = {
     { name: 'haptic', description: 'Every committed step fires a selection tick, whether from a button tap, each hold-repeat step, or ArrowUp/ArrowDown in the field, all riding the existing step amount; a step that clamps at min or max bumps medium once (re-armed after leaving the bound); typed digits are silent and their blur-commit fires one light; data-haptic="none" opts the stepper out.', behavioral: true },
   ],
   // a 3px accent-soft glow hugging the group border, which itself turns focus-ring on :focus-within
+  paint: { background: '$surface', text: '$text', border: '$border' },
   focusRing: { ring: token('accent-soft'), offset: '0' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
