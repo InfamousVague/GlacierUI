@@ -15,7 +15,7 @@ import { spacingDecls } from './space.ts';
 import { radiusDecls } from './radius.ts';
 import { sizeDecls } from './size.ts';
 import { motionDecls, reducedMotionDecls } from './motion.ts';
-import { densityDecls } from './density.ts';
+import { densityDecls, densityScale, type Density } from './density.ts';
 import { effectsDecls, glassDecls } from './effects.ts';
 import { layoutDecls } from './layout.ts';
 import { shadowDecls, elevationOverlayDecls } from './elevation.ts';
@@ -103,8 +103,11 @@ for (const name of Object.keys(monoFonts).slice(1) as MonoFont[]) {
   out.push(`[data-mono='${name}'] {`, ...lines(monoFontDecls(name), '  '), '}', '');
 }
 
-out.push('/* Compact density - data-density="compact" */', '');
-out.push("[data-density='compact'] {", ...lines(densityDecls('compact'), '  '), '}', '');
+out.push('/* Pickable density - data-density selects a shared space and control scale */', '');
+for (const mode of Object.keys(densityScale) as Density[]) {
+  if (mode === 'comfortable') continue;
+  out.push(`[data-density='${mode}'] {`, ...lines(densityDecls(mode), '  '), '}', '');
+}
 
 out.push('/* Reduced motion */', '');
 out.push('@media (prefers-reduced-motion: reduce) {', '  :root {', ...lines(reducedMotionDecls(), '    '), '  }', '}', '');

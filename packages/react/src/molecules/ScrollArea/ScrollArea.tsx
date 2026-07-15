@@ -6,13 +6,16 @@ import {
   useState,
   type ComponentProps,
   type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
   type ReactNode,
 } from 'react';
+import { ScrollbarAppearance, type scrollbarAppearances } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
 import styles from './ScrollArea.module.css';
 
 /** Which axis the content overflows and scrolls along. */
 export type ScrollAreaOrientation = 'vertical' | 'horizontal';
+export type ScrollbarAppearanceName = (typeof scrollbarAppearances)[number];
 
 export interface ScrollAreaProps extends Omit<ComponentProps<'div'>, 'children'> {
   /**
@@ -22,6 +25,10 @@ export interface ScrollAreaProps extends Omit<ComponentProps<'div'>, 'children'>
   maxHeight?: number | string;
   /** Scroll axis. Vertical (the default) shows top/bottom fades; horizontal shows left/right. */
   orientation?: ScrollAreaOrientation;
+  /** Visual treatment for the visible scrollbar. */
+  scrollbarAppearance?: ScrollbarAppearanceName;
+  /** Shows the half-opaque track behind the scrollbar thumb. */
+  showScrollbarTrack?: boolean;
   /** Hides the scrollbar entirely; wheel, drag, keyboard, and touch scrolling all still work. */
   hideScrollbar?: boolean;
   /** The overflowing content. */
@@ -29,6 +36,7 @@ export interface ScrollAreaProps extends Omit<ComponentProps<'div'>, 'children'>
 }
 
 type Edges = { start: boolean; end: boolean };
+type ScrollbarMetrics = { visible: boolean; thumbSize: number; thumbOffset: number };
 
 /**
  * A styled overflow container. It caps its viewport along one axis, paints a
@@ -41,6 +49,8 @@ type Edges = { start: boolean; end: boolean };
 export function ScrollArea({
   maxHeight,
   orientation = 'vertical',
+  scrollbarAppearance = ScrollbarAppearance.Default,
+  showScrollbarTrack = true,
   hideScrollbar = false,
   className,
   style,
@@ -49,21 +59,47 @@ export function ScrollArea({
 }: ScrollAreaProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const [edges, setEdges] = useState<Edges>({ start: false, end: false });
+  const [scrollbar, setScrollbar] = useState<ScrollbarMetrics>({ visible: false, thumbSize: 100, thumbOffset: 0 });
 
   const measure = useCallback(() => {
     const el = viewportRef.current;
     if (!el) return;
-    if (orientation === 'horizontal') {
-      const max = el.scrollWidth - el.clientWidth;
+    const horizontal = orientation === 'horizontal';
+    const scrollSize = horizontal ? el.scrollWidth : el.scrollHeight;
+    const clientSize = horizontal ? el.clientWidth : el.clientHeight;
+    const max = Math.max(scrollSize - clientSize, 0);
+    const pos = horizontal
       // scrollLeft runs 0..-max in RTL, so its absolute value is the distance
       // from the inline start either way; clamp against sub-pixel rounding so
       // the end fade fully clears
-      const pos = Math.min(Math.abs(el.scrollLeft), max);
-      setEdges({ start: pos > 1, end: max - pos > 1 });
+      ? Math.min(Math.abs(el.scrollLeft), max)
+      : Math.min(Math.max(el.scrollTop, 0), max);
+    const thumbSize = Math.min(100, Math.max(12, (clientSize / Math.max(scrollSize, 1)) * 100));
+    setEdges({ start: pos > 1, end: max - pos > 1 });
+    setScrollbar({
+      visible: max > 1,
+      thumbSize,
+      thumbOffset: max > 0 ? (pos / max) * (100 - thumbSize) : 0,
+    });
+  }, [orientation]);
+
+  const scrollFromPointer = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    const el = viewportRef.current;
+    if (!el) return;
+    const horizontal = orientation === 'horizontal';
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const trackSize = horizontal ? bounds.width : bounds.height;
+    const trackPosition = horizontal ? event.clientX - bounds.left : event.clientY - bounds.top;
+    const scrollSize = horizontal ? el.scrollWidth : el.scrollHeight;
+    const clientSize = horizontal ? el.clientWidth : el.clientHeight;
+    const max = Math.max(scrollSize - clientSize, 0);
+    const ratio = clientSize / Math.max(scrollSize, 1);
+    const next = Math.max(0, Math.min(1, trackPosition / trackSize - ratio / 2)) * max;
+
+    if (horizontal) {
+      el.scrollLeft = getComputedStyle(el).direction === 'rtl' ? -next : next;
     } else {
-      const max = el.scrollHeight - el.clientHeight;
-      const pos = Math.min(Math.max(el.scrollTop, 0), max);
-      setEdges({ start: pos > 1, end: max - pos > 1 });
+      el.scrollTop = next;
     }
   }, [orientation]);
 
@@ -89,6 +125,10 @@ export function ScrollArea({
       : orientation === 'horizontal'
         ? { maxWidth: maxHeight }
         : { maxHeight };
+  const scrollbarStyle = {
+    '--scrollbar-thumb-size': `${scrollbar.thumbSize}%`,
+    '--scrollbar-thumb-offset': `${scrollbar.thumbOffset}%`,
+  } as CSSProperties;
 
   return (
     <div
@@ -110,12 +150,33 @@ export function ScrollArea({
         ref={viewportRef}
         className={styles.viewport}
         style={sizeStyle}
+        data-scrollbar-appearance={scrollbarAppearance}
         tabIndex={0}
         role="group"
         onScroll={measure}
       >
         {children}
       </div>
+      {!hideScrollbar && scrollbar.visible && (
+        <div
+          className={styles.scrollbar}
+          data-orientation={orientation}
+          data-scrollbar-appearance={scrollbarAppearance}
+          data-track-visible={showScrollbarTrack || undefined}
+          style={scrollbarStyle}
+          aria-hidden="true"
+          onPointerDown={(event) => {
+            event.preventDefault();
+            event.currentTarget.setPointerCapture(event.pointerId);
+            scrollFromPointer(event);
+          }}
+          onPointerMove={(event) => {
+            if (event.currentTarget.hasPointerCapture(event.pointerId)) scrollFromPointer(event);
+          }}
+        >
+          <span className={styles.thumb} />
+        </div>
+      )}
     </div>
   );
 }

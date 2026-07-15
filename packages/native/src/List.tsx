@@ -20,7 +20,7 @@ import { paintFor, sizeFor, dimensionsFor } from './resolve.ts';
  * resolvers so the rows cannot drift from List.module.css:
  *   - list dims      → per-size row height + inline padding + inter-row gap.
  *   - item dims      → space-3 row gap, radius-lg row corners.
- *   - item base paint→ surface-raised card, border-subtle hairline, text.
+ *   - item base paint→ transparent, borderless row with text.
  *   - states.selected→ accent-soft fill, accent-border, accent-text.
  *   - states.disabled→ text-disabled title.
  *   - divided divider→ the `border` hairline drawn between rows.
@@ -149,7 +149,7 @@ export function List({
       <ScrollView
         accessibilityRole="list"
         {...rest}
-        style={[{ minWidth: 0 }, style as never]}
+        style={[{ minWidth: 0, flexGrow: 0, alignSelf: 'flex-start' }, style as never]}
         contentContainerStyle={[{ rowGap: gap }, contentContainerStyle as never]}
       >
         {content}
@@ -160,11 +160,10 @@ export function List({
 
 /**
  * A semantic list row with optional leading, supporting, and trailing content.
- * The row is a card by default (surface-raised, border-subtle hairline, radius-lg)
- * and flat when the parent List is divided; selected rows take the accent-soft
- * fill, accent border, and accent text. Density (height, padding, title size)
- * follows the parent List's `size`. Rendered as a Pressable when `onClick` or
- * `href` is set (and not disabled), else a static View.
+ * Default rows are transparent and borderless; selected rows take the accent-soft
+ * fill and accent text. Density (height, padding, title size) follows the parent
+ * List's `size`. Rendered as a Pressable when `onClick` or `href` is set (and not
+ * disabled), else a static View.
  */
 export function ListItem({
   title,
@@ -190,9 +189,8 @@ export function ListItem({
       : t(bare(ITEM_BASE.text) ?? 'text');
   const rowFont = t(ROW_FONT[size]);
 
-  // The row surface. Divided rows are flat (transparent, no border); card rows
-  // carry the base hairline, swapped to the accent border + accent-soft fill when
-  // selected.
+  // The web row is flat by default. Dividers belong to the List container, while
+  // selection alone supplies the accent surface.
   const rowStyle = {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
@@ -203,16 +201,11 @@ export function ListItem({
     paddingVertical: t(ROW_PAD_BLOCK[size]),
     paddingHorizontal: t(dims.paddingInline ?? (size === 'sm' ? 'space-3' : 'space-4')),
     borderRadius: t(ITEM_DIMS.radius ?? 'radius-lg'),
-    borderWidth: divided ? 0 : t(LIST_DIMS.border ?? 'hairline'),
+    borderWidth: 0,
     borderStyle: 'solid' as const,
-    borderColor: selected ? t(SELECTED.border ?? 'accent-border') : t(bare(ITEM_BASE.border) ?? 'border-subtle'),
-    backgroundColor: divided
-      ? selected
-        ? t(SELECTED.background ?? 'accent-soft')
-        : 'transparent'
-      : selected
-        ? t(SELECTED.background ?? 'accent-soft')
-        : t(bare(ITEM_BASE.background) ?? 'surface-raised'),
+    borderColor: 'transparent',
+    backgroundColor: selected ? t(SELECTED.background ?? 'accent-soft') : 'transparent',
+    marginVertical: divided ? t('space-1') : 0,
   };
 
   const content = (
@@ -232,7 +225,7 @@ export function ListItem({
         </View>
       )}
       <View style={{ flex: 1, flexDirection: 'column', minWidth: 0, rowGap: t('space-1') }}>
-        <Text numberOfLines={1} style={{ color: titleColor, fontSize: rowFont, fontFamily: t('font-sans') }}>
+        <Text numberOfLines={1} style={{ color: titleColor, fontSize: rowFont, lineHeight: t('leading-sm') as never, fontFamily: t('font-sans') }}>
           {title}
         </Text>
         {description != null && (
@@ -275,7 +268,11 @@ export function ListItem({
         // event argument (the web handler receives a MouseEvent).
         onPress={onClick != null ? () => onClick() : undefined}
         {...rest}
-        style={[rowStyle, style as never]}
+        style={({ hovered }) => [
+          rowStyle,
+          hovered && !selected && { backgroundColor: t('hover') },
+          style as never,
+        ]}
       >
         {content}
       </Pressable>

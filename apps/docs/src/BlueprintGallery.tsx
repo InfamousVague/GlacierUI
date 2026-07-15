@@ -90,6 +90,7 @@ function useSections(): Section[] {
     { spec: 'table', page: 'table', title: t(pageTitles.table), blurb: t(m.bpgTableBlurb) },
     { spec: 'data-grid', page: 'datagrid', title: t(pageTitles.datagrid), blurb: t(m.bpgDataGridBlurb) },
     { spec: 'timeline', page: 'timeline', title: t(pageTitles.timeline), blurb: t(m.bpgTimelineBlurb) },
+    { spec: 'timeline-scrubber', page: 'timelinescrubber', title: t(pageTitles.timelinescrubber), blurb: t(m.bpgTimelineScrubberBlurb) },
     { spec: 'wizard', page: 'wizard', title: t(pageTitles.wizard), blurb: t(m.bpgWizardBlurb) },
   ];
 

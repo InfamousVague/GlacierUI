@@ -82,7 +82,7 @@ export function Carousel({
   ...rest
 }: CarouselProps) {
   return (
-    <View {...rest} style={[{ position: 'relative', minWidth: 0 }, style as never]}>
+    <View {...rest} style={[{ position: 'relative', minWidth: 0, width: '100%' }, style as never]}>
       {showControls && (
         // Prev slot: full-height, inline-start edge, vertically centering the
         // control; box-none lets the strip stay scrollable behind the slot while
@@ -105,7 +105,7 @@ export function Carousel({
         showsHorizontalScrollIndicator={false}
         // Pad so cards clear the overlaid controls without clipping shadows, then
         // pull the frame back by the same amount (web `.scroller` padding/margin).
-        style={{ margin: `calc(-1 * ${t('space-1')})` as never }}
+        style={{ width: '100%', margin: `calc(-1 * ${t('space-1')})` as never }}
         contentContainerStyle={{ flexDirection: 'row', columnGap: gap, padding: t('space-1') }}
       >
         {children}

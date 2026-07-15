@@ -1,6 +1,6 @@
 .root { display: grid; gap: var(--glacier-space-2); }
 .item { border: var(--glacier-hairline) solid var(--glacier-border); border-radius: var(--glacier-radius-lg); overflow: hidden; background: var(--glacier-surface); }
-.header { margin: 0; }
+.header { margin: 0; font: inherit; }
 .trigger {
   width: 100%;
   display: grid;
@@ -11,9 +11,12 @@
   border: 0;
   background: transparent;
   color: inherit;
-  cursor: pointer;
-  font: inherit;
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-md);
+  font-weight: var(--glacier-font-weight-regular);
+  line-height: normal;
   text-align: start;
+  cursor: pointer;
 }
 .trigger:disabled { cursor: not-allowed; opacity: 0.5; }
 .title {

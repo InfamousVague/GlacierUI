@@ -1,4 +1,5 @@
-import { View, type ViewProps } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { Animated, Platform, View, type ViewProps } from 'react-native';
 import { controlSizes, spinnerTones, spinnerSpec, skeletonSpec } from '@glacier/spec';
 import { t } from './tokens.ts';
 import { paintFor, paintStyle, sizeFor, dimensionsFor } from './resolve.ts';
@@ -47,10 +48,8 @@ function metric(value: string | undefined, fallback: string): string {
  * per-tone ring color are read from the spinner spec through the shared
  * resolvers, so it cannot drift from @glacier/react's Spinner.
  *
- * The continuous rotation (and the reduced-motion opacity pulse) is a device
- * follow-up — there is no animation runtime here — so this renders the static
- * ring only. The `inherit` tone paints `currentColor`, which react-native-web
- * resolves against the inherited text color on the DOM (matching the web
+ * The `inherit` tone paints `currentColor`, which react-native-web resolves
+ * against the inherited text color on the DOM (matching the web
  * `.spinner.inherit` rule); a concrete device token map is the follow-up.
  */
 export function Spinner({ size = 'md', tone = 'subtle', skeleton = false, ...rest }: SpinnerProps) {
@@ -91,24 +90,56 @@ export function Spinner({ size = 'md', tone = 'subtle', skeleton = false, ...res
   const label = rest['aria-label'] ?? DEFAULT_LABEL;
   const isHidden = label === '';
 
+  const ringStyle = {
+    width: diameter,
+    height: diameter,
+    borderRadius: radius,
+    borderWidth: border,
+    borderStyle: 'solid' as const,
+    color: ringColor,
+    borderColor: ringColor,
+    borderBottomColor: 'transparent',
+  };
+
+  if (Platform.OS === 'web') {
+    return (
+      <View
+        accessibilityRole="status"
+        aria-label={isHidden ? undefined : label}
+        aria-hidden={isHidden || undefined}
+        style={{
+          ...ringStyle,
+          animationName: 'nativeSpinnerRotate',
+          animationDuration: '800ms',
+          animationTimingFunction: 'linear',
+          animationIterationCount: 'infinite',
+        }}
+        {...rest}
+      />
+    );
+  }
+
+  return <AnimatedSpinner {...rest} isHidden={isHidden} label={label} ringStyle={ringStyle} />;
+}
+
+function AnimatedSpinner({ isHidden, label, ringStyle, ...rest }: ViewProps & { isHidden: boolean; label: string; ringStyle: Record<string, string> }) {
+  const rotation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const animation = Animated.loop(Animated.timing(rotation, { toValue: 1, duration: 800, useNativeDriver: true }));
+    animation.start();
+    return () => animation.stop();
+  }, [rotation]);
+
   return (
-    <View
+    <Animated.View
       accessibilityRole="status"
       aria-label={isHidden ? undefined : label}
       aria-hidden={isHidden || undefined}
       style={{
-        width: diameter,
-        height: diameter,
-        borderRadius: radius,
-        borderWidth: border,
-        borderStyle: 'solid',
-        // color carries currentColor for the `inherit` tone, exactly like the
-        // web `.spinner` sets `color` and the border reads `currentColor`.
-        color: ringColor,
-        borderColor: ringColor,
-        // The one edge the DOM leaves transparent so the resting ring reads as
-        // a gap (`border-bottom-color: transparent`).
+        ...ringStyle,
         borderBottomColor: 'transparent',
+        transform: [{ rotate: rotation.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] }) }],
       }}
       {...rest}
     />

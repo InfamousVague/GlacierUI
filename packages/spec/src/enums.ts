@@ -15,6 +15,7 @@ import { controlSizes, tones } from './vocab.ts';
 import { textSizes, textTones } from './components/text.ts';
 import { buttonVariants } from './components/button.ts';
 import { skeletonVariants } from './components/skeleton.ts';
+import { scrollbarAppearances } from './components/scroll-area.ts';
 
 /** Every size step in the kit. A component's own union restricts which apply. */
 export enum Size {
@@ -71,6 +72,13 @@ export enum SkeletonVariant {
   Circle = 'circle',
 }
 
+/** Visual treatments available to ScrollArea's visible web scrollbar. */
+export enum ScrollbarAppearance {
+  Subtle = 'subtle',
+  Default = 'default',
+  Accent = 'accent',
+}
+
 // ---- compile-time sync guards ----------------------------------------------
 // These fail the build if an enum drifts from the spec arrays it mirrors.
 type AssertTrue<T extends true> = T;
@@ -92,3 +100,5 @@ type _variantCovers = AssertTrue<(typeof buttonVariants)[number] extends `${Vari
 type _variantExact = AssertTrue<`${Variant}` extends (typeof buttonVariants)[number] ? true : false>;
 type _skelCovers = AssertTrue<(typeof skeletonVariants)[number] extends `${SkeletonVariant}` ? true : false>;
 type _skelExact = AssertTrue<`${SkeletonVariant}` extends (typeof skeletonVariants)[number] ? true : false>;
+type _scrollbarAppearanceExact = AssertTrue<`${ScrollbarAppearance}` extends (typeof scrollbarAppearances)[number] ? true : false>;
+type _scrollbarAppearanceCovers = AssertTrue<(typeof scrollbarAppearances)[number] extends `${ScrollbarAppearance}` ? true : false>;

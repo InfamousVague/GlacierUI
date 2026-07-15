@@ -1,12 +1,13 @@
 import { accentOptions, accentSteps, type SansFont, type MonoFont } from '@glacier/tokens';
-import { Button, Divider, Label, SegmentedControl, Select, Slider, Switch, TabbedModal, Text, useT, Size, TextTone, Variant, type Locale, type VisualFeedbackVariant, type VisualFeedbackIntensity } from '@glacier/react';
+import { Button, Divider, Label, ScrollbarAppearance, SegmentedControl, Select, Slider, Switch, TabbedModal, Text, useT, Size, TextTone, Variant, type Locale, type VisualFeedbackVariant, type VisualFeedbackIntensity } from '@glacier/react';
 import { LayoutTemplate, Palette, Sparkles, Type } from '@glacier/icons';
+import { DensitySelector, type DensityMode } from './DensitySelector.tsx';
 import { FlagSquircle } from './FlagSquircle.tsx';
 import { LANGUAGES, m } from './i18n.ts';
 
 export interface Preferences {
   theme: 'system' | 'light' | 'dark';
-  density: 'comfortable' | 'compact';
+  density: DensityMode;
   layout: 'floating' | 'full';
   direction: 'ltr' | 'rtl';
   /** Vibration feedback on tap, on supported touch devices. */
@@ -21,6 +22,8 @@ export interface Preferences {
   radiusScale: number;
   /** Backdrop-blur multiplier for every glass surface. */
   frostedness: number;
+  /** Visual treatment used by the docs' themed scrollbars. */
+  scrollbarStyle: ScrollbarAppearance;
 }
 
 export const DEFAULT_PREFERENCES: Preferences = {
@@ -37,6 +40,7 @@ export const DEFAULT_PREFERENCES: Preferences = {
   mono: 'jetbrains',
   radiusScale: 1,
   frostedness: 1,
+  scrollbarStyle: ScrollbarAppearance.Default,
 };
 
 interface PreferencesModalProps {
@@ -136,6 +140,24 @@ export function PreferencesModal({ open, onClose, preferences, onChange, locale,
           ))}
         </div>
       </div>
+      <Divider />
+      <div className="prefsSection">
+        <Label>{t(m.scrollbarStyle)}</Label>
+        <SegmentedControl
+          aria-label={t(m.scrollbarStyle)}
+          fullWidth
+          value={preferences.scrollbarStyle}
+          onValueChange={(value) => onChange({ scrollbarStyle: value as ScrollbarAppearance })}
+          options={[
+            { value: ScrollbarAppearance.Subtle, label: t(m.scrollbarSubtle) },
+            { value: ScrollbarAppearance.Default, label: t(m.scrollbarDefault) },
+            { value: ScrollbarAppearance.Accent, label: t(m.scrollbarAccent) },
+          ]}
+        />
+        <Text size={Size.XSmall} tone={TextTone.Subtle}>
+          {t(m.scrollbarStyleHelp)}
+        </Text>
+      </div>
     </div>
   );
 
@@ -175,15 +197,10 @@ export function PreferencesModal({ open, onClose, preferences, onChange, locale,
     <div className="prefsBody">
       <div className="prefsSection">
         <Label>{t(m.density)}</Label>
-        <SegmentedControl
+        <DensitySelector
           aria-label={t(m.density)}
-          fullWidth
           value={preferences.density}
-          onValueChange={(value) => onChange({ density: value as Preferences['density'] })}
-          options={[
-            { value: 'comfortable', label: t(m.comfortable) },
-            { value: 'compact', label: t(m.compact) },
-          ]}
+          onValueChange={(density) => onChange({ density })}
         />
       </div>
       <Divider />

@@ -1,4 +1,4 @@
-import { Heading, Text, Size, TextTone, useT } from '@glacier/react';
+import { Heading, ScrollArea, ScrollbarAppearance, Text, Size, TextTone, useT } from '@glacier/react';
 import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
 import { m } from '../../i18n.ts';
@@ -8,6 +8,17 @@ const tags = [
   'primary', 'secondary', 'ghost', 'outline', 'solid', 'soft',
   'small', 'medium', 'large', 'compact', 'comfortable',
 ];
+
+const scrollbarAppearances = [
+  { value: ScrollbarAppearance.Subtle, label: m.scrollbarSubtle },
+  { value: ScrollbarAppearance.Default, label: m.scrollbarDefault },
+  { value: ScrollbarAppearance.Accent, label: m.scrollbarAccent },
+] as const;
+
+const scrollbarTrackVariants = [
+  { visible: true, label: m.saScrollbarTrack },
+  { visible: false, label: m.saScrollbarNoTrack },
+] as const;
 
 export function ScrollAreaPage() {
   const t = useT();
@@ -105,6 +116,40 @@ export function ScrollAreaPage() {
 </ScrollArea>`}
       />
 
+      <Heading level={2}>{t(m.saScrollbars)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.saScrollbarsDesc)}</Text>
+      <div className="scrollbarPreviewGrid">
+        {scrollbarAppearances.map(({ value, label }) => (
+          <div key={value}>
+            <Text size={Size.Small} tone={TextTone.Muted} className="scrollbarPreviewLabel">
+              {t(label)}
+            </Text>
+            <div className="scrollbarPreviewVariants">
+              {scrollbarTrackVariants.map(({ visible, label: trackLabel }) => (
+                <div key={String(visible)}>
+                  <Text size={Size.Small} tone={TextTone.Muted} className="scrollbarPreviewVariantLabel">
+                    {t(trackLabel)}
+                  </Text>
+                  <ScrollArea
+                    maxHeight={144}
+                    className="scrollbarPreview"
+                    scrollbarAppearance={value}
+                    showScrollbarTrack={visible}
+                    aria-label={`${t(m.saScrollbarsAria)}: ${t(label)}, ${t(trackLabel)}`}
+                  >
+                    {paragraphs.slice(0, 4).map((text, index) => (
+                      <Text key={index} size={Size.Small} style={{ margin: '0 0 var(--glacier-space-3)' }}>
+                        {text}
+                      </Text>
+                    ))}
+                  </ScrollArea>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
       <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable
         props={[
@@ -114,6 +159,8 @@ export function ScrollAreaPage() {
             description: t(m.saPropMaxHeight),
           },
           { name: 'orientation', type: "'vertical' | 'horizontal'", default: "'vertical'", description: t(m.saPropOrientation) },
+          { name: 'scrollbarAppearance', type: "'subtle' | 'default' | 'accent'", default: "'default'", description: t(m.saPropScrollbarAppearance) },
+          { name: 'showScrollbarTrack', type: 'boolean', default: 'true', description: t(m.saPropShowScrollbarTrack) },
           { name: 'hideScrollbar', type: 'boolean', default: 'false', description: t(m.saPropHideScrollbar) },
           { name: 'children', type: 'ReactNode', description: t(m.saPropChildren) },
           { name: 'className', type: 'string', description: t(m.saPropClassName) },

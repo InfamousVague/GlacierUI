@@ -1,5 +1,5 @@
 // shared enum vocabulary — Size.Large, Tone.Accent, TextTone.Muted, Variant.Soft, SkeletonVariant.Circle
-export { Size, Tone, TextTone, Variant, SkeletonVariant } from '@glacier/spec';
+export { Size, Tone, TextTone, Variant, SkeletonVariant, ScrollbarAppearance } from '@glacier/spec';
 
 // writing direction — live resolution for event handlers, a hook for render output
 export { resolveDirection, useDirection, type Direction } from './internal/direction.ts';
@@ -20,6 +20,7 @@ export { Link, type LinkProps } from './atoms/display/Typography/Link.tsx';
 export { Kbd, type KbdProps } from './atoms/display/Typography/Kbd.tsx';
 export { Pill, type PillProps, type PillTone, type PillVariant } from './atoms/display/Pill/Pill.tsx';
 export { Divider, type DividerProps } from './atoms/display/Divider/Divider.tsx';
+export { IconBackfill, type IconBackfillProps } from './atoms/display/IconBackfill/IconBackfill.tsx';
 export { ProgressBar, type ProgressBarProps } from './atoms/feedback/Progress/ProgressBar.tsx';
 export { Spinner, type SpinnerProps } from './atoms/feedback/Progress/Spinner.tsx';
 export { Slider, type SliderProps } from './atoms/inputs/Slider/Slider.tsx';
@@ -37,6 +38,7 @@ export { Callout, type CalloutProps, type CalloutTone } from './atoms/feedback/C
 export { CodeBlock, type CodeBlockProps } from './atoms/display/CodeBlock/CodeBlock.tsx';
 export { SegmentedBar, type SegmentedBarProps } from './atoms/feedback/SegmentedBar/SegmentedBar.tsx';
 export { Banner, type BannerProps, type BannerTone } from './atoms/feedback/Banner/Banner.tsx';
+export { Announcements, type AnnouncementsProps, type AnnouncementItem, type AnnouncementTone } from './atoms/feedback/Announcements/Announcements.tsx';
 export { EmptyState, type EmptyStateProps } from './atoms/feedback/EmptyState/EmptyState.tsx';
 export { Steps, type StepsProps, type StepsTone, type StepsSize } from './atoms/feedback/Steps/Steps.tsx';
 export { RadioCard, type RadioCardProps } from './atoms/inputs/RadioCard/RadioCard.tsx';
@@ -66,7 +68,7 @@ export {
   type SegmentedControlProps,
   type SegmentedOption,
 } from './molecules/Segmented/SegmentedControl.tsx';
-export { ScrollArea, type ScrollAreaProps, type ScrollAreaOrientation } from './molecules/ScrollArea/ScrollArea.tsx';
+export { ScrollArea, type ScrollAreaProps, type ScrollAreaOrientation, type ScrollbarAppearanceName } from './molecules/ScrollArea/ScrollArea.tsx';
 export { Carousel, type CarouselProps } from './molecules/Carousel/Carousel.tsx';
 export { Combobox, type ComboboxProps, type ComboboxOption } from './molecules/Combobox/Combobox.tsx';
 export { MultiSelect, type MultiSelectProps, type MultiSelectOption } from './molecules/MultiSelect/MultiSelect.tsx';

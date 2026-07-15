@@ -133,7 +133,7 @@ export function Accordion({ items, defaultOpen, allowMultiple = false, ...rest }
                   style={{
                     color: t('text-subtle'),
                     fontSize: '0.95rem',
-                    lineHeight: 1.45 as never,
+                    lineHeight: '1.45' as never,
                     fontFamily: t('font-sans'),
                   }}
                 >

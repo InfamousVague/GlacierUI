@@ -18,8 +18,7 @@ export const timelineScrubberSpec: ComponentSpec = {
     { name: 'marker', description: 'A flagged instant on the track: a thin tone-colored tick, e.g. a spike or an alert.' },
     { name: 'playhead', description: 'The draggable vertical line whose position is the inspected time; its grab handle rides above the track edge, never clipped by it.', required: true },
     { name: 'time-readout', description: 'The formatted time under the playhead while scrubbing.' },
-    { name: 'ticks', description: 'Sparse time labels along the bottom edge of the track.' },
-    { name: 'live-button', description: 'The return-to-live control at the trailing edge; reflects whether the playhead is pinned to now.', required: true },
+    { name: 'marker-label', description: 'Formatted marker times aligned beneath the track, shown only where an event is marked.' },
   ],
   props: [
     { name: 'start', type: 'number', required: true, description: 'Window start, epoch milliseconds.' },
@@ -52,9 +51,8 @@ export const timelineScrubberSpec: ComponentSpec = {
     },
     { name: 'step', type: 'number', default: 1000, description: 'Arrow-key step in milliseconds; PageUp/PageDown move by ten steps.' },
     { name: 'formatTime', type: 'handler', description: 'Formats a timestamp for the readout, the ticks, and aria-valuetext. Defaults to a locale time string.' },
-    { name: 'liveLabel', type: 'string', default: 'Live', description: 'Label for the live button; replace it for localization.' },
     { name: 'size', type: 'enum', values: compactSizes, default: 'md', description: 'Track height step. The handle adds its overhang above the track.' },
-    { name: 'glass', type: 'boolean', default: false, description: 'Renders the track and live button on the frosted glass material.' },
+    { name: 'glass', type: 'boolean', default: false, description: 'Renders the track on the frosted glass material.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Blocks scrubbing and dims the control.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
     { name: 'aria-label', type: 'string', required: true, description: 'Accessible name for the scrubber, e.g. "Recorded activity".' },
@@ -63,7 +61,7 @@ export const timelineScrubberSpec: ComponentSpec = {
     { name: 'sm', height: '2.5rem' },
     { name: 'md', height: '3.5rem' },
   ],
-  defaults: { step: 1000, liveLabel: 'Live', size: 'md', glass: false, disabled: false, skeleton: false },
+  defaults: { step: 1000, size: 'md', glass: false, disabled: false, skeleton: false },
   dimensions: {
     radius: token('radius-md'),
     border: token('hairline'),
@@ -74,11 +72,10 @@ export const timelineScrubberSpec: ComponentSpec = {
     tickFontSize: token('font-size-xs'),
   },
   states: [
-    { name: 'default', description: 'Track on the sunken surface, activity backdrop in the accent soft, playhead line in the accent solid.' },
+    { name: 'default', description: 'Track on the sunken surface, activity backdrop in the text color, playhead line in the accent solid.' },
     {
       name: 'live',
-      description: 'The playhead hugs the trailing edge and moves with it; the live button fills solid to say "you are watching now".',
-      paint: { background: token('accent-solid'), text: token('accent-contrast') },
+      description: 'The playhead hugs the trailing edge and moves with the advancing window.',
     },
     {
       name: 'scrubbing',
@@ -87,12 +84,11 @@ export const timelineScrubberSpec: ComponentSpec = {
     },
     {
       name: 'past',
-      description: 'Scrubbed away from the live edge: the live button hollows to its soft form, inviting the jump back.',
-      paint: { background: token('accent-soft'), text: token('accent-text') },
+      description: 'Scrubbed away from the live edge: the playhead remains on the inspected moment.',
     },
     {
       name: 'glass',
-      description: 'The track and live button swap their solid surfaces for the frosted material.',
+      description: 'The track swaps its solid surface for the frosted material.',
       paint: { background: token('glass-regular'), border: token('glass-border') },
       tokens: { highlight: token('glass-highlight') },
     },
@@ -123,7 +119,6 @@ export const timelineScrubberSpec: ComponentSpec = {
     notes: [
       'The playhead is the slider: aria-valuemin/max are the window bounds and aria-valuetext speaks the formatted time, or the live label when pinned.',
       'Markers are decorative ticks with tooltips; the flagged events must also exist somewhere textual (a list, a feed) for non-pointer users.',
-      'The live button is a plain button named by liveLabel and reflects its state with aria-pressed.',
     ],
   },
   motion: {

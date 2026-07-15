@@ -2,7 +2,7 @@
  * NavBar — the @glacier/native binding of the web structure.
  *
  * KIND: compose. A navigation bar/rail built from native primitives (View /
- * Pressable / Text + the CounterBadge / Skeleton / Tooltip siblings), matching
+ * Pressable / Text + the CounterBadge / Skeleton siblings), matching
  * the DOM kit's `nav` landmark of icon-and-label items with a sliding active
  * pill. Paint and geometry are read from `navBarSpec` through the shared
  * resolvers so it cannot drift from NavBar.module.css:
@@ -16,9 +16,9 @@
  * `.icon` rules (the spec's top-level item paint is empty and those values are
  * not tokenized).
  *
- * ORIENTATION: horizontal is a row of icon+label items; vertical is a slim
- * square-icon rail whose labels collapse into an aria-label plus a right-placed
- * Tooltip. Items read the bar's orientation from a context; used outside a
+ * ORIENTATION: both orientations are icon-only by default; showLabels adds
+ * text to horizontal items. Vertical is always a slim square-icon rail. Items read the
+ * bar's orientation from a context; used outside a
  * NavBar an item lays out as a horizontal (labelled) item, exactly like the web.
  *
  * RESTING VISUALS ONLY. Web-only fidelity that is accepted-but-noop here
@@ -42,7 +42,6 @@ import { t } from './tokens.ts';
 import { paintFor, dimensionsFor } from './resolve.ts';
 import { CounterBadge } from './CounterBadge.tsx';
 import { Skeleton } from './Skeleton.tsx';
-import { Tooltip } from './Tooltip.tsx';
 
 // Derived from the spec so the unions cannot drift from the web kit.
 export type NavBarOrientation = (typeof navBarOrientations)[number];
@@ -52,6 +51,7 @@ export type NavBarSpring = (typeof navBarSprings)[number];
 // is used outside a NavBar, where it lays out as a horizontal (labelled) item.
 interface NavBarContextValue {
   orientation: NavBarOrientation;
+  showLabels: boolean;
 }
 const NavBarContext = createContext<NavBarContextValue | null>(null);
 
@@ -88,6 +88,8 @@ export interface NavBarProps extends Omit<ViewProps, 'style' | 'children'> {
   'aria-label': string;
   /** Pinned to the far end (bottom when vertical, trailing edge when horizontal), for a settings item. */
   end?: ReactNode;
+  /** Show item labels beside icons in horizontal orientation. Defaults to icon-only. */
+  showLabels?: boolean;
   /** Spring preset for the active pill. Accepted for parity; no motion runtime on this binding. */
   spring?: NavBarSpring;
   /** Renders a placeholder with the component's exact geometry. */
@@ -98,15 +100,15 @@ export interface NavBarProps extends Omit<ViewProps, 'style' | 'children'> {
 }
 
 /**
- * The Glacier NavBar, rendered with React Native primitives. Horizontal it is a
- * row of icon-and-label items; vertical it is a slim icon rail of square buttons
- * with tooltips carrying the labels. Fill it with NavBarItem and pin a settings
+ * The Glacier NavBar, rendered with React Native primitives. It is icon-only
+ * by default; showLabels adds text to horizontal items. Fill it with NavBarItem and pin a settings
  * item in the end slot. Geometry and the active-pill paint are read from the
  * nav-bar spec so it stays visually locked to @glacier/react's NavBar.
  */
 export function NavBar({
   orientation = 'horizontal',
   end,
+  showLabels = false,
   spring: _spring = 'snappy',
   skeleton = false,
   className: _className,
@@ -149,7 +151,7 @@ export function NavBar({
     // Same regions, geometry, and radius as the live bar. Decorative, so hidden
     // from a11y. The end square renders regardless of the `end` prop, matching
     // the web skeleton.
-    const widths = vertical ? SKELETON_ITEM_WIDTHS.map(() => ITEM_SIZE) : SKELETON_ITEM_WIDTHS;
+    const widths = vertical || !showLabels ? SKELETON_ITEM_WIDTHS.map(() => ITEM_SIZE) : SKELETON_ITEM_WIDTHS;
     return (
       <View aria-hidden={true} style={navStyle} {...rest}>
         <View style={itemsStyle}>
@@ -165,7 +167,7 @@ export function NavBar({
   }
 
   return (
-    <NavBarContext.Provider value={{ orientation }}>
+    <NavBarContext.Provider value={{ orientation, showLabels }}>
       <View accessibilityRole="navigation" aria-label={ariaLabel} style={navStyle} {...rest}>
         <View style={itemsStyle}>{children}</View>
         {end != null && <View style={endStyle}>{end}</View>}
@@ -186,8 +188,8 @@ export interface NavBarItemProps extends Omit<PressableProps, 'style' | 'childre
   /** Required leading glyph, hidden from assistive tech. */
   icon: ReactNode;
   /**
-   * Required label. Visible text in horizontal orientation; in vertical it
-   * becomes the accessible name and a Tooltip placed to the right.
+  * Required accessible label. It becomes visible text when a horizontal
+  * NavBar enables showLabels.
    */
   label: string;
   /** Highlights the item as the current location. */
@@ -201,7 +203,7 @@ export interface NavBarItemProps extends Omit<PressableProps, 'style' | 'childre
 /**
  * One destination in a NavBar: an icon with a label, an optional count badge,
  * and the resting active pill. In the vertical rail the label collapses into an
- * aria-label plus a right-placed Tooltip, so the item stays a square icon
+ * aria-label, so the item stays a square icon
  * button. Reads the bar's orientation from context; used outside a NavBar it
  * renders as a horizontal, labelled item with a static pill.
  */
@@ -220,6 +222,8 @@ export function NavBarItem({
 }: NavBarItemProps) {
   const context = useContext(NavBarContext);
   const vertical = context?.orientation === 'vertical';
+  const labelsVisible = context ? context.showLabels && !vertical : true;
+  const iconOnly = !labelsVisible;
   const isLink = href != null || as === 'a';
   const contentColor = active ? ACTIVE_TEXT : REST_TEXT;
 
@@ -232,7 +236,7 @@ export function NavBarItem({
     columnGap: ITEM_GAP,
     borderRadius: RADIUS,
     backgroundColor: 'transparent',
-    ...(vertical
+    ...(iconOnly
       ? { width: ITEM_SIZE, height: ITEM_SIZE }
       : { height: ITEM_SIZE, paddingHorizontal: ITEM_PAD_INLINE }),
     ...(disabled ? { opacity: 0.5 } : null),
@@ -242,7 +246,7 @@ export function NavBarItem({
     <Pressable
       accessibilityRole={isLink ? 'link' : 'button'}
       accessibilityState={{ selected: active, disabled }}
-      aria-label={vertical ? label : undefined}
+      aria-label={iconOnly ? label : undefined}
       disabled={disabled}
       style={itemStyle}
       {...rest}
@@ -279,7 +283,7 @@ export function NavBarItem({
       >
         {icon}
       </View>
-      {!vertical && (
+      {labelsVisible && (
         <Text
           numberOfLines={1}
           style={{
@@ -295,7 +299,7 @@ export function NavBarItem({
         </Text>
       )}
       {badge !== undefined &&
-        (vertical ? (
+        (iconOnly ? (
           // In the rail the badge pins to the top-right corner of the icon square.
           <View style={{ position: 'absolute', top: t('space-1'), right: t('space-1'), zIndex: 2 }}>
             <CounterBadge count={badge} size="sm" />
@@ -306,13 +310,5 @@ export function NavBarItem({
     </Pressable>
   );
 
-  // The rail has no visible labels, so every item carries its own tooltip.
-  if (vertical) {
-    return (
-      <Tooltip content={label} placement="right">
-        {item}
-      </Tooltip>
-    );
-  }
   return item;
 }

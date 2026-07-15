@@ -5,15 +5,18 @@
  * multiplies the whole space scale. So every padding and gap built on
  * --glacier-space-* breathes with density while staying on one shared scale.
  *
- * Comfortable is cozy: generous heights near Apple touch targets and roomier
- * padding. Compact pulls everything in for dense desktop tools.
+ * Comfortable remains the default for backwards compatibility. The other
+ * modes provide two tighter and two roomier stops around that baseline.
  */
 
-export type Density = 'comfortable' | 'compact';
+export type Density = 'extra-compact' | 'compact' | 'comfortable' | 'spacious' | 'more-space';
 
 export const controlHeights: Record<Density, Record<'sm' | 'md' | 'lg', string>> = {
+  'extra-compact': { sm: '1.625rem', md: '2rem', lg: '2.5rem' },
   comfortable: { sm: '2.25rem', md: '2.75rem', lg: '3.25rem' },
   compact: { sm: '1.875rem', md: '2.25rem', lg: '2.75rem' },
+  spacious: { sm: '2.375rem', md: '2.875rem', lg: '3.375rem' },
+  'more-space': { sm: '2.5rem', md: '3rem', lg: '3.5rem' },
 };
 
 /**
@@ -22,8 +25,11 @@ export const controlHeights: Record<Density, Record<'sm' | 'md' | 'lg', string>>
  * between the two, so neither mode feels like the middle.
  */
 export const densityScale: Record<Density, number> = {
+  'extra-compact': 0.65,
   comfortable: 1.1,
   compact: 0.8,
+  spacious: 1.2,
+  'more-space': 1.35,
 };
 
 // ---- CSS emission ----------------------------------------------------------

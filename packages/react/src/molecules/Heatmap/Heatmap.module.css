@@ -1,7 +1,10 @@
 .heatmap {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   gap: var(--glacier-space-2);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
   font-family: var(--glacier-font-sans);
   color: var(--glacier-text-subtle);
 }
@@ -9,6 +12,7 @@
 .grid {
   display: flex;
   gap: var(--glacier-space-1);
+  width: max-content;
 }
 
 .column {

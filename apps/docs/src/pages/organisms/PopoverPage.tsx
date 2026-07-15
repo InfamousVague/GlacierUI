@@ -24,6 +24,15 @@ export function PopoverPage() {
       <Example
         title={t(m.exBasic)}
         description={t(m.popExBasicDesc)}
+        component="Popover"
+        render={(K) => (
+          <K.Popover aria-label={t(m.popoverAboutThisRelease)} trigger={<K.Button>{t(m.popWhatsNew)}</K.Button>}>
+            <K.Stack gap={2}>
+              <K.Text weight="semibold">{t(m.popVersion24)}</K.Text>
+              <K.Text tone="muted">{t(m.popBasicBody)}</K.Text>
+            </K.Stack>
+          </K.Popover>
+        )}
         code={`import { Button, Popover, Stack, Text } from '@glacier/react';
 
 <Popover
@@ -37,14 +46,7 @@ export function PopoverPage() {
     </Text>
   </Stack>
 </Popover>`}
-      >
-        <Popover aria-label={t(m.popoverAboutThisRelease)} trigger={<Button>{t(m.popWhatsNew)}</Button>}>
-          <Stack gap={2}>
-            <Text weight="semibold">{t(m.popVersion24)}</Text>
-            <Text tone={TextTone.Muted}>{t(m.popBasicBody)}</Text>
-          </Stack>
-        </Popover>
-      </Example>
+      />
 
       <Example
         title={t(m.popExPlacementsTitle)}

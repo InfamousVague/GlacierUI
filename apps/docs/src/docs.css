@@ -11,12 +11,23 @@ body {
   line-height: var(--glacier-leading-md);
 }
 
+@keyframes nativeSkeletonShimmer {
+  from { transform: translateX(-45vw); }
+  to { transform: translateX(145vw); }
+}
+
+@keyframes nativeSpinnerRotate {
+  to { transform: rotate(360deg); }
+}
+
 /* Themed scrollbars across the whole app, matching the ScrollArea treatment so
-   the page, sidebar, code blocks, and prose all read as one system. Firefox's
-   scrollbar-color/-width inherit from :root; WebKit's pseudo-elements are
-   unscoped so they cover every overflow container. Components that theme (or
-   hide) their own scrollbar win on specificity. */
-:root {
+  the page, sidebar, code blocks, and prose all read as one system. Unlike the
+  color, scrollbar-width is not inherited, so every possible scroll host needs
+  the Firefox declaration directly. WebKit's pseudo-elements below are already
+  unscoped. Components that theme (or hide) their own scrollbar win on
+  specificity. macOS may still fade its overlay scrollbar when idle, but its
+  visible thumb uses the same dimensions and colors as Windows. */
+:where(html, body, body *) {
   scrollbar-width: thin;
   scrollbar-color: var(--glacier-border-strong) transparent;
 }
@@ -41,6 +52,72 @@ body {
 
 ::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+/* Scrollbar treatments are a docs appearance preference. The html/body prefix
+   intentionally outranks component-local defaults (including ScrollArea), so
+   the selected treatment remains consistent in every scroll host. */
+html[data-scrollbar-style='subtle'] body * {
+  scrollbar-color: var(--glacier-border) transparent;
+}
+
+html[data-scrollbar-style='subtle'] body *::-webkit-scrollbar-thumb {
+  background: var(--glacier-border-subtle);
+}
+
+html[data-scrollbar-style='subtle'] body *::-webkit-scrollbar-thumb:hover {
+  background: var(--glacier-border);
+}
+
+html[data-scrollbar-style='accent'] body * {
+  scrollbar-color: var(--glacier-accent-solid) var(--glacier-accent-soft);
+}
+
+html[data-scrollbar-style='accent'] body *::-webkit-scrollbar-track {
+  background: var(--glacier-accent-soft);
+}
+
+html[data-scrollbar-style='accent'] body *::-webkit-scrollbar-thumb {
+  background: var(--glacier-accent-solid);
+}
+
+html[data-scrollbar-style='accent'] body *::-webkit-scrollbar-thumb:hover {
+  background: var(--glacier-accent-10);
+}
+
+.scrollbarPreviewGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--glacier-space-4);
+  margin-block: var(--glacier-space-5) var(--glacier-space-10);
+}
+
+.scrollbarPreviewLabel {
+  display: block;
+  margin-bottom: var(--glacier-space-2);
+}
+
+.scrollbarPreviewVariants {
+  display: grid;
+  gap: var(--glacier-space-3);
+}
+
+.scrollbarPreviewVariantLabel {
+  display: block;
+  margin-bottom: var(--glacier-space-1);
+}
+
+.scrollbarPreview {
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-md);
+  background: var(--glacier-surface);
+  padding: var(--glacier-space-3);
+}
+
+@media (max-width: 720px) {
+  .scrollbarPreviewGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* ambient color wash so glass materials have something to blur */
@@ -133,24 +210,38 @@ body::before {
 
 /* The sidebar nav is the Sidebar structure; only the brand keeps custom type. */
 
-/* .content is a prose marker only; the Container primitive owns width and padding. */
+/* The Container owns width and default gutters. In floating mode its inline
+   padding follows the AppShell header edges: desktop's expanded grid already
+   reserves the start gutter beside the sidebar, while collapsed and mobile
+   layouts need equal gutters on both sides. */
+[data-mobile][data-floating] .content {
+  padding-inline: var(--glacier-space-3);
+}
+
+[data-desktop][data-floating] .content {
+  padding-inline: 0 var(--glacier-space-4);
+}
+
+[data-desktop][data-floating][data-sidebar-collapsed] .content {
+  padding-inline: var(--glacier-space-4);
+}
 
 /* Prose chrome renders through the kit's Heading/Text components now, so they
    own type (size, weight, color). These rules keep only the page's vertical
    rhythm — the margins between title, lede, and sections. */
-.content h1 {
+.content > h1 {
   margin: 0 0 var(--glacier-space-2);
 }
 
-.content h2 {
+.content > h2 {
   margin: var(--glacier-space-10) 0 var(--glacier-space-4);
 }
 
-.content h2:first-of-type {
+.content > h2:first-of-type {
   margin-top: var(--glacier-space-8);
 }
 
-.content h3 {
+.content > h3 {
   margin: var(--glacier-space-6) 0 var(--glacier-space-3);
 }
 
@@ -246,6 +337,191 @@ code {
 .propsTableWrap {
   overflow-x: auto;
   margin-block: var(--glacier-space-4);
+}
+
+.shellMock {
+  position: relative;
+  display: grid;
+  grid-template-columns: 18rem minmax(0, 1fr);
+  width: 100%;
+  height: 22rem;
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-bg);
+  overflow: hidden;
+}
+
+.shellMockPair {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--glacier-space-5);
+  width: 100%;
+  align-items: start;
+}
+
+.shellMockExample {
+  display: grid;
+  min-width: 0;
+  gap: var(--glacier-space-2);
+}
+
+.shellMockExample[data-layout='mobile'] {
+  width: min(100%, 17rem);
+  justify-self: start;
+}
+
+.shellMockLabel {
+  color: var(--glacier-text-subtle);
+  font-size: var(--glacier-font-size-xs);
+  font-weight: var(--glacier-font-weight-semibold);
+}
+
+.shellMockSidebar,
+.shellMockMain {
+  min-width: 0;
+}
+
+.shellMockSidebar {
+  position: relative;
+}
+
+.shellMockSidebarNav {
+  position: absolute;
+  inset-inline: 0;
+  bottom: var(--glacier-space-2);
+  width: auto;
+  min-height: 2.25rem;
+  border-top: var(--glacier-hairline) solid var(--glacier-border-subtle);
+}
+
+.shellMockNavBar,
+.shellMockBottomNav {
+  width: 100%;
+}
+
+.shellMockSidebarNav > div,
+.shellMockBottomNav > div {
+  flex: 1;
+  justify-content: space-around;
+}
+
+.shellMockMain {
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.shellMock[data-layout='mobile'] .shellMockMain {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.shellMockHeader {
+  position: relative;
+}
+
+.shellMockBackdrop,
+.shellMockClose {
+  display: none;
+}
+
+.shellMockMenu {
+  position: absolute;
+  inset-inline-start: var(--glacier-space-2);
+  top: 50%;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--glacier-radius-sm);
+  background: transparent;
+  color: var(--glacier-text);
+  transform: translateY(-50%);
+}
+
+.shellMock[data-layout='desktop'][data-collapsed] {
+  grid-template-columns: 0 minmax(0, 1fr);
+}
+
+.shellMock[data-layout='desktop'][data-collapsed] .shellMockSidebar {
+  visibility: hidden;
+}
+
+.shellMock[data-layout='mobile'] {
+  grid-template-columns: minmax(0, 1fr);
+  height: auto;
+  aspect-ratio: 390 / 844;
+}
+
+.shellMock[data-layout='mobile'] .shellMockSidebar {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  z-index: 2;
+  width: min(15rem, 84%);
+  transform: translateX(-120%);
+}
+
+.shellMock[data-layout='mobile'][data-open] .shellMockSidebar {
+  transform: translateX(0);
+}
+
+.shellMock[data-layout='mobile'] .shellMockBackdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border: 0;
+  background: var(--glacier-overlay);
+}
+
+.shellMock[data-layout='mobile'][data-open] .shellMockBackdrop {
+  display: block;
+}
+
+.shellMock[data-layout='mobile'][data-open] .shellMockClose {
+  display: inline-flex;
+}
+
+.shellMockClose {
+  position: absolute;
+  inset-block-start: var(--glacier-space-2);
+  inset-inline-end: var(--glacier-space-2);
+  z-index: 3;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 0;
+  border-radius: var(--glacier-radius-sm);
+  background: transparent;
+  color: var(--glacier-text);
+  align-items: center;
+  justify-content: center;
+}
+
+.shellMockBottomNav {
+  min-height: 2.75rem;
+  border-top: var(--glacier-hairline) solid var(--glacier-border-subtle) !important;
+  background: var(--glacier-surface-raised);
+}
+
+.shellMock[data-layout='mobile'][data-floating] .shellMockMain {
+  padding-block-end: var(--glacier-space-3);
+}
+
+.shellMock[data-layout='mobile'][data-floating] .shellMockBottomNav {
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle) !important;
+  border-radius: var(--glacier-radius-lg) !important;
+}
+
+@media (max-width: 640px) {
+  .shellMockPair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .shellMockExample[data-layout='mobile'] {
+    justify-self: start;
+  }
 }
 
 .swatchGrid {

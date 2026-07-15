@@ -13,6 +13,9 @@
 .viewport {
   overflow: auto;
   overscroll-behavior: contain;
+  /* Overlay scrollbars otherwise paint over the final line of content. Reserve
+     their lane so the thumb remains at the viewport edge on every platform. */
+  scrollbar-gutter: stable;
   /* when the host sizes the root instead of passing maxHeight (flex panels,
      sidebar bodies), the viewport still may not outgrow it */
   max-height: 100%;
@@ -20,8 +23,7 @@
   /* mask defaults to fully opaque; each fade edge is layered in below */
   --mask-start: transparent 0;
   --mask-end: #000 0;
-  scrollbar-width: thin;
-  scrollbar-color: var(--glacier-border-strong) transparent;
+  scrollbar-width: none;
 }
 
 .viewport:focus-visible {
@@ -33,6 +35,9 @@
 .vertical .viewport {
   overflow-x: hidden;
   overflow-y: auto;
+  /* Overlay scrollbars do not consume the stable gutter on macOS, so keep
+     text clear of the thumb with a matching content-side safety lane. */
+  padding-inline-end: var(--glacier-space-4);
 }
 
 .horizontal .viewport {
@@ -91,26 +96,69 @@
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--scroll-fade), #000 calc(100% - var(--scroll-fade)), transparent 100%);
 }
 
-/* --- WebKit scrollbar (thin, themed) --------------------------------------- */
+/* Browser scrollbars are hidden in favor of the cross-platform track below. */
 .viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  border-radius: var(--glacier-radius-full);
+  background: color-mix(in oklch, var(--glacier-border-strong) 50%, transparent);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.scrollbar[data-orientation='vertical'] {
+  inset-block: var(--glacier-space-2);
+  inset-inline-end: var(--glacier-space-2);
   width: var(--glacier-space-2);
+}
+
+.scrollbar[data-orientation='horizontal'] {
+  inset-inline: var(--glacier-space-2);
+  inset-block-end: 0;
   height: var(--glacier-space-2);
 }
 
-.viewport::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.viewport::-webkit-scrollbar-thumb {
-  background: var(--glacier-border);
-  border-radius: var(--glacier-radius-full);
-}
-
-.viewport::-webkit-scrollbar-thumb:hover {
+.thumb {
+  position: absolute;
+  display: block;
+  border-radius: inherit;
   background: var(--glacier-border-strong);
 }
 
-.viewport::-webkit-scrollbar-corner {
+.scrollbar[data-orientation='vertical'] .thumb {
+  inset-inline: 0;
+  inset-block-start: var(--scrollbar-thumb-offset);
+  height: var(--scrollbar-thumb-size);
+}
+
+.scrollbar[data-orientation='horizontal'] .thumb {
+  inset-block: 0;
+  inset-inline-start: var(--scrollbar-thumb-offset);
+  width: var(--scrollbar-thumb-size);
+}
+
+.scrollbar[data-scrollbar-appearance='subtle'] {
+  background: color-mix(in oklch, var(--glacier-border) 50%, transparent);
+}
+
+.scrollbar[data-scrollbar-appearance='subtle'] .thumb {
+  background: var(--glacier-border);
+}
+
+.scrollbar[data-scrollbar-appearance='accent'] {
+  background: color-mix(in oklch, var(--glacier-accent-solid) 50%, transparent);
+}
+
+.scrollbar[data-scrollbar-appearance='accent'] .thumb {
+  background: var(--glacier-accent-solid);
+}
+
+.scrollbar:not([data-track-visible]) {
   background: transparent;
 }
 

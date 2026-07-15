@@ -27,14 +27,24 @@ describe('NavBar', () => {
     expect(screen.getByRole('button', { name: 'Inbox' })).not.toHaveAttribute('aria-current');
   });
 
-  it('horizontal: shows the label text and renders the badge inline', () => {
+  it('horizontal: is icon-only by default and keeps labels accessible', () => {
     render(
       <NavBar aria-label="Primary">
         <NavBarItem icon={icon} label="Inbox" badge={8} />
       </NavBar>,
     );
-    expect(screen.getByText('Inbox')).toBeInTheDocument();
+    expect(screen.queryByText('Inbox')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Inbox' })).toBeInTheDocument();
     expect(screen.getByRole('status', { name: '8 items' })).toBeInTheDocument();
+  });
+
+  it('showLabels renders text beside horizontal icons', () => {
+    render(
+      <NavBar aria-label="Primary" showLabels>
+        <NavBarItem icon={icon} label="Inbox" />
+      </NavBar>,
+    );
+    expect(screen.getByText('Inbox')).toBeInTheDocument();
   });
 
   it('vertical: the label becomes the accessible name instead of visible text', () => {

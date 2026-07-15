@@ -14,11 +14,16 @@ export const iconSpec: ComponentSpec = {
       description: 'The stroked paths of one icon, drawn on the shared 24 by 24 grid.',
       required: true,
     },
+    {
+      name: 'backfill',
+      description: 'Optional IconBackfill wrapper: a 33%-opacity silhouette of the glyph itself, painted from the resolved icon color.',
+    },
   ],
   props: [
     { name: 'size', type: 'number', default: 24, description: 'Rendered width and height in pixels; the glyph scales from the 24-unit grid.' },
     { name: 'color', type: 'string', default: 'currentColor', description: 'Stroke color; the default inherits the surrounding text color.' },
     { name: 'strokeWidth', type: 'number', default: 2, description: 'Stroke width in grid units, shared across the set for a consistent weight.' },
+    { name: 'backfill', type: 'boolean', default: false, description: 'Wraps the glyph in IconBackfill, adding a 33%-opacity silhouette in the same resolved icon color.' },
     {
       name: 'absoluteStrokeWidth',
       type: 'boolean',
@@ -32,8 +37,8 @@ export const iconSpec: ComponentSpec = {
     { name: 'md', diameter: '20px' },
     { name: 'lg', diameter: '24px' },
   ],
-  defaults: { size: 24, color: 'currentColor', strokeWidth: 2, absoluteStrokeWidth: false },
-  dimensions: { strokeWidth: '2px' },
+  defaults: { size: 24, color: 'currentColor', strokeWidth: 2, backfill: false, absoluteStrokeWidth: false },
+  dimensions: { strokeWidth: '2px', backfillOpacity: '33%' },
   // strokes currentColor, so it carries no paint of its own
   paint: {},
   tokens: [],

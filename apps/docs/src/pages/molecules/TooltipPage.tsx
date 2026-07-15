@@ -25,7 +25,7 @@ export function TooltipPage() {
         component="Tooltip"
         render={(K) => (
           <K.Tooltip content={t(m.tipContentSaved)}>
-            <Button>{t(m.tooltipSave)}</Button>
+            <K.Button>{t(m.tooltipSave)}</K.Button>
           </K.Tooltip>
         )}
         code={`import { Button, Tooltip } from '@glacier/react';
@@ -42,16 +42,16 @@ export function TooltipPage() {
         render={(K) => (
           <Row gap={3} wrap>
             <K.Tooltip content={t(m.tipContentTop)} placement="top">
-              <Button>{t(m.tooltipTop)}</Button>
+              <K.Button>{t(m.tooltipTop)}</K.Button>
             </K.Tooltip>
             <K.Tooltip content={t(m.tipContentBottom)} placement="bottom">
-              <Button>{t(m.tooltipBottom)}</Button>
+              <K.Button>{t(m.tooltipBottom)}</K.Button>
             </K.Tooltip>
             <K.Tooltip content={t(m.tipContentLeft)} placement="left">
-              <Button>{t(m.tooltipLeft)}</Button>
+              <K.Button>{t(m.tooltipLeft)}</K.Button>
             </K.Tooltip>
             <K.Tooltip content={t(m.tipContentRight)} placement="right">
-              <Button>{t(m.tooltipRight)}</Button>
+              <K.Button>{t(m.tooltipRight)}</K.Button>
             </K.Tooltip>
           </Row>
         )}
@@ -75,7 +75,7 @@ export function TooltipPage() {
         component="Tooltip"
         render={(K) => (
           <K.Tooltip content={t(m.tipContentCopyLink)}>
-            <IconButton aria-label={t(m.tipContentCopyLink)}><Link2 size={18} /></IconButton>
+            <K.IconButton aria-label={t(m.tipContentCopyLink)}><Link2 size={18} /></K.IconButton>
           </K.Tooltip>
         )}
         code={`<Tooltip content="Copy link">
@@ -113,7 +113,7 @@ export function TooltipPage() {
         component="Tooltip"
         render={(K) => (
           <K.Tooltip content={t(m.tipContentNoWait)} delay={0}>
-            <Button variant={Variant.Ghost}>{t(m.tooltipInstant)}</Button>
+            <K.Button variant={Variant.Ghost}>{t(m.tooltipInstant)}</K.Button>
           </K.Tooltip>
         )}
         code={`<Tooltip content="No wait" delay={0}>

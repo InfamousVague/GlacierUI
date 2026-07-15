@@ -12,6 +12,14 @@ when validated.
   side-by-side comparison shows the resting trigger.
 
 ---
+## Missing
+- [x] Announcements banner with scrolling updates
+- [x] Custom scrollbars
+- [ ] Default Themes
+- [ ] UI background accents (Halftone dots illustrations, etc) for the top right top left or other corner in the background of the app for visual flair
+- [x] Option for semi-transparent empty icon fill
+- [x] Support for 4 different size modes, from more cozy to more space like macos has
+
 
 ## Atoms (43)
 
@@ -20,88 +28,89 @@ when validated.
 - [x] Button
 - [x] Callout
 - [x] Card
-- [ ] Checkbox
-- [ ] CodeBlock
-- [ ] CounterBadge
-- [ ] DeviceFrame
-- [ ] Divider
-- [ ] EmptyState
-- [ ] FilterChip
-- [ ] Heading
-- [ ] Icon
-- [ ] IconButton
-- [ ] Image
-- [ ] Input
-- [ ] Kbd
-- [ ] Label
-- [ ] Link
-- [ ] Meter
-- [ ] NumberInput
-- [ ] OtpField
-- [ ] Pill
-- [ ] ProgressBar
-- [ ] ProgressRing
-- [ ] Radio
-- [ ] RadioCard
-- [ ] Rating
-- [ ] SearchField
-- [ ] SegmentedBar
-- [ ] Skeleton
-- [ ] Slider
-- [ ] Sparkline
-- [ ] Spinner
-- [ ] StatTile
-- [ ] StatusDot
-- [ ] Steps
-- [ ] Surface
-- [ ] Switch
-- [ ] Text
-- [ ] Textarea
-- [ ] Toggle
+- [x] Checkbox
+- [x] CodeBlock
+- [x] CounterBadge
+- [x] DeviceFrame
+- [x] Divider
+- [x] EmptyState
+- [x] FilterChip
+- [x] Heading
+- [x] Icon
+- [x] IconButton
+- [x] Image
+- [x] Input
+- [x] Kbd
+- [x] Label
+- [x] Link
+- [x] Meter
+- [x] NumberInput
+- [x] OtpField
+- [x] Pill
+- [x] ProgressBar
+- [x] ProgressRing
+- [x] Radio
+- [x] RadioCard
+- [x] Rating
+- [x] SearchField
+- [x] SegmentedBar
+- [x] Skeleton
+- [x] Slider
+- [x] Sparkline
+- [x] Spinner
+- [x] StatTile
+- [x] StatusDot
+- [x] Steps
+- [x] Surface
+- [x] Switch
+- [x] Text
+- [x] Textarea
+- [x] Toggle
 
 ## Molecules (21)
 
-- [ ] Accordion
-- [ ] Breadcrumbs
-- [ ] Calendar
-- [ ] Carousel
-- [ ] Combobox &nbsp;`▲ overlay`
-- [ ] DatePicker &nbsp;`▲ overlay`
-- [ ] Field
-- [ ] Fieldset
-- [ ] FileUpload
-- [ ] FormSection
-- [ ] Heatmap
-- [ ] List
-- [ ] MultiSelect &nbsp;`▲ overlay`
-- [ ] Pagination
-- [ ] ScrollArea
-- [ ] SegmentedControl
-- [ ] Select &nbsp;`▲ overlay`
-- [ ] Spotlight &nbsp;`▲ overlay`
-- [ ] Tabs
-- [ ] Toast
-- [ ] Tooltip &nbsp;`▲ overlay`
+- [x] Accordion
+- [x] Breadcrumbs
+- [x] Calendar
+- [x] Carousel
+- [x] Combobox &nbsp;`▲ overlay`
+- [x] DatePicker &nbsp;`▲ overlay`
+- [x] Field
+- [x] Fieldset
+- [x] FileUpload
+- [x] FormSection
+- [x] Heatmap
+- [x] List
+- [x] MultiSelect &nbsp;`▲ overlay`
+- [x] Pagination
+- [x] ScrollArea
+- [x] SegmentedControl
+- [x] Select &nbsp;`▲ overlay`
+- [x] Spotlight &nbsp;`▲ overlay`
+- [x] Tabs
+- [x] Toast
 
 ## Organisms (18)
 
-- [ ] AlertDialog &nbsp;`▲ overlay`
-- [ ] AppShell
-- [ ] DataGrid
+- [x] AlertDialog &nbsp;`▲ overlay`
+- [x] AppShell
+- [x] DataGrid
 - [ ] Drawer &nbsp;`▲ overlay`
 - [ ] FloatingPanel &nbsp;`▲ overlay`
-- [ ] Menu &nbsp;`▲ overlay`
+- [x] Menu &nbsp;`▲ overlay`
 - [ ] Modal &nbsp;`▲ overlay`
 - [ ] Popover &nbsp;`▲ overlay`
-- [ ] ResizableSplitPane
-- [ ] TabStrip
-- [ ] TabbedModal &nbsp;`▲ overlay`
-- [ ] TabbedPanel
-- [ ] Table
-- [ ] Timeline
-- [ ] TimeSeriesChart
-- [ ] TimelineScrubber
+- [x] ResizableSplitPane
+- [x] TabStrip
+- [x] TabbedModal &nbsp;`▲ overlay`
+- [x] TabbedPanel
+- [x] Table
+- [x] Timeline
+- [x] TimeSeriesChart
+- [x] TimelineScrubber
 - [ ] TreeView
+  - [ ] Text clipped on react native
+  - [ ] Blueprint is not representitive of tree view
 - [ ] Wizard
 
 ## Structures (7)

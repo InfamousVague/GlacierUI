@@ -9,23 +9,18 @@
  * resting split is visually identical to @glacier/react's ResizableSplitPane
  * and cannot drift from it.
  *
- * Resting visuals only. The divider is STATIC: the web drives resize through
- * pointer capture + pointermove and keyboard arrows/Home/End, none of which
- * have a runtime here (there is no PanResponder in this binding). The divider
- * therefore renders at the resting split and does not move; `onRatioChange`,
- * `min`, `max`, `step`, and `resetRatio` are accepted for a 1:1 prop contract
- * but are inert without a drag/keyboard runtime. A controlled `ratio` is still
- * honored through `useControlled`, so a parent that owns the ratio repaints the
- * split. The grip pill (a web hover/focus reveal, opacity 0→1) is shown at rest
- * as the touch drag affordance — a documented approximation, since touch has no
- * hover; its white fill is the web CSS literal (not a spec token). The focus
- * ring and the divider's hover/focus accent-solid fill are focus/hover states,
- * not part of the resting paint. The web `className`/`style` DOM escape hatches
- * are not part of the native contract.
+ * Dragging uses the native responder system on devices and pointer capture on
+ * React Native Web. Both paths measure movement from the drag's starting ratio,
+ * clamp to `min`/`max`, and update through the same controlled-state contract.
+ * Native accessibility increment/decrement actions move by `step`. The grip
+ * pill (a web hover/focus reveal, opacity 0→1) is shown at rest as the touch
+ * drag affordance; its white fill is the web CSS literal (not a spec token).
+ * The web `className`/`style` DOM escape hatches are not part of the native
+ * contract.
  */
 
-import { type ReactNode } from 'react';
-import { View, type ViewProps } from 'react-native';
+import { useRef, type ComponentType, type ReactNode } from 'react';
+import { Platform, View, type ViewProps } from 'react-native';
 import { resizableSplitPaneSpec } from '@glacier/spec';
 import { useControlled } from '@glacier/commons';
 import { t } from './tokens.ts';
@@ -48,18 +43,15 @@ export interface ResizableSplitPaneProps extends Omit<ViewProps, 'children' | 's
   ratio?: number;
   /** Initial start-pane fraction when uncontrolled. */
   defaultRatio?: number;
-  /**
-   * Called with the next ratio on drag, keyboard step, or reset. Accepted for
-   * contract parity; inert on native (no drag/keyboard runtime here).
-   */
+  /** Called with the next ratio while the divider is dragged or adjusted. */
   onRatioChange?: (ratio: number) => void;
-  /** Smallest start-pane fraction the divider can reach (inert without a drag). */
+  /** Smallest start-pane fraction the divider can reach. */
   min?: number;
-  /** Largest start-pane fraction the divider can reach (inert without a drag). */
+  /** Largest start-pane fraction the divider can reach. */
   max?: number;
   /** Fraction the divider snaps back to on double-click (web-only; inert here). */
   resetRatio?: number;
-  /** Fraction the divider moves per arrow-key press (web-only; inert here). */
+  /** Fraction the divider moves per native accessibility adjustment. */
   step?: number;
   /** Accessible name for the divider. */
   'aria-label'?: string;
@@ -83,6 +75,44 @@ const DIVIDER_BG = t('border-subtle');
 const GRIP_COLOR = '#fff';
 
 const round = (value: number): number => Math.round(value * 1e4) / 1e4;
+const clamp = (value: number, min: number, max: number): number => Math.min(Math.max(value, min), max);
+
+type LayoutEvent = { nativeEvent: { layout: { width: number; height: number } } };
+type ResponderDragEvent = {
+  nativeEvent: { locationX: number; locationY: number; pageX?: number; pageY?: number };
+};
+type PointerDragEvent = {
+  nativeEvent: { clientX: number; clientY: number; button?: number; buttons?: number; pointerId?: number };
+  currentTarget: {
+    parentElement?: { getBoundingClientRect(): { width: number; height: number } };
+    setPointerCapture?(pointerId: number): void;
+    releasePointerCapture?(pointerId: number): void;
+  };
+  preventDefault?(): void;
+};
+type AccessibilityActionEvent = { nativeEvent: { actionName: string } };
+
+const Root = View as unknown as ComponentType<ViewProps & { onLayout?: (event: LayoutEvent) => void }>;
+const Divider = View as unknown as ComponentType<
+  Omit<ViewProps, 'onResponderGrant' | 'onResponderMove' | 'onPointerDown' | 'onPointerMove' | 'onPointerUp'> & {
+    hitSlop?: number;
+    accessibilityValue?: { min: number; max: number; now: number };
+    accessibilityActions?: Array<{ name: string }>;
+    onAccessibilityAction?: (event: AccessibilityActionEvent) => void;
+    onResponderGrant?: (event: ResponderDragEvent) => void;
+    onResponderMove?: (event: ResponderDragEvent) => void;
+    onResponderRelease?: () => void;
+    onResponderTerminate?: () => void;
+    onPointerDown?: (event: PointerDragEvent) => void;
+    onPointerMove?: (event: PointerDragEvent) => void;
+    onPointerUp?: (event: PointerDragEvent) => void;
+    onPointerCancel?: (event: PointerDragEvent) => void;
+    tabIndex?: number;
+    'aria-valuemin'?: number;
+    'aria-valuemax'?: number;
+    'aria-valuenow'?: number;
+  }
+>;
 
 /**
  * A container that splits into two panes with a divider between them. It hosts
@@ -96,28 +126,60 @@ export function ResizableSplitPane({
   ratio,
   defaultRatio = 0.5,
   onRatioChange,
-  min: _min = 0.1,
-  max: _max = 0.9,
+  min = 0.1,
+  max = 0.9,
   resetRatio: _resetRatio,
-  step: _step = 0.02,
+  step = 0.02,
   'aria-label': ariaLabel,
   ...rest
 }: ResizableSplitPaneProps) {
-  // Controlled-or-uncontrolled, so a parent that persists the ratio stays the
-  // source of truth. The setter has no caller here (the drag/keyboard that would
-  // move the divider are web-only), so the split rests where it is resolved.
-  const [current] = useControlled({ value: ratio, defaultValue: defaultRatio, onChange: onRatioChange });
+  const [current, setCurrent] = useControlled({ value: ratio, defaultValue: defaultRatio, onChange: onRatioChange });
   const isHorizontal = orientation === 'horizontal';
   const [start, end] = children;
+  const extentRef = useRef(0);
+  const dragStartRef = useRef({ coordinate: 0, ratio: current });
+  const pointerDraggingRef = useRef(false);
+
+  const commit = (next: number) => setCurrent(round(clamp(next, min, max)));
+  const beginDrag = (coordinate: number, liveExtent?: number) => {
+    if (liveExtent !== undefined && liveExtent > 0) extentRef.current = liveExtent;
+    dragStartRef.current = { coordinate, ratio: current };
+  };
+  const moveDrag = (coordinate: number) => {
+    if (extentRef.current <= 0) return;
+    const delta = coordinate - dragStartRef.current.coordinate;
+    commit(dragStartRef.current.ratio + delta / extentRef.current);
+  };
+  const responderCoordinate = (event: ResponderDragEvent) =>
+    isHorizontal
+      ? (event.nativeEvent.pageX ?? event.nativeEvent.locationX)
+      : (event.nativeEvent.pageY ?? event.nativeEvent.locationY);
+  const pointerCoordinate = (event: PointerDragEvent) =>
+    isHorizontal ? event.nativeEvent.clientX : event.nativeEvent.clientY;
+  const finishPointerDrag = (event: PointerDragEvent) => {
+    pointerDraggingRef.current = false;
+    const pointerId = event.nativeEvent.pointerId;
+    if (pointerId !== undefined) {
+      try {
+        event.currentTarget.releasePointerCapture?.(pointerId);
+      } catch {
+        // The pointer may already have been released by the host.
+      }
+    }
+  };
 
   // The start pane's size along the split axis, as a percentage of the whole,
   // matching the web `--split-start` custom property.
-  const startSize = `${round(current * 100)}%`;
+  const percent = round(current * 100);
+  const startSize = `${percent}%`;
 
   return (
-    <View
+    <Root
       accessibilityRole="group"
       {...rest}
+      onLayout={(event) => {
+        extentRef.current = isHorizontal ? event.nativeEvent.layout.width : event.nativeEvent.layout.height;
+      }}
       style={{
         width: '100%',
         height: '100%',
@@ -129,7 +191,7 @@ export function ResizableSplitPane({
         flexDirection: isHorizontal ? 'row' : 'column',
       }}
     >
-      {/* Start pane: fixed to the resting split along the axis, clipped. */}
+      {/* Start pane: fixed to the resolved split along the axis, clipped. */}
       <View
         style={{
           [isHorizontal ? 'width' : 'height']: startSize,
@@ -143,13 +205,57 @@ export function ResizableSplitPane({
         {start}
       </View>
 
-      {/* Divider: a hairline rail (stretched across the cross axis by RN's
-          default alignItems) carrying the centered grip pill. Static. */}
-      <View
+      {/* Divider: a hairline rail with a larger invisible drag target. */}
+      <Divider
         accessibilityRole="separator"
         accessibilityLabel={ariaLabel ?? 'Resize panes'}
+        accessibilityValue={{ min: round(min * 100), max: round(max * 100), now: percent }}
+        accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
+        onAccessibilityAction={(event) => {
+          if (event.nativeEvent.actionName === 'increment') commit(current + step);
+          if (event.nativeEvent.actionName === 'decrement') commit(current - step);
+        }}
         aria-label={ariaLabel ?? 'Resize panes'}
         aria-orientation={isHorizontal ? 'vertical' : 'horizontal'}
+        aria-valuemin={round(min * 100)}
+        aria-valuemax={round(max * 100)}
+        aria-valuenow={percent}
+        tabIndex={Platform.OS === 'web' ? 0 : undefined}
+        hitSlop={8}
+        {...(Platform.OS === 'web'
+          ? {
+              onPointerDown: (event: PointerDragEvent) => {
+                if (event.nativeEvent.button !== undefined && event.nativeEvent.button !== 0) return;
+                event.preventDefault?.();
+                const bounds = event.currentTarget.parentElement?.getBoundingClientRect();
+                beginDrag(pointerCoordinate(event), bounds ? (isHorizontal ? bounds.width : bounds.height) : undefined);
+                pointerDraggingRef.current = true;
+                const pointerId = event.nativeEvent.pointerId;
+                if (pointerId !== undefined) {
+                  try {
+                    event.currentTarget.setPointerCapture?.(pointerId);
+                  } catch {
+                    // Synthetic events can provide an ID without an active pointer.
+                  }
+                }
+              },
+              onPointerMove: (event: PointerDragEvent) => {
+                if (pointerDraggingRef.current && event.nativeEvent.buttons !== 0) moveDrag(pointerCoordinate(event));
+              },
+              onPointerUp: finishPointerDrag,
+              onPointerCancel: finishPointerDrag,
+            }
+          : {
+              onStartShouldSetResponder: () => true,
+              onResponderGrant: (event: ResponderDragEvent) => beginDrag(responderCoordinate(event)),
+              onResponderMove: (event: ResponderDragEvent) => moveDrag(responderCoordinate(event)),
+              onResponderRelease: () => {
+                pointerDraggingRef.current = false;
+              },
+              onResponderTerminate: () => {
+                pointerDraggingRef.current = false;
+              },
+            })}
         style={{
           flexGrow: 0,
           flexShrink: 0,
@@ -157,6 +263,9 @@ export function ResizableSplitPane({
           justifyContent: 'center',
           backgroundColor: DIVIDER_BG,
           [isHorizontal ? 'width' : 'height']: THICKNESS,
+          ...(Platform.OS === 'web'
+            ? { cursor: isHorizontal ? 'col-resize' : 'row-resize', touchAction: 'none', userSelect: 'none' }
+            : null),
         }}
       >
         <View
@@ -168,12 +277,12 @@ export function ResizableSplitPane({
             height: isHorizontal ? GRIP_LONG : GRIP_SHORT,
           }}
         />
-      </View>
+      </Divider>
 
       {/* End pane: fills the remaining space, clipped. */}
       <View style={{ flexGrow: 1, flexShrink: 1, flexBasis: 0, minWidth: 0, minHeight: 0, overflow: 'hidden' }}>
         {end}
       </View>
-    </View>
+    </Root>
   );
 }

@@ -3,6 +3,8 @@ import { token } from '../vocab.ts';
 
 /** The scroll axis the container caps and fades along. */
 export const scrollAreaOrientations = ['vertical', 'horizontal'] as const;
+/** Visual treatments for the scrollbar on web-capable bindings. */
+export const scrollbarAppearances = ['subtle', 'default', 'accent'] as const;
 
 export const scrollAreaSpec: ComponentSpec = {
   name: 'ScrollArea',
@@ -20,11 +22,13 @@ export const scrollAreaSpec: ComponentSpec = {
   props: [
     { name: 'maxHeight', type: 'string', description: 'Caps the viewport along the scroll axis (max-height when vertical, max-width when horizontal); a CSS length or pixel number.' },
     { name: 'orientation', type: 'enum', values: scrollAreaOrientations, default: 'vertical', description: 'Scroll axis; vertical fades top/bottom, horizontal fades left/right.' },
+    { name: 'scrollbarAppearance', type: 'enum', values: scrollbarAppearances, default: 'default', description: 'Visual treatment for the visible scrollbar on web-capable bindings.' },
+    { name: 'showScrollbarTrack', type: 'boolean', default: true, description: 'Shows the half-opaque track behind the scrollbar thumb.' },
     { name: 'hideScrollbar', type: 'boolean', default: false, description: 'Hides the scrollbar entirely while every scroll input keeps working; the edge fades still signal the overflow.' },
     { name: 'children', type: 'node', description: 'The overflowing content.' },
     { name: 'className', type: 'string', description: 'Extra class on the root wrapper.' },
   ],
-  defaults: { orientation: 'vertical', hideScrollbar: false },
+  defaults: { orientation: 'vertical', scrollbarAppearance: 'default', showScrollbarTrack: true, hideScrollbar: false },
   // fade width and scrollbar thickness are fixed on the space scale
   dimensions: {
     fade: token('space-6'),
@@ -44,7 +48,7 @@ export const scrollAreaSpec: ComponentSpec = {
   tokens: [
     'space-2', 'space-6',
     'font-sans', 'text',
-    'border', 'border-strong',
+    'border', 'border-strong', 'border-subtle', 'accent-solid', 'accent-soft', 'accent-10',
     'radius-sm', 'radius-full', 'focus-ring',
   ],
   a11y: {

@@ -25,6 +25,7 @@ export type NavBarOrientation = (typeof navBarOrientations)[number];
 // static.
 interface NavBarContextValue {
   orientation: NavBarOrientation;
+  showLabels: boolean;
   layoutId: string;
   transition: Transition;
 }
@@ -43,6 +44,8 @@ export interface NavBarProps extends ComponentProps<'nav'> {
   'aria-label': string;
   /** Pinned to the far end (bottom when vertical, trailing edge when horizontal), for a settings item. */
   end?: ReactNode;
+  /** Show item labels beside icons in horizontal orientation. Defaults to icon-only. */
+  showLabels?: boolean;
   /** Spring preset for the active pill as it slides between items. */
   spring?: Spring;
   /** Renders a placeholder with the component's exact geometry. */
@@ -51,15 +54,16 @@ export interface NavBarProps extends ComponentProps<'nav'> {
 }
 
 /**
- * An app-level primary navigation bar. Horizontal it is a row of icon-and-label
- * items for a top nav or a bottom tab bar; vertical it is a slim icon rail of
- * square buttons with tooltips carrying the labels. Fill it with NavBarItem and
+ * An app-level primary navigation bar. It renders icon-only destinations with
+ * accessible labels and tooltips by default; showLabels adds visible text to
+ * horizontal items. Fill it with NavBarItem and
  * pin a settings item in the end slot. The active pill slides between items
  * with the chosen spring.
  */
 export function NavBar({
   orientation = 'horizontal',
   end,
+  showLabels = false,
   spring = Spring.Snappy,
   skeleton = false,
   className,
@@ -71,7 +75,7 @@ export function NavBar({
   const reduce = useReducedMotion();
 
   if (skeleton) {
-    const widths = orientation === 'vertical' ? SKELETON_ITEM_WIDTHS.map(() => ITEM_SIZE) : SKELETON_ITEM_WIDTHS;
+    const widths = orientation === 'vertical' || !showLabels ? SKELETON_ITEM_WIDTHS.map(() => ITEM_SIZE) : SKELETON_ITEM_WIDTHS;
     return (
       <nav {...rest} aria-hidden="true" className={cx(styles.nav, styles[orientation], className)}>
         <div className={styles.items}>
@@ -88,6 +92,7 @@ export function NavBar({
 
   const context: NavBarContextValue = {
     orientation,
+    showLabels,
     layoutId: `${id}-active`,
     transition: reduce ? { duration: 0 } : springTransition(spring),
   };
@@ -111,8 +116,8 @@ export interface NavBarItemProps extends Omit<ComponentProps<'button'>, 'childre
   /** Required leading glyph, hidden from assistive tech. */
   icon: ReactNode;
   /**
-   * Required label. Visible text in horizontal orientation; in vertical it
-   * becomes the accessible name and a tooltip placed to the right.
+  * Required accessible label. It appears in a tooltip by default and becomes
+  * visible text when a horizontal NavBar enables showLabels.
    */
   label: string;
   /** Highlights the item as the current location. */
@@ -122,10 +127,9 @@ export interface NavBarItemProps extends Omit<ComponentProps<'button'>, 'childre
 }
 
 /**
- * One destination in a NavBar: an icon with a label, an optional count badge,
- * and the sliding active pill. In the vertical rail the label collapses into
- * an aria-label plus a right-placed tooltip, so the item stays a square icon
- * button.
+ * One destination in a NavBar: an icon with an accessible label, an optional
+ * count badge, and the sliding active pill. Icon-only items expose the label
+ * through aria-label and a tooltip.
  */
 export function NavBarItem({
   as,
@@ -141,13 +145,15 @@ export function NavBarItem({
   const extra = (as ?? 'button') === 'button' ? { type: 'button' as const, disabled } : {};
   const context = useContext(NavBarContext);
   const vertical = context?.orientation === 'vertical';
+  const labelsVisible = context ? context.showLabels && !vertical : true;
+  const iconOnly = !labelsVisible;
   const item = (
     <Component
-      className={cx(styles.item, vertical ? styles.itemVertical : styles.itemHorizontal, className)}
+      className={cx(styles.item, iconOnly ? styles.itemVertical : styles.itemHorizontal, className)}
       data-active={active || undefined}
       aria-current={active ? 'page' : undefined}
       aria-disabled={disabled || undefined}
-      aria-label={vertical ? label : undefined}
+      aria-label={iconOnly ? label : undefined}
       {...extra}
       {...rest}
     >
@@ -165,14 +171,14 @@ export function NavBarItem({
       <span className={styles.icon} aria-hidden="true">
         {icon}
       </span>
-      {!vertical && <span className={styles.label}>{label}</span>}
+      {labelsVisible && <span className={styles.label}>{label}</span>}
       {badge !== undefined && <CounterBadge count={badge} size="sm" className={styles.badge} />}
     </Component>
   );
   // The rail has no visible labels, so every item carries its own tooltip.
-  if (vertical) {
+  if (iconOnly) {
     return (
-      <Tooltip content={label} placement="right">
+      <Tooltip content={label} placement={vertical ? 'right' : 'top'}>
         {item}
       </Tooltip>
     );

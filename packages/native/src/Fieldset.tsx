@@ -81,7 +81,7 @@ export function Fieldset({
         position: 'relative' as const,
         borderWidth: BORDER,
         borderStyle: 'solid' as const,
-        borderColor: t('border'),
+        borderColor: 'transparent',
         borderRadius: RADIUS,
         padding: PAD,
       }
@@ -95,7 +95,15 @@ export function Fieldset({
     color: t('text'),
     fontFamily: t('font-sans'),
     // On the border the legend floats with side padding pulled back into the line.
-    ...(bordered ? { paddingHorizontal: t('space-2'), marginLeft: 'calc(var(--glacier-space-2) * -1)' } : null),
+    ...(bordered
+      ? {
+          paddingHorizontal: t('space-2'),
+          marginLeft: 'calc(var(--glacier-space-2) * -1)',
+          backgroundColor: t('surface-sunken'),
+          transform: [{ translateY: `calc(${PAD} * -1)` }],
+          alignSelf: 'flex-start',
+        }
+      : null),
     ...(disabled ? { opacity: 0.5 } : null),
   };
 
@@ -108,12 +116,31 @@ export function Fieldset({
     ...(disabled ? { opacity: 0.5 } : null),
   };
 
+  const borderFrame = bordered ? (
+    <View
+      aria-hidden={true}
+      pointerEvents="none"
+      style={{
+        position: 'absolute',
+        top: `calc(${t('font-size-md')} * ${t('leading-sm')} / 2)`,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        borderWidth: BORDER,
+        borderStyle: 'solid',
+        borderColor: t('border'),
+        borderRadius: RADIUS,
+      }}
+    />
+  ) : null;
+
   if (skeleton) {
     // The legend/description swap to placeholder lines; nested controls render
     // their own skeletons. Skeleton is a View, so it is wrapped in a View (never
     // a Text) to stay valid on-device; the bordered legend offset is preserved.
     return (
       <View style={boxStyle} {...rest}>
+        {borderFrame}
         <View style={bordered ? { paddingHorizontal: t('space-2'), marginLeft: 'calc(var(--glacier-space-2) * -1)' } : null}>
           <Skeleton variant="text" width="8rem" />
         </View>
@@ -134,6 +161,7 @@ export function Fieldset({
       style={boxStyle}
       {...rest}
     >
+      {borderFrame}
       <Text style={legendStyle}>{legend}</Text>
       {description != null && <Text style={descriptionStyle}>{description}</Text>}
       {actions != null && (

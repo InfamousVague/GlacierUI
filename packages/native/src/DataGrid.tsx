@@ -269,6 +269,7 @@ export function DataGrid({
   const cellTextStyle = (col: DataGridColumn) => ({
     color: t('text'),
     fontSize: t('font-size-sm'),
+    lineHeight: t('leading-sm') as never,
     fontFamily: t('font-sans'),
     textAlign: textAlignFor(col.align),
   });
@@ -293,6 +294,7 @@ export function DataGrid({
           const headerText = {
             color: headerColor,
             fontSize: t('font-size-sm'),
+            lineHeight: t('leading-sm') as never,
             fontFamily: t('font-sans'),
             fontWeight: '600' as never,
             textAlign: textAlignFor(col.align),
@@ -410,9 +412,8 @@ export function DataGrid({
         aria-hidden={true}
         {...rest}
         style={[wrapStyle(), style as never]}
-        contentContainerStyle={{ flexGrow: 1 }}
       >
-        <View style={{ flexGrow: 1, backgroundColor: SURFACE }}>
+        <View style={{ backgroundColor: SURFACE }}>
           <View accessibilityRole="row" style={{ flexDirection: 'row', backgroundColor: SURFACE, ...rowDivider }}>
             {selectable ? (
               <View style={selectBox}>
@@ -464,9 +465,8 @@ export function DataGrid({
       aria-busy={loading || undefined}
       {...rest}
       style={[wrapStyle(), style as never]}
-      contentContainerStyle={{ flexGrow: 1 }}
     >
-      <View accessibilityRole="grid" style={{ flexGrow: 1, backgroundColor: SURFACE }}>
+      <View accessibilityRole="grid" style={{ backgroundColor: SURFACE }}>
         {content}
       </View>
     </ScrollView>
@@ -476,6 +476,8 @@ export function DataGrid({
 /** The `.wrap` surface: hairline border, radius-md, surface fill, clipped. */
 function wrapStyle() {
   return {
+    alignSelf: 'flex-start' as const,
+    flexGrow: 0,
     borderWidth: HAIRLINE,
     borderColor: BORDER,
     borderStyle: 'solid' as const,

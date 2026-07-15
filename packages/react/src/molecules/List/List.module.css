@@ -16,6 +16,11 @@
   border-top: var(--glacier-hairline) solid var(--glacier-border);
 }
 
+.divided > [data-glacier-list-item] {
+  border-radius: 0;
+  padding-block: var(--glacier-space-1);
+}
+
 .item {
   min-width: 0;
   border-radius: var(--glacier-radius-lg);
@@ -28,7 +33,7 @@
   width: 100%;
   box-sizing: border-box;
   border: 0;
-  border-radius: inherit;
+  border-radius: var(--glacier-radius-lg);
   background: transparent;
   color: inherit;
   font: inherit;

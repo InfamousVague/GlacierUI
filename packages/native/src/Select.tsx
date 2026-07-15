@@ -218,7 +218,7 @@ export function Select({
       style={[
         {
           position: 'relative',
-          alignSelf: fullWidth ? 'stretch' : 'flex-start',
+          alignSelf: fullWidth ? 'stretch' : undefined,
           width: fullWidth ? '100%' : undefined,
         },
         style as never,

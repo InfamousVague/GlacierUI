@@ -177,6 +177,7 @@ export function Popover({
           style={[
             anchorStyle(placement, gap),
             {
+              width: minWidth,
               minWidth,
               maxWidth,
               padding: metric(BOX.padding, 'space-3'),
@@ -185,6 +186,10 @@ export function Popover({
               borderStyle: 'solid',
               borderColor: PANEL_BORDER,
               backgroundColor: PANEL_BG,
+              color: t('text'),
+              fontFamily: t('font-sans'),
+              backdropFilter: `blur(${t('blur-lg')}) saturate(${t('glass-saturate')})`,
+              boxShadow: `inset 0 ${t('hairline')} 0 ${t('glass-highlight')}, ${t('shadow-4')}`,
               // Keep the panel above later siblings in its stacking context.
               zIndex: 1,
             },

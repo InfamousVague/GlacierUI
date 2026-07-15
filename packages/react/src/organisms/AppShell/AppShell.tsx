@@ -12,12 +12,16 @@ export interface AppShellProps extends ComponentProps<'div'> {
   sidebar: ReactNode;
   /** Optional top bar content, placed to the right of the mobile menu button. */
   header?: ReactNode;
+  /** Optional primary navigation pinned below mobile content and at the bottom of the desktop sidebar. */
+  bottomNav?: ReactNode;
   /** Sidebar width on desktop. Defaults to 16rem. */
   sidebarWidth?: string;
   /** Accessible name for the sidebar landmark. */
   sidebarLabel?: string;
   /** Detach the desktop sidebar into a floating, rounded card with a gutter. */
   floating?: boolean;
+  /** Force the mobile or desktop layout. When omitted, follows the lg viewport breakpoint. */
+  isMobile?: boolean;
   /** Let the user drag the divider (or arrow-key it) to resize the sidebar. */
   resizable?: boolean;
   /** Called with the next sidebar width (a px string) while resizing. */
@@ -34,6 +38,33 @@ const MenuIcon = (
   </svg>
 );
 
+const CloseIcon = (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+    <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+  </svg>
+);
+
+const MOBILE_QUERY = '(max-width: 1023px)';
+
+function useViewportIsMobile() {
+  const [mobile, setMobile] = useState(() =>
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia(MOBILE_QUERY).matches
+      : false,
+  );
+
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return;
+    const query = window.matchMedia(MOBILE_QUERY);
+    const update = () => setMobile(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+
+  return mobile;
+}
+
 /**
  * The app frame: a sticky sidebar next to a scrollable main column with an
  * optional sticky header. Below the lg breakpoint the sidebar collapses into
@@ -43,9 +74,11 @@ const MenuIcon = (
 export function AppShell({
   sidebar,
   header,
+  bottomNav,
   sidebarWidth = '16rem',
   sidebarLabel = 'Navigation',
   floating = false,
+  isMobile,
   resizable = false,
   onSidebarWidthChange,
   minSidebarWidth = 200,
@@ -56,6 +89,9 @@ export function AppShell({
 }: AppShellProps) {
   const t = useT();
   const [open, setOpen] = useState(false);
+  const [desktopCollapsed, setDesktopCollapsed] = useState(false);
+  const viewportIsMobile = useViewportIsMobile();
+  const mobile = isMobile ?? viewportIsMobile;
   const asideRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -136,6 +172,10 @@ export function AppShell({
       {...rest}
       className={styles.shell}
       data-floating={floating ? '' : undefined}
+      data-bottom-nav={bottomNav ? '' : undefined}
+      data-sidebar-collapsed={desktopCollapsed ? '' : undefined}
+      data-mobile={mobile ? '' : undefined}
+      data-desktop={mobile ? undefined : ''}
       style={{ '--shell-sidebar': sidebarWidth, ...style } as CSSProperties}
     >
       <aside
@@ -145,6 +185,14 @@ export function AppShell({
         data-open={open ? '' : undefined}
         onClick={closeOnNav}
       >
+        <IconButton
+          aria-label={t(kitMessages.closeNavigation)}
+          variant={Variant.Ghost}
+          className={styles.sidebarClose}
+          onClick={() => setOpen(false)}
+        >
+          {CloseIcon}
+        </IconButton>
         {sidebar}
       </aside>
       {resizable && (
@@ -162,9 +210,19 @@ export function AppShell({
       <div className={styles.main}>
         <header className={cx(styles.header)} data-empty={header ? undefined : ''}>
           <IconButton
-            aria-label={t(kitMessages.openNavigation)}
+            aria-label={t(desktopCollapsed ? kitMessages.openNavigation : kitMessages.closeNavigation)}
+            aria-expanded={!desktopCollapsed}
             variant={Variant.Ghost}
-            className={styles.menuButton}
+            className={styles.desktopMenuButton}
+            onClick={() => setDesktopCollapsed((collapsed) => !collapsed)}
+          >
+            {MenuIcon}
+          </IconButton>
+          <IconButton
+            aria-label={t(kitMessages.openNavigation)}
+            aria-expanded={open}
+            variant={Variant.Ghost}
+            className={styles.mobileMenuButton}
             onClick={() => setOpen(true)}
           >
             {MenuIcon}
@@ -172,6 +230,7 @@ export function AppShell({
           {header && <div className={styles.headerContent}>{header}</div>}
         </header>
         <div className={styles.content}>{children}</div>
+        {bottomNav && <div className={styles.bottomNav}>{bottomNav}</div>}
       </div>
     </div>
   );

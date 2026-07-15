@@ -37,54 +37,62 @@ export function ImagePage() {
       <Example
         title={t(m.imgEx1Title)}
         description={t(m.imgEx1Desc)}
+        component="Image"
+        render={(K) => (
+          <div style={{ display: 'flex', gap: 'var(--glacier-space-4)', alignItems: 'flex-start' }}>
+            <K.Image src={dune} alt={t(m.imageDune)} aspectRatio="2 / 3" style={{ width: 120 }} />
+            <K.Image src={wide} alt={t(m.imagePanorama)} aspectRatio="16 / 9" style={{ width: 200 }} />
+            <K.Image src={square} alt={t(m.imageAlbumArt)} aspectRatio={1} style={{ width: 120 }} />
+          </div>
+        )}
         code={`import { Image } from '@glacier/react';
 
 <Image src={cover} alt="Dune" aspectRatio="2 / 3" />
 <Image src={photo} alt="Panorama" aspectRatio="16 / 9" />
 <Image src={art} alt="Album" aspectRatio={1} />`}
-      >
-        <div style={{ display: 'flex', gap: 'var(--glacier-space-4)', alignItems: 'flex-start' }}>
-          <Image src={dune} alt={t(m.imageDune)} aspectRatio="2 / 3" style={{ width: 120 }} />
-          <Image src={wide} alt={t(m.imagePanorama)} aspectRatio="16 / 9" style={{ width: 200 }} />
-          <Image src={square} alt={t(m.imageAlbumArt)} aspectRatio={1} style={{ width: 120 }} />
-        </div>
-      </Example>
+      />
 
       <Example
         title={t(m.imgEx2Title)}
         description={t(m.imgEx2Desc)}
+        component="Image"
+        render={(K) => (
+          <div style={{ display: 'flex', gap: 'var(--glacier-space-4)' }}>
+            <K.Image src={square} alt="" aspectRatio="2 / 3" fit="cover" style={{ width: 120 }} />
+            <K.Image src={square} alt="" aspectRatio="2 / 3" fit="contain" style={{ width: 120 }} />
+          </div>
+        )}
         code={`<Image src={art} alt="" aspectRatio="2 / 3" fit="cover" />
 <Image src={art} alt="" aspectRatio="2 / 3" fit="contain" />`}
-      >
-        <div style={{ display: 'flex', gap: 'var(--glacier-space-4)' }}>
-          <Image src={square} alt="" aspectRatio="2 / 3" fit="cover" style={{ width: 120 }} />
-          <Image src={square} alt="" aspectRatio="2 / 3" fit="contain" style={{ width: 120 }} />
-        </div>
-      </Example>
+      />
 
       <Example
         title={t(m.imgEx3Title)}
         description={t(m.imgEx3Desc)}
+        component="Image"
+        render={(K) => (
+          <div style={{ display: 'flex', gap: 'var(--glacier-space-4)' }}>
+            <K.Image src={square} alt="" aspectRatio={1} radius="lg" style={{ width: 100 }} />
+            <K.Image src={square} alt="" aspectRatio={1} radius="full" style={{ width: 100 }} />
+          </div>
+        )}
         code={`<Image src={art} alt="" aspectRatio={1} radius="lg" />
 <Image src={art} alt="" aspectRatio={1} radius="full" />`}
-      >
-        <div style={{ display: 'flex', gap: 'var(--glacier-space-4)' }}>
-          <Image src={square} alt="" aspectRatio={1} radius="lg" style={{ width: 100 }} />
-          <Image src={square} alt="" aspectRatio={1} radius="full" style={{ width: 100 }} />
-        </div>
-      </Example>
+      />
 
       <Example
         title={t(m.imgEx4Title)}
         description={t(m.imgEx4Desc)}
+        component="Image"
+        render={(K) => (
+          <div style={{ display: 'flex', gap: 'var(--glacier-space-4)' }}>
+            <K.Image src="/missing-cover.jpg" alt={t(m.imageMissingCover)} aspectRatio="2 / 3" style={{ width: 120 }} />
+            <K.Image src={dune} alt={t(m.imageLoading)} aspectRatio="2 / 3" skeleton style={{ width: 120 }} />
+          </div>
+        )}
         code={`<Image src="/missing.jpg" alt="Missing cover" aspectRatio="2 / 3" />
 <Image src={cover} alt="Loading" aspectRatio="2 / 3" skeleton />`}
-      >
-        <div style={{ display: 'flex', gap: 'var(--glacier-space-4)' }}>
-          <Image src="/missing-cover.jpg" alt={t(m.imageMissingCover)} aspectRatio="2 / 3" style={{ width: 120 }} />
-          <Image src={dune} alt={t(m.imageLoading)} aspectRatio="2 / 3" skeleton style={{ width: 120 }} />
-        </div>
-      </Example>
+      />
 
       <Heading level={2}>{t(m.secProps)}</Heading>
       <PropsTable

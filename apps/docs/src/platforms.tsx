@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { SegmentedControl, Size, useT } from '@glacier/react';
+import { Icon } from '@glacier/icons';
 import * as Web from '@glacier/react';
 import * as Native from '@glacier/native';
 import { m } from './i18n.ts';
@@ -30,12 +31,14 @@ export interface Platform {
 }
 
 /** A kit namespace as seen by a demo's render function. */
-export type PlatformKit = Record<string, never> & typeof Web;
+export type PlatformKit = Record<string, never> & typeof Web & { Icon: typeof Icon };
 
 export function usePlatforms(): Platform[] {
   const t = useT();
   return [
-    { id: 'web', label: t(m.platformWebDom), tag: t(m.platformWeb), tint: 'var(--glacier-blue-9)', kit: Web },
+    // Icon lives in @glacier/icons rather than @glacier/react on the web, but
+    // it is still the web binding of the documented Icon atom.
+    { id: 'web', label: t(m.platformWebDom), tag: t(m.platformWeb), tint: 'var(--glacier-blue-9)', kit: { ...Web, Icon } },
     { id: 'native', label: t(m.platformNativeRn), tag: t(m.platformNative), tint: 'var(--glacier-purple-9)', kit: Native },
   ];
 }
@@ -55,9 +58,11 @@ export function platformsFor(component: string, all: Platform[]): Platform[] {
 export function PlatformDemo({
   component,
   render,
+  stacked = false,
 }: {
   component: string;
   render: (kit: PlatformKit) => ReactNode;
+  stacked?: boolean;
 }) {
   const t = useT();
   const all = usePlatforms();
@@ -89,9 +94,13 @@ export function PlatformDemo({
           ]}
         />
       </div>
-      <div style={{ display: 'flex', gap: 'var(--glacier-space-6)', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+      <div
+        style={stacked
+          ? { display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: 'var(--glacier-space-6)', minWidth: 0 }
+          : { display: 'flex', gap: 'var(--glacier-space-6)', flexWrap: 'wrap', alignItems: 'flex-start' }}
+      >
         {shown.map((p) => (
-          <PlatformPane key={p.id} tag={p.tag} tint={p.tint}>
+          <PlatformPane key={p.id} tag={p.tag} tint={p.tint} fullWidth={stacked}>
             {render(p.kit as PlatformKit)}
           </PlatformPane>
         ))}
@@ -100,13 +109,14 @@ export function PlatformDemo({
   );
 }
 
-function PlatformPane({ tag, tint, children }: { tag: string; tint: string; children: ReactNode }) {
+function PlatformPane({ tag, tint, children, fullWidth = false }: { tag: string; tint: string; children: ReactNode; fullWidth?: boolean }) {
   return (
     <div
       style={{
         position: 'relative',
-        flex: '1 1 16rem',
-        minWidth: '14rem',
+        flex: fullWidth ? '0 0 auto' : '1 1 16rem',
+        width: fullWidth ? '100%' : undefined,
+        minWidth: fullWidth ? 0 : '14rem',
         padding: 'var(--glacier-space-5)',
         // Extra top padding so the demo clears the corner platform tag.
         paddingTop: 'var(--glacier-space-8)',

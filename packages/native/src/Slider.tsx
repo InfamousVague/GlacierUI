@@ -1,5 +1,5 @@
-import { useState, type ComponentType } from 'react';
-import { View, Pressable, type ViewProps, type PressableProps } from 'react-native';
+import { useRef, useState, type ComponentType } from 'react';
+import { View, type ViewProps } from 'react-native';
 import { sliderSpec } from '@glacier/spec';
 import { useControlled } from '@glacier/commons';
 import { t } from './tokens.ts';
@@ -16,11 +16,9 @@ import { dimensionsFor } from './resolve.ts';
  * resolvers, so the resting visual is pixel-identical to @glacier/react's Slider
  * and cannot drift from it.
  *
- * Interaction (Tier C): the track is a Pressable that snaps the value to the tap
- * position (clamped and rounded to `step`), fired through the shared
- * `useControlled` so controlled/uncontrolled behavior matches the web exactly. A
- * smooth PanResponder drag is the device follow-up (rule 5 — resting visual +
- * a tappable/stepped track).
+ * Interaction: the track owns its responder. It snaps on touch-down and updates
+ * continuously as a pointer moves, fired through the shared `useControlled` so
+ * controlled/uncontrolled behavior matches the web exactly.
  *
  * Web features with no native runtime are accepted-but-noop and reported:
  *  - `hapticStep` / `data-haptic`: the web fires haptics through a DOM
@@ -60,13 +58,26 @@ export interface SliderProps extends Omit<ViewProps, 'style' | 'children'> {
   disabled?: boolean;
 }
 
-// react-native-web hands `onLayout` a layout event and `onPress` a press event
-// carrying `nativeEvent.locationX/locationY`; the kit's permissive d.ts declares
-// neither shape, so the track Pressable is typed through a narrow local alias.
+// react-native-web hands `onLayout` a layout event; the track View is typed
+// through a narrow local alias because the docs shim intentionally only models
+// the subset of events the kit consumes.
 type LayoutEvent = { nativeEvent: { layout: { width: number; height: number } } };
 type PressEvent = { nativeEvent: { locationX: number; locationY: number } };
-const Track = Pressable as unknown as ComponentType<
-  Omit<PressableProps, 'onPress'> & { onLayout?: (e: LayoutEvent) => void; onPress?: (e: PressEvent) => void }
+type PointerEvent = {
+  nativeEvent: { clientX: number; clientY: number; buttons?: number };
+  currentTarget: { getBoundingClientRect(): { left: number; top: number; width: number; height: number } };
+};
+const Track = View as unknown as ComponentType<
+  ViewProps & {
+    onLayout?: (e: LayoutEvent) => void;
+    onStartShouldSetResponder?: () => boolean;
+    onResponderGrant?: (e: PressEvent) => void;
+    onResponderMove?: (e: PressEvent) => void;
+    onClick?: (e: PointerEvent) => void;
+    onPointerDown?: (e: PointerEvent) => void;
+    onPointerMove?: (e: PointerEvent) => void;
+    onPointerUp?: (e: PointerEvent) => void;
+  }
 >;
 
 // Geometry read once from the spec. `height`, `trackHeight`, `thumbDiameter`,
@@ -117,19 +128,29 @@ export function Slider({
   // Pixel length of the rail along the travel axis, captured on layout so a tap
   // can be mapped to a value.
   const [extent, setExtent] = useState(0);
+  const pointerDragging = useRef(false);
 
   const vertical = orientation === 'vertical';
   const range = max - min;
   const fillPct = range <= 0 ? 0 : ((current - min) / range) * 100;
 
-  const handleTap = (e: PressEvent) => {
-    if (disabled || extent <= 0 || range <= 0) return;
-    const { locationX, locationY } = e.nativeEvent;
+  const setFromCoordinates = (locationX: number, locationY: number, liveExtent?: number) => {
+    const travelExtent = liveExtent ?? extent;
+    if (disabled || travelExtent <= 0 || range <= 0) return;
     // Vertical fills bottom-to-top, so invert the Y position.
-    const frac = clamp((vertical ? extent - locationY : locationX) / extent, 0, 1);
+    const frac = clamp((vertical ? travelExtent - locationY : locationX) / travelExtent, 0, 1);
     const raw = min + frac * range;
     const snapped = step > 0 ? Math.round((raw - min) / step) * step + min : raw;
     setCurrent(clamp(snapped, min, max));
+  };
+  const setFromPosition = (e: PressEvent) => setFromCoordinates(e.nativeEvent.locationX, e.nativeEvent.locationY);
+  const setFromPointer = (e: PointerEvent) => {
+    const bounds = e.currentTarget.getBoundingClientRect();
+    setFromCoordinates(
+      e.nativeEvent.clientX - bounds.left,
+      e.nativeEvent.clientY - bounds.top,
+      vertical ? bounds.height : bounds.width,
+    );
   };
 
   // The round handle, shared by both orientations and the skeleton bone shape.
@@ -207,9 +228,21 @@ export function Slider({
       accessibilityRole="adjustable"
       accessibilityState={{ disabled }}
       aria-orientation={vertical ? 'vertical' : undefined}
-      disabled={disabled}
       onLayout={(e) => setExtent(vertical ? e.nativeEvent.layout.height : e.nativeEvent.layout.width)}
-      onPress={handleTap}
+      onStartShouldSetResponder={() => !disabled}
+      onResponderGrant={setFromPosition}
+      onResponderMove={setFromPosition}
+      onClick={setFromPointer}
+      onPointerDown={(e) => {
+        pointerDragging.current = true;
+        setFromPointer(e);
+      }}
+      onPointerMove={(e) => {
+        if (pointerDragging.current && e.nativeEvent.buttons !== 0) setFromPointer(e);
+      }}
+      onPointerUp={() => {
+        pointerDragging.current = false;
+      }}
       style={{
         position: 'relative',
         alignItems: 'center',

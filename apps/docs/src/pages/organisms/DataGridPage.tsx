@@ -34,12 +34,13 @@ const PEOPLE: Person[] = [
 const statusTone = { Active: 'success', Away: 'warning', Offline: 'neutral' } as const;
 
 const COLUMNS: DataGridColumn[] = [
-  { key: 'name', header: 'Name', sortable: true },
-  { key: 'role', header: 'Role', sortable: true },
-  { key: 'commits', header: 'Commits', align: 'end', sortable: true },
+  { key: 'name', header: 'Name', width: '6.375rem', sortable: true },
+  { key: 'role', header: 'Role', width: '9rem', sortable: true },
+  { key: 'commits', header: 'Commits', width: '7.6875rem', align: 'end', sortable: true },
   {
     key: 'status',
     header: 'Status',
+    width: '6.0625rem',
     render: (row) => (
       <Pill tone={statusTone[(row as Person).status]} size={Size.Small}>
         {(row as Person).status}
@@ -52,7 +53,7 @@ function SelectableGrid({ K }: { K: PlatformKit }) {
   const t = useT();
   const [selectedIds, setSelectedIds] = useState<DataGridRowId[]>([1]);
   return (
-    <div style={{ display: 'grid', gap: 'var(--glacier-space-3)' }}>
+    <div style={{ display: 'grid', width: 'fit-content', maxWidth: '100%', gap: 'var(--glacier-space-3)' }}>
       <K.DataGrid
         aria-label={t(m.datagridTeamSelectable)}
         columns={COLUMNS}
@@ -101,6 +102,7 @@ export function DataGridPage() {
         title={t(m.dgExSortTitle)}
         description={t(m.dgExSortDesc)}
         component="DataGrid"
+        platformLayout="stacked"
         render={(K) => <K.DataGrid aria-label={t(m.datagridTeam)} columns={COLUMNS} data={PEOPLE} />}
         code={`const columns: DataGridColumn[] = [
   { key: 'name', header: 'Name', sortable: true },
@@ -115,6 +117,7 @@ export function DataGridPage() {
         title={t(m.dgExSelectTitle)}
         description={t(m.dgExSelectDesc)}
         component="DataGrid"
+        platformLayout="stacked"
         render={(K) => <SelectableGrid K={K} />}
         code={`const [selectedIds, setSelectedIds] = useState<DataGridRowId[]>([1]);
 
@@ -132,6 +135,7 @@ export function DataGridPage() {
         title={t(m.dgExCtrlTitle)}
         description={t(m.dgExCtrlDesc)}
         component="DataGrid"
+        platformLayout="stacked"
         render={(K) => <ControlledSortGrid K={K} />}
         code={`const [sort, setSort] = useState<DataGridSort | null>({ columnKey: 'name', direction: 'asc' });
 
@@ -142,6 +146,7 @@ export function DataGridPage() {
         title={t(m.dgExRenderTitle)}
         description={t(m.dgExRenderDesc)}
         component="DataGrid"
+        platformLayout="stacked"
         render={(K) => <K.DataGrid aria-label={t(m.datagridTeamStatus)} columns={COLUMNS} data={PEOPLE.slice(0, 2)} />}
         code={`{
   key: 'status',
@@ -154,6 +159,7 @@ export function DataGridPage() {
         title={t(m.dgExCompactTitle)}
         description={t(m.dgExCompactDesc)}
         component="DataGrid"
+        platformLayout="stacked"
         render={(K) => <K.DataGrid aria-label={t(m.datagridTeamCompact)} columns={COLUMNS} data={PEOPLE} density="compact" />}
         code={`<DataGrid aria-label="Team" columns={columns} data={people} density="compact" />`}
       />
@@ -162,6 +168,7 @@ export function DataGridPage() {
         title={t(m.dgExStickyTitle)}
         description={t(m.dgExStickyDesc)}
         component="DataGrid"
+        platformLayout="stacked"
         render={(K) => <K.DataGrid aria-label={t(m.datagridTeamScroll)} columns={COLUMNS} data={[...PEOPLE, ...PEOPLE.map((p) => ({ ...p, id: p.id + 100 }))]} stickyHeader maxHeight="9rem" />}
         code={`<DataGrid aria-label="Team" columns={columns} data={people} stickyHeader maxHeight="9rem" />`}
       />
@@ -170,6 +177,7 @@ export function DataGridPage() {
         title={t(m.dgExLoadingTitle)}
         description={t(m.dgExLoadingDesc)}
         component="DataGrid"
+        platformLayout="stacked"
         render={(K) => <K.DataGrid aria-label={t(m.datagridTeamLoading)} columns={COLUMNS} data={[]} loading loadingRows={4} />}
         code={`<DataGrid aria-label="Team" columns={columns} data={[]} loading loadingRows={4} />`}
       />
@@ -178,6 +186,7 @@ export function DataGridPage() {
         title={t(m.dgExEmptyTitle)}
         description={t(m.dgExEmptyDesc)}
         component="DataGrid"
+        platformLayout="stacked"
         render={(K) => <K.DataGrid aria-label={t(m.datagridTeamEmpty)} columns={COLUMNS} data={[]} emptyState={t(m.dgEmptyDemo)} />}
         code={`<DataGrid aria-label="Team" columns={columns} data={[]} emptyState="No teammates yet" />`}
       />

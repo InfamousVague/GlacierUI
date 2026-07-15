@@ -1,4 +1,4 @@
-import { accentOptions, type SansFont, type MonoFont } from '@glacier/tokens';
+import { accentOptions, type Density, type SansFont, type MonoFont } from '@glacier/tokens';
 import type { VisualFeedbackVariant, VisualFeedbackIntensity } from '@glacier/react';
 
 /**
@@ -11,7 +11,7 @@ import type { AppLocale } from './i18n.ts';
 
 export interface Preferences {
   theme: 'system' | 'light' | 'dark';
-  density: 'comfortable' | 'compact';
+  density: Density;
   layout: 'floating' | 'full';
   accent: string;
   /** The sans typeface, stamped as data-font. */

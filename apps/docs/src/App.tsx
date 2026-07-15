@@ -1,6 +1,6 @@
 import { accentOptions } from '@glacier/tokens';
 import {
-  AppShell, Button, Container, HapticsProvider, VisualFeedbackProvider, LocaleProvider, Sidebar, SidebarItem, SidebarSection, TitleBar, locales, direction, useT, type Locale, Size, Variant } from '@glacier/react';
+  AppShell, Button, Container, HapticsProvider, VisualFeedbackProvider, LocaleProvider, ScrollbarAppearance, Sidebar, SidebarItem, SidebarSection, TitleBar, locales, direction, useT, type Locale, Size, Variant } from '@glacier/react';
 import { Settings } from '@glacier/icons';
 import glacierLogoFull from '../../../packages/assets/glacier_logo_blue.png';
 import glacierLogoText from '../../../packages/assets/logo_text.png';
@@ -42,6 +42,7 @@ import { AvatarPage } from './pages/atoms/AvatarPage.tsx';
 import { DividerPage } from './pages/atoms/DividerPage.tsx';
 import { CalloutPage } from './pages/atoms/CalloutPage.tsx';
 import { BannerPage } from './pages/atoms/BannerPage.tsx';
+import { AnnouncementsPage } from './pages/atoms/AnnouncementsPage.tsx';
 import { CodeBlockPage } from './pages/atoms/CodeBlockPage.tsx';
 import { SelectionPage } from './pages/atoms/SelectionPage.tsx';
 import { RadioCardPage } from './pages/atoms/RadioCardPage.tsx';
@@ -145,6 +146,7 @@ const PAGES = {
   divider: { group: 'Atoms', el: <DividerPage /> },
   callout: { group: 'Atoms', el: <CalloutPage /> },
   banner: { group: 'Atoms', el: <BannerPage /> },
+  announcements: { group: 'Atoms', el: <AnnouncementsPage /> },
   codeblock: { group: 'Atoms', el: <CodeBlockPage /> },
   selection: { group: 'Atoms', el: <SelectionPage /> },
   radiocard: { group: 'Atoms', el: <RadioCardPage /> },
@@ -254,7 +256,14 @@ function loadPreferences(): Preferences {
     const accentValid = accentOptions.some((option) => option.name === saved.accent);
     return {
       theme: saved.theme === 'light' || saved.theme === 'dark' ? saved.theme : 'system',
-      density: saved.density === 'compact' ? 'compact' : 'comfortable',
+      density:
+        saved.density === 'extra-compact' ||
+        saved.density === 'compact' ||
+        saved.density === 'comfortable' ||
+        saved.density === 'spacious' ||
+        saved.density === 'more-space'
+          ? saved.density
+          : DEFAULT_PREFERENCES.density,
       layout: saved.layout === 'full' ? 'full' : 'floating',
       direction: saved.direction === 'rtl' ? 'rtl' : 'ltr',
       haptics: saved.haptics === true,
@@ -280,6 +289,10 @@ function loadPreferences(): Preferences {
         typeof saved.frostedness === 'number' && saved.frostedness >= 0 && saved.frostedness <= 2
           ? saved.frostedness
           : DEFAULT_PREFERENCES.frostedness,
+      scrollbarStyle:
+        saved.scrollbarStyle === ScrollbarAppearance.Subtle || saved.scrollbarStyle === ScrollbarAppearance.Accent
+          ? saved.scrollbarStyle
+          : DEFAULT_PREFERENCES.scrollbarStyle,
     };
   } catch {
     return DEFAULT_PREFERENCES;
@@ -388,7 +401,7 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
 
   useEffect(() => {
     const root = document.documentElement;
-    const { theme, density, layout, direction, accent, font, mono, radiusScale, frostedness } = preferences;
+    const { theme, density, layout, direction, accent, font, mono, radiusScale, frostedness, scrollbarStyle } = preferences;
 
     if (theme === 'system') root.removeAttribute('data-theme');
     else root.setAttribute('data-theme', theme);
@@ -418,6 +431,8 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
     if (accent === DEFAULT_PREFERENCES.accent) root.removeAttribute('data-accent');
     else root.setAttribute('data-accent', accent);
 
+    if (scrollbarStyle === ScrollbarAppearance.Default) root.removeAttribute('data-scrollbar-style');
+    else root.setAttribute('data-scrollbar-style', scrollbarStyle);
 
     if (radiusScale === 1) root.style.removeProperty('--glacier-radius-scale');
     else root.style.setProperty('--glacier-radius-scale', String(radiusScale));

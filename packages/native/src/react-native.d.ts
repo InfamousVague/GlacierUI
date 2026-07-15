@@ -39,9 +39,32 @@ declare module 'react-native' {
     'aria-label'?: string;
   }
 
-  export interface ViewProps extends CommonProps {
+  export interface ResponderEvent {
+    nativeEvent: { locationX: number; locationY: number };
+  }
+
+  export interface ResponderProps {
+    onStartShouldSetResponder?: () => boolean;
+    onResponderGrant?: (event: ResponderEvent) => void;
+    onResponderMove?: (event: ResponderEvent) => void;
+  }
+
+  export interface PointerEvent {
+    nativeEvent: { clientX: number; clientY: number; buttons?: number };
+    currentTarget: { getBoundingClientRect(): { left: number; top: number; width: number; height: number } };
+  }
+
+  export interface PointerProps {
+    onClick?: (event: PointerEvent) => void;
+    onPointerDown?: (event: PointerEvent) => void;
+    onPointerMove?: (event: PointerEvent) => void;
+    onPointerUp?: (event: PointerEvent) => void;
+  }
+
+  export interface ViewProps extends CommonProps, ResponderProps, PointerProps {
     style?: StyleProp;
     children?: ReactNode;
+    className?: string;
   }
 
   export interface TextProps extends CommonProps {
@@ -58,12 +81,17 @@ declare module 'react-native' {
     focused?: boolean;
   }
 
-  export interface PressableProps extends CommonProps {
+  export interface PressableProps extends CommonProps, ResponderProps, PointerProps {
     style?: StyleProp | ((state: PressableStateCallbackType) => StyleProp);
     children?: ReactNode | ((state: PressableStateCallbackType) => ReactNode);
     disabled?: boolean;
-    onPress?: () => void;
+    onPress?: (event?: ResponderEvent) => void;
+    onPressMove?: (event: ResponderEvent) => void;
     onLongPress?: () => void;
+    onHoverIn?: () => void;
+    onHoverOut?: () => void;
+    onFocus?: () => void;
+    onBlur?: () => void;
     hitSlop?: number | { top?: number; bottom?: number; left?: number; right?: number };
   }
 
@@ -130,10 +158,32 @@ declare module 'react-native' {
   export const ScrollView: ComponentType<ScrollViewProps>;
   export const Modal: ComponentType<ModalProps>;
 
+  export const Platform: {
+    OS: 'android' | 'ios' | 'web';
+  };
+
+  export function useWindowDimensions(): { width: number; height: number; scale: number; fontScale: number };
+
   export const StyleSheet: {
     create<T extends Record<string, Style>>(styles: T): T;
     flatten(style?: StyleProp): Style;
     readonly hairlineWidth: number;
     readonly absoluteFill: Style;
+  };
+
+  export interface AnimatedValue {
+    interpolate(config: { inputRange: number[]; outputRange: Array<string | number> }): unknown;
+  }
+
+  export interface CompositeAnimation {
+    start(callback?: () => void): void;
+    stop(): void;
+  }
+
+  export const Animated: {
+    Value: new (value: number) => AnimatedValue;
+    View: ComponentType<ViewProps>;
+    timing(value: AnimatedValue, config: { toValue: number; duration: number; useNativeDriver: boolean }): CompositeAnimation;
+    loop(animation: CompositeAnimation): CompositeAnimation;
   };
 }

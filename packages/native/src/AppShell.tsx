@@ -11,17 +11,13 @@
  * to @glacier/react's AppShell and cannot drift from it. The slot/prop contract
  * (sidebar, header, sidebarWidth, floating, resizable, …) is kept 1:1.
  *
- * Native renders the desktop (lg+) resting layout: the sidebar is an always-
- * visible column next to the main column, which is exactly what the web shows
- * above the lg breakpoint (where the built-in menu button is display:none). The
- * sub-lg RESPONSIVE behavior has no React Native equivalent and is a documented
- * reduction — React Native has no CSS media queries to branch the layout on
- * viewport width, and the web AppShell owns its drawer `open` state internally
- * (there is no open/onOpenChange in the public contract to drive on native):
- *   - The off-canvas drawer, its backdrop scrim, the built-in menu IconButton,
- *     the close-on-Escape / close-on-backdrop / close-on-nav-tap behavior, and
- *     the slide-in transform transition are all sub-lg only and are not rendered.
- *     The sidebar simply renders as the static desktop column.
+ * Above the lg breakpoint, native renders the desktop resting layout: an
+ * always-visible sidebar beside the main column. Below it, the sidebar becomes
+ * an overlay drawer opened from the compact header and dismissed by its
+ * backdrop. `useWindowDimensions` provides the viewport branch on device and
+ * react-native-web. The web's transform transition, Escape shortcut, and
+ * close-on-navigation interaction have no universal React Native equivalent,
+ * so the native drawer opens and closes without those enhancements.
  *   - `resizable` renders only the resting divider grip (the space-3 strip with
  *     its centered border-strong pill). The pointer-drag resize, the arrow-key /
  *     Home/End keyboard resize, the hover/focus grip highlight, and the
@@ -38,8 +34,8 @@
  * equivalent and is accepted-but-noop.
  */
 
-import { type ReactNode } from 'react';
-import { View, ScrollView, type ViewProps, type StyleProp } from 'react-native';
+import { useState, type ReactNode } from 'react';
+import { View, ScrollView, Pressable, useWindowDimensions, type ViewProps, type StyleProp } from 'react-native';
 import { appShellSpec } from '@glacier/spec';
 import { t } from './tokens.ts';
 import { paintFor, dimensionsFor } from './resolve.ts';
@@ -49,12 +45,16 @@ export interface AppShellProps extends Omit<ViewProps, 'style' | 'children'> {
   sidebar: ReactNode;
   /** Optional top bar content, placed in the header region. */
   header?: ReactNode;
+  /** Optional primary navigation pinned below mobile content and at the bottom of the desktop sidebar. */
+  bottomNav?: ReactNode;
   /** Sidebar width on desktop. Defaults to 16rem. */
   sidebarWidth?: string;
   /** Accessible name for the sidebar landmark. */
   sidebarLabel?: string;
   /** Detach the desktop sidebar and header into floating, rounded cards with a gutter. */
   floating?: boolean;
+  /** Force the mobile or desktop layout. When omitted, follows the lg viewport breakpoint. */
+  isMobile?: boolean;
   /** Render the resting resize divider. The drag/keyboard resize is web-only (no-op here). */
   resizable?: boolean;
   /** Web-only: called with the next sidebar width while resizing. Accepted-but-noop on native. */
@@ -96,18 +96,34 @@ const SIDEBAR_BG = t(FLOATING.background ?? 'surface');
 const HAIRLINE = t(FLOATING.border ?? 'glass-border');
 const HEADER_BG = t('glass-thin');
 const GRIP_REST = t(RESIZER['grip-rest'] ?? 'border-strong');
+const MOBILE_BREAKPOINT = 1024;
+
+const MenuIcon = (
+  <View aria-hidden={true} style={{ width: 18, height: 14, justifyContent: 'space-between' }}>
+    {[0, 1, 2].map((index) => <View key={index} style={{ height: 2, borderRadius: 1, backgroundColor: t('text') }} />)}
+  </View>
+);
+
+const CloseIcon = (
+  <View aria-hidden={true} style={{ width: 18, height: 18 }}>
+    <View style={{ position: 'absolute', top: 8, left: 2, width: 14, height: 2, borderRadius: 1, backgroundColor: t('text'), transform: [{ rotate: '45deg' }] }} />
+    <View style={{ position: 'absolute', top: 8, left: 2, width: 14, height: 2, borderRadius: 1, backgroundColor: t('text'), transform: [{ rotate: '-45deg' }] }} />
+  </View>
+);
 
 /**
  * The Glacier AppShell, rendered with React Native primitives. See the file
- * header for the responsive/parity contract; the resting desktop frame is
+ * header for the responsive/parity contract; its desktop resting frame is
  * visually matched to @glacier/react's AppShell and unable to drift from it.
  */
 export function AppShell({
   sidebar,
   header,
+  bottomNav,
   sidebarWidth = '16rem',
   sidebarLabel = 'Navigation',
   floating = false,
+  isMobile,
   resizable = false,
   // Web-only resize props; kept for a 1:1 contract, no-op on native.
   onSidebarWidthChange: _onSidebarWidthChange,
@@ -118,6 +134,10 @@ export function AppShell({
   className: _className,
   ...rest
 }: AppShellProps) {
+  const { width: viewportWidth } = useWindowDimensions();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [desktopCollapsed, setDesktopCollapsed] = useState(false);
+  const mobile = isMobile ?? viewportWidth < MOBILE_BREAKPOINT;
   // The sidebar column: fixed width with the `surface` fill. Flush, it carries a
   // single inline-end hairline; floating, it detaches into a rounded card inset
   // by the gutter on every edge with a full hairline border (web `.sidebar` /
@@ -169,6 +189,86 @@ export function AppShell({
         }),
   };
 
+  if (mobile) {
+    const mobilePanel = floating
+      ? {
+          marginHorizontal: GUTTER,
+          borderWidth: BORDER,
+          borderColor: HAIRLINE,
+          borderStyle: 'solid' as const,
+          borderRadius: RADIUS,
+          overflow: 'hidden' as const,
+        }
+      : {};
+    return (
+      <View {...rest} style={[{ flex: 1, minHeight: '100vh', flexDirection: 'column' }, style as never]}>
+        <View style={[headerBar, floating ? { ...mobilePanel, marginTop: GUTTER, marginRight: GUTTER } : null]}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Open navigation"
+            accessibilityState={{ expanded: drawerOpen }}
+            onPress={() => setDrawerOpen(true)}
+            style={{ width: t('control-height-sm'), height: t('control-height-sm'), alignItems: 'center', justifyContent: 'center' }}
+          >
+            {MenuIcon}
+          </Pressable>
+          {header != null && <View style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center' }}>{header}</View>}
+        </View>
+        <ScrollView style={{ flex: 1, minWidth: 0 }} contentContainerStyle={{ flexGrow: 1 }}>{children}</ScrollView>
+        {bottomNav != null && (
+          <View
+            style={[
+              {
+                paddingVertical: PAD_BLOCK,
+                paddingHorizontal: PAD_INLINE,
+                backgroundColor: HEADER_BG,
+                borderTopWidth: BORDER,
+                borderTopColor: HAIRLINE,
+                borderStyle: 'solid',
+              },
+              floating ? { ...mobilePanel, marginBottom: GUTTER } : null,
+            ]}
+          >
+            {bottomNav}
+          </View>
+        )}
+        <>
+          {drawerOpen && (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Close navigation"
+              onPress={() => setDrawerOpen(false)}
+              style={{ position: 'absolute', inset: 0, backgroundColor: t('overlay') }}
+            />
+          )}
+            <View
+              aria-label={sidebarLabel}
+              aria-hidden={!drawerOpen}
+              pointerEvents={drawerOpen ? 'auto' : 'none'}
+              style={{
+                position: 'absolute', top: floating ? GUTTER : 0, bottom: floating ? GUTTER : 0, left: drawerOpen ? (floating ? GUTTER : 0) : '-120%',
+                width: sidebarWidth, maxWidth: floating ? 'calc(85% - var(--glacier-space-4))' : '85%', zIndex: 1,
+                backgroundColor: SIDEBAR_BG,
+                ...(floating
+                  ? { borderWidth: BORDER, borderColor: HAIRLINE, borderStyle: 'solid', borderRadius: RADIUS, overflow: 'hidden' }
+                  : { borderRightWidth: BORDER, borderRightColor: HAIRLINE, borderStyle: 'solid' }),
+              }}
+            >
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Close navigation"
+                onPress={() => setDrawerOpen(false)}
+                style={{ position: 'absolute', top: PAD_BLOCK, right: PAD_BLOCK, zIndex: 2, width: t('control-height-sm'), height: t('control-height-sm'), alignItems: 'center', justifyContent: 'center' }}
+              >
+                {CloseIcon}
+              </Pressable>
+              <ScrollView style={{ flex: 1, minHeight: 0 }}>{sidebar}</ScrollView>
+            </View>
+        </>
+      </View>
+    );
+  }
+
   return (
     <View
       {...rest}
@@ -182,10 +282,26 @@ export function AppShell({
       {/* The sidebar landmark. On web this is an <aside> named by sidebarLabel;
           RN has no complementary landmark, so it carries aria-label only. Its
           own ScrollView approximates the web sidebar's independent overflow. */}
-      <View aria-label={sidebarLabel} style={sidebarBox}>
-        <ScrollView style={{ flex: 1, minHeight: 0 }}>{sidebar}</ScrollView>
-      </View>
-      {resizable && (
+      {!desktopCollapsed && (
+        <View aria-label={sidebarLabel} style={sidebarBox}>
+          <ScrollView style={{ flex: 1, minHeight: 0 }}>{sidebar}</ScrollView>
+          {bottomNav != null && (
+            <View
+              style={{
+                paddingVertical: PAD_BLOCK,
+                paddingHorizontal: PAD_BLOCK,
+                backgroundColor: HEADER_BG,
+                borderTopWidth: BORDER,
+                borderTopColor: HAIRLINE,
+                borderStyle: 'solid',
+              }}
+            >
+              {bottomNav}
+            </View>
+          )}
+        </View>
+      )}
+      {resizable && !desktopCollapsed && (
         // Resting divider only: the space-3 hit strip with its centered grip
         // pill (4px wide, space-6 tall, radius-full, border-strong). The
         // pointer-drag + keyboard resize and the hover/focus highlight are
@@ -207,14 +323,22 @@ export function AppShell({
       {/* The main column: the sticky header stacked over the scrollable content.
           The built-in mobile menu button is desktop-hidden on web and omitted. */}
       <View style={{ flex: 1, minWidth: 0, flexDirection: 'column' }}>
-        {header != null && header !== false && (
-          <View style={headerBar}>
-            {/* headerContent: grows to fill the bar beside the (omitted) menu button. */}
+        <View style={headerBar}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Open navigation"
+            accessibilityState={{ expanded: !desktopCollapsed }}
+            onPress={() => setDesktopCollapsed((collapsed) => !collapsed)}
+            style={{ width: t('control-height-sm'), height: t('control-height-sm'), alignItems: 'center', justifyContent: 'center' }}
+          >
+            {MenuIcon}
+          </Pressable>
+          {header != null && header !== false && (
             <View style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center' }}>
               {header}
             </View>
-          </View>
-        )}
+          )}
+        </View>
         <ScrollView style={{ flex: 1, minWidth: 0 }} contentContainerStyle={{ flexGrow: 1 }}>
           {children}
         </ScrollView>

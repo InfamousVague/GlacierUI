@@ -164,6 +164,12 @@ export function DataGrid({
   const rowIds = useMemo(() => sortedData.map((r) => r.id), [sortedData]);
   const allSelected = rowIds.length > 0 && rowIds.every((id) => selectedSet.has(id));
   const someSelected = !allSelected && rowIds.some((id) => selectedSet.has(id));
+  const fixedTableWidth = columns.every((column) => column.width != null)
+    ? `calc(${[
+      ...(selectable ? ['var(--glacier-space-4) + var(--glacier-space-4) + 1.375rem'] : []),
+      ...columns.map((column) => column.width!),
+    ].join(' + ')})`
+    : undefined;
 
   function emitSelection(next: DataGridRowId[]) {
     setSelected(next);
@@ -236,7 +242,11 @@ export function DataGrid({
     const rows = Math.max(1, loadingRows);
     return (
       <div className={cx(styles.wrap, className)} data-density={density} style={wrapStyle} aria-hidden {...rest}>
-        <table className={styles.table}>
+        <table className={styles.table} style={fixedTableWidth ? { width: fixedTableWidth } : undefined}>
+          <colgroup>
+            {selectable ? <col className={styles.selectColumn} /> : null}
+            {columns.map((col) => <col key={col.key} style={col.width ? { width: col.width } : undefined} />)}
+          </colgroup>
           <thead className={cx(styles.head, stickyHeader && styles.sticky)}>
             <tr>
               {selectable ? <th className={styles.selectCell}><Skeleton variant="rect" width="1.1rem" height="1.1rem" /></th> : null}
@@ -271,8 +281,13 @@ export function DataGrid({
         aria-multiselectable={selectable || undefined}
         aria-busy={loading || undefined}
         className={styles.table}
+        style={fixedTableWidth ? { width: fixedTableWidth } : undefined}
         onKeyDown={onKeyDown}
       >
+        <colgroup>
+          {selectable ? <col className={styles.selectColumn} /> : null}
+          {columns.map((col) => <col key={col.key} style={col.width ? { width: col.width } : undefined} />)}
+        </colgroup>
         <thead className={cx(styles.head, stickyHeader && styles.sticky)}>
           <tr role="row" aria-rowindex={1}>
             {selectable ? (

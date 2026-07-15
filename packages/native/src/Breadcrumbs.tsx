@@ -28,9 +28,9 @@ import { t } from './tokens.ts';
  * - `.separator`  color: text-subtle. The `[dir='rtl'] scaleX(-1)` mirroring is
  *   an RTL/DOM-only transform and is not applied here (resting LTR).
  *
- * No font-size is set: the web declares none on breadcrumbs, so crumbs inherit
- * the surrounding text size (nested RN <Text> inherits its parent size), exactly
- * like the DOM. Hard rule 2 — the spec/CSS declare no size, so none is invented.
+ * The DOM crumbs inherit the surrounding body type. React Native Web does not
+ * inherit View typography into Text, so every native Text explicitly receives
+ * those same body tokens.
  *
  * `className` is accepted for 1:1 prop parity with the web nav but is DOM-only
  * and has no effect on device (no-op).
@@ -72,21 +72,21 @@ export function Breadcrumbs({ items, separator = DEFAULT_SEPARATOR, className: _
             <View key={`${String(item.label)}-${index}`} style={{ flexDirection: 'row', alignItems: 'center', columnGap: t('space-2') }}>
               {isCurrent ? (
                 // .current
-                <Text style={{ color: t('text'), fontFamily: t('font-sans'), fontWeight: t('font-weight-semibold') as never }}>
+                <Text style={{ color: t('text'), fontFamily: t('font-sans'), fontSize: t('font-size-md'), lineHeight: t('leading-md'), fontWeight: t('font-weight-semibold') as never }}>
                   {item.label}
                 </Text>
               ) : item.href ? (
                 // .link — subtle inline anchor (raw `<a>`, not the accent Link kit).
-                <Text accessibilityRole="link" style={{ color: t('text-subtle'), fontFamily: t('font-sans'), textDecorationLine: 'none' }}>
+                <Text accessibilityRole="link" style={{ color: t('text-subtle'), fontFamily: t('font-sans'), fontSize: t('font-size-md'), lineHeight: t('leading-md'), textDecorationLine: 'none' }}>
                   {item.label}
                 </Text>
               ) : (
                 // .text — a plain, non-linked crumb.
-                <Text style={{ color: t('text-subtle'), fontFamily: t('font-sans') }}>{item.label}</Text>
+                <Text style={{ color: t('text-subtle'), fontFamily: t('font-sans'), fontSize: t('font-size-md'), lineHeight: t('leading-md') }}>{item.label}</Text>
               )}
               {showSeparator && (
                 // .separator — hidden from assistive tech (web `aria-hidden="true"`).
-                <Text aria-hidden style={{ color: t('text-subtle'), fontFamily: t('font-sans') }}>
+                <Text aria-hidden style={{ color: t('text-subtle'), fontFamily: t('font-sans'), fontSize: t('font-size-md'), lineHeight: t('leading-md') }}>
                   {separator}
                 </Text>
               )}

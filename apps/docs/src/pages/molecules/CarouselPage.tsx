@@ -36,6 +36,7 @@ export function CarouselPage() {
         title={t(m.exBasic)}
         description={t(m.carEx1Desc)}
         component="Carousel"
+        platformLayout="stacked"
         render={(K) => (
           <K.Carousel aria-label={t(m.carAriaFeatured)}>
             {cards.map((title) => (
@@ -56,6 +57,7 @@ export function CarouselPage() {
         title={t(m.carEx2Title)}
         description={t(m.carEx2Desc)}
         component="Carousel"
+        platformLayout="stacked"
         render={(K) => (
           <K.Carousel showControls aria-label={t(m.carAriaFeaturedControls)}>
             {cards.map((title) => (
@@ -74,6 +76,7 @@ export function CarouselPage() {
         title={t(m.carEx3Title)}
         description={t(m.carEx3Desc)}
         component="Carousel"
+        platformLayout="stacked"
         render={(K) => (
           <K.Carousel gap="var(--glacier-space-6)" aria-label={t(m.carAriaRoomy)}>
             {cards.map((title) => (

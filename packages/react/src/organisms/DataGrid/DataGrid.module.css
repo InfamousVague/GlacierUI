@@ -6,7 +6,7 @@
 }
 
 .table {
-    width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
     background: var(--glacier-surface);
     color: var(--glacier-text);
@@ -14,6 +14,10 @@
        unset, so pin it like every other component root. */
     font-family: var(--glacier-font-sans);
     font-size: var(--glacier-font-size-sm);
+}
+
+.selectColumn {
+    width: calc(var(--glacier-space-4) + var(--glacier-space-4) + 1.375rem);
 }
 
 .head {

@@ -55,7 +55,7 @@ export function Button({
           borderWidth: t('hairline'),
           borderStyle: 'solid',
           borderColor: 'transparent',
-          alignSelf: fullWidth ? 'stretch' : 'flex-start',
+          ...(fullWidth ? { alignSelf: 'stretch' as const } : {}),
           opacity: disabled ? 0.5 : 1,
           transform: [{ scale: pressed && !disabled ? press.control : 1 }],
           ...paint,

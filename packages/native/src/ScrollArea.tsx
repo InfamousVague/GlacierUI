@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { ScrollView, View, type ViewProps } from 'react-native';
-import { scrollAreaOrientations } from '@glacier/spec';
+import { ScrollbarAppearance, scrollAreaOrientations, type scrollbarAppearances } from '@glacier/spec';
 
 /**
  * ScrollArea — the @glacier/native binding of the web molecule.
@@ -12,10 +12,10 @@ import { scrollAreaOrientations } from '@glacier/spec';
  * matching where the DOM kit spreads them.
  *
  * The scroll axis is capped with `maxHeight` (a max-height when vertical, a
- * max-width when horizontal) on the ScrollView, and a `max: 100%` baseline keeps
- * the viewport from outgrowing a host that sizes it instead — the same split the
- * web makes between the root and its viewport. The thin themed scrollbar becomes
- * the platform scroll indicator, toggled off by `hideScrollbar`.
+ * max-width when horizontal) on the ScrollView, and width-bounded root and
+ * content containers keep react-native-web from expanding a vertical viewport
+ * beyond its host. The thin themed scrollbar becomes the platform scroll
+ * indicator, toggled off by `hideScrollbar`.
  *
  * The orientation union is derived from the spec's `scrollAreaOrientations`, so
  * it cannot drift from @glacier/react's ScrollArea.
@@ -40,6 +40,7 @@ import { scrollAreaOrientations } from '@glacier/spec';
 
 /** Which axis the content overflows and scrolls along. Derived from the spec. */
 export type ScrollAreaOrientation = (typeof scrollAreaOrientations)[number];
+export type ScrollbarAppearanceName = (typeof scrollbarAppearances)[number];
 
 /** A flat native style object; the escape hatch merged last onto the root View. */
 type NativeStyle = Record<string, string | number>;
@@ -52,6 +53,10 @@ export interface ScrollAreaProps extends Omit<ViewProps, 'children' | 'style'> {
   maxHeight?: number | string;
   /** Scroll axis. Vertical (the default) scrolls up/down; horizontal scrolls left/right. */
   orientation?: ScrollAreaOrientation;
+  /** Web-only visual treatment for the visible scrollbar; accepted as a no-op on native. */
+  scrollbarAppearance?: ScrollbarAppearanceName;
+  /** Web-only track visibility; accepted as a no-op on native. */
+  showScrollbarTrack?: boolean;
   /** Hides the scrollbar entirely; wheel, drag, keyboard, and touch scrolling all still work. */
   hideScrollbar?: boolean;
   /** The overflowing content. */
@@ -72,6 +77,8 @@ export interface ScrollAreaProps extends Omit<ViewProps, 'children' | 'style'> {
 export function ScrollArea({
   maxHeight,
   orientation = 'vertical',
+  scrollbarAppearance: _scrollbarAppearance = ScrollbarAppearance.Default,
+  showScrollbarTrack: _showScrollbarTrack = true,
   hideScrollbar = false,
   className: _className,
   style,
@@ -80,10 +87,10 @@ export function ScrollArea({
 }: ScrollAreaProps) {
   const horizontal = orientation === 'horizontal';
 
-  // The cap belongs on the viewport (the overflow container): a max:100% baseline
-  // so it never outgrows a host that sizes the root, then the scroll-axis cap
-  // overrides — max-width when horizontal, max-height when vertical.
-  const cap: NativeStyle = { maxHeight: '100%', maxWidth: '100%' };
+  // The cap belongs on the viewport (the overflow container). Width is explicit
+  // because react-native-web otherwise lets long vertical content widen the
+  // ScrollView past its preview host instead of wrapping inside it.
+  const cap: NativeStyle = { width: '100%', maxHeight: '100%', maxWidth: '100%', minWidth: 0, flexShrink: 1 };
   if (maxHeight !== undefined) {
     if (horizontal) cap.maxWidth = maxHeight;
     else cap.maxHeight = maxHeight;
@@ -97,13 +104,14 @@ export function ScrollArea({
     // rest (a11y / testID) and the caller style land on the root wrapper, exactly
     // where the web spreads them; style goes after rest so it augments, never
     // clobbered by, the spread.
-    <View {...rest} style={[{ minHeight: 0, minWidth: 0 }, style as never]}>
+    <View {...rest} style={[{ width: '100%', minHeight: 0, minWidth: 0, flexShrink: 1, overflow: 'hidden' }, style as never]}>
       <ScrollView
         accessibilityRole="group"
         horizontal={horizontal}
         showsVerticalScrollIndicator={!horizontal && showBar}
         showsHorizontalScrollIndicator={horizontal && showBar}
         style={cap}
+        contentContainerStyle={horizontal ? { minWidth: 0 } : { width: '100%', minWidth: 0 }}
       >
         {children}
       </ScrollView>

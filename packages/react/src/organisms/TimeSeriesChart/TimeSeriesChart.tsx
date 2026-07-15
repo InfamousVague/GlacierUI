@@ -85,6 +85,31 @@ const defaultFormatValue = (value: number) =>
 const defaultFormatTime = (time: number) =>
   new Date(time).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
 
+/** "Nice" value-axis ticks inside [min, max], shared with the native SVG binding. */
+function niceTicks(min: number, max: number, count: number): number[] {
+  const span = max - min;
+  if (!(span > 0)) return [min];
+  const step0 = span / count;
+  const magnitude = Math.pow(10, Math.floor(Math.log10(step0)));
+  const normalized = step0 / magnitude;
+  const step = (normalized < 1.5 ? 1 : normalized < 3 ? 2 : normalized < 7 ? 5 : 10) * magnitude;
+  const ticks: number[] = [];
+  const start = Math.ceil(min / step) * step;
+  for (let value = start; value <= max + step * 1e-6; value += step) ticks.push(Math.round(value * 1e6) / 1e6);
+  return ticks.length >= 2 ? ticks : [min, max];
+}
+
+/** Evenly spaced sample indices for the sparse time axis, including endpoints. */
+function timeTickIndices(length: number, count: number): number[] {
+  if (length <= 1) return length === 1 ? [0] : [];
+  const numberOfTicks = Math.max(2, Math.min(count, length));
+  const indices: number[] = [];
+  for (let index = 0; index < numberOfTicks; index += 1) {
+    indices.push(Math.round((index / (numberOfTicks - 1)) * (length - 1)));
+  }
+  return Array.from(new Set(indices));
+}
+
 /** Resolve the theme colors the canvas needs from the CSS custom properties. */
 function resolveTheme(el: HTMLElement) {
   const cs = getComputedStyle(el);
@@ -132,6 +157,7 @@ export function TimeSeriesChart({
   const [hidden, setHidden] = useState<Set<string>>(() => new Set());
   const [themeEpoch, setThemeEpoch] = useState(0);
   const [tonePool, setTonePool] = useState<readonly ChartSeriesTone[]>(chartSeriesTones);
+  const axisRef = useRef({ xSplits: [] as number[], ySplits: [] as number[], yMin: 0, yMax: 1 });
 
   // The accent is itself one of the ramps (a blue accent resolves to the blue
   // ramp), so the positional default would hand two adjacent series the same
@@ -157,6 +183,14 @@ export function TimeSeriesChart({
     () => [times.map((t) => t / 1000), ...series.map((s) => s.values)] as uPlot.AlignedData,
     [times, series],
   );
+
+  const flat = series.flatMap((entry) => entry.values.filter((value): value is number => value != null));
+  const dataMax = flat.length ? Math.max(...flat) : 1;
+  const yMin = min ?? 0;
+  const yMax = max ?? Math.max(dataMax, 1);
+  const ySplits = niceTicks(yMin, yMax, 4).filter((value) => value >= yMin - 1e-6 && value <= yMax + 1e-6);
+  const xSplits = timeTickIndices(times.length, 4).map((index) => (times[index] ?? 0) / 1000);
+  axisRef.current = { xSplits, ySplits, yMin, yMax };
 
   // Re-theme when the document theme flips (data-theme / class on the root).
   useEffect(() => {
@@ -193,7 +227,7 @@ export function TimeSeriesChart({
           scales: {
             x: { time: true },
             y: {
-              range: (_u, dataMin, dataMax) => [min ?? 0, max ?? Math.max(dataMax ?? 1, 1)],
+              range: () => [axisRef.current.yMin, axisRef.current.yMax],
             },
           },
           axes: [
@@ -204,6 +238,7 @@ export function TimeSeriesChart({
               font: theme.font,
               // sparse labels: never let timestamps run into each other
               space: 88,
+              splits: () => axisRef.current.xSplits,
               values: (_u, splits) => splits.map((s) => formatTime(s * 1000)),
             },
             {
@@ -211,7 +246,8 @@ export function TimeSeriesChart({
               grid: { stroke: theme.grid, width: 1 },
               ticks: { show: false },
               font: theme.font,
-              size: 44,
+              size: 56,
+              splits: () => axisRef.current.ySplits,
               values: (_u, splits) => splits.map((s) => formatValue(s)),
             },
           ],

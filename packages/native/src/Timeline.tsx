@@ -231,6 +231,7 @@ export function Timeline({
                     flexShrink: 1,
                     color: t('text'),
                     fontSize: t('font-size-sm'),
+                    lineHeight: t('leading-sm') as never,
                     fontFamily: t('font-sans'),
                     fontWeight: t('font-weight-medium') as never,
                   }}
@@ -244,6 +245,7 @@ export function Timeline({
                       marginLeft: 'auto',
                       color: t('text-subtle'),
                       fontSize: t('font-size-xs'),
+                      lineHeight: t('leading-xs') as never,
                       fontFamily: t('font-sans'),
                       fontVariant: ['tabular-nums'],
                     }}
@@ -258,6 +260,7 @@ export function Timeline({
                     marginTop: descriptionGap,
                     color: t('text-muted'),
                     fontSize: t('font-size-sm'),
+                    lineHeight: t('leading-sm') as never,
                     fontFamily: t('font-sans'),
                   }}
                 >

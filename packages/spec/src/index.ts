@@ -13,6 +13,7 @@ export * from './enums.ts';
 // re-export every component module (each exports its `*Spec` plus any shared
 // enum const arrays, e.g. buttonVariants, textTones, selectSizes)
 export * from './components/app-shell.ts';
+export * from './components/announcements.ts';
 export * from './components/avatar.ts';
 export * from './components/banner.ts';
 export * from './components/button.ts';
@@ -104,6 +105,7 @@ export * from './components/page-header.ts';
 
 import type { ComponentSpec } from './schema.ts';
 import { appShellSpec } from './components/app-shell.ts';
+import { announcementsSpec } from './components/announcements.ts';
 import { avatarSpec } from './components/avatar.ts';
 import { bannerSpec } from './components/banner.ts';
 import { buttonSpec } from './components/button.ts';
@@ -177,6 +179,14 @@ import { iconSpec } from './components/icon.ts';
 import { imageSpec } from './components/image.ts';
 import { ratingSpec } from './components/rating.ts';
 import { otpFieldSpec } from './components/otp-field.ts';
+import { navBarSpec } from './components/nav-bar.ts';
+import { pageHeaderSpec } from './components/page-header.ts';
+import { sectionSpec } from './components/section.ts';
+import { cardGroupSpec } from './components/card-group.ts';
+import { dataGridSpec } from './components/data-grid.ts';
+import { timelineSpec } from './components/timeline.ts';
+import { timelineScrubberSpec } from './components/timeline-scrubber.ts';
+import { wizardSpec } from './components/wizard.ts';
 
 /** Bump when the schema shape changes in a breaking way. */
 export const SPEC_VERSION = '0.1.0';
@@ -212,6 +222,7 @@ export const specs: ComponentSpec[] = [
   avatarSpec,
   calloutSpec,
   bannerSpec,
+  announcementsSpec,
   meterSpec,
   progressBarSpec,
   progressRingSpec,
@@ -270,6 +281,15 @@ export const specs: ComponentSpec[] = [
   // structures
   sidebarSpec,
   toolbarSpec,
+  navBarSpec,
+  pageHeaderSpec,
+  sectionSpec,
+  cardGroupSpec,
+  // data workflows
+  dataGridSpec,
+  timelineSpec,
+  timelineScrubberSpec,
+  wizardSpec,
 ];
 
 /** Specs keyed by id for O(1) lookup. */

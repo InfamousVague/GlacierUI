@@ -1,4 +1,5 @@
-import { View, type ViewProps } from 'react-native';
+import { useEffect, useRef } from 'react';
+import { Animated, Platform, View, type ViewProps } from 'react-native';
 import { skeletonVariants, skeletonSpec } from '@glacier/spec';
 import { t } from './tokens.ts';
 import { paintStyle, dimensionsFor } from './resolve.ts';
@@ -32,10 +33,8 @@ const RADIUS: Record<SkeletonVariant, string | undefined> = {
  * Skeleton and cannot drift from it. text is a 1em line, rect a rounded block,
  * circle a disc whose height falls back to its width.
  *
- * This renders the resting visual only: the web kit sweeps a highlight band
- * across every skeleton (an opacity pulse under reduced motion). Reproducing
- * that on-device (no animation runtime here) is a follow-up; the static tinted
- * block already holds the exact geometry so content never shifts on arrival.
+ * A clipped highlight band crosses the placeholder continuously, preserving
+ * the web kit's loading affordance without changing its geometry.
  */
 export function Skeleton({
   variant = 'rect',
@@ -48,6 +47,50 @@ export function Skeleton({
   const resolvedHeight =
     height ?? (variant === 'circle' ? width : variant === 'text' ? DIMS.textHeight : undefined);
   const variantRadius = RADIUS[variant];
+
+  if (Platform.OS === 'web') {
+    return (
+      <View
+        aria-hidden={true}
+        style={{
+          width,
+          height: resolvedHeight,
+          borderRadius: radius ?? (variantRadius ? t(variantRadius) : undefined),
+          overflow: 'hidden',
+          ...paint,
+        }}
+        {...rest}
+      >
+        <View
+          style={{
+            pointerEvents: 'none',
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            width: '45vw',
+            backgroundImage: `linear-gradient(100deg, ${t('hover')} 0%, ${t('active')} 50%, ${t('hover')} 100%)`,
+            animationName: 'nativeSkeletonShimmer',
+            animationDuration: '1.8s',
+            animationTimingFunction: 'linear',
+            animationIterationCount: 'infinite',
+          }}
+        />
+      </View>
+    );
+  }
+
+  return <AnimatedSkeleton {...rest} width={width} height={resolvedHeight} radius={radius ?? (variantRadius ? t(variantRadius) : undefined)} paint={paint} />;
+}
+
+function AnimatedSkeleton({ width, height, radius, paint, ...rest }: Omit<ViewProps, 'style' | 'children'> & Pick<SkeletonProps, 'width' | 'height' | 'radius'> & { paint: ReturnType<typeof paintStyle> }) {
+  const shimmer = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    const animation = Animated.loop(Animated.timing(shimmer, { toValue: 1, duration: 1800, useNativeDriver: true }));
+    animation.start();
+    return () => animation.stop();
+  }, [shimmer]);
+
   return (
     <View
       // Decorative: hidden from the accessibility tree, matching the web
@@ -56,11 +99,25 @@ export function Skeleton({
       aria-hidden={true}
       style={{
         width,
-        height: resolvedHeight,
-        borderRadius: radius ?? (variantRadius ? t(variantRadius) : undefined),
+        height,
+        borderRadius: radius,
+        overflow: 'hidden',
         ...paint,
       }}
       {...rest}
-    />
+    >
+      <Animated.View
+        style={{
+          pointerEvents: 'none',
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+          width: '45%',
+          backgroundColor: t('active'),
+          opacity: 0.6,
+          transform: [{ translateX: shimmer.interpolate({ inputRange: [0, 1], outputRange: [-220, 880] }) }],
+        }}
+      />
+    </View>
   );
 }

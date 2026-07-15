@@ -12,7 +12,7 @@ const a = (n: number) => `var(--glacier-accent-${n})`;
 export const semantic: Record<string, string> = {
   // surfaces
   bg: g(1),
-  surface: WHITE, // overridden per theme below
+  surface: g(2), // overridden per theme below
   'surface-raised': WHITE,
   'surface-sunken': g(3),
   overlay: 'oklch(0.2 0.01 260 / 0.45)',

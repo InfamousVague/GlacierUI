@@ -83,7 +83,6 @@ export function IconButton({
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          alignSelf: 'flex-start',
           // Square: width = height = the size's diameter (control-height-*).
           width: t(dims.diameter ?? 'control-height-md'),
           height: t(dims.height ?? 'control-height-md'),

@@ -1,7 +1,7 @@
 // The Glacier TimelineScrubber, rendered with React Native primitives: a
 // flight-recorder band over a recorded time window with an activity backdrop,
-// tone-colored event markers, sparse time ticks, a playhead, and a return-to-
-// live button. Geometry and paint are read from `timelineScrubberSpec` through
+// tone-colored event markers, sparse time ticks, and a playhead. Geometry and
+// paint are read from `timelineScrubberSpec` through
 // the shared resolvers so the resting visual cannot drift from @glacier/react.
 
 import { useState, type ComponentType } from 'react';
@@ -47,11 +47,9 @@ export interface TimelineScrubberProps extends Omit<ViewProps, 'style' | 'childr
   step?: number;
   /** Formats a timestamp for the ticks and aria-valuetext. */
   formatTime?: (time: number) => string;
-  /** Label for the live button; replace it for localization. */
-  liveLabel?: string;
   /** Track height step. The handle adds its overhang above the track. */
   size?: TimelineScrubberSize;
-  /** Renders the track and live button on the frosted glass material. */
+  /** Renders the track on the frosted glass material. */
   glass?: boolean;
   /** Blocks scrubbing and dims the control. */
   disabled?: boolean;
@@ -62,9 +60,6 @@ export interface TimelineScrubberProps extends Omit<ViewProps, 'style' | 'childr
 }
 
 const defaultFormat = (time: number) => new Date(time).toLocaleTimeString();
-
-/** How many sparse time labels the track carries. */
-const TICK_COUNT = 4;
 
 /** A tap within this fraction of the trailing edge snaps back to live. */
 const LIVE_SNAP = 0.995;
@@ -137,7 +132,6 @@ export function TimelineScrubber({
   markers,
   step: _step,
   formatTime = defaultFormat,
-  liveLabel = 'Live',
   size = 'md',
   glass = false,
   disabled = false,
@@ -171,14 +165,8 @@ export function TimelineScrubber({
 
   if (skeleton) {
     return (
-      <View
-        style={{ flexDirection: 'row', alignItems: 'flex-end', gap: GAP, width: '100%', paddingTop: ROOT_PAD_TOP }}
-        {...rest}
-      >
-        <View style={{ flex: 1, minWidth: 0 }}>
-          <Skeleton height={trackHeight} width="100%" radius={RADIUS} />
-        </View>
-        <Skeleton height="2rem" width="3.5rem" radius={RADIUS} />
+      <View style={{ width: '100%', paddingTop: ROOT_PAD_TOP }} {...rest}>
+        <Skeleton height={trackHeight} width="100%" radius={RADIUS} />
       </View>
     );
   }
@@ -191,19 +179,12 @@ export function TimelineScrubber({
           .join(' L ')} L 100 100 L 0 100 Z`
       : undefined;
 
-  const ticks = Array.from({ length: TICK_COUNT }, (_, i) => {
-    const f = i / (TICK_COUNT - 1);
-    return { f, label: formatTime(start + f * windowSpan) };
-  });
-
   // Track surface + border swap for the frosted material under `glass`.
   const trackBg = glass ? t('glass-regular') : t('surface-sunken');
   const trackBorder = glass ? t('glass-border') : t('border');
-  const liveColor = live ? t('accent-contrast') : t('accent-text');
-
   return (
     <View
-      style={{ flexDirection: 'row', alignItems: 'flex-end', gap: GAP, width: '100%', paddingTop: ROOT_PAD_TOP }}
+      style={{ width: '100%', paddingTop: ROOT_PAD_TOP, userSelect: 'none' as never }}
       {...rest}
     >
       <Track
@@ -215,8 +196,6 @@ export function TimelineScrubber({
         onPress={handleTap}
         style={{
           position: 'relative',
-          flex: 1,
-          minWidth: 0,
           height: trackHeight,
           borderRadius: RADIUS,
           borderWidth: t('hairline'),
@@ -240,7 +219,7 @@ export function TimelineScrubber({
               preserveAspectRatio="none"
               style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' }}
             >
-              <Path d={activityPath} fill={t('accent-soft')} />
+              <Path d={activityPath} fill={t('text')} />
             </Svg>
           )}
           {markers?.map((marker, i) => {
@@ -259,26 +238,6 @@ export function TimelineScrubber({
                   opacity: 0.8,
                 }}
               />
-            );
-          })}
-          {ticks.map((tick) => {
-            const edge = tick.f === 0 ? 'start' : tick.f === 1 ? 'end' : undefined;
-            return (
-              <Text
-                key={tick.f}
-                numberOfLines={1}
-                style={{
-                  position: 'absolute',
-                  bottom: 2,
-                  left: edge === 'start' ? 6 : `${tick.f * 100}%`,
-                  transform: edge === 'start' ? undefined : edge === 'end' ? [{ translateX: '-100%' }] : [{ translateX: '-50%' }],
-                  marginLeft: edge === 'end' ? -6 : undefined,
-                  fontSize: TICK_FONT,
-                  color: t('text-muted'),
-                }}
-              >
-                {tick.label}
-              </Text>
             );
           })}
         </View>
@@ -311,31 +270,30 @@ export function TimelineScrubber({
           />
         </View>
       </Track>
-
-      {/* The return-to-live control; fills solid while pinned to now. */}
-      <Pressable
-        accessibilityRole="button"
-        accessibilityState={{ disabled, selected: live }}
-        aria-checked={live}
-        disabled={disabled}
-        onPress={() => setScrubbed(null)}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: GAP,
-          height: trackHeight,
-          paddingHorizontal: t('space-3'),
-          borderRadius: RADIUS,
-          borderWidth: t('hairline'),
-          borderStyle: 'solid',
-          borderColor: live ? 'transparent' : glass ? t('glass-border') : t('border'),
-          backgroundColor: live ? t('accent-solid') : glass ? t('glass-regular') : t('accent-soft'),
-          opacity: disabled ? 0.5 : 1,
-        }}
-      >
-        <View style={{ width: '0.375rem', height: '0.375rem', borderRadius: t('radius-full'), backgroundColor: liveColor }} />
-        <Text style={{ color: liveColor, fontSize: TICK_FONT, fontWeight: '600' as never }}>{liveLabel}</Text>
-      </Pressable>
+      {markers && markers.length > 0 && (
+        <View aria-hidden={true} style={{ position: 'relative', width: '100%', height: '2rem', pointerEvents: 'none' }}>
+          {markers.map((marker, i) => {
+            const f = clamp01((marker.time - start) / windowSpan);
+            const edge = f === 0 ? 'start' : f === 1 ? 'end' : undefined;
+            return (
+              <Text
+                key={i}
+                numberOfLines={1}
+                style={{
+                  position: 'absolute',
+                  top: i % 2 === 0 ? 0 : '1rem',
+                  left: `${f * 100}%`,
+                  transform: edge === 'start' ? undefined : edge === 'end' ? [{ translateX: '-100%' }] : [{ translateX: '-50%' }],
+                  fontSize: TICK_FONT,
+                  color: t('text-muted'),
+                }}
+              >
+                {formatTime(marker.time)}
+              </Text>
+            );
+          })}
+        </View>
+      )}
     </View>
   );
 }

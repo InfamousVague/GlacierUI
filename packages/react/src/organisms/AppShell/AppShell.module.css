@@ -94,51 +94,63 @@
   min-width: 0;
 }
 
-.menuButton {
+.bottomNav {
   display: none;
+}
+
+.bottomNav > * {
+  width: 100%;
+}
+
+.mobileMenuButton,
+.sidebarClose {
+  display: none;
+}
+
+.desktopMenuButton {
+  display: inline-flex;
 }
 
 .backdrop {
   display: none;
 }
 
-/* below the lg breakpoint the sidebar becomes an off-canvas drawer */
-@media (max-width: 1023px) {
-  .shell {
+/* In mobile mode the sidebar becomes an off-canvas drawer. */
+  .shell[data-mobile] {
     grid-template-columns: 1fr;
   }
 
-  .resizer {
+  .shell[data-mobile] .resizer {
     display: none;
   }
 
   /* the drawer parks at the inline-start edge; the off-canvas translate is
      physical, so it flips under [dir='rtl'] */
-  .sidebar {
+  .shell[data-mobile] .sidebar {
     position: fixed;
     inset-block: 0;
     inset-inline-start: 0;
     width: var(--shell-sidebar);
     max-width: 85vw;
     z-index: 40;
-    transform: translateX(-100%);
+    transform: translateX(-120%);
     transition: transform var(--glacier-duration-normal) var(--glacier-ease-out);
   }
 
-  [dir='rtl'] .sidebar {
-    transform: translateX(100%);
+  [dir='rtl'] .shell[data-mobile] .sidebar {
+    transform: translateX(120%);
   }
 
-  .sidebar[data-open] {
+  .shell[data-mobile] .sidebar[data-open] {
     transform: translateX(0);
     box-shadow: var(--glacier-shadow-5);
   }
 
-  [dir='rtl'] .sidebar[data-open] {
+  [dir='rtl'] .shell[data-mobile] .sidebar[data-open] {
     transform: translateX(0);
   }
 
-  .backdrop {
+  .shell[data-mobile] .backdrop {
     display: block;
     position: fixed;
     inset: 0;
@@ -148,31 +160,116 @@
     -webkit-backdrop-filter: blur(var(--glacier-blur-sm));
   }
 
-  .menuButton {
+  .shell[data-mobile] .desktopMenuButton {
+    display: none;
+  }
+
+  .shell[data-mobile] .mobileMenuButton {
     display: inline-flex;
   }
 
-  .header[data-empty] {
+  .shell[data-mobile] .sidebarClose {
+    position: absolute;
+    inset-block-start: var(--glacier-space-2);
+    inset-inline-end: var(--glacier-space-2);
+    z-index: 1;
+    display: inline-flex;
+  }
+
+  .shell[data-mobile] .bottomNav {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    display: block;
+    padding: var(--glacier-space-2) var(--glacier-space-3);
+    border-top: var(--glacier-hairline) solid var(--glacier-glass-border);
+    background: var(--glacier-glass-thin);
+    backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
+  }
+
+  .shell[data-mobile][data-bottom-nav] .content {
+    padding-bottom: calc(var(--glacier-control-height-md) + var(--glacier-space-6));
+  }
+
+  .shell[data-mobile] .header[data-empty] {
     background: transparent;
     border-bottom: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     padding: var(--glacier-space-2) var(--glacier-space-3);
   }
-}
 
-@media (min-width: 1024px) {
-  .header[data-empty] {
-    display: none;
+  .shell[data-mobile][data-floating] .header {
+    top: var(--glacier-space-3);
+    margin: var(--glacier-space-3) var(--glacier-space-3) 0;
+    border: var(--glacier-hairline) solid var(--glacier-glass-border);
+    border-radius: var(--glacier-radius-xl);
+    box-shadow: var(--glacier-shadow-3);
+  }
+
+  .shell[data-mobile][data-floating] .sidebar {
+    inset-block: var(--glacier-space-3);
+    inset-inline-start: var(--glacier-space-3);
+    height: auto;
+    max-width: calc(85vw - var(--glacier-space-3));
+    border: var(--glacier-hairline) solid var(--glacier-glass-border);
+    border-radius: var(--glacier-radius-xl);
+    box-shadow: var(--glacier-shadow-5);
+  }
+
+  .shell[data-mobile][data-floating] .bottomNav {
+    bottom: var(--glacier-space-3);
+    margin: 0 var(--glacier-space-3) var(--glacier-space-3);
+    border: var(--glacier-hairline) solid var(--glacier-glass-border);
+    border-radius: var(--glacier-radius-xl);
+    box-shadow: var(--glacier-shadow-3);
+  }
+
+  .shell[data-mobile][data-floating][data-bottom-nav] .content {
+    padding-bottom: calc(var(--glacier-control-height-md) + var(--glacier-space-8));
+  }
+
+  .shell[data-desktop][data-sidebar-collapsed] {
+    grid-template-columns: 0 minmax(0, 1fr);
+  }
+
+  .shell[data-desktop][data-sidebar-collapsed] .sidebar,
+  .shell[data-desktop][data-sidebar-collapsed] .resizer,
+  .shell[data-desktop][data-sidebar-collapsed] .bottomNav {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .shell[data-desktop][data-bottom-nav] .sidebar {
+    padding-bottom: calc(var(--glacier-control-height-md) + var(--glacier-space-4));
+  }
+
+  .shell[data-desktop] .bottomNav {
+    position: fixed;
+    inset-inline-start: 0;
+    bottom: 0;
+    z-index: 20;
+    display: block;
+    width: var(--shell-sidebar);
+    padding: var(--glacier-space-2);
+    border-top: var(--glacier-hairline) solid var(--glacier-glass-border);
+    background: var(--glacier-glass-thin);
+    backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glacier-blur-md)) saturate(var(--glacier-glass-saturate));
   }
 
   /* floating variant: the sidebar detaches into a rounded card with a gutter
      on every side, floating in place as the main column scrolls past it */
-  .shell[data-floating] {
+  .shell[data-desktop][data-floating] {
     grid-template-columns: calc(var(--shell-sidebar) + var(--glacier-space-4) * 2) 1fr;
   }
 
-  .shell[data-floating] .sidebar {
+  .shell[data-desktop][data-floating][data-sidebar-collapsed] {
+    grid-template-columns: 0 minmax(0, 1fr);
+  }
+
+  .shell[data-desktop][data-floating] .sidebar {
     top: var(--glacier-space-4);
     height: calc(100vh - var(--glacier-space-4) * 2);
     margin: var(--glacier-space-4);
@@ -183,16 +280,24 @@
     overflow: hidden;
   }
 
+  .shell[data-desktop][data-floating] .bottomNav {
+    inset-inline-start: var(--glacier-space-4);
+    bottom: var(--glacier-space-4);
+    width: var(--shell-sidebar);
+    border: var(--glacier-hairline) solid var(--glacier-glass-border);
+    border-radius: 0 0 var(--glacier-radius-xl) var(--glacier-radius-xl);
+  }
+
   /* in the floating layout the sidebar card sits a gutter in from the edge, so
      move the divider out to its inline-end edge */
-  .shell[data-floating] .resizer {
+  .shell[data-desktop][data-floating] .resizer {
     inset-inline-start: calc(var(--shell-sidebar) + var(--glacier-space-4));
   }
 
   /* the top bar floats too, so the whole chrome reads as detached panels: a
      rounded toolbar with the same gutter, sitting inline-after the sidebar
      card and clear of the top and outer edges */
-  .shell[data-floating] .header {
+  .shell[data-desktop][data-floating] .header {
     top: var(--glacier-space-4);
     margin-block: var(--glacier-space-4) 0;
     margin-inline: 0 var(--glacier-space-4);
@@ -201,16 +306,19 @@
     box-shadow: var(--glacier-shadow-3);
   }
 
+  .shell[data-desktop][data-floating][data-sidebar-collapsed] .header {
+    margin-inline: var(--glacier-space-4);
+  }
+
   /* an empty floating header would just be a stray bar; hide it and let the
      content start at the top gutter instead */
-  .shell[data-floating] .header[data-empty] {
+  .shell[data-desktop][data-floating] .header[data-empty] {
     display: none;
   }
 
-  .shell[data-floating] .header[data-empty] + .content {
+  .shell[data-desktop][data-floating] .header[data-empty] + .content {
     padding-top: var(--glacier-space-4);
   }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .sidebar {

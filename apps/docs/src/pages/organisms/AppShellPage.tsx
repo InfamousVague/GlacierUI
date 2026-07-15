@@ -1,15 +1,19 @@
-import { Callout, Heading, Text, Size, TextTone, useT } from '@glacier/react';
-import type { CSSProperties } from 'react';
+import { Callout, Heading, NavBar, NavBarItem, Text, Size, TextTone, useT } from '@glacier/react';
+import { Box, House, Menu, Palette, PanelLeft, X } from '@glacier/icons';
+import { useState, type CSSProperties } from 'react';
 import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
 import { m } from '../../i18n.ts';
 
-// A small static illustration of the shell layout. AppShell itself is a
+// Small fixed-layout illustrations of the shell. AppShell itself is a
 // full-height frame (min-height 100vh with its own sticky sidebar), so it can
 // not be nested inside a bounded doc example, and this page already lives
-// inside one. This mock shows the composition; the living example is the site.
-function ShellMock({ floating = false }: { floating?: boolean }) {
+// inside one. These mocks show both responsive layouts; the living example is
+// the site.
+function ShellMock({ floating = false, isMobile = false }: { floating?: boolean; isMobile?: boolean }) {
   const t = useT();
+  const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const gap = floating ? 'var(--glacier-space-3)' : '0';
   const block: CSSProperties = {
     background: 'var(--glacier-surface-raised)',
@@ -22,25 +26,69 @@ function ShellMock({ floating = false }: { floating?: boolean }) {
   };
   return (
     <div
+      className="shellMock"
+      data-layout={isMobile ? 'mobile' : 'desktop'}
+      data-floating={floating || undefined}
+      data-open={open || undefined}
+      data-collapsed={collapsed || undefined}
       style={{
-        width: '100%',
-        display: 'grid',
-        gridTemplateColumns: '9rem 1fr',
         gap,
-        height: '13rem',
         padding: floating ? 'var(--glacier-space-3)' : '0',
-        borderRadius: 'var(--glacier-radius-lg)',
-        border: 'var(--glacier-hairline) solid var(--glacier-border-subtle)',
-        background: 'var(--glacier-bg)',
-        overflow: 'hidden',
       }}
     >
-      <div style={{ ...block, borderRight: floating ? block.border : 'var(--glacier-hairline) solid var(--glacier-border-subtle)' }}>{t(m.appshellSidebar)}</div>
-      <div style={{ display: 'grid', gridTemplateRows: 'auto 1fr', gap, minWidth: 0 }}>
-        <div style={{ ...block, height: '2.25rem', borderBottom: floating ? block.border : 'var(--glacier-hairline) solid var(--glacier-border-subtle)' }}>{t(m.appshellHeader)}</div>
+      <button className="shellMockBackdrop" aria-label="Close navigation" onClick={() => setOpen(false)} />
+      <aside className="shellMockSidebar" style={{ ...block, borderRight: floating ? block.border : 'var(--glacier-hairline) solid var(--glacier-border-subtle)' }}>
+        {isMobile && open && (
+          <button className="shellMockClose" aria-label="Close navigation" onClick={() => setOpen(false)}>
+            <X size={16} aria-hidden="true" />
+          </button>
+        )}
+        <span>{t(m.appshellSidebar)}</span>
+        {!isMobile && (
+          <ShellNav className="shellMockSidebarNav" label={t(m.shellBottomNav)} />
+        )}
+      </aside>
+      <div className="shellMockMain" style={{ gap }}>
+        <div className="shellMockHeader" style={{ ...block, height: '2.25rem', borderBottom: floating ? block.border : 'var(--glacier-hairline) solid var(--glacier-border-subtle)' }}>
+          <button
+            className="shellMockMenu"
+            aria-label="Open navigation"
+            aria-expanded={isMobile ? open : !collapsed}
+            onClick={() => isMobile ? setOpen(true) : setCollapsed((value) => !value)}
+          >
+            <Menu size={16} aria-hidden="true" />
+          </button>
+          <span>{t(m.appshellHeader)}</span>
+        </div>
         <div style={block}>{t(m.appshellMain)}</div>
+        {isMobile && (
+          <ShellNav className="shellMockBottomNav" label={t(m.shellBottomNav)} />
+        )}
       </div>
     </div>
+  );
+}
+
+function ShellNav({ className, label }: { className: string; label: string }) {
+  const [active, setActive] = useState('home');
+  const destinations = [
+    { id: 'home', icon: <House size={16} />, label: 'Home' },
+    { id: 'colors', icon: <Palette size={16} />, label: 'Colors' },
+    { id: 'ui', icon: <Box size={16} />, label: 'UI' },
+    { id: 'shell', icon: <PanelLeft size={16} />, label: 'Shell' },
+  ];
+  return (
+    <NavBar className={className} aria-label={label}>
+      {destinations.map((destination) => (
+        <NavBarItem
+          key={destination.id}
+          icon={destination.icon}
+          label={destination.label}
+          active={active === destination.id}
+          onClick={() => setActive(destination.id)}
+        />
+      ))}
+    </NavBar>
   );
 }
 
@@ -59,7 +107,10 @@ export function AppShellPage() {
 
       <Heading level={2}>{t(m.secAnatomy)}</Heading>
       <Text tone={TextTone.Muted}>{t(m.shellAnatomyIntro)}</Text>
+      <Heading level={3}>{t(m.shellDesktop)}</Heading>
       <ComponentBlueprint specId="app-shell" />
+      <Heading level={3}>{t(m.shellMobile)}</Heading>
+      <ComponentBlueprint specId="app-shell" variant="mobile" />
 
       <Heading level={2}>{t(m.secExamples)}</Heading>
 
@@ -69,6 +120,7 @@ export function AppShellPage() {
         code={`import { AppShell, Sidebar, SidebarItem, Toolbar } from '@glacier/react';
 
 <AppShell
+  isMobile={isMobile}
   sidebar={
     <Sidebar>
       <SidebarItem active>Home</SidebarItem>
@@ -76,21 +128,40 @@ export function AppShellPage() {
     </Sidebar>
   }
   header={<Toolbar end={<button>Account</button>}>Dashboard</Toolbar>}
+  bottomNav={<NavBar aria-label="Primary">…</NavBar>}
 >
   <main>Page content</main>
 </AppShell>`}
       >
-        <ShellMock />
+        <div className="shellMockPair">
+          <div className="shellMockExample" data-layout="desktop">
+            <span className="shellMockLabel">{t(m.shellDesktop)}</span>
+            <ShellMock />
+          </div>
+          <div className="shellMockExample" data-layout="mobile">
+            <span className="shellMockLabel">{t(m.shellMobile)}</span>
+            <ShellMock isMobile />
+          </div>
+        </div>
       </Example>
 
       <Example
         title={t(m.shellEx2Title)}
         description={t(m.shellEx2Desc)}
-        code={`<AppShell floating sidebar={sidebar} header={header}>
+        code={`<AppShell isMobile={isMobile} floating sidebar={sidebar} header={header} bottomNav={bottomNav}>
   {content}
 </AppShell>`}
       >
-        <ShellMock floating />
+        <div className="shellMockPair">
+          <div className="shellMockExample" data-layout="desktop">
+            <span className="shellMockLabel">{t(m.shellDesktop)}</span>
+            <ShellMock floating />
+          </div>
+          <div className="shellMockExample" data-layout="mobile">
+            <span className="shellMockLabel">{t(m.shellMobile)}</span>
+            <ShellMock floating isMobile />
+          </div>
+        </div>
       </Example>
 
       <Example
@@ -117,9 +188,11 @@ export function AppShellPage() {
         props={[
           { name: 'sidebar', type: 'ReactNode', description: t(m.shellPropSidebar) },
           { name: 'header', type: 'ReactNode', description: t(m.shellPropHeader) },
+          { name: 'bottomNav', type: 'ReactNode', description: t(m.shellPropBottomNav) },
           { name: 'sidebarWidth', type: 'string', default: "'16rem'", description: t(m.shellPropSidebarWidth) },
           { name: 'sidebarLabel', type: 'string', default: "'Navigation'", description: t(m.shellPropSidebarLabel) },
           { name: 'floating', type: 'boolean', default: 'false', description: t(m.shellPropFloating) },
+          { name: 'isMobile', type: 'boolean', description: t(m.shellPropIsMobile) },
           { name: 'resizable', type: 'boolean', default: 'false', description: t(m.shellPropResizable) },
           { name: 'onSidebarWidthChange', type: '(width: string) => void', description: t(m.shellPropOnWidthChange) },
           { name: 'minSidebarWidth', type: 'number', description: t(m.shellPropMinWidth) },

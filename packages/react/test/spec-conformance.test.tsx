@@ -13,6 +13,7 @@ import {
 } from '@glacier/spec';
 import {
   Avatar,
+  Announcements,
   Banner,
   Button,
   Callout,
@@ -135,6 +136,7 @@ const RENDER: Record<string, Renderer> = {
   ),
   callout: (o) => <Callout tone={o.tone as never}>Note</Callout>,
   banner: (o) => <Banner tone={o.tone as never}>Heads up</Banner>,
+  announcements: (o) => <Announcements tone={o.tone as never} autoPlay={false} items={[{ id: 'release', label: 'Release', content: 'Version 2.1 is available.' }]} />,
   card: (o) => <Card variant={o.variant as never}>Body</Card>,
   checkbox: () => <Checkbox />,
   'code-block': () => <CodeBlock code="const x = 1;" />,

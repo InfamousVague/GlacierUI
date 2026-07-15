@@ -7,7 +7,7 @@
 // contract (data / HeatmapData / HeatmapPoint, levels, legend, rows, skeleton,
 // skeletonColumns, aria-label) matches the web component 1:1.
 
-import { View, Text, type ViewProps } from 'react-native';
+import { View, Text, ScrollView, type ViewProps } from 'react-native';
 import { heatmapSpec } from '@glacier/spec';
 import { t } from './tokens.ts';
 import { dimensionsFor } from './resolve.ts';
@@ -193,7 +193,7 @@ export function Heatmap({
 
   const legendSwatches: number[] = Array.from({ length: steps }, (_, i) => i);
 
-  const containerStyle = { flexDirection: 'column' as const, alignSelf: 'flex-start' as const, rowGap: t('space-2') };
+  const containerStyle = { flexDirection: 'column' as const, width: '100%' as const, maxWidth: '100%' as const, rowGap: t('space-2') };
 
   const legendRow = legend ? (
     <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end', columnGap: t(GAP) }}>
@@ -220,7 +220,7 @@ export function Heatmap({
         {...rest}
         style={[containerStyle, style as never]}
       >
-        <View style={{ flexDirection: 'row', columnGap: t(GAP) }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ width: '100%' }} contentContainerStyle={{ flexDirection: 'row', columnGap: t(GAP) }}>
           {Array.from({ length: columnCount }, (_, ci) => (
             <View key={ci} style={{ flexDirection: 'column', rowGap: t(GAP) }}>
               {Array.from({ length: rowCount }, (_, ri) => (
@@ -228,7 +228,7 @@ export function Heatmap({
               ))}
             </View>
           ))}
-        </View>
+        </ScrollView>
         {legend && (
           <View style={{ flexDirection: 'row', alignItems: 'center', alignSelf: 'flex-end', columnGap: t(GAP) }}>
             <Skeleton width="1.5rem" height="0.5rem" />
@@ -249,7 +249,7 @@ export function Heatmap({
       {...rest}
       style={[containerStyle, style as never]}
     >
-      <View style={{ flexDirection: 'row', columnGap: t(GAP) }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ width: '100%' }} contentContainerStyle={{ flexDirection: 'row', columnGap: t(GAP) }}>
         {columns.map((column, ci) => (
           <View key={ci} style={{ flexDirection: 'column', rowGap: t(GAP) }}>
             {column.map((cell, ri) => {
@@ -259,7 +259,7 @@ export function Heatmap({
             })}
           </View>
         ))}
-      </View>
+      </ScrollView>
       {legendRow}
     </View>
   );

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import axe from 'axe-core';
-import { ScrollArea } from '../src/index.ts';
+import { ScrollArea, ScrollbarAppearance } from '../src/index.ts';
 
 const AXE_RULES = { region: { enabled: false }, 'page-has-heading-one': { enabled: false } };
 
@@ -52,6 +52,41 @@ describe('ScrollArea', () => {
       </ScrollArea>,
     );
     expect(root().className).toMatch(/hideScrollbar/);
+  });
+
+  it('applies scrollbar appearance to the scrolling viewport', () => {
+    render(
+      <ScrollArea scrollbarAppearance={ScrollbarAppearance.Accent} maxHeight={100}>
+        <p>Content</p>
+      </ScrollArea>,
+    );
+    expect(viewport()).toHaveAttribute('data-scrollbar-appearance', ScrollbarAppearance.Accent);
+  });
+
+  it('renders the custom scrollbar track for overflowing content', () => {
+    const { container } = render(
+      <ScrollArea maxHeight={100}>
+        <p>Content</p>
+      </ScrollArea>,
+    );
+    const vp = viewport();
+    stubMetrics(vp, { scrollHeight: 400, clientHeight: 100, scrollTop: 0 });
+    fireEvent.scroll(vp);
+    expect(container.querySelector('[data-scrollbar-appearance="default"]')).toBeInTheDocument();
+  });
+
+  it('keeps the custom scrollbar thumb when its track is hidden', () => {
+    const { container } = render(
+      <ScrollArea showScrollbarTrack={false} maxHeight={100}>
+        <p>Content</p>
+      </ScrollArea>,
+    );
+    const vp = viewport();
+    stubMetrics(vp, { scrollHeight: 400, clientHeight: 100, scrollTop: 0 });
+    fireEvent.scroll(vp);
+    const scrollbar = container.querySelector('[data-scrollbar-appearance="default"]');
+    expect(scrollbar).toBeInTheDocument();
+    expect(scrollbar).not.toHaveAttribute('data-track-visible');
   });
 
   it('caps the width with maxHeight when horizontal', () => {

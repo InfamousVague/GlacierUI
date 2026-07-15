@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react';
-import { View, Text, Pressable, type ViewProps } from 'react-native';
+import { ScrollView, View, Text, Pressable, type ViewProps } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 import { tabStripSpec } from '@glacier/spec';
 import { useControlled } from '@glacier/commons';
@@ -31,11 +31,11 @@ import { paintFor, dimensionsFor } from './resolve.ts';
  *
  * Web-only, accepted-but-noop on native (reported in the wave notes):
  *   - spring          — no framer-motion layout animation here (resting underline).
- *   - showScrollbar   — horizontal overflow scrolling needs a ScrollView, which
- *                       is not on this tier; the strip lays its tabs out at their
- *                       intrinsic width (flexShrink 0), matching the resting look.
  *   - className        — DOM escape hatch, ignored.
  *   - keyboard nav (Arrow/Home/End/Delete) and roving tabindex/focus — DOM-only.
+ *
+ * Overflowing tabs retain their intrinsic width inside a horizontal ScrollView,
+ * keeping the strip bounded by its parent on both native and React Native Web.
  */
 
 export interface TabStripItem {
@@ -62,7 +62,7 @@ export interface TabStripProps extends Omit<ViewProps, 'children' | 'style'> {
   onClose?: (id: string) => void;
   /** Spring preset for the active indicator. Accepted for parity; no motion runtime on this binding. */
   spring?: TabStripSpring;
-  /** Web-only: shows the horizontal scrollbar beneath overflowing tabs. No-op here (needs a ScrollView). */
+  /** Shows the horizontal scroll indicator beneath overflowing tabs. */
   showScrollbar?: boolean;
   /** Accessible name for the strip. */
   'aria-label'?: string;
@@ -121,7 +121,7 @@ export function TabStrip({
   onValueChange,
   onClose,
   spring: _spring,
-  showScrollbar: _showScrollbar,
+  showScrollbar = false,
   className: _className,
   'aria-label': ariaLabel,
   ...rest
@@ -151,17 +151,27 @@ export function TabStrip({
   const indicatorColor = t(SELECTED.indicator ?? 'accent-solid');
 
   return (
-    <View
+    <ScrollView
+      horizontal={true}
+      showsHorizontalScrollIndicator={showScrollbar}
       accessibilityRole="tablist"
       aria-orientation="horizontal"
       aria-label={ariaLabel}
       style={{
-        flexDirection: 'row',
-        alignItems: 'flex-end',
-        columnGap: stripGap,
+        alignSelf: 'stretch',
+        width: '100%',
+        maxWidth: '100%',
+        flexGrow: 0,
+        flexShrink: 1,
         borderBottomWidth: t('hairline'),
         borderBottomColor: t(STRIP_BORDER),
         borderStyle: 'solid',
+      }}
+      contentContainerStyle={{
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        columnGap: stripGap,
+        minWidth: '100%',
       }}
       {...rest}
     >
@@ -252,6 +262,6 @@ export function TabStrip({
           </Pressable>
         );
       })}
-    </View>
+    </ScrollView>
   );
 }

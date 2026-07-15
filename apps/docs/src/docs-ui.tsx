@@ -83,9 +83,11 @@ export interface ExampleProps {
   component?: string;
   /** The demo written once, rendered by each supporting platform's kit. */
   render?: (kit: PlatformKit) => ReactNode;
+  /** Stacks the platform panes when a demo needs the full example width. */
+  platformLayout?: 'inline' | 'stacked';
 }
 
-export function Example({ title, description, code, children, component, render }: ExampleProps) {
+export function Example({ title, description, code, children, component, render, platformLayout = 'inline' }: ExampleProps) {
   const crossPlatform = component != null && render != null;
   return (
     <section className="example">
@@ -93,7 +95,7 @@ export function Example({ title, description, code, children, component, render 
       {description && <p className="exampleDescription">{description}</p>}
       {crossPlatform ? (
         <div className="exampleDemo" style={{ padding: 'var(--glacier-space-8)' }}>
-          <PlatformDemo component={component} render={render} />
+          <PlatformDemo component={component} render={render} stacked={platformLayout === 'stacked'} />
         </div>
       ) : (
         <Row wrap gap={4} padding={8} className="exampleDemo">

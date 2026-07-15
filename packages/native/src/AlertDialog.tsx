@@ -4,10 +4,10 @@
 // Cancel + confirmation footer. Paint (scrim, glass-thick surface, per-tone
 // border, and the per-tone action-background/action-text) and geometry (radius,
 // paddings, footer gap) are read from the alert-dialog spec through the shared
-// resolvers, so this cannot drift from the web kit. Rendered inside RN's <Modal>
-// instead of a document.body portal.
+// resolvers, so this cannot drift from the web kit. Devices use RN's <Modal>;
+// react-native-web portals the same Native content to document.body.
 import { type ReactNode } from 'react';
-import { View, Text, Pressable, Modal, type StyleProp } from 'react-native';
+import { View, Text, Pressable, type StyleProp } from 'react-native';
 import { alertDialogSpec, alertDialogTones, buttonSpec } from '@glacier/spec';
 import { press } from '@glacier/commons';
 import { t } from './tokens.ts';
@@ -16,6 +16,7 @@ import { Heading } from './Heading.tsx';
 import { Text as DisplayText } from './Text.tsx';
 import { Button } from './Button.tsx';
 import { Spinner } from './Spinner.tsx';
+import { AlertDialogHost } from './AlertDialogHost';
 
 // Derived from the spec so the tone union cannot drift from the web kit.
 export type AlertDialogTone = (typeof alertDialogTones)[number];
@@ -70,8 +71,8 @@ const BTN_MD = sizeFor(buttonSpec, 'md'); // height, paddingInline, fontSize
  * The Glacier AlertDialog, rendered with React Native primitives.
  *
  * Resting OPEN state only: the panel fades/scales in on the web via motion; here
- * the <Modal> uses the platform `fade`, and the panel renders at its resting
- * open geometry (the spring scale-in is a device follow-up). Cancel is focused
+ * the device <Modal> uses the platform `fade`, and the panel renders at its
+ * resting open geometry (the spring scale-in is a device follow-up). Cancel is focused
  * first on the web; RN has no imperative focus-trap runtime, so focus order is
  * left to the platform.
  *
@@ -128,8 +129,7 @@ export function AlertDialog({
     backgroundColor: t(OPEN.background ?? 'glass-thick'),
   };
 
-  return (
-    <Modal visible transparent animationType="fade" onRequestClose={requestClose}>
+  const content = (
       <Pressable
         // The fixed, blurred backdrop. A press closes only when dismissible.
         onPress={dismissible ? onClose : undefined}
@@ -213,6 +213,11 @@ export function AlertDialog({
           </View>
         </Pressable>
       </Pressable>
-    </Modal>
+  );
+
+  return (
+    <AlertDialogHost onRequestClose={requestClose}>
+      {content}
+    </AlertDialogHost>
   );
 }

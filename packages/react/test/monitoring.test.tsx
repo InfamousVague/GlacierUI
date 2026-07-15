@@ -69,13 +69,12 @@ describe('TimelineScrubber', () => {
     expect(slider).toHaveAttribute('aria-valuetext', 't+30s');
   });
 
-  it('speaks the live label and presses the live button when pinned to live', () => {
-    render(<TimelineScrubber {...window} liveLabel="Live" aria-label="Recorded activity" />);
-    expect(screen.getByRole('slider')).toHaveAttribute('aria-valuetext', 'Live');
-    expect(screen.getByRole('button', { name: 'Live' })).toHaveAttribute('aria-pressed', 'true');
+  it('reports the live edge as the formatted end time', () => {
+    render(<TimelineScrubber {...window} formatTime={(t) => `t+${t / 1000}s`} aria-label="Recorded activity" />);
+    expect(screen.getByRole('slider')).toHaveAttribute('aria-valuetext', 't+60s');
   });
 
-  it('steps with arrows, jumps Home, and returns to live from End and the button', () => {
+  it('steps with arrows, jumps Home, and returns to live from End', () => {
     const onChange = vi.fn();
     render(
       <TimelineScrubber {...window} value={30_000} step={1000} onChange={onChange} aria-label="Recorded activity" />,
@@ -94,8 +93,6 @@ describe('TimelineScrubber', () => {
     fireEvent.keyDown(slider, { key: 'End' });
     expect(onChange).toHaveBeenLastCalledWith(null);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Live' }));
-    expect(onChange).toHaveBeenLastCalledWith(null);
   });
 
   it('stepping past the trailing edge pins to live', () => {
@@ -114,7 +111,6 @@ describe('TimelineScrubber', () => {
     );
     fireEvent.keyDown(screen.getByRole('slider'), { key: 'ArrowLeft' });
     expect(onChange).not.toHaveBeenCalled();
-    expect(screen.getByRole('button', { name: 'Live' })).toBeDisabled();
   });
 
   it('has no axe violations', async () => {

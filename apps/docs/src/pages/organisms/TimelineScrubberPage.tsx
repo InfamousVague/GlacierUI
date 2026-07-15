@@ -106,7 +106,7 @@ export function TimelineScrubberPage() {
 
       <Example
         title={t(m.scrubEx2Title)}
-        description={t(m.scrubEx2Desc)}
+        description={t(m.scrubEx2ButtonlessDesc)}
         component="TimelineScrubber"
         render={(K) => <LiveDemo K={K} />}
         code={`<TimelineScrubber
@@ -122,7 +122,7 @@ export function TimelineScrubberPage() {
 
       <Example
         title={t(m.exGlass)}
-        description={t(m.scrubEx3Desc)}
+        description={t(m.scrubEx3ButtonlessDesc)}
         component="TimelineScrubber"
         render={(K) => (
           <div
@@ -141,7 +141,7 @@ export function TimelineScrubberPage() {
 
       <Example
         title={t(m.exSkeleton)}
-        description={t(m.scrubEx4Desc)}
+        description={t(m.scrubEx4ButtonlessDesc)}
         component="TimelineScrubber"
         render={(K) => <K.TimelineScrubber start={0} end={1} skeleton aria-label={t(m.scrubAriaLoading)} />}
         code={`<TimelineScrubber start={0} end={1} skeleton aria-label="Recorded activity" />`}
@@ -158,9 +158,8 @@ export function TimelineScrubberPage() {
           { name: 'markers', type: '{ time, tone?, label? }[]', description: t(m.scrubPropMarkers) },
           { name: 'step', type: 'number', default: '1000', description: t(m.scrubPropStep) },
           { name: 'formatTime', type: '(time: number) => string', description: t(m.scrubPropFormatTime) },
-          { name: 'liveLabel', type: 'string', default: "'Live'", description: t(m.scrubPropLiveLabel) },
           { name: 'size', type: "'sm' | 'md'", default: "'md'", description: t(m.scrubPropSize) },
-          { name: 'glass', type: 'boolean', default: 'false', description: t(m.scrubPropGlass) },
+          { name: 'glass', type: 'boolean', default: 'false', description: t(m.scrubPropGlassTrack) },
           { name: 'disabled', type: 'boolean', default: 'false', description: t(m.scrubPropDisabled) },
           { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.scrubPropSkeleton) },
           { name: 'aria-label', type: 'string', description: t(m.scrubPropAriaLabel) },
@@ -169,10 +168,9 @@ export function TimelineScrubberPage() {
 
       <Heading level={2}>{t(m.secAccessibility)}</Heading>
       <ul>
-        <li>{prose(t(m.scrubA11y1))}</li>
+        <li>{prose(t(m.scrubA11y1Buttonless))}</li>
         <li>{prose(t(m.scrubA11y2))}</li>
         <li>{prose(t(m.scrubA11y3))}</li>
-        <li>{prose(t(m.scrubA11y4))}</li>
         <li>{prose(t(m.scrubA11y5))}</li>
       </ul>
 

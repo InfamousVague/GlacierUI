@@ -1,22 +1,19 @@
 .root {
   display: flex;
-  align-items: flex-end;
-  gap: var(--glacier-space-2);
+  flex-direction: column;
   width: 100%;
   /* room for the playhead handle riding above the track edge */
   padding-top: 0.625rem;
+  user-select: none;
 }
 
 .track {
   position: relative;
-  flex: 1;
-  min-width: 0;
   border: var(--glacier-hairline) solid var(--glacier-border);
   border-radius: var(--glacier-radius-md);
   background: var(--glacier-surface-sunken);
   cursor: crosshair;
   touch-action: none;
-  user-select: none;
 }
 
 .sm .track {
@@ -40,7 +37,7 @@
   overflow: hidden;
 }
 
-/* glass swaps the sunken track and soft button for the frosted material */
+/* glass swaps the sunken track for the frosted material */
 .glass .track {
   background: var(--glacier-glass-regular);
   border-color: var(--glacier-glass-border);
@@ -57,7 +54,7 @@
 }
 
 .activity path {
-  fill: var(--glacier-accent-soft);
+  fill: var(--glacier-text);
 }
 
 .marker {
@@ -90,29 +87,32 @@
   background: var(--glacier-info-solid);
 }
 
-.ticks {
-  position: absolute;
-  inset: 0;
+.markerLabels {
+  position: relative;
+  width: 100%;
+  height: 2rem;
   pointer-events: none;
 }
 
-.tick {
+.markerLabel {
   position: absolute;
-  bottom: 2px;
+  top: 0;
   transform: translateX(-50%);
   font-size: var(--glacier-font-size-xs);
   color: var(--glacier-text-muted);
   white-space: nowrap;
 }
 
-.tick[data-edge='start'] {
-  transform: none;
-  left: 6px !important;
+.markerLabel[data-row='1'] {
+  top: 1rem;
 }
 
-.tick[data-edge='end'] {
+.markerLabel[data-edge='start'] {
+  transform: none;
+}
+
+.markerLabel[data-edge='end'] {
   transform: translateX(-100%);
-  margin-left: -6px;
 }
 
 .playhead {
@@ -188,75 +188,3 @@
   -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
 }
 
-.live {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--glacier-space-2);
-  padding-inline: var(--glacier-space-3);
-  border: var(--glacier-hairline) solid var(--glacier-border);
-  border-radius: var(--glacier-radius-md);
-  background: var(--glacier-accent-soft);
-  color: var(--glacier-accent-text);
-  font-size: var(--glacier-font-size-xs);
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
-    color var(--glacier-duration-fast) var(--glacier-ease-out);
-}
-
-/* the button matches the track height, sitting under the handle overhang */
-.sm .live {
-  height: 2.5rem;
-}
-
-.md .live {
-  height: 3.5rem;
-}
-
-.glass .live {
-  background: var(--glacier-glass-regular);
-  border-color: var(--glacier-glass-border);
-  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
-  box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
-}
-
-.live:focus-visible {
-  outline: 2px solid var(--glacier-focus-ring);
-  outline-offset: 2px;
-}
-
-.live[aria-pressed='true'] {
-  background: var(--glacier-accent-solid);
-  color: var(--glacier-accent-contrast);
-  border-color: transparent;
-}
-
-.live:disabled {
-  cursor: default;
-  opacity: 0.5;
-}
-
-.liveDot {
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: var(--glacier-radius-full);
-  background: currentColor;
-}
-
-[data-live] .liveDot {
-  animation: pulse 2s var(--glacier-ease-out) infinite;
-}
-
-@keyframes pulse {
-  50% {
-    opacity: 0.4;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  [data-live] .liveDot {
-    animation: none;
-  }
-}

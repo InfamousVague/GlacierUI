@@ -20,6 +20,7 @@ export const kitMessages = defineMessages({
   decrease: { en: 'Decrease', es: 'Disminuir', fr: 'Diminuer', de: 'Verringern', ja: '減らす', pt: 'Diminuir', zh: '减少', ar: 'تقليل' },
   increase: { en: 'Increase', es: 'Aumentar', fr: 'Augmenter', de: 'Erhöhen', ja: '増やす', pt: 'Aumentar', zh: '增加', ar: 'زيادة' },
   openNavigation: { en: 'Open navigation', es: 'Abrir navegación', fr: 'Ouvrir la navigation', de: 'Navigation öffnen', ja: 'ナビゲーションを開く', pt: 'Abrir navegação', zh: '打开导航', ar: 'فتح الملاحة' },
+  closeNavigation: { en: 'Close navigation', es: 'Cerrar navegación', fr: 'Fermer la navigation', de: 'Navigation schließen', ja: 'ナビゲーションを閉じる', pt: 'Fechar navegação', zh: '关闭导航', ar: 'إغلاق الملاحة' },
   resizeSidebar: { en: 'Resize sidebar', es: 'Redimensionar la barra lateral', fr: 'Redimensionner la barre latérale', de: 'Seitenleiste anpassen', ja: 'サイドバーのサイズを変更', pt: 'Redimensionar barra lateral', zh: '调整侧边栏大小', ar: 'تغيير حجم الشريط الجانبي' },
   loading: { en: 'Loading', es: 'Cargando', fr: 'Chargement', de: 'Wird geladen', ja: '読み込み中', pt: 'Carregando', zh: '加载中', ar: 'جاري التحميل' },
   noOptions: { en: 'No options', es: 'Sin opciones', fr: 'Aucune option', de: 'Keine Optionen', ja: '選択肢がありません', pt: 'Nenhuma opção', zh: '无选项', ar: 'لا توجد خيارات' },

@@ -20,10 +20,11 @@ import { t } from './tokens.ts';
  *
  * Approximation, documented as a device follow-up: the web uses `table-layout:
  * auto` to size each column to its content. That needs measurement, so this
- * binding distributes columns evenly (`flex: 1` over a `COLUMN_MIN` floor). The
- * table fills the viewport like the web's `width: 100%` and scrolls horizontally
- * once the columns' floors exceed it; header and body columns stay aligned
- * because they share one flex rule. Long-table virtualization is likewise a
+ * binding derives a shared intrinsic width for each primitive-text column from
+ * its header and values. The table keeps that intrinsic width and scrolls
+ * horizontally once its columns exceed the available space; header and body
+ * columns stay aligned because they share those widths. Custom-render columns
+ * use a conservative width floor. Long-table virtualization is likewise a
  * follow-up — every row renders. `className` is accepted for parity and ignored.
  */
 
@@ -55,11 +56,32 @@ const PAINT = (tableSpec.paint ?? {}) as { background?: string; text?: string };
 const SURFACE = t(bare(PAINT.background) ?? 'surface');
 const TEXT = t(bare(PAINT.text) ?? 'text');
 
-// The resting per-column floor. The web auto-sizes columns; without measurement
-// this binding gives every column an equal share above this width, so wide
-// tables scroll instead of crushing their cells. A raw length (like Pill/
-// TabStrip's inline rem metrics) — never a token, so t() must not wrap it.
-const COLUMN_MIN = '6rem';
+const HEADER_CHARACTER_EM = 0.706;
+const BODY_CHARACTER_EM = 0.5225;
+const CUSTOM_COLUMN_EM = 4.5;
+
+function textWidth(value: ReactNode, characterWidth: number): number | null {
+  return typeof value === 'string' || typeof value === 'number'
+    ? String(value).length * characterWidth
+    : null;
+}
+
+function columnWidth(
+  column: TableColumn,
+  data: Record<string, unknown>[],
+  padding: string,
+  fontSize: string,
+): string {
+  const headerWidth = textWidth(column.header, HEADER_CHARACTER_EM);
+  if (headerWidth == null || column.render != null) {
+    return `calc(${padding} * 2 + ${fontSize} * ${CUSTOM_COLUMN_EM})`;
+  }
+
+  const bodyWidth = data.reduce((widest, row) => (
+    Math.max(widest, textWidth(String(row[column.key] ?? ''), BODY_CHARACTER_EM) ?? 0)
+  ), 0);
+  return `calc(${padding} * 2 + ${fontSize} * ${Math.max(headerWidth, bodyWidth)})`;
+}
 
 /** align → RN horizontal placement. Web maps left→start, right→end (§ text color/align rule). */
 function alignItemsFor(align: TableColumn['align']): 'center' | 'flex-end' | 'stretch' {
@@ -72,7 +94,9 @@ function textAlignFor(align: TableColumn['align']): 'center' | 'right' | 'left' 
 /** Wrap bare text in <Text> (RN cannot render a raw string in a View); pass
  *  through a caller-supplied ReactNode element unchanged. */
 function asText(node: ReactNode, style: Record<string, unknown>): ReactNode {
-  return typeof node === 'string' || typeof node === 'number' ? <Text style={style}>{node}</Text> : node;
+  return typeof node === 'string' || typeof node === 'number'
+    ? <Text numberOfLines={1} style={style}>{node}</Text>
+    : node;
 }
 
 /**
@@ -88,6 +112,7 @@ export function Table({ columns, data, caption, emptyState, className: _classNam
   const padInline = t('space-4');
   const fontSans = t('font-sans');
   const subtle = t('text-subtle');
+  const fontSize = t('font-size-md');
 
   // The bottom hairline that divides every row (header + body cells alike).
   const rowDivider = {
@@ -97,8 +122,8 @@ export function Table({ columns, data, caption, emptyState, className: _classNam
   };
 
   const cellBox = (align: TableColumn['align']) => ({
-    flex: 1,
-    minWidth: COLUMN_MIN,
+    flexGrow: 0,
+    flexShrink: 0,
     paddingVertical: padBlock,
     paddingHorizontal: padInline,
     alignItems: alignItemsFor(align),
@@ -106,13 +131,15 @@ export function Table({ columns, data, caption, emptyState, className: _classNam
 
   const headerText = {
     color: TEXT,
-    fontSize: t('font-size-md'),
+    fontSize,
+    lineHeight: t('leading-sm') as never,
     fontFamily: fontSans,
     fontWeight: '600' as never,
   };
   const cellText = (align: TableColumn['align']) => ({
     color: TEXT,
-    fontSize: t('font-size-md'),
+    fontSize,
+    lineHeight: t('leading-sm') as never,
     fontFamily: fontSans,
     textAlign: textAlignFor(align),
   });
@@ -123,6 +150,8 @@ export function Table({ columns, data, caption, emptyState, className: _classNam
       {...rest}
       style={[
         {
+          alignSelf: 'flex-start',
+          flexGrow: 0,
           borderWidth: hairline,
           borderColor,
           borderStyle: 'solid',
@@ -132,9 +161,9 @@ export function Table({ columns, data, caption, emptyState, className: _classNam
         },
         style as never,
       ]}
-      contentContainerStyle={{ flexGrow: 1 }}
+      contentContainerStyle={{ flexGrow: 0 }}
     >
-      <View accessibilityRole="table" style={{ flexGrow: 1, backgroundColor: SURFACE }}>
+      <View accessibilityRole="table" style={{ flexGrow: 0, backgroundColor: SURFACE }}>
         {/* Header rowgroup */}
         <View accessibilityRole="rowgroup">
           <View accessibilityRole="row" style={{ flexDirection: 'row', ...rowDivider }}>
@@ -142,7 +171,7 @@ export function Table({ columns, data, caption, emptyState, className: _classNam
               <View
                 key={column.key}
                 accessibilityRole="columnheader"
-                style={cellBox(column.align)}
+                style={{ ...cellBox(column.align), width: columnWidth(column, data, padInline, fontSize) }}
               >
                 {asText(column.header, { ...headerText, textAlign: textAlignFor(column.align) })}
               </View>
@@ -181,7 +210,7 @@ export function Table({ columns, data, caption, emptyState, className: _classNam
                   <View
                     key={`${column.key}-${rowIndex}`}
                     accessibilityRole="cell"
-                    style={cellBox(column.align)}
+                    style={{ ...cellBox(column.align), width: columnWidth(column, data, padInline, fontSize) }}
                   >
                     {column.render
                       ? column.render(row, rowIndex)
@@ -200,10 +229,12 @@ export function Table({ columns, data, caption, emptyState, className: _classNam
               paddingHorizontal: padInline,
               color: subtle,
               fontSize: t('font-size-sm'),
+              lineHeight: t('leading-sm') as never,
               fontFamily: fontSans,
               textAlign: 'left',
             })
           : null}
+
       </View>
     </ScrollView>
   );

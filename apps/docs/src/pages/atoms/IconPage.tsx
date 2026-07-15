@@ -75,6 +75,20 @@ export function IconPage() {
       </Example>
 
       <Example
+        title={t(m.icoBackfillTitle)}
+        description={t(m.icoBackfillDesc)}
+        component="IconBackfill"
+        render={(K) => (
+          <div style={{ display: 'flex', gap: 'var(--glacier-space-4)', alignItems: 'center' }}>
+            <K.IconBackfill><Bell size={20} /></K.IconBackfill>
+            <K.IconBackfill><Star size={20} color="var(--glacier-amber-9)" /></K.IconBackfill>
+          </div>
+        )}
+        code={`<IconBackfill><Bell size={20} /></IconBackfill>
+<IconBackfill><Star size={20} color="var(--glacier-amber-9)" /></IconBackfill>`}
+      />
+
+      <Example
         title={t(m.icoEx4Title)}
         description={t(m.icoEx4Desc)}
         code={`<Button><Check size={16} /> Approve</Button>
@@ -100,6 +114,7 @@ export function IconPage() {
           { name: 'size', type: 'number', default: '24', description: t(m.icoPropSize) },
           { name: 'color', type: 'string', default: "'currentColor'", description: t(m.icoPropColor) },
           { name: 'strokeWidth', type: 'number', default: '2', description: t(m.icoPropStrokeWidth) },
+          { name: 'backfill', type: 'boolean', default: 'false', description: t(m.icoPropBackfill) },
           { name: 'absoluteStrokeWidth', type: 'boolean', default: 'false', description: t(m.icoPropAbsoluteStrokeWidth) },
           { name: '...svg', type: 'SVGProps', description: t(m.icoPropSvg) },
         ]}

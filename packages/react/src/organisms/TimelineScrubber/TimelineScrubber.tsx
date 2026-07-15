@@ -33,11 +33,9 @@ export interface TimelineScrubberProps extends Omit<ComponentProps<'div'>, 'onCh
   step?: number;
   /** Formats a timestamp for the readout, the ticks, and aria-valuetext. */
   formatTime?: (time: number) => string;
-  /** Label for the live button; replace it for localization. */
-  liveLabel?: string;
   /** Track height step. The handle adds its overhang above the track. */
   size?: 'sm' | 'md';
-  /** Renders the track and live button on the frosted glass material. */
+  /** Renders the track on the frosted glass material. */
   glass?: boolean;
   /** Blocks scrubbing and dims the control. */
   disabled?: boolean;
@@ -48,9 +46,6 @@ export interface TimelineScrubberProps extends Omit<ComponentProps<'div'>, 'onCh
 }
 
 const defaultFormat = (time: number) => new Date(time).toLocaleTimeString();
-
-/** How many sparse time labels the track carries. */
-const TICK_COUNT = 4;
 
 /** Scrubbing within this fraction of the trailing edge snaps back to live. */
 const LIVE_SNAP = 0.995;
@@ -71,7 +66,6 @@ export function TimelineScrubber({
   markers,
   step = 1000,
   formatTime = defaultFormat,
-  liveLabel = 'Live',
   size = 'md',
   glass = false,
   disabled = false,
@@ -136,8 +130,7 @@ export function TimelineScrubber({
   if (skeleton) {
     return (
       <div className={cx(styles.root, styles[size], className)} {...rest}>
-        <Skeleton height={size === 'sm' ? '2.5rem' : '3.5rem'} width="100%" radius="var(--glacier-radius-md)" style={{ flex: 1 }} />
-        <Skeleton height="2rem" width="3.5rem" radius="var(--glacier-radius-md)" />
+        <Skeleton height={size === 'sm' ? '2.5rem' : '3.5rem'} width="100%" radius="var(--glacier-radius-md)" />
       </div>
     );
   }
@@ -148,11 +141,6 @@ export function TimelineScrubber({
           .map((v, i) => `${(i / (activity.length - 1)) * 100} ${100 - Math.min(Math.max(v, 0), 1) * 100}`)
           .join(' L ')} L 100 100 L 0 100 Z`
       : undefined;
-
-  const ticks = Array.from({ length: TICK_COUNT }, (_, i) => {
-    const f = i / (TICK_COUNT - 1);
-    return { f, label: formatTime(start + f * windowSpan) };
-  });
 
   return (
     <div
@@ -189,13 +177,6 @@ export function TimelineScrubber({
               />
             );
           })}
-          <div className={styles.ticks}>
-            {ticks.map((tick) => (
-              <span key={tick.f} className={styles.tick} style={{ left: `${tick.f * 100}%` }} data-edge={tick.f === 0 ? 'start' : tick.f === 1 ? 'end' : undefined}>
-                {tick.label}
-              </span>
-            ))}
-          </div>
         </div>
         <div
           className={styles.playhead}
@@ -207,7 +188,7 @@ export function TimelineScrubber({
           aria-valuemin={start}
           aria-valuemax={end}
           aria-valuenow={clamped}
-          aria-valuetext={live ? liveLabel : formatTime(clamped)}
+          aria-valuetext={formatTime(clamped)}
           aria-disabled={disabled || undefined}
           onKeyDown={handleKeyDown}
         >
@@ -215,16 +196,19 @@ export function TimelineScrubber({
           {scrubbing && !live && <span className={styles.readout}>{formatTime(clamped)}</span>}
         </div>
       </div>
-      <button
-        type="button"
-        className={styles.live}
-        aria-pressed={live}
-        disabled={disabled}
-        onClick={() => onChange?.(null)}
-      >
-        <span className={styles.liveDot} aria-hidden="true" />
-        {liveLabel}
-      </button>
+      {markers && markers.length > 0 && (
+        <div className={styles.markerLabels} aria-hidden="true">
+          {markers.map((marker, i) => {
+            const f = Math.min(Math.max((marker.time - start) / windowSpan, 0), 1);
+            const edge = f === 0 ? 'start' : f === 1 ? 'end' : undefined;
+            return (
+              <span key={i} className={styles.markerLabel} style={{ left: `${f * 100}%` }} data-edge={edge} data-row={i % 2}>
+                {formatTime(marker.time)}
+              </span>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

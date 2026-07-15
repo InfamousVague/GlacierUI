@@ -32,10 +32,10 @@ const fmt = (m?: Measure): string | undefined => (m ? (m.startsWith('$') ? m.sli
 // (their SizeSpec.name still carries the real size key some measures look up).
 const TitleContext = createContext('');
 
-function BpTitle() {
+function BpTitle({ y = 26 }: { y?: number }) {
   const title = useContext(TitleContext);
   return (
-    <text x={16} y={26} className="bpTitle">
+    <text x={16} y={y} className="bpTitle">
       {title}
     </text>
   );
@@ -714,7 +714,7 @@ function CalloutBlueprint({ size, dimensions }: BlueprintProps) {
         </>
       )}
 
-      <BpTitle />
+      <BpTitle y={16} />
       <text x={200} y={214} textAnchor="middle" className="bpLabel bpMuted">
         {[gap && `${t(m.bpGap)}: ${gap}`, font && `${t(m.bpFont)}: ${font}`, border && `${t(m.bpBorder)}: ${border}`].filter(Boolean).join('   ·   ')}
       </text>
@@ -803,6 +803,85 @@ function BannerBlueprint({ size, dimensions }: BlueprintProps) {
         x={W / 2}
         parts={[t(m.bpWidthFull), gap && `${t(m.bpGap)}: ${gap}`, font && `${t(m.bpFont)}: ${font}`, border && `${t(m.bpBorder)}: ${border}`]}
       />
+    </svg>
+  );
+}
+
+/** Announcements blueprint: a rotating ticker with a clipped message viewport and compact controls. */
+function AnnouncementsBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
+  const minHeight = fmt(dimensions?.minHeight);
+  const paddingStart = fmt(dimensions?.paddingInlineStart);
+  const paddingEnd = fmt(dimensions?.paddingInlineEnd);
+  const paddingBlock = fmt(dimensions?.paddingBlock);
+  const viewportPadding = fmt(dimensions?.viewportPaddingInline);
+  const controlSize = fmt(dimensions?.controlSize);
+  const radius = fmt(dimensions?.radius);
+  const border = fmt(dimensions?.border);
+  const gap = fmt(dimensions?.gap);
+  const W = 460;
+  const H = 224;
+  const BX = 48;
+  const BY = 74;
+  const BW = 364;
+  const BH = 56;
+  const rr = 12;
+  const pStart = 22;
+  const pEnd = 18;
+  const pViewport = 6;
+  const midY = BY + BH / 2;
+  const viewportX = BX + pStart;
+  const controlsW = 116;
+  const viewportW = BW - pStart - pEnd - controlsW - 14;
+  const controlsX = viewportX + viewportW + 14;
+  const labelW = 48;
+  const labelX = viewportX + pViewport;
+  const contentX = labelX + labelW + 10;
+  const contentW = viewportW - pViewport * 2 - labelW - 10;
+  const controlY = midY - 11;
+  const previousX = controlsX;
+  const positionX = controlsX + 28;
+  const pauseX = controlsX + 68;
+  const nextX = controlsX + 96;
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheAnnouncements)}>
+      <Defs />
+      <rect x={0} y={0} width={W} height={H} fill="url(#bpGrid)" />
+
+      <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={2} strokeDasharray="5 3" />
+
+      {/* Clipped ticker viewport: category label followed by one changing announcement line. */}
+      <rect x={viewportX} y={midY - 9} width={viewportW} height={18} rx={4} fill="none" stroke={C.grid} strokeWidth={1.25} strokeDasharray="3 2" />
+      <rect x={labelX} y={midY - 4} width={labelW} height={8} rx={3} fill={C.line} />
+      <rect x={contentX} y={midY - 4} width={contentW} height={8} rx={3} fill={C.content} />
+      <text x={labelX + labelW / 2} y={BY - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpLabel)}</text>
+      <text x={contentX + contentW / 2} y={BY - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpContent)}</text>
+      <text x={viewportX + viewportW / 2} y={BY + BH + 16} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpViewport)}</text>
+
+      {/* Previous, position, pause, and next controls remain fixed at the inline end. */}
+      <rect x={previousX} y={controlY} width={20} height={22} rx={5} fill={C.content} fillOpacity={0.3} stroke={C.line} strokeWidth={1} />
+      <path d={`M ${previousX + 12} ${midY - 4} L ${previousX + 8} ${midY} L ${previousX + 12} ${midY + 4}`} fill="none" stroke={C.line} strokeWidth={1.25} strokeLinecap="round" strokeLinejoin="round" />
+      <text x={positionX + 16} y={midY + 4} textAnchor="middle" className="bpLabel" fill={C.faint}>1 / 3</text>
+      <rect x={pauseX} y={controlY} width={20} height={22} rx={5} fill={C.content} fillOpacity={0.3} stroke={C.line} strokeWidth={1} />
+      <line x1={pauseX + 7} y1={midY - 4} x2={pauseX + 7} y2={midY + 4} stroke={C.line} strokeWidth={1.5} strokeLinecap="round" />
+      <line x1={pauseX + 13} y1={midY - 4} x2={pauseX + 13} y2={midY + 4} stroke={C.line} strokeWidth={1.5} strokeLinecap="round" />
+      <rect x={nextX} y={controlY} width={20} height={22} rx={5} fill={C.content} fillOpacity={0.3} stroke={C.line} strokeWidth={1} />
+      <path d={`M ${nextX + 8} ${midY - 4} L ${nextX + 12} ${midY} L ${nextX + 8} ${midY + 4}`} fill="none" stroke={C.line} strokeWidth={1.25} strokeLinecap="round" strokeLinejoin="round" />
+      <text x={controlsX + 53} y={BY - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpControl)}</text>
+
+      {paddingStart && <HDim x1={BX} x2={BX + pStart} y={BY + BH + 34} label={paddingStart} above={false} />}
+      {paddingEnd && <HDim x1={BX + BW - pEnd} x2={BX + BW} y={BY + BH + 34} label={paddingEnd} above={false} />}
+      {paddingBlock && <VDim x={BX + BW + 24} y1={BY} y2={BY + 14} label={paddingBlock} left={false} />}
+      {radius && (
+        <>
+          <path d={`M ${BX + BW - rr} ${BY} A ${rr} ${rr} 0 0 1 ${BX + BW} ${BY + rr}`} fill="none" stroke={C.line} strokeWidth={1.5} />
+          <text x={W - 8} y={28} textAnchor="end" className="bpLabel">{t(m.bpRadius)}: {radius}</text>
+        </>
+      )}
+
+      <BpTitle />
+      <Foot y={H - 14} x={W / 2} parts={[minHeight && `${t(m.bpHeight)}: ${minHeight}`, viewportPadding && `${t(m.bpViewport)}: ${viewportPadding}`, controlSize && `${t(m.bpControl)}: ${controlSize}`, gap && `${t(m.bpGap)}: ${gap}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
@@ -2516,6 +2595,7 @@ function AppShellBlueprint({ dimensions }: BlueprintProps) {
   const G = 18; // gap between the regions, matching the app's own gutter feel
   const sideW = 88;
   const headerH = 30;
+  const navH = 26;
   const sideX = X + P;
   const regionY = Y + P;
   const mainX = sideX + sideW + G;
@@ -2532,8 +2612,16 @@ function AppShellBlueprint({ dimensions }: BlueprintProps) {
       <Ln x={sideX + 12} y={regionY + 12} w={sideW - 24} h={5} op={0.7} />
       <Ln x={sideX + 12} y={regionY + 28} w={sideW - 30} h={5} op={0.4} />
       <Ln x={sideX + 12} y={regionY + 42} w={sideW - 38} h={5} op={0.4} />
+      {/* the same primary nav slot pins to the bottom of the desktop sidebar */}
+      <rect x={sideX + 6} y={regionY + H - P * 2 - navH - 6} width={sideW - 12} height={navH} rx={6} fill={C.content} fillOpacity={0.3} stroke={C.text} strokeWidth={1} />
+      {[0, 1, 2, 3].map((index) => (
+        <circle key={index} cx={sideX + 14 + index * 20} cy={regionY + H - P * 2 - navH / 2 - 6} r={4} fill={index === 0 ? C.text : 'none'} stroke={C.text} strokeWidth={1} />
+      ))}
       {/* header region */}
       <rect x={mainX} y={regionY} width={mainW} height={headerH} rx={6} fill={C.content} fillOpacity={0.28} stroke={C.text} strokeWidth={1} />
+      {[0, 1, 2].map((index) => (
+        <line key={index} x1={mainX + 10} y1={regionY + 10 + index * 4} x2={mainX + 20} y2={regionY + 10 + index * 4} stroke={C.text} strokeWidth={1.5} strokeLinecap="round" />
+      ))}
       {/* main content rows */}
       <Ln x={mainX + 4} y={contentY} w={mainW - 40} h={5} op={0.3} />
       <Ln x={mainX + 4} y={contentY + 14} w={mainW - 16} h={5} op={0.3} />
@@ -2542,10 +2630,67 @@ function AppShellBlueprint({ dimensions }: BlueprintProps) {
       <HDim x1={sideX} x2={sideX + sideW} y={Y - 16} label={t(m.bpSidebar16rem)} />
       {/* region labels */}
       <text x={mainX + mainW / 2} y={regionY + headerH / 2 + 4} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpHeader)}</text>
-      <text x={sideX + sideW / 2} y={Y + H - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpSidebar)}</text>
+      <text x={sideX + sideW / 2} y={regionY + 66} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpSidebar)}</text>
+      <text x={sideX + sideW / 2} y={Y + H + 12} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpBottomNav)}</text>
       <text x={mainX + mainW / 2} y={Y + H - 14} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpMain)}</text>
       <BpTitle />
       <Foot y={248} parts={[gutter && `${t(m.bpGutter)}: ${gutter}`, radius && `${t(m.bpRadius)}: ${radius}`, border && `${t(m.bpBorder)}: ${border}`]} />
+    </svg>
+  );
+}
+
+function AppShellMobileBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const gutter = fmt(dimensions?.gutter);
+  const padding = fmt(dimensions?.padding);
+  const radius = fmt(dimensions?.radius);
+  const border = fmt(dimensions?.border);
+  const X = 132;
+  const Y = 42;
+  const W = 136;
+  const H = 178;
+  const inset = 8;
+  const headerH = 28;
+  const navH = 34;
+  const panelX = X + inset;
+  const panelW = W - inset * 2;
+  const headerY = Y + inset;
+  const navY = Y + H - inset - navH;
+  const drawerW = 92;
+  const drawerX = X - drawerW - 18;
+  return (
+    <svg viewBox="0 0 400 258" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfTheAppShell)}: ${t(m.shellMobile)}`}>
+      <Defs />
+      <rect x={0} y={0} width={400} height={258} fill="url(#bpGrid)" />
+      <Frame x={X} y={Y} w={W} h={H} r={12} />
+      {/* Floating mobile header with the sidebar toggle. */}
+      <rect x={panelX} y={headerY} width={panelW} height={headerH} rx={8} fill={C.content} fillOpacity={0.28} stroke={C.text} strokeWidth={1} />
+      {[0, 1, 2].map((index) => (
+        <line key={index} x1={panelX + 10} y1={headerY + 9 + index * 4} x2={panelX + 20} y2={headerY + 9 + index * 4} stroke={C.text} strokeWidth={1.5} strokeLinecap="round" />
+      ))}
+      <Ln x={panelX + 32} y={headerY + 12} w={panelW - 46} h={4} op={0.45} />
+      {/* Scrollable content between the two fixed chrome regions. */}
+      <Ln x={panelX + 4} y={headerY + headerH + 20} w={panelW - 30} h={5} op={0.28} />
+      <Ln x={panelX + 4} y={headerY + headerH + 34} w={panelW - 12} h={5} op={0.28} />
+      <Ln x={panelX + 4} y={headerY + headerH + 48} w={panelW - 42} h={5} op={0.28} />
+      {/* Persistent bottom navigation with four evenly-spaced destinations. */}
+      <rect x={panelX} y={navY} width={panelW} height={navH} rx={10} fill={C.content} fillOpacity={0.3} stroke={C.text} strokeWidth={1} />
+      {[0, 1, 2, 3].map((index) => (
+        <circle key={index} cx={panelX + 17 + index * 29} cy={navY + navH / 2} r={4} fill={index === 0 ? C.text : 'none'} stroke={C.text} strokeWidth={1} />
+      ))}
+      {/* Dashed off-canvas drawer indicates what the header toggle reveals. */}
+      <rect x={drawerX} y={Y + inset} width={drawerW} height={H - inset * 2} rx={10} fill={C.content} fillOpacity={0.08} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+      <line x1={drawerX + drawerW - 22} y1={Y + 20} x2={drawerX + drawerW - 12} y2={Y + 30} stroke={C.text} strokeWidth={1.5} strokeLinecap="round" />
+      <line x1={drawerX + drawerW - 12} y1={Y + 20} x2={drawerX + drawerW - 22} y2={Y + 30} stroke={C.text} strokeWidth={1.5} strokeLinecap="round" />
+      <Ln x={drawerX + 12} y={Y + 28} w={drawerW - 24} h={5} op={0.45} />
+      <Ln x={drawerX + 12} y={Y + 44} w={drawerW - 34} h={5} op={0.3} />
+      <text x={drawerX + drawerW / 2} y={Y + H - 18} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpSidebar)}</text>
+      <text x={panelX + 15} y={headerY - 5} textAnchor="middle" className="bpLabel bpMuted">{t(m.bpMenu)}</text>
+      <text x={X + W + 12} y={headerY + 18} className="bpLabel bpMuted">{t(m.bpHeader)}</text>
+      <text x={X + W + 12} y={Y + H / 2} className="bpLabel bpMuted">{t(m.bpMain)}</text>
+      <text x={X + W + 12} y={navY + 20} className="bpLabel bpMuted">{t(m.bpBottomNav)}</text>
+      <BpTitle />
+      <Foot y={248} parts={[gutter && `${t(m.bpGutter)}: ${gutter}`, padding && `${t(m.bpPad)}: ${padding}`, radius && `${t(m.bpRadius)}: ${radius}`, border && `${t(m.bpBorder)}: ${border}`]} />
     </svg>
   );
 }
@@ -3257,7 +3402,7 @@ function PageHeaderBlueprint({ dimensions }: BlueprintProps) {
 // the content region a token gap below; a hairline divider tops stacked sections.
 function SectionBlueprint({ dimensions }: BlueprintProps) {
   const t = useT();
-  const gap = fmt(dimensions?.gap);
+  const gap = fmt(dimensions?.gapMd);
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSection)}>
       <Defs />
@@ -3282,7 +3427,7 @@ function SectionBlueprint({ dimensions }: BlueprintProps) {
 // width, with the min-width and gap called out.
 function CardGroupBlueprint({ dimensions }: BlueprintProps) {
   const t = useT();
-  const gap = fmt(dimensions?.gap);
+  const gap = fmt(dimensions?.gapMd);
   const cols = [40, 152, 264];
   const rows = [54, 122];
   return (
@@ -3558,7 +3703,7 @@ function SparklineBlueprint({ size, dimensions }: BlueprintProps) {
 }
 
 // TimelineScrubber: the recorded window with its activity silhouette, marker
-// ticks, the playhead with its readout, and the live button at the edge.
+// ticks, the playhead with its readout, and the trailing live edge.
 function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
   const t = useT();
   const height = fmt(size.height);
@@ -3568,7 +3713,7 @@ function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
   const handleDia = fmt(dimensions?.handleDiameter);
 
   const TX = 44;
-  const TW = 264;
+  const TW = 312;
   const TY = 76;
   const TH = 64;
   const PX = TX + TW * 0.66; // playhead position
@@ -3600,11 +3745,6 @@ function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
       {/* sparse time ticks along the bottom edge */}
       <text x={TX + 4} y={TY + TH - 6} className="bpLabel" fill={C.faint}>14:15</text>
       <text x={TX + TW - 4} y={TY + TH - 6} textAnchor="end" className="bpLabel" fill={C.faint}>{t(m.bpNow)}</text>
-
-      {/* the live button at the trailing edge */}
-      <rect x={TX + TW + 12} y={TY + TH / 2 - 14} width={52} height={28} rx={8} fill={C.content} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.25} />
-      <circle cx={TX + TW + 26} cy={TY + TH / 2} r={3} fill={C.text} />
-      <text x={TX + TW + 34} y={TY + TH / 2 + 3.5} className="bpLabel">{t(m.bpLive)}</text>
 
       {/* dimensions */}
       <HDim x1={TX} x2={TX + TW} y={TY - 28} label={t(m.bpWindowStartEnd)} />
@@ -3676,7 +3816,7 @@ function TimeSeriesChartBlueprint({ dimensions }: BlueprintProps) {
   );
 }
 
-export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps) {
+export function Blueprint({ size, dimensions, slots, shape, id, variant }: BlueprintProps & { variant?: 'mobile' }) {
   if (shape === 'ring') return withFrame(<RingBlueprint size={size} />);
   if (shape === 'slider') return withFrame(<SliderBlueprint size={size} dimensions={dimensions} />);
   if (id === 'checkbox') return withFrame(<CheckboxBlueprint size={size} dimensions={dimensions} />);
@@ -3687,6 +3827,7 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'search-field') return withFrame(<SearchFieldBlueprint size={size} dimensions={dimensions} />);
   if (id === 'callout') return withFrame(<CalloutBlueprint size={size} dimensions={dimensions} />);
   if (id === 'banner') return withFrame(<BannerBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'announcements') return withFrame(<AnnouncementsBlueprint size={size} dimensions={dimensions} />);
   if (id === 'meter') return withFrame(<MeterBlueprint size={size} dimensions={dimensions} />);
   if (id === 'segmented-bar') return withFrame(<SegmentedBarBlueprint size={size} dimensions={dimensions} />);
   if (id === 'icon') return withFrame(<IconBlueprint size={size} dimensions={dimensions} />);
@@ -3731,7 +3872,11 @@ export function Blueprint({ size, dimensions, slots, shape, id }: BlueprintProps
   if (id === 'nav-bar') return withFrame(<NavBarBlueprint size={size} dimensions={dimensions} />);
   if (id === 'fieldset') return withFrame(<FieldsetBlueprint size={size} dimensions={dimensions} />);
   if (id === 'form-section') return withFrame(<FormSectionBlueprint size={size} dimensions={dimensions} />);
-  if (id === 'app-shell') return withFrame(<AppShellBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'app-shell') return withFrame(
+    variant === 'mobile'
+      ? <AppShellMobileBlueprint size={size} dimensions={dimensions} />
+      : <AppShellBlueprint size={size} dimensions={dimensions} />,
+  );
   if (id === 'modal') return withFrame(<ModalBlueprint size={size} dimensions={dimensions} />);
   if (id === 'alert-dialog') return withFrame(<AlertDialogBlueprint size={size} dimensions={dimensions} />);
   if (id === 'drawer') return withFrame(<DrawerBlueprint size={size} dimensions={dimensions} />);
@@ -3766,11 +3911,14 @@ export function ComponentBlueprint({
   specId,
   preview = false,
   fixedSize,
+  variant,
 }: {
   specId: string;
   preview?: boolean;
   /** Show only this size's figure and drop the size picker. */
   fixedSize?: string;
+  /** Render a documented responsive variant where one exists. */
+  variant?: 'mobile';
 }) {
   const t = useT();
   const spec = getSpec(specId);
@@ -3822,6 +3970,7 @@ export function ComponentBlueprint({
             dimensions={spec.dimensions}
             slots={spec.anatomy?.map((a) => a.name)}
             shape={RING_IDS.has(spec.id) ? 'ring' : spec.id === 'slider' ? 'slider' : undefined}
+            variant={variant}
           />
         </TitleContext.Provider>
       </Stack>

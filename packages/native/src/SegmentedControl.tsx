@@ -3,8 +3,8 @@
 // label and a filled highlight painted behind it. Paint and geometry are read
 // from the segmented-control spec through the shared resolvers, so it stays
 // visually identical to @glacier/react's SegmentedControl and cannot drift.
-import { type ReactNode } from 'react';
-import { View, Text, Pressable, type ViewProps } from 'react-native';
+import { useEffect, useLayoutEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
+import { Animated, Platform, View, Text, Pressable, type PressableProps, type ViewProps } from 'react-native';
 import { segmentedControlSpec, segmentedControlSizes, segmentedControlSprings } from '@glacier/spec';
 import { useControlled, paintFor } from '@glacier/commons';
 import { t } from './tokens.ts';
@@ -31,9 +31,7 @@ export interface SegmentedControlProps extends Omit<ViewProps, 'children'> {
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
   /**
-   * Spring preset for the thumb. Accepted for prop parity with the web kit but
-   * inert here: this binding paints the selected highlight in place with no
-   * animation runtime, so nothing springs between segments.
+    * Spring preset for the selected thumb entrance. Defaults to snappy.
    */
   spring?: SegmentedControlSpring;
   disabled?: boolean;
@@ -65,6 +63,19 @@ const SELECTED_COLOR = t(SELECTED.text ?? 'text');
 const DISABLED_COLOR = t(paintFor(segmentedControlSpec, 'states', 'disabled').text ?? 'text-disabled');
 const MUTED_COLOR = t('text-muted');
 
+const SPRING_DURATIONS: Record<SegmentedControlSpring, number> = {
+  snappy: 140,
+  smooth: 220,
+  bouncy: 180,
+};
+
+type LayoutEvent = { nativeEvent: { layout: { x: number; width: number } } };
+type SegmentLayout = { x: number; width: number };
+const SegmentPressable = Pressable as unknown as ComponentType<
+  PressableProps & { onLayout?: (event: LayoutEvent) => void }
+>;
+const SegmentRoot = View as unknown as ComponentType<ViewProps & { ref?: { current: HTMLElement | null } }>;
+
 /**
  * A resolved measurement value. `sizeFor`/`dimensionsFor` return bare token
  * names (`space-4`, `control-radius`) alongside raw CSS values — the track
@@ -88,12 +99,9 @@ function metric(value: string | undefined, fallback: string): string {
  * controlled/uncontrolled through the shared `useControlled` hook — the same
  * contract the web kit uses.
  *
- * Resting visuals only: the web slides the thumb between segments as a shared
- * Motion layout element, scales the pressed label, and draws a focus ring on
- * keyboard focus. This binding has no animation runtime, so it paints the static
- * highlight under the selected segment and taps switch selection (the `spring`
- * prop is inert; `className` is a web escape hatch and ignored). The glass track
- * is the resting tint only — native cannot blur.
+ * A single measured thumb slides between segments at the requested preset's
+ * tempo, while a pressed label scales to 0.96 like the web control. The glass
+ * track is the resting tint only — native cannot blur.
  */
 export function SegmentedControl({
   options,
@@ -103,7 +111,7 @@ export function SegmentedControl({
   size = 'md',
   fullWidth = false,
   skeleton = false,
-  spring: _spring,
+  spring = 'snappy',
   disabled = false,
   className: _className,
   'aria-label': ariaLabel,
@@ -112,6 +120,51 @@ export function SegmentedControl({
 }: SegmentedControlProps) {
   const fallback = defaultValue ?? options.find((o) => !o.disabled)?.value ?? '';
   const [selected, setSelected] = useControlled({ value, defaultValue: fallback, onChange: onValueChange });
+  const [layouts, setLayouts] = useState<Record<string, SegmentLayout>>({});
+  const rootRef = useRef<HTMLElement | null>(null);
+  const thumbLeft = useRef(new Animated.Value(0)).current;
+  const thumbWidth = useRef(new Animated.Value(0)).current;
+
+  useLayoutEffect(() => {
+    if (Platform.OS !== 'web' || rootRef.current == null) return;
+    const root = rootRef.current;
+    const measure = () => {
+      const rootBounds = root.getBoundingClientRect();
+      const next: Record<string, SegmentLayout> = {};
+      for (const [index, segment] of Array.from(root.querySelectorAll<HTMLElement>('[role="radio"]')).entries()) {
+        const value = options[index]?.value;
+        if (value == null) continue;
+        const bounds = segment.getBoundingClientRect();
+        next[value] = { x: bounds.left - rootBounds.left, width: bounds.width };
+      }
+      setLayouts(next);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, [options, size, fullWidth]);
+
+  const selectedLayout = layouts[selected];
+  useEffect(() => {
+    if (Platform.OS === 'web' || selectedLayout == null) return;
+    const left = Animated.timing(thumbLeft, {
+      toValue: selectedLayout.x,
+      duration: SPRING_DURATIONS[spring],
+      useNativeDriver: false,
+    });
+    const width = Animated.timing(thumbWidth, {
+      toValue: selectedLayout.width,
+      duration: SPRING_DURATIONS[spring],
+      useNativeDriver: false,
+    });
+    left.start();
+    width.start();
+    return () => {
+      left.stop();
+      width.stop();
+    };
+  }, [selectedLayout, spring, thumbLeft, thumbWidth]);
 
   // Geometry: per-size height/padding/font from the spec, plus the shared box.
   const dims = sizeFor(segmentedControlSpec, size);
@@ -121,19 +174,44 @@ export function SegmentedControl({
   const radius = metric(BOX.radius, 'control-radius');
   const trackPad = metric(BOX.padding, '0.1875rem');
   const hairline = metric(BOX.border, 'hairline');
+  const intrinsicDisplay = Platform.OS === 'web' && !fullWidth ? ('inline-flex' as const) : ('flex' as const);
 
   // The glass track box, shared by the live control and the skeleton.
   const trackStyle = {
+    display: intrinsicDisplay,
     flexDirection: 'row' as const,
     alignItems: 'stretch' as const,
     alignSelf: fullWidth ? ('stretch' as const) : ('flex-start' as const),
     width: fullWidth ? ('100%' as const) : undefined,
+    flexGrow: fullWidth ? 1 : 0,
+    flexShrink: fullWidth ? 1 : 0,
     padding: trackPad,
     borderRadius: radius,
     borderWidth: hairline,
     borderStyle: 'solid' as const,
     borderColor: TRACK_BORDER,
     backgroundColor: TRACK_BG,
+    overflow: 'hidden' as const,
+  };
+  const thumbStyle = selectedLayout == null ? undefined : {
+    position: 'absolute' as const,
+    top: trackPad,
+    bottom: trackPad,
+    left: selectedLayout.x,
+    width: selectedLayout.width,
+    borderRadius: radius,
+    backgroundColor: THUMB_BG,
+    pointerEvents: 'none' as const,
+    transitionProperty: Platform.OS === 'web' ? ('left, width' as const) : undefined,
+    transitionDuration: Platform.OS === 'web' ? `${SPRING_DURATIONS[spring]}ms` : undefined,
+    transitionTimingFunction: Platform.OS === 'web'
+      ? spring === 'bouncy' ? 'cubic-bezier(0.2, 1.35, 0.4, 1)' : 'var(--glacier-ease-out)'
+      : undefined,
+  };
+  const nativeThumbStyle = selectedLayout == null ? undefined : {
+    ...thumbStyle,
+    left: thumbLeft,
+    width: thumbWidth,
   };
 
   if (skeleton) {
@@ -177,66 +255,92 @@ export function SegmentedControl({
   }
 
   return (
-    <View accessibilityRole="radiogroup" aria-label={ariaLabel} {...rest} style={[trackStyle, style as never]}>
+    <SegmentRoot ref={rootRef} accessibilityRole="radiogroup" aria-label={ariaLabel} {...rest} style={[trackStyle, style as never]}>
+      {thumbStyle != null && (
+        Platform.OS === 'web'
+          ? <View aria-hidden={true} style={thumbStyle} />
+          : <Animated.View aria-hidden={true} style={nativeThumbStyle} />
+      )}
       {options.map((option) => {
         const isSelected = option.value === selected;
-        const isDisabled = disabled || option.disabled;
-        const labelColor = isDisabled ? DISABLED_COLOR : isSelected ? SELECTED_COLOR : MUTED_COLOR;
+        const isDisabled = Boolean(disabled || option.disabled);
         return (
-          <Pressable
+          <NativeSegment
             key={option.value}
-            accessibilityRole="radio"
-            accessibilityState={{ checked: isSelected, disabled: isDisabled }}
-            // Also surface selection as aria-checked so react-native-web exposes
-            // it to assistive tech (accessibilityState alone does not map here).
-            aria-checked={isSelected}
-            aria-label={typeof option.label === 'string' ? option.label : undefined}
+            option={option}
+            selected={isSelected}
             disabled={isDisabled}
+            spring={spring}
+            fullWidth={fullWidth}
+            height={segHeight}
+            padding={padInline}
+            radius={radius}
+            fontSize={fontSize}
+            onLayout={(layout) => setLayouts((current) => (
+              current[option.value]?.x === layout.x && current[option.value]?.width === layout.width
+                ? current
+                : { ...current, [option.value]: layout }
+            ))}
             onPress={() => setSelected(option.value)}
-            style={{
-              position: 'relative',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flex: fullWidth ? 1 : undefined,
-              height: segHeight,
-              paddingHorizontal: padInline,
-              borderRadius: radius,
-            }}
-          >
-            {isSelected && (
-              // The highlight fills the segment (web `.thumb` inset:0). Rendered
-              // before the label so the label paints on top (web z-index:1).
-              <View
-                aria-hidden={true}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  bottom: 0,
-                  left: 0,
-                  borderRadius: radius,
-                  backgroundColor: THUMB_BG,
-                }}
-              />
-            )}
-            <Text
-              numberOfLines={1}
-              style={{
-                color: labelColor,
-                fontSize,
-                // line-height:1, matching the web `.label` rule.
-                lineHeight: fontSize as never,
-                fontFamily: t('font-sans'),
-                // Selected labels go semibold; the resting weight is medium.
-                fontWeight: t(isSelected ? 'font-weight-semibold' : 'font-weight-medium') as never,
-              }}
-            >
-              {option.label}
-            </Text>
-          </Pressable>
+          />
         );
       })}
-    </View>
+    </SegmentRoot>
+  );
+}
+
+interface NativeSegmentProps {
+  option: SegmentedOption;
+  selected: boolean;
+  disabled: boolean;
+  spring: SegmentedControlSpring;
+  fullWidth: boolean;
+  height: string;
+  padding: string;
+  radius: string;
+  fontSize: string;
+  onLayout: (layout: SegmentLayout) => void;
+  onPress: () => void;
+}
+
+function NativeSegment({ option, selected, disabled, fullWidth, height, padding, radius, fontSize, onLayout, onPress }: NativeSegmentProps) {
+  const labelColor = disabled ? DISABLED_COLOR : selected ? SELECTED_COLOR : MUTED_COLOR;
+
+  return (
+    <SegmentPressable
+      accessibilityRole="radio"
+      accessibilityState={{ checked: selected, disabled }}
+      aria-checked={selected}
+      aria-label={typeof option.label === 'string' ? option.label : undefined}
+      disabled={disabled}
+      onPress={onPress}
+      onLayout={(event) => onLayout(event.nativeEvent.layout)}
+      style={({ pressed }) => ({
+        position: 'relative',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: fullWidth ? 1 : undefined,
+        flexGrow: fullWidth ? 1 : 0,
+        flexShrink: fullWidth ? 1 : 0,
+        height,
+        paddingHorizontal: padding,
+        borderRadius: radius,
+        transform: [{ scale: pressed ? 0.96 : 1 }],
+      })}
+    >
+      <Text
+        numberOfLines={1}
+        style={{
+          color: labelColor,
+          fontSize,
+          lineHeight: fontSize as never,
+          fontFamily: t('font-sans'),
+          fontWeight: t(selected ? 'font-weight-semibold' : 'font-weight-medium') as never,
+        }}
+      >
+        {option.label}
+      </Text>
+    </SegmentPressable>
   );
 }

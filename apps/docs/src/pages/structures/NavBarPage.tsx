@@ -100,6 +100,7 @@ export function NavBarPage() {
           { name: 'orientation', type: "'horizontal' | 'vertical'", default: "'horizontal'", description: t(m.navPropOrientation) },
           { name: 'aria-label', type: 'string', description: t(m.navPropAriaLabel) },
           { name: 'end', type: 'ReactNode', description: t(m.navPropEnd) },
+          { name: 'showLabels', type: 'boolean', default: 'false', description: t(m.navPropShowLabels) },
           { name: 'spring', type: 'Spring', default: 'Spring.Snappy', description: t(m.navPropSpring) },
           { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.navPropSkeleton) },
         ]}

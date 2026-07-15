@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { View, TextInput, type ViewProps } from 'react-native';
+import { useRef, useState, type ComponentType } from 'react';
+import { View, TextInput, type TextInputProps, type ViewProps } from 'react-native';
 import { otpFieldSpec, otpFieldTypes, controlSizes } from '@glacier/spec';
 import { useControlled, paintFor } from '@glacier/commons';
 import { t } from './tokens.ts';
@@ -25,6 +25,9 @@ const CELL_WIDTH: Record<OtpFieldSize, string> = {
   md: '2.5rem',
   lg: '3rem',
 };
+
+type FocusableInput = { focus?: () => void };
+const FocusableTextInput = TextInput as unknown as ComponentType<TextInputProps & { ref?: (input: FocusableInput | null) => void }>;
 
 export interface OtpFieldProps extends Omit<ViewProps, 'style' | 'children' | 'aria-label'> {
   /** Number of code characters. */
@@ -114,6 +117,7 @@ export function OtpField({
     onChange: onValueChange,
   });
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+  const inputRefs = useRef<Array<FocusableInput | null>>([]);
 
   const dims = sizeFor(otpFieldSpec, size);
   const gap = dims.gap ?? 'space-2';
@@ -162,6 +166,9 @@ export function OtpField({
       }
     }
     commit(chars.join('').slice(0, length));
+
+    if (filtered) inputRefs.current[Math.min(index + filtered.length, length - 1)]?.focus?.();
+    else if (value[index] && index > 0) inputRefs.current[index - 1]?.focus?.();
   };
 
   return (
@@ -188,7 +195,10 @@ export function OtpField({
 
         return (
           <View key={i} style={{ flexDirection: 'row', alignItems: 'center', columnGap: t(gap) }}>
-            <TextInput
+            <FocusableTextInput
+              ref={(input) => {
+                inputRefs.current[i] = input;
+              }}
               // Masking is native via secureTextEntry (dots), matching the web
               // MASK_CHAR presentation; the cell still owns the real character.
               value={value[i] ?? ''}

@@ -236,7 +236,7 @@
 
   /* Semantic aliases */
   --glacier-bg: var(--glacier-gray-1);
-  --glacier-surface: oklch(0.995 0 0);
+  --glacier-surface: var(--glacier-gray-2);
   --glacier-surface-raised: oklch(0.995 0 0);
   --glacier-surface-sunken: var(--glacier-gray-3);
   --glacier-overlay: oklch(0.2 0.01 260 / 0.45);
@@ -885,13 +885,34 @@
   --glacier-font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', SFMono-Regular, Menlo, monospace;
 }
 
-/* Compact density - data-density="compact" */
+/* Pickable density - data-density selects a shared space and control scale */
+
+[data-density='extra-compact'] {
+  --glacier-control-height-sm: 1.625rem;
+  --glacier-control-height-md: 2rem;
+  --glacier-control-height-lg: 2.5rem;
+  --glacier-density-scale: 0.65;
+}
 
 [data-density='compact'] {
   --glacier-control-height-sm: 1.875rem;
   --glacier-control-height-md: 2.25rem;
   --glacier-control-height-lg: 2.75rem;
   --glacier-density-scale: 0.8;
+}
+
+[data-density='spacious'] {
+  --glacier-control-height-sm: 2.375rem;
+  --glacier-control-height-md: 2.875rem;
+  --glacier-control-height-lg: 3.375rem;
+  --glacier-density-scale: 1.2;
+}
+
+[data-density='more-space'] {
+  --glacier-control-height-sm: 2.5rem;
+  --glacier-control-height-md: 3rem;
+  --glacier-control-height-lg: 3.5rem;
+  --glacier-density-scale: 1.35;
 }
 
 /* Reduced motion */

@@ -50,6 +50,53 @@ const shell = (onSidebarWidthChange: (width: string) => void, dir?: 'rtl') => {
   return dir ? <div dir={dir}>{app}</div> : app;
 };
 
+describe('AppShell mobile chrome', () => {
+  it('allows either layout to be forced with isMobile', () => {
+    const { container, rerender } = render(<AppShell isMobile sidebar={<nav>Sidebar</nav>}>Content</AppShell>);
+    expect(container.firstChild).toHaveAttribute('data-mobile');
+    expect(container.firstChild).not.toHaveAttribute('data-desktop');
+
+    rerender(<AppShell isMobile={false} sidebar={<nav>Sidebar</nav>}>Content</AppShell>);
+    expect(container.firstChild).toHaveAttribute('data-desktop');
+    expect(container.firstChild).not.toHaveAttribute('data-mobile');
+  });
+
+  it('renders the sidebar toggle and optional bottom navigation', () => {
+    render(
+      <AppShell sidebar={<nav>Sidebar</nav>} bottomNav={<nav aria-label="Primary">Bottom destinations</nav>}>
+        Content
+      </AppShell>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Open navigation' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Close navigation', expanded: true })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Primary' })).toHaveTextContent('Bottom destinations');
+  });
+
+  it('opens and explicitly closes the mobile drawer', () => {
+    render(<AppShell sidebar={<nav>Sidebar</nav>}>Content</AppShell>);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open navigation' }));
+    expect(screen.getByLabelText('Navigation')).toHaveAttribute('data-open');
+    const closeDrawer = screen.getAllByRole('button', { name: 'Close navigation' })
+      .find((button) => !button.hasAttribute('aria-expanded'));
+    expect(closeDrawer).toBeDefined();
+    fireEvent.click(closeDrawer!);
+    expect(screen.getByLabelText('Navigation')).not.toHaveAttribute('data-open');
+  });
+
+  it('collapses and restores the desktop sidebar', () => {
+    const { container } = render(<AppShell sidebar={<nav>Sidebar</nav>}>Content</AppShell>);
+    const toggle = screen.getByRole('button', { name: 'Close navigation', expanded: true });
+
+    fireEvent.click(toggle);
+    expect(container.firstChild).toHaveAttribute('data-sidebar-collapsed');
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(toggle);
+    expect(container.firstChild).not.toHaveAttribute('data-sidebar-collapsed');
+  });
+});
+
 describe('AppShell resizer', () => {
   it('grows with ArrowRight and shrinks with ArrowLeft in LTR', () => {
     const onWidth = vi.fn();

@@ -32,13 +32,12 @@ const BOX = dimensionsFor(cardSpec);
  * Card and cannot drift from it. Each elevation maps to its resting `shadow-*`
  * token via `boxShadow`; glass keeps its own fixed material shadow.
  *
- * Resting visuals only. Three web features have no native runtime and are
- * accepted-but-noop: the dark-theme `elevation-overlay-*` background gradient,
- * the glass `backdrop-filter` blur (glass renders as its resting tint, like
- * Avatar/Checkbox), and the interactive hover lift. An interactive card is a
- * Pressable that dips by `press.control` on tap; a plain card is a static View.
- * Card content brings its own <Text>, so no text color is set on the container
- * (RN text does not inherit color from a parent View).
+ * The dark-theme `elevation-overlay-*` token is composited as a child View,
+ * because React Native has no CSS background-image layer. Glass backdrop blur
+ * and the interactive hover lift remain web-only; an interactive card instead
+ * dips by `press.control` on tap. Card content brings its own <Text>, so no
+ * text color is set on the container (RN text does not inherit color from a
+ * parent View).
  */
 export function Card({
   elevation = 1,
@@ -68,12 +67,25 @@ export function Card({
     padding: t(BOX.padding ?? 'space-6'),
     boxShadow,
   };
+  const elevationOverlay =
+    variant === 'solid' && elevation > 0 ? (
+      <View
+        pointerEvents="none"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundColor: t(`elevation-overlay-${elevation}`),
+          borderRadius: t(BOX.radius ?? 'radius-xl'),
+        }}
+      />
+    ) : null;
 
   if (skeleton) {
     // Resting placeholder at the card's exact geometry: three text lines with a
     // space-2 gap, matching the web skeleton's 40% / 100% / 85% widths.
     return (
       <View {...rest} style={[box, style as never]}>
+        {elevationOverlay}
         <View style={{ rowGap: t('space-2') }}>
           <Skeleton variant="text" width="40%" />
           <Skeleton variant="text" width="100%" />
@@ -91,6 +103,7 @@ export function Card({
         // without clobbering its paint, and `...rest` cannot override the style.
         style={({ pressed }) => [box, { transform: [{ scale: pressed ? press.control : 1 }] }, style as never]}
       >
+        {elevationOverlay}
         {children}
       </Pressable>
     );
@@ -98,6 +111,7 @@ export function Card({
 
   return (
     <View {...rest} style={[box, style as never]}>
+      {elevationOverlay}
       {children}
     </View>
   );

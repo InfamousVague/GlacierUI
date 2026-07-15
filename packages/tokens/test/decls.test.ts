@@ -70,14 +70,14 @@ describe('CSS declaration emitters', () => {
     for (const [, value] of reduced) expect(value).toBe('0.01ms');
   });
 
-  it('emits control heights plus the density scale for both density modes', () => {
-    const comfortable = Object.fromEntries(densityDecls('comfortable'));
-    const compact = Object.fromEntries(densityDecls('compact'));
-    for (const decls of [comfortable, compact]) {
+  it('emits control heights plus the density scale for all five density modes', () => {
+    const modes = ['extra-compact', 'compact', 'comfortable', 'spacious', 'more-space'] as const;
+    const densities = modes.map((mode) => Object.fromEntries(densityDecls(mode)));
+    for (const decls of densities) {
       expect(decls['density-scale']).toBeDefined();
       expect(decls['control-height-md']).toBeDefined();
     }
-    expect(comfortable).not.toEqual(compact);
+    expect(new Set(densities.map((decls) => decls['density-scale'])).size).toBe(modes.length);
   });
 
   it('rides scaled radius steps on the radius-scale knob', () => {

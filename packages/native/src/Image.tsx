@@ -9,7 +9,7 @@ import { Skeleton } from './Skeleton.tsx';
 export type ImageFit = (typeof imageFits)[number];
 export type ImageRadius = (typeof imageRadii)[number];
 
-export interface ImageProps extends Omit<ViewProps, 'style' | 'children'> {
+export interface ImageProps extends Omit<ViewProps, 'children'> {
   src: string;
   /** Required for a11y; pass an empty string for a purely decorative image. */
   alt: string;
@@ -86,6 +86,7 @@ export function Image({
   fallback,
   skeleton = false,
   loading: _loading = 'lazy',
+  style,
   ...rest
 }: ImageProps) {
   const [status, setStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
@@ -101,7 +102,7 @@ export function Image({
 
   if (skeleton) {
     return (
-      <View style={frame} {...rest}>
+      <View {...rest} style={[frame, style]}>
         <Skeleton width="100%" height="100%" />
       </View>
     );
@@ -110,7 +111,7 @@ export function Image({
   const fill = { position: 'absolute' as const, top: 0, left: 0, right: 0, bottom: 0 };
 
   return (
-    <View style={frame} {...rest}>
+    <View {...rest} style={[frame, style]}>
       {status !== 'error' && (
         <RNImage
           source={{ uri: src }}

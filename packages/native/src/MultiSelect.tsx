@@ -289,6 +289,7 @@ export function MultiSelect({
           flexDirection: 'row',
           flexWrap: 'wrap',
           alignItems: 'center',
+          alignContent: 'center',
           columnGap: tok(BOX.gap, 'space-1'),
           rowGap: tok(BOX.gap, 'space-1'),
           width: '100%',
@@ -445,7 +446,7 @@ export function MultiSelect({
                               {option.label}
                             </Text>
                             {option.description != null && (
-                              <Text style={{ color: descColor, opacity: on ? 0.8 : 1, fontSize: t('font-size-xs'), fontFamily: t('font-sans') }}>
+                              <Text style={{ color: descColor, opacity: on ? 0.8 : 1, fontSize: t('font-size-xs'), lineHeight: t('leading-sm') as never, fontFamily: t('font-sans') }}>
                                 {option.description}
                               </Text>
                             )}

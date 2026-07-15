@@ -1,0 +1,18 @@
+.root {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  color: currentColor;
+  line-height: 1;
+}
+
+.root > svg {
+  grid-area: 1 / 1;
+  display: block;
+}
+
+.backfill {
+  fill: currentColor;
+  stroke: currentColor;
+  opacity: 0.33;
+}

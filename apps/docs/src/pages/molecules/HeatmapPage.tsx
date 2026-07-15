@@ -40,6 +40,7 @@ export function HeatmapPage() {
         title={t(m.hmEx1Title)}
         description={t(m.hmEx1Desc)}
         component="Heatmap"
+        platformLayout="stacked"
         render={(K) => (
           <K.Heatmap aria-label={t(m.hmAriaContributions)} data={days} legend />
         )}
@@ -59,6 +60,7 @@ const days = [
         title={t(m.hmEx2Title)}
         description={t(m.hmEx2Desc)}
         component="Heatmap"
+        platformLayout="stacked"
         render={(K) => (
           <K.Heatmap aria-label={t(m.hmAriaActivityMetric)} data={grid} legend />
         )}
@@ -76,6 +78,7 @@ const days = [
         title={t(m.hmEx3Title)}
         description={t(m.hmEx3Desc)}
         component="Heatmap"
+        platformLayout="stacked"
         render={(K) => (
           <K.Heatmap aria-label={t(m.hmAriaLoad)} data={grid} levels={3} legend />
         )}
@@ -86,6 +89,7 @@ const days = [
         title={t(m.exSkeleton)}
         description={prose(t(m.hmEx4Desc))}
         component="Heatmap"
+        platformLayout="stacked"
         render={(K) => (
           <div style={{ display: 'grid', gap: 'var(--glacier-space-4)' }}>
             <K.Heatmap skeleton data={[]} aria-label={t(m.hmAriaActivity)} />

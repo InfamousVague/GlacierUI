@@ -15,6 +15,7 @@ export { t } from './tokens.ts';
 
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from './Button.tsx';
 export { Icon, type IconProps } from './Icon.tsx';
+export { IconBackfill, type IconBackfillProps } from './IconBackfill.tsx';
 export { Text, type TextProps, type TextSize, type TextToneName, type TextWeight, type TextAlign } from './Text.tsx';
 export { Heading, type HeadingProps, type HeadingLevel, type HeadingAlign } from './Heading.tsx';
 export { Pill, type PillProps, type PillVariant, type PillTone, type PillSize } from './Pill.tsx';
@@ -29,6 +30,7 @@ export { ProgressRing, type ProgressRingProps, type ProgressRingTone } from './P
 
 // Second wave: the remaining atom bindings, generated from spec + web source.
 export { Banner, type BannerProps, type BannerTone } from './Banner.tsx';
+export { Announcements, type AnnouncementsProps, type AnnouncementItem, type AnnouncementTone } from './Announcements.tsx';
 export { Callout, type CalloutProps, type CalloutTone } from './Callout.tsx';
 export { Card, type CardProps, type CardVariant, type Elevation } from './Card.tsx';
 export { DeviceFrame, type DeviceFrameProps, type DeviceFrameSize } from './DeviceFrame.tsx';
@@ -100,7 +102,7 @@ export { Timeline, type TimelineProps, type TimelineItem, type TimelineTone } fr
 export { Wizard, type WizardProps, type WizardStep } from './Wizard.tsx';
 
 // Tier B: scroll containers.
-export { ScrollArea, type ScrollAreaProps, type ScrollAreaOrientation } from './ScrollArea.tsx';
+export { ScrollArea, type ScrollAreaProps, type ScrollAreaOrientation, type ScrollbarAppearanceName } from './ScrollArea.tsx';
 export { List, ListItem, type ListProps, type ListItemProps, type ListSize } from './List.tsx';
 export { Carousel, type CarouselProps } from './Carousel.tsx';
 export { Table, type TableProps, type TableColumn } from './Table.tsx';
@@ -111,7 +113,6 @@ export { Modal, type ModalProps, type ModalSize } from './Modal.tsx';
 export { AlertDialog, type AlertDialogProps, type AlertDialogTone } from './AlertDialog.tsx';
 export { Drawer, type DrawerProps, type DrawerSide, type DrawerSize } from './Drawer.tsx';
 export { TabbedModal, type TabbedModalProps, type TabbedModalSection } from './TabbedModal.tsx';
-export { Tooltip, type TooltipProps, type TooltipPlacement } from './Tooltip.tsx';
 export { Popover, type PopoverProps, type Placement } from './Popover.tsx';
 export { FloatingPanel, type FloatingPanelProps, type Point } from './FloatingPanel.tsx';
 export { Select, type SelectProps, type SelectOption, type SelectSize } from './Select.tsx';

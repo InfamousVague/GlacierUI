@@ -80,6 +80,10 @@ export function TabbedPanel({
     <View
       style={{
         flexDirection: 'column',
+        alignSelf: 'stretch',
+        width: '100%',
+        maxWidth: '100%',
+        flexShrink: 1,
         minWidth: 0,
         borderWidth: t('hairline'),
         borderColor: t('border-subtle'),

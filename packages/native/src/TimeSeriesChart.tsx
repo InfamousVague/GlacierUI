@@ -24,7 +24,7 @@
  *     hairline border, and radius only).
  */
 
-import { useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { View, Text, Pressable, StyleSheet, type ViewProps, type StyleProp } from 'react-native';
 import { Svg, Path, Line } from 'react-native-svg';
 import { chartSeriesTones, timeSeriesChartShapes, timeSeriesChartSpec } from '@glacier/spec';
@@ -83,11 +83,12 @@ const BOX = dimensionsFor(timeSeriesChartSpec);
 // Series stroke, e.g. '2px' -> 2.
 const STROKE_WIDTH = Number.parseFloat(BOX.strokeWidth ?? '2px') || 2;
 
-// Axis gutters, mirroring uPlot's reserved axis sizes (y size 44, a compact x
+// Axis gutters, mirroring uPlot's reserved axis sizes (y size 56, a compact x
 // band). Layout constants, not spec tokens: the web hardcodes these in the
 // component too. rem so react-native-web resolves against the root font size.
-const GUTTER_LEFT = '2.75rem';
-const X_AXIS_HEIGHT = '1.25rem';
+const GUTTER_LEFT = '3.5rem';
+const PLOT_TOP_INSET = '0.5rem';
+const X_AXIS_HEIGHT = '3.125rem';
 
 const defaultFormatValue = (value: number) =>
   Math.abs(value) >= 1000
@@ -144,6 +145,22 @@ export function TimeSeriesChart({
   ...rest
 }: TimeSeriesChartProps) {
   const [hidden, setHidden] = useState<Set<string>>(() => new Set());
+  const [tonePool, setTonePool] = useState<readonly ChartSeriesTone[]>(chartSeriesTones);
+
+  // The accent can alias one of the categorical ramps (blue in the current
+  // docs theme). Resolve the mounted CSS tokens on native-web and omit that
+  // duplicate from implicit positional assignment, as the DOM binding does.
+  useEffect(() => {
+    if (typeof document === 'undefined' || typeof getComputedStyle !== 'function') return;
+    const styles = getComputedStyle(document.documentElement);
+    const resolvedInk = (tone: ChartSeriesTone) => {
+      const token = paintFor(timeSeriesChartSpec, 'tones', tone).text ?? 'accent-solid';
+      return styles.getPropertyValue(`--glacier-${token}`).trim();
+    };
+    const accentInk = resolvedInk('accent');
+    if (!accentInk) return;
+    setTonePool(chartSeriesTones.filter((tone) => tone === 'accent' || resolvedInk(tone) !== accentInk));
+  }, []);
 
   const toggle = (id: string) =>
     setHidden((prev) => {
@@ -153,9 +170,8 @@ export function TimeSeriesChart({
       return next;
     });
 
-  // Positional tone order (explicit tones win). The web's runtime accent-collision
-  // de-dup is a getComputedStyle trick that has no native equivalent.
-  const tones: ChartSeriesTone[] = series.map((s, i) => s.tone ?? chartSeriesTones[i % chartSeriesTones.length] ?? 'accent');
+  // Positional tone order after the accent collision check. Explicit tones win.
+  const tones: ChartSeriesTone[] = series.map((s, i) => s.tone ?? tonePool[i % tonePool.length] ?? 'accent');
   const ink = (tone: ChartSeriesTone) => t(paintFor(timeSeriesChartSpec, 'tones', tone).text ?? 'accent-solid');
   const soft = (tone: ChartSeriesTone) => t(paintFor(timeSeriesChartSpec, 'tones', tone).fill ?? 'accent-soft');
 
@@ -264,7 +280,7 @@ export function TimeSeriesChart({
             <Text style={{ fontSize: t('font-size-sm'), color: t('text-muted') } as never}>{emptyLabel}</Text>
           </View>
         ) : (
-          <View style={{ flex: 1, flexDirection: 'column' }}>
+          <View style={{ flex: 1, flexDirection: 'column', paddingTop: PLOT_TOP_INSET, paddingRight: PLOT_TOP_INSET }}>
             {/* Plotting band: y-axis labels beside the fluid SVG. */}
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <View style={{ width: GUTTER_LEFT, position: 'relative' }}>
@@ -295,24 +311,21 @@ export function TimeSeriesChart({
                     const y = yFrac(v) * 100;
                     return <Line key={v} x1={0} x2={100} y1={y} y2={y} stroke={t('border')} strokeWidth={StyleSheet.hairlineWidth} vectorEffect="non-scaling-stroke" />;
                   })}
-                  {/* Series marks: optional soft fill under a 2px line. */}
+                  {/* uPlot paints each series as fill then stroke. Later series
+                      intentionally cover earlier areas, while their own stroke
+                      remains crisp above its fill. */}
                   {series.map((s, i) => {
                     if (hidden.has(s.id)) return null;
                     const tone = tones[i] ?? 'accent';
-                    const { line } = buildPaths(s.values);
+                    const { line, area } = buildPaths(s.values);
                     if (!line) return null;
                     return (
-                      <Path key={s.id} d={line} fill="none" stroke={ink(tone)} strokeWidth={STROKE_WIDTH} strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                      <Fragment key={s.id}>
+                        {shape === 'area' && area && <Path d={area} fill={soft(tone)} stroke="none" />}
+                        <Path d={line} fill="none" stroke={ink(tone)} strokeWidth={STROKE_WIDTH} strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                      </Fragment>
                     );
                   })}
-                  {shape === 'area' &&
-                    series.map((s, i) => {
-                      if (hidden.has(s.id)) return null;
-                      const tone = tones[i] ?? 'accent';
-                      const { area } = buildPaths(s.values);
-                      if (!area) return null;
-                      return <Path key={`fill-${s.id}`} d={area} fill={soft(tone)} stroke="none" />;
-                    })}
                 </Svg>
               </View>
             </View>

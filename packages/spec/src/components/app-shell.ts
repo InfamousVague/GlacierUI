@@ -6,24 +6,28 @@ export const appShellSpec: ComponentSpec = {
   id: 'app-shell',
   category: 'organism',
   status: 'stable',
-  summary: 'The app frame: a sticky sidebar beside a scrollable main column with an optional sticky header, collapsing to an off-canvas drawer on small screens.',
+  summary: 'The app frame: a sticky sidebar beside a scrollable main column, with an optional mobile mode that uses an off-canvas drawer.',
   element: 'div',
   anatomy: [
-    { name: 'sidebar', description: 'The persistent side navigation landmark; sticky on desktop, an off-canvas drawer below the lg breakpoint.', required: true },
-    { name: 'backdrop', description: 'The scrim rendered behind the open drawer; clicking it closes the drawer. Present only while open on small screens.' },
+    { name: 'sidebar', description: 'The persistent side navigation landmark; sticky in desktop mode and an off-canvas drawer in mobile mode.', required: true },
+    { name: 'backdrop', description: 'The scrim rendered behind the open mobile drawer; clicking it closes the drawer.' },
     { name: 'main', description: 'The main column: header stacked above scrollable content.' },
-    { name: 'header', description: 'Sticky top bar holding the mobile menu button and optional header content.' },
-    { name: 'menuButton', description: 'The built-in IconButton that opens the drawer; visible only below the lg breakpoint.' },
+    { name: 'header', description: 'Sticky top bar holding the responsive sidebar toggle and optional header content.' },
+    { name: 'menuButton', description: 'The built-in IconButton that collapses the desktop sidebar or opens the mobile drawer.' },
+    { name: 'closeButton', description: 'The explicit X button inside the expanded mobile drawer.' },
     { name: 'resizer', description: 'Optional role="separator" drag strip on the sidebar\'s inline-end edge with a centered grip; rendered only when resizable is set, desktop only.' },
     { name: 'headerContent', description: 'Wrapper for the caller-supplied header slot, placed right of the menu button.' },
     { name: 'content', description: 'The scrollable region that renders children.' },
+    { name: 'bottomNav', description: 'Optional primary navigation pinned below mobile content and at the bottom of the desktop sidebar.' },
   ],
   props: [
     { name: 'sidebar', type: 'node', required: true, description: 'The persistent side navigation content.' },
     { name: 'header', type: 'node', description: 'Optional top bar content, placed to the right of the mobile menu button.' },
+    { name: 'bottomNav', type: 'node', description: 'Optional primary navigation shown below mobile content and at the bottom of the desktop sidebar.' },
     { name: 'sidebarWidth', type: 'string', default: '16rem', description: 'Sidebar width on desktop, set on the --shell-sidebar custom property.' },
     { name: 'sidebarLabel', type: 'string', default: 'Navigation', description: 'Accessible name for the sidebar landmark.' },
-    { name: 'floating', type: 'boolean', default: false, description: 'Detaches the desktop sidebar and header into floating, rounded cards with a gutter.' },
+    { name: 'floating', type: 'boolean', default: false, description: 'Detaches the sidebar, header, and mobile bottom navigation into rounded cards with a gutter.' },
+    { name: 'isMobile', type: 'boolean', description: 'Forces the mobile or desktop layout. When omitted, follows the lg viewport breakpoint.' },
     { name: 'resizable', type: 'boolean', default: false, description: 'Lets the user drag the divider (or arrow-key it) to resize the sidebar.' },
     { name: 'onSidebarWidthChange', type: 'handler', description: 'Called with the next sidebar width (a px string) while resizing.' },
     { name: 'minSidebarWidth', type: 'number', default: 200, description: 'Lower clamp for the resize drag, in pixels.' },
@@ -40,7 +44,8 @@ export const appShellSpec: ComponentSpec = {
     border: token('hairline'),
   },
   states: [
-    { name: 'open', description: 'The drawer is open: the sidebar slides in, gains a shadow, and the backdrop appears. Small screens only.', tokens: { shadow: token('shadow-5'), scrim: token('overlay') } },
+    { name: 'open', description: 'The mobile drawer is open: the sidebar slides in, gains a shadow, and the backdrop appears.', tokens: { shadow: token('shadow-5'), scrim: token('overlay') } },
+    { name: 'sidebar-collapsed', description: 'The desktop sidebar, resizer, and sidebar bottom navigation are hidden while the main column fills the frame.', behavioral: true },
     {
       name: 'sticky',
       description:
@@ -51,7 +56,7 @@ export const appShellSpec: ComponentSpec = {
     {
       name: 'empty-header',
       description:
-        'With no header content the header strips its chrome to literals - background: transparent, border-bottom: none, backdrop-filter: none (no tokens involved) - and on desktop it is hidden entirely (display: none).',
+        'With no header content the mobile header strips its chrome to literals; on desktop the header remains visible so the sidebar toggle stays available.',
       behavioral: true,
     },
     {
@@ -83,14 +88,14 @@ export const appShellSpec: ComponentSpec = {
     ],
     notes: [
       'The sidebar is an aside landmark named by sidebarLabel (default "Navigation").',
-      'The built-in menu button carries aria-label "Open navigation" and is visible only below the lg breakpoint.',
-      'On small screens, clicking the backdrop or any link or button inside the sidebar closes the drawer.',
+      'The built-in responsive toggle carries aria-expanded and a state-aware Open navigation or Close navigation label.',
+      'In mobile mode, the explicit X button, backdrop, or any link or button inside the sidebar closes the drawer.',
       'The drawer is not a focus trap and does not use dialog semantics; it is a persistent aside that becomes off-canvas.',
       'The optional resizer is a keyboard-reachable role="separator" (aria-orientation="vertical") labeled from the kit\'s translatable Resize sidebar message; it is hidden below the lg breakpoint.',
     ],
   },
   motion: {
-    description: 'On small screens the drawer slides in and out via a transform transition; it respects reduced motion.',
+    description: 'In mobile mode the drawer slides in and out via a transform transition; it respects reduced motion.',
     transition: { speed: 'normal', ease: 'out' },
   },
 };
