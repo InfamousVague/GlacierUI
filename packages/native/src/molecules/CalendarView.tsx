@@ -40,7 +40,7 @@ import {
 } from '@glacier/logic';
 import { t } from '../tokens.ts';
 import { dimensionsFor } from '../resolve.ts';
-import { Text } from '../atoms/display/Text.tsx';
+import { Text, type TextToneName } from '../atoms/display/Text.tsx';
 import { Button } from '../atoms/inputs/Button.tsx';
 import { IconButton } from '../atoms/inputs/IconButton.tsx';
 import { SegmentedControl } from './SegmentedControl.tsx';
@@ -78,13 +78,27 @@ const BOX = dimensionsFor(calendarViewSpec);
 const bare = (v?: string): string | undefined => (v?.startsWith('$') ? v.slice(1) : v);
 
 /** The soft fill and text token each event tone paints with, mirroring the web. */
-const TONE_TOKENS: Record<CalendarTone, { bg: string; text: string }> = {
-  accent: { bg: 'accent-soft', text: 'accent-text' },
-  success: { bg: 'success-soft', text: 'success-text' },
-  warning: { bg: 'warning-soft', text: 'warning-text' },
-  danger: { bg: 'danger-soft', text: 'danger-text' },
-  info: { bg: 'info-soft', text: 'info-text' },
-  neutral: { bg: 'surface-hover', text: 'text-muted' },
+/**
+ * The fixed height of a month row, and of the single week row.
+ *
+ * Fixed rather than a floor, mirroring the web. A month grid whose height
+ * tracks its busiest day changes size as you page, so everything below it
+ * moves. `splitOverflow` caps a cell at MONTH_CELL_LIMIT lines and chips never
+ * wrap, so the tallest a cell can be is knowable: padding, the date, a gap,
+ * then three slots. These are the px equivalents of the web's derived value.
+ */
+const MONTH_ROW_HEIGHT = 109;
+const WEEK_ROW_HEIGHT = 192;
+
+const TONE_TOKENS: Record<CalendarTone, { bg: string; text: TextToneName }> = {
+  accent: { bg: 'accent-soft', text: 'accent' },
+  success: { bg: 'success-soft', text: 'success' },
+  warning: { bg: 'warning-soft', text: 'warning' },
+  danger: { bg: 'danger-soft', text: 'danger' },
+  // Text has no `info` tone, and none is missing: info and accent resolve to
+  // the same colour in this kit, which is what the web chip paints too.
+  info: { bg: 'info-soft', text: 'accent' },
+  neutral: { bg: 'surface-hover', text: 'muted' },
 };
 
 /** The labels the web kit routes through kitMessages; mirrored here. */
@@ -193,19 +207,38 @@ export function CalendarView({
 
   const renderChip = (event: CalendarEvent, compact: boolean) => {
     const tone = TONE_TOKENS[event.tone ?? 'accent'] ?? TONE_TOKENS.accent;
+    // The web sets `font-size` once on the chip and both spans inherit it, so
+    // the time and the title are always the same size. Sizing them separately
+    // here is what made the agenda row read as misaligned: a `sm` title next to
+    // an `xs` time have different cap heights and no shared baseline.
+    const textSize = compact ? 'xs' : 'sm';
     // flexShrink is explicit throughout this file: React Native defaults it to
     // 0, where CSS gives it 1, so anything not told to shrink pushes its
     // container wider than the pane instead of truncating inside it.
     const body = (
-      <View style={{ flexDirection: 'row', columnGap: t('space-1'), flexShrink: 1, minWidth: 0 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          columnGap: t('space-1'),
+          flexShrink: 1,
+          minWidth: 0,
+        }}
+      >
         {!event.allDay && (
-          <Text size="xs" numberOfLines={1}>
-            {showTime(event.start)}
-          </Text>
+          // `Text` takes no style, so the web's `.chipTime { flex: none;
+          // opacity: 0.75 }` has to live on a wrapper.
+          <View style={{ flexShrink: 0, opacity: 0.75 }}>
+            <Text size={textSize} tone={tone.text} numberOfLines={1}>
+              {showTime(event.start)}
+            </Text>
+          </View>
         )}
-        <Text size={compact ? 'xs' : 'sm'} numberOfLines={1}>
-          {event.title}
-        </Text>
+        <View style={{ flexShrink: 1, minWidth: 0 }}>
+          <Text size={textSize} tone={tone.text} numberOfLines={1}>
+            {event.title}
+          </Text>
+        </View>
       </View>
     );
     const style = {
@@ -215,6 +248,11 @@ export function CalendarView({
       borderRadius: t('radius-sm'),
       backgroundColor: t(tone.bg),
       minWidth: 0,
+      // Mirrors the web chip. Both are no-ops on a touch device and only take
+      // effect where there is a cursor to shape — react-native-web, macOS,
+      // Windows — which is exactly where the caret was showing up.
+      cursor: 'pointer' as const,
+      userSelect: 'none' as const,
     };
     return onSelectEvent ? (
       <Pressable key={event.id} accessibilityRole="button" onPress={() => onSelectEvent(event)} style={style}>
@@ -310,7 +348,7 @@ export function CalendarView({
         {/* The exact six-by-seven geometry, so nothing reflows when the real
             events land. */}
         {Array.from({ length: 6 }, (_, row) => (
-          <View key={row} style={{ flexDirection: 'row', columnGap: gap, minHeight: 80 }}>
+          <View key={row} style={{ flexDirection: 'row', columnGap: gap, height: MONTH_ROW_HEIGHT }}>
             {Array.from({ length: 7 }, (_, col) => (
               <View key={col} style={{ flex: 1, padding: cellPadding, borderRadius: radius }}>
                 <Skeleton width={20} height={14} />
@@ -414,7 +452,7 @@ export function CalendarView({
             {Array.from({ length: rows }, (_, row) => (
               <View
                 key={row}
-                style={{ flexDirection: 'row', columnGap: gap, minHeight: mode === 'month' ? 80 : 192 }}
+                style={{ flexDirection: 'row', columnGap: gap, height: mode === 'month' ? MONTH_ROW_HEIGHT : WEEK_ROW_HEIGHT }}
               >
                 {(mode === 'month' ? days.slice(row * 7, row * 7 + 7) : days).map(renderCell)}
               </View>
