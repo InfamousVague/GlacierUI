@@ -176,6 +176,20 @@ export function parseOklch(input: string): Oklch | null {
  */
 export const MAX_CHROMA = 0.37;
 
+/** Degrees a hue control moves per step. */
+export const HUE_STEP = 1;
+
+/**
+ * The largest hue a control should offer — one step short of a full turn.
+ *
+ * Not 360. Hue is circular, so 360° *is* 0°, and `parseOklch` normalises it to
+ * the canonical 0 on the way back in. A slider whose max is 360 therefore reads
+ * its own maximum back as its minimum: drag the thumb to the end and it snaps
+ * to the start. The last distinct hue is a step short of the turn, and it is
+ * indistinguishable from 360° anyway.
+ */
+export const MAX_HUE = 360 - HUE_STEP;
+
 /**
  * Whether a colour survives a round trip through sRGB unchanged, i.e. whether
  * it is actually displayable. The picker uses this to mark out-of-gamut choices
@@ -194,4 +208,48 @@ export function inSrgbGamut(color: Oklch, tolerance = 0.02): boolean {
  */
 export function readableOn(background: Oklch): '#000000' | '#ffffff' {
   return background.l > 0.6 ? '#000000' : '#ffffff';
+}
+
+/** The channels a colour picker exposes as sliders. */
+export type ColorChannel = 'l' | 'c' | 'h' | 'a';
+
+/**
+ * The colours a channel's slider travels through, sampled evenly across its
+ * range.
+ *
+ * One ramp for both bindings. The web joins these into a `linear-gradient` and
+ * native paints them as a run of solid segments — neither derives its own
+ * stops, so a track cannot come out a different colour on one platform than the
+ * other. It also makes the ramp truer than a handful of CSS stops: the browser
+ * interpolates between stops in sRGB, which bends an OKLCH ramp, while every
+ * sample here is converted from OKLCH directly.
+ *
+ * `steps` trades smoothness against work. The web interpolates between stops so
+ * a handful would do there, but native paints one flat view per sample and any
+ * band wide enough to see is a visible step — a lightness ramp is the worst
+ * case, crossing the whole L range in one track. The default puts a band at
+ * roughly two pixels on a typical rail, which reads as continuous; it is a
+ * default rather than a constant because the cost is a view per sample, and a
+ * caller drawing many rails at once may want fewer.
+ */
+export function channelRamp(color: Oklch, channel: ColorChannel, steps = 96): string[] {
+  const out: string[] = [];
+  for (let i = 0; i < steps; i++) {
+    const t = steps === 1 ? 0 : i / (steps - 1);
+    if (channel === 'a') {
+      // Alpha rides over whatever the colour currently is, so the ramp is the
+      // one colour at increasing opacity rather than a change of colour.
+      const { r, g, b } = oklchToRgb(color);
+      out.push(`rgba(${r}, ${g}, ${b}, ${+t.toFixed(3)})`);
+      continue;
+    }
+    const at: Oklch =
+      channel === 'l'
+        ? { ...color, l: t }
+        : channel === 'c'
+          ? { ...color, c: t * MAX_CHROMA }
+          : { ...color, h: t * 360 };
+    out.push(oklchToHex(at));
+  }
+  return out;
 }

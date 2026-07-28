@@ -56,6 +56,24 @@ export interface SliderProps extends Omit<ViewProps, 'style' | 'children'> {
   skeleton?: boolean;
   /** Dims the slider and blocks interaction. */
   disabled?: boolean;
+  /**
+   * Paints the rail as a run of solid segments instead of one flat tint — a
+   * gradient without a gradient library, which is what the web track gets from
+   * `linear-gradient`. Feed it `channelRamp` from @glacier/logic so both
+   * bindings travel the same colours.
+   *
+   * A painted rail suppresses the accent fill: when the track itself carries
+   * the meaning, a solid bar over its lower half hides the very colours the
+   * control exists to show.
+   */
+  trackColors?: string[];
+  /**
+   * Rail thickness, overriding the spec's. The ColorPicker's web track is
+   * taller than a plain slider's so the gradient reads as a band rather than a
+   * line, and the control collapses to the rail's own height there — the row is
+   * the rail, with the thumb overhanging it.
+   */
+  trackHeight?: string;
 }
 
 // react-native-web hands `onLayout` a layout event; the track View is typed
@@ -90,6 +108,10 @@ const THUMB = DIMS.thumbDiameter ?? '1.25rem';
 const V_LEN = DIMS.verticalLength ?? '8rem';
 const RADIUS = t(DIMS.radius ?? 'radius-full');
 const HALF_THUMB = `calc(${THUMB} * -0.5)`;
+// The web paints its ring thumb at a flat 1rem rather than the spec's thumb
+// diameter, because a ring has to sit *on* a ramp without swallowing it.
+const RING = '1rem';
+const HALF_RING = `calc(${RING} * -0.5)`;
 
 // Paint tokens (children carry the paint; the spec's `paint` is empty).
 const TRACK_COLOR = t('segment-track');
@@ -118,8 +140,21 @@ export function Slider({
   hapticStep: _hapticStep,
   skeleton = false,
   disabled = false,
+  trackColors,
+  trackHeight,
   ...rest
 }: SliderProps) {
+  const segments = trackColors ?? [];
+  const painted = segments.length > 0;
+  const railH = trackHeight ?? TRACK_H;
+  // Matching the web means matching its box too: there the input *is* the
+  // track, so the row is only as tall as the rail. Worth knowing this trades
+  // away touch target — the thumb overhangs and stays grabbable on the DOM, but
+  // a device build will not deliver touches outside the parent's bounds.
+  const controlH = trackHeight ?? CONTROL_H;
+  // Both follow whichever thumb is drawn.
+  const size = painted ? RING : THUMB;
+  const half = painted ? HALF_RING : HALF_THUMB;
   const [current, setCurrent] = useControlled({
     value,
     defaultValue: defaultValue ?? min,
@@ -154,7 +189,24 @@ export function Slider({
   };
 
   // The round handle, shared by both orientations and the skeleton bone shape.
-  const thumb = (
+  // Over a painted rail the thumb is a ring with nothing in it, so the colour
+  // it sits on stays visible — the one thing the user is actually looking at.
+  // The dark hairline outside it is what keeps a white ring legible on the pale
+  // end of a ramp, where a plain white thumb would disappear.
+  const thumb = painted ? (
+    <View
+      style={{
+        width: RING,
+        height: RING,
+        borderRadius: RADIUS,
+        borderWidth: 2,
+        borderStyle: 'solid',
+        borderColor: '#fff',
+        backgroundColor: 'transparent',
+        boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.4)',
+      }}
+    />
+  ) : (
     <View
       style={{
         width: THUMB,
@@ -178,14 +230,14 @@ export function Slider({
           position: 'relative',
           alignItems: 'center',
           justifyContent: 'center',
-          width: vertical ? CONTROL_H : '100%',
-          height: vertical ? V_LEN : CONTROL_H,
+          width: vertical ? controlH : '100%',
+          height: vertical ? V_LEN : controlH,
         }}
       >
         <View
           style={{
-            width: vertical ? TRACK_H : '100%',
-            height: vertical ? '100%' : TRACK_H,
+            width: vertical ? railH : '100%',
+            height: vertical ? '100%' : railH,
             borderRadius: RADIUS,
             backgroundColor: bone,
           }}
@@ -211,12 +263,18 @@ export function Slider({
     />
   );
 
+  // The thumb travels between the rail's ends rather than across them: its
+  // *edges* reach the ends, not its centre. Centring it on the value would hang
+  // half of it off the rail at both extremes — which a range input never does,
+  // because the browser insets thumb travel by half the thumb. The offset axis
+  // still centres the thumb across the rail's thickness.
+  const travel = `calc(${fillPct / 100} * (100% - ${size}))`;
   const thumbWrap = (
     <View
       style={
         vertical
-          ? { position: 'absolute', left: '50%', bottom: `${fillPct}%`, marginLeft: HALF_THUMB, marginBottom: HALF_THUMB }
-          : { position: 'absolute', top: '50%', left: `${fillPct}%`, marginTop: HALF_THUMB, marginLeft: HALF_THUMB }
+          ? { position: 'absolute', left: '50%', bottom: travel, marginLeft: half }
+          : { position: 'absolute', top: '50%', left: travel, marginTop: half }
       }
     >
       {thumb}
@@ -247,8 +305,8 @@ export function Slider({
         position: 'relative',
         alignItems: 'center',
         justifyContent: 'center',
-        width: vertical ? CONTROL_H : '100%',
-        height: vertical ? V_LEN : CONTROL_H,
+        width: vertical ? controlH : '100%',
+        height: vertical ? V_LEN : controlH,
         opacity: disabled ? 0.5 : 1,
       }}
       {...rest}
@@ -257,13 +315,39 @@ export function Slider({
       <View
         style={{
           position: 'relative',
-          width: vertical ? TRACK_H : '100%',
-          height: vertical ? '100%' : TRACK_H,
+          width: vertical ? railH : '100%',
+          height: vertical ? '100%' : railH,
           borderRadius: RADIUS,
-          backgroundColor: TRACK_COLOR,
+          backgroundColor: painted ? 'transparent' : TRACK_COLOR,
         }}
       >
-        {fill}
+        {/* The ramp is its own layer, and the clip lives here rather than on the
+            rail. On the rail it would also crop the thumb, which stands three
+            times the rail's height and would come out a stub. */}
+        {painted && (
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              borderRadius: RADIUS,
+              overflow: 'hidden',
+              // Laid out rather than absolutely placed: flex children divide the
+              // rail with no gap and no overlap. Overlapping them would double
+              // the alpha wherever two translucent segments met, which bands an
+              // opacity ramp; leaving exact-width gaps rules pale hairlines
+              // across an opaque one. Flex has neither problem.
+              flexDirection: vertical ? 'column-reverse' : 'row',
+            }}
+          >
+            {segments.map((segment, i) => (
+              <View key={i} style={{ flex: 1, backgroundColor: segment }} />
+            ))}
+          </View>
+        )}
+        {!painted && fill}
         {thumbWrap}
       </View>
     </Track>

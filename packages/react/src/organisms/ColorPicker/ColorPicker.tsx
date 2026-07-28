@@ -9,6 +9,9 @@ import {
   rgbToOklch,
   useControlled,
   type Oklch,
+  channelRamp,
+  MAX_HUE,
+  HUE_STEP,
 } from '@glacier/logic';
 import { useState, type ComponentProps } from 'react';
 import { cx } from '../../internal/cx.ts';
@@ -50,7 +53,7 @@ function parseColor(input: string): Oklch | null {
  *
  * OKLCH rather than HSL because that is the space the kit's own ramps are
  * authored in: a colour picked here sits on the same perceptual footing as
- * every token around it, and its lightness means the same thing at every hue —
+ * every token around it, and its lightness means the same thing at every hue
  * which is exactly what HSL does not give you.
  *
  * Three plain range inputs rather than a 2D gradient canvas. A canvas is only
@@ -95,28 +98,27 @@ export function ColorPicker({
       max: 1,
       step: 0.01,
       // Each track paints the gradient it actually traverses, so the slider
-      // shows what moving it will do.
-      track: `linear-gradient(to right, ${[0, 0.25, 0.5, 0.75, 1]
-        .map((l) => oklchToHex({ ...color, l }))
-        .join(', ')})`,
+      // shows what moving it will do. The stops come from the shared ramp
+      // rather than being sampled here: native paints the same list as solid
+      // segments, and a track that disagreed between the two would be a
+      // difference in what the control *claims*, not just how it looks.
+      track: `linear-gradient(to right, ${channelRamp(color, 'l').join(', ')})`,
     },
     {
       key: 'c',
       label: t(kitMessages.colorChroma),
       max: MAX_CHROMA,
       step: 0.005,
-      track: `linear-gradient(to right, ${[0, 0.5, 1]
-        .map((f) => oklchToHex({ ...color, c: f * MAX_CHROMA }))
-        .join(', ')})`,
+      track: `linear-gradient(to right, ${channelRamp(color, 'c').join(', ')})`,
     },
     {
       key: 'h',
+      // MAX_HUE, not 360: a full turn normalises back to 0, so a slider that
+      // could reach it would snap to its own start.
       label: t(kitMessages.colorHue),
-      max: 360,
-      step: 1,
-      track: `linear-gradient(to right, ${[0, 60, 120, 180, 240, 300, 360]
-        .map((h) => oklchToHex({ ...color, h }))
-        .join(', ')})`,
+      max: MAX_HUE,
+      step: HUE_STEP,
+      track: `linear-gradient(to right, ${channelRamp(color, 'h').join(', ')})`,
     },
   ];
 
@@ -126,7 +128,10 @@ export function ColorPicker({
       label: t(kitMessages.colorAlpha),
       max: 1,
       step: 0.01,
-      track: `linear-gradient(to right, transparent, ${hex})`,
+      // Not `transparent`, which is rgba(0,0,0,0): CSS would interpolate from
+      // it and fade the ramp through black on its way to clear. The shared ramp
+      // holds the colour and moves only the alpha, which is what opacity means.
+      track: `linear-gradient(to right, ${channelRamp(color, 'a').join(', ')})`,
     });
   }
 

@@ -10,10 +10,11 @@
  * - The channel sliders are the kit's own Slider rather than an <input
  *   type=range>, which is the closest native equivalent and keeps them
  *   keyboard- and screen-reader-operable through the existing component.
- * - The gradient painted on each web track has no cheap React Native
- *   equivalent (it would need react-native-svg per track); the sliders here
- *   carry a plain track and the swatch above carries the colour. The values,
- *   ranges, and steps are identical.
+ * - Each track paints the gradient it traverses, as the web one does. React
+ *   Native has no gradient primitive, but it does not need one: the rail is a
+ *   run of solid segments sampled from `channelRamp`, the same ramp the web
+ *   joins into a `linear-gradient`. Both bindings therefore travel identical
+ *   colours, and no dependency was added to get there.
  * - The hex field is a TextInput with the same parse-before-commit rule, so a
  *   half-typed value never resolves to black.
  */
@@ -31,6 +32,9 @@ import {
   rgbToOklch,
   useControlled,
   type Oklch,
+  channelRamp,
+  MAX_HUE,
+  HUE_STEP,
 } from '@glacier/logic';
 import { t } from '../../tokens.ts';
 import { dimensionsFor } from '../../resolve.ts';
@@ -71,6 +75,12 @@ const LABELS = {
 };
 
 const SWATCH_HEIGHT = { sm: 48, md: 72 };
+// Mirrors the web's `--track-height` per size, as SWATCH_HEIGHT mirrors
+// `--swatch-height`. Deliberately the literal and not the spec's
+// `trackHeight: space-3`: space-3 is a density-scaled clamp, so reading the
+// token here would make the native rail a couple of pixels off the web one at
+// every density but the base.
+const TRACK_HEIGHT = { sm: '0.625rem', md: '0.75rem' };
 
 function parseColor(input: string): Oklch | null {
   const lch = parseOklch(input);
@@ -112,7 +122,9 @@ export function ColorPicker({
   const channels: { key: 'l' | 'c' | 'h' | 'a'; label: string; max: number; step: number }[] = [
     { key: 'l', label: LABELS.lightness, max: 1, step: 0.01 },
     { key: 'c', label: LABELS.chroma, max: MAX_CHROMA, step: 0.005 },
-    { key: 'h', label: LABELS.hue, max: 360, step: 1 },
+    // MAX_HUE, not 360: a full turn normalises back to 0, so a slider that
+    // could reach it would snap to its own start.
+    { key: 'h', label: LABELS.hue, max: MAX_HUE, step: HUE_STEP },
   ];
   if (alpha) channels.push({ key: 'a', label: LABELS.alpha, max: 1, step: 0.01 });
 
@@ -180,6 +192,8 @@ export function ColorPicker({
                 value={current}
                 disabled={disabled}
                 aria-label={channel.label}
+                trackColors={channelRamp(color, channel.key)}
+                trackHeight={TRACK_HEIGHT[size]}
                 onValueChange={(next: number) => emit({ ...color, [channel.key]: next })}
               />
             </View>

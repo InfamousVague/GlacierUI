@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+  MAX_CHROMA,
+  MAX_HUE,
+  HUE_STEP,
+  channelRamp,
   formatOklch,
   inSrgbGamut,
   oklchToHex,
@@ -172,5 +176,99 @@ describe('readableOn', () => {
 
   it('puts white on a dark background', () => {
     expect(readableOn({ l: 0.2, c: 0, h: 0 })).toBe('#ffffff');
+  });
+});
+
+describe('channelRamp', () => {
+  const base = { l: 0.64, c: 0.162, h: 228 };
+
+  it('samples the requested number of stops', () => {
+    expect(channelRamp(base, 'l', 8)).toHaveLength(8);
+    expect(channelRamp(base, 'l')).toHaveLength(96);
+  });
+
+  it('spans lightness from black to white, whatever the hue', () => {
+    const ramp = channelRamp(base, 'l', 5);
+    expect(ramp[0]).toBe(oklchToHex({ ...base, l: 0 }));
+    expect(ramp[4]).toBe(oklchToHex({ ...base, l: 1 }));
+  });
+
+  it('starts chroma at grey and ends at the maximum', () => {
+    const ramp = channelRamp(base, 'c', 3);
+    expect(ramp[0]).toBe(oklchToHex({ ...base, c: 0 }));
+    expect(ramp[2]).toBe(oklchToHex({ ...base, c: MAX_CHROMA }));
+  });
+
+  it('closes the hue circle, because 0 and 360 are one colour', () => {
+    const ramp = channelRamp(base, 'h', 7);
+    expect(ramp[0]).toBe(ramp[6]);
+  });
+
+  it('holds the colour steady while alpha climbs', () => {
+    const ramp = channelRamp(base, 'a', 3);
+    expect(ramp[0]).toMatch(/^rgba\(.*, 0\)$/);
+    expect(ramp[2]).toMatch(/^rgba\(.*, 1\)$/);
+    // Same rgb throughout: opacity is not a change of colour.
+    const rgbOf = (s: string) => s.slice(0, s.lastIndexOf(','));
+    expect(rgbOf(ramp[0]!)).toBe(rgbOf(ramp[2]!));
+  });
+
+  it('varies only the channel it was asked for', () => {
+    // Every lightness stop keeps the base hue, so the ramp reads as one colour
+    // getting lighter rather than sliding across the wheel.
+    const ramp = channelRamp(base, 'l', 5);
+    const expected = [0, 0.25, 0.5, 0.75, 1].map((l) => oklchToHex({ ...base, l }));
+    expect(ramp).toEqual(expected);
+  });
+
+  it('is deterministic, so both bindings paint the same track', () => {
+    expect(channelRamp(base, 'h', 12)).toEqual(channelRamp(base, 'h', 12));
+  });
+
+  it('survives a single-step request without dividing by zero', () => {
+    expect(channelRamp(base, 'l', 1)).toEqual([oklchToHex({ ...base, l: 0 })]);
+  });
+});
+
+describe('hue is circular, so a control must stop short of a full turn', () => {
+  it('normalises a full turn back to zero', () => {
+    // The behaviour MAX_HUE exists to work around: a slider whose max is 360
+    // reads its own maximum back as its minimum, and the thumb snaps to the
+    // start the moment it reaches the end.
+    expect(parseOklch('oklch(0.64 0.162 360)')!.h).toBe(0);
+  });
+
+  it('round-trips MAX_HUE unchanged, so the thumb stays where it was dragged', () => {
+    const at = { l: 0.64, c: 0.162, h: MAX_HUE };
+    expect(parseOklch(formatOklch(at))!.h).toBe(MAX_HUE);
+  });
+
+  it('leaves MAX_HUE inside the circle', () => {
+    expect(MAX_HUE).toBeLessThan(360);
+    expect(MAX_HUE).toBe(360 - HUE_STEP);
+  });
+
+  it('renders MAX_HUE indistinguishably from a full turn', () => {
+    // Being one step short costs nothing visible, which is why stopping there
+    // is the right trade rather than a compromise.
+    const base = { l: 0.64, c: 0.162 };
+    const rgbA = oklchToRgb({ ...base, h: MAX_HUE });
+    const rgbB = oklchToRgb({ ...base, h: 360 });
+    // One degree of hue moves a channel by at most a couple of 8-bit steps.
+    for (const ch of ['r', 'g', 'b'] as const) {
+      expect(Math.abs(rgbA[ch] - rgbB[ch])).toBeLessThanOrEqual(2);
+    }
+  });
+
+  it('still wraps values past a full turn, which is what normalising is for', () => {
+    expect(parseOklch('oklch(0.64 0.162 400)')!.h).toBe(40);
+  });
+
+  it('rejects a negative hue rather than wrapping it', () => {
+    // CSS does allow a negative hue angle; this parser's number pattern does
+    // not take a sign, so it declines the whole string instead of reading it
+    // as 340deg. Pinned because it is a real limit, not because it is desirable
+    // — nothing in the kit emits one, and the picker cannot produce one.
+    expect(parseOklch('oklch(0.64 0.162 -20)')).toBeNull();
   });
 });
