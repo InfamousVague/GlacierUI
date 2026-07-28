@@ -26,5 +26,3 @@ export { StatTile, type StatTileProps } from './StatTile.tsx';
 export { Surface, type SurfaceProps, type SurfaceLevel } from './Surface.tsx';
 export { Sparkline, type SparklineProps, type SparklineShape, type SparklineTone, type SparklineSize } from './Sparkline.tsx';
 export { CodeBlock, type CodeBlockProps } from './CodeBlock.tsx';
-export { AvatarGroup, type AvatarStackItem, type AvatarGroupProps } from './AvatarGroup.tsx';
-export { PresenceDot, type PresenceDotSize, type PresenceDotProps } from './PresenceDot.tsx';

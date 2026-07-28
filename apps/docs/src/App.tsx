@@ -102,13 +102,6 @@ import { VirtualListPage } from './pages/organisms/VirtualListPage.tsx';
 import { RichTextEditorPage } from './pages/organisms/RichTextEditorPage.tsx';
 import { ColorPickerPage } from './pages/organisms/ColorPickerPage.tsx';
 import { CommandPalettePage } from './pages/organisms/CommandPalettePage.tsx';
-import { ComposeBarPage } from './pages/organisms/ComposeBarPage.tsx';
-import { ChatStatusPage } from './pages/molecules/ChatStatusPage.tsx';
-import { PresencePage } from './pages/molecules/PresencePage.tsx';
-import { ConversationListPage } from './pages/molecules/ConversationListPage.tsx';
-import { ReactionsPage } from './pages/molecules/ReactionsPage.tsx';
-import { AttachmentsPage } from './pages/molecules/AttachmentsPage.tsx';
-import { MessageTranscriptPage } from './pages/organisms/MessageTranscriptPage.tsx';
 import { ModalPage } from './pages/organisms/ModalPage.tsx';
 import { DrawerPage } from './pages/organisms/DrawerPage.tsx';
 import { AlertDialogPage } from './pages/organisms/AlertDialogPage.tsx';
@@ -197,13 +190,6 @@ const PAGES = {
   richtexteditor: { group: 'Organisms', el: <RichTextEditorPage /> },
   colorpicker: { group: 'Organisms', el: <ColorPickerPage /> },
   commandpalette: { group: 'Organisms', el: <CommandPalettePage /> },
-  messagetranscript: { group: 'Organisms', el: <MessageTranscriptPage /> },
-  reactions: { group: 'Molecules', el: <ReactionsPage /> },
-  composebar: { group: 'Organisms', el: <ComposeBarPage /> },
-  chatstatus: { group: 'Molecules', el: <ChatStatusPage /> },
-  presence: { group: 'Molecules', el: <PresencePage /> },
-  conversationlist: { group: 'Molecules', el: <ConversationListPage /> },
-  attachments: { group: 'Molecules', el: <AttachmentsPage /> },
   modal: { group: 'Organisms', el: <ModalPage /> },
   drawer: { group: 'Organisms', el: <DrawerPage /> },
   alertdialog: { group: 'Organisms', el: <AlertDialogPage /> },

@@ -106,53 +106,10 @@ import {
   Calendar,
   DatePicker,
   TimeSeriesChart,
-  // chat suite
-  AttachmentChip,
-  AttachmentTray,
-  AvatarGroup,
-  CallControlBar,
-  CallControlButton,
-  CallTimer,
-  CharacterCounter,
-  ChatHeader,
-  ComposeBar,
-  ComposeContextBanner,
-  ConnectionBanner,
-  ConnectionQuality,
-  ConversationList,
-  ConversationListItem,
-  ConversationSkeleton,
-  DateSeparator,
   DeliveryStatus,
-  FileAttachment,
-  ImageAttachment,
-  ImageGrid,
-  LinkPreviewCard,
-  MemberRow,
-  MentionAutocomplete,
-  MessageActions,
   MessageBubble,
   MessageGroup,
-  MessageInput,
-  MessageList,
   MessageMeta,
-  MicToggle,
-  PresenceDot,
-  QuotedMessage,
-  ReactionBar,
-  ReactionPicker,
-  ReactionPill,
-  ReadReceiptStack,
-  RecordingIndicator,
-  ScrollToLatest,
-  SendButton,
-  SystemMessage,
-  ThreadIndicator,
-  TypingIndicator,
-  UnreadDivider,
-  VideoAttachment,
-  VoiceNote,
-  VoiceRecorder,
 } from '../src/index.ts';
 import { Star } from '@glacier/icons';
 import { cloneElement, type ReactElement } from 'react';
@@ -251,7 +208,6 @@ const RENDER: Record<string, Renderer> = {
   ),
   input: (o) => <Input size={o.size as never} />,
   kbd: () => <Kbd>K</Kbd>,
-  icon: () => <Star size={16} />,
   label: () => <Label>Email</Label>,
   link: () => <Link href="#">Docs</Link>,
   meter: (o) => <Meter tone={o.tone as never} size={o.size as never} value={50} />,
@@ -457,102 +413,16 @@ const RENDER: Record<string, Renderer> = {
     />
   ),
   // chat suite: atoms
-  'attachment-chip': () => (
-    <AttachmentChip id="a1" name="report.pdf" size={24_000} status="uploading" progress={0.4} />
-  ),
-  'call-control-button': (o) => (
-    <CallControlButton aria-label="Mute" state={o.variant as never} size={o.size as never}>
-      <span />
-    </CallControlButton>
-  ),
-  'call-timer': (o) => <CallTimer seconds={125} size={o.size as never} />,
-  'character-counter': () => <CharacterCounter length={180} limit={200} />,
-  'connection-quality': () => <ConnectionQuality level={3} />,
   'delivery-status': (o) => <DeliveryStatus status={o.tone as never} size={o.size as never} />,
-  'message-input': (o) => <MessageInput size={o.size as never} aria-label="Message" />,
   'message-meta': () => <MessageMeta at={SENT} now={NOW} status="read" />,
-  'presence-dot': (o) => <PresenceDot status={o.tone as never} size={o.size as never} />,
-  'reaction-pill': (o) => <ReactionPill emoji="👍" count={2} size={o.size as never} />,
-  'send-button': (o) => <SendButton state="ready" size={o.size as never} />,
-  'system-message': () => <SystemMessage kind="join">Ada joined</SystemMessage>,
-  'typing-indicator': (o) => <TypingIndicator names={['Ada']} size={o.size as never} />,
   // chat suite: molecules
-  'attachment-tray': () => (
-    <AttachmentTray attachments={[{ id: 'a1', name: 'report.pdf', status: 'complete' }]} />
-  ),
-  'avatar-group': () => <AvatarGroup avatars={[{ name: 'Ada Lovelace' }, { name: 'Grace Hopper' }]} />,
-  'read-receipt-stack': () => <ReadReceiptStack readers={[{ name: 'Ada Lovelace' }]} />,
-  'call-control-bar': (o) => (
-    <CallControlBar variant={o.variant as never} size={o.size as never} label="Call controls">
-      <CallControlButton aria-label="Mute">
-        <span />
-      </CallControlButton>
-    </CallControlBar>
-  ),
-  'compose-context-banner': (o) => (
-    <ComposeContextBanner mode={o.variant as never} author="Ada" preview="Hello" onDismiss={() => {}} />
-  ),
-  'connection-banner': (o) => <ConnectionBanner state={(o.tone ?? 'offline') as never} />,
-  'conversation-list-item': (o) => (
-    <ConversationListItem item={{ id: 'ada', name: 'Ada Lovelace', snippet: 'Hello', timestamp: SENT }} density={o.size as never} now={NOW} />
-  ),
-  'conversation-skeleton': () => <ConversationSkeleton count={2} />,
-  'date-separator': (o) => <DateSeparator at={SENT} now={NOW} variant={o.variant as never} />,
-  'file-attachment': () => <FileAttachment attachment={REPORT} />,
-  'image-attachment': () => <ImageAttachment attachment={PHOTO} alt="A photo" />,
-  'image-grid': () => <ImageGrid images={[PHOTO, { ...PHOTO, id: 'photo-2' }]} />,
-  'link-preview-card': () => (
-    <LinkPreviewCard url="https://example.com/post" title="A post" description="What it is about" />
-  ),
-  'member-row': () => <MemberRow name="Ada Lovelace" status="online" role="Admin" />,
-  'mention-autocomplete': () => (
-    <MentionAutocomplete
-      open
-      trigger="@"
-      candidates={[{ id: 'ada', label: 'Ada Lovelace', handle: 'ada' }]}
-      cursor={0}
-      onChoose={() => {}}
-    />
-  ),
-  'message-actions': () => (
-    <MessageActions actions={[{ id: 'react', label: 'React' }, { id: 'reply', label: 'Reply' }]} visible />
-  ),
   'message-bubble': () => (
     <MessageBubble own position="last" tail at={SENT} now={NOW}>
       Hello
     </MessageBubble>
   ),
   'message-group': () => <MessageGroup group={MESSAGE_RUN} authorName="Ada" now={NOW} />,
-  'mic-toggle': () => <MicToggle />,
-  'quoted-message': (o) => <QuotedMessage author="Ada" text="Hello" tone={o.variant as never} />,
-  'reaction-bar': () => (
-    <ReactionBar reactions={[{ emoji: '👍', actorId: 'ada' }]} viewerId="grace" onToggle={() => {}} />
-  ),
-  'reaction-picker': () => <ReactionPicker />,
-  'recording-indicator': (o) => <RecordingIndicator recording seconds={12} size={o.size as never} />,
-  'scroll-to-latest': () => <ScrollToLatest visible count={3} />,
-  'thread-indicator': () => <ThreadIndicator count={4} lastActivityAt={SENT} now={NOW} />,
-  'unread-divider': () => <UnreadDivider count={3} />,
-  'video-attachment': () => <VideoAttachment attachment={CLIP} />,
-  'voice-note': () => <VoiceNote duration={12} levels={[0.2, 0.8, 0.4]} />,
-  'voice-recorder': () => <VoiceRecorder />,
   // chat suite: organisms and structures
-  'compose-bar': () => <ComposeBar aria-label="Message composer" />,
-  'conversation-list': (o) => (
-    <ConversationList
-      items={[{ id: 'ada', name: 'Ada Lovelace', snippet: 'Hello', timestamp: SENT }]}
-      density={o.size as never}
-      now={NOW}
-    />
-  ),
-  'message-list': () => (
-    <MessageList
-      items={[{ kind: 'group', key: 'g0', group: MESSAGE_RUN }]}
-      renderGroup={(group) => <div>{group.messages.length}</div>}
-      now={NOW}
-    />
-  ),
-  'chat-header': (o) => <ChatHeader title="Ada Lovelace" subtitle="Online" density={o.size as never} />,
 };
 
 describe('React renders every spec variant, tone, and size', () => {

@@ -290,54 +290,10 @@ export { emitFeedback, subscribeFeedback, type FeedbackEvent } from './haptics/f
 
 
 // --- chat suite: atoms ---
-export { CallControlButton, type CallControlButtonProps } from './atoms/inputs/CallControlButton/CallControlButton.tsx';
 export { DeliveryStatus, type DeliveryStatusSize, type DeliveryStatusProps } from './atoms/display/DeliveryStatus/DeliveryStatus.tsx';
-export { PresenceDot, type PresenceDotSize, type PresenceDotProps } from './atoms/display/PresenceDot/PresenceDot.tsx';
-export { ReactionPill, type ReactionPillLabels, type ReactionPillProps } from './atoms/inputs/ReactionPill/ReactionPill.tsx';
-export { SystemMessage, type SystemMessageProps } from './atoms/display/SystemMessage/SystemMessage.tsx';
-export { TypingIndicator, type TypingIndicatorSize, type TypingIndicatorProps } from './atoms/feedback/TypingIndicator/TypingIndicator.tsx';
-
 // --- chat suite: molecules ---
-export { AvatarGroup, type AvatarStackItem, type AvatarGroupProps } from './molecules/AvatarGroup/AvatarGroup.tsx';
-export { CallControlBar, type CallControlBarAlign, type CallControlBarVariant, type CallControlBarProps } from './molecules/CallControls/CallControlBar.tsx';
-export { CallTimer, type CallTimerTone, type CallTimerProps } from './molecules/CallControls/CallTimer.tsx';
-export { ConnectionBanner, type ConnectionBannerProps } from './molecules/ConnectionBanner/ConnectionBanner.tsx';
-export { ConnectionQuality, type ConnectionQualityLabels, type ConnectionQualityProps } from './molecules/CallControls/ConnectionQuality.tsx';
-export { ConversationList, type ConversationListProps } from './molecules/ConversationList/ConversationList.tsx';
-export { ConversationListItem, type ConversationItem, type ConversationListItemProps } from './molecules/ConversationList/ConversationListItem.tsx';
-export { ConversationSkeleton, type ConversationSkeletonProps } from './molecules/ConversationList/ConversationSkeleton.tsx';
-export { FileAttachment, type FileAttachmentLabels, type FileAttachmentProps } from './molecules/Attachments/FileAttachment.tsx';
-export { ImageAttachment, type ImageAttachmentRadius, type ImageAttachmentLabels, type ImageAttachmentProps } from './molecules/Attachments/ImageAttachment.tsx';
-export { ImageGrid, type ImageGridLabels, type ImageGridProps } from './molecules/Attachments/ImageGrid.tsx';
-export { LinkPreviewCard, type LinkPreviewLayout, type LinkPreviewCardLabels, type LinkPreviewCardProps } from './molecules/Attachments/LinkPreviewCard.tsx';
-export { MemberRow, type MemberRowProps } from './molecules/MemberRow/MemberRow.tsx';
-export { MessageActions, type MessageActionsLayout, type MessageActionsReveal, type MessageActionItem, type MessageActionsProps } from './molecules/MessageActions/MessageActions.tsx';
 export { MessageBubble, type MessageBubbleProps } from './molecules/MessageBubble/MessageBubble.tsx';
 export { MessageGroup, type MessageSlotContext, type MessageGroupProps } from './molecules/MessageBubble/MessageGroup.tsx';
 export { MessageMeta, type MessageMetaProps } from './molecules/MessageBubble/MessageMeta.tsx';
-export { MicToggle, type MicToggleLabels, type MicToggleProps } from './molecules/CallControls/MicToggle.tsx';
-export { QuotedMessage, type QuotedMessageTone, type QuotedMessageProps } from './molecules/QuotedMessage/QuotedMessage.tsx';
-export { ReactionBar, type ReactionBarAddMode, type ReactionBarProps } from './molecules/ReactionBar/ReactionBar.tsx';
-export { ReactionPicker, type ReactionPickerLabels, type ReactionPickerProps } from './molecules/ReactionPicker/ReactionPicker.tsx';
-export { ReadReceiptStack, type ReadReceiptStackProps } from './molecules/AvatarGroup/ReadReceiptStack.tsx';
-export { RecordingIndicator, type RecordingIndicatorLabels, type RecordingIndicatorProps } from './molecules/CallControls/RecordingIndicator.tsx';
-export { ThreadIndicator, type ThreadIndicatorProps } from './molecules/ThreadIndicator/ThreadIndicator.tsx';
-export { VideoAttachment, type VideoBadgePlacement, type VideoAttachmentLabels, type VideoAttachmentProps } from './molecules/Attachments/VideoAttachment.tsx';
-export { VoiceNote, type VoiceNoteDensity, type VoiceNoteLabels, type VoiceNoteProps } from './molecules/Attachments/VoiceNote.tsx';
-
 // --- chat suite: organisms ---
-export { AttachmentChip, AttachmentTray, type AttachmentChipProps, type AttachmentTrayProps } from './organisms/ComposeBar/AttachmentTray.tsx';
-export { CharacterCounter, type CharacterCounterProps } from './organisms/ComposeBar/CharacterCounter.tsx';
-export { ComposeBar, type ComposeContext, type ComposeBarProps } from './organisms/ComposeBar/ComposeBar.tsx';
-export { ComposeContextBanner, type ComposeContextMode, type ComposeContextBannerProps } from './organisms/ComposeBar/ComposeContextBanner.tsx';
-export { DateSeparator, type DateSeparatorVariant, type DateSeparatorProps } from './organisms/MessageList/DateSeparator.tsx';
-export { MentionAutocomplete, type MentionAutocompleteProps } from './organisms/ComposeBar/MentionAutocomplete.tsx';
-export { MessageInput, type MessageInputProps } from './organisms/ComposeBar/MessageInput.tsx';
-export { MessageList, type TranscriptRowContext, type MessageListHandle, type MessageListProps } from './organisms/MessageList/MessageList.tsx';
-export { ScrollToLatest, type ScrollToLatestProps } from './organisms/MessageList/ScrollToLatest.tsx';
-export { SendButton, type SendButtonLabels, type SendButtonProps } from './organisms/ComposeBar/SendButton.tsx';
-export { UnreadDivider, type UnreadDividerAlign, type UnreadDividerProps } from './organisms/MessageList/UnreadDivider.tsx';
-export { VoiceRecorder, type VoiceRecorderProps } from './organisms/ComposeBar/VoiceRecorder.tsx';
-
 // --- chat suite: structures ---
-export { ChatHeader, type ChatHeaderDensity, type ChatHeaderProps } from './structures/ChatHeader/ChatHeader.tsx';
