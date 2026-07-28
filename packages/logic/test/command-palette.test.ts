@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   firstCommandCursor,
+  highlightSegments,
   groupCommands,
   isCommandShortcut,
   matchCommands,
@@ -177,5 +178,159 @@ describe('isCommandShortcut', () => {
 
   it('rejects another modified key', () => {
     expect(isCommandShortcut({ key: 'j', metaKey: true })).toBe(false);
+  });
+});
+
+describe('matchCommands — keyword and multi-term search', () => {
+  const kit = [
+    { id: 'slider', label: 'Slider', group: 'Atoms', keywords: 'form input range value drag' },
+    { id: 'seekbar', label: 'Seek Bar', group: 'Atoms', keywords: 'audio video media player scrub sound' },
+    { id: 'playercard', label: 'Player Card', group: 'Molecules', keywords: 'audio music media player track' },
+    { id: 'modal', label: 'Modal', group: 'Organisms', keywords: 'overlay popup dialog window' },
+    { id: 'progress', label: 'Progress Bar', group: 'Atoms', keywords: 'feedback loading percent' },
+  ];
+  const ids = (query: string) => matchCommands(kit, query).map((m) => m.item.id);
+
+  it('finds a component by a concept it never names', () => {
+    // The whole point: "audio" appears in no label.
+    expect(ids('audio')).toEqual(['seekbar', 'playercard']);
+  });
+
+  it('finds a component by a synonym of its own name', () => {
+    expect(ids('popup')).toEqual(['modal']);
+  });
+
+  it('ANDs the terms, so a second word narrows rather than widens', () => {
+    expect(ids('audio')).toHaveLength(2);
+    expect(ids('audio music')).toEqual(['playercard']);
+  });
+
+  it('matches terms across different fields', () => {
+    // "media" is a keyword, "card" is in the label; neither field holds both.
+    expect(ids('media card')).toEqual(['playercard']);
+  });
+
+  it('drops an item when any single term misses', () => {
+    expect(ids('audio nonsense')).toEqual([]);
+  });
+
+  it('ignores extra whitespace between terms', () => {
+    expect(ids('  audio   music  ')).toEqual(['playercard']);
+  });
+
+  it('ranks a label hit above a keyword hit', () => {
+    // Slider names itself; SeekBar merely lists 'scrub'... but both hold 'bar'.
+    expect(ids('bar')).toEqual(['seekbar', 'progress']);
+  });
+
+  it('ranks a label prefix above a mid-label match', () => {
+    const items = [
+      { id: 'mid', label: 'Rich Text Editor' },
+      { id: 'prefix', label: 'Text Area' },
+    ];
+    expect(matchCommands(items, 'text').map((m) => m.item.id)).toEqual(['prefix', 'mid']);
+  });
+
+  it('ranks by the worst term, so a whole-query match wins', () => {
+    const items = [
+      { id: 'half', label: 'Audio', keywords: 'zzz' },
+      { id: 'whole', label: 'Audio Player', keywords: '' },
+    ];
+    // Both match 'audio' at tier 0; only 'whole' matches 'player' in its label.
+    expect(matchCommands(items, 'audio player').map((m) => m.item.id)).toEqual(['whole']);
+  });
+
+  it('keeps the caller’s order within a tier', () => {
+    // All three match 'a' only via keywords, so nothing reorders them.
+    const items = [
+      { id: 'first', label: 'One', keywords: 'alpha' },
+      { id: 'second', label: 'Two', keywords: 'alpha' },
+      { id: 'third', label: 'Three', keywords: 'alpha' },
+    ];
+    expect(matchCommands(items, 'alpha').map((m) => m.item.id)).toEqual(['first', 'second', 'third']);
+  });
+
+  it('reports the keyword that earned the hit, for the row to explain itself', () => {
+    const [hit] = matchCommands(kit, 'audio');
+    expect(hit!.matchedKeyword).toBe('audio');
+  });
+
+  it('names no keyword when the label already explains the hit', () => {
+    const [hit] = matchCommands(kit, 'modal');
+    expect(hit!.matchedKeyword).toBeUndefined();
+  });
+
+  it('renumbers indices to the ranked order, so the cursor follows the eye', () => {
+    const matches = matchCommands(kit, 'bar');
+    expect(matches.map((m) => m.index)).toEqual([0, 1]);
+  });
+
+  it('treats a regex-special query as literal text, not a pattern', () => {
+    const items = [{ id: 'a', label: 'C++ Guide' }, { id: 'b', label: 'Anything' }];
+    expect(matchCommands(items, 'c++').map((m) => m.item.id)).toEqual(['a']);
+    expect(() => matchCommands(items, '(')).not.toThrow();
+  });
+
+  it('still returns everything, in the given order, for an empty query', () => {
+    expect(ids('')).toEqual(kit.map((k) => k.id));
+    expect(ids('   ')).toEqual(kit.map((k) => k.id));
+  });
+});
+
+describe('highlightSegments', () => {
+  const marked = (text: string, query: string) =>
+    highlightSegments(text, query)
+      .filter((s) => s.match)
+      .map((s) => s.text);
+
+  it('returns the whole string unmarked for an empty query', () => {
+    expect(highlightSegments('Rich Text Editor', '')).toEqual([{ text: 'Rich Text Editor', match: false }]);
+  });
+
+  it('returns the whole string unmarked when nothing lands', () => {
+    expect(highlightSegments('Button', 'zzz')).toEqual([{ text: 'Button', match: false }]);
+  });
+
+  it('marks a single term', () => {
+    expect(marked('Rich Text Editor', 'rich')).toEqual(['Rich']);
+  });
+
+  it('marks each term of a multi-term query', () => {
+    // Matching ANDs terms across fields, so highlighting has to be term-wise
+    // too — marking the whole query as one string would mark nothing here.
+    expect(marked('Rich Text Editor', 'rich editor')).toEqual(['Rich', 'Editor']);
+  });
+
+  it('is case-insensitive but preserves the original casing', () => {
+    expect(marked('Rich Text Editor', 'RICH')).toEqual(['Rich']);
+  });
+
+  it('marks every occurrence, not just the first', () => {
+    expect(marked('text and more text', 'text')).toEqual(['text', 'text']);
+  });
+
+  it('merges overlapping hits into one run', () => {
+    // 'text' and 'extra' overlap; two marks would paint a seam mid-word.
+    const segments = highlightSegments('textra', 'text extra');
+    expect(segments.filter((s) => s.match)).toHaveLength(1);
+  });
+
+  it('merges touching runs so no zero-width gap appears between them', () => {
+    expect(marked('abcd', 'ab cd')).toEqual(['abcd']);
+  });
+
+  it('reassembles to exactly the original string', () => {
+    const text = 'Rich Text Editor';
+    for (const q of ['', 'rich', 'rich editor', 'zzz', 'e']) {
+      expect(highlightSegments(text, q).map((s) => s.text).join('')).toBe(text);
+    }
+  });
+
+  it('handles an empty label', () => {
+    expect(highlightSegments('', 'rich')).toEqual([{ text: '', match: false }]);
+  });
+
+  it('marks a leading hit without emitting an empty first segment', () => {
+    expect(highlightSegments('Button', 'butt')[0]).toEqual({ text: 'Butt', match: true });
   });
 });

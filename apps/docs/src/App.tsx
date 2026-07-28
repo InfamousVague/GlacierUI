@@ -9,7 +9,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { DEFAULT_PREFERENCES, PreferencesModal, type Preferences } from './PreferencesModal.tsx';
 import { DocSearchTrigger } from './DocSearchTrigger.tsx';
 import { LanguageSelect } from './LanguageSelect.tsx';
-import { groupTitles, m, pageTags, pageTitles } from './i18n.ts';
+import { groupTitles, m, pageConcepts, pageTags, pageTitles } from './i18n.ts';
 import { getThemePreset, isThemePreference } from './themePresets.ts';
 // Pages are compartmentalized by category under pages/<group>/, and the routes
 // mirror that layout: #/<group>/<id> (the overview is the root, #/).
@@ -381,7 +381,9 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
         id,
         label: t(pageTitles[id]),
         group: t(groupTitles[PAGES[id].group]),
-        keywords: (pageTags[id] ?? []).join(' '),
+        // Component names first, then the concept words someone reaches for
+        // when they cannot recall the name — "audio" has to find SeekBar.
+        keywords: `${(pageTags[id] ?? []).join(' ')} ${pageConcepts[id] ?? ''}`.trim(),
       })),
     [t],
   );

@@ -43,14 +43,22 @@ export const commandPaletteSpec: ComponentSpec = {
     gap: token('space-2'),
     padding: token('space-2'),
     rowRadius: token('radius-md'),
-    // Where the panel sits and how tall it may get. Stated here because the two
-    // bindings express them in different units and had silently diverged: a
-    // percentage padding resolves against the parent's WIDTH, so the native
-    // panel was offset by a fraction of the window's width while the web used
-    // a fraction of its height.
+    // Written as CSS lengths and passed through verbatim by both bindings.
+    // Earlier attempts to re-express these natively went wrong twice: a
+    // percentage padding resolves against the parent's WIDTH, and a pixel
+    // max-width cannot follow the text-size preference the rem-based
+    // stylesheet does. Handing both sides the same string avoids restating it.
     topOffset: '12vh',
-    maxHeightCap: '28rem',
-    maxHeightRatio: '70vh',
+    maxHeight: 'min(28rem, 70vh)',
+    // The `size` prop steps the PANEL's width, not a control's box, so these
+    // live here rather than in `sizes` — that field describes control heights
+    // and paddings, and this component's a11y role is a combobox, so declaring
+    // them there made the auditor rightly ask for a height no panel has.
+    //
+    // rem, like the stylesheet: both follow the reader's text-size preference.
+    widthSm: '24rem',
+    widthMd: '32rem',
+    widthLg: '40rem',
   },
   states: [
     { name: 'default', description: 'Open with an empty query, showing the full command list from the top.' },

@@ -46,34 +46,78 @@ export interface CommandGroup<T extends CommandDescriptor = CommandDescriptor> {
 
 const norm = (value: string): string => value.trim().toLowerCase();
 
+const escapeRe = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 /**
- * Filters commands by a query and stamps each survivor with its flat index.
+ * How well a single term hit an item, lower being better, or null for a miss.
  *
- * Matching is a plain substring test across the label, group, and keywords.
- * That is deliberate: fuzzy scoring makes a palette feel clever right up until
- * it ranks something surprising first, and a substring match is a rule the user
- * can predict and a test can pin. An empty query returns everything, so opening
- * the palette shows the full menu rather than a blank list.
+ * The tiers are about *where* the term landed, not how many characters it
+ * shares — "seek" should put SeekBar above a component that merely lists seek
+ * as a keyword, and that is a fact about position, not a similarity score.
+ */
+function rankTerm(item: CommandDescriptor, term: string): number | null {
+  const label = norm(item.label);
+  if (label.startsWith(term)) return 0;
+  if (new RegExp(`\\b${escapeRe(term)}`).test(label)) return 1;
+  if (label.includes(term)) return 2;
+  if (norm(`${item.group ?? ''} ${item.keywords ?? ''}`).includes(term)) return 3;
+  return null;
+}
+
+/**
+ * Filters commands by a query, orders them by where the query hit, and stamps
+ * each survivor with its flat index.
  *
- * Input order is preserved — the caller decides priority by ordering its list.
+ * Two rules, both chosen so a user can predict the result and a test can pin it:
+ *
+ * - **Every whitespace-separated term must match somewhere.** Terms are ANDed
+ *   across the label, group, and keywords, so "audio bar" finds a SeekBar tagged
+ *   `audio` even though no single field contains that phrase. A single
+ *   contiguous substring test cannot: it asks the user to type a fragment that
+ *   exists verbatim, which means guessing the label they are searching for.
+ * - **Results are tiered by where the term landed** — label prefix, then a word
+ *   start inside the label, then anywhere in the label, then group or keywords.
+ *   An item is ranked by its *worst* term, so a command has to be a good match
+ *   for the whole query rather than a great match for one word of it.
+ *
+ * This is deliberately not fuzzy scoring. There is no character-distance
+ * measure and no tie-break that a reader has to trust; ties keep the caller's
+ * order, so the caller still decides priority within a tier. An empty query
+ * returns everything, in the given order, so opening the palette shows the full
+ * menu — and because every item then ranks equally, `groupCommands` still sees
+ * the caller's grouping intact.
  */
 export function matchCommands<T extends CommandDescriptor>(items: T[], query: string): CommandMatch<T>[] {
-  const q = norm(query);
-  const matches: CommandMatch<T>[] = [];
+  const terms = norm(query).split(/\s+/).filter(Boolean);
 
-  for (const item of items) {
-    if (q) {
-      const haystack = norm(`${item.label} ${item.group ?? ''} ${item.keywords ?? ''}`);
-      if (!haystack.includes(q)) continue;
+  const scored: { item: T; rank: number; order: number; matchedKeyword?: string }[] = [];
+
+  items.forEach((item, order) => {
+    if (!terms.length) {
+      scored.push({ item, rank: 0, order });
+      return;
     }
-    const hitLabel = !q || norm(item.label).includes(q);
-    const matchedKeyword = hitLabel
-      ? undefined
-      : (item.keywords ?? '').split(/\s+/).find((word) => word && norm(word).includes(q));
-    matches.push({ item, matchedKeyword, index: matches.length });
-  }
 
-  return matches;
+    let worst = 0;
+    for (const term of terms) {
+      const rank = rankTerm(item, term);
+      if (rank === null) return; // one miss drops the item
+      worst = Math.max(worst, rank);
+    }
+
+    // Only worth naming when the label alone would not explain the hit — the
+    // row otherwise looks unrelated to what the user typed.
+    const words = (item.keywords ?? '').split(/\s+/).filter(Boolean);
+    const matchedKeyword = terms.every((term) => rankTerm(item, term) === 3)
+      ? words.find((word) => terms.some((term) => norm(word).includes(term)))
+      : undefined;
+
+    scored.push({ item, rank: worst, order, matchedKeyword });
+  });
+
+  scored.sort((a, b) => a.rank - b.rank || a.order - b.order);
+
+  return scored.map((entry, index) => ({ item: entry.item, matchedKeyword: entry.matchedKeyword, index }));
 }
 
 /**
@@ -146,4 +190,66 @@ export interface CommandShortcutEvent {
  */
 export function isCommandShortcut(event: CommandShortcutEvent): boolean {
   return (event.metaKey === true || event.ctrlKey === true) && event.key.toLowerCase() === 'k';
+}
+
+/** One run of a label, flagged for whether the query put it there. */
+export interface CommandSegment {
+  text: string;
+  /** True when this run is part of why the row matched. */
+  match: boolean;
+}
+
+/**
+ * Splits a label into matched and unmatched runs so a row can show the user
+ * exactly which characters answered their query.
+ *
+ * Term-wise, not query-wise, because matching is: `matchCommands` ANDs the
+ * whitespace-separated terms across separate fields, so "rich text" can hit a
+ * label that never contains that phrase contiguously. Highlighting the whole
+ * query as one string would then mark nothing at all on a row that genuinely
+ * matched. Each term is marked wherever it lands instead.
+ *
+ * Overlapping and adjacent hits are merged, so "text textarea" marks one run
+ * rather than painting a seam through a word. Returns a single unmatched
+ * segment when the query is empty or nothing lands, so callers can render the
+ * result unconditionally.
+ */
+export function highlightSegments(text: string, query: string): CommandSegment[] {
+  const terms = norm(query).split(/\s+/).filter(Boolean);
+  if (!terms.length || !text) return [{ text, match: false }];
+
+  const haystack = text.toLowerCase();
+  const ranges: Array<[number, number]> = [];
+  for (const term of terms) {
+    // Every occurrence, not just the first: a term can legitimately appear more
+    // than once in one label, and marking only the first reads as a near-miss.
+    let from = 0;
+    for (;;) {
+      const at = haystack.indexOf(term, from);
+      if (at === -1) break;
+      ranges.push([at, at + term.length]);
+      from = at + term.length;
+    }
+  }
+  if (!ranges.length) return [{ text, match: false }];
+
+  ranges.sort((a, b) => a[0] - b[0]);
+  const merged: Array<[number, number]> = [];
+  for (const [start, end] of ranges) {
+    const last = merged[merged.length - 1];
+    // `<=` merges touching runs as well as overlapping ones, so two terms that
+    // meet exactly do not leave a zero-width unmatched segment between them.
+    if (last && start <= last[1]) last[1] = Math.max(last[1], end);
+    else merged.push([start, end]);
+  }
+
+  const segments: CommandSegment[] = [];
+  let cursor = 0;
+  for (const [start, end] of merged) {
+    if (start > cursor) segments.push({ text: text.slice(cursor, start), match: false });
+    segments.push({ text: text.slice(start, end), match: true });
+    cursor = end;
+  }
+  if (cursor < text.length) segments.push({ text: text.slice(cursor), match: false });
+  return segments;
 }

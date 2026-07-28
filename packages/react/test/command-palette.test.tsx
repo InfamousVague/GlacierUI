@@ -271,6 +271,66 @@ describe('CommandPalette', () => {
     expect(save?.getAttribute('aria-disabled')).toBe('true');
   });
 
+  it('marks the characters that matched, in the accent', () => {
+    const { field } = setup();
+    fireEvent.change(field, { target: { value: 'zen' } });
+    const marks = [...document.querySelectorAll('[role=option] mark')];
+    expect(marks.map((m) => m.textContent)).toEqual(['Zen']);
+  });
+
+  it('marks each term of a multi-term query', () => {
+    render(
+      <CommandPalette
+        open
+        onOpenChange={vi.fn()}
+        onRun={vi.fn()}
+        commands={[{ id: 'rte', label: 'Rich Text Editor' }]}
+        query="rich editor"
+      />,
+    );
+    const marks = [...document.querySelectorAll('[role=option] mark')];
+    expect(marks.map((m) => m.textContent)).toEqual(['Rich', 'Editor']);
+  });
+
+  it('leaves the label intact when nothing is marked', () => {
+    const { field } = setup();
+    expect(field).toBeTruthy();
+    expect(document.querySelectorAll('[role=option] mark')).toHaveLength(0);
+    expect(screen.getByText('Zen mode')).toBeTruthy();
+  });
+
+  // Regression: groups are built from ADJACENT runs, so one name can head
+  // several groups in an interleaved list. Keying the group by its name handed
+  // React duplicate keys, and reconciliation then left whole stale runs mounted
+  // when a query narrowed the list — the palette went on showing rows that no
+  // longer matched.
+  it('drops every non-matching row when groups repeat a name', () => {
+    const interleaved: CommandDescriptor[] = [
+      { id: 'a', label: 'Alpha', group: 'One' },
+      { id: 'b', label: 'Bravo', group: 'Two' },
+      { id: 'c', label: 'Charlie', group: 'One' },
+      { id: 'd', label: 'Delta', group: 'Two' },
+      { id: 'e', label: 'Zulu', group: 'One' },
+    ];
+    const { field } = setup({ commands: interleaved });
+    expect(options()).toHaveLength(5);
+
+    fireEvent.change(field, { target: { value: 'zulu' } });
+    expect(options()).toHaveLength(1);
+    expect(options()[0]?.textContent).toContain('Zulu');
+  });
+
+  it('renders one group box per adjacent run, not one per name', () => {
+    const interleaved: CommandDescriptor[] = [
+      { id: 'a', label: 'Alpha', group: 'One' },
+      { id: 'b', label: 'Bravo', group: 'Two' },
+      { id: 'c', label: 'Charlie', group: 'One' },
+    ];
+    setup({ commands: interleaved });
+    const heads = [...document.querySelectorAll('[role=listbox] [aria-hidden=true]')];
+    expect(heads.map((h) => h.textContent)).toEqual(['One', 'Two', 'One']);
+  });
+
   it('has no axe violations', async () => {
     const { container } = render(
       <CommandPalette open onOpenChange={vi.fn()} commands={commands} onRun={vi.fn()} />,

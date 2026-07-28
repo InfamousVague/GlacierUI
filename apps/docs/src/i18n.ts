@@ -153,6 +153,128 @@ export const pageTitles = defineMessages({
  * unfindable without these. Keywords are matched, never shown, so they stay
  * untranslated proper nouns rather than going through the message catalog.
  */
+/**
+ * Concept words per page — what a user types when they do not know, or cannot
+ * recall, the component's name. "audio" should reach SeekBar and PlayerCard;
+ * "popup" should reach Modal, Drawer, and Popover.
+ *
+ * Separate from `pageTags`, which holds real component names. These are the
+ * vocabulary of the problem rather than of the kit, and the two are worth
+ * keeping apart: a name is a fact, a concept is a judgement about what someone
+ * might call the thing.
+ *
+ * Held in English only. Unlike a label, a keyword is a search target rather than
+ * a translated string, and the localised page titles already carry the
+ * translated words — these add the English vocabulary a developer reaches for
+ * regardless of the UI language they are reading the docs in.
+ */
+export const pageConcepts: Record<string, string> = {
+  // media and playback
+  seekbar: 'audio video media player playback scrub seek position track sound waveform',
+  playercard: 'audio video media player music song track playback now playing sound',
+  image: 'media picture photo img asset',
+  carousel: 'media slider slideshow gallery swipe',
+  deviceframe: 'media mockup phone screenshot preview',
+
+  // time
+  datepicker: 'date time calendar day month year schedule picker',
+  calendarview: 'date time calendar schedule event agenda month week appointment',
+  timeline: 'time history sequence chronology events',
+  timelinescrubber: 'time scrub seek playback position media',
+  timeserieschart: 'chart graph data time metrics plot',
+
+  // form and input
+  field: 'form input label validation error required',
+  fieldset: 'form input group legend',
+  textarea: 'form input text multiline notes comment',
+  searchfield: 'form input search filter query find',
+  numberinput: 'form input number quantity stepper amount',
+  otpfield: 'form input code pin verification two-factor 2fa',
+  select: 'form input dropdown picker choose option',
+  combobox: 'form input dropdown autocomplete typeahead search option',
+  multiselect: 'form input dropdown tags multiple choose option',
+  selection: 'form input checkbox radio switch toggle choose',
+  radiocard: 'form input choose option radio card',
+  fileupload: 'form input file upload attach drop drag document',
+  slider: 'form input range value drag track',
+  toggle: 'form input switch on off boolean enable',
+  colorpicker: 'form input color colour swatch hue palette hex',
+  richtexteditor: 'form input text editor wysiwyg format bold italic markdown',
+
+  // overlays
+  modal: 'overlay popup dialog window sheet',
+  drawer: 'overlay popup panel sheet sidebar slide',
+  alertdialog: 'overlay popup dialog confirm destructive warning',
+  popover: 'overlay popup tooltip anchored floating',
+  tooltip: 'overlay popup hint hover help label',
+  menu: 'overlay popup dropdown context actions right-click',
+  spotlight: 'overlay popup highlight focus onboarding tour',
+  commandpalette: 'overlay popup search command launcher quick actions cmdk',
+  tabbedmodal: 'overlay popup dialog tabs settings',
+  floatingpanel: 'overlay popup panel window draggable',
+
+  // feedback and status
+  toast: 'feedback notification snackbar alert message transient',
+  callout: 'feedback note info warning message admonition',
+  banner: 'feedback notification alert message announcement',
+  announcements: 'feedback accessibility screen reader live region aria',
+  spinner: 'feedback loading busy wait progress',
+  progress: 'feedback loading bar percent complete',
+  progressring: 'feedback loading circular percent complete',
+  skeleton: 'feedback loading placeholder shimmer ghost',
+  meter: 'feedback gauge level measure value capacity',
+  emptystate: 'feedback empty blank nothing placeholder zero',
+  statusdot: 'feedback status indicator online badge state',
+
+  // navigation
+  tabs: 'navigation tab switch section panel',
+  tabstrip: 'navigation tab switch section scroll',
+  tabbedpanel: 'navigation tab switch section panel',
+  breadcrumbs: 'navigation path trail hierarchy back',
+  pagination: 'navigation pages next previous paging',
+  sidebar: 'navigation menu nav rail drawer',
+  navbar: 'navigation menu nav header top bar',
+  steps: 'navigation wizard progress stepper flow',
+  wizard: 'navigation steps flow multi-step form onboarding',
+  treeview: 'navigation tree hierarchy folder nested expand',
+  accordion: 'navigation collapse expand disclosure faq section',
+  toolbar: 'navigation actions buttons bar controls',
+  titlebar: 'navigation window chrome header title',
+  appshell: 'navigation layout frame chrome scaffold shell',
+
+  // data
+  table: 'data rows columns grid spreadsheet list',
+  datagrid: 'data rows columns table spreadsheet sort filter',
+  list: 'data rows items collection',
+  virtuallist: 'data rows items performance windowing large scroll',
+  sortablelist: 'data rows items reorder drag drop sort',
+  stattile: 'data metric kpi number summary dashboard',
+  sparkline: 'data chart graph trend mini metric',
+  heatmap: 'data chart grid density matrix activity',
+  rating: 'data stars score review feedback',
+  counterbadge: 'data count number badge unread notification',
+  pill: 'data tag chip label badge',
+  filterchip: 'data filter tag chip facet refine',
+
+  // layout and foundations
+  layout: 'layout box stack row grid spacing align flex',
+  surfaces: 'layout card panel surface elevation container',
+  section: 'layout group heading region',
+  cardgroup: 'layout cards grid collection',
+  resizablesplitpane: 'layout split resize panes divider drag',
+  scrollarea: 'layout scroll overflow scrollbar',
+  divider: 'layout separator rule line hr',
+  pageheader: 'layout header title heading page top',
+  colors: 'color colour palette theme token ramp contrast',
+  typography: 'font text type size weight family scale',
+  spacing: 'space margin padding gap rhythm scale',
+  shape: 'radius corner border elevation shadow',
+  materials: 'glass blur frosted material translucent',
+  motion: 'animation transition duration easing spring',
+  haptics: 'vibration feedback touch taptic',
+  icons: 'icon glyph symbol svg pictogram',
+};
+
 export const pageTags: Record<string, string[]> = {
   // multi-component and shared pages
   button: ['IconButton'],
@@ -366,6 +488,13 @@ export const m = defineMessages({
   cvExViewsDesc: { en: 'The week view is the same grid, one row tall, so a day has room for its whole list. The agenda drops the grid entirely: it is a list, and it is marked up as one, because an agenda has no second axis to navigate.', es: 'La vista semanal es la misma cuadrícula, de una fila, para que un día tenga sitio para toda su lista. La agenda descarta la cuadrícula: es una lista, y así se marca, porque una agenda no tiene un segundo eje que recorrer.', fr: 'La vue semaine est la même grille, sur une rangée, pour qu’un jour ait la place de toute sa liste. L’agenda abandonne la grille : c’est une liste, et elle est balisée comme telle, car un agenda n’a pas de second axe à parcourir.', de: 'Die Wochenansicht ist dasselbe Raster, eine Zeile hoch, damit ein Tag Platz für seine ganze Liste hat. Die Agenda lässt das Raster ganz weg: sie ist eine Liste und wird als solche ausgezeichnet, denn eine Agenda hat keine zweite Achse.', ja: '週表示は同じグリッドの 1 行版で、1 日が予定を全部並べられます。予定リストはグリッド自体をやめます。リストであり、そう記述されます。予定リストには辿るべき第 2 の軸がないからです。', pt: 'A vista semanal é a mesma grelha, com uma linha, para que um dia tenha espaço para toda a sua lista. A agenda dispensa a grelha: é uma lista, e está marcada como tal, porque uma agenda não tem um segundo eixo para navegar.', zh: '周视图是同一个网格，只有一行高，让一天有空间放下整份列表。日程则完全去掉网格：它是列表，也按列表标注，因为日程没有第二条轴可供导航。', ar: 'عرض الأسبوع هو الشبكة نفسها بصف واحد، ليتّسع اليوم لقائمته كاملة. أما جدول الأعمال فيتخلى عن الشبكة تمامًا: إنه قائمة، ومُوسَّم كذلك، لأن جدول الأعمال لا يملك محورًا ثانيًا للتنقل.' },
   cvExSelectTitle: { en: 'Selecting days and events', es: 'Seleccionar días y eventos', fr: 'Sélectionner jours et événements', de: 'Tage und Termine auswählen', ja: '日と予定の選択', pt: 'Selecionar dias e eventos', zh: '选择日期与事件', ar: 'اختيار الأيام والأحداث' },
   cvExSelectDesc: { en: 'Pass `onSelectDay` to make cells pressable and `onSelectEvent` to make chips pressable. A press on a chip reports the event and not the day underneath it. Selection tints the whole cell, while today marks only its number — otherwise the date it is and the date you picked look alike.', es: 'Pasa `onSelectDay` para que las celdas se puedan pulsar y `onSelectEvent` para las etiquetas. Pulsar una etiqueta informa del evento, no del día que hay debajo. La selección tiñe toda la celda, mientras que hoy solo marca su número: si no, la fecha que es y la que elegiste se parecen.', fr: 'Passez `onSelectDay` pour rendre les cellules pressables et `onSelectEvent` pour les puces. Une pression sur une puce signale l’événement, pas le jour en dessous. La sélection teinte toute la cellule, alors qu’aujourd’hui ne marque que son numéro — sinon la date qu’il est et celle que vous avez choisie se ressemblent.', de: 'Mit `onSelectDay` werden Zellen drückbar, mit `onSelectEvent` die Chips. Ein Druck auf einen Chip meldet den Termin, nicht den Tag darunter. Die Auswahl färbt die ganze Zelle, Heute markiert nur seine Zahl — sonst sehen das heutige und das gewählte Datum gleich aus.', ja: '`onSelectDay` でセルを、`onSelectEvent` でチップを押せるようにします。チップを押すと下の日ではなく予定が返ります。選択はセル全体を色づけ、今日は数字だけを印します。そうしないと「今日」と「選んだ日」が似て見えます。', pt: 'Passe `onSelectDay` para tornar as células premíveis e `onSelectEvent` para as etiquetas. Premir uma etiqueta reporta o evento, não o dia por baixo. A seleção tinge a célula inteira, enquanto hoje marca só o seu número — caso contrário a data que é e a que escolheu parecem iguais.', zh: '传入 `onSelectDay` 让单元格可按，传入 `onSelectEvent` 让事件条可按。按下事件条上报的是事件，而不是它下面的那一天。选中会给整个单元格上色，而“今天”只标记数字——否则今天的日期和你选的日期看起来一样。', ar: 'مرّر `onSelectDay` لجعل الخلايا قابلة للضغط و`onSelectEvent` للرقاقات. الضغط على رقاقة يُبلّغ عن الحدث لا عن اليوم تحته. الاختيار يلوّن الخلية كاملة، بينما اليوم الحالي يُعلَّم رقمه فقط — وإلا بدا تاريخ اليوم وتاريخ اختيارك متشابهين.' },
+  cvExEditTitle: { en: 'Adding and editing events', es: 'Añadir y editar eventos', fr: 'Ajouter et modifier des événements', de: 'Termine anlegen und bearbeiten', ja: '予定の追加と編集', pt: 'Adicionar e editar eventos', zh: '添加与编辑事件', ar: 'إضافة الأحداث وتعديلها' },
+  cvExEditDesc: { en: 'Set `editable` and the calendar brings its own editor. Right-click a day or an event for a menu — a long press does the same on touch — double-press empty day space to add, or press an event to edit. The calendar never owns your events: it reports through `onEventCreate`, `onEventChange`, and `onEventDelete`, and re-renders from the list you hand back. Omit `onEventDelete` to hide every delete control.', es: 'Activa `editable` y el calendario trae su propio editor. Haz clic derecho en un día o un evento para abrir un menú — una pulsación larga hace lo mismo en táctil —, doble clic en espacio vacío para añadir, o pulsa un evento para editarlo. El calendario nunca es dueño de tus eventos: informa mediante `onEventCreate`, `onEventChange` y `onEventDelete`, y se vuelve a dibujar con la lista que le devuelvas. Omite `onEventDelete` para ocultar todo control de eliminación.', fr: 'Activez `editable` et le calendrier apporte son propre éditeur. Clic droit sur un jour ou un événement pour un menu — un appui long fait de même au toucher —, double-clic sur un espace vide pour ajouter, ou pression sur un événement pour le modifier. Le calendrier ne possède jamais vos événements : il signale via `onEventCreate`, `onEventChange` et `onEventDelete`, et se redessine à partir de la liste que vous renvoyez. Omettez `onEventDelete` pour masquer toute suppression.', de: 'Mit `editable` bringt der Kalender seinen eigenen Editor mit. Rechtsklick auf einen Tag oder Termin öffnet ein Menü — ein langer Druck tut dasselbe auf Touch —, Doppelklick auf freien Tagesraum legt an, ein Druck auf einen Termin bearbeitet ihn. Der Kalender besitzt Ihre Termine nie: Er meldet über `onEventCreate`, `onEventChange` und `onEventDelete` und zeichnet aus der zurückgegebenen Liste neu. Ohne `onEventDelete` entfällt jedes Löschen.', ja: '`editable` を渡すとカレンダー自身がエディタを備えます。日や予定を右クリックするとメニューが開き（タッチでは長押しでも同じ）、空いた日の余白をダブルクリックで追加、予定を押すと編集できます。予定の所有者はあくまで呼び出し側です。`onEventCreate`・`onEventChange`・`onEventDelete` で報告し、返されたリストから描き直します。`onEventDelete` を省くと削除操作はすべて消えます。', pt: 'Ative `editable` e o calendário traz o seu próprio editor. Clique com o botão direito num dia ou evento para abrir um menu — uma pressão longa faz o mesmo no toque —, duplo clique em espaço vazio para adicionar, ou prima um evento para o editar. O calendário nunca é dono dos seus eventos: reporta por `onEventCreate`, `onEventChange` e `onEventDelete`, e redesenha a partir da lista que devolver. Omita `onEventDelete` para esconder qualquer controlo de eliminação.', zh: '设置 `editable`，日历就自带编辑器。右键点击某一天或某个事件会打开菜单——触屏上长按同理——双击空白日期区域可新增，点击事件即可编辑。日历始终不拥有你的数据：它通过 `onEventCreate`、`onEventChange` 和 `onEventDelete` 上报，并根据你回传的列表重新渲染。省略 `onEventDelete` 即可隐藏所有删除入口。', ar: 'فعِّل `editable` ليأتي التقويم بمحرّره الخاص. انقر بالزر الأيمن على يوم أو حدث لفتح قائمة — والضغط المطوّل يفعل الشيء نفسه على اللمس — وانقر نقرًا مزدوجًا على مساحة فارغة للإضافة، أو اضغط حدثًا لتعديله. لا يملك التقويم أحداثك أبدًا: فهو يُبلّغ عبر `onEventCreate` و`onEventChange` و`onEventDelete`، ثم يُعيد الرسم من القائمة التي تُعيدها. احذف `onEventDelete` لإخفاء كل عناصر الحذف.' },
+  cvPropEditable: { en: 'Turns on the built-in editor: right-click or long-press for a menu, double-press empty day space to add, press an event to edit.', es: 'Activa el editor integrado: clic derecho o pulsación larga para el menú, doble clic en espacio vacío para añadir, pulsa un evento para editarlo.', fr: 'Active l’éditeur intégré : clic droit ou appui long pour le menu, double-clic sur un espace vide pour ajouter, pression sur un événement pour le modifier.', de: 'Aktiviert den eingebauten Editor: Rechtsklick oder langer Druck öffnet ein Menü, Doppelklick auf freien Raum legt an, ein Druck bearbeitet.', ja: '組み込みエディタを有効にします。右クリックまたは長押しでメニュー、空き領域のダブルクリックで追加、予定を押すと編集。', pt: 'Ativa o editor integrado: clique direito ou pressão longa para o menu, duplo clique em espaço vazio para adicionar, prima um evento para editar.', zh: '启用内置编辑器：右键或长按打开菜单，双击空白日期区域新增，点击事件进行编辑。', ar: 'يفعّل المحرّر المدمج: نقر أيمن أو ضغط مطوّل لفتح القائمة، ونقر مزدوج على مساحة فارغة للإضافة، وضغط حدث لتعديله.' },
+  cvPropOnEventCreate: { en: 'Reports a newly built event. The calendar does not store it — merge it into your own list.', es: 'Informa de un evento recién creado. El calendario no lo guarda: úsalo para actualizar tu lista.', fr: 'Signale un événement nouvellement créé. Le calendrier ne le stocke pas — fusionnez-le dans votre liste.', de: 'Meldet einen neu erstellten Termin. Der Kalender speichert ihn nicht — führen Sie ihn in Ihre Liste ein.', ja: '新しく作られた予定を通知します。カレンダーは保存しないので、自分のリストに反映してください。', pt: 'Reporta um evento recém-criado. O calendário não o guarda — junte-o à sua lista.', zh: '上报新建的事件。日历不会保存它——请合并进你自己的列表。', ar: 'يُبلّغ عن حدث أُنشئ للتو. لا يخزّنه التقويم — ادمجه في قائمتك.' },
+  cvPropOnEventChange: { en: 'Reports an edited event, keeping its original id.', es: 'Informa de un evento editado, conservando su id original.', fr: 'Signale un événement modifié, en conservant son id d’origine.', de: 'Meldet einen bearbeiteten Termin und behält dessen ursprüngliche id.', ja: '編集された予定を、元の id のまま通知します。', pt: 'Reporta um evento editado, mantendo o id original.', zh: '上报被编辑的事件，并保留其原有 id。', ar: 'يُبلّغ عن حدث مُعدَّل مع الإبقاء على مُعرّفه الأصلي.' },
+  cvPropOnEventDelete: { en: 'Reports a deletion by id. Omit it to hide every delete control.', es: 'Informa de una eliminación por id. Omítelo para ocultar todo control de eliminación.', fr: 'Signale une suppression par id. Omettez-le pour masquer toute suppression.', de: 'Meldet eine Löschung per id. Weglassen blendet jedes Löschen aus.', ja: '削除を id で通知します。省略すると削除操作はすべて消えます。', pt: 'Reporta uma eliminação por id. Omita para esconder qualquer controlo de eliminação.', zh: '按 id 上报删除。省略即可隐藏所有删除入口。', ar: 'يُبلّغ عن حذف عبر المُعرّف. حذفه يُخفي كل عناصر الحذف.' },
+  cvPropNewEventId: { en: 'Mints the id for a new event. Defaults to one unique to this calendar.', es: 'Genera el id de un evento nuevo. Por defecto, uno único para este calendario.', fr: 'Génère l’id d’un nouvel événement. Par défaut, un id propre à ce calendrier.', de: 'Erzeugt die id für einen neuen Termin. Standard ist eine für diesen Kalender eindeutige.', ja: '新しい予定の id を生成します。既定ではこのカレンダー内で一意の id です。', pt: 'Gera o id de um evento novo. Por omissão, um único para este calendário.', zh: '为新事件生成 id。默认使用该日历内唯一的 id。', ar: 'يولّد مُعرّف الحدث الجديد. افتراضيًا مُعرّف فريد داخل هذا التقويم.' },
   cvPropEvents: { en: 'Everything to lay over the range. Events outside it are ignored, so a whole year can be passed to a one-week view.', es: 'Todo lo que se superpone al rango. Los eventos fuera de él se ignoran, así que puedes pasar un año entero a una vista de una semana.', fr: 'Tout ce qui se pose sur la plage. Les événements en dehors sont ignorés : on peut passer une année entière à une vue d’une semaine.', de: 'Alles, was über den Zeitraum gelegt wird. Termine außerhalb werden ignoriert, ein ganzes Jahr kann also an eine Wochenansicht übergeben werden.', ja: '期間に重ねるものすべて。範囲外の予定は無視されるので、1 週間表示に 1 年分を渡しても構いません。', pt: 'Tudo o que se sobrepõe ao intervalo. Os eventos fora dele são ignorados, por isso pode passar um ano inteiro a uma vista de uma semana.', zh: '要铺在该范围上的全部内容。范围之外的事件会被忽略，所以可以把一整年传给只显示一周的视图。', ar: 'كل ما يوضع فوق النطاق. تُتجاهَل الأحداث خارجه، فيمكن تمرير سنة كاملة إلى عرض أسبوع واحد.' },
   cvPropMode: { en: 'Controlled view mode.', es: 'Modo de vista controlado.', fr: 'Mode d’affichage contrôlé.', de: 'Kontrollierter Ansichtsmodus.', ja: '制御された表示モード。', pt: 'Modo de vista controlado.', zh: '受控的视图模式。', ar: 'وضع العرض المُتحكَّم به.' },
   cvPropDate: { en: 'Controlled anchor date; the range shown is the one containing it.', es: 'Fecha ancla controlada; se muestra el rango que la contiene.', fr: 'Date d’ancrage contrôlée ; la plage affichée est celle qui la contient.', de: 'Kontrolliertes Ankerdatum; gezeigt wird der Zeitraum, der es enthält.', ja: '制御された基準日。それを含む期間が表示されます。', pt: 'Data-âncora controlada; o intervalo mostrado é o que a contém.', zh: '受控的锚点日期；显示包含它的那个范围。', ar: 'تاريخ الإرساء المُتحكَّم به؛ يُعرض النطاق الذي يحتويه.' },

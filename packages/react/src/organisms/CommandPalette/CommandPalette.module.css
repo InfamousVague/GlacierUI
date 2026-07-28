@@ -132,3 +132,25 @@
   padding: var(--glacier-space-2) var(--glacier-space-3) var(--glacier-space-1);
   border-block-start: var(--glacier-hairline) solid var(--glacier-border);
 }
+
+/* The characters that answered the query, in the accent. A <mark> carries the
+   meaning semantically, but its user-agent yellow-on-black background is wrong
+   for a dark palette and would fight the active row's fill, so the paint is
+   replaced outright: colour and weight do the work, no background. */
+.mark {
+  background: none;
+  color: var(--glacier-accent-text);
+  font-weight: var(--glacier-font-weight-semibold, 600);
+}
+
+/* On the active row the fill is already accent-tinted, so the mark steps up to
+   the brighter solid to stay legible against it. */
+.option[data-active] .mark {
+  color: var(--glacier-accent-solid);
+}
+
+/* A disabled row is quiet by definition — a bright mark inside it would read as
+   actionable, so the highlight only carries weight there. */
+.option[data-disabled] .mark {
+  color: inherit;
+}
