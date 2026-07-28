@@ -256,8 +256,13 @@ body::before {
   max-width: 46rem;
 }
 
-.content p,
-.content li {
+/* Prose only. The `:not()` keeps this out of the example panes: those contain
+   real kit components, and a <li> in there belongs to the component, not to the
+   page. Without it this rule outweighs a component's own class (0,1,1 beats
+   0,1,0) and quietly repaints anything that happens to render a list or a
+   paragraph — which is how SortableList's items ended up muted on web while the
+   native binding, rendering plain views, showed the colour both had declared. */
+.content :is(p, li):not(.exampleDemo *) {
   color: var(--glacier-text-muted);
 }
 
@@ -1073,6 +1078,25 @@ code {
   .bpGalleryFilterChips {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* Category headings own the space around them. The gallery stacks section after
+   section with no wrapper gap, and the kit's Heading carries no default margin
+   — spacing is the layout's job, not the type's — so without this a heading
+   touches the cards on both sides and reads as belonging to neither. */
+.bpGallerySection {
+  margin-top: var(--glacier-space-12);
+}
+
+/* The first one only has to clear the filters, not a field of cards. */
+.bpGallerySection:first-of-type {
+  margin-top: var(--glacier-space-6);
+}
+
+/* Bound tighter below than above — smaller than the gap between cards, so the
+   heading groups with the grid it names instead of floating between two. */
+.bpGallerySection > h2 {
+  margin-bottom: var(--glacier-space-3);
 }
 
 .bpGalleryGrid {

@@ -301,7 +301,7 @@ export function BlueprintGallery() {
         </div>
       ) : (
         filtered.map((section) => (
-          <section key={section.group}>
+          <section key={section.group} className="bpGallerySection">
             <Heading level={2}>{section.title}</Heading>
             <div className="bpGalleryGrid">
               {section.items.map((item, i) => (
