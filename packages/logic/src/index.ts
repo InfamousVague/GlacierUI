@@ -208,6 +208,26 @@ export {
   type CommandSegment,
 } from './command-palette.ts';
 
+export {
+  messageAuthorship,
+  conversationOwn,
+  messageAck,
+  isProvisional,
+  conversationRuns,
+  atBottom,
+  conversationSkeletonMessages,
+  conversationSkeletonRuns,
+  CONVERSATION_ASSUMED_STATUS,
+  CONVERSATION_STICK_SLOP,
+  CONVERSATION_SKELETON_VIEWER,
+  type MessageAuthorship,
+  type MessageAck,
+  type ConversationRun,
+  type ConversationRunsOptions,
+  type ConversationScroll,
+  type ConversationSkeletonRun,
+} from './conversation-view.ts';
+
 // Chat rules: message grouping, bubble geometry, separators, reaction tallies,
 // typing state, attachment routing, and delivery ordering. Shared so a DOM
 // transcript and a native one break their runs, place their unread divider, and

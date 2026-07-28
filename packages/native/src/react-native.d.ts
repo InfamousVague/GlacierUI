@@ -10,7 +10,7 @@
  * build lands with real react-native, its own types supersede this file.
  */
 declare module 'react-native' {
-  import type { ComponentType, ReactNode } from 'react';
+  import type { ComponentType, ReactNode, Ref } from 'react';
 
   export type Style = Record<string, unknown>;
   // A falsy style (null/undefined/false) is valid in React Native, and style
@@ -148,7 +148,17 @@ declare module 'react-native' {
     showsVerticalScrollIndicator?: boolean;
     showsHorizontalScrollIndicator?: boolean;
     scrollEnabled?: boolean;
-    onScroll?: (e: { nativeEvent: { contentOffset: { x: number; y: number } } }) => void;
+    onScroll?: (e: {
+      nativeEvent: {
+        contentOffset: { x: number; y: number };
+        /** The scrollable content's size. Needed to know where the end IS. */
+        contentSize: { width: number; height: number };
+        /** The visible box. Needed to know how much of the end is on screen. */
+        layoutMeasurement: { width: number; height: number };
+      };
+    }) => void;
+    /** Fires when the content grows or shrinks — a new message, in a transcript. */
+    onContentSizeChange?: (width: number, height: number) => void;
     stickyHeaderIndices?: number[];
     /** Whether a tap that lands while the keyboard is up reaches the row under
         it, instead of only dismissing the keyboard. */
@@ -171,7 +181,16 @@ declare module 'react-native' {
   export const Pressable: ComponentType<PressableProps>;
   export const Image: ComponentType<ImageProps>;
   export const TextInput: ComponentType<TextInputProps>;
-  export const ScrollView: ComponentType<ScrollViewProps>;
+  /** The imperative handle a ScrollView ref hands back. */
+  export interface ScrollViewHandle {
+    scrollTo(options: { x?: number; y?: number; animated?: boolean }): void;
+    scrollToEnd(options?: { animated?: boolean }): void;
+  }
+
+  // The ref rides on the component rather than on ScrollViewProps, so a
+  // component that spreads ScrollViewProps (List) does not accidentally
+  // advertise a handle it does not forward.
+  export const ScrollView: ComponentType<ScrollViewProps & { ref?: Ref<ScrollViewHandle> }>;
   export const Modal: ComponentType<ModalProps>;
 
   export const Platform: {

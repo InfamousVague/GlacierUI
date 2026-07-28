@@ -112,8 +112,8 @@ export * from './components/section.ts';
 export * from './components/page-header.ts';
 // chat suite
 export * from './components/delivery-status.ts';
+export * from './components/conversation-view.ts';
 export * from './components/message-bubble.ts';
-export * from './components/voice-recorder.ts';
 
 import type { ComponentSpec } from './schema.ts';
 import { appShellSpec } from './components/app-shell.ts';
@@ -216,8 +216,8 @@ import { sparklineSpec } from './components/sparkline.ts';
 import { timeSeriesChartSpec } from './components/time-series-chart.ts';
 // chat suite
 import { deliveryStatusSpec } from './components/delivery-status.ts';
+import { conversationViewSpec } from './components/conversation-view.ts';
 import { messageBubbleSpec, messageGroupSpec, messageMetaSpec } from './components/message-bubble.ts';
-import { voiceRecorderSpec } from './components/voice-recorder.ts';
 
 /** Bump when the schema shape changes in a breaking way. */
 export const SPEC_VERSION = '0.1.0';
@@ -325,9 +325,9 @@ export const specs: ComponentSpec[] = [
   wizardSpec,
   deliveryStatusSpec,
   messageMetaSpec,
+  conversationViewSpec,
   messageBubbleSpec,
   messageGroupSpec,
-  voiceRecorderSpec,
 ];
 
 /** Specs keyed by id for O(1) lookup. */

@@ -13,6 +13,7 @@ import {
 } from '@glacier/spec';
 import {
   Avatar,
+  ConversationView,
   Announcements,
   Banner,
   Button,
@@ -208,6 +209,18 @@ const RENDER: Record<string, Renderer> = {
   ),
   input: (o) => <Input size={o.size as never} />,
   kbd: () => <Kbd>K</Kbd>,
+  'conversation-view': () => (
+    <ConversationView
+      viewerId="ada"
+      messages={[
+        { id: 'm0', authorId: 'bo', at: SENT, text: 'Hello' },
+        { id: 'm1', authorId: 'ada', at: REPLIED, text: 'Again', status: 'sending' },
+      ]}
+      now={NOW}
+      label="Chat with Bo"
+    />
+  ),
+  icon: () => <Star size={16} />,
   label: () => <Label>Email</Label>,
   link: () => <Link href="#">Docs</Link>,
   meter: (o) => <Meter tone={o.tone as never} size={o.size as never} value={50} />,

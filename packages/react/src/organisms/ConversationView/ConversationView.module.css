@@ -1,0 +1,96 @@
+/* Every measurement arrives as a --conversation-* custom property, resolved
+   once from the spec, so the stylesheet keeps deciding how the space is spent
+   while the numbers stay shared with the native binding. */
+
+.conversation {
+  /* The thread owns its overflow; that is what "organism" buys over dropping a
+     column of MessageGroups into whatever the page happens to scroll. */
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* A transcript is prose, like the bubbles inside it: the single most common
+     thing a reader does with a conversation is select part of it and copy it. */
+  user-select: text;
+  -webkit-user-select: text;
+  /* The scroller keeps its own scroll chain: reaching the top of a conversation
+     should stop, not start scrolling the page behind it. */
+  overscroll-behavior: contain;
+  /* Content-box height comes from the caller; without a min the flex parent of
+     a short thread would collapse the scroller to nothing. */
+  min-height: 0;
+}
+
+.thread {
+  display: flex;
+  flex-direction: column;
+  /* Wider than the gap inside a run. That difference is the whole grouping
+     signal: two bubbles a hair apart are one utterance, two runs a full step
+     apart are two turns. */
+  gap: var(--conversation-gap);
+  padding: var(--conversation-padding-block) var(--conversation-padding-inline);
+  /* A short conversation sits at the FOOT of the pane rather than floating at
+     its top, which is where a reader's eye goes and where the composer would
+     be. `min-height` only sets a floor, so once the thread outgrows the pane
+     its own height wins and `justify-content` has nothing left to distribute —
+     which is why this does not hit the usual "flex centring clips the
+     overflowing start" trap: that needs a container shorter than its content,
+     and this one never is. */
+  min-height: 100%;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+/* Full width so a run can still align its own contents to whichever edge its
+   authorship earned — the run decides the side, the wrapper only stacks. */
+.run {
+  min-width: 0;
+  transition: opacity var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+/* The acknowledgement axis, and the entire visual budget spent on it.
+
+   Alpha, not a second fill: an in-flight message must be recognisably the same
+   message it is about to become, and a hue change would make the reader learn a
+   second colour to identify the first. It resolves by going away, which is the
+   right shape for a state whose only content is "not yet".
+
+   Deliberately NOT applied to a failed send. Failure is unacknowledged too, but
+   it is the one row in a transcript that asks the reader to act, and quieting it
+   is the exact wrong move — see the `failed` state in the spec. */
+.run[data-provisional] {
+  opacity: var(--conversation-provisional-opacity);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .run {
+    transition: none;
+  }
+}
+
+/* An inset ring rather than an outset one: the scroller's edge is usually flush
+   with a pane, and an outset ring would be clipped by the very overflow this
+   element owns. */
+.conversation:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: -2px;
+}
+
+/* An empty thread is a centred stop, not a column anchored to the bottom edge —
+   there is nothing below it for the anchor to mean anything against. */
+.conversation[data-empty] .thread {
+  justify-content: center;
+}
+
+/* A loading thread reads as an outline waiting to be filled. The bones inside
+   are what the eye should follow, so the thread itself paints nothing and stays
+   inert to assistive tech — announced content that is not content yet is worse
+   than silence in a live region.
+
+   No specificity trick is needed here, unlike PlayerCard: that component is
+   built on Card, whose `.card:not(.glass)[data-elevation]` rule is (0,3,0) and
+   outranks a plain `[data-skeleton]` selector. This thread is a bare scroll box
+   with no surface of its own, so there is nothing to outrank. */
+.conversation[data-skeleton] .run {
+  /* The placeholder must not inherit the acknowledgement axis it has no state
+     for; `delivery: false` already stripped the data, this is the belt. */
+  opacity: 1;
+}

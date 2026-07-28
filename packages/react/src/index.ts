@@ -199,6 +199,7 @@ export {
   type CommandPaletteProps,
   type CommandDescriptor,
 } from './organisms/CommandPalette/CommandPalette.tsx';
+export { ConversationView, type ConversationViewProps } from './organisms/ConversationView/ConversationView.tsx';
 export { Modal, type ModalProps } from './organisms/Modal/Modal.tsx';
 export { Drawer, type DrawerProps, type DrawerSide, type DrawerSize } from './organisms/Drawer/Drawer.tsx';
 export { AlertDialog, type AlertDialogProps, type AlertDialogTone } from './organisms/AlertDialog/AlertDialog.tsx';
