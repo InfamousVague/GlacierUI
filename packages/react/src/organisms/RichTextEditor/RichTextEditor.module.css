@@ -85,18 +85,95 @@
   background: var(--glacier-border);
 }
 
-.editor {
+/* The stack. Both layers are the same box; the textarea is the one in flow, so
+   `resize` and `rows` still size the control, and the highlight is pinned over
+   it. */
+.editorStack {
+  position: relative;
+}
+
+/* Every property that decides where a character lands. The highlight and the
+   textarea must agree on all of it or the two drift apart mid-line — which is
+   why they share one class rather than repeating values that could be edited
+   apart. */
+.editorText {
+  box-sizing: border-box;
   width: 100%;
   padding: var(--glacier-space-3);
   border: 0;
-  background: transparent;
-  color: inherit;
   /* Monospace, because the value IS markdown: the markers should line up and
      read as syntax rather than as stray punctuation in prose. */
   font-family: var(--glacier-font-mono);
   font-size: var(--glacier-font-size-sm);
   line-height: 1.5;
+  letter-spacing: normal;
+  tab-size: 4;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.editor {
+  position: relative;
+  display: block;
+  background: transparent;
+  /* The glyphs come from the layer beneath; the textarea contributes only its
+     caret and selection. `color: transparent` keeps both — a hidden textarea
+     would take the caret with it. */
+  color: transparent;
+  caret-color: var(--glacier-text);
   resize: vertical;
+}
+
+/* Sits under the textarea and takes no input: the textarea above owns every
+   pointer and key event, and this layer only draws. */
+.highlight {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--glacier-text);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* The syntax itself, kept in the document but spoken quietly — the text still
+   reads as markdown while the content takes the styling the markers describe. */
+.run[data-kind='marker'] {
+  color: var(--glacier-text-subtle);
+}
+
+.run[data-marks~='bold'] {
+  font-weight: var(--glacier-font-weight-bold);
+}
+
+.run[data-marks~='italic'] {
+  font-style: italic;
+}
+
+.run[data-marks~='strike'] {
+  text-decoration: line-through;
+}
+
+.run[data-marks~='code'] {
+  color: var(--glacier-accent-text);
+}
+
+.run[data-block='heading']:not([data-kind='marker']) {
+  font-weight: var(--glacier-font-weight-bold);
+}
+
+.run[data-block='quote']:not([data-kind='marker']) {
+  color: var(--glacier-text-muted);
+  font-style: italic;
+}
+
+.run[data-kind='link-text'] {
+  color: var(--glacier-accent-text);
+  text-decoration: underline;
+}
+
+.run[data-kind='link-url'] {
+  color: var(--glacier-text-muted);
 }
 
 .editor:focus {
@@ -119,4 +196,32 @@
 
 .root[data-disabled] {
   opacity: 0.5;
+}
+
+/* Inside a fence. The body is plain-but-quiet so the highlighted parts read as
+   the exceptions, which is what makes them scannable. */
+.run[data-kind='code-block'] {
+  color: var(--glacier-text-muted);
+}
+
+.run[data-kind='code-lang'] {
+  color: var(--glacier-accent-text);
+}
+
+.run[data-kind='code-keyword'] {
+  color: var(--glacier-accent-text);
+  font-weight: var(--glacier-font-weight-medium);
+}
+
+.run[data-kind='code-string'] {
+  color: var(--glacier-success-text);
+}
+
+.run[data-kind='code-number'] {
+  color: var(--glacier-warning-text);
+}
+
+.run[data-kind='code-comment'] {
+  color: var(--glacier-text-subtle);
+  font-style: italic;
 }

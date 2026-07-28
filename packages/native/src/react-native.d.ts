@@ -119,6 +119,8 @@ declare module 'react-native' {
     defaultValue?: string;
     placeholder?: string;
     placeholderTextColor?: string;
+    /** Caret and selection tint — the device-side counterpart to `caretColor`. */
+    selectionColor?: string;
     editable?: boolean;
     multiline?: boolean;
     numberOfLines?: number;

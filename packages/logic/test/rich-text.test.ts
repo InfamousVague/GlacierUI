@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  activeBlock,
+  tokenizeMarkdown,
   activeMarks,
   insertLink,
   markForShortcut,
@@ -192,5 +194,304 @@ describe('markForShortcut', () => {
 
   it('ignores an unmapped chord', () => {
     expect(markForShortcut({ key: 'q', metaKey: true })).toBeNull();
+  });
+});
+
+describe('tokenizeMarkdown', () => {
+  const cover = (text: string) =>
+    tokenizeMarkdown(text)
+      .map((t) => text.slice(t.start, t.end))
+      .join('');
+
+  const kindsOf = (text: string) => tokenizeMarkdown(text).map((t) => [t.kind, text.slice(t.start, t.end)]);
+
+  it('reproduces the source exactly — the invariant both editors rest on', () => {
+    for (const sample of [
+      '',
+      'plain text',
+      '**bold**',
+      'a **b** c',
+      '# Heading\n\n> quote\n- bullet\n1. numbered',
+      '`code` and _italic_ and ~~struck~~',
+      '[label](https://example.com)',
+      'unclosed ** marker',
+      '**bold _and italic_**',
+      'line one\nline two\n',
+      '\n\n\n',
+    ]) {
+      expect(cover(sample)).toBe(sample);
+    }
+  });
+
+  it('never overlaps and never leaves a gap', () => {
+    const text = '# Title\n**bold** and `code`\n> quoted [link](url)';
+    const tokens = tokenizeMarkdown(text);
+    let at = 0;
+    for (const token of tokens) {
+      expect(token.start).toBe(at);
+      expect(token.end).toBeGreaterThan(token.start);
+      at = token.end;
+    }
+    expect(at).toBe(text.length);
+  });
+
+  it('separates the markers from what they wrap', () => {
+    expect(kindsOf('**hi**')).toEqual([
+      ['marker', '**'],
+      ['bold', 'hi'],
+      ['marker', '**'],
+    ]);
+  });
+
+  it('marks a block prefix without styling the line as a marker', () => {
+    const tokens = tokenizeMarkdown('> quoted');
+    expect(tokens[0]).toMatchObject({ kind: 'marker', block: 'quote' });
+    expect(tokens[1]).toMatchObject({ kind: 'text', block: 'quote' });
+  });
+
+  it('recognises every block form the toolbar writes', () => {
+    for (const [source, block] of [
+      ['# h', 'heading'],
+      ['###### h', 'heading'],
+      ['> q', 'quote'],
+      ['- b', 'bullet'],
+      ['* b', 'bullet'],
+      ['1. n', 'number'],
+      ['42. n', 'number'],
+    ] as const) {
+      expect(tokenizeMarkdown(source)[0]).toMatchObject({ kind: 'marker', block });
+    }
+  });
+
+  it('nests marks, so inner text carries both', () => {
+    const tokens = tokenizeMarkdown('**a _b_**');
+    const inner = tokens.find((t) => t.kind === 'italic');
+    expect(inner!.marks).toEqual(['bold', 'italic']);
+  });
+
+  it('treats code as terminal, so its contents are never re-read', () => {
+    const tokens = tokenizeMarkdown('`**not bold**`');
+    expect(tokens.some((t) => t.kind === 'bold')).toBe(false);
+    expect(tokens.find((t) => t.kind === 'code')!.marks).toEqual(['code']);
+  });
+
+  it('leaves an unclosed delimiter as plain text', () => {
+    // The common state while the pair is still being typed — it must not
+    // swallow the rest of the document.
+    expect(tokenizeMarkdown('**hanging').every((t) => t.kind === 'text')).toBe(true);
+  });
+
+  it('does not let a mark span a line break', () => {
+    expect(tokenizeMarkdown('**open\nclose**').some((t) => t.kind === 'bold')).toBe(false);
+  });
+
+  it('ignores an empty pair rather than emitting a zero-width run', () => {
+    expect(tokenizeMarkdown('****').every((t) => t.kind === 'text')).toBe(true);
+  });
+
+  it('reads `**` as bold rather than two italics', () => {
+    expect(tokenizeMarkdown('**b**').some((t) => t.kind === 'bold')).toBe(true);
+    expect(tokenizeMarkdown('**b**').some((t) => t.kind === 'italic')).toBe(false);
+  });
+
+  it('splits a link into its label and its target', () => {
+    expect(kindsOf('[a](b)')).toEqual([
+      ['marker', '['],
+      ['link-text', 'a'],
+      ['marker', ']('],
+      ['link-url', 'b'],
+      ['marker', ')'],
+    ]);
+  });
+
+  it('merges touching runs so a renderer emits one span per stretch', () => {
+    // Every character is plain, so it should be a single token, not eleven.
+    expect(tokenizeMarkdown('plain words')).toHaveLength(1);
+  });
+
+  it('agrees with what the toolbar writes', () => {
+    // Bold applied by the toolbar must be recognised by the highlighter; this
+    // is the drift the shared delimiters exist to prevent.
+    const applied = toggleMark('word', { start: 0, end: 4 }, 'bold');
+    expect(tokenizeMarkdown(applied.text).some((t) => t.kind === 'bold')).toBe(true);
+  });
+});
+
+describe('activeMarks with the caret inside a mark', () => {
+  const at = (text: string, caret: number) => activeMarks(text, { start: caret, end: caret });
+
+  it('reports the mark from anywhere inside it, not just at its edges', () => {
+    const text = '**bold text**';
+    // Dead centre, between "bold" and "text" — the case that used to report
+    // nothing because the delimiters were not immediately adjacent.
+    expect(at(text, 7)).toEqual(['bold']);
+  });
+
+  it('reports it at both boundaries of the content', () => {
+    const text = '**bold**';
+    expect(at(text, 2)).toEqual(['bold']);
+    expect(at(text, 6)).toEqual(['bold']);
+  });
+
+  it('reports nothing outside the mark', () => {
+    const text = 'plain **bold** plain';
+    expect(at(text, 2)).toEqual([]);
+    expect(at(text, 18)).toEqual([]);
+  });
+
+  it('reports both marks where they nest', () => {
+    const text = '**a _b_ c**';
+    expect(at(text, 6)).toEqual(['bold', 'italic']);
+  });
+
+  it('does not report a mark that covers only part of a selection', () => {
+    // Half bold is not a state the button can honestly show as pressed.
+    const text = '**bold** plain';
+    expect(activeMarks(text, { start: 2, end: 13 })).toEqual([]);
+  });
+
+  it('reports a mark that covers the whole selection', () => {
+    const text = '**bold text**';
+    expect(activeMarks(text, { start: 2, end: 11 })).toEqual(['bold']);
+  });
+
+  it('still recognises a selection that encloses its own delimiters', () => {
+    expect(activeMarks('**bold**', { start: 0, end: 8 })).toEqual(['bold']);
+  });
+});
+
+describe('activeBlock', () => {
+  const at = (text: string, caret: number) => activeBlock(text, { start: caret, end: caret });
+
+  it('names the block the caret sits in', () => {
+    expect(at('> quoted', 4)).toBe('quote');
+    expect(at('# heading', 4)).toBe('heading');
+    expect(at('- item', 4)).toBe('bullet');
+    expect(at('1. item', 4)).toBe('number');
+  });
+
+  it('reports none on a plain line', () => {
+    expect(at('plain', 2)).toBeNull();
+  });
+
+  it('reports none when a selection spans two different blocks', () => {
+    // In neither, the same way a partly-bold selection is not bold.
+    expect(activeBlock('> quoted\nplain', { start: 4, end: 12 })).toBeNull();
+  });
+
+  it('reports the block from within its prefix as well as its text', () => {
+    expect(at('> quoted', 1)).toBe('quote');
+  });
+});
+
+describe('toggleBlock on an empty line', () => {
+  const empty = { start: 0, end: 0 };
+
+  it('inserts the marker and its space', () => {
+    expect(toggleBlock('', empty, 'heading').text).toBe('# ');
+    expect(toggleBlock('', empty, 'quote').text).toBe('> ');
+    expect(toggleBlock('', empty, 'bullet').text).toBe('- ');
+    expect(toggleBlock('', empty, 'number').text).toBe('1. ');
+  });
+
+  it('leaves the caret after the marker, ready to type', () => {
+    // Before this, pressing Heading on an empty document did nothing at all —
+    // the moment the button is most likely to be pressed.
+    const result = toggleBlock('', empty, 'heading');
+    expect(result.selection).toEqual({ start: 2, end: 2 });
+    expect(toggleBlock('', empty, 'number').selection).toEqual({ start: 3, end: 3 });
+  });
+
+  it('toggles back off on a second press', () => {
+    const on = toggleBlock('', empty, 'quote');
+    expect(toggleBlock(on.text, on.selection, 'quote').text).toBe('');
+  });
+
+  it('still skips blank lines inside a multi-line selection', () => {
+    // The separator between two paragraphs should not become a quote.
+    expect(toggleBlock('a\n\nb', { start: 0, end: 4 }, 'quote').text).toBe('> a\n\n> b');
+  });
+
+  it('inserts on an empty line among others', () => {
+    const text = 'a\n\nb';
+    // Caret on the blank middle line.
+    expect(toggleBlock(text, { start: 2, end: 2 }, 'quote').text).toBe('a\n> \nb');
+  });
+});
+
+describe('fenced code blocks', () => {
+  const cover = (text: string) =>
+    tokenizeMarkdown(text)
+      .map((t) => text.slice(t.start, t.end))
+      .join('');
+  const kinds = (text: string) => tokenizeMarkdown(text).map((t) => [t.kind, text.slice(t.start, t.end)]);
+
+  it('still reproduces the source exactly', () => {
+    for (const sample of [
+      '```\ncode\n```',
+      '```js\nconst a = 1;\n```',
+      '```\nunclosed',
+      'before\n```\nin\n```\nafter',
+      '~~~\ntilde fence\n~~~',
+      '```\n\n```',
+    ]) {
+      expect(cover(sample)).toBe(sample);
+    }
+  });
+
+  it('marks the fence and names the language', () => {
+    const out = kinds('```ts\nx\n```');
+    expect(out[0]).toEqual(['marker', '```']);
+    expect(out[1]).toEqual(['code-lang', 'ts']);
+    expect(out[out.length - 1]).toEqual(['marker', '```']);
+  });
+
+  it('treats the body as code, not as markdown', () => {
+    // The whole point: `**` inside a fence is not bold.
+    const tokens = tokenizeMarkdown('```\n**not bold**\n```');
+    expect(tokens.some((t) => t.kind === 'bold')).toBe(false);
+  });
+
+  it('does not apply block prefixes inside a fence', () => {
+    const tokens = tokenizeMarkdown('```\n# not a heading\n```');
+    expect(tokens.some((t) => t.block === 'heading')).toBe(false);
+  });
+
+  it('highlights strings, numbers, keywords and comments', () => {
+    const found = (src: string, kind: string) => tokenizeMarkdown(src).filter((t) => t.kind === kind);
+    expect(found('```\nconst a = 1;\n```', 'code-keyword').map((t) => t)).toHaveLength(1);
+    expect(found('```\nx = "hi";\n```', 'code-string')).toHaveLength(1);
+    expect(found('```\nx = 42;\n```', 'code-number')).toHaveLength(1);
+    expect(found('```\n// note\n```', 'code-comment')).toHaveLength(1);
+  });
+
+  it('does not read a digit inside an identifier as a number', () => {
+    const src = '```\nvalue1 = 2\n```';
+    const numbers = tokenizeMarkdown(src).filter((t) => t.kind === 'code-number');
+    expect(numbers).toHaveLength(1);
+    expect(src.slice(numbers[0]!.start, numbers[0]!.end)).toBe('2');
+  });
+
+  it('keeps an escaped quote inside its string', () => {
+    const src = '```\n"a\\"b"\n```';
+    const strings = tokenizeMarkdown(src).filter((t) => t.kind === 'code-string');
+    expect(strings).toHaveLength(1);
+    expect(src.slice(strings[0]!.start, strings[0]!.end)).toBe('"a\\"b"');
+  });
+
+  it('runs an unclosed fence to the end of the document', () => {
+    const tokens = tokenizeMarkdown('```\nstill code\n**not bold**');
+    expect(tokens.some((t) => t.kind === 'bold')).toBe(false);
+  });
+
+  it('closes only on a matching fence character', () => {
+    // A ~~~ line does not close a ``` fence.
+    const tokens = tokenizeMarkdown('```\n~~~\n**still code**\n```');
+    expect(tokens.some((t) => t.kind === 'bold')).toBe(false);
+  });
+
+  it('resumes markdown after the closing fence', () => {
+    const tokens = tokenizeMarkdown('```\ncode\n```\n**bold**');
+    expect(tokens.some((t) => t.kind === 'bold')).toBe(true);
   });
 });

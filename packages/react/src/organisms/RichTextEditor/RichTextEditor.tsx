@@ -1,5 +1,7 @@
 import {
   activeMarks,
+  activeBlock,
+  tokenizeMarkdown,
   markForShortcut,
   toggleBlock,
   toggleMark,
@@ -79,6 +81,17 @@ export function RichTextEditor({
 }: RichTextEditorProps) {
   const t = useT();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const highlightRef = useRef<HTMLDivElement>(null);
+
+  // The layer does not scroll itself — it is offset to follow the textarea, so
+  // a long document stays aligned once the textarea starts scrolling.
+  const syncScroll = () => {
+    const layer = highlightRef.current;
+    const field = textareaRef.current;
+    if (!layer || !field) return;
+    layer.scrollTop = field.scrollTop;
+    layer.scrollLeft = field.scrollLeft;
+  };
   const [value, setValue] = useControlled({ value: valueProp, defaultValue, onChange: onValueChange });
   const [selection, setSelection] = useState<TextSelection>({ start: 0, end: 0 });
 
@@ -104,10 +117,42 @@ export function RichTextEditor({
   const apply = (result: { text: string; selection: TextSelection }) => {
     if (maxLength !== undefined && result.text.length > maxLength) return;
     pending.current = result.selection;
+
+    // Written through the browser's own editing pipeline rather than by setting
+    // state, so the edit joins the native undo stack and Ctrl/Cmd+Z steps back
+    // through toolbar work the same as through typing. Assigning `value` from
+    // React replaces the field's contents outright, which discards that history.
+    //
+    // Only the changed span is rewritten — the common prefix and suffix are left
+    // alone — so undo returns the document a step at a time instead of swapping
+    // the whole thing.
+    const el = textareaRef.current;
+    if (el && typeof document.execCommand === 'function') {
+      const before = el.value;
+      let head = 0;
+      while (head < before.length && head < result.text.length && before[head] === result.text[head]) head++;
+      let tail = 0;
+      while (
+        tail < before.length - head &&
+        tail < result.text.length - head &&
+        before[before.length - 1 - tail] === result.text[result.text.length - 1 - tail]
+      ) {
+        tail++;
+      }
+
+      el.focus();
+      el.setSelectionRange(head, before.length - tail);
+      // Returns false where the command is unsupported; the state write below
+      // is then the fallback, and undo is simply unavailable rather than broken.
+      if (document.execCommand('insertText', false, result.text.slice(head, result.text.length - tail))) return;
+    }
+
     setValue(result.text);
   };
 
   const active = activeMarks(value, selection);
+  const activeBlockForm = activeBlock(value, selection);
+  const tokens = tokenizeMarkdown(value);
 
   const onKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     const mark = markForShortcut(event);
@@ -163,6 +208,9 @@ export function RichTextEditor({
             type="button"
             className={styles.control}
             aria-label={t(kitMessages[`editor${block[0]!.toUpperCase()}${block.slice(1)}` as 'editorHeading'])}
+            // Reads the document as well as writing to it, like the mark
+            // controls: a form the caret already sits in shows as pressed.
+            aria-pressed={activeBlockForm === block}
             disabled={disabled}
             onMouseDown={(event) => {
               event.preventDefault();
@@ -174,13 +222,37 @@ export function RichTextEditor({
         ))}
       </div>
 
+      {/* The highlight and the textarea are one stacked box. The textarea keeps
+          its own caret and selection but paints no glyphs; the layer beneath
+          draws the same string as styled runs. Every metric that affects
+          wrapping is shared through `.editorText`, because a single pixel of
+          difference slides the highlight out from under the caret. */}
+      <div className={styles.editorStack}>
+        <div ref={highlightRef} className={cx(styles.editorText, styles.highlight)} aria-hidden="true">
+          {tokens.map((token, i) => (
+            <span
+              key={i}
+              className={styles.run}
+              data-kind={token.kind}
+              data-marks={token.marks.join(' ') || undefined}
+              data-block={token.block}
+            >
+              {value.slice(token.start, token.end)}
+            </span>
+          ))}
+          {/* A trailing newline leaves no run to give the last line height, so
+              the layer would be shorter than the textarea and stop scrolling
+              with it. */}
+          {'\n'}
+        </div>
+
       <textarea
         ref={textareaRef}
         id={id}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
-        className={styles.editor}
+        className={cx(styles.editorText, styles.editor)}
         value={value}
         rows={rows}
         maxLength={maxLength}
@@ -192,7 +264,9 @@ export function RichTextEditor({
         onKeyUp={readSelection}
         onClick={readSelection}
         onKeyDown={onKeyDown}
+        onScroll={syncScroll}
       />
+      </div>
 
       {maxLength !== undefined && (
         <div className={styles.counter} aria-hidden="true">

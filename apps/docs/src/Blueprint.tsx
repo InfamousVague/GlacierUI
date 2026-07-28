@@ -4467,9 +4467,11 @@ function RichTextEditorBlueprint({ dimensions }: BlueprintProps) {
   const PRESSED = 0;
 
   const btnX = (i: number) => X + 10 + i * (btn + btnGap);
-  // the divider sits between the marks and the blocks
-  const dividerX = btnX(MARKS) - btnGap / 2;
   const blockX = (i: number) => btnX(MARKS + i) + 6;
+  // Centred in the gap it actually divides, measured from its two neighbours.
+  // Derived rather than assumed: the block buttons carry an extra offset, so a
+  // midpoint taken from the nominal grid sat left of the real gap.
+  const dividerX = (btnX(MARKS - 1) + btn + blockX(0)) / 2;
 
   return (
     <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheRichTextEditor)}>

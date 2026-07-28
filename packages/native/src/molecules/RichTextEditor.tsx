@@ -21,10 +21,12 @@
  *   device the toolbar is the whole interface, and it is identical.
  */
 import { useState, type ReactNode } from 'react';
-import { View, Pressable, TextInput } from 'react-native';
+import { View, Pressable, TextInput, Text as RNText } from 'react-native';
 import { richTextEditorSpec } from '@glacier/spec';
 import {
   activeMarks,
+  tokenizeMarkdown,
+  type MarkdownToken,
   toggleBlock,
   toggleMark,
   useControlled,
@@ -83,6 +85,43 @@ const LABELS: Record<string, string> = {
 const LINE_HEIGHT = 21;
 
 /**
+ * How a run is painted, mirroring the web's `.run[data-...]` rules.
+ *
+ * Markers keep their place in the text but are spoken quietly, so the document
+ * still reads as markdown while the content takes the styling it describes.
+ */
+function runStyle(token: MarkdownToken): Record<string, unknown> {
+  if (token.kind === 'marker') return { color: t('text-subtle') };
+
+  // Inside a fence, mirroring the web stylesheet rule for rule.
+  if (token.kind === 'code-block') return { color: t('text-muted') };
+  if (token.kind === 'code-lang') return { color: t('accent-text') };
+  if (token.kind === 'code-keyword') return { color: t('accent-text'), fontWeight: t('font-weight-medium') };
+  if (token.kind === 'code-string') return { color: t('success-text') };
+  if (token.kind === 'code-number') return { color: t('warning-text') };
+  if (token.kind === 'code-comment') return { color: t('text-subtle'), fontStyle: 'italic' };
+
+  const style: Record<string, unknown> = {};
+  if (token.marks.includes('bold')) style.fontWeight = t('font-weight-bold');
+  if (token.marks.includes('italic')) style.fontStyle = 'italic';
+  if (token.marks.includes('strike')) style.textDecorationLine = 'line-through';
+  if (token.marks.includes('code')) style.color = t('accent-text');
+
+  if (token.kind === 'link-text') {
+    style.color = t('accent-text');
+    style.textDecorationLine = 'underline';
+  }
+  if (token.kind === 'link-url') style.color = t('text-muted');
+
+  if (token.block === 'heading') style.fontWeight = t('font-weight-bold');
+  if (token.block === 'quote') {
+    style.color = t('text-muted');
+    style.fontStyle = 'italic';
+  }
+  return style;
+}
+
+/**
  * The Glacier RichTextEditor, rendered with React Native primitives. See the
  * file header for the parity contract.
  */
@@ -103,9 +142,20 @@ export function RichTextEditor({
 
   const radius = t(bare(BOX.radius) ?? 'radius-lg');
   const padding = t(bare(BOX.padding) ?? 'space-3');
+  // Every property that decides where a character lands. Shared by the input
+  // and the layer beneath it rather than repeated, so the two cannot be edited
+  // apart and drift mid-line.
+  const METRICS = {
+    padding,
+    fontFamily: t('font-mono'),
+    fontSize: t('font-size-sm'),
+    lineHeight: LINE_HEIGHT,
+    textAlignVertical: 'top' as const,
+  };
   const border = t(bare(BOX.border) ?? 'hairline');
 
   const active = activeMarks(value, selection);
+  const tokens = tokenizeMarkdown(value);
 
   const apply = (result: { text: string; selection: TextSelection }) => {
     if (maxLength !== undefined && result.text.length > maxLength) return;
@@ -191,6 +241,27 @@ export function RichTextEditor({
         )}
       </View>
 
+      {/* The highlight and the input are one stacked box, as on web. The input
+          keeps its caret and selection but paints no glyphs; the layer beneath
+          draws the same string as styled runs. Every metric that decides where
+          a character lands is shared through METRICS, because a difference of
+          one pixel slides the highlight out from under the caret.
+
+          Not TextInput children, which render styled text on a device but not
+          through react-native-web — the docs would then show a highlight the
+          native pane could not actually be demonstrating. */}
+      <View style={{ position: 'relative' }}>
+        <RNText
+          style={{ ...METRICS, color: t('text'), position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}
+          pointerEvents="none"
+        >
+          {tokens.map((token, i) => (
+            <RNText key={i} style={runStyle(token)}>
+              {value.slice(token.start, token.end)}
+            </RNText>
+          ))}
+        </RNText>
+
       <TextInput
         value={value}
         onChangeText={setValue}
@@ -204,17 +275,20 @@ export function RichTextEditor({
         multiline
         maxLength={maxLength}
         style={{
-          padding,
-          color: t('text'),
-          // Monospace, because the value IS markdown: the markers should read
-          // as syntax rather than as stray punctuation.
-          fontFamily: t('font-mono'),
-          fontSize: t('font-size-sm'),
-          lineHeight: LINE_HEIGHT,
+          ...METRICS,
+          // The glyphs come from the layer beneath; the input contributes only
+          // its caret and selection. Hiding it outright would take the caret
+          // with it.
+          color: 'transparent',
+          // Transparent text takes the caret with it. `caretColor` restores it
+          // under react-native-web; `selectionColor` below is the same job on a
+          // device, where the style property does not exist.
+          caretColor: t('text'),
           minHeight: rows * LINE_HEIGHT,
-          textAlignVertical: 'top',
         }}
+        selectionColor={t('text')}
       />
+      </View>
 
       {maxLength !== undefined && (
         <View
