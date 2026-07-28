@@ -1,6 +1,6 @@
 import { getSpec, seekBarSpec, type Measure, type SizeSpec } from '@glacier/spec';
 import { seekBarGeometry, SEEK_VIEW_WIDTH, SEEK_VIEW_HEIGHT, type SeekBarShape } from '@glacier/logic';
-import { createContext, useContext, useState, type ReactElement } from 'react';
+import { createContext, useContext, useId, useState, type ReactElement } from 'react';
 import { SegmentedControl, Select, Stack, Size, useT } from '@glacier/react';
 import { m } from './i18n.ts';
 
@@ -57,13 +57,15 @@ const C = {
 function HDim({ x1, x2, y, label, above = true }: { x1: number; x2: number; y: number; label: string; above?: boolean }) {
   const mid = (x1 + x2) / 2;
   const A = 6;
+  // Outward on a span too short to hold both heads — see VDim for why.
+  const head = Math.abs(x2 - x1) < A * 2 ? -A : A;
   return (
     <g stroke={C.line} strokeWidth={1.25} fill="none" strokeLinecap="round" strokeLinejoin="round">
       <line x1={x1} y1={y - 4} x2={x1} y2={y + 4} strokeWidth={1} />
       <line x1={x2} y1={y - 4} x2={x2} y2={y + 4} strokeWidth={1} />
       <line x1={x1} y1={y} x2={x2} y2={y} />
-      <polyline points={`${x1 + A},${y - 3.5} ${x1},${y} ${x1 + A},${y + 3.5}`} />
-      <polyline points={`${x2 - A},${y - 3.5} ${x2},${y} ${x2 - A},${y + 3.5}`} />
+      <polyline points={`${x1 + head},${y - 3.5} ${x1},${y} ${x1 + head},${y + 3.5}`} />
+      <polyline points={`${x2 - head},${y - 3.5} ${x2},${y} ${x2 - head},${y + 3.5}`} />
       <text x={mid} y={above ? y - 6 : y + 13} textAnchor="middle" className="bpLabel" stroke="none">
         {label}
       </text>
@@ -94,13 +96,19 @@ function VDim({
   const mid = (y1 + y2) / 2;
   const lx = left ? x - 10 : x + 10;
   const A = 6;
+  // Arrowheads normally point inward, into the span they measure. On a span
+  // shorter than the two heads combined they would pass through each other and
+  // fuse into a solid bowtie — which is what a 7-unit gap between two slider
+  // tracks produced. Flipping them outward is the drafting convention for a
+  // tight dimension, and it keeps the tips on the lines they mark.
+  const head = Math.abs(y2 - y1) < A * 2 ? -A : A;
   return (
     <g stroke={C.line} strokeWidth={1.25} fill="none" strokeLinecap="round" strokeLinejoin="round">
       <line x1={x - 4} y1={y1} x2={x + 4} y2={y1} strokeWidth={1} />
       <line x1={x - 4} y1={y2} x2={x + 4} y2={y2} strokeWidth={1} />
       <line x1={x} y1={y1} x2={x} y2={y2} />
-      <polyline points={`${x - 3.5},${y1 + A} ${x},${y1} ${x + 3.5},${y1 + A}`} />
-      <polyline points={`${x - 3.5},${y2 - A} ${x},${y2} ${x + 3.5},${y2 - A}`} />
+      <polyline points={`${x - 3.5},${y1 + head} ${x},${y1} ${x + 3.5},${y1 + head}`} />
+      <polyline points={`${x - 3.5},${y2 - head} ${x},${y2} ${x + 3.5},${y2 - head}`} />
       {horizontal ? (
         <text x={lx} y={mid} textAnchor={left ? 'end' : 'start'} dominantBaseline="middle" className="bpLabel" stroke="none">
           {label}
@@ -4130,7 +4138,19 @@ function CalendarViewBlueprint({ dimensions }: BlueprintProps) {
       {Array.from({ length: COLS }, (_, col) => (
         <rect key={col} x={cellX(col) + cw / 2 - 8} y={weekdayY} width={16} height={5} rx={2.5} fill={C.line} opacity={0.4} />
       ))}
-      <text x={X - 6} y={weekdayY + 5} textAnchor="end" className="bpLabel" fill={C.faint}>
+      {/* The side labels are set vertically. The grid is 320 units wide in a
+          400 canvas, leaving ~40 either side — nowhere near enough for a
+          horizontal word, so "weekdays" and "day cell" used to run off the
+          left edge and "event" and "+N more" off the right. Rotated, they need
+          only their line height, which the margin does have. */}
+      <text
+        transform={`rotate(-90 ${X - 14} ${weekdayY + 4})`}
+        x={X - 14}
+        y={weekdayY + 4}
+        textAnchor="middle"
+        className="bpLabel"
+        fill={C.faint}
+      >
         {t(m.bpWeekdays)}
       </text>
 
@@ -4192,13 +4212,34 @@ function CalendarViewBlueprint({ dimensions }: BlueprintProps) {
       <text x={cellX(TODAY[1]) + cw / 2} y={cellY(TODAY[0]) - 4} textAnchor="middle" className="bpLabel" fill={C.faint}>
         {t(m.bpToday)}
       </text>
-      <text x={X + W + 6} y={cellY(1) + 20} className="bpLabel" fill={C.faint}>
+      <text
+        transform={`rotate(90 ${X + W + 14} ${cellY(1) + 16})`}
+        x={X + W + 14}
+        y={cellY(1) + 16}
+        textAnchor="middle"
+        className="bpLabel"
+        fill={C.faint}
+      >
         {t(m.bpEventChip)}
       </text>
-      <text x={X + W + 6} y={cellY(2) + 31} className="bpLabel" fill={C.faint}>
+      <text
+        transform={`rotate(90 ${X + W + 14} ${cellY(2) + 16})`}
+        x={X + W + 14}
+        y={cellY(2) + 16}
+        textAnchor="middle"
+        className="bpLabel"
+        fill={C.faint}
+      >
         {t(m.bpOverflowLine)}
       </text>
-      <text x={X - 6} y={cellY(5) + 18} textAnchor="end" className="bpLabel" fill={C.faint}>
+      <text
+        transform={`rotate(-90 ${X - 14} ${cellY(5) + 15})`}
+        x={X - 14}
+        y={cellY(5) + 15}
+        textAnchor="middle"
+        className="bpLabel"
+        fill={C.faint}
+      >
         {t(m.bpDayCell)}
       </text>
 
@@ -4517,6 +4558,7 @@ function RichTextEditorBlueprint({ dimensions }: BlueprintProps) {
 // ColorPicker: the swatch, the three channel tracks each carrying the gradient
 // it traverses, the hex field, and a preset row with one entry ringed.
 function ColorPickerBlueprint({ dimensions }: BlueprintProps) {
+  const uid = useId();
   const t = useT();
   const radius = fmt(dimensions?.radius);
   const gap = fmt(dimensions?.gap);
@@ -4552,8 +4594,19 @@ function ColorPickerBlueprint({ dimensions }: BlueprintProps) {
       {/* the three channel tracks, drawn as graded runs */}
       {[0, 1, 2].map((row) => {
         const y = tracksY + row * trackGap;
+        // The run is built from square steps but the track is a pill, so the
+        // first and last step overhang the rounded caps. Clipping to the same
+        // rounded rect the outline draws is what makes the gradient end where
+        // the track does. The id is scoped to this instance: every blueprint on
+        // the overview shares one document, and a fixed id there would have
+        // every copy clip to whichever rendered first.
+        const clipId = `${uid}-cpTrack${row}`;
         return (
           <g key={row}>
+            <clipPath id={clipId}>
+              <rect x={X} y={y} width={W} height={trackH} rx={trackH / 2} />
+            </clipPath>
+            <g clipPath={`url(#${clipId})`}>
             {Array.from({ length: STEPS }, (_, i) => (
               <rect
                 key={i}
@@ -4566,6 +4619,10 @@ function ColorPickerBlueprint({ dimensions }: BlueprintProps) {
                 opacity={0.15 + (i / (STEPS - 1)) * 0.7}
               />
             ))}
+            </g>
+            {/* Outside the clip: a stroke centred on the edge would lose its
+                outer half to it, leaving the track a hairline thinner than the
+                real control's. */}
             <rect x={X} y={y} width={W} height={trackH} rx={trackH / 2} fill="none" stroke={C.edge} strokeWidth={1} />
             {/* the thumb: a ring, so the colour under it stays visible */}
             <circle
