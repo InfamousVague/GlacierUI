@@ -11,7 +11,7 @@
   position: relative;
   min-width: 12rem;
   max-width: min(24rem, calc(100vw - 2rem));
-  padding: var(--glacier-space-3);
+  padding: var(--glacier-space-2);
   border-radius: var(--glacier-radius-lg);
   color: var(--glacier-text);
   font-family: var(--glacier-font-sans);

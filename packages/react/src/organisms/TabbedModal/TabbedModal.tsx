@@ -1,16 +1,37 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { Size } from '@glacier/spec';
 import { Speed, Ease, transition } from '@glacier/motion';
-import { useId, useRef, type KeyboardEvent, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import { Modal } from '../Modal/Modal.tsx';
 import styles from './TabbedModal.module.css';
 
+const NARROW_QUERY = '(max-width: 40rem)';
+
+function useNarrowLayout() {
+  const [narrow, setNarrow] = useState(() =>
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia(NARROW_QUERY).matches
+      : false,
+  );
+
+  useEffect(() => {
+    if (typeof window.matchMedia !== 'function') return;
+    const query = window.matchMedia(NARROW_QUERY);
+    const update = () => setNarrow(query.matches);
+    update();
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+
+  return narrow;
+}
+
 export interface TabbedModalSection {
   /** Stable identifier for the section, matched against `value`. */
   id: string;
-  /** Nav-rail label. */
+  /** Section navigation label. */
   label: ReactNode;
   /** Optional leading glyph in the nav rail. */
   icon?: ReactNode;
@@ -24,7 +45,7 @@ export interface TabbedModalProps {
   open: boolean;
   /** Called when the user dismisses via Escape, the close button, or the overlay. */
   onClose: () => void;
-  /** The sections listed in the left nav rail; the active one fills the right pane. */
+  /** Sections listed in the responsive tab navigation; the active one fills the content pane. */
   sections: TabbedModalSection[];
   /** Controlled active section id. */
   value?: string;
@@ -40,11 +61,11 @@ export interface TabbedModalProps {
 }
 
 /**
- * A settings-style dialog: a fixed left nav rail of sections and a scrollable
- * right pane showing the active one. It composes the kit's Modal - inheriting
- * its portal, focus trap, scroll lock, and dismiss behaviour - and lays a
- * vertical WAI-ARIA tablist beside a role="tabpanel". Arrow Up/Down move and
- * activate the rail (wrapping, skipping disabled), Home and End jump to the ends.
+ * A settings-style dialog with section tabs and a scrollable active pane. It
+ * composes the kit's Modal, inheriting its portal, focus trap, scroll lock, and
+ * dismiss behaviour. The WAI-ARIA tablist is a vertical rail on wide screens
+ * and a horizontal strip on narrow screens; Up/Down or Left/Right move and
+ * activate tabs respectively, while Home and End jump to the ends.
  */
 export function TabbedModal({
   open,
@@ -59,6 +80,7 @@ export function TabbedModal({
 }: TabbedModalProps) {
   const id = useId();
   const reduce = useReducedMotion();
+  const narrow = useNarrowLayout();
   const tabRefs = useRef(new Map<string, HTMLButtonElement>());
   const fallback = defaultValue ?? sections.find((section) => !section.disabled)?.id ?? '';
   const [selected, setSelected] = useControlled(value, fallback);
@@ -76,12 +98,15 @@ export function TabbedModal({
   function onRailKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (enabled.length === 0) return;
     const pos = enabled.findIndex((section) => section.id === selected);
+    const rtl = getComputedStyle(event.currentTarget).direction === 'rtl';
+    const nextKey = narrow ? (rtl ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown';
+    const previousKey = narrow ? (rtl ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp';
     switch (event.key) {
-      case 'ArrowDown':
+      case nextKey:
         event.preventDefault();
         select(enabled[(pos + 1) % enabled.length]!, true);
         break;
-      case 'ArrowUp':
+      case previousKey:
         event.preventDefault();
         select(enabled[(pos - 1 + enabled.length) % enabled.length]!, true);
         break;
@@ -98,10 +123,10 @@ export function TabbedModal({
 
   return (
     <Modal open={open} onClose={onClose} title={title} footer={footer} size={Size.XLarge}>
-      <div className={cx(styles.layout, className)}>
+      <div className={cx(styles.layout, className)} data-modal-overflow="contained">
         <div
           role="tablist"
-          aria-orientation="vertical"
+          aria-orientation={narrow ? 'horizontal' : 'vertical'}
           aria-label={typeof title === 'string' ? title : undefined}
           className={styles.rail}
           onKeyDown={onRailKeyDown}

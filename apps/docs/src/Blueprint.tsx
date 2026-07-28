@@ -1,4 +1,5 @@
-import { getSpec, type Measure, type SizeSpec } from '@glacier/spec';
+import { getSpec, seekBarSpec, type Measure, type SizeSpec } from '@glacier/spec';
+import { seekBarGeometry, SEEK_VIEW_WIDTH, SEEK_VIEW_HEIGHT, type SeekBarShape } from '@glacier/logic';
 import { createContext, useContext, useState, type ReactElement } from 'react';
 import { SegmentedControl, Select, Stack, Size, useT } from '@glacier/react';
 import { m } from './i18n.ts';
@@ -42,12 +43,12 @@ function BpTitle({ y = 26 }: { y?: number }) {
 }
 
 const C = {
-  grid: 'var(--glacier-blue-5)',
-  line: 'var(--glacier-blue-11)',
-  fill: 'var(--glacier-blue-3)',
-  edge: 'var(--glacier-blue-8)',
-  content: 'var(--glacier-blue-6)',
-  text: 'var(--glacier-blue-11)',
+  grid: 'var(--glacier-accent-border)',
+  line: 'var(--glacier-accent-solid)',
+  fill: 'var(--glacier-accent-soft)',
+  edge: 'var(--glacier-accent-border)',
+  content: 'var(--glacier-accent-solid)',
+  text: 'var(--glacier-accent-text)',
   faint: 'var(--glacier-text-subtle)',
 };
 
@@ -125,7 +126,6 @@ function CircleBlueprint({ size, id }: { size: SizeSpec; id?: string }) {
   return (
     <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSize)}`}>
       <Defs />
-      <rect x={0} y={0} width={380} height={214} fill="url(#bpGrid)" />
       <circle cx={cx} cy={cy} r={r} fill={C.fill} stroke={C.edge} strokeWidth={border ? 2 : 1} strokeDasharray="4 3" />
       {isAvatar ? (
         // Avatar renders initials on the disc, so show sample initials instead of
@@ -171,7 +171,6 @@ function StatusDotBlueprint({ size }: { size: SizeSpec }) {
   return (
     <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSize)}`}>
       <Defs />
-      <rect x={0} y={0} width={380} height={214} fill="url(#bpGrid)" />
       {/* the host element the dot attaches to, drawn as a dotted circle */}
       <circle cx={hostCx} cy={hostCy} r={hostR} fill="none" stroke={C.edge} strokeWidth={1} strokeDasharray="2 4" strokeLinecap="round" />
       <text x={hostCx} y={hostCy} textAnchor="middle" dominantBaseline="central" stroke="none" className="bpLabel bpMuted">{t(m.bpHost)}</text>
@@ -197,7 +196,6 @@ function IconBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheIcon)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       {/* the glyph box (the 24-unit grid) */}
       <Frame x={X} y={Y} w={S} h={S} r={8} />
       {/* grid thirds, faint, to read as the drawing grid */}
@@ -260,7 +258,6 @@ function RingBlueprint({ size }: { size: SizeSpec }) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSize)}`}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the track band: a stroked circle as wide as the ring thickness */}
       <circle cx={cx} cy={cy} r={rMid} fill="none" stroke={C.fill} strokeWidth={bandW} />
@@ -303,7 +300,6 @@ function SliderBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSlider)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the rail */}
       <rect x={TX} y={TY - TH / 2} width={TW} height={TH} rx={TH / 2} fill={C.fill} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
@@ -344,7 +340,6 @@ function CheckboxBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCheckbox)}>
       <Defs />
-      <rect x={0} y={0} width={380} height={214} fill="url(#bpGrid)" />
 
       {/* the checked box: schematic bounds, the filled state, and the checkmark */}
       <rect x={BXc} y={BYc} width={S} height={S} rx={rr} fill={C.content} fillOpacity={0.28} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
@@ -385,7 +380,6 @@ function RadioBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 380 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheRadio)}>
       <Defs />
-      <rect x={0} y={0} width={380} height={214} fill="url(#bpGrid)" />
 
       {/* the ring and, at its center, the selected dot */}
       <circle cx={cx} cy={cy} r={R} fill={C.fill} stroke={C.edge} strokeWidth={1.75} strokeDasharray="5 3" />
@@ -424,7 +418,6 @@ function SwitchBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSwitch)}`}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the pill track, tinted to read as on, with the thumb at the trailing edge */}
       <rect x={TX} y={TY} width={TW} height={TH} rx={TH / 2} fill={C.content} fillOpacity={0.28} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
@@ -471,7 +464,6 @@ function NumberInputBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpNumberInput)}`}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the bordered group */}
       <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={border ? 2 : 1.25} strokeDasharray="5 3" />
@@ -546,7 +538,6 @@ function RadioCardBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 254" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheRadioCard)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={254} fill="url(#bpGrid)" />
 
       {/* the selected card: schematic bounds with an accent tint */}
       <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={2} strokeDasharray="5 3" />
@@ -612,7 +603,6 @@ function SearchFieldBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSearchField)}`}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the field box */}
       <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={border ? 2 : 1.25} strokeDasharray="5 3" />
@@ -681,7 +671,6 @@ function CalloutBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCallout)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the callout block */}
       <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={2} strokeDasharray="5 3" />
@@ -756,7 +745,6 @@ function BannerBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheBanner)}>
       <Defs />
-      <rect x={0} y={0} width={W} height={H} fill="url(#bpGrid)" />
 
       {/* the full-width strip */}
       <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={2} strokeDasharray="5 3" />
@@ -847,7 +835,6 @@ function AnnouncementsBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheAnnouncements)}>
       <Defs />
-      <rect x={0} y={0} width={W} height={H} fill="url(#bpGrid)" />
 
       <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={2} strokeDasharray="5 3" />
 
@@ -907,7 +894,6 @@ function MeterBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheMeter)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
 
       {/* the discrete segments: filled pips fill from the left, the rest are empty track */}
       {Array.from({ length: N }, (_, i) => {
@@ -996,7 +982,6 @@ function SegmentedBarBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSegmentedBar)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the track: the container that clips the slices and paints the empty remainder */}
       <rect x={SX} y={SY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
@@ -1108,7 +1093,6 @@ function BoxBlueprint({ size, dimensions, slots, id }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSize)}`}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the component box */}
       <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={border ? 2 : 1.25} strokeDasharray="5 3" />
@@ -1258,7 +1242,6 @@ function TextareaBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTextarea)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={BX} y={BY} w={BW} h={BH} r={rr} />
       {/* multi-line placeholder text */}
       {[0, 1, 2, 3].map((i) => (
@@ -1299,11 +1282,10 @@ function SkeletonBlueprint({ size, dimensions }: BlueprintProps) {
       <Defs />
       <defs>
         <linearGradient id="bpSkel" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="var(--glacier-blue-8)" stopOpacity={0.8} />
-          <stop offset="1" stopColor="var(--glacier-blue-8)" stopOpacity={0.05} />
+          <stop offset="0" stopColor="var(--glacier-accent-solid)" stopOpacity={0.8} />
+          <stop offset="1" stopColor="var(--glacier-accent-solid)" stopOpacity={0.05} />
         </linearGradient>
       </defs>
-      <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
       {/* one rect + one circle, filled with the static blue-to-transparent shimmer */}
       <rect x={RX} y={RY} width={RW} height={RH} rx={10} fill={g} />
       <circle cx={Ccx} cy={Ccy} r={Cr} fill={g} />
@@ -1337,7 +1319,6 @@ function CodeBlockBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCodeBlock)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={12} />
       {/* header: filename, language, copy */}
       <line x1={X} y1={bodyY} x2={X + W} y2={bodyY} stroke={C.edge} strokeWidth={1} />
@@ -1387,7 +1368,6 @@ function StepsBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 174" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSteps)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={174} fill="url(#bpGrid)" />
       {Array.from({ length: N }, (_, i) => {
         if (i < active) return <circle key={i} cx={cxOf(i)} cy={Y} r={r} fill={C.content} fillOpacity={0.7} />;
         if (i === active) return <circle key={i} cx={cxOf(i)} cy={Y} r={cr} fill={C.content} fillOpacity={0.95} stroke={C.text} strokeWidth={1} />;
@@ -1418,7 +1398,6 @@ function ProgressBarBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 174" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheProgressBar)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={174} fill="url(#bpGrid)" />
       {/* the track */}
       <rect x={X} y={Y} width={W} height={H} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       {/* the fill, sized to the value */}
@@ -1451,7 +1430,6 @@ function DividerBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 164" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheDivider)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={164} fill="url(#bpGrid)" />
       {/* the two hairline rules with the label between them */}
       <line x1={X} y1={Y} x2={leftEnd} y2={Y} stroke={C.line} strokeWidth={1.5} />
       <line x1={rightStart} y1={Y} x2={X + W} y2={Y} stroke={C.line} strokeWidth={1.5} />
@@ -1482,7 +1460,6 @@ function BarBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 164" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfThe)} ${size.name} ${t(m.bpSize)}`}>
       <Defs />
-      <rect x={0} y={0} width={400} height={164} fill="url(#bpGrid)" />
       <rect x={BX} y={BY} width={BW} height={BH} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       {thickness && <VDim x={BX - 22} y1={BY} y2={BY + BH} label={thickness} />}
       <HDim x1={BX} x2={BX + BW} y={BY - 24} label={t(m.bpWidthAuto)} />
@@ -1558,7 +1535,6 @@ function FieldBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheField)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Ln x={X} y={labelY} w={60} op={0.75} />
       <text x={X + 68} y={labelY + 8} fill="var(--glacier-danger-solid)" stroke="none" style={{ fontSize: 12, fontWeight: 700 }}>*</text>
       <Frame x={X} y={ctrlY} w={W} h={ctrlH} r={8} />
@@ -1593,7 +1569,6 @@ function SelectBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 234" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSelect)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={234} fill="url(#bpGrid)" />
       <Frame x={X} y={trigY} w={W} h={trigH} r={9} />
       <Ln x={X + 12} y={trigY + trigH / 2 - 3} w={88} op={0.55} />
       <path d={`M ${X + W - 20} ${trigY + 12} l 5 -5 l 5 5`} fill="none" stroke={C.line} strokeWidth={1.4} />
@@ -1640,7 +1615,6 @@ function ComboboxBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 250" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCombobox)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={250} fill="url(#bpGrid)" />
 
       {/* the editable input: typed query, a text caret, and the indicator chevron */}
       <Frame x={X} y={trigY} w={W} h={trigH} r={9} />
@@ -1723,7 +1697,6 @@ function MultiSelectBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 250" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheMultiSelect)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={250} fill="url(#bpGrid)" />
 
       {/* the control shell: tags, then the editable input caret, then the chevron */}
       <Frame x={X} y={trigY} w={W} h={trigH} r={9} />
@@ -1802,7 +1775,6 @@ function ListBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 282" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheList)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={282} fill="url(#bpGrid)" />
       {row(rows[0]!, true)}
       {row(rows[1]!, false)}
       {row(rows[2]!, false)}
@@ -1843,7 +1815,6 @@ function SegmentedControlBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSegmentedControl)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
       <rect x={SX - pad} y={SY - pad} width={totalW + pad * 2} height={segH + pad * 2} rx={12} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       {/* the thumb under the first segment */}
       <rect x={segX(0)} y={SY} width={segW} height={segH} rx={9} fill={C.content} fillOpacity={0.3} stroke={C.text} strokeWidth={1} />
@@ -1876,7 +1847,6 @@ function TabsBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTabs)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       {/* tablist labels */}
       {Array.from({ length: 3 }, (_, i) => (
         <Ln key={i} x={X + i * (tabW + gap) + 12} y={listY + 8} w={tabW - 24} op={i === 0 ? 0.75 : 0.4} />
@@ -1913,7 +1883,6 @@ function TooltipBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTooltip)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
       {/* the bubble and its pointer as one outline, so the dashes trace around
           the tip the way the popover blueprint does */}
       <path
@@ -1962,7 +1931,6 @@ function DrawerBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheDrawer)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       {/* the screen, with the overlay wash dimming the page behind the sheet */}
       <rect x={SX} y={SY} width={SW} height={SH} rx={10} fill={C.text} fillOpacity={0.06} stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 3" />
       {/* the floating sheet: a gutter off every edge, all corners rounded */}
@@ -2034,7 +2002,6 @@ function CalendarBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 314" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCalendarMonthGrid)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={314} fill="url(#bpGrid)" />
       {/* the panel */}
       <rect x={GX - 16} y={36} width={GRID_W + 32} height={frameH - 28} rx={12} fill={C.fill} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       {/* caption and nav chevrons */}
@@ -2072,7 +2039,7 @@ function CalendarBlueprint({ dimensions }: BlueprintProps) {
               textAnchor="middle"
               className="bpLabel"
               fontSize={10}
-              style={selected ? { fill: 'var(--glacier-blue-2)' } : undefined}
+              style={selected ? { fill: 'var(--glacier-accent-contrast)' } : undefined}
               opacity={selected ? 1 : cell.outside ? 0.28 : 0.75}
               stroke="none"
             >
@@ -2107,7 +2074,6 @@ function DatePickerBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 254" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheDatePicker)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={254} fill="url(#bpGrid)" />
       {/* trigger: calendar glyph, value line, chevron */}
       <rect x={TX} y={TY} width={TW} height={TH} rx={10} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       <rect x={TX + 10} y={TY + 9} width={16} height={16} rx={3} fill="none" stroke={C.line} strokeWidth={1.1} />
@@ -2162,7 +2128,6 @@ function ToastBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheToast)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={X} y={Y} width={W} height={H} rx={rr} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       <circle cx={iconX} cy={cyc} r={9} fill={C.content} fillOpacity={0.4} stroke={C.line} strokeWidth={1} />
       <Ln x={msgX} y={cyc - 3} w={110} h={6} op={0.5} />
@@ -2196,7 +2161,6 @@ function ScrollAreaBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheScrollArea)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={10} />
       {/* content lines */}
       {Array.from({ length: 6 }, (_, i) => (
@@ -2207,12 +2171,12 @@ function ScrollAreaBlueprint({ size, dimensions }: BlueprintProps) {
       <rect x={X + 1} y={Y + H - 19} width={W - 2} height={18} fill="url(#bpFadeBot)" />
       <defs>
         <linearGradient id="bpFadeTop" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="var(--glacier-blue-3)" stopOpacity={0.95} />
-          <stop offset="1" stopColor="var(--glacier-blue-3)" stopOpacity={0} />
+          <stop offset="0" stopColor="var(--glacier-accent-soft)" stopOpacity={0.95} />
+          <stop offset="1" stopColor="var(--glacier-accent-soft)" stopOpacity={0} />
         </linearGradient>
         <linearGradient id="bpFadeBot" x1="0" y1="1" x2="0" y2="0">
-          <stop offset="0" stopColor="var(--glacier-blue-3)" stopOpacity={0.95} />
-          <stop offset="1" stopColor="var(--glacier-blue-3)" stopOpacity={0} />
+          <stop offset="0" stopColor="var(--glacier-accent-soft)" stopOpacity={0.95} />
+          <stop offset="1" stopColor="var(--glacier-accent-soft)" stopOpacity={0} />
         </linearGradient>
       </defs>
       {/* scrollbar */}
@@ -2241,7 +2205,6 @@ function CarouselBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCarousel)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
       {/* items */}
       {Array.from({ length: 3 }, (_, i) => (
         <rect key={i} x={X + i * (itemW + g)} y={Y} width={itemW} height={H} rx={8} fill={C.content} fillOpacity={0.24} stroke={C.edge} strokeWidth={1.25} strokeDasharray="4 3" />
@@ -2281,7 +2244,6 @@ function HeatmapBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 214" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheHeatmap)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={214} fill="url(#bpGrid)" />
       {Array.from({ length: cols }, (_, c) =>
         Array.from({ length: rowsN }, (_, r) => {
           const op = levels[(c + r) % levels.length] ?? 0.3;
@@ -2314,7 +2276,6 @@ function SpotlightBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSpotlight)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       {/* backdrop */}
       <rect x={40} y={38} width={320} height={140} rx={10} fill={C.text} fillOpacity={0.08} stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 3" />
       {/* the cutout ring on the target */}
@@ -2367,7 +2328,6 @@ function FieldsetBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 248" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheFieldset)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={248} fill="url(#bpGrid)" />
       {/* the bordered group; the legend chip sits on the border line */}
       <Frame x={X} y={Y} w={W} h={H} r={10} />
       <rect x={X + 14} y={Y - 9} width={62} height={18} rx={5} fill={C.fill} stroke={C.text} strokeWidth={1} />
@@ -2409,7 +2369,6 @@ function FormSectionBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 236" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheFormSection)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={236} fill="url(#bpGrid)" />
       {/* the stacking divider above the section */}
       <line x1={X} y1={divY} x2={X + W} y2={divY} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       {/* title row with actions at the end */}
@@ -2467,7 +2426,6 @@ function SidebarBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 254" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSidebar)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={254} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={12} />
       {/* pinned header with its hairline */}
       <Ln x={rowX} y={Y + 12} w={64} h={7} op={0.7} />
@@ -2509,7 +2467,6 @@ function ToolbarBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 200" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheToolbar)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={200} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={11} />
       {/* start: an icon control and a title */}
       <rect x={X + 10} y={Y + H / 2 - 9} width={18} height={18} rx={5} fill="none" stroke={C.line} strokeWidth={1.25} strokeDasharray="2 2" />
@@ -2558,7 +2515,6 @@ function NavBarBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 196" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheNavBar)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={196} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={12} />
       {item(0, true)}
       {item(1, false)}
@@ -2604,7 +2560,6 @@ function AppShellBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 258" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheAppShell)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={258} fill="url(#bpGrid)" />
       {/* the app frame */}
       <Frame x={X} y={Y} w={W} h={H} r={12} />
       {/* sidebar region with a few nav rows */}
@@ -2661,7 +2616,6 @@ function AppShellMobileBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 258" className="bpSvg" role="img" aria-label={`${t(m.bpBlueprintOfTheAppShell)}: ${t(m.shellMobile)}`}>
       <Defs />
-      <rect x={0} y={0} width={400} height={258} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={12} />
       {/* Floating mobile header with the sidebar toggle. */}
       <rect x={panelX} y={headerY} width={panelW} height={headerH} rx={8} fill={C.content} fillOpacity={0.28} stroke={C.text} strokeWidth={1} />
@@ -2712,7 +2666,6 @@ function ModalBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheModal)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={OX} y={OY} width={OW} height={OH} rx={10} fill={C.text} fillOpacity={0.06} stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 3" />
       <Frame x={PX} y={PY} w={PW} h={PH} r={14} />
       <g stroke={C.line} strokeWidth={1.3}>
@@ -2767,7 +2720,6 @@ function AlertDialogBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 234" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheAlertDialog)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={234} fill="url(#bpGrid)" />
       <rect x={OX} y={OY} width={OW} height={OH} rx={10} fill={C.text} fillOpacity={0.06} stroke={C.edge} strokeWidth={1.25} strokeDasharray="3 3" />
       <Frame x={PX} y={PY} w={PW} h={PH} r={14} />
 
@@ -2813,7 +2765,6 @@ function PopoverBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfThePopover)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={cx - trigW / 2} y={trigY} width={trigW} height={trigH} rx={6} fill={C.content} fillOpacity={0.22} stroke={C.edge} strokeWidth={1.25} />
       <Ln x={cx - 26} y={trigY + trigH / 2 - 3} w={52} h={5} op={0.5} />
       <path
@@ -2855,7 +2806,6 @@ function MenuBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheMenu)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={X} y={trigY} width={W} height={trigH} rx={6} fill={C.content} fillOpacity={0.22} stroke={C.edge} strokeWidth={1.25} />
       <Ln x={X + 12} y={trigY + trigH / 2 - 3} w={70} h={5} op={0.5} />
       <Frame x={X} y={menuY} w={W} h={menuH} r={11} />
@@ -2898,7 +2848,6 @@ function FloatingPanelBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheFloatingPanel)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={11} />
       {/* handle bar */}
       <path d={`M ${X + 1} ${Y + handleH} L ${X + 1} ${Y + 11} A 10 10 0 0 1 ${X + 11} ${Y + 1} L ${X + W - 11} ${Y + 1} A 10 10 0 0 1 ${X + W - 1} ${Y + 11} L ${X + W - 1} ${Y + handleH} Z`} fill={C.content} fillOpacity={0.18} stroke="none" />
@@ -2940,7 +2889,6 @@ function TabbedPanelBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTabbedPanel)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={14} />
       {/* header row: tabs + actions */}
       {[0, 1, 2].map((i) => (
@@ -2983,7 +2931,6 @@ function TabbedModalBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTabbedModal)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={16} />
       {/* rail */}
       <line x1={X + railW} y1={Y + 8} x2={X + railW} y2={Y + H - 8} stroke={C.edge} strokeWidth={1} />
@@ -3022,7 +2969,6 @@ function TabStripBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 204" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTabStrip)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={204} fill="url(#bpGrid)" />
       {[0, 1, 2, 3].map((i) => {
         const tx = X + i * (tabW + g);
         const active = i === 0;
@@ -3064,7 +3010,6 @@ function ResizableSplitPaneBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheResizableSplitPane)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
       {/* start pane */}
       <rect x={X} y={Y} width={divX - X - 6} height={H} rx={10} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       {/* end pane */}
@@ -3082,13 +3027,27 @@ function ResizableSplitPaneBlueprint({ size, dimensions }: BlueprintProps) {
   );
 }
 
+/**
+ * The shared defs plus the dot grid every blueprint sits on.
+ *
+ * The grid is drawn here, not per-figure, and reaches far outside any viewBox
+ * on purpose. A figure taller than the usual 400x224 letterboxes when the
+ * gallery fits it to a wider tile, and a grid sized to the viewBox would stop
+ * at the drawing's edge and leave those bands bare. The SVG viewport clips the
+ * overspill, so the paper always reaches the frame. The pattern is anchored to
+ * the user-space origin rather than to this rect, so oversizing it does not
+ * shift a single dot.
+ */
 function Defs() {
   return (
-    <defs>
-      <pattern id="bpGrid" width="16" height="16" patternUnits="userSpaceOnUse">
-        <circle cx={1} cy={1} r={0.75} fill={C.grid} />
-      </pattern>
-    </defs>
+    <>
+      <defs>
+        <pattern id="bpGrid" width="16" height="16" patternUnits="userSpaceOnUse">
+          <circle cx={1} cy={1} r={0.75} fill={C.grid} />
+        </pattern>
+      </defs>
+      <rect x={-800} y={-800} width={2000} height={2000} fill="url(#bpGrid)" />
+    </>
   );
 }
 
@@ -3110,7 +3069,6 @@ function StatTileBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheStatTile)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <Frame x={X} y={Y} w={W} h={H} r={14} />
       <rect x={iconX} y={iconY} width={iconS} height={iconS} rx={9} fill={C.content} fillOpacity={0.28} stroke={C.text} strokeWidth={1} strokeDasharray="3 2" />
       <g transform={`translate(${iconX + iconS / 2 - 9} ${iconY + iconS / 2 - 9}) scale(${18 / 24})`} fill={C.line} stroke="none">
@@ -3155,7 +3113,6 @@ function DeviceFrameBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 250" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheDeviceFrame)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={250} fill="url(#bpGrid)" />
       <rect x={px} y={py} width={pw} height={ph} rx={18} fill={C.fill} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       <path
         d={`M ${sx} ${sy + screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx + screenCorner} ${sy} H ${notchX} V ${notchY + notchH - 2} a 2 2 0 0 1 2 2 H ${notchX + notchW - 2} a 2 2 0 0 1 2 -2 V ${notchY} H ${sx + sw - screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx + sw} ${sy + screenCorner} V ${sy + sh - screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx + sw - screenCorner} ${sy + sh} H ${sx + screenCorner} A ${screenCorner} ${screenCorner} 0 0 1 ${sx} ${sy + sh - screenCorner} Z`}
@@ -3196,7 +3153,6 @@ function FilterChipBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheFilterChip)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={CX} y={CY} width={CW} height={CH} rx={CH / 2} fill="var(--glacier-accent-soft)" stroke="var(--glacier-accent-border)" strokeWidth={1.5} />
       <g transform={`translate(${CX + 20} ${CY + CH / 2 - 8}) scale(${16 / 24})`} fill={C.line} stroke="none">
         <path d={PLACEHOLDER_ICON} />
@@ -3227,7 +3183,6 @@ function ImageBlueprint({ size }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheImage)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={X} y={Y} width={W} height={H} rx={12} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
       <circle cx={X + 34} cy={Y + 38} r={11} fill="none" stroke={C.line} strokeWidth={2} />
       <path
@@ -3253,7 +3208,6 @@ function BreadcrumbsBlueprint({ size }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheBreadcrumbs)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={60} y={78} width={304} height={56} rx={12} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       <text x={94} y={110} className="bpLabel" fill={C.text}>{t(m.bpHome)}</text>
       <text x={164} y={110} className="bpLabel" fill={C.text}>/</text>
@@ -3272,7 +3226,6 @@ function PaginationBlueprint({ size }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfThePagination)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={70} y={88} width={72} height={34} rx={17} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       <rect x={156} y={88} width={34} height={34} rx={17} fill={C.content} fillOpacity={0.32} stroke={C.edge} strokeWidth={1.25} />
       <rect x={204} y={88} width={34} height={34} rx={17} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
@@ -3295,7 +3248,6 @@ function AccordionBlueprint({ size }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheAccordion)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={72} y={56} width={256} height={42} rx={12} fill={C.content} fillOpacity={0.16} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       <rect x={72} y={108} width={256} height={72} rx={12} fill={C.content} fillOpacity={0.1} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       <text x={102} y={82} className="bpLabel" fill={C.text}>{t(m.bpSectionOne)}</text>
@@ -3312,7 +3264,6 @@ function TableBlueprint({ size }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTable)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={56} y={54} width={288} height={112} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       <line x1={56} y1={90} x2={344} y2={90} stroke={C.line} strokeWidth={1.25} />
       <line x1={56} y1={122} x2={344} y2={122} stroke={C.line} strokeWidth={1.25} />
@@ -3337,7 +3288,6 @@ function DataGridBlueprint(_: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheDataGrid)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <rect x={40} y={54} width={320} height={112} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       {/* selection column divider and header/row separators */}
       <line x1={80} y1={54} x2={80} y2={166} stroke={C.line} strokeWidth={1.25} />
@@ -3372,7 +3322,6 @@ function PageHeaderBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 220" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfThePageHeader)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={220} fill="url(#bpGrid)" />
       <rect x={28} y={44} width={344} height={140} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       {/* padding-block from the region edge down to the first content */}
       <VDim x={38} y1={44} y2={58} label={padBlock ? `${t(m.bpPad)}: ${padBlock}` : t(m.bpPaddingBlock)} left={false} horizontal />
@@ -3406,7 +3355,6 @@ function SectionBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSection)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <line x1={36} y1={44} x2={364} y2={44} stroke={C.line} strokeWidth={1.25} strokeDasharray="5 3" />
       <text x={370} y={40} textAnchor="end" className="bpLabel" fill={C.faint}>{t(m.bpDivider)}</text>
       {/* heading row */}
@@ -3433,7 +3381,6 @@ function CardGroupBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 226" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCardGroup)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={226} fill="url(#bpGrid)" />
       {rows.map((y) =>
         cols.map((x) => (
           <g key={`${x}-${y}`}>
@@ -3463,7 +3410,6 @@ function TimelineBlueprint(_: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTimeline)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
       {/* connector segments stop above the last marker */}
       <line x1={56} y1={72} x2={56} y2={110} stroke={C.line} strokeWidth={1.25} />
       <line x1={56} y1={126} x2={56} y2={164} stroke={C.line} strokeWidth={1.25} />
@@ -3506,7 +3452,6 @@ function WizardBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheWizard)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
       <rect x={28} y={40} width={344} height={156} rx={10} fill={C.content} fillOpacity={0.12} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
       {/* connected progress markers */}
       <line x1={69} y1={62} x2={107} y2={62} stroke={C.line} strokeWidth={1.25} />
@@ -3551,7 +3496,6 @@ function RatingBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheRating)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       <clipPath id="bpRatingHalf">
         <rect x={0} y={0} width={halfX} height={210} />
       </clipPath>
@@ -3605,7 +3549,6 @@ function OtpFieldBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheOtpField)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
       {Array.from({ length: N }, (_, i) => {
         const x = SX + i * (cw + g);
         const active = i === DIGITS.length;
@@ -3678,7 +3621,6 @@ function SparklineBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSparkline)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={224} fill="url(#bpGrid)" />
 
       {/* the box: fluid width, fixed height */}
       <rect x={BX} y={BY} width={BW} height={BH} fill={C.fill} fillOpacity={0.5} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
@@ -3724,7 +3666,6 @@ function TimelineScrubberBlueprint({ size, dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTimelineScrubber)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
 
       {/* the track over the recorded window */}
       <rect x={TX} y={TY} width={TW} height={TH} rx={8} fill={C.fill} fillOpacity={0.4} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
@@ -3776,7 +3717,6 @@ function TimeSeriesChartBlueprint({ dimensions }: BlueprintProps) {
   return (
     <svg viewBox="0 0 400 230" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheTimeSeriesChart)}>
       <Defs />
-      <rect x={0} y={0} width={400} height={230} fill="url(#bpGrid)" />
 
       {/* readout (left) and legend (right) rows above the plot */}
       <circle cx={PXx + 4} cy={44} r={3.5} fill={C.line} />
@@ -3816,12 +3756,896 @@ function TimeSeriesChartBlueprint({ dimensions }: BlueprintProps) {
   );
 }
 
+
+/**
+ * SeekBar blueprint: the four parts the spec names — the track, the played run
+ * behind the playhead, the run still ahead, and the thumb. The wave is drawn
+ * from the same geometry the component uses, so the picture is the component
+ * rather than an impression of it.
+ */
+function SeekBarBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
+  const strokeW = fmt(dimensions?.strokeWidth);
+  const barStroke = fmt(dimensions?.barStrokeWidth);
+  const thumbW = fmt(dimensions?.thumbWidth);
+  const height = fmt(size.height) ?? fmt(dimensions?.height);
+
+  // schematic geometry (not to scale; the labels carry the real values)
+  const TX = 72;
+  const TW = 256;
+  const TY = 104;
+  const TH = 34; // the bar's box, tall enough for the wave to deflect inside
+  const cut = TX + TW * 0.45; // the playhead
+
+  // The shape a bare <SeekBar /> renders, read from the spec rather than named
+  // here, so the diagram cannot fall out of step with the component's default
+  // the way a hardcoded shape would. The curve itself comes from the same
+  // geometry the component draws, mapped into this schematic.
+  const defaultShape = (seekBarSpec.defaults?.shape as SeekBarShape | undefined) ?? 'swell';
+  const geo = seekBarGeometry({ shape: defaultShape, progress: 0.45 });
+  const mapPath = (d: string): string =>
+    d.replace(/(-?[\d.]+) (-?[\d.]+)/g, (_m, x: string, y: string) =>
+      `${(TX + (Number(x) / SEEK_VIEW_WIDTH) * TW).toFixed(2)} ${(TY + (Number(y) / SEEK_VIEW_HEIGHT - 0.5) * TH).toFixed(2)}`,
+    );
+
+  return (
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSeekBar)}>
+      <Defs />
+
+      {/* the track: the full duration, and the whole of it takes the pointer */}
+      <rect
+        x={TX}
+        y={TY - TH / 2}
+        width={TW}
+        height={TH}
+        fill={C.fill}
+        stroke={C.edge}
+        strokeWidth={1.25}
+        strokeDasharray="5 3"
+      />
+
+      {/* the run still ahead, then the played run over it in the accent */}
+      <path d={mapPath(geo.aheadPath)} fill="none" stroke={C.edge} strokeWidth={2} strokeLinecap="round" />
+      <path d={mapPath(geo.playedPath)} fill="none" stroke={C.content} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+
+      {/* the thumb, riding the boundary between them */}
+      <rect x={cut - 3} y={TY - TH * 0.3} width={6} height={TH * 0.6} rx={3} fill={C.line} />
+
+      {/* callouts for the two runs and the playhead */}
+      <text x={TX + 6} y={TY - TH / 2 - 8} className="bpLabel" fill={C.faint}>{t(m.bpPlayed)}</text>
+      <text x={cut + 10} y={TY - TH / 2 - 8} className="bpLabel" fill={C.faint}>{t(m.bpAhead)}</text>
+
+      {/* the bar's width and height */}
+      <HDim x1={TX} x2={TX + TW} y={TY - TH / 2 - 26} label={t(m.bpWidthAuto)} />
+      {height && <VDim x={TX - 34} y1={TY - TH / 2} y2={TY + TH / 2} label={height} />}
+      {thumbW && <HDim x1={cut - 3} x2={cut + 3} y={TY + TH / 2 + 20} label={thumbW} above={false} />}
+
+      <BpTitle />
+      <Foot
+        y={204}
+        parts={[
+          strokeW && `${t(m.bpStroke)}: ${strokeW}`,
+          barStroke && `${t(m.bpBars)}: ${barStroke}`,
+        ]}
+      />
+    </svg>
+  );
+}
+
+
+/**
+ * PlayerCard blueprint: the card as it actually assembles — artwork beside the
+ * heading lines, the seek bar with its clock under them, and the transport row
+ * with its one solid control. The bar is drawn from the same geometry the
+ * component uses, so the diagram cannot drift from the thing it documents.
+ */
+function PlayerCardBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const gap = fmt(dimensions?.gap);
+  const transportGap = fmt(dimensions?.transportGap);
+  const radius = fmt(dimensions?.radius);
+
+  // A taller canvas than the usual 224: this card stacks four rows plus their
+  // callouts, and at the standard height the transport collided with the card
+  // edge and the footer. The frame scales to the viewBox, so height is free.
+  const H = 320;
+
+  // schematic geometry (not to scale; the labels carry the real values)
+  const CX = 62;
+  const CW = 276;
+  const CY = 52;
+  const CH = 214;
+  const PAD = 18;
+  const innerX = CX + PAD;
+  const innerW = CW - PAD * 2;
+
+  const artSize = 44;
+  const artY = CY + PAD + 10; // room for the heading callout above it
+  const textX = innerX + artSize + 12;
+
+  const barY = artY + artSize + 34;
+  const barH = 16;
+  const clockY = barY + barH + 16;
+  const transportY = clockY + 34;
+
+  // the real seek geometry, mapped into the schematic's bar box
+  const geo = seekBarGeometry({ shape: 'swell', progress: 0.45 });
+  const mapPath = (d: string): string =>
+    d.replace(/(-?[\d.]+) (-?[\d.]+)/g, (_m, x: string, y: string) =>
+      `${(innerX + (Number(x) / SEEK_VIEW_WIDTH) * innerW).toFixed(2)} ${(barY + (Number(y) / SEEK_VIEW_HEIGHT) * barH).toFixed(2)}`,
+    );
+
+  const centre = CX + CW / 2;
+
+  return (
+    <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfThePlayerCard)}>
+      <Defs />
+
+      {/* the card */}
+      <rect x={CX} y={CY} width={CW} height={CH} rx={12} fill={C.fill} stroke={C.edge} strokeWidth={1.25} strokeDasharray="5 3" />
+
+      {/* artwork, top-aligned with the heading beside it */}
+      <rect x={innerX} y={artY} width={artSize} height={artSize} rx={5} fill={C.content} opacity={0.45} />
+      <rect x={textX} y={artY + 4} width={118} height={8} rx={4} fill={C.content} />
+      <rect x={textX} y={artY + 19} width={88} height={7} rx={3.5} fill={C.line} opacity={0.6} />
+      <rect x={textX} y={artY + 32} width={66} height={6} rx={3} fill={C.line} opacity={0.4} />
+      <text x={textX} y={artY - 10} className="bpLabel" fill={C.faint}>{t(m.bpTitleLines)}</text>
+
+      {/* the seek bar, full width under the header */}
+      <text x={innerX} y={barY - 12} className="bpLabel" fill={C.faint}>{t(m.bpSeekBar)}</text>
+      <path d={mapPath(geo.aheadPath)} fill="none" stroke={C.edge} strokeWidth={2} strokeLinecap="round" />
+      <path d={mapPath(geo.playedPath)} fill="none" stroke={C.content} strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
+
+      {/* the clock: elapsed on the leading edge, total on the trailing one */}
+      <rect x={innerX} y={clockY} width={28} height={7} rx={3.5} fill={C.line} opacity={0.5} />
+      <rect x={innerX + innerW - 28} y={clockY} width={28} height={7} rx={3.5} fill={C.line} opacity={0.35} />
+
+      {/* the transport: quiet controls either side of one solid play button */}
+      {[-2, -1, 1, 2].map((i) => (
+        <circle key={i} cx={centre + i * 28} cy={transportY} r={9} fill="none" stroke={C.line} strokeWidth={1.5} strokeDasharray="4 2.5" />
+      ))}
+      <circle cx={centre} cy={transportY} r={14} fill={C.content} />
+      {/* the play glyph, knocked out of the disc: without it the primary
+          control is just a larger dot among the others */}
+      <path
+        d={`M ${centre - 4} ${transportY - 6} L ${centre + 6.5} ${transportY} L ${centre - 4} ${transportY + 6} Z`}
+        fill={C.fill}
+      />
+
+      {/* dimensions: the row gap on the outside, the control gap between two
+          adjacent buttons */}
+      {gap && <VDim x={CX - 28} y1={artY + artSize} y2={barY - 20} label={gap} />}
+      {transportGap && (
+        <HDim x1={centre + 14} x2={centre + 19} y={transportY + 24} label={transportGap} above={false} />
+      )}
+
+      {/* the control row named below the card, clear of its edge */}
+      <text x={centre} y={CY + CH + 22} textAnchor="middle" className="bpLabel" fill={C.faint}>
+        {t(m.bpTransport)}
+      </text>
+
+      <BpTitle />
+      <Foot y={H - 12} parts={[radius && `${t(m.bpRadius)}: ${radius}`]} />
+    </svg>
+  );
+}
+
+// CommandPalette: the scrim with the panel pinned near its top, the query field
+// across the panel's width, and a grouped option list under it with the cursor
+// on one row. Drawn as the palette actually sits — top-anchored, not centred —
+// because that placement is the point: the field lands in the same spot however
+// many commands match.
+function CommandPaletteBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const radius = fmt(dimensions?.radius);
+  const gap = fmt(dimensions?.gap);
+  const padding = fmt(dimensions?.padding);
+
+  // A taller canvas than the usual 224: the panel needs a query field plus two
+  // labelled groups under it before the list reads as a list.
+  const H = 300;
+
+  const PX = 74;
+  const PW = 252;
+  const PY = 44;
+  const PH = 224;
+  const PAD = 12;
+  const innerX = PX + PAD;
+  const innerW = PW - PAD * 2;
+
+  const fieldY = PY + PAD;
+  const fieldH = 26;
+
+  // rows, in flat order: a heading, three options, a heading, two options
+  const rowH = 18;
+  const rowGap = 3;
+  const headH = 12;
+  const listY = fieldY + fieldH + 10;
+
+  // the cursor sits on the first option, the one Enter would run
+  const CURSOR = 0;
+
+  type Row = { kind: 'head' } | { kind: 'option'; index: number; shortcut?: boolean };
+  const rows: Row[] = [
+    { kind: 'head' },
+    { kind: 'option', index: 0, shortcut: true },
+    { kind: 'option', index: 1 },
+    { kind: 'head' },
+    { kind: 'option', index: 2 },
+    { kind: 'option', index: 3, shortcut: true },
+  ];
+
+  let cursorY = listY;
+  let y = listY;
+  const drawn = rows.map((row) => {
+    const at = y;
+    if (row.kind === 'option' && row.index === CURSOR) cursorY = at;
+    y += (row.kind === 'head' ? headH : rowH) + rowGap;
+    return { row, y: at };
+  });
+
+  return (
+    <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCommandPalette)}>
+      <Defs />
+
+      {/* the scrim: the whole canvas is the overlay, so it is named rather than
+          drawn — a fill here would bury the grid the figure is measured on */}
+      <text x={16} y={H - 26} className="bpLabel" fill={C.faint}>
+        {t(m.bpScrim)}
+      </text>
+
+      {/* the panel, pinned near the top rather than centred */}
+      <rect
+        x={PX}
+        y={PY}
+        width={PW}
+        height={PH}
+        rx={12}
+        fill="none"
+        stroke={C.edge}
+        strokeWidth={1.25}
+        strokeDasharray="4 3"
+      />
+
+      {/* the query field: full panel width, and the only thing that ever holds
+          focus */}
+      <rect x={innerX} y={fieldY} width={innerW} height={fieldH} rx={7} fill="none" stroke={C.line} strokeWidth={1.5} />
+      <circle cx={innerX + 13} cy={fieldY + fieldH / 2} r={4} fill="none" stroke={C.line} strokeWidth={1.5} />
+      <line
+        x1={innerX + 16}
+        y1={fieldY + fieldH / 2 + 3}
+        x2={innerX + 19}
+        y2={fieldY + fieldH / 2 + 6}
+        stroke={C.line}
+        strokeWidth={1.5}
+        strokeLinecap="round"
+      />
+      <text x={innerX + 26} y={fieldY + fieldH / 2 + 3.5} className="bpLabel" fill={C.faint}>
+        {t(m.bpQuery)}
+      </text>
+
+      {/* the list */}
+      {drawn.map(({ row, y: at }, i) =>
+        row.kind === 'head' ? (
+          <text key={i} x={innerX + 8} y={at + headH - 2} className="bpLabel bpMuted">
+            {t(m.bpGroupHeading)}
+          </text>
+        ) : (
+          <g key={i}>
+            {/* only the cursor row is filled; every other row is bare, so there
+                is exactly one row Enter and a click agree on */}
+            {row.index === CURSOR && (
+              <rect x={innerX} y={at} width={innerW} height={rowH} rx={5} fill={C.fill} stroke={C.line} strokeWidth={1} />
+            )}
+            <rect x={innerX + 8} y={at + rowH / 2 - 3} width={innerW * 0.46} height={6} rx={3} fill={C.content} opacity={row.index === CURSOR ? 1 : 0.45} />
+            {row.shortcut && (
+              <rect
+                x={innerX + innerW - 30}
+                y={at + rowH / 2 - 6}
+                width={22}
+                height={12}
+                rx={3}
+                fill="none"
+                stroke={C.line}
+                strokeWidth={1}
+              />
+            )}
+          </g>
+        ),
+      )}
+
+      {/* the cursor named on the leading edge, clear of the panel */}
+      <text x={PX - 8} y={cursorY + rowH / 2 + 3} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpCursor)}
+      </text>
+
+      {/* the shortcut hint column named once, on the trailing edge */}
+      <text x={PX + PW + 8} y={fieldY + fieldH + 28} className="bpLabel" fill={C.faint}>
+        {t(m.bpShortcutHint)}
+      </text>
+
+      {/* dimensions: the panel padding on the outside, the row gap between two
+          adjacent options */}
+      {padding && <HDim x1={PX} x2={innerX} y={PY + PH + 16} label={padding} above={false} />}
+      {gap && <VDim x={PX + PW + 30} y1={drawn[1]!.y + rowH} y2={drawn[2]!.y} label={gap} />}
+
+      <BpTitle />
+      <Foot y={H - 12} parts={[radius && `${t(m.bpRadius)}: ${radius}`, padding && `${t(m.bpPadding)}: ${padding}`]} />
+    </svg>
+  );
+}
+
+// CalendarView: the header row, the weekday strip, and the six-by-seven grid
+// with events laid into a few cells. Drawn at the real proportions — six rows
+// even though the month fits in five, since that fixed height is the point.
+function CalendarViewBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const radius = fmt(dimensions?.radius);
+  const gap = fmt(dimensions?.gap);
+  const cellPadding = fmt(dimensions?.cellPadding);
+
+  const H = 300;
+  const X = 40;
+  const W = 320;
+  const COLS = 7;
+  const ROWS = 6;
+  const G = 3;
+  const cw = (W - (COLS - 1) * G) / COLS;
+  const ch = 30;
+
+  const headerY = 44;
+  const weekdayY = headerY + 26;
+  const gridY = weekdayY + 12;
+
+  // A handful of cells carrying event chips, so the figure reads as a schedule
+  // rather than an empty grid. [row, col, chips]
+  const filled: [number, number, number][] = [
+    [1, 3, 2],
+    [2, 1, 1],
+    [2, 3, 3],
+    [3, 5, 1],
+    [4, 2, 2],
+  ];
+  const chipsAt = new Map(filled.map(([r, c, n]) => [`${r}:${c}`, n]));
+
+  // today, and a selected day: the two markings that must not look alike
+  const TODAY: [number, number] = [2, 3];
+  const SELECTED: [number, number] = [3, 5];
+
+  const cellX = (col: number) => X + col * (cw + G);
+  const cellY = (row: number) => gridY + row * (ch + G);
+
+  return (
+    <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCalendarView)}>
+      <Defs />
+
+      {/* header: paging on the leading edge, the range title, the view switch */}
+      {[0, 1, 2].map((i) => (
+        <rect key={i} x={X + i * 26} y={headerY} width={22} height={18} rx={5} fill="none" stroke={C.line} strokeWidth={1.25} />
+      ))}
+      <rect x={X + 90} y={headerY + 5} width={72} height={8} rx={4} fill={C.content} opacity={0.6} />
+      <rect x={X + W - 92} y={headerY} width={92} height={18} rx={9} fill="none" stroke={C.line} strokeWidth={1.25} strokeDasharray="4 3" />
+
+      {/* weekday strip */}
+      {Array.from({ length: COLS }, (_, col) => (
+        <rect key={col} x={cellX(col) + cw / 2 - 8} y={weekdayY} width={16} height={5} rx={2.5} fill={C.line} opacity={0.4} />
+      ))}
+      <text x={X - 6} y={weekdayY + 5} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpWeekdays)}
+      </text>
+
+      {/* the grid: six rows, always */}
+      {Array.from({ length: ROWS }, (_, row) =>
+        Array.from({ length: COLS }, (_, col) => {
+          const isToday = TODAY[0] === row && TODAY[1] === col;
+          const isSelected = SELECTED[0] === row && SELECTED[1] === col;
+          const chips = chipsAt.get(`${row}:${col}`) ?? 0;
+          // the leading week borrows from the previous month
+          const outside = row === 0 && col < 3;
+          return (
+            <g key={`${row}:${col}`}>
+              <rect
+                x={cellX(col)}
+                y={cellY(row)}
+                width={cw}
+                height={ch}
+                rx={4}
+                fill={isSelected ? C.fill : 'none'}
+                stroke={isSelected ? C.line : C.edge}
+                strokeWidth={isSelected ? 1.5 : 1}
+              />
+              {/* Today marks only its number; selection tints the cell. */}
+              {isToday ? (
+                <circle cx={cellX(col) + 9} cy={cellY(row) + 8} r={5} fill={C.content} />
+              ) : (
+                <rect
+                  x={cellX(col) + 5}
+                  y={cellY(row) + 5.5}
+                  width={8}
+                  height={5}
+                  rx={2.5}
+                  fill={C.line}
+                  opacity={outside ? 0.25 : 0.55}
+                />
+              )}
+              {Array.from({ length: Math.min(chips, 2) }, (_, i) => (
+                <rect
+                  key={i}
+                  x={cellX(col) + 4}
+                  y={cellY(row) + 15 + i * 6}
+                  width={cw - 8}
+                  height={4}
+                  rx={2}
+                  fill={C.content}
+                  opacity={0.75}
+                />
+              ))}
+              {chips > 2 && (
+                <rect x={cellX(col) + 4} y={cellY(row) + 27} width={cw * 0.5} height={2.5} rx={1.25} fill={C.line} opacity={0.4} />
+              )}
+            </g>
+          );
+        }),
+      )}
+
+      {/* the three things worth naming, each pointed at from outside the grid */}
+      <text x={cellX(TODAY[1]) + cw / 2} y={cellY(TODAY[0]) - 4} textAnchor="middle" className="bpLabel" fill={C.faint}>
+        {t(m.bpToday)}
+      </text>
+      <text x={X + W + 6} y={cellY(1) + 20} className="bpLabel" fill={C.faint}>
+        {t(m.bpEventChip)}
+      </text>
+      <text x={X + W + 6} y={cellY(2) + 31} className="bpLabel" fill={C.faint}>
+        {t(m.bpOverflowLine)}
+      </text>
+      <text x={X - 6} y={cellY(5) + 18} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpDayCell)}
+      </text>
+
+      {/* dimensions: the gap between two cells, and the padding inside one */}
+      {gap && <HDim x1={cellX(0) + cw} x2={cellX(1)} y={cellY(ROWS - 1) + ch + 16} label={gap} above={false} />}
+
+      <BpTitle />
+      <Foot
+        y={H - 12}
+        parts={[radius && `${t(m.bpRadius)}: ${radius}`, cellPadding && `${t(m.bpPadding)}: ${cellPadding}`, '6 × 7']}
+      />
+    </svg>
+  );
+}
+
+// SortableList: four rows with their grips, one of them lifted off the stack
+// and the rows it passed shifted up into the gap it left. Drawn mid-drag,
+// because the resting state is just a list — the reordering is the component.
+function SortableListBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const radius = fmt(dimensions?.radius);
+  const gap = fmt(dimensions?.gap);
+  const padding = fmt(dimensions?.padding);
+
+  const H = 250;
+  const X = 84;
+  const W = 232;
+  const rowH = 30;
+  const G = 6;
+  const Y = 58;
+
+  // Row 0 is lifted and heading for slot 2, so rows 1 and 2 have shifted up one
+  // slot and row 3 is untouched — the same arithmetic `shiftFor` returns.
+  const LIFTED = 0;
+  const TARGET = 2;
+  const slotY = (slot: number) => Y + slot * (rowH + G);
+
+  return (
+    <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheSortableList)}>
+      <Defs />
+
+      {/* the settled rows, each already shifted into its mid-drag slot */}
+      {[1, 2, 3].map((row, i) => {
+        // rows 1 and 2 move up one slot; row 3 stays put
+        const shift = row <= TARGET ? -1 : 0;
+        const y = slotY(row + shift);
+        return (
+          <g key={row}>
+            <rect x={X} y={y} width={W} height={rowH} rx={6} fill="none" stroke={C.edge} strokeWidth={1.25} />
+            {/* grip: two columns of three dots */}
+            {[0, 1].map((col) =>
+              [0, 1, 2].map((dot) => (
+                <circle
+                  key={`${col}-${dot}`}
+                  cx={X + 12 + col * 5}
+                  cy={y + rowH / 2 - 5 + dot * 5}
+                  r={1.4}
+                  fill={C.line}
+                  opacity={0.7}
+                />
+              )),
+            )}
+            <rect x={X + 30} y={y + rowH / 2 - 3} width={W * 0.42} height={6} rx={3} fill={C.line} opacity={0.45} />
+            {/* the arrow showing which way this row slid */}
+            {shift !== 0 && i === 0 && (
+              <g stroke={C.line} strokeWidth={1.25} fill="none" strokeLinecap="round">
+                <line x1={X + W + 14} y1={y + rowH + 8} x2={X + W + 14} y2={y + 4} />
+                <polyline points={`${X + W + 10},${y + 9} ${X + W + 14},${y + 4} ${X + W + 18},${y + 9}`} />
+              </g>
+            )}
+          </g>
+        );
+      })}
+
+      {/* the lifted row, raised off the stack and part-way to its target */}
+      <g>
+        <rect
+          x={X + 10}
+          y={slotY(TARGET) - 6}
+          width={W}
+          height={rowH}
+          rx={6}
+          fill={C.fill}
+          stroke={C.line}
+          strokeWidth={1.75}
+        />
+        {[0, 1].map((col) =>
+          [0, 1, 2].map((dot) => (
+            <circle
+              key={`${col}-${dot}`}
+              cx={X + 22 + col * 5}
+              cy={slotY(TARGET) - 6 + rowH / 2 - 5 + dot * 5}
+              r={1.4}
+              fill={C.content}
+            />
+          )),
+        )}
+        <rect
+          x={X + 40}
+          y={slotY(TARGET) - 6 + rowH / 2 - 3}
+          width={W * 0.42}
+          height={6}
+          rx={3}
+          fill={C.content}
+        />
+      </g>
+
+      {/* the two things worth naming */}
+      <text x={X - 8} y={slotY(0) + rowH / 2 + 3} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpGrip)}
+      </text>
+      <text x={X - 8} y={slotY(TARGET) + rowH / 2 - 2} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpLiftedRow)}
+      </text>
+      <text x={X + W + 26} y={slotY(0) + rowH / 2 + 3} className="bpLabel" fill={C.faint}>
+        {t(m.bpRowShift)}
+      </text>
+
+      {/* dimensions: the gap between two rows */}
+      {gap && <VDim x={X - 30} y1={slotY(0) + rowH} y2={slotY(1)} label={gap} />}
+
+      <BpTitle />
+      <Foot y={H - 12} parts={[radius && `${t(m.bpRadius)}: ${radius}`, padding && `${t(m.bpPadding)}: ${padding}`]} />
+    </svg>
+  );
+}
+
+// VirtualList: the tall spacer standing for the whole list, the viewport
+// clipping it, and the small window of real rows inside — with the overscan
+// rows shown outside the viewport edges, since they are the part of the design
+// that is otherwise invisible.
+function VirtualListBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const radius = fmt(dimensions?.radius);
+
+  const H = 270;
+  // the spacer: a tall column standing for the entire list
+  const SX = 150;
+  const SW = 120;
+  const SY = 40;
+  const SH = 200;
+
+  // the viewport: the slice of that column a user can see
+  const VY = 108;
+  const VH = 74;
+  const rowH = 13;
+  const rowGapY = 2;
+
+  // rows: two above the viewport and two below are overscan, the rest visible
+  const firstRowY = VY - 2 * (rowH + rowGapY);
+  const ROWS = 9;
+  const overscanRows = new Set([0, 1, 7, 8]);
+
+  return (
+    <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheVirtualList)}>
+      <Defs />
+
+      {/* the spacer, as tall as the entire list */}
+      <rect x={SX} y={SY} width={SW} height={SH} rx={4} fill="none" stroke={C.edge} strokeWidth={1} strokeDasharray="3 3" />
+      <text x={SX - 8} y={SY + 12} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpSpacer)}
+      </text>
+      <VDim x={SX - 34} y1={SY} y2={SY + SH} label={t(m.bpTotal)} />
+
+      {/* the rendered rows, including the overscan that sits outside the view */}
+      {Array.from({ length: ROWS }, (_, i) => {
+        const y = firstRowY + i * (rowH + rowGapY);
+        const isOverscan = overscanRows.has(i);
+        return (
+          <rect
+            key={i}
+            x={SX + 6}
+            y={y}
+            width={SW - 12}
+            height={rowH}
+            rx={2.5}
+            fill={isOverscan ? 'none' : C.content}
+            stroke={isOverscan ? C.line : 'none'}
+            strokeWidth={1}
+            strokeDasharray={isOverscan ? '3 2' : undefined}
+            opacity={isOverscan ? 0.7 : 0.85}
+          />
+        );
+      })}
+
+      {/* the viewport: what the user can actually see */}
+      <rect x={SX - 10} y={VY} width={SW + 20} height={VH} rx={5} fill="none" stroke={C.line} strokeWidth={1.75} />
+      <text x={SX + SW + 18} y={VY + VH / 2 + 3} className="bpLabel" fill={C.faint}>
+        {t(m.bpViewport)}
+      </text>
+
+      <text x={SX + SW + 18} y={firstRowY + rowH} className="bpLabel" fill={C.faint}>
+        {t(m.bpOverscanRow)}
+      </text>
+      <text x={SX - 8} y={VY + VH / 2 + 3} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpWindowSlice)}
+      </text>
+
+      <BpTitle />
+      <Foot y={H - 12} parts={[radius && `${t(m.bpRadius)}: ${radius}`, t(m.bpFixedRowHeight)]} />
+    </svg>
+  );
+}
+
+// RichTextEditor: the toolbar row over the text area, in one frame, with one
+// control shown pressed — the state that makes the toolbar readable rather than
+// only operable.
+function RichTextEditorBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const radius = fmt(dimensions?.radius);
+  const padding = fmt(dimensions?.padding);
+  const gap = fmt(dimensions?.gap);
+
+  const H = 250;
+  const X = 60;
+  const W = 280;
+  const Y = 52;
+  const barH = 30;
+  const areaH = 118;
+
+  const btn = 20;
+  const btnGap = 5;
+  const MARKS = 4;
+  const BLOCKS = 4;
+  const PRESSED = 0;
+
+  const btnX = (i: number) => X + 10 + i * (btn + btnGap);
+  // the divider sits between the marks and the blocks
+  const dividerX = btnX(MARKS) - btnGap / 2;
+  const blockX = (i: number) => btnX(MARKS + i) + 6;
+
+  return (
+    <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheRichTextEditor)}>
+      <Defs />
+
+      {/* one frame around toolbar and text area, so the two read as one field */}
+      <rect x={X} y={Y} width={W} height={barH + areaH} rx={8} fill="none" stroke={C.line} strokeWidth={1.5} />
+      <line x1={X} y1={Y + barH} x2={X + W} y2={Y + barH} stroke={C.edge} strokeWidth={1} />
+
+      {/* inline mark controls; the first is pressed */}
+      {Array.from({ length: MARKS }, (_, i) => (
+        <rect
+          key={`m${i}`}
+          x={btnX(i)}
+          y={Y + (barH - btn) / 2}
+          width={btn}
+          height={btn}
+          rx={4}
+          fill={i === PRESSED ? C.content : 'none'}
+          stroke={i === PRESSED ? 'none' : C.line}
+          strokeWidth={1}
+          opacity={i === PRESSED ? 1 : 0.6}
+        />
+      ))}
+
+      <line x1={dividerX} y1={Y + 8} x2={dividerX} y2={Y + barH - 8} stroke={C.edge} strokeWidth={1} />
+
+      {/* block controls */}
+      {Array.from({ length: BLOCKS }, (_, i) => (
+        <rect
+          key={`b${i}`}
+          x={blockX(i)}
+          y={Y + (barH - btn) / 2}
+          width={btn}
+          height={btn}
+          rx={4}
+          fill="none"
+          stroke={C.line}
+          strokeWidth={1}
+          opacity={0.6}
+        />
+      ))}
+
+      {/* the text area, with lines of monospace text */}
+      {[0, 1, 2, 3].map((row) => (
+        <rect
+          key={row}
+          x={X + 12}
+          y={Y + barH + 14 + row * 16}
+          width={[0.72, 0.55, 0.8, 0.34][row]! * (W - 24)}
+          height={6}
+          rx={3}
+          fill={C.line}
+          opacity={0.4}
+        />
+      ))}
+      {/* the caret */}
+      <rect x={X + 12 + 0.34 * (W - 24) + 3} y={Y + barH + 14 + 3 * 16 - 3} width={1.5} height={12} fill={C.content} />
+
+      {/* labels */}
+      <text x={X + W + 8} y={Y + barH / 2 + 3} className="bpLabel" fill={C.faint}>
+        {t(m.bpToolbarRow)}
+      </text>
+      <text x={X + W + 8} y={Y + barH + 40} className="bpLabel" fill={C.faint}>
+        {t(m.bpEditorArea)}
+      </text>
+      <text x={btnX(PRESSED) + btn / 2} y={Y - 8} textAnchor="middle" className="bpLabel" fill={C.faint}>
+        {t(m.bpPressedControl)}
+      </text>
+      <text x={X - 8} y={Y + barH / 2 + 3} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpMarkControl)}
+      </text>
+      <text x={X - 8} y={Y + barH + 74} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpBlockControl)}
+      </text>
+
+      {/* dimensions: the gap between two controls */}
+      {gap && <HDim x1={btnX(0) + btn} x2={btnX(1)} y={Y + barH + areaH + 22} label={gap} above={false} />}
+
+      <BpTitle />
+      <Foot y={H - 12} parts={[radius && `${t(m.bpRadius)}: ${radius}`, padding && `${t(m.bpPadding)}: ${padding}`]} />
+    </svg>
+  );
+}
+
+// ColorPicker: the swatch, the three channel tracks each carrying the gradient
+// it traverses, the hex field, and a preset row with one entry ringed.
+function ColorPickerBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const radius = fmt(dimensions?.radius);
+  const gap = fmt(dimensions?.gap);
+  const trackHeight = fmt(dimensions?.trackHeight);
+
+  const H = 268;
+  const X = 118;
+  const W = 164;
+  const Y = 42;
+
+  const swatchH = 44;
+  const trackH = 9;
+  const trackGap = 16;
+  const tracksY = Y + swatchH + 16;
+  const fieldY = tracksY + 3 * trackGap + 10;
+  const presetY = fieldY + 30;
+
+  // Each track shows a run of steps, standing for the gradient it traverses.
+  const STEPS = 8;
+  const stepW = W / STEPS;
+
+  return (
+    <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheColorPicker)}>
+      <Defs />
+
+      {/* the swatch, with its value written on it */}
+      <rect x={X} y={Y} width={W} height={swatchH} rx={5} fill={C.fill} stroke={C.line} strokeWidth={1.5} />
+      <rect x={X + W - 46} y={Y + swatchH - 15} width={38} height={7} rx={3.5} fill={C.content} opacity={0.8} />
+      <text x={X - 8} y={Y + swatchH / 2 + 3} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpSwatchArea)}
+      </text>
+
+      {/* the three channel tracks, drawn as graded runs */}
+      {[0, 1, 2].map((row) => {
+        const y = tracksY + row * trackGap;
+        return (
+          <g key={row}>
+            {Array.from({ length: STEPS }, (_, i) => (
+              <rect
+                key={i}
+                x={X + i * stepW}
+                y={y}
+                width={stepW}
+                height={trackH}
+                fill={C.content}
+                // A ramp across the run, so the track reads as a gradient
+                opacity={0.15 + (i / (STEPS - 1)) * 0.7}
+              />
+            ))}
+            <rect x={X} y={y} width={W} height={trackH} rx={trackH / 2} fill="none" stroke={C.edge} strokeWidth={1} />
+            {/* the thumb: a ring, so the colour under it stays visible */}
+            <circle
+              cx={X + [0.62, 0.4, 0.75][row]! * W}
+              cy={y + trackH / 2}
+              r={6}
+              fill="none"
+              stroke={C.line}
+              strokeWidth={2}
+            />
+          </g>
+        );
+      })}
+      <text x={X - 8} y={tracksY + trackGap + trackH} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpChannelSliders)}
+      </text>
+
+      {/* the hex field */}
+      <rect x={X} y={fieldY} width={W * 0.66} height={18} rx={4} fill="none" stroke={C.line} strokeWidth={1.25} />
+      <rect x={X + 8} y={fieldY + 6} width={44} height={6} rx={3} fill={C.line} opacity={0.5} />
+      <text x={X + W + 8} y={fieldY + 13} className="bpLabel" fill={C.faint}>
+        {t(m.bpHexField)}
+      </text>
+
+      {/* the preset row, with the in-use entry ringed */}
+      {Array.from({ length: 6 }, (_, i) => (
+        <g key={i}>
+          <rect
+            x={X + i * 22}
+            y={presetY}
+            width={16}
+            height={16}
+            rx={4}
+            fill={C.content}
+            opacity={0.3 + i * 0.1}
+          />
+          {i === 1 && (
+            <rect
+              x={X + i * 22 - 2.5}
+              y={presetY - 2.5}
+              width={21}
+              height={21}
+              rx={6}
+              fill="none"
+              stroke={C.line}
+              strokeWidth={1.5}
+            />
+          )}
+        </g>
+      ))}
+      <text x={X - 8} y={presetY + 12} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpPresetRow)}
+      </text>
+
+      {/* dimensions: the gap between two channel tracks */}
+      {gap && <VDim x={X + W + 42} y1={tracksY + trackH} y2={tracksY + trackGap} label={gap} />}
+
+      <BpTitle />
+      <Foot
+        y={H - 12}
+        parts={[radius && `${t(m.bpRadius)}: ${radius}`, trackHeight && `${t(m.bpTrack)}: ${trackHeight}`]}
+      />
+    </svg>
+  );
+}
+
 export function Blueprint({ size, dimensions, slots, shape, id, variant }: BlueprintProps & { variant?: 'mobile' }) {
+  if (id === 'color-picker') return withFrame(<ColorPickerBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'rich-text-editor') return withFrame(<RichTextEditorBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'virtual-list') return withFrame(<VirtualListBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'sortable-list') return withFrame(<SortableListBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'calendar-view') return withFrame(<CalendarViewBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'command-palette') return withFrame(<CommandPaletteBlueprint size={size} dimensions={dimensions} />);
   if (shape === 'ring') return withFrame(<RingBlueprint size={size} />);
   if (shape === 'slider') return withFrame(<SliderBlueprint size={size} dimensions={dimensions} />);
   if (id === 'checkbox') return withFrame(<CheckboxBlueprint size={size} dimensions={dimensions} />);
   if (id === 'radio') return withFrame(<RadioBlueprint size={size} dimensions={dimensions} />);
   if (id === 'switch') return withFrame(<SwitchBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'seek-bar') return withFrame(<SeekBarBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'player-card') return withFrame(<PlayerCardBlueprint size={size} dimensions={dimensions} />);
   if (id === 'number-input') return withFrame(<NumberInputBlueprint size={size} dimensions={dimensions} />);
   if (id === 'radio-card') return withFrame(<RadioCardBlueprint size={size} dimensions={dimensions} />);
   if (id === 'search-field') return withFrame(<SearchFieldBlueprint size={size} dimensions={dimensions} />);

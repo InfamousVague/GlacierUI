@@ -1,0 +1,159 @@
+.root {
+  position: relative;
+  display: block;
+  width: 100%;
+  /* the stroke weights the shapes paint with; the level marks run thinner and
+     the wave runs thicker, both in px so they survive the viewBox stretch */
+  --seek-stroke: 3px;
+  --seek-bar-stroke: 2px;
+  cursor: pointer;
+  touch-action: none;
+  outline: none;
+  user-select: none;
+}
+
+.sm {
+  height: 1.5rem;
+}
+
+.md {
+  height: 2rem;
+}
+
+.root[data-disabled] {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.plot {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.stroke {
+  stroke-width: var(--seek-stroke);
+  stroke-linejoin: round;
+  transition: stroke var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+/* Cap and weight are classified once in @glacier/logic and arrive as data
+   attributes, so this binding and the native one cannot disagree about which
+   shapes butt — while the pixel values stay here, themeable. */
+.root[data-cap='round'] .stroke {
+  stroke-linecap: round;
+}
+
+/* Level marks butt, so an equalizer reads flat-topped instead of lozenge-capped.
+   They are stroked segments rather than filled rects, so the cap decides the end
+   shape in screen space and the viewBox stretch can never squash a corner
+   radius into an ellipse. */
+.root[data-cap='butt'] .stroke {
+  stroke-linecap: butt;
+}
+
+.root[data-weight='bar'] .stroke {
+  stroke-width: var(--seek-bar-stroke);
+}
+
+/* The tone's tokens arrive as --seek-from/--seek-to, resolved once in
+   @glacier/logic so this binding and native cannot disagree about what a tone
+   means. A gradient fill overrides the stroke with a paint server on the
+   element itself; solid falls through to this. */
+.played {
+  stroke: var(--seek-from, var(--glacier-accent-solid));
+}
+
+/* The rail's tokens arrive as --seek-rail/--seek-rail-hover, resolved once in
+   @glacier/logic. The default suits the page surface; `contrast` lifts it for
+   raised surfaces, where the segment track sits close enough to the surface
+   underneath to disappear. */
+.ahead {
+  stroke: var(--seek-rail, var(--glacier-segment-track));
+}
+
+.root:hover:not([data-disabled]) .ahead {
+  stroke: var(--seek-rail-hover, var(--glacier-border-strong));
+}
+
+/* A slim vertical pill rather than a round knob: on the waveform shapes a disc
+   would sit on top of the levels it is meant to be reading.
+
+   The thumb's position is deliberately NOT transitioned. Both it and the played
+   run are drawn from the same `progress`, but the run is an SVG path whose `d`
+   no CSS transition can follow — it repaints the moment progress changes. Easing
+   only the thumb therefore desynchronizes them: on any jump (End, a keyed seek,
+   a controlled update from `timeupdate`) the paint arrives first and the thumb
+   trails it for the length of the transition, which reads as the bar running
+   ahead of its own playhead. They have to move as one, so neither eases. */
+/* The thumb keeps the solid tone even under a gradient, so the playhead stays a
+   definite edge rather than fading out with the ramp. */
+.thumb {
+  position: absolute;
+  top: 50%;
+  inset-inline-start: 0;
+  width: 4px;
+  height: 60%;
+  transform: translate(-50%, -50%);
+  border-radius: var(--glacier-radius-full);
+  background: var(--seek-from, var(--glacier-accent-solid));
+  /* height only — see above */
+  transition: height var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+/* The thumb thickens while the pointer is down, the one cue that is safe to
+   animate: it changes the thumb's size, never its position. */
+.root[data-scrubbing] .thumb {
+  height: 78%;
+}
+
+.root[data-scrubbing] .played,
+.root[data-scrubbing] .ahead {
+  transition: none;
+}
+
+.root:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--glacier-radius-full);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumb,
+  .stroke {
+    transition: none;
+  }
+}
+
+/* The loading placeholder traces the shape it is standing in for. A stroked
+   path cannot carry the kit's background shimmer, so it pulses instead. */
+/* The kit's Skeleton shimmers by sweeping a background gradient, which a
+   stroked path has no background to carry. It pulses between the same two
+   tokens that sweep instead, so the placeholder speaks the same language. */
+.bone {
+  stroke: var(--glacier-hover);
+}
+
+.root[data-skeleton] {
+  cursor: default;
+}
+
+.root[data-skeleton] .bone {
+  animation: seekPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes seekPulse {
+  0%,
+  100% {
+    stroke: var(--glacier-hover);
+  }
+  50% {
+    stroke: var(--glacier-active);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root[data-skeleton] .bone {
+    animation: none;
+  }
+}

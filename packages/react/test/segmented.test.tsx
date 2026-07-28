@@ -61,6 +61,22 @@ describe('SegmentedControl', () => {
     expect(screen.getByRole('radio', { name: 'Day' })).toHaveAttribute('data-haptic', 'selection');
   });
 
+  it('uses equal tracks when stretched to full width', () => {
+    render(
+      <SegmentedControl
+        aria-label="Sidebar layout"
+        fullWidth
+        options={[
+          { value: 'floating', label: 'Floating' },
+          { value: 'full', label: 'Full height' },
+        ]}
+      />,
+    );
+
+    expect(screen.getByRole('radiogroup', { name: 'Sidebar layout' }).className).toMatch(/fullWidth/);
+    expect(screen.getAllByRole('radio')).toHaveLength(2);
+  });
+
   it('has no axe violations', async () => {
     const { container } = render(<SegmentedControl aria-label="Range" options={OPTIONS} />);
     const results = await axe.run(container, {

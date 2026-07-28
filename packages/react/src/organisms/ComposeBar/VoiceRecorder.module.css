@@ -1,0 +1,95 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  min-width: 0;
+  flex: none;
+}
+
+/* While recording the strip takes the bar's width rather than staying a button
+   in the corner: what is being captured deserves the room the text had. */
+.root[data-state='recording'],
+.root[data-state='canceling'],
+.root[data-state='locked'] {
+  flex: 1;
+  padding-inline: var(--glacier-space-3);
+  border-radius: var(--glacier-radius-full);
+}
+
+.root[data-state='canceling'] {
+  background: var(--glacier-danger-soft);
+}
+
+.root[data-disabled] {
+  opacity: 0.5;
+}
+
+/* The one continuous animation: a slow breath, so "live" is legible from the
+   corner of the eye without demanding attention. */
+.pulse {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-danger-solid);
+  animation: pulse var(--glacier-duration-slower) ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse {
+    animation: none;
+  }
+}
+
+.clock {
+  flex: none;
+  font-family: var(--glacier-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-danger-text);
+}
+
+.wave {
+  flex: 1;
+  min-width: 0;
+}
+
+/* The trace is decorative and must not read as dimmed while it is the liveliest
+   thing on the bar; `disabled` is only there to keep it out of the tab order
+   inside an aria-hidden subtree. The extra attribute outranks SeekBar's own
+   `.root[data-disabled]` rule without reaching for !important. */
+.wave [data-shape][data-disabled] {
+  opacity: 1;
+  cursor: default;
+}
+
+/* Tracks the finger with no transition: an eased hint would misreport how close
+   the cancel is, which is the one thing it exists to report. */
+.hint {
+  flex: none;
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-subtle);
+  white-space: nowrap;
+}
+
+.root[data-state='canceling'] .hint {
+  color: var(--glacier-danger-text);
+}
+
+.mic {
+  flex: none;
+  /* The gesture is a drag: selecting the label under the finger while holding
+     to record would leave a highlight behind the waveform. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}

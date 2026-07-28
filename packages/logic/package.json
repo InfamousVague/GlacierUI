@@ -1,0 +1,16 @@
+{
+  "name": "@glacier/logic",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Behaviour shared by @glacier/react (DOM) and @glacier/native (React Native). The unit of sharing is a PLATFORM, not a component: a module here is imported by both bindings so one behaviour cannot drift into two. It is normal and correct for a module to serve exactly one component. No DOM, no React Native, no rendering.",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@glacier/spec": "*"
+  },
+  "peerDependencies": {
+    "react": ">=19"
+  }
+}

@@ -1,0 +1,13 @@
+.bar {
+  display: flex;
+  /*
+   * Wraps rather than scrolls. A horizontally scrolling strip nested inside a
+   * vertically scrolling transcript is a gesture conflict on touch: a thumb a
+   * few degrees off the horizontal scrolls the conversation instead.
+   */
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--glacier-space-1);
+  margin-block-start: var(--glacier-space-1);
+  min-width: 0;
+}

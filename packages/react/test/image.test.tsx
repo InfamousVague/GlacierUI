@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import axe from 'axe-core';
 import { Image } from '../src/index.ts';
@@ -50,6 +50,25 @@ describe('Image', () => {
   it('renders a placeholder and no img when skeleton', () => {
     render(<Image src="/cover.jpg" alt="Cover" skeleton />);
     expect(screen.queryByAltText('Cover')).toBeNull();
+  });
+
+  // Regression: the internal onLoad/onError used to sit BEFORE the {...rest}
+  // spread, so a caller passing either one silently replaced the handler that
+  // clears the loading state — leaving the image stuck behind its skeleton.
+  it('runs a caller onLoad without losing its own loading state', () => {
+    const onLoad = vi.fn();
+    const { container } = render(<Image src="/cover.jpg" alt="Cover" onLoad={onLoad} />);
+    fireEvent.load(screen.getByAltText('Cover'));
+    expect(onLoad).toHaveBeenCalledTimes(1);
+    expect((container.firstElementChild as HTMLElement).dataset.status).toBe('loaded');
+  });
+
+  it('runs a caller onError without losing its own error state', () => {
+    const onError = vi.fn();
+    const { container } = render(<Image src="/gone.jpg" alt="Gone" onError={onError} />);
+    fireEvent.error(screen.getByAltText('Gone'));
+    expect(onError).toHaveBeenCalledTimes(1);
+    expect((container.firstElementChild as HTMLElement).dataset.status).toBe('error');
   });
 
   it('has no axe violations', async () => {

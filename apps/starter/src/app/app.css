@@ -70,7 +70,7 @@ body {
    hairline. The kit Sidebar fills it (width/height: 100%) and scrolls itself. */
 .appSidebar {
   flex: none;
-  width: 15rem;
+  width: 16rem;
   height: 100%;
   min-height: 0;
   overflow: hidden;
@@ -103,6 +103,10 @@ body {
 /* rail: outer gutter on the start edge, a single gutter to the sidebar */
 .appWindow[data-layout='floating'] .appRail {
   margin-inline: var(--glacier-space-4);
+  /* Nest the nav items inside the rail's rounded corners: the items sit ~space-1
+     in from the rail edge, so an item radius of (rail radius − that gap) keeps
+     their corners parallel to the rail's instead of looking square against it. */
+  --glacier-navbar-item-radius: calc(var(--glacier-radius-xl) - var(--glacier-space-1));
 }
 
 /* sidebar: sits against the rail's trailing gutter (start margin 0), its own
@@ -185,7 +189,7 @@ body {
 }
 
 .sidebarPreviewCard {
-  width: 15rem;
+  width: 16rem;
   height: min(26rem, calc(100vh - 5rem));
   overflow: hidden;
   background: var(--glacier-surface);

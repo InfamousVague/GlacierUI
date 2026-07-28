@@ -21,6 +21,8 @@ import {
   spacingDecls,
   statusDecls,
   themeOverrideDecls,
+  themePresetDecls,
+  themePresets,
   typographyDecls,
   type MonoFont,
   type SansFont,
@@ -145,5 +147,18 @@ describe('CSS declaration emitters', () => {
   it('emits semantic and status aliases', () => {
     expectWellFormed(semanticDecls());
     expectWellFormed(statusDecls());
+  });
+
+  it('emits named theme tokens for every custom preset', () => {
+    for (const preset of themePresets) {
+      const decls = themePresetDecls(preset.id);
+      if (preset.id === 'light' || preset.id === 'dark') {
+        expect(decls).toEqual([]);
+      } else {
+        expectWellFormed(decls);
+        expect(Object.fromEntries(decls)['gray-1']).toBeDefined();
+        expect(Object.fromEntries(decls)['glass-regular']).toBeDefined();
+      }
+    }
   });
 });

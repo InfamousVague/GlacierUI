@@ -1,5 +1,6 @@
 import {
   Button,
+  DensitySelector,
   Fieldset,
   FormSection,
   Label,
@@ -79,6 +80,7 @@ export function SettingsModal({
               <Label>{t('setTheme')}</Label>
               <SegmentedControl
                 aria-label={t('setTheme')}
+                fullWidth
                 value={preferences.theme}
                 onValueChange={(value) => onChange({ theme: value as Preferences['theme'] })}
                 options={[
@@ -90,14 +92,10 @@ export function SettingsModal({
             </div>
             <div className="control">
               <Label>{t('setDensity')}</Label>
-              <SegmentedControl
+              <DensitySelector
                 aria-label={t('setDensity')}
                 value={preferences.density}
-                onValueChange={(value) => onChange({ density: value as Preferences['density'] })}
-                options={[
-                  { value: 'comfortable', label: t('setComfortable') },
-                  { value: 'compact', label: t('setCompact') },
-                ]}
+                onValueChange={(density) => onChange({ density })}
               />
             </div>
           </div>
@@ -200,6 +198,7 @@ export function SettingsModal({
             <Label>{t('setSidebar')}</Label>
             <SegmentedControl
               aria-label={t('setSidebar')}
+              fullWidth
               value={preferences.layout}
               onValueChange={(value) => onChange({ layout: value as Preferences['layout'] })}
               options={[

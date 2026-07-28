@@ -75,7 +75,7 @@ export function AppShell({
   sidebar,
   header,
   bottomNav,
-  sidebarWidth = '16rem',
+  sidebarWidth = '17rem',
   sidebarLabel = 'Navigation',
   floating = false,
   isMobile,

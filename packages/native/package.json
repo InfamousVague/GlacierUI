@@ -8,7 +8,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@glacier/commons": "*",
+    "@glacier/logic": "*",
     "@glacier/icons": "*",
     "@glacier/spec": "*",
     "date-fns": "^4.4.0"

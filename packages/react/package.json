@@ -25,6 +25,7 @@
     "uplot": "^1.6.32"
   },
   "devDependencies": {
+    "@glacier/logic": "*",
     "@glacier/icons": "*",
     "@glacier/motion": "*",
     "@glacier/spec": "*",

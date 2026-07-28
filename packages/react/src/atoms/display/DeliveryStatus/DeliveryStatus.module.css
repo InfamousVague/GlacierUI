@@ -1,0 +1,48 @@
+/* The glyph box is a size step rather than a control height: this mark is an
+   annotation on a line of text, and it has to sit beside a timestamp without
+   changing the line box it lives in. */
+.sm {
+  --delivery-d: var(--glacier-size-sm);
+}
+
+.md {
+  --delivery-d: var(--glacier-size-md);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--delivery-d);
+  height: var(--delivery-d);
+  /* Swaps outright as the state advances; only the colour eases, because a tick
+     dissolving into two ticks reads as a rendering fault. */
+  transition: color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+/* Quiet greys until it matters. A transcript is a column of these, and tinting
+   every one of them turns the sender's own messages into a light show. */
+.subtle {
+  color: var(--glacier-text-subtle);
+}
+
+.muted {
+  color: var(--glacier-text-muted);
+}
+
+/* Read is the transition the sender is actually waiting for... */
+.accent {
+  color: var(--glacier-accent-text);
+}
+
+/* ...and failed is the one that needs acting on. */
+.danger {
+  color: var(--glacier-danger-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status {
+    transition: none;
+  }
+}

@@ -53,8 +53,19 @@
   height: 100%;
 }
 
-.activity path {
-  fill: var(--glacier-text);
+/* The backdrop reads as an area chart, matching how Sparkline and
+   TimeSeriesChart paint a series: the accent solid as the crest line over the
+   soft accent wash, so the silhouette's top edge stays legible at any track
+   height instead of dissolving into a flat block. */
+.activityArea {
+  fill: var(--glacier-accent-soft);
+}
+
+.activityLine {
+  stroke: var(--glacier-accent-solid);
+  stroke-width: 1px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
 .marker {

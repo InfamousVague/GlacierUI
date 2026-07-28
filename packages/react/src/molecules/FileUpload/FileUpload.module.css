@@ -13,7 +13,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--glacier-space-2);
-  padding: var(--glacier-space-6) var(--glacier-space-4);
+  padding: var(--glacier-space-5) var(--glacier-space-3);
   text-align: center;
   border: var(--glacier-hairline) dashed var(--glacier-border);
   border-radius: var(--glacier-radius-lg);

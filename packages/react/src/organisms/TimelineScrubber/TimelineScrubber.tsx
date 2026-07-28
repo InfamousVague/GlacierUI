@@ -135,12 +135,17 @@ export function TimelineScrubber({
     );
   }
 
-  const activityPath =
+  // The backdrop is drawn as an area chart, so the crest and the wash are two
+  // paths off one geometry: an open line for the stroke, and the same line
+  // closed down to the baseline for the fill. Stroking the closed path instead
+  // would outline the bottom and sides too.
+  const activityLine =
     activity && activity.length >= 2
       ? `M ${activity
           .map((v, i) => `${(i / (activity.length - 1)) * 100} ${100 - Math.min(Math.max(v, 0), 1) * 100}`)
-          .join(' L ')} L 100 100 L 0 100 Z`
+          .join(' L ')}`
       : undefined;
+  const activityArea = activityLine ? `${activityLine} L 100 100 L 0 100 Z` : undefined;
 
   return (
     <div
@@ -160,9 +165,17 @@ export function TimelineScrubber({
         {/* everything painted on the track clips to its rounding; the playhead
             lives outside this layer so its handle rides above the edge */}
         <div className={styles.clip} aria-hidden="true">
-          {activityPath && (
+          {activityLine && (
             <svg className={styles.activity} viewBox="0 0 100 100" preserveAspectRatio="none">
-              <path d={activityPath} />
+              <path className={styles.activityArea} d={activityArea} />
+              {/* the viewBox scales non-uniformly, so the crest keeps a true 1px
+                  weight only with a non-scaling stroke */}
+              <path
+                className={styles.activityLine}
+                d={activityLine}
+                vectorEffect="non-scaling-stroke"
+                fill="none"
+              />
             </svg>
           )}
           {markers?.map((marker, i) => {

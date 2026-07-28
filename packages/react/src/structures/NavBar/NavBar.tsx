@@ -80,11 +80,11 @@ export function NavBar({
       <nav {...rest} aria-hidden="true" className={cx(styles.nav, styles[orientation], className)}>
         <div className={styles.items}>
           {widths.map((width, index) => (
-            <Skeleton key={index} width={width} height={ITEM_SIZE} radius="var(--glacier-radius-md)" />
+            <Skeleton key={index} width={width} height={ITEM_SIZE} radius="var(--glacier-navbar-item-radius, var(--glacier-radius-md))" />
           ))}
         </div>
         <div className={styles.end}>
-          <Skeleton width={ITEM_SIZE} height={ITEM_SIZE} radius="var(--glacier-radius-md)" />
+          <Skeleton width={ITEM_SIZE} height={ITEM_SIZE} radius="var(--glacier-navbar-item-radius, var(--glacier-radius-md))" />
         </div>
       </nav>
     );

@@ -21,68 +21,74 @@ body {
 }
 
 /* Themed scrollbars across the whole app, matching the ScrollArea treatment so
-  the page, sidebar, code blocks, and prose all read as one system. Unlike the
-  color, scrollbar-width is not inherited, so every possible scroll host needs
-  the Firefox declaration directly. WebKit's pseudo-elements below are already
-  unscoped. Components that theme (or hide) their own scrollbar win on
-  specificity. macOS may still fade its overlay scrollbar when idle, but its
-  visible thumb uses the same dimensions and colors as Windows. */
-:where(html, body, body *) {
-  scrollbar-width: thin;
-  scrollbar-color: var(--glacier-border-strong) transparent;
+  the page, sidebar, code blocks, and prose all read as one system. Firefox gets
+  the standards-based fallback; Safari and Chromium use the explicit WebKit
+  geometry below so macOS cannot substitute its thin overlay treatment. */
+:root {
+  --docs-scrollbar-thumb: var(--glacier-border-strong);
+  --docs-scrollbar-track: color-mix(in oklch, var(--glacier-border-strong) 50%, var(--glacier-surface));
+  --docs-wash-one: color-mix(in oklch, var(--glacier-accent-solid) 18%, transparent);
+  --docs-wash-two: color-mix(in oklch, var(--glacier-accent-border) 14%, transparent);
+  --docs-wash-three: color-mix(in oklch, var(--glacier-accent-text) 10%, transparent);
 }
 
+html[data-scrollbar-style='subtle'] {
+  --docs-scrollbar-thumb: var(--glacier-border);
+  --docs-scrollbar-track: color-mix(in oklch, var(--glacier-border) 50%, var(--glacier-surface));
+}
+
+html[data-scrollbar-style='accent'] {
+  --docs-scrollbar-thumb: var(--glacier-accent-solid);
+  --docs-scrollbar-track: color-mix(in oklch, var(--glacier-accent-solid) 50%, var(--glacier-surface));
+}
+
+html[data-scrollbar-track='hidden'] {
+  --docs-scrollbar-track: transparent;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  :where(html, body, body *) {
+    scrollbar-width: thin;
+    scrollbar-color: var(--docs-scrollbar-thumb) var(--docs-scrollbar-track);
+  }
+}
+
+/* Native scrollbars are themed to read like the ScrollArea example: a space-2
+   pill floating a space-1 gutter clear of every edge. The inset is a SYMMETRIC
+   transparent border with background-clip: padding-box, applied equally on all
+   four sides so the padding-box corners all round by the same (radius-full −
+   space-1) amount — asymmetric insets would round each corner differently and
+   shear the pill ends. Equal insets also keep the track and thumb the same
+   space-2 width and clear of rounded, overflow-clipped containers (the sidebar
+   card), with no per-orientation or RTL handling needed. WebKit ignores logical
+   border properties on these pseudo-elements, so physical `border` is used. */
 ::-webkit-scrollbar {
-  width: var(--glacier-space-2);
-  height: var(--glacier-space-2);
-}
-
-::-webkit-scrollbar-track {
+  -webkit-appearance: none;
+  width: calc(var(--glacier-space-2) + var(--glacier-space-1) * 2);
+  height: calc(var(--glacier-space-2) + var(--glacier-space-1) * 2);
   background: transparent;
 }
 
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-track-piece,
 ::-webkit-scrollbar-thumb {
-  background: var(--glacier-border);
+  border: var(--glacier-space-1) solid transparent;
   border-radius: var(--glacier-radius-full);
+  background-clip: padding-box;
 }
 
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-track-piece {
+  background-color: var(--docs-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb,
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--glacier-border-strong);
+  background-color: var(--docs-scrollbar-thumb);
 }
 
 ::-webkit-scrollbar-corner {
   background: transparent;
-}
-
-/* Scrollbar treatments are a docs appearance preference. The html/body prefix
-   intentionally outranks component-local defaults (including ScrollArea), so
-   the selected treatment remains consistent in every scroll host. */
-html[data-scrollbar-style='subtle'] body * {
-  scrollbar-color: var(--glacier-border) transparent;
-}
-
-html[data-scrollbar-style='subtle'] body *::-webkit-scrollbar-thumb {
-  background: var(--glacier-border-subtle);
-}
-
-html[data-scrollbar-style='subtle'] body *::-webkit-scrollbar-thumb:hover {
-  background: var(--glacier-border);
-}
-
-html[data-scrollbar-style='accent'] body * {
-  scrollbar-color: var(--glacier-accent-solid) var(--glacier-accent-soft);
-}
-
-html[data-scrollbar-style='accent'] body *::-webkit-scrollbar-track {
-  background: var(--glacier-accent-soft);
-}
-
-html[data-scrollbar-style='accent'] body *::-webkit-scrollbar-thumb {
-  background: var(--glacier-accent-solid);
-}
-
-html[data-scrollbar-style='accent'] body *::-webkit-scrollbar-thumb:hover {
-  background: var(--glacier-accent-10);
 }
 
 .scrollbarPreviewGrid {
@@ -128,9 +134,9 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(42rem 42rem at 85% -10%, oklch(0.7 0.13 277 / 0.16), transparent 62%),
-    radial-gradient(52rem 52rem at -12% 32%, oklch(0.75 0.1 190 / 0.13), transparent 62%),
-    radial-gradient(46rem 46rem at 62% 112%, oklch(0.7 0.11 305 / 0.11), transparent 62%);
+    radial-gradient(42rem 42rem at 85% -10%, var(--docs-wash-one), transparent 62%),
+    radial-gradient(52rem 52rem at -12% 32%, var(--docs-wash-two), transparent 62%),
+    radial-gradient(46rem 46rem at 62% 112%, var(--docs-wash-three), transparent 62%);
 }
 
 /* The app frame is the AppShell organism; these are only the nav skin and
@@ -159,10 +165,10 @@ body::before {
   overflow: hidden;
   display: flex;
   align-items: center;
-  border: var(--glacier-hairline) solid var(--glacier-blue-6);
+  border: var(--glacier-hairline) solid var(--glacier-accent-border);
   border-radius: var(--glacier-radius-lg);
-  background-color: var(--glacier-blue-1);
-  background-image: radial-gradient(circle at 1px 1px, var(--glacier-blue-6) 1px, transparent 1.25px);
+  background-color: var(--glacier-accent-soft);
+  background-image: radial-gradient(circle at 1px 1px, var(--glacier-accent-border) 1px, transparent 1.25px);
   background-size: 1rem 1rem;
   min-height: 20rem;
   height: 20rem;
@@ -661,6 +667,13 @@ code {
   gap: var(--glacier-space-3);
 }
 
+.prefsToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--glacier-space-4);
+}
+
 .accentSwatches {
   display: flex;
   flex-wrap: wrap;
@@ -736,6 +749,53 @@ code {
   max-width: 22rem;
 }
 
+/* A button wearing the field's clothes: the search itself is the kit's
+   CommandPalette now, and this only opens it. The geometry deliberately matches
+   the SearchField it replaced so the toolbar did not shift. */
+.docSearchTrigger {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  height: var(--glacier-control-height-md);
+  padding-inline: var(--glacier-space-3);
+  border: var(--glacier-hairline) solid var(--glacier-glass-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-glass-thin);
+  color: var(--glacier-text-subtle);
+  font-family: inherit;
+  font-size: var(--glacier-font-size-sm);
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background var(--glacier-duration-fast) var(--glacier-ease-out),
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.docSearchTrigger:hover {
+  border-color: var(--glacier-border-strong);
+  color: var(--glacier-text);
+}
+
+.docSearchTrigger:focus-visible {
+  outline: 2px solid var(--glacier-accent-soft);
+  outline-offset: 2px;
+}
+
+.docSearchTriggerIcon {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Takes the free space so the ⌘K hint stays pinned to the trailing edge. */
+.docSearchTriggerLabel {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 /* the search (and its glass ⌘K key) sit inside the already-blurred glass
    toolbar, so drop their own backdrop blur to avoid a nested double-blur; the
    translucent tints still read as glass over the toolbar behind them. */
@@ -745,73 +805,8 @@ code {
   -webkit-backdrop-filter: none;
 }
 
-.docSearchResults {
-  z-index: 100;
-  margin: 0;
-  padding: var(--glacier-space-1);
-  list-style: none;
-  max-height: 22rem;
-  overflow-y: auto;
-  border: var(--glacier-hairline) solid var(--glacier-glass-border);
-  border-radius: var(--glacier-radius-lg);
-  background: var(--glacier-glass-thick);
-  backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glacier-blur-lg)) saturate(var(--glacier-glass-saturate));
-  box-shadow:
-    inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight),
-    var(--glacier-shadow-4);
-}
-
-.docSearchItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--glacier-space-3);
-  width: 100%;
-  padding: var(--glacier-space-2) var(--glacier-space-3);
-  border: none;
-  border-radius: var(--glacier-radius-md);
-  background: transparent;
-  color: var(--glacier-text);
-  font: inherit;
-  font-size: var(--glacier-font-size-sm);
-  text-align: start;
-  cursor: pointer;
-}
-
-.docSearchItem[data-active] {
-  background: var(--glacier-accent-soft);
-  color: var(--glacier-accent-text);
-}
-
-/* the page a matched keyword lives on, shown muted after the keyword */
-.docSearchContext {
-  color: var(--glacier-text-subtle);
-  font-weight: var(--glacier-font-weight-regular);
-}
-
-.docSearchItem[data-active] .docSearchContext {
-  color: var(--glacier-accent-text);
-}
-
-.docSearchGroup {
-  flex: none;
-  font-size: var(--glacier-font-size-xs);
-  color: var(--glacier-text-subtle);
-}
-
-.docSearchItem[data-active] .docSearchGroup {
-  color: var(--glacier-accent-text);
-}
-
-.docSearchEmpty {
-  padding: var(--glacier-space-3);
-  color: var(--glacier-text-subtle);
-  font-size: var(--glacier-font-size-sm);
-}
-
-/* blueprint illustrations: a technical drawing of a component's box, labelled
-   with the exact spec measurements, in a blue engineering-drawing palette. */
+/* Blueprint illustrations use semantic accent roles so their engineering-
+  drawing palette follows the selected theme and accent. */
 /* a blueprint block joins the prose rhythm like .example, so consecutive
    blueprints (e.g. Text then Heading) keep a clear gap rather than colliding. */
 .blueprint {
@@ -820,9 +815,9 @@ code {
 
 .bpFrame {
   width: 100%;
-  border: var(--glacier-hairline) solid var(--glacier-blue-6);
+  border: var(--glacier-hairline) solid var(--glacier-accent-border);
   border-radius: var(--glacier-radius-lg);
-  background: var(--glacier-blue-1);
+  background: var(--glacier-accent-soft);
   overflow: hidden;
   /* Blueprints are technical drawings: geometry, dimension lines, and token
      labels are authored left-to-right. Under an RTL page the inherited
@@ -838,7 +833,7 @@ code {
 }
 
 .bpLabel {
-  fill: var(--glacier-blue-11);
+  fill: var(--glacier-accent-text);
   font-family: var(--glacier-font-mono);
   font-size: 8.5px;
 }
@@ -848,7 +843,7 @@ code {
 }
 
 .bpTitle {
-  fill: var(--glacier-blue-11);
+  fill: var(--glacier-accent-text);
   font-family: var(--glacier-font-mono);
   font-size: 9.5px;
   font-weight: var(--glacier-font-weight-semibold);
@@ -859,6 +854,225 @@ code {
 /* Overview: infinite blueprint gallery ---------------------------------- */
 .bpGallery {
   margin-block: var(--glacier-space-4) var(--glacier-space-8);
+}
+
+/* Scrolls away with the page. The opaque background and stacking context that
+   made it sit over the cards went with the stickiness — nothing passes under
+   it now, so it does not need to hide anything. */
+.bpGalleryFilters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-2);
+  margin-block-end: var(--glacier-space-6);
+  padding-block: var(--glacier-space-3);
+}
+
+/* Full width: it filters the whole page, so it spans the whole page. */
+.bpGalleryFilterSearch {
+  width: 100%;
+}
+
+/* Grid, not flex-wrap: with the label as a plain flex item, a row that wrapped
+   put its second line of chips underneath the LABEL rather than under the first
+   chip. A two-column grid gives the chips their own column, so every line of
+   every row starts at the same x. */
+.bpGalleryFilterRow {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  align-items: start;
+  gap: var(--glacier-space-2);
+}
+
+/* A uniform grid, not flex-wrap. Wrapping laid the chips out at their natural
+   widths, so each line ended somewhere different and the two rows never lined
+   up with each other — the "haphazard" look.
+
+   A FIXED four columns, not auto-fit: auto-fit sizes each grid independently,
+   so the 8-chip purpose row and the 4-chip layer row resolved to different
+   column counts and different widths. Pinning the count makes purpose two tidy
+   rows of four and layer one row of four, every chip the same width and every
+   column aligned down the whole block. */
+.bpGalleryFilterChips {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--glacier-space-2);
+}
+
+/* These chips are the page's primary control, not incidental trim, so they get
+   a taller box and roomier sides than the kit's default md step. They fill
+   their grid cell and push the count to the trailing edge, so the labels start
+   on a common line and the counts end on one. */
+.bpGalleryFilterRow button {
+  justify-content: space-between;
+  width: 100%;
+  height: 2.25rem;
+  padding-inline: var(--glacier-space-3);
+  font-size: var(--glacier-font-size-sm);
+}
+
+/* ---- categorical hues ----------------------------------------------------
+
+   The kit ships four distinct hues (accent 228, warning 75, success 150,
+   danger 25 — info is a duplicate of accent), and this row needs eight
+   telling-apart colours. Rather than reuse the semantic ramps, which would
+   attach "danger" to Media and "success" to Data for no reason, each purpose
+   gets its own hue driven through the SAME recipe every kit ramp is built on:
+
+     soft   = oklch(<soft-l>   <chroma x soft-ratio>  H)
+     text   = oklch(<text-l>   <chroma>               H)
+     border = oklch(<border-l> <chroma>               H)
+
+   so these sit on the same perceptual footing as every token around them. The
+   lightness steps differ per theme, which is why they are variables. */
+.bpGalleryFilterChips {
+  --chip-c: 0.1275;
+  --chip-soft-l: 0.21;
+  --chip-soft-c: 0.048;
+  --chip-text-l: 0.805;
+  --chip-border-l: 0.39;
+}
+
+@media (prefers-color-scheme: light) {
+  .bpGalleryFilterChips {
+    --chip-soft-l: 0.96;
+    --chip-soft-c: 0.0375;
+    --chip-text-l: 0.498;
+    --chip-border-l: 0.822;
+  }
+}
+
+/* An explicit choice always wins over the OS preference, in both directions. */
+:root[data-theme='light'] .bpGalleryFilterChips {
+  --chip-soft-l: 0.96;
+  --chip-soft-c: 0.0375;
+  --chip-text-l: 0.498;
+  --chip-border-l: 0.822;
+}
+
+:root[data-theme='dark'] .bpGalleryFilterChips {
+  --chip-soft-l: 0.21;
+  --chip-soft-c: 0.048;
+  --chip-text-l: 0.805;
+  --chip-border-l: 0.39;
+}
+
+/* Eight hues spread around the wheel far enough apart to be told apart at chip
+   size. Input keeps the accent hue, since it is the kit's primary. */
+.bpGalleryFilterChips [data-kind='input'] { --chip-h: 228; }
+.bpGalleryFilterChips [data-kind='display'] { --chip-h: 265; }
+.bpGalleryFilterChips [data-kind='feedback'] { --chip-h: 300; }
+.bpGalleryFilterChips [data-kind='navigation'] { --chip-h: 335; }
+.bpGalleryFilterChips [data-kind='overlay'] { --chip-h: 25; }
+.bpGalleryFilterChips [data-kind='layout'] { --chip-h: 60; }
+.bpGalleryFilterChips [data-kind='data'] { --chip-h: 150; }
+.bpGalleryFilterChips [data-kind='media'] { --chip-h: 195; }
+
+/* The layer row gets a PROGRESSION rather than the purpose row's spread, because
+   the two axes are different in kind. Purposes are unordered categories, so they
+   get hues scattered around the wheel. Layers are an ordered scale — Atoms
+   compose into Molecules compose into Organisms — so they step evenly through
+   one blue-to-violet family. The eye reads the first row as "a set of options"
+   and the second as "a sequence", which is what they respectively are, and
+   nothing in the layer row pairs off against a purpose that happens to sit at a
+   similar hue. */
+.bpGalleryFilterChips [data-layer='atoms'] { --chip-h: 210; }
+.bpGalleryFilterChips [data-layer='molecules'] { --chip-h: 235; }
+.bpGalleryFilterChips [data-layer='organisms'] { --chip-h: 260; }
+.bpGalleryFilterChips [data-layer='structures'] { --chip-h: 285; }
+
+.bpGalleryFilterChips [data-kind],
+.bpGalleryFilterChips [data-layer] {
+  border-color: oklch(var(--chip-border-l) var(--chip-c) var(--chip-h) / 0.55);
+  color: oklch(var(--chip-text-l) var(--chip-c) var(--chip-h));
+}
+
+.bpGalleryFilterChips [data-kind]:hover,
+.bpGalleryFilterChips [data-layer]:hover {
+  background: oklch(var(--chip-soft-l) var(--chip-soft-c) var(--chip-h) / 0.6);
+  border-color: oklch(var(--chip-border-l) var(--chip-c) var(--chip-h));
+}
+
+.bpGalleryFilterChips [data-kind][aria-pressed='true'],
+.bpGalleryFilterChips [data-layer][aria-pressed='true'] {
+  background: oklch(var(--chip-soft-l) var(--chip-soft-c) var(--chip-h));
+  border-color: oklch(var(--chip-border-l) var(--chip-c) var(--chip-h));
+  color: oklch(var(--chip-text-l) var(--chip-c) var(--chip-h));
+}
+
+/* The count carries its chip's hue too, so a chip reads as one object rather
+   than a coloured label with a grey pill stuck on the end.
+
+   Targeted by role, not by the CounterBadge's own class: those are CSS-module
+   hashes and would change out from under this the next time the badge is
+   rebuilt. */
+.bpGalleryFilterChips [data-kind] [role='status'],
+.bpGalleryFilterChips [data-layer] [role='status'] {
+  background: oklch(var(--chip-soft-l) var(--chip-soft-c) var(--chip-h));
+  color: oklch(var(--chip-text-l) var(--chip-c) var(--chip-h));
+}
+
+/* Selected, the chip's own fill IS the soft step — so a soft badge would
+   vanish into it. The badge steps up to the border lightness to stay a
+   distinct object against its parent. */
+.bpGalleryFilterChips [data-kind][aria-pressed='true'] [role='status'],
+.bpGalleryFilterChips [data-layer][aria-pressed='true'] [role='status'] {
+  background: oklch(var(--chip-border-l) var(--chip-c) var(--chip-h));
+  color: oklch(var(--chip-text-l) var(--chip-c) var(--chip-h));
+}
+
+/* The label sits in its own grid column so the two chip rows start at the same
+   x and read as a pair rather than two unrelated strips. The top padding sits
+   it on the first line of chips: the grid aligns to the top of a row that may
+   be two lines tall, so centring would drift as rows wrap. */
+.bpGalleryFilterLabel {
+  padding-block-start: 0.7rem;
+  color: var(--glacier-text-subtle);
+  font-size: var(--glacier-font-size-xs);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.bpGalleryFilterFoot {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+}
+
+.bpGalleryClear {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--glacier-accent-text);
+  font: inherit;
+  font-size: var(--glacier-font-size-sm);
+  cursor: pointer;
+}
+
+.bpGalleryClear:hover {
+  text-decoration: underline;
+}
+
+.bpGalleryEmpty {
+  padding-block: var(--glacier-space-10);
+  text-align: center;
+}
+
+@media (max-width: 40rem) {
+  /* One column on a phone: a 4.5rem label column would leave the chips almost
+     no width to wrap into. */
+  .bpGalleryFilterRow {
+    grid-template-columns: 1fr;
+  }
+
+  .bpGalleryFilterLabel {
+    padding-block-start: 0;
+  }
+
+  /* Four columns would be a few characters wide here. */
+  .bpGalleryFilterChips {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .bpGalleryGrid {

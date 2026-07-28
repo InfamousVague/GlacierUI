@@ -1,0 +1,42 @@
+.group {
+  display: inline-flex;
+  align-items: center;
+  /* A stack is one object: nothing inside it should be selectable as text. */
+  user-select: none;
+  font-family: var(--glacier-font-sans);
+}
+
+/* One slot per person. The pad is what the ring is made of — a surface-coloured
+   plate under each avatar — so overlapping edges separate without an outline
+   the native binding cannot reproduce. */
+.slot {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.ringed {
+  background: var(--glacier-surface);
+}
+
+.circle {
+  border-radius: var(--glacier-radius-full);
+}
+
+.rounded {
+  border-radius: var(--glacier-radius-md);
+}
+
+/* The trailing count, at the avatar's exact geometry so the row's rhythm never
+   breaks on the last slot. */
+.count {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--glacier-hover);
+  color: var(--glacier-text-muted);
+  font-weight: var(--glacier-font-weight-semibold);
+  line-height: 1;
+}

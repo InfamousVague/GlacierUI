@@ -62,7 +62,7 @@ const PAGES = [
   'wizard',
 ];
 
-const THEME_LABEL = { light: 'Light', dark: 'Dark' } as const;
+const THEME_LABEL = { light: 'Alpine', dark: 'Midnight' } as const;
 
 for (const page of PAGES) {
   for (const theme of ['light', 'dark'] as const) {
@@ -70,7 +70,7 @@ for (const page of PAGES) {
       await pw.goto(`/#/${page}`);
       // theme lives in the Preferences modal
       await pw.getByRole('button', { name: 'Preferences' }).click();
-      await pw.getByRole('radio', { name: THEME_LABEL[theme] }).click();
+      await pw.getByRole('radiogroup', { name: 'Theme' }).getByText(THEME_LABEL[theme], { exact: true }).click();
       await pw.keyboard.press('Escape');
       await pw.waitForTimeout(400); // let entrance animations settle
       await expect(pw.locator('.content')).toHaveScreenshot(`${page}-${theme}.png`, {

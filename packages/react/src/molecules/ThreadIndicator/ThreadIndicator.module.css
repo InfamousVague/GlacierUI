@@ -1,0 +1,74 @@
+/* One strip, one target. The row hugs its content rather than spanning the
+   bubble: a full-width footer under every threaded message reads as a divider
+   between messages instead of an attachment to one. */
+.row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding-block: var(--glacier-space-1);
+  padding-inline: var(--glacier-space-2);
+  border: none;
+  border-radius: var(--glacier-radius-md);
+  background: transparent;
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-xs);
+  color: var(--glacier-text-subtle);
+  text-align: start;
+  transition: background var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.faces {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+/* This is the link, and it should read like one. */
+.count {
+  color: var(--glacier-accent-text);
+  font-weight: var(--glacier-font-weight-medium);
+  white-space: nowrap;
+}
+
+/* Weight, not a badge: the strip already carries a number, and a dot beside a
+   count is two ways of saying the same thing. Bold survives greyscale, which is
+   the point — unread is never carried by the accent alone. */
+.row[data-unread] .count {
+  font-weight: var(--glacier-font-weight-semibold);
+}
+
+/* Follows the count instead of being pinned to the trailing edge, so the strip
+   stays as wide as its content. */
+.activity {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pressable {
+  cursor: pointer;
+}
+
+.pressable:hover {
+  background: var(--glacier-accent-soft);
+}
+
+.pressable:hover .count {
+  text-decoration: underline;
+}
+
+.pressable:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    transition: none;
+  }
+}

@@ -26,7 +26,7 @@
   max-width: 28rem;
   border: var(--glacier-hairline) solid var(--glacier-border-subtle);
   border-radius: var(--glacier-radius-full);
-  padding: var(--glacier-space-3) var(--glacier-space-5);
+  padding: var(--glacier-space-2) var(--glacier-space-4);
   background: var(--glacier-surface-raised);
   box-shadow: var(--glacier-shadow-4);
   color: var(--glacier-text);

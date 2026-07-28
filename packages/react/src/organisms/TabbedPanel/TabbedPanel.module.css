@@ -99,7 +99,7 @@
 }
 
 .body {
-  padding: var(--glacier-space-5);
+  padding: var(--glacier-space-4);
   min-width: 0;
 }
 

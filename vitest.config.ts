@@ -9,6 +9,11 @@ export default defineConfig({
         'packages/react/src/**',
         'packages/tokens/src/**',
         'packages/spec/src/**',
+        // The shared-behaviour package is the one place a bug reaches BOTH
+        // bindings at once, so leaving it unmeasured hid the highest-leverage
+        // code in the repo. It was omitted back when it held two helpers; it
+        // now holds twenty modules and its own test project.
+        'packages/logic/src/**',
       ],
       exclude: [
         '**/*.module.css',
@@ -46,6 +51,13 @@ export default defineConfig({
           name: 'spec',
           environment: 'node',
           include: ['packages/spec/test/**/*.test.ts'],
+        },
+      },
+      {
+        test: {
+          name: 'logic',
+          environment: 'node',
+          include: ['packages/logic/test/**/*.test.ts'],
         },
       },
       {

@@ -117,3 +117,37 @@
   outline-offset: 2px;
   border-radius: var(--glacier-radius-sm);
 }
+
+@media (max-width: 40rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: var(--glacier-space-3);
+    min-height: 0;
+  }
+
+  .rail {
+    flex-direction: row;
+    gap: var(--glacier-space-1);
+    overflow-x: auto;
+    padding-inline-end: 0;
+    padding-block-end: var(--glacier-space-2);
+    border-inline-end: 0;
+    border-block-end: var(--glacier-hairline) solid var(--glacier-border-subtle);
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .railItem {
+    flex: 0 0 auto;
+    width: auto;
+  }
+
+  .railLabel {
+    overflow: visible;
+    text-overflow: clip;
+  }
+}

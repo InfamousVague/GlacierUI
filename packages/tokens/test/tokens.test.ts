@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import {
   space,
@@ -11,6 +12,8 @@ import {
   durations,
   accentOptions,
   accentSteps,
+  themePresets,
+  themePresetIds,
 } from '../src/index.ts';
 
 describe('accent options', () => {
@@ -32,6 +35,25 @@ describe('accent options', () => {
     const accentRamp = ramps.find((r) => r.name === 'accent')!;
     expect(first.hue).toBe(accentRamp.hue);
     expect(first.chroma).toBe(accentRamp.chroma);
+  });
+});
+
+describe('theme presets', () => {
+  it('has one token-derived preview for every named preset', () => {
+    expect(themePresets.map((preset) => preset.id)).toEqual(themePresetIds);
+    for (const preset of themePresets) {
+      expect(preset.preview.background).toMatch(/^oklch\(/);
+      expect(preset.preview.surface).toMatch(/^oklch\(/);
+      expect(preset.preview.accent).toMatch(/^oklch\(/);
+      expect(preset.preview.accentSoft).toMatch(/^oklch\(/);
+    }
+  });
+
+  it('emits custom presets with enough specificity to override system dark mode', () => {
+    const css = readFileSync(new URL('../css/tokens.css', import.meta.url), 'utf8');
+    for (const id of ['dawn', 'boreal', 'ember']) {
+      expect(css).toContain(`:root[data-theme-preset='${id}'] {`);
+    }
   });
 });
 

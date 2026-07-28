@@ -4,7 +4,7 @@
     "paths": {
       "@glacier/react": ["../../packages/react/src/index.ts"],
       "@glacier/native": ["../../packages/native/src/index.ts"],
-      "@glacier/commons": ["../../packages/commons/src/index.ts"]
+      "@glacier/logic": ["../../packages/logic/src/index.ts"]
     }
   },
   "include": [

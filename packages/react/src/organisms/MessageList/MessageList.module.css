@@ -1,0 +1,230 @@
+/* The transcript and its separators. Every measurement is the one the specs
+   declare; nothing here invents a value. */
+
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* A flex child defaults to min-height:auto, which refuses to shrink below its
+     content — so the viewport would grow to the full transcript height and the
+     page, not the list, would scroll. This is the single line that makes the
+     whole component work inside an app shell. */
+  min-height: 0;
+  flex: 1;
+}
+
+.viewport {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* The positioning ancestor for the sticky day rows AND the offsetParent every
+     anchor measurement is taken against. Both depend on this. */
+  position: relative;
+
+  /* The browser's own scroll anchoring would fight ours: it picks its own node
+     and applies its own correction, on its own schedule, so the two together
+     produce a double shift that reads as a jump. Ours runs in a layout effect
+     before paint and is measured against a row we chose. */
+  overflow-anchor: none;
+
+  /* A transcript is the innermost scroller in a chat app; letting a flick at the
+     end of it scroll the page behind is how a reader loses their place. */
+  overscroll-behavior: contain;
+
+  padding-inline: var(--glacier-space-4);
+  padding-block: var(--glacier-space-3);
+  color: var(--glacier-text);
+  font-family: var(--glacier-font-sans);
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--glacier-border-strong) transparent;
+}
+
+/* Inset, because an outset ring on a scroll container is clipped by its own
+   overflow and only half of it would ever be visible. */
+.viewport:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: -2px;
+}
+
+/* Header and footer live here rather than inside .rows: .rows carries role=list,
+   whose children must all be listitems, and a typing indicator is not one. */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-2);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-2);
+  /* The rows column must be exactly as tall as its content: any implicit
+     stretching would make scrollHeight disagree with the sum of the row offsets
+     the anchoring math reads. */
+  align-items: stretch;
+}
+
+.row {
+  /* So a long unbroken message shrinks rather than widening the transcript and
+     giving it a horizontal scrollbar it must never have. */
+  min-width: 0;
+}
+
+/* Sticky is applied to the row wrapper rather than to the separator itself, so
+   a caller's own renderDay output sticks too without having to know it should. */
+.sticky {
+  position: sticky;
+  top: 0;
+  /* Above the messages it passes over, below the floating jump control. */
+  z-index: 1;
+}
+
+.jump {
+  position: absolute;
+  inset-inline-end: var(--glacier-space-4);
+  bottom: var(--glacier-space-4);
+  z-index: 2;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* ---- DateSeparator ------------------------------------------------------- */
+
+.day {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  padding-block: var(--glacier-space-2);
+}
+
+.dayRule {
+  flex: 1;
+  height: var(--glacier-hairline);
+  background: var(--glacier-border);
+}
+
+.dayLabel {
+  font-size: var(--glacier-font-size-xs);
+  font-weight: var(--glacier-font-weight-medium);
+  color: var(--glacier-text-muted);
+  white-space: nowrap;
+}
+
+/* The chip drops the rule entirely. A pinned separator floats over the messages
+   scrolling beneath it, and a line running through them would read as a
+   strikethrough on somebody's sentence. */
+.day[data-variant='chip'] {
+  justify-content: center;
+}
+
+.day[data-variant='chip'] .dayRule {
+  display: none;
+}
+
+.day[data-variant='chip'] .dayLabel {
+  padding-inline: var(--glacier-space-3);
+  padding-block: var(--glacier-space-1);
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-surface-raised);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  box-shadow: var(--glacier-shadow-1);
+}
+
+/* ---- UnreadDivider ------------------------------------------------------- */
+
+/* Louder than the day row on three axes at once — accent hue, semibold weight,
+   and a tinted rule — because it has to be unmistakable at a glance while the
+   date rows around it stay quiet. */
+.unread {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  padding-block: var(--glacier-space-2);
+}
+
+.unreadRule {
+  flex: 1;
+  height: var(--glacier-hairline);
+  background: var(--glacier-accent-border);
+}
+
+/* start and end hide the rule on the side the label hugs, so the label reads as
+   a heading for what follows rather than as a centred boundary. */
+.unread[data-align='start'] .unreadRule:first-child,
+.unread[data-align='end'] .unreadRule:last-child {
+  display: none;
+}
+
+.unreadLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  font-size: var(--glacier-font-size-xs);
+  font-weight: var(--glacier-font-weight-semibold);
+  letter-spacing: var(--glacier-tracking-xs);
+  color: var(--glacier-accent-text);
+  white-space: nowrap;
+}
+
+/* A bookmark, not an error: the tally sits in a soft accent chip rather than
+   borrowing the danger tone the jump control's badge uses. */
+.unreadCount {
+  padding-inline: var(--glacier-space-2);
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-accent-soft);
+  color: var(--glacier-accent-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- ScrollToLatest ------------------------------------------------------ */
+
+.latest {
+  position: relative;
+  display: inline-flex;
+}
+
+.latestButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--glacier-control-height-md);
+  height: var(--glacier-control-height-md);
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-surface-raised);
+  color: var(--glacier-text);
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  box-shadow: var(--glacier-shadow-2);
+  cursor: pointer;
+  transition:
+    background var(--glacier-duration-fast) var(--glacier-ease-out),
+    box-shadow var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.latestButton:hover {
+  background: var(--glacier-hover);
+  box-shadow: var(--glacier-shadow-3);
+}
+
+.latestButton:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: 2px;
+}
+
+/* The badge sits on the leading top corner, clear of the glyph. Pointer events
+   are off so a press on the badge still hits the button underneath. */
+.latestBadge {
+  position: absolute;
+  top: calc(var(--glacier-space-1) * -1);
+  inset-inline-end: calc(var(--glacier-space-1) * -1);
+  pointer-events: none;
+}

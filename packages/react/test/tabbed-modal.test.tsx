@@ -82,6 +82,43 @@ describe('TabbedModal', () => {
     expect(privacy).toHaveFocus();
   });
 
+  it('uses a horizontal tab strip and Left/Right navigation on narrow screens', async () => {
+    const originalMatchMedia = window.matchMedia;
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      writable: true,
+      value: vi.fn().mockImplementation((query: string) => ({
+        matches: query === '(max-width: 40rem)',
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+
+    try {
+      render(<TabbedModal open onClose={() => {}} title="Settings" sections={sections} />);
+      const tablist = await screen.findByRole('tablist');
+      const account = screen.getByRole('tab', { name: 'Account' });
+      const notifications = screen.getByRole('tab', { name: 'Notifications' });
+
+      expect(tablist).toHaveAttribute('aria-orientation', 'horizontal');
+      account.focus();
+      fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+      expect(notifications).toHaveFocus();
+      expect(notifications).toHaveAttribute('aria-selected', 'true');
+    } finally {
+      Object.defineProperty(window, 'matchMedia', {
+        configurable: true,
+        writable: true,
+        value: originalMatchMedia,
+      });
+    }
+  });
+
   it('uses a roving tabindex so only the selected tab is tabbable', async () => {
     render(<TabbedModal open onClose={() => {}} title="Settings" sections={sections} />);
     await screen.findByRole('dialog');

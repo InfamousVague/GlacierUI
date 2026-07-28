@@ -12,7 +12,7 @@
   background: var(--glacier-surface-raised);
   border: var(--glacier-hairline) solid var(--glacier-border-subtle);
   border-radius: var(--glacier-radius-xl);
-  padding: var(--glacier-space-6);
+  padding: var(--glacier-space-5);
   font-family: var(--glacier-font-sans);
   color: var(--glacier-text);
   transition: box-shadow var(--glacier-duration-fast) var(--glacier-ease-out);

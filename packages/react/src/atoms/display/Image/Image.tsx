@@ -78,9 +78,19 @@ export function Image({
           loading={loading}
           className={styles.img}
           style={{ objectFit: fit }}
-          onLoad={() => setStatus('loaded')}
-          onError={() => setStatus('error')}
           {...rest}
+          // After the spread, not before: these drive the component's own
+          // loading state, and a caller passing onLoad used to replace them
+          // silently — leaving the image stuck behind its skeleton forever.
+          // The caller's handler still runs; it just no longer displaces ours.
+          onLoad={(event) => {
+            setStatus('loaded');
+            rest.onLoad?.(event);
+          }}
+          onError={(event) => {
+            setStatus('error');
+            rest.onError?.(event);
+          }}
         />
       )}
       {status === 'loading' && <Skeleton className={styles.pending} />}

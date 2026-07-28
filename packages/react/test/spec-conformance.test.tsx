@@ -16,10 +16,13 @@ import {
   Announcements,
   Banner,
   Button,
+  CalendarView,
   Callout,
+  CommandPalette,
   Card,
   Checkbox,
   CodeBlock,
+  ColorPicker,
   CounterBadge,
   Divider,
   EmptyState,
@@ -32,14 +35,19 @@ import {
   Meter,
   NumberInput,
   Pill,
+  PlayerCard,
   ProgressBar,
   ProgressRing,
   Radio,
+  RichTextEditor,
   RadioCard,
   SearchField,
+  SortableList,
+  VirtualList,
   SegmentedBar,
   Skeleton,
   Slider,
+  SeekBar,
   Spinner,
   StatusDot,
   Steps,
@@ -91,6 +99,60 @@ import {
   Pagination,
   Accordion,
   Table,
+  Sparkline,
+  Fieldset,
+  FormSection,
+  FileUpload,
+  Calendar,
+  DatePicker,
+  TimeSeriesChart,
+  // chat suite
+  AttachmentChip,
+  AttachmentTray,
+  AvatarGroup,
+  CallControlBar,
+  CallControlButton,
+  CallTimer,
+  CharacterCounter,
+  ChatHeader,
+  ComposeBar,
+  ComposeContextBanner,
+  ConnectionBanner,
+  ConnectionQuality,
+  ConversationList,
+  ConversationListItem,
+  ConversationSkeleton,
+  DateSeparator,
+  DeliveryStatus,
+  FileAttachment,
+  ImageAttachment,
+  ImageGrid,
+  LinkPreviewCard,
+  MemberRow,
+  MentionAutocomplete,
+  MessageActions,
+  MessageBubble,
+  MessageGroup,
+  MessageInput,
+  MessageList,
+  MessageMeta,
+  MicToggle,
+  PresenceDot,
+  QuotedMessage,
+  ReactionBar,
+  ReactionPicker,
+  ReactionPill,
+  ReadReceiptStack,
+  RecordingIndicator,
+  ScrollToLatest,
+  SendButton,
+  SystemMessage,
+  ThreadIndicator,
+  TypingIndicator,
+  UnreadDivider,
+  VideoAttachment,
+  VoiceNote,
+  VoiceRecorder,
 } from '../src/index.ts';
 import { Star } from '@glacier/icons';
 import { cloneElement, type ReactElement } from 'react';
@@ -122,6 +184,45 @@ function combos(spec: ComponentSpec): { variant?: string; tone?: string; size?: 
 
 type Combo = { variant?: string; tone?: string; size?: string };
 type Renderer = (o: Combo) => ReactElement;
+
+// Fixed clock and sample payloads for the chat suite: every timestamped
+// component takes `now` so a transcript, a test, and a screenshot agree.
+const NOW = new Date(2026, 6, 15, 12, 0).getTime();
+const SENT = new Date(2026, 6, 15, 9, 41).getTime();
+const REPLIED = new Date(2026, 6, 15, 9, 41, 5).getTime();
+
+const PHOTO = {
+  id: 'photo-1',
+  url: '/photo.jpg',
+  mimeType: 'image/png',
+  fileName: 'photo.png',
+  width: 800,
+  height: 600,
+};
+const CLIP = {
+  id: 'clip-1',
+  url: '/clip.mp4',
+  mimeType: 'video/mp4',
+  fileName: 'clip.mp4',
+  width: 640,
+  height: 360,
+  durationMs: 42_000,
+};
+const REPORT = { id: 'file-1', fileName: 'report.pdf', mimeType: 'application/pdf', byteSize: 24_000 };
+
+const MESSAGE_RUN = {
+  id: 'm0',
+  authorId: 'ada',
+  messages: [
+    { id: 'm0', authorId: 'ada', at: SENT, text: 'Hello' },
+    { id: 'm1', authorId: 'ada', at: REPLIED, text: 'Again' },
+  ],
+  startedAt: SENT,
+  endedAt: REPLIED,
+  dayKey: '2026-07-15',
+  standalone: false,
+  continued: false,
+};
 
 // One renderer per component: required props baked in, the spec's variant /
 // tone / size threaded to the real prop. Heading and Surface render bare
@@ -170,6 +271,7 @@ const RENDER: Record<string, Renderer> = {
   ),
   skeleton: (o) => <Skeleton variant={o.variant as never} />,
   slider: () => <Slider value={50} />,
+  'seek-bar': (o) => <SeekBar duration={174} value={84} size={o.size as never} aria-label="Seek" />,
   spinner: (o) => <Spinner tone={o.tone as never} size={o.size as never} />,
   steps: (o) => <Steps tone={o.tone as never} size={o.size as never} count={3} active={1} />,
   'empty-state': () => <EmptyState title="Nothing here" description="No items yet." />,
@@ -202,6 +304,22 @@ const RENDER: Record<string, Renderer> = {
     </Tooltip>
   ),
   toast: (o) => <Toast tone={o.tone as never} message="Saved" />,
+  'color-picker': (o) => <ColorPicker defaultValue="#3b82f6" size={o.size as never} aria-label="Colour" />,
+  'rich-text-editor': () => <RichTextEditor defaultValue="hi" aria-label="Notes" />,
+  'virtual-list': () => <VirtualList count={0} itemSize={40} renderItem={() => 'Row'} aria-label="Rows" />,
+  'sortable-list': (o) => (
+    <SortableList items={[{ id: 'a' }]} onReorder={() => {}} renderItem={() => 'Row'} size={o.size as never} />
+  ),
+  'calendar-view': () => (
+    <CalendarView events={[]} today={new Date(2026, 6, 15)} defaultDate={new Date(2026, 6, 15)} />
+  ),
+  // Both render closed: the conformance sweep is about a spec having a renderer
+  // at all, and an overlay that portals itself into the body on every variant
+  // would leave the sweep asserting against a document, not a subtree.
+  'command-palette': (o) => (
+    <CommandPalette open={false} onOpenChange={() => {}} commands={[]} onRun={() => {}} size={o.size as never} />
+  ),
+  'player-card': (o) => <PlayerCard duration={205} title="Allegro" density={o.variant as never} />,
   modal: (o) => (
     <Modal open={false} onClose={() => {}} size={o.size as never}>
       Body
@@ -317,6 +435,124 @@ const RENDER: Record<string, Renderer> = {
       data={[{ name: 'Ada', status: 'Active' }]}
     />
   ),
+  sparkline: (o) => (
+    <Sparkline data={[3, 7, 4, 9, 6]} tone={o.tone as never} size={o.size as never} aria-label="Trend" />
+  ),
+  fieldset: () => (
+    <Fieldset legend="Contact">
+      <input aria-label="Email" />
+    </Fieldset>
+  ),
+  'form-section': () => <FormSection title="Profile">Body</FormSection>,
+  'file-upload': () => <FileUpload aria-label="Attachments" />,
+  calendar: () => <Calendar aria-label="Date" defaultValue={new Date(2026, 6, 15)} />,
+  'date-picker': (o) => (
+    <DatePicker size={o.size as never} aria-label="Date" defaultValue={new Date(2026, 6, 15)} />
+  ),
+  'time-series-chart': (o) => (
+    <TimeSeriesChart
+      aria-label="Throughput"
+      times={[SENT, SENT + 60_000, SENT + 120_000]}
+      series={[{ id: 'requests', label: 'Requests', values: [4, 9, 6], tone: o.tone as never }]}
+    />
+  ),
+  // chat suite: atoms
+  'attachment-chip': () => (
+    <AttachmentChip id="a1" name="report.pdf" size={24_000} status="uploading" progress={0.4} />
+  ),
+  'call-control-button': (o) => (
+    <CallControlButton aria-label="Mute" state={o.variant as never} size={o.size as never}>
+      <span />
+    </CallControlButton>
+  ),
+  'call-timer': (o) => <CallTimer seconds={125} size={o.size as never} />,
+  'character-counter': () => <CharacterCounter length={180} limit={200} />,
+  'connection-quality': () => <ConnectionQuality level={3} />,
+  'delivery-status': (o) => <DeliveryStatus status={o.tone as never} size={o.size as never} />,
+  'message-input': (o) => <MessageInput size={o.size as never} aria-label="Message" />,
+  'message-meta': () => <MessageMeta at={SENT} now={NOW} status="read" />,
+  'presence-dot': (o) => <PresenceDot status={o.tone as never} size={o.size as never} />,
+  'reaction-pill': (o) => <ReactionPill emoji="👍" count={2} size={o.size as never} />,
+  'send-button': (o) => <SendButton state="ready" size={o.size as never} />,
+  'system-message': () => <SystemMessage kind="join">Ada joined</SystemMessage>,
+  'typing-indicator': (o) => <TypingIndicator names={['Ada']} size={o.size as never} />,
+  // chat suite: molecules
+  'attachment-tray': () => (
+    <AttachmentTray attachments={[{ id: 'a1', name: 'report.pdf', status: 'complete' }]} />
+  ),
+  'avatar-group': () => <AvatarGroup avatars={[{ name: 'Ada Lovelace' }, { name: 'Grace Hopper' }]} />,
+  'read-receipt-stack': () => <ReadReceiptStack readers={[{ name: 'Ada Lovelace' }]} />,
+  'call-control-bar': (o) => (
+    <CallControlBar variant={o.variant as never} size={o.size as never} label="Call controls">
+      <CallControlButton aria-label="Mute">
+        <span />
+      </CallControlButton>
+    </CallControlBar>
+  ),
+  'compose-context-banner': (o) => (
+    <ComposeContextBanner mode={o.variant as never} author="Ada" preview="Hello" onDismiss={() => {}} />
+  ),
+  'connection-banner': (o) => <ConnectionBanner state={(o.tone ?? 'offline') as never} />,
+  'conversation-list-item': (o) => (
+    <ConversationListItem item={{ id: 'ada', name: 'Ada Lovelace', snippet: 'Hello', timestamp: SENT }} density={o.size as never} now={NOW} />
+  ),
+  'conversation-skeleton': () => <ConversationSkeleton count={2} />,
+  'date-separator': (o) => <DateSeparator at={SENT} now={NOW} variant={o.variant as never} />,
+  'file-attachment': () => <FileAttachment attachment={REPORT} />,
+  'image-attachment': () => <ImageAttachment attachment={PHOTO} alt="A photo" />,
+  'image-grid': () => <ImageGrid images={[PHOTO, { ...PHOTO, id: 'photo-2' }]} />,
+  'link-preview-card': () => (
+    <LinkPreviewCard url="https://example.com/post" title="A post" description="What it is about" />
+  ),
+  'member-row': () => <MemberRow name="Ada Lovelace" status="online" role="Admin" />,
+  'mention-autocomplete': () => (
+    <MentionAutocomplete
+      open
+      trigger="@"
+      candidates={[{ id: 'ada', label: 'Ada Lovelace', handle: 'ada' }]}
+      cursor={0}
+      onChoose={() => {}}
+    />
+  ),
+  'message-actions': () => (
+    <MessageActions actions={[{ id: 'react', label: 'React' }, { id: 'reply', label: 'Reply' }]} visible />
+  ),
+  'message-bubble': () => (
+    <MessageBubble own position="last" tail at={SENT} now={NOW}>
+      Hello
+    </MessageBubble>
+  ),
+  'message-group': () => <MessageGroup group={MESSAGE_RUN} authorName="Ada" now={NOW} />,
+  'mic-toggle': () => <MicToggle />,
+  'quoted-message': (o) => <QuotedMessage author="Ada" text="Hello" tone={o.variant as never} />,
+  'reaction-bar': () => (
+    <ReactionBar reactions={[{ emoji: '👍', actorId: 'ada' }]} viewerId="grace" onToggle={() => {}} />
+  ),
+  'reaction-picker': () => <ReactionPicker />,
+  'recording-indicator': (o) => <RecordingIndicator recording seconds={12} size={o.size as never} />,
+  'scroll-to-latest': () => <ScrollToLatest visible count={3} />,
+  'thread-indicator': () => <ThreadIndicator count={4} lastActivityAt={SENT} now={NOW} />,
+  'unread-divider': () => <UnreadDivider count={3} />,
+  'video-attachment': () => <VideoAttachment attachment={CLIP} />,
+  'voice-note': () => <VoiceNote duration={12} levels={[0.2, 0.8, 0.4]} />,
+  'voice-recorder': () => <VoiceRecorder />,
+  // chat suite: organisms and structures
+  'compose-bar': () => <ComposeBar aria-label="Message composer" />,
+  'conversation-list': (o) => (
+    <ConversationList
+      items={[{ id: 'ada', name: 'Ada Lovelace', snippet: 'Hello', timestamp: SENT }]}
+      density={o.size as never}
+      now={NOW}
+    />
+  ),
+  'message-list': () => (
+    <MessageList
+      items={[{ kind: 'group', key: 'g0', group: MESSAGE_RUN }]}
+      renderGroup={(group) => <div>{group.messages.length}</div>}
+      now={NOW}
+    />
+  ),
+  'chat-header': (o) => <ChatHeader title="Ada Lovelace" subtitle="Online" density={o.size as never} />,
 };
 
 describe('React renders every spec variant, tone, and size', () => {
@@ -339,6 +575,7 @@ describe('React renders every spec variant, tone, and size', () => {
 // receive data-testid. They are intentionally targeted by role (dialog,
 // listbox, menu, tooltip) instead and stay excluded from the passthrough sweep.
 const NO_SYNC_ROOT = new Set([
+  'command-palette',
   'modal',
   'drawer',
   'alert-dialog',

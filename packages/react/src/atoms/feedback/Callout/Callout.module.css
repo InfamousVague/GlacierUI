@@ -3,7 +3,7 @@
   gap: var(--glacier-space-3);
   border: var(--glacier-hairline) solid var(--glacier-border-subtle);
   border-radius: var(--glacier-radius-lg);
-  padding: var(--glacier-space-4) var(--glacier-space-5);
+  padding: var(--glacier-space-3) var(--glacier-space-4);
   font-family: var(--glacier-font-sans);
   font-size: var(--glacier-font-size-sm);
   line-height: var(--glacier-leading-md);
@@ -17,13 +17,23 @@
   line-height: var(--glacier-leading-md);
 }
 
+/* Normal flow, not a grid. A grid makes every child its own row, which turns an
+   inline <code> inside a sentence into a full-width block and breaks the text
+   around it — the most ordinary thing to put in a callout. Block children are
+   spaced by margin instead; inline ones ignore block margins, so they keep
+   flowing with the sentence. */
 .body {
-  display: grid;
-  gap: var(--glacier-space-1);
   min-width: 0;
 }
 
+.callout .body > * + * {
+  margin-block-start: var(--glacier-space-1);
+}
+
 .title {
+  /* its own line above the body, which the grid used to provide */
+  display: block;
+  margin-block-end: var(--glacier-space-1);
   font-weight: var(--glacier-font-weight-semibold);
   color: var(--glacier-text);
 }

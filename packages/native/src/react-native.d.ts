@@ -45,8 +45,12 @@ declare module 'react-native' {
 
   export interface ResponderProps {
     onStartShouldSetResponder?: () => boolean;
+    /** Claims an in-progress gesture, so a parent scroller cannot steal a drag. */
+    onMoveShouldSetResponder?: () => boolean;
     onResponderGrant?: (event: ResponderEvent) => void;
     onResponderMove?: (event: ResponderEvent) => void;
+    onResponderRelease?: (event: ResponderEvent) => void;
+    onResponderTerminate?: (event: ResponderEvent) => void;
   }
 
   export interface PointerEvent {
@@ -127,6 +131,11 @@ declare module 'react-native' {
     onBlur?: () => void;
     onKeyPress?: (e: { nativeEvent: { key: string } }) => void;
     onSubmitEditing?: () => void;
+    /** Controlled caret/selection range — how a caret is restored after an edit. */
+    selection?: { start: number; end: number };
+    onSelectionChange?: (e: { nativeEvent: { selection: { start: number; end: number } } }) => void;
+    /** Where text sits in a multiline box; RN centres it vertically by default. */
+    textAlignVertical?: 'auto' | 'top' | 'bottom' | 'center';
   }
 
   export interface ScrollViewProps extends CommonProps {
@@ -139,6 +148,11 @@ declare module 'react-native' {
     scrollEnabled?: boolean;
     onScroll?: (e: { nativeEvent: { contentOffset: { x: number; y: number } } }) => void;
     stickyHeaderIndices?: number[];
+    /** Whether a tap that lands while the keyboard is up reaches the row under
+        it, instead of only dismissing the keyboard. */
+    keyboardShouldPersistTaps?: 'always' | 'never' | 'handled';
+    /** Minimum ms between scroll events; 16 asks for one per frame. */
+    scrollEventThrottle?: number;
   }
 
   export interface ModalProps extends CommonProps {

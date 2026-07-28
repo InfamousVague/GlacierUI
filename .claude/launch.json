@@ -5,7 +5,8 @@
       "name": "docs",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev", "--workspace", "apps/docs"],
-      "port": 5199
+      "port": 5199,
+      "autoPort": true
     }
   ]
 }

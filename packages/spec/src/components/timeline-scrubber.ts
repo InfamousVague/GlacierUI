@@ -72,7 +72,7 @@ export const timelineScrubberSpec: ComponentSpec = {
     tickFontSize: token('font-size-xs'),
   },
   states: [
-    { name: 'default', description: 'Track on the sunken surface, activity backdrop in the text color, playhead line in the accent solid.' },
+    { name: 'default', description: 'Track on the sunken surface, activity backdrop as an area chart with a 1px accent-solid crest over an accent-soft wash, playhead line in the accent solid.' },
     {
       name: 'live',
       description: 'The playhead hugs the trailing edge and moves with the advancing window.',

@@ -1,0 +1,128 @@
+/* A fixed-height strip, not a masthead. The row never wraps: the trailing
+   actions are call buttons, and a header that reflows on a narrow screen pushes
+   the transcript down while somebody is reading it. */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: var(--glacier-space-16);
+  padding-inline: var(--glacier-space-4);
+  background: var(--glacier-surface);
+  font-family: var(--glacier-font-sans);
+  color: var(--glacier-text);
+}
+
+.header[data-density='compact'] {
+  height: var(--glacier-control-height-lg);
+  gap: var(--glacier-space-2);
+  padding-inline: var(--glacier-space-3);
+}
+
+.header[data-border] {
+  border-block-end: var(--glacier-hairline) solid var(--glacier-border-subtle);
+}
+
+.back {
+  flex: none;
+  /* Physical arrow, logical position: the control sits on the leading edge and
+     the glyph flips with the document direction. */
+  margin-inline-start: calc(var(--glacier-space-2) * -1);
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  /* Takes the row's slack so the actions stay pinned to the trailing edge. */
+  flex: 1;
+  min-width: 0;
+}
+
+.header[data-density='compact'] .identity {
+  gap: var(--glacier-space-2);
+}
+
+.avatar {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* One line, truncated. Conversation names are long and arbitrary; letting one
+   wrap would grow the bar and move the transcript. */
+.title {
+  margin: 0;
+  font-size: var(--glacier-font-size-md);
+  line-height: var(--glacier-leading-sm);
+  font-weight: var(--glacier-font-weight-semibold);
+  color: var(--glacier-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header[data-density='compact'] .title {
+  font-size: var(--glacier-font-size-sm);
+}
+
+/* The button inside the heading, styled to disappear into it: the affordance is
+   the hover underline and the focus ring, not a chrome box. */
+.titleButton {
+  display: block;
+  max-width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.titleButton:hover {
+  text-decoration: underline;
+}
+
+.titleButton:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--glacier-radius-sm);
+}
+
+/* Presence, member count, or a typing row. Compose it — this is a slot, and its
+   only job here is to stay on one line and stay quiet. */
+.subtitle {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-1);
+  min-width: 0;
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-xs);
+  color: var(--glacier-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  /* Tighter than the bar gap: the actions are one cluster, and the bar gap is
+     what separates that cluster from the conversation's name. */
+  gap: var(--glacier-space-1);
+  flex: none;
+  margin-inline-start: auto;
+}

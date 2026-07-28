@@ -12,9 +12,12 @@ when validated.
   side-by-side comparison shows the resting trigger.
 
 ---
+
 ## Missing
 - [x] Announcements banner with scrolling updates
 - [x] Custom scrollbars
+- [ ] Scrollbars in sidebar in app should use subtle track version
+- [ ] Add support for hiding scrollbars unless scrolling
 - [ ] Default Themes
 - [ ] UI background accents (Halftone dots illustrations, etc) for the top right top left or other corner in the background of the app for visual flair
 - [x] Option for semi-transparent empty icon fill
@@ -96,7 +99,8 @@ when validated.
 - [x] AppShell
 - [x] DataGrid
 - [ ] Drawer &nbsp;`▲ overlay`
-- [ ] FloatingPanel &nbsp;`▲ overlay`
+  - [ ] Native version doesn't open
+- [x] FloatingPanel &nbsp;`▲ overlay`
 - [x] Menu &nbsp;`▲ overlay`
 - [ ] Modal &nbsp;`▲ overlay`
 - [ ] Popover &nbsp;`▲ overlay`
@@ -112,25 +116,27 @@ when validated.
   - [ ] Text clipped on react native
   - [ ] Blueprint is not representitive of tree view
 - [ ] Wizard
+  - [ ] Both examples do not fill the card 100%
+  - [ ] Both examples jump in width while progressing through steps
 
 ## Structures (7)
 
-- [ ] CardGroup
-- [ ] NavBar
-- [ ] PageHeader
-- [ ] Section
-- [ ] Sidebar
-- [ ] TitleBar
-- [ ] Toolbar
+- [x] CardGroup
+- [x] NavBar
+- [x] PageHeader
+- [x] Section
+- [x] Sidebar
+- [x] TitleBar
+- [x] Toolbar
 
 ## Layout primitives (7)
 
 _No dedicated component pages — validate via any page that uses them, or the Layout foundations page._
 
-- [ ] Box
-- [ ] Center
-- [ ] Container
-- [ ] Grid
-- [ ] Row
-- [ ] Spacer
-- [ ] Stack
+- [x] Box
+- [x] Center
+- [x] Container
+- [x] Grid
+- [x] Row
+- [x] Spacer
+- [x] Stack

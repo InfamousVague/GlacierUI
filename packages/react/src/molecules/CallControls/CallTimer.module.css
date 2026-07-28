@@ -1,0 +1,27 @@
+.timer {
+  font-family: var(--glacier-font-mono);
+  /* Tabular figures, so the readout does not jitter as digits change width — a
+     clock that twitched every second would drag the eye off the call. */
+  font-variant-numeric: tabular-nums;
+  /* Wide enough for a settled m:ss, so the row does not reflow when 9:59 rolls
+     over to 10:00. */
+  min-width: 5ch;
+  display: inline-block;
+  /* No transition anywhere: an eased clock would appear to lag the call. */
+}
+
+.sm {
+  font-size: var(--glacier-font-size-xs);
+}
+
+.md {
+  font-size: var(--glacier-font-size-sm);
+}
+
+.default {
+  color: var(--glacier-text);
+}
+
+.muted {
+  color: var(--glacier-text-muted);
+}

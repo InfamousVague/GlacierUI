@@ -1,0 +1,122 @@
+/* The density's spacing arrives as --player-* custom properties, resolved once
+   in @glacier/logic so a compact card is the same card on both platforms. */
+.card {
+  width: 100%;
+  /* A transport is a control, not prose: dragging across it should scrub or do
+     nothing, never leave a selection highlight behind the buttons. */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--player-gap);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-1);
+  min-width: 0;
+}
+
+/* Holds the real line box while loading, so swapping a placeholder for its text
+   never shifts the card. */
+.bone {
+  display: flex;
+  align-items: center;
+}
+
+/* a long title truncates rather than reflowing the card */
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The bar and its clock are one unit: the times are the bar's endpoints, so
+   they sit tight under it and the density gap separates the group from the
+   transport rather than splitting the pair. */
+.scrubber {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-1);
+  min-width: 0;
+}
+
+.times {
+  display: flex;
+  justify-content: space-between;
+}
+
+.transport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--player-transport-gap);
+}
+
+/* An engaged mode tints its control, so shuffle-on or repeat-on is visible
+   without having to compare it against its neighbours. */
+.transport [data-on] {
+  color: var(--glacier-accent-text);
+}
+
+.card[data-disabled] {
+  opacity: 0.5;
+}
+
+/* A loading card should read as an outline waiting to be filled, not a solid
+   grey slab. The placeholders inside are what the eye should follow, so the
+   surface and its shadow step back and let them carry the card.
+
+   The extra attributes are for specificity, not decoration: the Card's own
+   `.card:not(.glass)[data-elevation]` rule is (0,3,0), and `shadow-0` is still a
+   shadow, so a plain `.card[data-skeleton]` would lose to it. These are
+   attributes the card already carries. */
+.card[data-skeleton][data-layout][data-density] {
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ---- layouts ------------------------------------------------------------ */
+
+/* Stacked: art is a thumbnail above the heading, small enough that the card
+   stays a control rather than becoming a picture. */
+.card[data-layout='stacked'] .artwork {
+  width: 3.5rem;
+  flex: none;
+}
+
+/* Inline: the art pairs with the text as a header row, then the card breaks so
+   the bar and controls span its full width. Top-aligned, because centring the
+   art against a tall column leaves it floating next to nothing. */
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--player-gap);
+  min-width: 0;
+}
+
+.card[data-layout='inline'] .artwork {
+  width: 5rem;
+  flex: none;
+}
+
+/* min-width 0 lets the title truncate instead of forcing the row wider */
+.header .heading {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Square: the art is the hero, filling the card's width, with the bar and
+   controls beneath it. */
+.card[data-layout='square'] .artwork {
+  width: 100%;
+}
+
+.card[data-layout='square'] .transport {
+  /* the controls carry the card at this size, so they get room to breathe */
+  gap: var(--player-transport-gap);
+}

@@ -56,6 +56,6 @@
 
 .body {
   overflow-y: auto;
-  padding: var(--glacier-space-4);
+  padding: var(--glacier-space-3);
   font-size: var(--glacier-font-size-sm);
 }

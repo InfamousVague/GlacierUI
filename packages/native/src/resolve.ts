@@ -1,14 +1,14 @@
 /**
  * The native side of the spec seam.
  *
- * @glacier/commons reads a ComponentSpec and returns bare token names; this
+ * @glacier/logic reads a ComponentSpec and returns bare token names; this
  * turns those names into React Native style values by wrapping each in
  * `var(--glacier-*)` (which react-native-web resolves on the DOM, and a device
  * build will swap for a concrete token map). Components call these instead of
  * hand-writing paint and size objects, so they cannot drift from the web kit.
  */
 
-import { paintFor, sizeFor, dimensionsFor, type StyleGroup } from '@glacier/commons';
+import { paintFor, sizeFor, dimensionsFor, type StyleGroup } from '@glacier/logic';
 import type { ComponentSpec } from '@glacier/spec';
 import { t } from './tokens.ts';
 

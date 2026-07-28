@@ -1,12 +1,13 @@
 import { accentOptions, accentSteps, type SansFont, type MonoFont } from '@glacier/tokens';
-import { Button, Divider, Label, ScrollbarAppearance, SegmentedControl, Select, Slider, Switch, TabbedModal, Text, useT, Size, TextTone, Variant, type Locale, type VisualFeedbackVariant, type VisualFeedbackIntensity } from '@glacier/react';
+import { Button, DensitySelector, Divider, Label, ScrollbarAppearance, SegmentedControl, Select, Slider, Switch, TabbedModal, Text, useT, Size, TextTone, Variant, type DensityMode, type Locale, type VisualFeedbackVariant, type VisualFeedbackIntensity } from '@glacier/react';
 import { LayoutTemplate, Palette, Sparkles, Type } from '@glacier/icons';
-import { DensitySelector, type DensityMode } from './DensitySelector.tsx';
 import { FlagSquircle } from './FlagSquircle.tsx';
 import { LANGUAGES, m } from './i18n.ts';
+import { ThemeSelector } from './ThemeSelector.tsx';
+import { THEME_PRESETS, getThemePreset, type ThemePreference } from './themePresets.ts';
 
 export interface Preferences {
-  theme: 'system' | 'light' | 'dark';
+  theme: ThemePreference;
   density: DensityMode;
   layout: 'floating' | 'full';
   direction: 'ltr' | 'rtl';
@@ -24,6 +25,8 @@ export interface Preferences {
   frostedness: number;
   /** Visual treatment used by the docs' themed scrollbars. */
   scrollbarStyle: ScrollbarAppearance;
+  /** Shows the themed track behind scrollbar thumbs throughout the docs. */
+  showScrollbarTrack: boolean;
 }
 
 export const DEFAULT_PREFERENCES: Preferences = {
@@ -41,6 +44,7 @@ export const DEFAULT_PREFERENCES: Preferences = {
   radiusScale: 1,
   frostedness: 1,
   scrollbarStyle: ScrollbarAppearance.Default,
+  showScrollbarTrack: true,
 };
 
 interface PreferencesModalProps {
@@ -60,6 +64,15 @@ interface PreferencesModalProps {
  */
 export function PreferencesModal({ open, onClose, preferences, onChange, locale, onLocaleChange }: PreferencesModalProps) {
   const t = useT();
+
+  const themeCopy = {
+    system: { label: t(m.themeAutomatic), description: t(m.themeAutomaticDescription) },
+    light: { label: t(m.themeAlpine), description: t(m.themeAlpineDescription) },
+    dawn: { label: t(m.themeDawn), description: t(m.themeDawnDescription) },
+    dark: { label: t(m.themeMidnight), description: t(m.themeMidnightDescription) },
+    boreal: { label: t(m.themeBoreal), description: t(m.themeBorealDescription) },
+    ember: { label: t(m.themeEmber), description: t(m.themeEmberDescription) },
+  } satisfies Record<ThemePreference, { label: string; description: string }>;
 
   const VISUAL_FEEDBACK_VARIANTS: Array<{ value: VisualFeedbackVariant; label: string }> = [
     { value: 'shockwave', label: t(m.prefsShockwave) },
@@ -108,16 +121,19 @@ export function PreferencesModal({ open, onClose, preferences, onChange, locale,
       <Divider />
       <div className="prefsSection">
         <Label>{t(m.theme)}</Label>
-        <SegmentedControl
+        <ThemeSelector
           aria-label={t(m.theme)}
-          fullWidth
           value={preferences.theme}
-          onValueChange={(value) => onChange({ theme: value as Preferences['theme'] })}
-          options={[
-            { value: 'system', label: t(m.system) },
-            { value: 'light', label: t(m.light) },
-            { value: 'dark', label: t(m.dark) },
-          ]}
+          options={THEME_PRESETS.map((preset) => ({
+            value: preset.id,
+            palette: preset.palette,
+            alternatePalette: preset.alternatePalette,
+            ...themeCopy[preset.id],
+          }))}
+          onValueChange={(theme) => {
+            const preset = getThemePreset(theme);
+            onChange({ theme, accent: preset.accent });
+          }}
         />
       </div>
       <Divider />
@@ -156,6 +172,18 @@ export function PreferencesModal({ open, onClose, preferences, onChange, locale,
         />
         <Text size={Size.XSmall} tone={TextTone.Subtle}>
           {t(m.scrollbarStyleHelp)}
+        </Text>
+        <Divider />
+        <div className="prefsToggle">
+          <Label htmlFor="prefs-scrollbar-track">{t(m.scrollbarTrack)}</Label>
+          <Switch
+            id="prefs-scrollbar-track"
+            checked={preferences.showScrollbarTrack}
+            onCheckedChange={(showScrollbarTrack) => onChange({ showScrollbarTrack })}
+          />
+        </div>
+        <Text size={Size.XSmall} tone={TextTone.Subtle}>
+          {t(m.scrollbarTrackHelp)}
         </Text>
       </div>
     </div>

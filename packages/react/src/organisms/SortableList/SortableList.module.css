@@ -1,0 +1,112 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  padding: var(--row-padding);
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface);
+  color: var(--glacier-text);
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-sm);
+  /* The slot shift is a count, multiplied by the row's own height here, so the
+     shared logic talks in slots and each platform converts to its own pixels. */
+  transform: translateY(calc(var(--row-shift, 0) * (var(--row-height) + var(--glacier-space-1))));
+  transition: transform var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+/* ---- sizes: one row height each, shared by the row and its shift ---------- */
+
+.sm { --row-height: 2.25rem; --row-padding: var(--glacier-space-2); }
+.md { --row-height: 2.75rem; --row-padding: var(--glacier-space-3); }
+.lg { --row-height: 3.25rem; --row-padding: var(--glacier-space-4); }
+
+.list > .item {
+  min-height: var(--row-height);
+}
+
+.handle {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--glacier-space-1);
+  border: 0;
+  border-radius: var(--glacier-radius-sm);
+  background: transparent;
+  color: var(--glacier-text-subtle);
+  cursor: grab;
+  /* Without this the browser scrolls the page instead of letting the handle
+     take the gesture, and a drag on a touch device does nothing. */
+  touch-action: none;
+}
+
+.handle:hover:not(:disabled) {
+  background: var(--glacier-surface-hover);
+  color: var(--glacier-text);
+}
+
+.handle:disabled {
+  cursor: default;
+}
+
+.handle:focus-visible {
+  outline: 2px solid var(--glacier-accent-soft);
+  outline-offset: 2px;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+/* The lifted row rides above the list and tracks the pointer. It gets no
+   transition: it is already following the hand, and easing it would make it
+   visibly lag. */
+.item[data-dragging] {
+  z-index: 1;
+  border-color: var(--glacier-accent-border);
+  background: var(--glacier-surface-raised);
+  box-shadow: var(--glacier-shadow-3);
+  transform: translateY(var(--row-offset, 0));
+  transition: none;
+  cursor: grabbing;
+}
+
+.item[data-dragging] .handle {
+  cursor: grabbing;
+}
+
+/* The keyboard equivalent, marked differently: there is no pointer here to
+   explain what is happening, so the row says it is held. */
+.item[data-lifted] {
+  border-color: var(--glacier-accent-border);
+  background: var(--glacier-accent-soft);
+}
+
+.list[data-disabled] {
+  opacity: 0.5;
+}
+
+/* Visually hidden, but present for assistive tech — the running commentary of
+   a keyboard reorder. */
+.live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+}

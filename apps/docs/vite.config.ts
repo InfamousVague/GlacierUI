@@ -15,7 +15,7 @@ export default defineConfig({
       // HMR and the docs build never depend on a stale library build.
       '@glacier/react': fileURLToPath(new URL('../../packages/react/src/index.ts', import.meta.url)),
       '@glacier/native': fileURLToPath(new URL('../../packages/native/src/index.ts', import.meta.url)),
-      '@glacier/commons': fileURLToPath(new URL('../../packages/commons/src/index.ts', import.meta.url)),
+      '@glacier/logic': fileURLToPath(new URL('../../packages/logic/src/index.ts', import.meta.url)),
       // the native kit imports from 'react-native'; on the web docs that resolves
       // to react-native-web so View/Text/Pressable render to the DOM, which is
       // what powers the Web/Native comparison toggle on each component page.

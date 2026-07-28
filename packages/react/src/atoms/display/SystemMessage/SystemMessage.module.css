@@ -1,0 +1,39 @@
+/* Centred, narrow, and quiet: the three things that make a line read as chrome
+   rather than as somebody speaking. The width cap is the important one — a
+   notice that spans the full transcript column has the same footprint as a
+   message, and the eye stops filing it as furniture. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--glacier-space-2);
+  max-width: var(--glacier-container-sm);
+  margin-inline: auto;
+  padding-block: var(--glacier-space-2);
+  padding-inline: var(--glacier-space-4);
+  font-family: var(--glacier-font-sans);
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-xs);
+  color: var(--glacier-text-subtle);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  color: var(--glacier-text-subtle);
+}
+
+.text {
+  min-width: 0;
+}
+
+/* The same colour as the sentence, not a step quieter: at this size a second
+   level of muting is unreadable rather than subordinate. */
+.timestamp {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}

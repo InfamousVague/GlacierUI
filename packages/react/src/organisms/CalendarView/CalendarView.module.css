@@ -1,0 +1,230 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-2);
+  width: 100%;
+  color: var(--glacier-text);
+  font-family: var(--glacier-font-sans);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  flex-wrap: wrap;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-1);
+}
+
+/* The title takes the free space so the nav sits on the leading edge and the
+   view switch on the trailing one, whatever the month's name length. */
+.title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--glacier-font-size-md);
+  font-weight: var(--glacier-font-weight-semibold, 600);
+}
+
+.weekdays,
+.row {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--glacier-space-1);
+}
+
+.weekday {
+  padding-block: var(--glacier-space-1);
+  color: var(--glacier-text-subtle);
+  font-size: var(--glacier-font-size-xs);
+  text-align: center;
+}
+
+/* A grid rather than a flex column, for `grid-auto-rows: 1fr`: in an
+   auto-height container that sizes every row to the tallest one. Without it the
+   busy week stretches and the quiet weeks stay short, and a month grid whose
+   rows are different heights stops reading as a grid. `min-height` alone only
+   sets a floor — it does not stop a row from growing. */
+.grid {
+  display: grid;
+  grid-auto-rows: 1fr;
+  gap: var(--glacier-space-1);
+}
+
+.grid[data-rows='6'] .row {
+  min-height: 5rem;
+}
+
+.grid[data-rows='1'] .row {
+  min-height: 12rem;
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-1);
+  min-width: 0;
+  padding: var(--glacier-space-2);
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface);
+  overflow: hidden;
+}
+
+.cell[data-pressable] {
+  cursor: pointer;
+}
+
+.cell[data-pressable]:hover {
+  background: var(--glacier-surface-hover);
+}
+
+/* Borrowed from the adjacent month: dimmed rather than blanked, because the
+   events on those days are still real. */
+.cell[data-outside] .dayNumber {
+  color: var(--glacier-text-subtle);
+}
+
+.cell[data-weekend] {
+  background: var(--glacier-surface-raised);
+}
+
+/* Selection tints the whole cell; today marks only its number. That is what
+   keeps "the date it is" and "the date you picked" from looking alike. */
+.cell[data-selected] {
+  border-color: var(--glacier-accent-border);
+  background: var(--glacier-accent-soft);
+}
+
+.dayNumber {
+  align-self: flex-start;
+  min-width: 1.5rem;
+  padding: 1px var(--glacier-space-1);
+  border-radius: var(--glacier-radius-full);
+  font-size: var(--glacier-font-size-xs);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.cell[data-today] .dayNumber {
+  background: var(--glacier-accent-solid);
+  color: var(--glacier-accent-contrast);
+  font-weight: var(--glacier-font-weight-semibold, 600);
+}
+
+.events {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.chip {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 1px var(--glacier-space-1);
+  border: 0;
+  border-radius: var(--glacier-radius-sm);
+  background: var(--chip-bg);
+  color: var(--chip-text);
+  font-family: inherit;
+  font-size: var(--glacier-font-size-xs);
+  text-align: start;
+}
+
+button.chip {
+  cursor: pointer;
+}
+
+button.chip:hover {
+  /* A press target should say so on hover without changing its tone. */
+  filter: brightness(1.08);
+}
+
+.chipBody {
+  display: flex;
+  gap: var(--glacier-space-1);
+  min-width: 0;
+}
+
+/* The time is context, the title is the thing — so the title gets the space and
+   the time never pushes it out of the cell. */
+.chipTime {
+  flex: none;
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+}
+
+.chipTitle {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.chip[data-tone='accent'] { --chip-bg: var(--glacier-accent-soft); --chip-text: var(--glacier-accent-text); }
+.chip[data-tone='success'] { --chip-bg: var(--glacier-success-soft); --chip-text: var(--glacier-success-text); }
+.chip[data-tone='warning'] { --chip-bg: var(--glacier-warning-soft); --chip-text: var(--glacier-warning-text); }
+.chip[data-tone='danger'] { --chip-bg: var(--glacier-danger-soft); --chip-text: var(--glacier-danger-text); }
+.chip[data-tone='info'] { --chip-bg: var(--glacier-info-soft); --chip-text: var(--glacier-info-text); }
+.chip[data-tone='neutral'] { --chip-bg: var(--glacier-surface-hover); --chip-text: var(--glacier-text-muted); }
+
+.overflow {
+  padding-inline: var(--glacier-space-1);
+  color: var(--glacier-text-subtle);
+  font-size: var(--glacier-font-size-xs);
+}
+
+/* ---- agenda -------------------------------------------------------------- */
+
+/* A list, not a grid: an agenda has no second axis to navigate. */
+.agenda {
+  display: flex;
+  flex-direction: column;
+}
+
+.agendaDay {
+  display: flex;
+  gap: var(--glacier-space-3);
+  padding-block: var(--glacier-space-2);
+  border-block-start: var(--glacier-hairline) solid var(--glacier-border);
+}
+
+.agendaDay:first-child {
+  border-block-start: 0;
+}
+
+/* A fixed date column, so the event titles line up down the list instead of
+   stepping in and out with the length of each date. */
+.agendaDate {
+  flex: none;
+  width: 7rem;
+  padding-block-start: 1px;
+}
+
+.agendaEvents {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--glacier-space-1);
+  min-width: 0;
+}
+
+.chipCompact {
+  padding: 1px var(--glacier-space-1);
+}
+
+.agendaEvents .chip {
+  padding: var(--glacier-space-1) var(--glacier-space-2);
+  font-size: var(--glacier-font-size-sm);
+}
+
+.empty {
+  padding-block: var(--glacier-space-8);
+  text-align: center;
+}

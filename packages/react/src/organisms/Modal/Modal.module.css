@@ -13,9 +13,9 @@
 .panel {
   position: relative;
   width: 100%;
-  max-height: calc(100vh - var(--glacier-space-16));
+  max-height: calc(100vh - var(--glacier-space-6) * 2);
   overflow-y: auto;
-  padding: var(--glacier-space-6);
+  padding: var(--glacier-space-5);
   border: var(--glacier-hairline) solid var(--glacier-glass-border);
   border-radius: var(--glacier-radius-2xl);
   background: var(--glacier-glass-thick);
@@ -30,6 +30,12 @@
 
 .panel:focus-visible {
   outline: none;
+}
+
+/* Composites such as TabbedModal own scrolling inside their content pane. Do
+   not expose a second scrollbar for harmless panel-level layout overflow. */
+.panel:has(> [data-modal-overflow='contained']) {
+  overflow-y: hidden;
 }
 
 .sm { max-width: 22rem; }

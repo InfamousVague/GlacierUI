@@ -1,14 +1,16 @@
 import { accentOptions } from '@glacier/tokens';
 import {
-  AppShell, Button, Container, HapticsProvider, VisualFeedbackProvider, LocaleProvider, ScrollbarAppearance, Sidebar, SidebarItem, SidebarSection, TitleBar, locales, direction, useT, type Locale, Size, Variant } from '@glacier/react';
+  AppShell, Button, CommandPalette, Container, HapticsProvider, VisualFeedbackProvider, LocaleProvider, ScrollbarAppearance, Sidebar, SidebarItem, SidebarSection, TitleBar, locales, direction, useT, type Locale, Size, Variant,
+  type CommandDescriptor } from '@glacier/react';
 import { Settings } from '@glacier/icons';
 import glacierLogoFull from '../../../packages/assets/glacier_logo_blue.png';
 import glacierLogoText from '../../../packages/assets/logo_text.png';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { DEFAULT_PREFERENCES, PreferencesModal, type Preferences } from './PreferencesModal.tsx';
-import { DocSearch } from './DocSearch.tsx';
+import { DocSearchTrigger } from './DocSearchTrigger.tsx';
 import { LanguageSelect } from './LanguageSelect.tsx';
 import { groupTitles, m, pageTags, pageTitles } from './i18n.ts';
+import { getThemePreset, isThemePreference } from './themePresets.ts';
 // Pages are compartmentalized by category under pages/<group>/, and the routes
 // mirror that layout: #/<group>/<id> (the overview is the root, #/).
 import { OverviewPage } from './pages/OverviewPage.tsx';
@@ -28,7 +30,6 @@ import { SpecPage } from './pages/foundations/SpecPage.tsx';
 import { IconsPage } from './pages/foundations/IconsPage.tsx';
 import { TestingPage } from './pages/foundations/TestingPage.tsx';
 import { TestReportPage } from './pages/foundations/TestReportPage.tsx';
-import { ParityMatrixPage } from './pages/foundations/ParityMatrixPage.tsx';
 
 // Atoms
 import { ButtonPage } from './pages/atoms/ButtonPage.tsx';
@@ -51,6 +52,7 @@ import { SearchFieldPage } from './pages/atoms/SearchFieldPage.tsx';
 import { NumberInputPage } from './pages/atoms/NumberInputPage.tsx';
 import { OtpFieldPage } from './pages/atoms/OtpFieldPage.tsx';
 import { SliderPage } from './pages/atoms/SliderPage.tsx';
+import { SeekBarPage } from './pages/atoms/SeekBarPage.tsx';
 import { TogglePage } from './pages/atoms/TogglePage.tsx';
 import { MeterPage } from './pages/atoms/MeterPage.tsx';
 import { ProgressBarPage } from './pages/atoms/ProgressBarPage.tsx';
@@ -70,6 +72,7 @@ import { SparklinePage } from './pages/atoms/SparklinePage.tsx';
 
 // Molecules
 import { FieldPage } from './pages/molecules/FieldPage.tsx';
+import { PlayerCardPage } from './pages/molecules/PlayerCardPage.tsx';
 import { SelectPage } from './pages/molecules/SelectPage.tsx';
 import { ComboboxPage } from './pages/molecules/ComboboxPage.tsx';
 import { MultiSelectPage } from './pages/molecules/MultiSelectPage.tsx';
@@ -93,6 +96,12 @@ import { DataGridPage } from './pages/organisms/DataGridPage.tsx';
 
 // Organisms
 import { AppShellPage } from './pages/organisms/AppShellPage.tsx';
+import { CalendarViewPage } from './pages/organisms/CalendarViewPage.tsx';
+import { SortableListPage } from './pages/organisms/SortableListPage.tsx';
+import { VirtualListPage } from './pages/organisms/VirtualListPage.tsx';
+import { RichTextEditorPage } from './pages/organisms/RichTextEditorPage.tsx';
+import { ColorPickerPage } from './pages/organisms/ColorPickerPage.tsx';
+import { CommandPalettePage } from './pages/organisms/CommandPalettePage.tsx';
 import { ModalPage } from './pages/organisms/ModalPage.tsx';
 import { DrawerPage } from './pages/organisms/DrawerPage.tsx';
 import { AlertDialogPage } from './pages/organisms/AlertDialogPage.tsx';
@@ -134,7 +143,6 @@ const PAGES = {
   icons: { group: 'Foundations', el: <IconsPage /> },
   testing: { group: 'Foundations', el: <TestingPage /> },
   testreport: { group: 'Foundations', el: <TestReportPage /> },
-  paritymatrix: { group: 'Foundations', el: <ParityMatrixPage /> },
   button: { group: 'Atoms', el: <ButtonPage /> },
   icon: { group: 'Atoms', el: <IconPage /> },
   text: { group: 'Atoms', el: <TextPage /> },
@@ -155,6 +163,7 @@ const PAGES = {
   numberinput: { group: 'Atoms', el: <NumberInputPage /> },
   otpfield: { group: 'Atoms', el: <OtpFieldPage /> },
   slider: { group: 'Atoms', el: <SliderPage /> },
+  seekbar: { group: 'Atoms', el: <SeekBarPage /> },
   toggle: { group: 'Atoms', el: <TogglePage /> },
   meter: { group: 'Atoms', el: <MeterPage /> },
   progress: { group: 'Atoms', el: <ProgressBarPage /> },
@@ -166,6 +175,7 @@ const PAGES = {
   emptystate: { group: 'Atoms', el: <EmptyStatePage /> },
   surfaces: { group: 'Atoms', el: <SurfacesPage /> },
   field: { group: 'Molecules', el: <FieldPage /> },
+  playercard: { group: 'Molecules', el: <PlayerCardPage /> },
   select: { group: 'Molecules', el: <SelectPage /> },
   combobox: { group: 'Molecules', el: <ComboboxPage /> },
   multiselect: { group: 'Molecules', el: <MultiSelectPage /> },
@@ -174,6 +184,12 @@ const PAGES = {
   tooltip: { group: 'Molecules', el: <TooltipPage /> },
   toast: { group: 'Molecules', el: <ToastPage /> },
   appshell: { group: 'Organisms', el: <AppShellPage /> },
+  calendarview: { group: 'Organisms', el: <CalendarViewPage /> },
+  sortablelist: { group: 'Organisms', el: <SortableListPage /> },
+  virtuallist: { group: 'Organisms', el: <VirtualListPage /> },
+  richtexteditor: { group: 'Organisms', el: <RichTextEditorPage /> },
+  colorpicker: { group: 'Organisms', el: <ColorPickerPage /> },
+  commandpalette: { group: 'Organisms', el: <CommandPalettePage /> },
   modal: { group: 'Organisms', el: <ModalPage /> },
   drawer: { group: 'Organisms', el: <DrawerPage /> },
   alertdialog: { group: 'Organisms', el: <AlertDialogPage /> },
@@ -255,7 +271,7 @@ function loadPreferences(): Preferences {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}') as Partial<Preferences>;
     const accentValid = accentOptions.some((option) => option.name === saved.accent);
     return {
-      theme: saved.theme === 'light' || saved.theme === 'dark' ? saved.theme : 'system',
+      theme: isThemePreference(saved.theme) ? saved.theme : DEFAULT_PREFERENCES.theme,
       density:
         saved.density === 'extra-compact' ||
         saved.density === 'compact' ||
@@ -293,6 +309,7 @@ function loadPreferences(): Preferences {
         saved.scrollbarStyle === ScrollbarAppearance.Subtle || saved.scrollbarStyle === ScrollbarAppearance.Accent
           ? saved.scrollbarStyle
           : DEFAULT_PREFERENCES.scrollbarStyle,
+      showScrollbarTrack: saved.showScrollbarTrack !== false,
     };
   } catch {
     return DEFAULT_PREFERENCES;
@@ -355,24 +372,29 @@ function SidebarBrand() {
 
 function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (next: Locale) => void }) {
   const t = useT();
-  const searchItems = useMemo(
+  // Every doc page as a runnable command. The shape the palette wants is the
+  // shape the page catalog already has, so this is a rename rather than a
+  // second index to keep in sync.
+  const commands = useMemo<CommandDescriptor[]>(
     () =>
       SEARCH_PAGE_IDS.map((id) => ({
         id,
-        title: t(pageTitles[id]),
+        label: t(pageTitles[id]),
         group: t(groupTitles[PAGES[id].group]),
         keywords: (pageTags[id] ?? []).join(' '),
       })),
     [t],
   );
+  const [searchOpen, setSearchOpen] = useState(false);
   const [page, setPage] = useState<PageId>(pageFromHash);
+  const activePage: PageId = Object.hasOwn(PAGES, page) ? page : 'overview';
   const [preferences, setPreferences] = useState<Preferences>(loadPreferences);
   const [preferencesOpen, setPreferencesOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState<string>(() => {
     try {
-      return localStorage.getItem(SIDEBAR_WIDTH_KEY) ?? '16rem';
+      return localStorage.getItem(SIDEBAR_WIDTH_KEY) ?? '17rem';
     } catch {
-      return '16rem';
+      return '17rem';
     }
   });
 
@@ -401,10 +423,12 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
 
   useEffect(() => {
     const root = document.documentElement;
-    const { theme, density, layout, direction, accent, font, mono, radiusScale, frostedness, scrollbarStyle } = preferences;
+    const { theme, density, layout, direction, accent, font, mono, radiusScale, frostedness, scrollbarStyle, showScrollbarTrack } = preferences;
+    const themePreset = getThemePreset(theme);
 
-    if (theme === 'system') root.removeAttribute('data-theme');
-    else root.setAttribute('data-theme', theme);
+    if (themePreset.mode === 'system') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', themePreset.mode);
+    root.setAttribute('data-theme-preset', themePreset.id);
 
     if (density === 'comfortable') root.removeAttribute('data-density');
     else root.setAttribute('data-density', density);
@@ -434,6 +458,9 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
     if (scrollbarStyle === ScrollbarAppearance.Default) root.removeAttribute('data-scrollbar-style');
     else root.setAttribute('data-scrollbar-style', scrollbarStyle);
 
+    if (showScrollbarTrack) root.removeAttribute('data-scrollbar-track');
+    else root.setAttribute('data-scrollbar-track', 'hidden');
+
     if (radiusScale === 1) root.style.removeProperty('--glacier-radius-scale');
     else root.style.setProperty('--glacier-radius-scale', String(radiusScale));
 
@@ -461,7 +488,7 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
             .map(([id]) => (
               <SidebarItem
                 key={id}
-                active={page === id}
+                active={activePage === id}
                 onClick={() => {
                   window.location.hash = hashFor(id);
                   setPage(id);
@@ -486,13 +513,7 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
       surface={false}
       border={false}
       start={
-        <DocSearch
-          items={searchItems}
-          onSelect={(id) => {
-            window.location.hash = hashFor(id as PageId);
-            setPage(id as PageId);
-          }}
-        />
+        <DocSearchTrigger onOpen={() => setSearchOpen(true)} />
       }
       end={
         <>
@@ -528,9 +549,24 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
           onSidebarWidthChange={setSidebarWidth}
         >
           <Container size={Size.XLarge} paddingY={8} as="main" className="content">
-            {PAGES[page].el}
+            {PAGES[activePage].el}
           </Container>
         </AppShell>
+        {/* The docs search IS the kit's CommandPalette, dogfooded. It owns the
+            ⌘K chord itself, so the toolbar trigger only has to open it. Mounted
+            here rather than inside the TitleBar because it portals to the body
+            regardless, and a dialog nested in a header reads oddly in the tree. */}
+        <CommandPalette
+          open={searchOpen}
+          onOpenChange={setSearchOpen}
+          commands={commands}
+          onRun={(id) => {
+            window.location.hash = hashFor(id as PageId);
+            setPage(id as PageId);
+          }}
+          placeholder={t(m.searchPlaceholder)}
+          emptyLabel={t(m.noMatches)}
+        />
         <PreferencesModal
           open={preferencesOpen}
           onClose={() => setPreferencesOpen(false)}

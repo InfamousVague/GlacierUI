@@ -9,7 +9,7 @@ import type { ComponentSpec, Measure } from '../../../packages/spec/src/schema.t
  * Spec parity, proven in a real browser.
  *
  * For every variant x tone x size combination of the beachhead specs (Button,
- * Pill, Card) the Parity Matrix page renders one resting sample tagged
+ * Pill, Card) the internal parity harness renders one resting sample tagged
  * data-parity="<specId>:<variant>:<tone>:<size>". This suite resolves each
  * spec measurement ($token -> var(--glacier-<name>)) inside the live page via
  * a sibling probe element (so theme, accent, and scale knobs all apply), then
@@ -29,7 +29,7 @@ import type { ComponentSpec, Measure } from '../../../packages/spec/src/schema.t
  * visible until the spec is backfilled.
  */
 
-const MATRIX_URL = '/#/foundations/paritymatrix';
+const MATRIX_URL = '/tests/fixtures/parity.html';
 
 type Paint = { background?: Measure; text?: Measure; border?: Measure };
 type PaintRole = keyof Paint;

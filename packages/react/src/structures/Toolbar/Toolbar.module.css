@@ -4,7 +4,7 @@
   gap: var(--glacier-space-3);
   min-width: 0;
   /* even padding on every side, matched to the spec's dimensions */
-  padding: var(--glacier-space-3);
+  padding: var(--glacier-space-2);
   font-family: var(--glacier-font-sans);
 }
 

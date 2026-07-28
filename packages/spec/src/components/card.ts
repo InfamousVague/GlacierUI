@@ -26,7 +26,7 @@ export const cardSpec: ComponentSpec = {
     { name: 'glass', description: 'Translucent blurred material for chrome over content.', paint: { background: token('glass-regular'), border: token('glass-border'), text: token('text') }, tokens: { highlight: token('glass-highlight') } },
   ],
   defaults: { elevation: 1, interactive: false, variant: 'solid', skeleton: false },
-  dimensions: { radius: token('radius-xl'), padding: token('space-6'), border: token('hairline') },
+  dimensions: { radius: token('radius-xl'), padding: token('space-5'), border: token('hairline') },
   states: [
     { name: 'elevation-0', description: 'Flat, no shadow.', tokens: { shadow: token('shadow-0') } },
     { name: 'elevation-1', description: 'The default resting depth.', tokens: { shadow: token('shadow-1') } },
@@ -50,7 +50,7 @@ export const cardSpec: ComponentSpec = {
   ],
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
-    'surface-raised', 'hairline', 'border-subtle', 'radius-xl', 'space-6', 'space-2', 'font-sans', 'text',
+    'surface-raised', 'hairline', 'border-subtle', 'radius-xl', 'space-5', 'space-2', 'font-sans', 'text',
     'duration-fast', 'ease-out',
     'glass-regular', 'glass-border', 'glass-highlight', 'blur-md', 'glass-saturate',
     'shadow-0', 'shadow-1', 'shadow-2', 'shadow-3', 'shadow-4', 'shadow-5',

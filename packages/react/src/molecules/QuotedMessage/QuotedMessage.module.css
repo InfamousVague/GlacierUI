@@ -1,0 +1,97 @@
+/* The rule is a logical inline-start border, not a decorative bar: it marks
+   where the quoted text begins, so under RTL it belongs on the right with the
+   text it marks. */
+.quote {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--glacier-space-2);
+  width: 100%;
+  box-sizing: border-box;
+  padding-block: var(--glacier-space-2);
+  padding-inline: var(--glacier-space-3);
+  border: none;
+  border-inline-start: 0.1875rem solid var(--glacier-accent-solid);
+  border-radius: var(--glacier-radius-md);
+  background: var(--glacier-accent-soft);
+  font-family: var(--glacier-font-sans);
+  color: var(--glacier-text-muted);
+  text-align: start;
+  transition:
+    background var(--glacier-duration-fast) var(--glacier-ease-out),
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-1);
+  min-width: 0;
+  flex: 1;
+}
+
+/* One weight up and in the tone's colour, so the eye lands on the name first —
+   which is the question a reply block answers. */
+.author {
+  font-size: var(--glacier-font-size-xs);
+  font-weight: var(--glacier-font-weight-semibold);
+  color: var(--glacier-accent-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The string is already cut at the shared character budget; the clamp is the
+   box's half of the same rule, for a caller with a narrower bubble. */
+.snippet {
+  font-size: var(--glacier-font-size-sm);
+  line-height: var(--glacier-leading-sm);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.preview {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+/* Neutral: for a quote nested inside an already-accented bubble, where a second
+   accent would fight the first. */
+.neutral {
+  border-inline-start-color: var(--glacier-border-strong);
+  background: var(--glacier-surface-sunken);
+}
+
+.neutral .author {
+  color: var(--glacier-text);
+}
+
+/* Only a quote that can jump ever lights up, so a block that cannot be pressed
+   never looks like it can. */
+.pressable {
+  cursor: pointer;
+}
+
+.pressable:hover {
+  background: var(--glacier-accent-soft-hover);
+}
+
+.neutral.pressable:hover {
+  background: var(--glacier-hover);
+}
+
+.pressable:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  /* Clear of the leading rule, so the ring and the bar do not read as one thick
+     edge. */
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote {
+    transition: none;
+  }
+}

@@ -14,7 +14,7 @@
   width: min(100%, 28rem);
   max-height: calc(100vh - var(--glacier-space-16));
   overflow-y: auto;
-  padding: var(--glacier-space-5);
+  padding: var(--glacier-space-4);
   border: var(--glacier-hairline) solid var(--glacier-glass-border);
   border-radius: var(--glacier-radius-2xl);
   background: var(--glacier-glass-thick);
@@ -57,6 +57,6 @@
   }
 
   .panel {
-    padding: var(--glacier-space-5);
+    padding: var(--glacier-space-4);
   }
 }

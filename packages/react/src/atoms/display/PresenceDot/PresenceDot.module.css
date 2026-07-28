@@ -1,0 +1,83 @@
+/* The dot's diameter is published as a custom property so the marks inside can
+   size themselves against it with calc(), and so the halo can pad by a fraction
+   of it. The fractions themselves arrive inline from @glacier/logic — they are
+   the numbers the native binding reads too. */
+.sm {
+  --presence-d: var(--glacier-size-xs);
+}
+
+.md {
+  --presence-d: var(--glacier-size-sm);
+}
+
+/* The halo is a pad, not a shadow: a ring drawn with box-shadow does not exist
+   on a device, and this shape renders identically in both bindings. */
+.halo {
+  display: inline-flex;
+  flex: none;
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-surface);
+}
+
+.dot {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  box-sizing: border-box;
+  width: var(--presence-d);
+  height: var(--presence-d);
+  border: 0 solid transparent;
+  border-radius: var(--glacier-radius-full);
+  /* The crescent is a circle that overhangs the disc; clipping is what turns it
+     into a bite rather than a bump. */
+  overflow: hidden;
+}
+
+.online {
+  background: var(--glacier-success-solid);
+}
+
+.away {
+  background: var(--glacier-warning-solid);
+}
+
+.busy {
+  background: var(--glacier-danger-solid);
+}
+
+/* Hollow: the ring is the border and nothing fills it, so "nobody is home"
+   reads at a glance even in grayscale. */
+.offline,
+.invisible {
+  background: transparent;
+  border-width: var(--presence-stroke);
+  border-color: var(--glacier-text-subtle);
+}
+
+.mark {
+  position: absolute;
+  border-radius: var(--glacier-radius-full);
+}
+
+/* Away: a circle bitten out of the top-right corner, in the tone's own contrast
+   colour so it never depends on what is behind the dot. Physical corners, not
+   logical ones: a moon's orientation carries no reading direction, and matching
+   the native binding exactly matters more than mirroring under RTL. */
+.crescent {
+  background: var(--glacier-warning-contrast);
+}
+
+/* Centred by auto margins rather than a translate, because that is the one
+   centring recipe both a stylesheet and React Native express the same way. */
+.bar {
+  inset: 0;
+  margin: auto;
+  background: var(--glacier-danger-contrast);
+}
+
+/* Invisible: a core inside the hollow ring — present, but not showing. */
+.core {
+  inset: 0;
+  margin: auto;
+  background: var(--glacier-text-subtle);
+}

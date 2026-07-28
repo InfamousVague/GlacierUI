@@ -20,6 +20,7 @@ import { effectsDecls, glassDecls } from './effects.ts';
 import { layoutDecls } from './layout.ts';
 import { shadowDecls, elevationOverlayDecls } from './elevation.ts';
 import { semanticDecls, statusDecls, themeOverrideDecls } from './semantic.ts';
+import { themePresetDecls, themePresets } from './theme-presets.ts';
 
 const P = '--glacier';
 type Decl = [name: string, value: string];
@@ -78,6 +79,20 @@ out.push(
   '}',
   '',
 );
+
+out.push('/* Named themes - data-theme-preset swaps neutral, glass, and semantic color tokens */', '');
+for (const preset of themePresets) {
+  const decls = themePresetDecls(preset.id);
+  if (decls.length === 0) continue;
+  out.push(
+    `:root[data-theme-preset='${preset.id}'] {`,
+    `  color-scheme: ${preset.scheme};`,
+    '',
+    ...section('Theme color tokens', decls, '  '),
+    '}',
+    '',
+  );
+}
 
 out.push('/* Pickable accents - data-accent="name" swaps the accent ramp */', '');
 for (const option of accentOptions.slice(1)) {

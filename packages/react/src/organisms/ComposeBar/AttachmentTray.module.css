@@ -1,0 +1,105 @@
+/* Chips scroll rather than wrap: wrapping grows the bar upward without limit,
+   and a composer that eats the conversation to show six files has its
+   priorities backwards. */
+.tray {
+  display: flex;
+  gap: var(--glacier-space-2);
+  align-items: center;
+  margin: 0;
+  padding: 0 0 var(--glacier-space-2);
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  flex: none;
+  max-width: 14rem;
+  padding-block: var(--glacier-space-1);
+  padding-inline: var(--glacier-space-2);
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-md);
+  background: var(--glacier-surface-sunken);
+  color: var(--glacier-text);
+  transition:
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.icon {
+  display: flex;
+  flex: none;
+  color: var(--glacier-text-muted);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+/* Head shrinks and elides, tail never does, so the extension always survives. */
+.name {
+  display: flex;
+  min-width: 0;
+  font-size: var(--glacier-font-size-xs);
+}
+
+.nameHead {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nameTail {
+  flex: none;
+  white-space: nowrap;
+}
+
+.meta,
+.error {
+  font-size: var(--glacier-font-size-xs);
+  color: var(--glacier-text-muted);
+  white-space: nowrap;
+}
+
+.error {
+  color: var(--glacier-danger-text);
+}
+
+/* The bar sits under the name inside the chip's own column, so a chip is the
+   same height whether or not it is uploading and the tray never jumps. */
+.progress {
+  margin-top: var(--glacier-space-1);
+}
+
+/* A landed file reads as attached, not still working. */
+.chip[data-status='complete'] {
+  border-color: var(--glacier-accent-border);
+}
+
+.chip[data-status='failed'] {
+  border-color: var(--glacier-danger-border);
+  color: var(--glacier-danger-text);
+}
+
+.chip[data-disabled] {
+  opacity: 0.5;
+}
+
+/* Spoken, not seen: the progress bar is the visual channel. */
+.live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

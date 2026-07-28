@@ -48,7 +48,7 @@ export const fieldsetSpec: ComponentSpec = {
     contentOffset: token('space-4'),
     border: token('hairline'),
     radius: token('radius-lg'),
-    padding: token('space-5'),
+    padding: token('space-4'),
   },
   states: [
     {

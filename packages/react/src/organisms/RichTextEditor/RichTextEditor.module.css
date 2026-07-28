@@ -1,0 +1,122 @@
+/* Toolbar and text area read as one field, not a toolbar sitting next to a box:
+   one border around both, and the focus state moves to this frame rather than
+   ringing the textarea inside it. */
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: var(--glacier-hairline) solid var(--glacier-border);
+  border-radius: var(--glacier-radius-lg);
+  background: var(--glacier-surface);
+  color: var(--glacier-text);
+  font-family: var(--glacier-font-sans);
+  overflow: hidden;
+}
+
+.root:focus-within {
+  border-color: var(--glacier-accent-border);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-1);
+  padding: var(--glacier-space-1) var(--glacier-space-2);
+  border-block-end: var(--glacier-hairline) solid var(--glacier-border);
+  background: var(--glacier-surface-raised);
+}
+
+.control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  padding-inline: var(--glacier-space-1);
+  border: 0;
+  border-radius: var(--glacier-radius-md);
+  background: transparent;
+  color: var(--glacier-text-muted);
+  font-family: inherit;
+  font-size: var(--glacier-font-size-sm);
+  font-weight: var(--glacier-font-weight-semibold, 600);
+  cursor: pointer;
+  transition:
+    background var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.control:hover:not(:disabled) {
+  background: var(--glacier-surface-hover);
+  color: var(--glacier-text);
+}
+
+/* Pressed means the mark is already applied at the caret — the toolbar reading
+   the document, not just writing to it. */
+.control[aria-pressed='true'] {
+  background: var(--glacier-accent-soft);
+  color: var(--glacier-accent-text);
+}
+
+.control:disabled {
+  cursor: default;
+}
+
+.control:focus-visible {
+  outline: 2px solid var(--glacier-accent-soft);
+  outline-offset: -1px;
+}
+
+/* The glyphs carry their own meaning typographically: the italic control is
+   italic, the code control is monospace. */
+.italic {
+  font-style: italic;
+}
+
+.mono {
+  font-family: var(--glacier-font-mono);
+  font-size: var(--glacier-font-size-xs);
+}
+
+.divider {
+  width: var(--glacier-hairline);
+  height: 1rem;
+  margin-inline: var(--glacier-space-1);
+  background: var(--glacier-border);
+}
+
+.editor {
+  width: 100%;
+  padding: var(--glacier-space-3);
+  border: 0;
+  background: transparent;
+  color: inherit;
+  /* Monospace, because the value IS markdown: the markers should line up and
+     read as syntax rather than as stray punctuation in prose. */
+  font-family: var(--glacier-font-mono);
+  font-size: var(--glacier-font-size-sm);
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.editor:focus {
+  /* The frame already shows focus; a second ring inside it is noise. */
+  outline: none;
+}
+
+.editor::placeholder {
+  color: var(--glacier-text-subtle);
+}
+
+.counter {
+  padding: var(--glacier-space-1) var(--glacier-space-3);
+  border-block-start: var(--glacier-hairline) solid var(--glacier-border);
+  color: var(--glacier-text-subtle);
+  font-size: var(--glacier-font-size-xs);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.root[data-disabled] {
+  opacity: 0.5;
+}

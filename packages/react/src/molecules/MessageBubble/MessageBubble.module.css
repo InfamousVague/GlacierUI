@@ -1,0 +1,256 @@
+/* Every measurement arrives as a --message-* custom property, resolved once in
+   @glacier/logic, so the stylesheet keeps deciding how the space is spent
+   while the scale itself stays shared with the native binding. */
+
+.message {
+  display: flex;
+  /* Logical: the gutter leads and the content follows, whichever way the page
+     runs. Nothing in a transcript is pinned to a physical edge. */
+  flex-direction: row;
+  gap: var(--message-gutter-gap);
+  min-width: 0;
+  /* A transcript is prose. PlayerCard disables selection because it is a
+     control and a drag across it should scrub; a message is the opposite — the
+     single most common thing a reader does with one is select and copy it. */
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* The avatar column. Reserved whether or not it holds an avatar, so a run whose
+   header was suppressed still lines its text up with the run above it. */
+.gutter {
+  flex: none;
+  width: var(--message-gutter);
+  display: flex;
+  justify-content: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--message-gap);
+  /* Without this a long unbroken string sets the flex base size and the whole
+     row grows past its container instead of wrapping. */
+  min-width: 0;
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--glacier-space-2);
+  min-width: 0;
+}
+
+.bubble {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-1);
+  border-start-start-radius: var(--message-corner-start-start);
+  border-start-end-radius: var(--message-corner-start-end);
+  border-end-start-radius: var(--message-corner-end-start);
+  border-end-end-radius: var(--message-corner-end-end);
+  transition:
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.body {
+  font-size: var(--message-font-size);
+  line-height: var(--glacier-leading-sm);
+  /* A pasted URL, a hash, or a line of minified code has no break opportunity,
+     so without this one message would set the width of the whole transcript.
+     `anywhere` rather than `break-word` because only the former also stops the
+     unbroken run from inflating the bubble's max-content width. */
+  overflow-wrap: anywhere;
+  /* Newlines in a message are the author's, and collapsing them turns a poem or
+     a stack trace into one paragraph. */
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+/* ---- bubble layout ------------------------------------------------------- */
+
+.message[data-layout='bubble'] .column {
+  /* The run hugs one edge, and its content is only as wide as it needs to be. */
+  align-items: flex-start;
+}
+
+.message[data-layout='bubble'][data-side='end'] .column {
+  align-items: flex-end;
+}
+
+.message[data-layout='bubble'] .bubble {
+  /* The remaining quarter of the column is what makes alignment readable: a
+     bubble that could reach the far edge would stop distinguishing its author. */
+  max-width: var(--message-max-width);
+  padding: var(--message-padding-block) var(--message-padding-inline);
+  background: var(--glacier-surface-raised);
+  color: var(--glacier-text);
+}
+
+.message[data-layout='bubble'][data-own] .bubble {
+  background: var(--glacier-accent-solid);
+  color: var(--glacier-accent-contrast);
+}
+
+/* A failed send keeps its fill and takes a border, so it is findable by
+   scanning without the transcript turning red. */
+.message[data-status='failed'] .bubble {
+  box-shadow: 0 0 0 var(--glacier-hairline) var(--glacier-danger-border);
+}
+
+/* In a bubble transcript the avatar belongs to the end of the run, beside the
+   message the tail points out of — that is the message the author just sent. */
+.message[data-layout='bubble'] .gutter {
+  align-items: flex-end;
+}
+
+/* ---- the tail ------------------------------------------------------------ */
+
+.tail {
+  position: absolute;
+  bottom: 0;
+  /* Decoration: the corner geometry already says where the run ends. */
+  pointer-events: none;
+  /* Painted beside the bubble's own background, not from a prop, so the two
+     cannot come apart when either is retoned. */
+  fill: var(--glacier-surface-raised);
+}
+
+.message[data-own] .tail {
+  fill: var(--glacier-accent-solid);
+}
+
+/* A stamp inside a bubble trails the text on the run's own edge. */
+.message[data-side='end'] .bubble .meta {
+  align-self: flex-end;
+}
+
+.message[data-side='end'] .tail {
+  inset-inline-end: calc(-1 * var(--message-tail-width));
+}
+
+.message[data-side='start'] .tail {
+  inset-inline-start: calc(-1 * var(--message-tail-width));
+}
+
+/* The path is authored pointing physically right, and `tailScaleX` in commons
+   decides which way it should point — the same function the native binding
+   calls, so the two cannot disagree. SVG has no logical axis, so a right-to-left
+   page is the one thing that function cannot know from here; it is inverted
+   below rather than duplicated, which keeps the decision itself in one place.
+   The two selectors are separate rules on purpose: a browser without `:dir()`
+   must drop only the second, not both. */
+.tail {
+  transform: scaleX(var(--message-tail-scale));
+}
+
+:dir(rtl) .tail {
+  transform: scaleX(calc(-1 * var(--message-tail-scale)));
+}
+
+[dir='rtl'] .tail {
+  transform: scaleX(calc(-1 * var(--message-tail-scale)));
+}
+
+/* ---- row layout ---------------------------------------------------------- */
+
+/* Slack, not iMessage: full width, no fill, no alignment. Authorship lives in
+   the header line and the gutter, which is why both are always reserved. */
+.message[data-layout='row'] .bubble {
+  width: 100%;
+  background: none;
+  color: var(--glacier-text);
+  padding: 0;
+}
+
+.message[data-layout='row'] .gutter {
+  /* The avatar heads the run, so it aligns with the first line of the first
+     message rather than floating beside the middle of a long block. */
+  align-items: flex-start;
+}
+
+/* ---- meta ---------------------------------------------------------------- */
+
+.meta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-1);
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-xs);
+  color: var(--glacier-text-subtle);
+  /* Tabular figures: a clock that reflowed as the minute ticked would jitter
+     every stamp in the transcript. */
+  font-variant-numeric: tabular-nums;
+  /* The stamp is a label for the message above it and must not be swept into a
+     selection of the message text itself. */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Inside an accent-filled bubble the muted grey is close to unreadable, so the
+   line borrows the fill's contrast colour and leans on opacity for hierarchy. */
+.meta[data-own] {
+  color: var(--glacier-accent-contrast);
+  opacity: 0.75;
+}
+
+.metaIcon {
+  flex: none;
+  display: inline-flex;
+}
+
+/* In a bubble transcript the run's stamp sits under the last bubble, on the
+   same edge the run hugs. */
+.footMeta {
+  display: flex;
+}
+
+/* Announced but never drawn: the delivery glyph is an icon, so the status word
+   has to reach a screen reader some other way. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- group --------------------------------------------------------------- */
+
+.group {
+  display: flex;
+  flex-direction: row;
+  gap: var(--message-gutter-gap);
+  min-width: 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  /* Tight: the messages in a run are one utterance, and the cut corners only
+     read as one shape if the gap between them is small enough to see across. */
+  gap: var(--message-stack-gap);
+  min-width: 0;
+  flex: 1;
+}
+
+.group[data-side='end'] .stack {
+  align-items: flex-end;
+}
+
+.author {
+  font-weight: var(--glacier-font-weight-semibold);
+}
+
+/* A system notice is not a person talking, so it neither aligns nor fills. */
+.group[data-standalone] .stack {
+  align-items: center;
+}

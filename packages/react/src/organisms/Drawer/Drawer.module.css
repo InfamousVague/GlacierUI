@@ -119,7 +119,7 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--glacier-space-4);
-  padding: var(--glacier-space-6) var(--glacier-space-6) var(--glacier-space-4);
+  padding: var(--glacier-space-5) var(--glacier-space-5) var(--glacier-space-3);
 }
 
 .headerContent {
@@ -133,7 +133,7 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
-  padding: var(--glacier-space-2) var(--glacier-space-6) var(--glacier-space-6);
+  padding: var(--glacier-space-2) var(--glacier-space-5) var(--glacier-space-5);
 }
 
 .footer {
@@ -141,7 +141,7 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--glacier-space-3);
-  padding: var(--glacier-space-4) var(--glacier-space-6) var(--glacier-space-6);
+  padding: var(--glacier-space-3) var(--glacier-space-5) var(--glacier-space-5);
   border-top: var(--glacier-hairline) solid var(--glacier-border);
 }
 

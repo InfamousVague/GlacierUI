@@ -38,6 +38,7 @@ const SECTIONS: { group: keyof typeof groupTitles; rows: Row[] }[] = [
       { id: 'numberinput', native: 'NumberInput' },
       { id: 'otpfield', native: 'OtpField' },
       { id: 'slider', native: 'Slider' },
+      { id: 'seekbar', native: 'SeekBar' },
       { id: 'toggle', native: 'Toggle' },
       { id: 'meter', native: 'Meter' },
       { id: 'progress', native: 'ProgressBar' },
@@ -60,6 +61,7 @@ const SECTIONS: { group: keyof typeof groupTitles; rows: Row[] }[] = [
     group: 'Molecules',
     rows: [
       { id: 'field', native: 'Field' },
+      { id: 'playercard', native: 'PlayerCard' },
       { id: 'select', native: 'Select' },
       { id: 'combobox', native: 'Combobox' },
       { id: 'multiselect', native: 'MultiSelect' },
@@ -83,6 +85,12 @@ const SECTIONS: { group: keyof typeof groupTitles; rows: Row[] }[] = [
     group: 'Organisms',
     rows: [
       { id: 'appshell', native: 'AppShell' },
+      { id: 'calendarview', native: 'CalendarView' },
+      { id: 'sortablelist', native: 'SortableList' },
+      { id: 'virtuallist', native: 'VirtualList' },
+      { id: 'richtexteditor', native: 'RichTextEditor' },
+      { id: 'colorpicker', native: 'ColorPicker' },
+      { id: 'commandpalette', native: 'CommandPalette' },
       { id: 'modal', native: 'Modal' },
       { id: 'drawer', native: 'Drawer' },
       { id: 'alertdialog', native: 'AlertDialog' },
@@ -240,7 +248,7 @@ export function NativePage() {
         </li>
         <li>
           {t(m.nativeRendererAgnosticLogicControl)}
-          <code> @glacier/commons</code>{t(m.nativeSharedByBothBindingsSo)}
+          <code> @glacier/logic</code>{t(m.nativeSharedByBothBindingsSo)}
         </li>
       </ul>
     </>

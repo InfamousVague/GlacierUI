@@ -70,7 +70,7 @@ export const popoverSpec: ComponentSpec = {
   dimensions: {
     minWidth: '12rem',
     maxWidth: 'min(24rem, calc(100vw - 2rem))',
-    padding: token('space-3'),
+    padding: token('space-2'),
     radius: token('radius-lg'),
     border: token('hairline'),
     offset: '12px',
@@ -99,7 +99,7 @@ export const popoverSpec: ComponentSpec = {
   paint: { background: '$glass-regular', text: '$text', border: '$glass-border' },
   focusRing: { ring: token('focus-ring'), offset: '2px' },
   tokens: [
-    'space-3',
+    'space-2',
     'hairline',
     'glass-border',
     'radius-lg',

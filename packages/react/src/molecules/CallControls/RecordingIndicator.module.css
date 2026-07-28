@@ -1,0 +1,38 @@
+.indicator {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  font-family: var(--glacier-font-sans);
+  font-weight: var(--glacier-font-weight-medium);
+}
+
+.sm {
+  gap: var(--glacier-space-1);
+  font-size: var(--glacier-font-size-xs);
+}
+
+.md {
+  gap: var(--glacier-space-2);
+  font-size: var(--glacier-font-size-sm);
+}
+
+/* The words carry the state, not only the pulse, so it survives reduced motion
+   and greyscale alike. */
+.recording .label {
+  color: var(--glacier-danger-text);
+}
+
+.paused .label {
+  color: var(--glacier-text-muted);
+}
+
+.stopped .label {
+  color: var(--glacier-text-subtle);
+}
+
+.elapsed {
+  color: var(--glacier-text-muted);
+  font-family: var(--glacier-font-mono);
+  /* Tabular figures so the row does not twitch as the seconds tick. */
+  font-variant-numeric: tabular-nums;
+}
