@@ -5,12 +5,7 @@ import {
   MESSAGE_ACTION_INLINE_CAP,
   type MessageAction,
 } from '@glacier/logic';
-import {
-  messageActionLayouts,
-  messageActionReveals,
-  // TODO(integration): switch to '@glacier/spec' once message-actions.ts is
-  // registered in packages/spec/src/index.ts.
-} from '../../../../spec/src/components/message-actions.ts';
+import { messageActionLayouts, messageActionReveals } from '@glacier/spec';
 import { MoreHorizontal } from '@glacier/icons';
 import { useEffect, useRef, useState, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';

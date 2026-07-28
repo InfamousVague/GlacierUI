@@ -20,10 +20,7 @@
  */
 
 import type { Reaction, ReactionSummary } from './chat.ts';
-// TODO(integration): switch to '@glacier/spec' once the reaction and
-// message-action specs are registered in packages/spec/src/index.ts.
-import { reactionIntents } from '../../spec/src/components/reaction-pill.ts';
-import { messageActionOrder } from '../../spec/src/components/message-actions.ts';
+import { messageActionOrder, reactionIntents } from '@glacier/spec';
 
 export type { Reaction, ReactionSummary };
 

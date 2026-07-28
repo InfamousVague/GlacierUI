@@ -1,8 +1,7 @@
 import { Link2 } from '@glacier/icons';
 import type { ComponentProps, ReactNode } from 'react';
 import { LINK_PREVIEW_IMAGE_ASPECT, linkPreviewDomain } from '@glacier/logic';
-// TODO(integration): switch to '@glacier/spec' once the spec is registered.
-import type { linkPreviewLayouts } from '../../../../spec/src/components/link-preview-card.ts';
+import type { linkPreviewLayouts } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
 import { Image } from '../../atoms/display/Image/Image.tsx';
 import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';

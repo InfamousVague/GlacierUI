@@ -1,8 +1,7 @@
 import type { ChatAttachment } from '@glacier/logic';
 import type { ComponentProps, CSSProperties, ReactNode } from 'react';
 import { attachmentAspect, attachmentLabel } from '@glacier/logic';
-// TODO(integration): switch to '@glacier/spec' once the spec is registered.
-import type { imageAttachmentRadii } from '../../../../spec/src/components/image-attachment.ts';
+import type { imageAttachmentRadii } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
 import { format } from '../../i18n/locale.ts';
 import { Image } from '../../atoms/display/Image/Image.tsx';

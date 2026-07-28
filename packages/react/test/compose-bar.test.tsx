@@ -491,3 +491,22 @@ describe('ComposeBar', () => {
     expect(results.violations).toEqual([]);
   });
 });
+
+describe('VoiceRecorder controlled live state', () => {
+  // Regression: `startedAt` was seeded only in begin(), but the clock runs
+  // whenever the component is live. Entering a live state through the
+  // controlled `state` prop left it at 0, so elapsed was measured from the Unix
+  // epoch — ~1.8 billion seconds — which tripped maxDuration on the first tick
+  // and then fired onSend every 200ms forever, with no escape because a
+  // controlled component cannot change its own state.
+  it('does not fire onSend in a loop when entered via a controlled state', () => {
+    vi.useFakeTimers();
+    const onSend = vi.fn();
+    const onStateChange = vi.fn();
+    render(<VoiceRecorder state="recording" onSend={onSend} onStateChange={onStateChange} />);
+    vi.advanceTimersByTime(2000); // ten ticks of the 200ms clock
+    vi.useRealTimers();
+    expect(onSend).not.toHaveBeenCalled();
+    expect(onStateChange).not.toHaveBeenCalled();
+  });
+});

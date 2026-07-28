@@ -8,11 +8,7 @@ import {
   type PendingReaction,
   type ReactionIntent,
 } from '@glacier/logic';
-import {
-  reactionBarAddModes,
-  // TODO(integration): switch to '@glacier/spec' once reaction-bar.ts is
-  // registered in packages/spec/src/index.ts.
-} from '../../../../spec/src/components/reaction-bar.ts';
+import { reactionBarAddModes } from '@glacier/spec';
 import { SmilePlus } from '@glacier/icons';
 import { useEffect, useMemo, useRef, useState, type ComponentProps, type KeyboardEvent } from 'react';
 import { cx } from '../../internal/cx.ts';

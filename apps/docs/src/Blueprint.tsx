@@ -4434,7 +4434,18 @@ function VirtualListBlueprint({ dimensions }: BlueprintProps) {
       <text x={SX + SW + 18} y={firstRowY + rowH} className="bpLabel" fill={C.faint}>
         {t(m.bpOverscanRow)}
       </text>
-      <text x={SX - 8} y={VY + VH / 2 + 3} textAnchor="end" className="bpLabel" fill={C.faint}>
+      {/* Rotated, not flat: this label names the same vertical band the `total`
+          dimension measures, so laid flat it runs straight through that arrow
+          and its rotated label. Turned upright it sits in the gap between the
+          dimension line and the viewport edge, where nothing else is drawn. */}
+      <text
+        x={SX - 18}
+        y={VY + VH / 2}
+        textAnchor="middle"
+        transform={`rotate(-90 ${SX - 18} ${VY + VH / 2})`}
+        className="bpLabel"
+        fill={C.faint}
+      >
         {t(m.bpWindowSlice)}
       </text>
 

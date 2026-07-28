@@ -2,8 +2,7 @@ import { formatDuration, type ChatAttachment } from '@glacier/logic';
 import { Film, Play } from '@glacier/icons';
 import type { ComponentProps, CSSProperties } from 'react';
 import { attachmentAspect, attachmentLabel } from '@glacier/logic';
-// TODO(integration): switch to '@glacier/spec' once the spec is registered.
-import type { videoBadgePlacements } from '../../../../spec/src/components/video-attachment.ts';
+import type { videoBadgePlacements } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
 import { format } from '../../i18n/locale.ts';
 import { Image } from '../../atoms/display/Image/Image.tsx';

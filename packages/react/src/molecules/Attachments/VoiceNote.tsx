@@ -1,8 +1,7 @@
 import { formatDuration, playerSkeletonWidths } from '@glacier/logic';
 import { Pause, Play } from '@glacier/icons';
 import type { ComponentProps } from 'react';
-// TODO(integration): switch to '@glacier/spec' once the spec is registered.
-import type { voiceNoteDensities } from '../../../../spec/src/components/voice-note.ts';
+import type { voiceNoteDensities } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
 import { useControlled } from '../../internal/useControlled.ts';
 import { IconButton } from '../../atoms/inputs/Button/IconButton.tsx';

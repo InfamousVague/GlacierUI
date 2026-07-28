@@ -118,7 +118,20 @@ export function VoiceRecorder({
   // The clock, and the self-stop at the cap. A recording that ran forever would
   // hand the app a file it cannot send.
   useEffect(() => {
-    if (!live) return;
+    if (!live) {
+      // Cleared on the way out so the next take re-seeds rather than measuring
+      // from the previous one.
+      startedAt.current = 0;
+      return;
+    }
+    // A controlled `state` can enter a live state without ever calling begin(),
+    // which is the only other place this is seeded. Left at 0, the elapsed time
+    // below is measured from the Unix epoch — about 1.8 billion seconds — which
+    // trips maxDuration on the very first tick and then fires onSend every
+    // 200ms forever, because a controlled component cannot leave the state it
+    // was put in. Seeding here costs nothing on the uncontrolled path, where
+    // begin() has already set it.
+    if (startedAt.current === 0) startedAt.current = Date.now();
     const id = setInterval(() => {
       const seconds = (Date.now() - startedAt.current) / 1000;
       setElapsed(seconds);
