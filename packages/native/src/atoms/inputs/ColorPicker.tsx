@@ -230,9 +230,15 @@ export function ColorPicker({
           }}
         />
         {!displayable && (
+          // Mirrors the web's `.gamut { flex: none }`. Without it the label is
+          // the flexible half of the row and wraps to two lines, while the hex
+          // field — which has a whole field's worth of slack — keeps its width.
+          // `Text` takes no style, so the rule lives on a wrapper.
+          <View style={{ flexShrink: 0 }}>
           <Text size="xs" tone="muted">
             {LABELS.outOfGamut}
           </Text>
+          </View>
         )}
       </View>
 
