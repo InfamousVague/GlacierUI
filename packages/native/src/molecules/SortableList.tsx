@@ -22,13 +22,14 @@
  * - The drag shadow is a resting elevation rather than the web's layered
  *   box-shadow, which React Native has no equivalent for.
  */
-import { useRef, useState, type ComponentType, type ReactNode } from 'react';
-import { View, Text as RNText, type ViewProps } from 'react-native';
+import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
+import { Animated, View, type AnimatedValue, type ViewProps } from 'react-native';
 import { sortableListSpec } from '@glacier/spec';
 import { didReorder, dropTarget, moveItem, shiftFor } from '@glacier/logic';
 import { t } from '../tokens.ts';
 import { paintFor, dimensionsFor } from '../resolve.ts';
 import { Skeleton } from '../atoms/feedback/Skeleton.tsx';
+import { Text } from '../atoms/display/Text.tsx';
 
 /** The minimum a row must provide: something stable to key and track it by. */
 export interface SortableItemLike {
@@ -81,7 +82,34 @@ interface DragResponderEvent {
  */
 type LayoutEvent = { nativeEvent: { layout: { y: number } } };
 
-const Row = View as unknown as ComponentType<ViewProps & { onLayout?: (event: LayoutEvent) => void }>;
+// Animated.View, not View: the slot shift is animated, and only an Animated
+// component reads an Animated.Value in its style.
+const Row = Animated.View as unknown as ComponentType<ViewProps & { onLayout?: (event: LayoutEvent) => void }>;
+
+/** Mirrors `--glacier-duration-fast`, which is what the web row transitions on. */
+const SHIFT_DURATION = 150;
+
+/**
+ * Approximates `--glacier-ease-out` — `cubic-bezier(0.16, 1, 0.3, 1)`, a strong
+ * ease-out that covers most of the distance early. It is an approximation and
+ * not that curve: evaluating a bezier needs a solver, and over a 150ms slot
+ * shift the difference is not a thing anyone can see.
+ */
+const easeOut = (value: number): number => 1 - Math.pow(1 - value, 4);
+
+/**
+ * Zero when the reader asked for less motion.
+ *
+ * The web binding gets this free — its transition is expressed in a token the
+ * reduced-motion media query already rewrites to 0.01ms. Nothing rewrites a
+ * number in JavaScript, so the query has to be read directly. Guarded because
+ * `matchMedia` is a DOM API: on a real device this is simply absent, and the
+ * platform's own reduce-motion setting is not wired up here yet.
+ */
+function shiftDuration(): number {
+  if (typeof matchMedia !== 'function') return SHIFT_DURATION;
+  return matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : SHIFT_DURATION;
+}
 
 /** The six-dot grip, drawn with plain views so it needs no icon dependency. */
 function Grip({ color }: { color: string }) {
@@ -132,6 +160,57 @@ export function SortableList<T extends SortableItemLike>({
   // into "44var(--glacier-space-1)" instead of adding. Two real measured tops
   // give the true distance whatever the gap turns out to be.
   const slotRef = useRef(metrics.height);
+
+  // One animated offset per item, keyed by id rather than index so a row keeps
+  // its own value across a reorder instead of inheriting the one belonging to
+  // whatever used to sit in that position.
+  const offsets = useRef(new Map<string, AnimatedValue>()).current;
+  const offsetFor = (id: string): AnimatedValue => {
+    const existing = offsets.get(id);
+    if (existing) return existing;
+    const created = new Animated.Value(0);
+    offsets.set(id, created);
+    return created;
+  };
+
+  // The last target each row was sent to, so a re-render mid-drag does not
+  // restart an animation that is already running to the same place — which is
+  // what turns a smooth shift into a stutter.
+  const targets = useRef(new Map<string, number>()).current;
+
+  // Runs every render deliberately: `drag.offset` changes on each pointer move,
+  // and there is no dependency that captures "the finger moved" more cheaply.
+  useEffect(() => {
+    items.forEach((item, index) => {
+      const value = offsetFor(item.id);
+
+      if (drag?.from === index) {
+        // Already following the hand. Easing it would make it visibly lag, which
+        // is the same reason the web binding gives this row `transition: none`.
+        value.setValue(drag.offset);
+        targets.delete(item.id);
+        return;
+      }
+
+      const target = drag ? shiftFor(index, drag.from, drag.to) * slotRef.current : 0;
+      if (targets.get(item.id) === target) return;
+      targets.set(item.id, target);
+
+      if (!drag) {
+        // The drop already committed the reorder, so the row is where it belongs
+        // and its offset is now a lie to be dropped, not a distance to travel.
+        value.setValue(0);
+        return;
+      }
+
+      Animated.timing(value, {
+        toValue: target,
+        duration: shiftDuration(),
+        easing: easeOut,
+        useNativeDriver: true,
+      }).start();
+    });
+  });
 
   const pointerY = (event: DragResponderEvent): number => {
     const { pageY, locationY } = event.nativeEvent;
@@ -195,7 +274,7 @@ export function SortableList<T extends SortableItemLike>({
     <View style={{ width: '100%', rowGap: gap, alignSelf: 'stretch', opacity: disabled ? 0.5 : 1 }}>
       {items.map((item, index) => {
         const isDragging = drag?.from === index;
-        const shift = drag ? shiftFor(index, drag.from, drag.to) : 0;
+        const content = renderItem(item, index);
 
         return (
           <Row
@@ -215,8 +294,9 @@ export function SortableList<T extends SortableItemLike>({
               borderRadius: radius,
               backgroundColor: isDragging ? t(DRAGGING.background ?? 'surface-raised') : t('surface'),
               // The dragged row follows the finger; the rows it passes move one
-              // slot. Slots come from the shared logic, pixels from here.
-              transform: [{ translateY: isDragging ? (drag?.offset ?? 0) : shift * slotRef.current }],
+              // slot. Slots come from the shared logic, pixels from here, and
+              // the effect above decides whether reaching them is animated.
+              transform: [{ translateY: offsetFor(item.id) }],
               zIndex: isDragging ? 1 : 0,
               elevation: isDragging ? 3 : 0,
             }}
@@ -236,11 +316,12 @@ export function SortableList<T extends SortableItemLike>({
               <Grip color={t('text-subtle')} />
             </View>
             <View style={{ flex: 1, minWidth: 0 }}>
-              {typeof renderItem(item, index) === 'string' ? (
-                <RNText>{renderItem(item, index)}</RNText>
-              ) : (
-                renderItem(item, index)
-              )}
+              {/* The kit's Text, not react-native's: a bare RNText carries none
+                  of the token font, size, or colour, so a plain string item
+                  rendered dim and small next to the web's `--glacier-text` at
+                  `font-size-sm`. Called once — `renderItem` is the caller's
+                  function and may not be cheap or free of side effects. */}
+              {typeof content === 'string' ? <Text size="sm">{content}</Text> : content}
             </View>
           </Row>
         );

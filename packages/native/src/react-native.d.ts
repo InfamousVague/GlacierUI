@@ -187,6 +187,8 @@ declare module 'react-native' {
 
   export interface AnimatedValue {
     interpolate(config: { inputRange: number[]; outputRange: Array<string | number> }): unknown;
+    /** Jumps to a value without animating — for what is already tracking a finger. */
+    setValue(value: number): void;
   }
 
   export interface CompositeAnimation {
@@ -197,7 +199,10 @@ declare module 'react-native' {
   export const Animated: {
     Value: new (value: number) => AnimatedValue;
     View: ComponentType<ViewProps>;
-    timing(value: AnimatedValue, config: { toValue: number; duration: number; useNativeDriver: boolean }): CompositeAnimation;
+    timing(
+      value: AnimatedValue,
+      config: { toValue: number; duration: number; useNativeDriver: boolean; easing?: (value: number) => number },
+    ): CompositeAnimation;
     loop(animation: CompositeAnimation): CompositeAnimation;
   };
 }
