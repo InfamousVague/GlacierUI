@@ -1,0 +1,42 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  /* Tighter than the modal's own rhythm on purpose: every Field already
+     reserves a line under its control for an error, so a larger gap here
+     stacks two kinds of breathing room and stretches the sheet into a column. */
+  gap: var(--glacier-space-2);
+}
+
+/* Two fields that read as a pair share a row — it halves the height of the
+   sheet, which is what keeps this a form rather than a scroll. Falls to one
+   column when the panel is too narrow to give each control a usable width. */
+.pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--glacier-space-3);
+  align-items: start;
+}
+
+@media (max-width: 24rem) {
+  .pair {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The switch and its word are one control, so they share a row and the word
+   sits close enough to the track to read as its label. */
+.allDay {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  /* Pulls the toggle up into the space the Field above reserves for an error
+     it does not have, so the row does not float. */
+  margin-block: calc(var(--glacier-space-1) * -1) var(--glacier-space-1);
+}
+
+/* Destructive action to the far side of the confirm pair: it is the one button
+   here you cannot take back, and it should not sit under a travelling thumb
+   next to Save. */
+.deleteAction {
+  margin-inline-end: auto;
+}

@@ -1,4 +1,5 @@
 import { Heading, Size, Text, TextTone, useT, type CalendarEvent } from '@glacier/react';
+import { removeEvent, upsertEvent } from '@glacier/logic';
 import { useState } from 'react';
 import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { type PlatformKit } from '../../platforms.tsx';
@@ -35,6 +36,30 @@ function useDemoEvents(): CalendarEvent[] {
 function CalendarDemo({ K, ...props }: { K: PlatformKit } & Record<string, unknown>) {
   const events = useDemoEvents();
   return <K.CalendarView events={events} today={TODAY} defaultDate={TODAY} {...props} />;
+}
+
+/**
+ * The editing demo owns its event list, which is the whole point of the
+ * contract: the calendar reports what the user did and re-renders from what it
+ * is handed back. `upsertEvent` and `removeEvent` do that update.
+ */
+function EditableCalendarDemo({ K }: { K: PlatformKit }) {
+  const seed = useDemoEvents();
+  const [events, setEvents] = useState<CalendarEvent[]>(seed);
+
+  return (
+    <div style={{ width: '100%' }}>
+      <K.CalendarView
+        events={events}
+        today={TODAY}
+        defaultDate={TODAY}
+        editable
+        onEventCreate={(event: CalendarEvent) => setEvents((list) => upsertEvent(list, event))}
+        onEventChange={(event: CalendarEvent) => setEvents((list) => upsertEvent(list, event))}
+        onEventDelete={(id: string) => setEvents((list) => removeEvent(list, id))}
+      />
+    </div>
+  );
 }
 
 /**
@@ -90,6 +115,7 @@ export function CalendarViewPage() {
         title={t(m.exBasic)}
         description={t(m.cvExBasicDesc)}
         component="CalendarView"
+        platformLayout="stacked"
         render={(K) => <CalendarDemo K={K} />}
         code={`import { CalendarView } from '@glacier/react';
 
@@ -103,9 +129,30 @@ const events = [
       />
 
       <Example
+        title={t(m.cvExEditTitle)}
+        description={t(m.cvExEditDesc)}
+        component="CalendarView"
+        platformLayout="stacked"
+        render={(K) => <EditableCalendarDemo K={K} />}
+        code={`const [events, setEvents] = useState(initial);
+
+<CalendarView
+  events={events}
+  editable
+  // Right-click (or long-press) a day or an event for the menu;
+  // double-press empty day space to add; press an event to edit.
+  onEventCreate={(event) => setEvents((list) => upsertEvent(list, event))}
+  onEventChange={(event) => setEvents((list) => upsertEvent(list, event))}
+  // Omit onEventDelete to hide every delete control.
+  onEventDelete={(id) => setEvents((list) => removeEvent(list, id))}
+/>`}
+      />
+
+      <Example
         title={t(m.cvExViewsTitle)}
         description={t(m.cvExViewsDesc)}
         component="CalendarView"
+        platformLayout="stacked"
         render={(K) => <CalendarDemo K={K} defaultMode="agenda" />}
         code={`// Uncontrolled: the header's switch drives it.
 <CalendarView events={events} defaultMode="agenda" />
@@ -118,6 +165,7 @@ const events = [
         title={t(m.cvExSelectTitle)}
         description={t(m.cvExSelectDesc)}
         component="CalendarView"
+        platformLayout="stacked"
         render={(K) => <SelectableCalendarDemo K={K} />}
         code={`const [selected, setSelected] = useState<Date>();
 
@@ -143,6 +191,11 @@ const events = [
           { name: 'onSelectEvent', type: '(event: CalendarEvent) => void', description: t(m.cvPropOnSelectEvent) },
           { name: 'today', type: 'Date', description: t(m.cvPropToday) },
           { name: 'agendaDays', type: 'number', default: '7', description: t(m.cvPropAgendaDays) },
+          { name: 'editable', type: 'boolean', default: 'false', description: t(m.cvPropEditable) },
+          { name: 'onEventCreate', type: '(event: CalendarEvent) => void', description: t(m.cvPropOnEventCreate) },
+          { name: 'onEventChange', type: '(event: CalendarEvent) => void', description: t(m.cvPropOnEventChange) },
+          { name: 'onEventDelete', type: '(id: string) => void', description: t(m.cvPropOnEventDelete) },
+          { name: 'newEventId', type: '() => string', description: t(m.cvPropNewEventId) },
         ]}
       />
 

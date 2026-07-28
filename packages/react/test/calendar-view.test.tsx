@@ -278,3 +278,192 @@ describe('CalendarView', () => {
     expect(results.violations).toEqual([]);
   });
 });
+
+describe('CalendarView editing', () => {
+  const openEditorOn = (title: string) => fireEvent.click(screen.getByRole('button', { name: new RegExp(title) }));
+
+  it('leaves every editing affordance off unless asked', () => {
+    setup();
+    expect(screen.queryByRole('button', { name: 'Add event' })).toBeNull();
+    fireEvent.doubleClick(cellFor('2026-07-20'));
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('opens a blank editor on the add control', () => {
+    setup({ editable: true });
+    fireEvent.click(screen.getByRole('button', { name: 'Add event' }));
+    expect(screen.getByRole('dialog')).toBeTruthy();
+    expect(screen.getByLabelText('Title')).toHaveProperty('value', '');
+  });
+
+  it('adds to the selected day rather than always to today', () => {
+    setup({ editable: true, selected: new Date(2026, 6, 22) });
+    fireEvent.click(screen.getByRole('button', { name: 'Add event' }));
+    expect(screen.getByLabelText('Date')).toHaveProperty('value', '2026-07-22');
+  });
+
+  it('opens a blank editor on the day that was double-pressed', () => {
+    setup({ editable: true });
+    fireEvent.doubleClick(cellFor('2026-07-20'));
+    expect(screen.getByLabelText('Date')).toHaveProperty('value', '2026-07-20');
+  });
+
+  it('opens an existing event filled in', () => {
+    setup({ editable: true });
+    openEditorOn('Design review');
+    expect(screen.getByLabelText('Title')).toHaveProperty('value', 'Design review');
+    expect(screen.getByLabelText('Starts')).toHaveProperty('value', '14:00');
+  });
+
+  it('reports a new event as a create', () => {
+    const onEventCreate = vi.fn();
+    const onEventChange = vi.fn();
+    setup({ editable: true, onEventCreate, onEventChange, newEventId: () => 'minted' });
+    fireEvent.doubleClick(cellFor('2026-07-20'));
+    fireEvent.change(screen.getByLabelText('Title'), { target: { value: 'Lunch' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    expect(onEventChange).not.toHaveBeenCalled();
+    const event = onEventCreate.mock.calls[0]![0] as CalendarEvent;
+    expect(event.id).toBe('minted');
+    expect(event.title).toBe('Lunch');
+    // Local construction: the 20th, not the 19th, wherever the suite runs.
+    expect(event.start.getDate()).toBe(20);
+  });
+
+  it('reports an edited event as a change, keeping its id', () => {
+    const onEventCreate = vi.fn();
+    const onEventChange = vi.fn();
+    setup({ editable: true, onEventCreate, onEventChange });
+    openEditorOn('Design review');
+    fireEvent.change(screen.getByLabelText('Title'), { target: { value: 'Design crit' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    expect(onEventCreate).not.toHaveBeenCalled();
+    expect(onEventChange.mock.calls[0]![0]).toMatchObject({ id: 'review', title: 'Design crit' });
+  });
+
+  it('refuses to save a draft with no title, and says why', () => {
+    const onEventCreate = vi.fn();
+    setup({ editable: true, onEventCreate });
+    fireEvent.click(screen.getByRole('button', { name: 'Add event' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    expect(onEventCreate).not.toHaveBeenCalled();
+    expect(screen.getByRole('dialog').textContent).toContain('Required');
+  });
+
+  it('says nothing about a field the user has not tried to save yet', () => {
+    setup({ editable: true });
+    fireEvent.click(screen.getByRole('button', { name: 'Add event' }));
+    expect(screen.getByRole('dialog').textContent).not.toContain('Required');
+  });
+
+  it('hides the times when the event is all-day', () => {
+    setup({ editable: true });
+    fireEvent.click(screen.getByRole('button', { name: 'Add event' }));
+    expect(screen.queryByLabelText('Starts')).toBeTruthy();
+    fireEvent.click(screen.getByRole('switch', { name: 'All day' }));
+    expect(screen.queryByLabelText('Starts')).toBeNull();
+  });
+
+  it('offers delete only for an event that exists', () => {
+    setup({ editable: true, onEventDelete: vi.fn() });
+    fireEvent.click(screen.getByRole('button', { name: 'Add event' }));
+    expect(screen.queryByRole('button', { name: 'Delete event' })).toBeNull();
+  });
+
+  it('reports a delete by id and closes', () => {
+    const onEventDelete = vi.fn();
+    setup({ editable: true, onEventDelete });
+    openEditorOn('Design review');
+    fireEvent.click(screen.getByRole('button', { name: 'Delete event' }));
+    expect(onEventDelete).toHaveBeenCalledWith('review');
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('still tells a host about the press it asked for', () => {
+    const onSelectEvent = vi.fn();
+    setup({ editable: true, onSelectEvent });
+    openEditorOn('Design review');
+    expect(onSelectEvent).toHaveBeenCalled();
+  });
+
+  it('mints ids that do not collide across two new events', () => {
+    const onEventCreate = vi.fn();
+    setup({ editable: true, onEventCreate });
+    for (const title of ['One', 'Two']) {
+      fireEvent.click(screen.getByRole('button', { name: 'Add event' }));
+      fireEvent.change(screen.getByLabelText('Title'), { target: { value: title } });
+      fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    }
+    const [first, second] = onEventCreate.mock.calls.map((c) => (c[0] as CalendarEvent).id);
+    expect(first).not.toBe(second);
+  });
+});
+
+describe('CalendarView context menu', () => {
+  const chipFor = (id: string) => document.querySelector(`[data-event-id="${id}"]`) as HTMLElement;
+  const menu = () => screen.queryByRole('menu');
+  const itemNames = () => screen.getAllByRole('menuitem').map((i) => i.textContent!.trim());
+
+  it('stays out of the way unless editing is on', () => {
+    setup();
+    fireEvent.contextMenu(cellFor('2026-07-20'));
+    expect(menu()).toBeNull();
+  });
+
+  it('offers add on empty day space', () => {
+    setup({ editable: true });
+    fireEvent.contextMenu(cellFor('2026-07-20'));
+    expect(itemNames()).toEqual(['Add event']);
+  });
+
+  it('adds on the day that was right-clicked, not on today', () => {
+    setup({ editable: true });
+    fireEvent.contextMenu(cellFor('2026-07-20'));
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Add event' }));
+    expect(screen.getByLabelText('Date')).toHaveProperty('value', '2026-07-20');
+  });
+
+  it('offers edit, delete, and add on an event', () => {
+    setup({ editable: true, onEventDelete: vi.fn() });
+    fireEvent.contextMenu(chipFor('review'));
+    expect(itemNames()).toEqual(['Edit event', 'Delete event', 'Add event']);
+  });
+
+  it('drops delete when the host does not handle it', () => {
+    setup({ editable: true });
+    fireEvent.contextMenu(chipFor('review'));
+    expect(itemNames()).toEqual(['Edit event', 'Add event']);
+  });
+
+  it('opens the right event for editing', () => {
+    setup({ editable: true });
+    fireEvent.contextMenu(chipFor('review'));
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Edit event' }));
+    expect(screen.getByLabelText('Title')).toHaveProperty('value', 'Design review');
+  });
+
+  it('deletes by id from the menu', () => {
+    const onEventDelete = vi.fn();
+    setup({ editable: true, onEventDelete });
+    fireEvent.contextMenu(chipFor('review'));
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Delete event' }));
+    expect(onEventDelete).toHaveBeenCalledWith('review');
+  });
+
+  it('adds to the event’s own day when the press landed on a chip', () => {
+    setup({ editable: true });
+    fireEvent.contextMenu(chipFor('review'));
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Add event' }));
+    // 'review' is on 15 July; the blank draft inherits that day, not today's.
+    expect(screen.getByLabelText('Date')).toHaveProperty('value', '2026-07-15');
+  });
+
+  it('resolves a day in agenda mode, where there is no grid cell', () => {
+    setup({ editable: true, defaultMode: 'agenda' });
+    fireEvent.contextMenu(chipFor('standup'));
+    expect(itemNames()).toContain('Edit event');
+  });
+});

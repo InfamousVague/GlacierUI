@@ -59,6 +59,10 @@
 
 .footer {
   display: flex;
+  /* Wraps rather than overflowing: with `flex-end` and no wrap, a footer whose
+     buttons are wider than the panel pushes the first one out past the left
+     edge, where it is clipped instead of merely cramped. */
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--glacier-space-3);
   margin-top: var(--glacier-space-6);

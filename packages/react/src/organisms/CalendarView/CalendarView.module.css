@@ -55,8 +55,20 @@
   gap: var(--glacier-space-1);
 }
 
-.grid[data-rows='6'] .row {
-  min-height: 5rem;
+/* Fixed, not a floor. A month grid whose height tracks its busiest day changes
+   size as you page, so the controls above it and the page below it move under
+   the pointer — press Next twice and the button has walked away from the
+   cursor. splitOverflow caps a cell at MONTH_CELL_LIMIT lines and chips never
+   wrap, so the tallest a cell can be is knowable, and this is it: the date, a
+   gap, then three slots. Derived from the same tokens the parts are drawn from,
+   so it survives a change of text or density scale. */
+.grid[data-rows='6'] {
+  --cal-line: calc(var(--glacier-font-size-xs) * var(--glacier-leading-xs) + 2px);
+  --cal-slots: 3; /* MONTH_CELL_LIMIT */
+  grid-auto-rows: calc(
+    var(--glacier-space-2) * 2 + var(--glacier-hairline) * 2 + var(--cal-line) + var(--glacier-space-1) + var(--cal-line) *
+      var(--cal-slots) + 2px * (var(--cal-slots) - 1)
+  );
 }
 
 .grid[data-rows='1'] .row {
@@ -135,10 +147,11 @@
   font-family: inherit;
   font-size: var(--glacier-font-size-xs);
   text-align: start;
-}
-
-button.chip {
+  /* An event is an object you point at, not a passage you select. The caret
+     also made dragging across a month select the text of every chip it
+     crossed, which is never what the drag was for. */
   cursor: pointer;
+  user-select: none;
 }
 
 button.chip:hover {
@@ -227,4 +240,24 @@ button.chip:hover {
 .empty {
   padding-block: var(--glacier-space-8);
   text-align: center;
+}
+
+/* The hover preview's two lines. Stacked rather than inline because the title
+   is the thing being previewed and the time is its subtitle — and because a
+   long title on one line would just recreate the clipping the preview exists
+   to undo. */
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-1);
+  max-width: 16rem;
+}
+
+.previewTitle {
+  font-weight: var(--glacier-font-weight-medium);
+}
+
+.previewTime {
+  color: var(--glacier-text-muted);
+  font-variant-numeric: tabular-nums;
 }

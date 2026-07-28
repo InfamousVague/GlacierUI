@@ -5,6 +5,9 @@ import {
   buildMonthGrid,
   buildWeek,
   dayKey,
+  draftForDate,
+  draftFromEvent,
+  eventTimeSummary,
   sameDay,
   splitOverflow,
   startOfDay,
@@ -13,10 +16,11 @@ import {
   weekdayOrder,
   type CalendarDay,
   type CalendarEvent,
+  type CalendarEventDraft,
   type CalendarViewMode,
   type WeekStart,
 } from '@glacier/logic';
-import { useMemo, useRef, useState, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
+import { useId, useMemo, useRef, useState, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useLocale, useT } from '../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../i18n/messages.ts';
@@ -25,6 +29,9 @@ import { Button } from '../../atoms/inputs/Button/Button.tsx';
 import { SegmentedControl } from '../../molecules/Segmented/SegmentedControl.tsx';
 import { Text } from '../../atoms/display/Typography/Text.tsx';
 import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
+import { Tooltip } from '../../molecules/Tooltip/Tooltip.tsx';
+import { ContextMenu, MenuItem, MenuSeparator } from '../Menu/Menu.tsx';
+import { CalendarEventEditor } from './CalendarEventEditor.tsx';
 import styles from './CalendarView.module.css';
 
 export type { CalendarEvent, CalendarViewMode, WeekStart } from '@glacier/logic';
@@ -53,6 +60,21 @@ export interface CalendarViewProps extends Omit<ComponentProps<'div'>, 'onSelect
   formatTime?: (date: Date) => string;
   emptyLabel?: ReactNode;
   skeleton?: boolean;
+  /**
+   * Turns on the built-in editor: pressing an event opens it for editing, and
+   * double-pressing empty day space opens a blank one on that day.
+   *
+   * The calendar still does not own the events — it reports what the user did
+   * through the three callbacks below and re-renders from the `events` you pass
+   * back. `upsertEvent` and `removeEvent` in @glacier/logic do that update.
+   */
+  editable?: boolean;
+  onEventCreate?: (event: CalendarEvent) => void;
+  onEventChange?: (event: CalendarEvent) => void;
+  /** Omit to hide the editor's delete control. */
+  onEventDelete?: (id: string) => void;
+  /** Mints the id for a new event. Defaults to one unique to this calendar. */
+  newEventId?: () => string;
 }
 
 const Chevron = ({ back }: { back?: boolean }) => (
@@ -98,6 +120,11 @@ export function CalendarView({
   formatTime,
   emptyLabel,
   skeleton = false,
+  editable = false,
+  onEventCreate,
+  onEventChange,
+  onEventDelete,
+  newEventId,
   className,
   ...rest
 }: CalendarViewProps) {
@@ -123,6 +150,48 @@ export function CalendarView({
   // through a month should not fire a selection on every keystroke.
   const [focusedKey, setFocusedKey] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  // The editor's working copy. Null closes it, which also means the editor is
+  // inert — and costs nothing — for every calendar that is not `editable`.
+  const [draft, setDraft] = useState<CalendarEventDraft | null>(null);
+
+  // Ids are minted per calendar rather than globally: `useId` is stable across
+  // server and client render, and the counter only has to be unique within the
+  // one list this calendar is editing.
+  const idPrefix = useId();
+  const idCount = useRef(0);
+  const mintId = newEventId ?? (() => `${idPrefix}e${++idCount.current}`);
+
+  const openEditor = (next: CalendarEventDraft) => setDraft(next);
+  const closeEditor = () => setDraft(null);
+
+  // What the pointer was over when the context menu was summoned. Read off the
+  // DOM rather than threaded through every cell and chip: one handler on the
+  // wrapper beats forty-two `onContextMenu` props, and the menu is one instance
+  // instead of one per cell.
+  const [menuTarget, setMenuTarget] = useState<{ event?: CalendarEvent; date: Date } | null>(null);
+
+  const resolveMenuTarget = (target: EventTarget | null) => {
+    const el = target instanceof Element ? target : null;
+    const id = el?.closest('[data-event-id]')?.getAttribute('data-event-id');
+    const key = el?.closest('[data-day]')?.getAttribute('data-day');
+    const hit = id ? events.find((candidate) => candidate.id === id) : undefined;
+    const date = key ? days.find((day) => day.key === key)?.date : undefined;
+
+    // A right-click on an agenda row has no day cell to find, so the event's
+    // own day stands in. A miss on both leaves the menu closed rather than
+    // guessing a date the user never pointed at.
+    if (!hit && !date) return setMenuTarget(null);
+    setMenuTarget({ event: hit, date: date ?? startOfDay(hit!.start) });
+  };
+
+  const saveEvent = (event: CalendarEvent) => {
+    // Which callback fires is decided by the draft that produced the event, not
+    // by searching `events` — a host editing a filtered subset would otherwise
+    // see a create for an event it already has.
+    if (draft?.id !== undefined) onEventChange?.(event);
+    else onEventCreate?.(event);
+  };
 
   const days = useMemo(() => {
     if (mode === 'month') return buildMonthGrid(anchor, { weekStartsOn, today }).flat();
@@ -234,32 +303,55 @@ export function CalendarView({
   };
 
   const renderEvent = (event: CalendarEvent, compact: boolean) => {
-    const label = event.allDay ? event.title : `${showTime(event.start)} ${event.title}`;
     const chip = (
-      <span className={styles.chipBody} title={label}>
+      <span className={styles.chipBody}>
         {!event.allDay && <span className={styles.chipTime}>{showTime(event.start)}</span>}
         <span className={styles.chipTitle}>{event.title}</span>
       </span>
     );
-    return onSelectEvent ? (
+
+    // A month chip is one clipped line, so the full title and the time it hides
+    // are exactly what a preview has to supply.
+    const preview = (
+      <span className={styles.preview}>
+        <span className={styles.previewTitle}>{event.title}</span>
+        <span className={styles.previewTime}>
+          {eventTimeSummary(event, showTime, t(kitMessages.calendarAllDay))}
+        </span>
+      </span>
+    );
+
+    const pressable = Boolean(onSelectEvent) || editable;
+    const body = pressable ? (
       <button
-        key={event.id}
         type="button"
         className={cx(styles.chip, compact && styles.chipCompact)}
+        data-event-id={event.id}
         data-tone={event.tone ?? 'accent'}
         onClick={(e) => {
           // A chip sits inside its day cell; a press on it is a press on the
           // event, not on the day underneath.
           e.stopPropagation();
-          onSelectEvent(event);
+          onSelectEvent?.(event);
+          if (editable) openEditor(draftFromEvent(event));
         }}
       >
         {chip}
       </button>
     ) : (
-      <span key={event.id} className={cx(styles.chip, compact && styles.chipCompact)} data-tone={event.tone ?? 'accent'}>
+      <span
+        className={cx(styles.chip, compact && styles.chipCompact)}
+        data-event-id={event.id}
+        data-tone={event.tone ?? 'accent'}
+      >
         {chip}
       </span>
+    );
+
+    return (
+      <Tooltip key={event.id} content={preview} placement="top">
+        {body}
+      </Tooltip>
     );
   };
 
@@ -285,8 +377,12 @@ export function CalendarView({
         data-today={day.isToday || undefined}
         data-selected={isSelected || undefined}
         data-weekend={day.isWeekend || undefined}
-        data-pressable={onSelectDay ? '' : undefined}
+        data-pressable={onSelectDay || editable ? '' : undefined}
         onClick={onSelectDay ? () => onSelectDay(day.date) : undefined}
+        // Double-press rather than single: a single press on a day already
+        // means "select this day", and a calendar that sprouted a form every
+        // time you clicked a date would be unusable.
+        onDoubleClick={editable ? () => openEditor(draftForDate(day.date)) : undefined}
         onFocus={() => setFocusedKey(day.key)}
         onKeyDown={(event) => onGridKeyDown(event, day)}
       >
@@ -335,6 +431,50 @@ export function CalendarView({
 
   const isAgenda = mode === 'agenda';
 
+  /**
+   * Wraps the calendar body in a pointer-summoned menu when editing is on.
+   *
+   * One instance for the whole body rather than one per cell: `ContextMenu` is
+   * `display: contents`, so it adds no box, and its rows are built from
+   * whatever the pointer landed on. It also covers touch — the same component
+   * opens on a long press, which is the gesture that has to stand in for a
+   * right-click on a device with no second button.
+   */
+  const withContextMenu = (body: ReactNode) => {
+    if (!editable) return body;
+    const target = menuTarget;
+    return (
+      <ContextMenu
+        aria-label={t(kitMessages.calendarViewLabel)}
+        onContextMenu={(pointer) => resolveMenuTarget(pointer.target)}
+        content={
+          <>
+            {target?.event && (
+              <>
+                <MenuItem onSelect={() => openEditor(draftFromEvent(target.event!))}>
+                  {t(kitMessages.calendarEditEvent)}
+                </MenuItem>
+                {onEventDelete && (
+                  <MenuItem danger onSelect={() => onEventDelete(target.event!.id)}>
+                    {t(kitMessages.calendarDeleteEvent)}
+                  </MenuItem>
+                )}
+                <MenuSeparator />
+              </>
+            )}
+            {/* Offered even when the press landed on an event: "add another one
+                on this day" is the reason you right-click a busy day. */}
+            <MenuItem onSelect={() => target && openEditor(draftForDate(target.date))}>
+              {t(kitMessages.calendarAddEvent)}
+            </MenuItem>
+          </>
+        }
+      >
+        {body}
+      </ContextMenu>
+    );
+  };
+
   return (
     <div className={cx(styles.root, className)} data-mode={mode} {...rest}>
       <div className={styles.header}>
@@ -363,65 +503,96 @@ export function CalendarView({
             { value: 'agenda', label: t(kitMessages.calendarAgenda) },
           ]}
         />
+        {/* Double-press is the shortcut, not the affordance: it cannot be
+            reached from a keyboard and cannot be discovered by looking. This
+            button is the way in, and it adds to the selected day — or today,
+            which is where an unaimed "new event" belongs. */}
+        {editable && (
+          <Button
+            variant={Variant.Soft}
+            size={Size.Small}
+            onClick={() => openEditor(draftForDate(selected ?? today))}
+          >
+            {t(kitMessages.calendarAddEvent)}
+          </Button>
+        )}
       </div>
 
-      {isAgenda ? (
-        <div className={styles.agenda}>
-          {days.every((day) => !buckets.get(day.key)?.length) ? (
-            <div className={styles.empty}>
-              <Text tone={TextTone.Subtle} size={Size.Small}>
-                {emptyLabel ?? t(kitMessages.calendarEmpty)}
-              </Text>
-            </div>
-          ) : (
-            days
-              .filter((day) => buckets.get(day.key)?.length)
-              .map((day) => (
-                <div key={day.key} className={styles.agendaDay} data-today={day.isToday || undefined}>
-                  <div className={styles.agendaDate}>
-                    <Text size={Size.Small} tone={day.isToday ? TextTone.Default : TextTone.Muted}>
-                      {new Intl.DateTimeFormat(locale, { weekday: 'short', day: 'numeric', month: 'short' }).format(
-                        day.date,
-                      )}
-                    </Text>
-                  </div>
-                  <div className={styles.agendaEvents}>
-                    {(buckets.get(day.key) ?? []).map((event) => renderEvent(event, false))}
-                  </div>
-                </div>
-              ))
-          )}
-        </div>
-      ) : (
-        <>
-          <div className={styles.weekdays} aria-hidden="true">
-            {weekdays.map((w) => (
-              <span key={w.weekday} className={styles.weekday}>
-                {w.label}
-              </span>
-            ))}
-          </div>
-          <div
-            ref={gridRef}
-            role="grid"
-            aria-label={title}
-            className={styles.grid}
-            data-rows={mode === 'month' ? 6 : 1}
-          >
-            {mode === 'month'
-              ? // Rows are weeks, so the grid can be navigated on two axes.
-                Array.from({ length: 6 }, (_, row) => (
-                  <div key={row} role="row" className={styles.row}>
-                    {days.slice(row * 7, row * 7 + 7).map(renderDayCell)}
+      {withContextMenu(
+        isAgenda ? (
+          <div className={styles.agenda}>
+            {days.every((day) => !buckets.get(day.key)?.length) ? (
+              <div className={styles.empty}>
+                <Text tone={TextTone.Subtle} size={Size.Small}>
+                  {emptyLabel ?? t(kitMessages.calendarEmpty)}
+                </Text>
+              </div>
+            ) : (
+              days
+                .filter((day) => buckets.get(day.key)?.length)
+                .map((day) => (
+                  <div
+                    key={day.key}
+                    className={styles.agendaDay}
+                    data-day={day.key}
+                    data-today={day.isToday || undefined}
+                  >
+                    <div className={styles.agendaDate}>
+                      <Text size={Size.Small} tone={day.isToday ? TextTone.Default : TextTone.Muted}>
+                        {new Intl.DateTimeFormat(locale, { weekday: 'short', day: 'numeric', month: 'short' }).format(
+                          day.date,
+                        )}
+                      </Text>
+                    </div>
+                    <div className={styles.agendaEvents}>
+                      {(buckets.get(day.key) ?? []).map((event) => renderEvent(event, false))}
+                    </div>
                   </div>
                 ))
-              : (
-                <div role="row" className={styles.row}>
-                  {days.map(renderDayCell)}
-                </div>
-              )}
+            )}
           </div>
-        </>
+        ) : (
+          <>
+            <div className={styles.weekdays} aria-hidden="true">
+              {weekdays.map((w) => (
+                <span key={w.weekday} className={styles.weekday}>
+                  {w.label}
+                </span>
+              ))}
+            </div>
+            <div
+              ref={gridRef}
+              role="grid"
+              aria-label={title}
+              className={styles.grid}
+              data-rows={mode === 'month' ? 6 : 1}
+            >
+              {mode === 'month'
+                ? // Rows are weeks, so the grid can be navigated on two axes.
+                  Array.from({ length: 6 }, (_, row) => (
+                    <div key={row} role="row" className={styles.row}>
+                      {days.slice(row * 7, row * 7 + 7).map(renderDayCell)}
+                    </div>
+                  ))
+                : (
+                  <div role="row" className={styles.row}>
+                    {days.map(renderDayCell)}
+                  </div>
+                )}
+            </div>
+          </>
+        ),
+      )}
+
+      {editable && (
+        <CalendarEventEditor
+          draft={draft}
+          onDraftChange={setDraft}
+          onClose={closeEditor}
+          onSave={saveEvent}
+          onDelete={onEventDelete}
+          newId={mintId}
+        />
       )}
     </div>
   );

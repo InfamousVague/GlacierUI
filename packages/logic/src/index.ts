@@ -123,10 +123,31 @@ export {
   parseOklch,
   inSrgbGamut,
   readableOn,
+  channelRamp,
   MAX_CHROMA,
+  MAX_HUE,
+  HUE_STEP,
   type Oklch,
   type Rgb,
+  type ColorChannel,
 } from './color.ts';
+
+// Calendar event editing: the draft model the editor popover works on, and
+// the local-time parsing that keeps a typed date on the day it was typed.
+export {
+  timeString,
+  parseLocal,
+  draftFromEvent,
+  draftForDate,
+  validateDraft,
+  draftIsValid,
+  eventFromDraft,
+  upsertEvent,
+  removeEvent,
+  eventTimeSummary,
+  type CalendarEventDraft,
+  type DraftErrors,
+} from './calendar-editor.ts';
 
 // Rich text editing: selection-to-markdown transforms, shared so Bold means
 // exactly the same thing on a DOM textarea and a native TextInput.
@@ -174,10 +195,12 @@ export {
   moveCommandCursor,
   firstCommandCursor,
   isCommandShortcut,
+  highlightSegments,
   type CommandDescriptor,
   type CommandMatch,
   type CommandGroup,
   type CommandShortcutEvent,
+  type CommandSegment,
 } from './command-palette.ts';
 
 // Chat rules: message grouping, bubble geometry, separators, reaction tallies,
