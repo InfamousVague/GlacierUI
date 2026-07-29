@@ -22,7 +22,6 @@ import {
   type MessageLayout,
   type Millis,
 } from '@glacier/logic';
-// TODO(integration): switch to '@glacier/logic' once conversation-view.ts is
 // re-exported from packages/logic/src/index.ts.
 import {
   CONVERSATION_SKELETON_VIEWER,
@@ -30,10 +29,9 @@ import {
   conversationRuns,
   conversationSkeletonMessages,
   type ConversationRun,
-} from '../../../logic/src/conversation-view.ts';
-// TODO(integration): switch to '@glacier/spec' once conversation-view.ts is
+} from '@glacier/logic';
 // re-exported from packages/spec/src/index.ts.
-import { conversationViewSpec } from '../../../spec/src/components/conversation-view.ts';
+import { conversationViewSpec } from '@glacier/spec';
 import { t } from '../tokens.ts';
 import { dimensionsFor } from '../resolve.ts';
 import { EmptyState } from '../atoms/feedback/EmptyState.tsx';

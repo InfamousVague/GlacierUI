@@ -101,6 +101,10 @@ import { SortableListPage } from './pages/organisms/SortableListPage.tsx';
 import { VirtualListPage } from './pages/organisms/VirtualListPage.tsx';
 import { RichTextEditorPage } from './pages/organisms/RichTextEditorPage.tsx';
 import { ColorPickerPage } from './pages/organisms/ColorPickerPage.tsx';
+import { DeliveryStatusPage } from './pages/atoms/DeliveryStatusPage.tsx';
+import { MessageBubblePage } from './pages/molecules/MessageBubblePage.tsx';
+import { MessageGroupPage } from './pages/molecules/MessageGroupPage.tsx';
+import { ConversationViewPage } from './pages/organisms/ConversationViewPage.tsx';
 import { CommandPalettePage } from './pages/organisms/CommandPalettePage.tsx';
 import { ModalPage } from './pages/organisms/ModalPage.tsx';
 import { DrawerPage } from './pages/organisms/DrawerPage.tsx';
@@ -189,6 +193,10 @@ const PAGES = {
   virtuallist: { group: 'Organisms', el: <VirtualListPage /> },
   richtexteditor: { group: 'Organisms', el: <RichTextEditorPage /> },
   colorpicker: { group: 'Organisms', el: <ColorPickerPage /> },
+  deliverystatus: { group: 'Atoms', el: <DeliveryStatusPage /> },
+  messagebubble: { group: 'Molecules', el: <MessageBubblePage /> },
+  messagegroup: { group: 'Molecules', el: <MessageGroupPage /> },
+  conversationview: { group: 'Organisms', el: <ConversationViewPage /> },
   commandpalette: { group: 'Organisms', el: <CommandPalettePage /> },
   modal: { group: 'Organisms', el: <ModalPage /> },
   drawer: { group: 'Organisms', el: <DrawerPage /> },

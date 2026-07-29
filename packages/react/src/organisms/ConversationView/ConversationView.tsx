@@ -5,7 +5,6 @@ import {
   type MessageLayout,
   type Millis,
 } from '@glacier/logic';
-// TODO(integration): switch to '@glacier/logic' once conversation-view.ts is
 // re-exported from packages/logic/src/index.ts.
 import {
   CONVERSATION_SKELETON_VIEWER,
@@ -13,7 +12,7 @@ import {
   conversationRuns,
   conversationSkeletonMessages,
   type ConversationRun,
-} from '../../../../logic/src/conversation-view.ts';
+} from '@glacier/logic';
 import {
   useLayoutEffect,
   useMemo,
@@ -23,9 +22,8 @@ import {
   type ReactNode,
   type UIEvent,
 } from 'react';
-// TODO(integration): switch to '@glacier/spec' once conversation-view.ts is
 // re-exported from packages/spec/src/index.ts.
-import { conversationViewSpec } from '../../../../spec/src/components/conversation-view.ts';
+import { conversationViewSpec } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
 import { useT } from '../../i18n/LocaleProvider.tsx';
 import { EmptyState } from '../../atoms/feedback/EmptyState/EmptyState.tsx';

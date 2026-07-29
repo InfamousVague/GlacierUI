@@ -37,6 +37,8 @@ declare module 'react-native' {
     'aria-hidden'?: boolean;
     'aria-checked'?: boolean | 'mixed';
     'aria-label'?: string;
+    /** Pins a header's level so native and DOM agree; RN-web emits h1 otherwise. */
+    'aria-level'?: number;
   }
 
   export interface ResponderEvent {

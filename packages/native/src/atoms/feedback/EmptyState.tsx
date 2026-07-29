@@ -112,6 +112,12 @@ export function EmptyState({
       )}
       <Text
         accessibilityRole="header"
+        // react-native-web turns `accessibilityRole="header"` into a bare <h1>,
+        // but the DOM kit's EmptyState is an <h2> — so the same empty state
+        // injected a level-1 heading on native and a level-2 one on web, and an
+        // empty state dropped inside a page outranked that page's own title.
+        // aria-level pins it to the DOM kit's level on both.
+        aria-level={2}
         style={{
           color: t('text'),
           fontSize: metric(DIMS.titleFontSize, 'font-size-lg'),

@@ -1,7 +1,24 @@
 import { getSpec, seekBarSpec, type Measure, type SizeSpec } from '@glacier/spec';
-import { seekBarGeometry, SEEK_VIEW_WIDTH, SEEK_VIEW_HEIGHT, type SeekBarShape } from '@glacier/logic';
+import {
+  seekBarGeometry,
+  SEEK_VIEW_WIDTH,
+  SEEK_VIEW_HEIGHT,
+  // The message core's figures are drawn from the shared geometry rather than
+  // by eye, the way SeekBar's is: the corners, the tail, the run slots and the
+  // delivery silhouettes all come from the modules both kits render through.
+  BUBBLE_MAX_WIDTH,
+  bubbleCorners,
+  bubblePosition,
+  deliveryGlyph,
+  deliveryStatuses,
+  messageTail,
+  tailScaleX,
+  type BubblePosition,
+  type DeliveryGlyph,
+  type SeekBarShape,
+} from '@glacier/logic';
 import { createContext, useContext, useId, useState, type ReactElement } from 'react';
-import { SegmentedControl, Select, Stack, Size, useT } from '@glacier/react';
+import { SegmentedControl, Select, Stack, Size, defineMessages, useT } from '@glacier/react';
 import { m } from './i18n.ts';
 
 /**
@@ -4702,7 +4719,635 @@ function ColorPickerBlueprint({ dimensions }: BlueprintProps) {
   );
 }
 
+// ---- the message core ---------------------------------------------------
+//
+// Four figures for the four surviving chat components. Everything that is a
+// real measurement is read from the shared modules rather than eyeballed: the
+// delivery silhouettes come from `deliveryGlyph`, the bubble corners from
+// `bubbleCorners`, the tail from `messageTail`, the run slots from
+// `bubblePosition`, and the provisional alpha from the spec. Only the
+// schematic pixel scale is invented here, and the labels carry the real values.
+
+/**
+ * TODO(i18n): these belong in apps/docs/src/i18n.ts beside the other `bp*`
+ * labels; they are authored here so the figures compile standalone, and every
+ * key is listed in the handoff ready to be pasted in verbatim.
+ */
+const bpm = defineMessages({
+  bpBlueprintOfTheDeliveryStatus: { en: 'Blueprint of the Delivery Status', es: 'Plano del estado de entrega', fr: 'Plan de l’état de remise', de: 'Bauplan des Zustellstatus', ja: '配信ステータスの設計図', pt: 'Planta do estado de entrega', zh: '送达状态蓝图', ar: 'مخطّط حالة التسليم' },
+  bpBlueprintOfTheMessageBubble: { en: 'Blueprint of the Message Bubble', es: 'Plano de la burbuja de mensaje', fr: 'Plan de la bulle de message', de: 'Bauplan der Nachrichtenblase', ja: 'メッセージバブルの設計図', pt: 'Planta do balão de mensagem', zh: '消息气泡蓝图', ar: 'مخطّط فقاعة الرسالة' },
+  bpBlueprintOfTheMessageGroup: { en: 'Blueprint of the Message Group', es: 'Plano del grupo de mensajes', fr: 'Plan du groupe de messages', de: 'Bauplan der Nachrichtengruppe', ja: 'メッセージグループの設計図', pt: 'Planta do grupo de mensagens', zh: '消息分组蓝图', ar: 'مخطّط مجموعة الرسائل' },
+  bpBlueprintOfTheConversationView: { en: 'Blueprint of the Conversation View', es: 'Plano de la vista de conversación', fr: 'Plan de la vue de conversation', de: 'Bauplan der Unterhaltungsansicht', ja: '会話ビューの設計図', pt: 'Planta da vista de conversa', zh: '会话视图蓝图', ar: 'مخطّط عرض المحادثة' },
+  bpShapeNotColour: { en: 'shape, not colour', es: 'forma, no color', fr: 'la forme, pas la couleur', de: 'Form, nicht Farbe', ja: '色ではなく形', pt: 'forma, não cor', zh: '靠形状，不靠颜色', ar: 'الشكل لا اللون' },
+  bpGlyphBox: { en: 'glyph box', es: 'caja del glifo', fr: 'boîte du glyphe', de: 'Zeichenkasten', ja: 'グリフ枠', pt: 'caixa do glifo', zh: '字形框', ar: 'صندوق الرمز' },
+  bpTranscriptColumn: { en: 'transcript column', es: 'columna de transcripción', fr: 'colonne de transcription', de: 'Verlaufsspalte', ja: '履歴の列', pt: 'coluna da transcrição', zh: '会话记录列', ar: 'عمود السجلّ' },
+  bpTail: { en: 'tail', es: 'cola', fr: 'queue', de: 'Zipfel', ja: 'しっぽ', pt: 'cauda', zh: '尾巴', ar: 'ذيل' },
+  bpAvatarOnce: { en: 'avatar (once)', es: 'avatar (una vez)', fr: 'avatar (une fois)', de: 'Avatar (einmal)', ja: 'アバター（1度）', pt: 'avatar (uma vez)', zh: '头像（一次）', ar: 'صورة (مرة)' },
+  bpNameOnce: { en: 'name (once)', es: 'nombre (una vez)', fr: 'nom (une fois)', de: 'Name (einmal)', ja: '名前（1度）', pt: 'nome (uma vez)', zh: '姓名（一次）', ar: 'اسم (مرة)' },
+  bpOneMetaLine: { en: 'one meta line', es: 'una línea meta', fr: 'une ligne méta', de: 'eine Meta-Zeile', ja: 'メタ行は1つ', pt: 'uma linha meta', zh: '一行元信息', ar: 'سطر بيانات واحد' },
+  bpContinuedRun: { en: 'continued — no avatar, no name, gutter kept', es: 'continuada: sin avatar, sin nombre, canaleta conservada', fr: 'continuée — sans avatar, sans nom, gouttière conservée', de: 'fortgesetzt — kein Avatar, kein Name, Spalte bleibt', ja: '継続 ― アバターも名前もなし、余白列は保持', pt: 'continuada — sem avatar, sem nome, goteira mantida', zh: '续接——无头像、无姓名，保留栏位', ar: 'متواصلة — بلا صورة ولا اسم، مع إبقاء العمود' },
+  bpAuthorship: { en: 'authorship', es: 'autoría', fr: 'paternité', de: 'Urheberschaft', ja: '作者', pt: 'autoria', zh: '作者身份', ar: 'النسبة' },
+  bpAcknowledgement: { en: 'acknowledgement', es: 'acuse', fr: 'accusé', de: 'Bestätigung', ja: '承認', pt: 'reconhecimento', zh: '确认状态', ar: 'الإقرار' },
+  bpRemote: { en: 'remote', es: 'remoto', fr: 'distant', de: 'entfernt', ja: 'リモート', pt: 'remoto', zh: '远端', ar: 'بعيدة' },
+  bpLocal: { en: 'local', es: 'local', fr: 'local', de: 'lokal', ja: 'ローカル', pt: 'local', zh: '本地', ar: 'محلّية' },
+  bpNoTick: { en: 'no tick, ever', es: 'nunca una marca', fr: 'jamais de coche', de: 'nie ein Haken', ja: 'チェックは決してなし', pt: 'nunca um visto', zh: '绝无对钩', ar: 'لا علامة أبدًا' },
+  bpConfirmed: { en: 'confirmed', es: 'confirmado', fr: 'confirmé', de: 'bestätigt', ja: '確定済み', pt: 'confirmado', zh: '已确认', ar: 'مؤكَّدة' },
+  bpOptimistic: { en: 'optimistic', es: 'optimista', fr: 'optimiste', de: 'optimistisch', ja: '楽観的', pt: 'otimista', zh: '乐观', ar: 'متفائلة' },
+  bpFailedRun: { en: 'failed', es: 'fallido', fr: 'échoué', de: 'fehlgeschlagen', ja: '失敗', pt: 'falhado', zh: '失败', ar: 'فاشلة' },
+  bpScroller: { en: 'scroller', es: 'desplazador', fr: 'défileur', de: 'Scroller', ja: 'スクローラー', pt: 'deslocador', zh: '滚动容器', ar: 'الممرِّر' },
+  bpProvisional: { en: 'provisional', es: 'provisional', fr: 'provisoire', de: 'vorläufig', ja: '暫定', pt: 'provisório', zh: '暂定', ar: 'مؤقّتة' },
+  bpMaxWidth: { en: 'max width', es: 'ancho máx.', fr: 'largeur max', de: 'max. Breite', ja: '最大幅', pt: 'largura máx.', zh: '最大宽度', ar: 'أقصى عرض' },
+});
+
+/**
+ * A rounded rectangle whose four corners differ, which `<rect rx>` cannot draw.
+ * The radii arrive as schematic pixels resolved from the token names
+ * `bubbleCorners` returned, so the figure follows the shared function rather
+ * than a shape typed in by eye.
+ */
+function cornerRect(
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  r: { tl: number; tr: number; br: number; bl: number },
+): string {
+  return [
+    `M ${x + r.tl} ${y}`,
+    `H ${x + w - r.tr}`,
+    r.tr ? `A ${r.tr} ${r.tr} 0 0 1 ${x + w} ${y + r.tr}` : `L ${x + w} ${y}`,
+    `V ${y + h - r.br}`,
+    r.br ? `A ${r.br} ${r.br} 0 0 1 ${x + w - r.br} ${y + h}` : `L ${x + w} ${y + h}`,
+    `H ${x + r.bl}`,
+    r.bl ? `A ${r.bl} ${r.bl} 0 0 1 ${x} ${y + h - r.bl}` : `L ${x} ${y + h}`,
+    `V ${y + r.tl}`,
+    r.tl ? `A ${r.tl} ${r.tl} 0 0 1 ${x + r.tl} ${y}` : `L ${x} ${y}`,
+    'Z',
+  ].join(' ');
+}
+
+/** The schematic pixel each corner token draws at. The names come from commons. */
+const CORNER_PX: Record<string, number> = {
+  'radius-xl': 11,
+  'radius-xs': 3,
+  'radius-none': 0,
+};
+
+const cornerPx = (token: string): number => CORNER_PX[token] ?? 6;
+
+/** A bubble's four corners in physical order, for a trailing-edge run in LTR. */
+function bubbleRadii(position: BubblePosition, tail: boolean) {
+  const c = bubbleCorners(position, 'end', tail);
+  // `end` in a left-to-right figure: inline-start is left, inline-end is right.
+  return {
+    tl: cornerPx(c.startStart),
+    tr: cornerPx(c.startEnd),
+    bl: cornerPx(c.endStart),
+    br: cornerPx(c.endEnd),
+  };
+}
+
+/**
+ * One delivery silhouette, drawn in a 24-unit box and scaled to `s`.
+ *
+ * The status-to-shape decision is `deliveryGlyph`'s, exactly as it is in both
+ * kits; only the strokes for each shape name live here, because that is the one
+ * part a drawing has to own.
+ */
+function DeliveryMark({ shape, x, y, s }: { shape: DeliveryGlyph; x: number; y: number; s: number }) {
+  const k = s / 24;
+  const g = (children: ReactElement) => (
+    <g
+      transform={`translate(${x} ${y}) scale(${k})`}
+      fill="none"
+      stroke={C.line}
+      // Authored in the 24-unit glyph space, so it scales with the box the way
+      // the real icon's stroke does.
+      strokeWidth={1.9}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {children}
+    </g>
+  );
+  switch (shape) {
+    case 'clock':
+      return g(
+        <>
+          <circle cx={12} cy={12} r={9} />
+          <path d="M12 7 v5 l3.5 2" />
+        </>,
+      );
+    case 'check':
+      return g(<path d="M20 7 L9.5 17.5 L4 12" />);
+    case 'double-check':
+      return g(
+        <>
+          <path d="M2 12.5 L7 17.5 L17 7" />
+          <path d="M22 8.5 L14 17 L12.6 15.6" />
+        </>,
+      );
+    case 'check-circle':
+      // Solid mass against the bare strokes of `double-check`: the two differ by
+      // fill as well as by hue, which is the whole point of the table.
+      return (
+        <g transform={`translate(${x} ${y}) scale(${k})`}>
+          <circle cx={12} cy={12} r={9} fill={C.line} stroke="none" />
+          <path
+            d="M8 12.2 L11 15 L16.2 9"
+            fill="none"
+            stroke={C.fill}
+            strokeWidth={2.2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </g>
+      );
+    case 'alert':
+    default:
+      return g(
+        <>
+          <path d="M12 3.5 L21.5 20 L2.5 20 Z" />
+          <path d="M12 10 v4.2" />
+          <path d="M12 17.4 v0.4" />
+        </>,
+      );
+  }
+}
+
+/**
+ * DeliveryStatus: the five states side by side, each in its own glyph box, so
+ * the claim the component exists to hold — no two states share a silhouette —
+ * is a thing you can check by looking rather than a sentence you have to trust.
+ */
+function DeliveryStatusBlueprint({ size, dimensions }: BlueprintProps) {
+  const t = useT();
+  const iconSize = fmt(size.iconSize) ?? fmt(size.diameter);
+  const fontSize = fmt(size.fontSize);
+  const stroke = fmt(dimensions?.stroke);
+
+  const S = 40;
+  const PITCH = 64;
+  const X0 = (400 - (deliveryStatuses.length * S + (deliveryStatuses.length - 1) * (PITCH - S))) / 2;
+  const Y = 78;
+  const GLYPH = 28;
+
+  return (
+    <svg viewBox="0 0 400 224" className="bpSvg" role="img" aria-label={t(bpm.bpBlueprintOfTheDeliveryStatus)}>
+      <Defs />
+      <BpTitle />
+      <text x={16} y={46} className="bpLabel" fill={C.faint}>
+        {t(bpm.bpShapeNotColour)}
+      </text>
+
+      {deliveryStatuses.map((status, i) => {
+        const x = X0 + i * PITCH;
+        return (
+          <g key={status}>
+            <rect
+              x={x}
+              y={Y}
+              width={S}
+              height={S}
+              rx={7}
+              fill={C.fill}
+              stroke={C.edge}
+              strokeWidth={1.25}
+              strokeDasharray="4 3"
+            />
+            <DeliveryMark shape={deliveryGlyph(status)} x={x + (S - GLYPH) / 2} y={Y + (S - GLYPH) / 2} s={GLYPH} />
+            {/* The status name, not a translation: it is the prop value. */}
+            <text x={x + S / 2} y={Y + S + 16} textAnchor="middle" className="bpLabel bpMuted">
+              {status}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* the glyph box, dimensioned once — every state draws in the same square */}
+      <HDim x1={X0} x2={X0 + S} y={Y + S + 32} label={iconSize ?? t(m.bpAuto)} above={false} />
+      <text x={X0 + S + 12} y={Y + S + 36} className="bpLabel" fill={C.faint}>
+        {t(bpm.bpGlyphBox)}
+      </text>
+
+      <Foot
+        y={212}
+        parts={[
+          stroke && `${t(m.bpStroke)}: ${stroke}`,
+          fontSize && `${t(m.bpFont)}: ${fontSize}`,
+          'read: accent-text',
+          'failed: danger-text',
+        ]}
+      />
+    </svg>
+  );
+}
+
+/**
+ * MessageBubble: a run of three on the trailing edge, drawn with the radii
+ * `bubbleCorners` actually returns and the tail `messageTail` actually defines,
+ * so the figure cannot drift from the geometry it documents. The three corners
+ * worth naming all land on the same edge, which is why the callouts stack down
+ * the trailing side.
+ */
+function MessageBubbleBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const radius = fmt(dimensions?.radius);
+  const stackedRadius = fmt(dimensions?.stackedRadius);
+  const tailRadius = fmt(dimensions?.tailRadius);
+  const padInline = fmt(dimensions?.paddingInline);
+  const padBlock = fmt(dimensions?.paddingBlock);
+  const gap = fmt(dimensions?.gap);
+  const maxWidth = fmt(dimensions?.maxWidth) ?? BUBBLE_MAX_WIDTH;
+
+  // Taller than the usual 224: three stacked bubbles plus a meta line and the
+  // corner callouts need the room, and the frame scales to the viewBox.
+  const H = 320;
+
+  const CX = 40;
+  const CW = 256;
+  const CY = 52;
+  const CH = 176;
+  const PAD = 14;
+  const RX = CX + CW - PAD; // the trailing edge the run hugs
+
+  const CAP = Math.round(CW * (Number.parseFloat(maxWidth) / 100 || 0.72));
+  const BH = 34;
+  const BGAP = 7;
+  const widths = [130, CAP, 104];
+  const tops = widths.map((_unused, i) => CY + 24 + i * (BH + BGAP));
+
+  // The tail's own numbers, scaled once into the schematic.
+  const TAIL_K = 1.4;
+  const tailW = messageTail.width * TAIL_K;
+  const tailH = messageTail.height * TAIL_K;
+  const lastTop = tops[2] as number;
+
+  return (
+    <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(bpm.bpBlueprintOfTheMessageBubble)}>
+      <Defs />
+      <BpTitle />
+
+      {/* the column a bubble is a share of; the empty remainder is what keeps
+          alignment readable, so it is drawn rather than implied */}
+      <rect x={CX} y={CY} width={CW} height={CH} rx={10} fill="none" stroke={C.edge} strokeWidth={1.25} strokeDasharray="4 3" />
+      <text x={CX} y={CY - 8} className="bpLabel" fill={C.faint}>
+        {t(bpm.bpTranscriptColumn)}
+      </text>
+
+      {widths.map((w, i) => {
+        const position = bubblePosition(i, widths.length);
+        const last = i === widths.length - 1;
+        const top = tops[i] as number;
+        const x = RX - w;
+        return (
+          <g key={position + String(i)}>
+            <path
+              d={cornerRect(x, top, w, BH, bubbleRadii(position, last))}
+              fill={C.fill}
+              stroke={C.edge}
+              strokeWidth={1.5}
+            />
+            <Ln x={x + 12} y={top + BH / 2 - 3} w={Math.min(w - 24, 96)} op={0.5} />
+          </g>
+        );
+      })}
+
+      {/* the tail, from the shared path: its inline-start edge sits on the
+          bubble's outer edge and its baseline is flush with the bubble's bottom,
+          which is exactly how the stylesheet places it */}
+      <g transform={`translate(${RX} ${lastTop + BH - tailH}) scale(${TAIL_K})`}>
+        <path d={messageTail.path} fill={C.fill} stroke={C.edge} strokeWidth={1.5 / TAIL_K} />
+      </g>
+
+      {/* the run's single meta line, under the message that ends it */}
+      <Ln x={RX - 40} y={lastTop + BH + 12} w={40} h={6} op={0.4} />
+      <text x={RX - 48} y={lastTop + BH + 18} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(m.bpMeta)}
+      </text>
+
+      {/* the three corners worth naming, all on the trailing edge, called out
+          clear of the column so no label crosses a drawn shape */}
+      {radius && (
+        <>
+          <line x1={RX + 2} y1={(tops[0] as number) + 3} x2={CX + CW + 14} y2={(tops[0] as number) + 3} stroke={C.line} strokeWidth={1} />
+          <text x={CX + CW + 18} y={(tops[0] as number) + 6} className="bpLabel">{radius}</text>
+        </>
+      )}
+      {stackedRadius && (
+        <>
+          <line x1={RX + 2} y1={(tops[1] as number) + 2} x2={CX + CW + 14} y2={(tops[1] as number) + 2} stroke={C.line} strokeWidth={1} />
+          <text x={CX + CW + 18} y={(tops[1] as number) + 5} className="bpLabel">{stackedRadius}</text>
+        </>
+      )}
+      {tailRadius && (
+        <>
+          <line x1={RX + tailW + 2} y1={lastTop + BH} x2={CX + CW + 14} y2={lastTop + BH + 14} stroke={C.line} strokeWidth={1} />
+          <text x={CX + CW + 18} y={lastTop + BH + 17} className="bpLabel">{tailRadius}</text>
+        </>
+      )}
+      <text x={CX + CW + 18} y={lastTop + BH + 30} className="bpLabel bpMuted">{t(bpm.bpTail)}</text>
+
+      {/* The in-run gap, on the leading side where the column is empty. Rotated
+          rather than laid flat: a flat `space-1` beside a line this far left
+          runs off the viewBox, and a rotated label is the drafting convention
+          for a tight dimension anyway. */}
+      {gap && <VDim x={CX - 14} y1={(tops[0] as number) + BH} y2={tops[1] as number} label={gap} />}
+
+      {/* what a bubble may grow to, measured against the column it sits in */}
+      <HDim x1={RX - CAP} x2={RX} y={CY + CH + 16} label={`${t(bpm.bpMaxWidth)} ${maxWidth}`} above={false} />
+
+      <Foot
+        y={H - 12}
+        parts={[
+          padInline && `${t(m.bpPadding)}: ${padInline} / ${padBlock ?? ''}`.trim(),
+          `${t(bpm.bpTail)}: ${messageTail.width}×${messageTail.height}px`,
+        ]}
+      />
+    </svg>
+  );
+}
+
+/**
+ * MessageGroup: the head of a run above the continued half of one, so the thing
+ * the `continued` flag actually does — suppress the avatar and the name while
+ * keeping the gutter reserved — is visible as a difference between two figures
+ * rather than described in a caption.
+ */
+function MessageGroupBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const gap = fmt(dimensions?.gap);
+  const gutterGap = fmt(dimensions?.gutterGap);
+  const lineGap = fmt(dimensions?.lineGap);
+  const gutter = fmt(dimensions?.gutter);
+  const rowGutter = fmt(dimensions?.rowGutter);
+
+  const H = 320;
+
+  const GX = 90; // the gutter's leading edge
+  const G = 30; // the gutter's width
+  const SX = GX + G + 8; // the stack, one gutter-gap along
+  const SW = 210;
+  const BH = 30;
+  const BGAP = 7;
+
+  /** One run: two bubbles on the leading edge, a meta line under them. */
+  const run = (top: number, header: boolean) => {
+    const bubbleTop = header ? top + 16 : top;
+    const tops = [bubbleTop, bubbleTop + BH + BGAP];
+    const widths = [SW - 40, SW - 90];
+    return { tops, widths, bottom: (tops[1] as number) + BH };
+  };
+
+  const a = run(60, true);
+  const b = run(a.bottom + 34, false);
+
+  const bubbles = (r: ReturnType<typeof run>) => (
+    <>
+      {r.tops.map((top, i) => {
+        const position = bubblePosition(i, 2);
+        const last = i === 1;
+        const c = bubbleCorners(position, 'start', last);
+        return (
+          <g key={String(top)}>
+            <path
+              d={cornerRect(SX, top, r.widths[i] as number, BH, {
+                tl: cornerPx(c.startStart),
+                tr: cornerPx(c.startEnd),
+                bl: cornerPx(c.endStart),
+                br: cornerPx(c.endEnd),
+              })}
+              fill={C.fill}
+              stroke={C.edge}
+              strokeWidth={1.5}
+            />
+            <Ln x={SX + 12} y={top + BH / 2 - 3} w={(r.widths[i] as number) - 26} op={0.5} />
+          </g>
+        );
+      })}
+      {/* The tail the run ends on, drawn from the shared path and mirrored by
+          `tailScaleX` rather than by a second hand-authored `d` — which is also
+          why the bottom-leading corner of that bubble is square. */}
+      <g
+        transform={`translate(${SX} ${r.bottom - messageTail.height}) scale(${tailScaleX('start')} 1)`}
+      >
+        <path d={messageTail.path} fill={C.fill} stroke={C.edge} strokeWidth={1.5} />
+      </g>
+    </>
+  );
+
+  return (
+    <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(bpm.bpBlueprintOfTheMessageGroup)}>
+      <Defs />
+      <BpTitle />
+
+      {/* ---- the head of a run ---- */}
+      <Ln x={SX} y={60} w={70} h={8} op={0.75} />
+      <text x={SX + 78} y={67} className="bpLabel" fill={C.faint}>
+        {t(bpm.bpNameOnce)}
+      </text>
+      {bubbles(a)}
+      {/* In a bubble transcript the avatar belongs to the END of the run, beside
+          the message the tail points out of — that is what the author just sent. */}
+      <circle cx={GX + G / 2} cy={a.bottom - G / 2} r={G / 2} fill={C.content} fillOpacity={0.3} stroke={C.edge} strokeWidth={1.25} />
+      <text x={GX - 8} y={a.bottom - G / 2 + 3} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(bpm.bpAvatarOnce)}
+      </text>
+      <Ln x={SX} y={a.bottom + 10} w={34} h={6} op={0.4} />
+      <text x={SX + 42} y={a.bottom + 16} className="bpLabel" fill={C.faint}>
+        {t(bpm.bpOneMetaLine)}
+      </text>
+
+      {/* ---- the same run, continued ---- */}
+      {bubbles(b)}
+      {/* Reserved even when empty: the messages in a continued run have to land
+          on the same line as the ones above them. */}
+      <circle
+        cx={GX + G / 2}
+        cy={b.bottom - G / 2}
+        r={G / 2}
+        fill="none"
+        stroke={C.edge}
+        strokeWidth={1.25}
+        strokeDasharray="3 3"
+      />
+      <text x={GX - 8} y={b.bottom - G / 2 + 3} textAnchor="end" className="bpLabel bpMuted">
+        {t(m.bpGutter)}
+      </text>
+      <Ln x={SX} y={b.bottom + 10} w={34} h={6} op={0.4} />
+      <text x={GX} y={b.bottom + 34} className="bpLabel" fill={C.faint}>
+        {t(bpm.bpContinuedRun)}
+      </text>
+
+      {/* the gutter's width — it must be exactly the avatar's diameter, or the
+          two halves of a split run stop lining up */}
+      {gutter && <HDim x1={GX} x2={GX + G} y={a.bottom + 40} label={gutter} />}
+
+      {/* the tight gap inside a run, on the trailing side where nothing else is */}
+      {gap && <VDim x={SX + SW + 22} y1={(a.tops[0] as number) + BH} y2={a.tops[1] as number} label={gap} />}
+
+      {/* The dimension names are the spec's own keys, so they stay in code font
+          rather than being translated into something a reader cannot grep for. */}
+      <Foot
+        y={H - 12}
+        parts={[
+          gutterGap && `gutterGap: ${gutterGap}`,
+          lineGap && `lineGap: ${lineGap}`,
+          rowGutter && `rowGutter: ${rowGutter}`,
+        ]}
+      />
+    </svg>
+  );
+}
+
+/**
+ * ConversationView: the two axes, drawn as two independent columns of labels
+ * either side of one thread. Authorship decides which edge a run hugs; the
+ * acknowledgement decides only whether it steps back — and the remote run, at
+ * the top, carries no delivery mark at all, which is the invariant the whole
+ * component exists to hold.
+ */
+function ConversationViewBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const gap = fmt(dimensions?.gap);
+  const padInline = fmt(dimensions?.paddingInline);
+  const padBlock = fmt(dimensions?.paddingBlock);
+  const provisional = fmt(dimensions?.provisionalOpacity) ?? '0.65';
+  // A real number from the spec, not a guess: the figure fades by exactly the
+  // alpha the component does.
+  const provisionalAlpha = Number.parseFloat(provisional) || 0.65;
+
+  const H = 350;
+  const SX = 70;
+  const SW = 228;
+  const SY = 48;
+  const SH = 248;
+  const PAD = 12;
+  const inX = SX + PAD;
+  const inRight = SX + SW - PAD;
+
+  const BH = 26;
+  const remote = [
+    { x: inX, y: 62, w: 110 },
+    { x: inX, y: 93, w: 88 },
+  ];
+  /** The local runs, one per point on the acknowledgement axis. */
+  const local = [
+    { y: 135, w: 104, status: 'read' as const, label: t(bpm.bpConfirmed), alpha: 1, strong: false },
+    { y: 189, w: 88, status: 'sending' as const, label: t(bpm.bpOptimistic), alpha: provisionalAlpha, strong: false },
+    { y: 243, w: 118, status: 'failed' as const, label: t(bpm.bpFailedRun), alpha: 1, strong: true },
+  ];
+
+  return (
+    <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(bpm.bpBlueprintOfTheConversationView)}>
+      <Defs />
+      <BpTitle />
+
+      {/* the two axes, named once each, on opposite sides of the thread */}
+      <text x={SX - 6} y={40} textAnchor="end" className="bpLabel" fill={C.faint}>
+        {t(bpm.bpAuthorship)}
+      </text>
+      <text x={SX + SW + 8} y={40} className="bpLabel" fill={C.faint}>
+        {t(bpm.bpAcknowledgement)}
+      </text>
+
+      {/* the scroller: it owns the overflow, and nothing else */}
+      <rect x={SX} y={SY} width={SW} height={SH} rx={10} fill="none" stroke={C.edge} strokeWidth={1.5} strokeDasharray="5 3" />
+      <text x={SX + 6} y={40} className="bpLabel bpMuted">
+        {t(bpm.bpScroller)}
+      </text>
+
+      {/* a remote run: the leading edge, and no delivery mark anywhere on it */}
+      {remote.map((b, i) => {
+        const c = bubbleCorners(bubblePosition(i, remote.length), 'start', i === remote.length - 1);
+        return (
+          <path
+            key={b.y}
+            d={cornerRect(b.x, b.y, b.w, BH, {
+              tl: cornerPx(c.startStart),
+              tr: cornerPx(c.startEnd),
+              bl: cornerPx(c.endStart),
+              br: cornerPx(c.endEnd),
+            })}
+            fill={C.fill}
+            stroke={C.edge}
+            strokeWidth={1.5}
+          />
+        );
+      })}
+      <g
+        transform={`translate(${inX} ${(remote[1] as { y: number }).y + BH - messageTail.height}) scale(${tailScaleX('start')} 1)`}
+      >
+        <path d={messageTail.path} fill={C.fill} stroke={C.edge} strokeWidth={1.5} />
+      </g>
+      <text x={SX - 6} y={98} textAnchor="end" className="bpLabel">
+        {t(bpm.bpRemote)}
+      </text>
+      <text x={SX + SW + 8} y={98} className="bpLabel">
+        {t(bpm.bpNoTick)}
+      </text>
+
+      {/* the local runs, one per point on the acknowledgement axis */}
+      {local.map((run) => {
+        const c = bubbleCorners('only', 'end', true);
+        const x = inRight - run.w;
+        return (
+          <g key={run.status} opacity={run.alpha}>
+            <path
+              d={cornerRect(x, run.y, run.w, BH, {
+                tl: cornerPx(c.startStart),
+                tr: cornerPx(c.startEnd),
+                bl: cornerPx(c.endStart),
+                br: cornerPx(c.endEnd),
+              })}
+              fill={C.content}
+              fillOpacity={0.28}
+              stroke={C.line}
+              // A failed send keeps full strength and takes a heavier edge: it is
+              // the one row in a transcript that asks to be acted on, so quieting
+              // it would be the exact wrong move.
+              strokeWidth={run.strong ? 2.5 : 1.25}
+            />
+            <g transform={`translate(${inRight} ${run.y + BH - messageTail.height}) scale(${tailScaleX('end')} 1)`}>
+              <path d={messageTail.path} fill={C.content} fillOpacity={0.28} stroke={C.line} strokeWidth={1.25} />
+            </g>
+            {/* the run's single delivery mark, on the edge the run hugs */}
+            <DeliveryMark shape={deliveryGlyph(run.status)} x={inRight - 13} y={run.y + BH + 4} s={13} />
+            <text x={SX - 6} y={run.y + BH / 2 + 3} textAnchor="end" className="bpLabel">
+              {t(bpm.bpLocal)}
+            </text>
+            <text x={SX + SW + 8} y={run.y + BH / 2 + 3} className="bpLabel">
+              {run.label}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* the gap BETWEEN runs, wider than the one inside a run — that difference
+          is the whole grouping signal, so it is the measurement worth drawing */}
+      {gap && <VDim x={SX + 8} y1={119} y2={135} label={gap} horizontal />}
+
+      {/* The thread's own padding, measured off the scroller's edge. Named as
+          well as valued, because it happens to resolve to the same token as the
+          run gap above it and two bare `space-4` labels would read as one
+          measurement taken twice. */}
+      {padInline && (
+        <HDim x1={SX} x2={inX} y={SY + SH + 14} label={`${t(m.bpPadInline)}: ${padInline}`} above={false} />
+      )}
+
+      <Foot
+        y={H - 12}
+        parts={[padBlock && `${t(m.bpPaddingBlock)}: ${padBlock}`, `${t(bpm.bpProvisional)}: ${provisional}`]}
+      />
+    </svg>
+  );
+}
+
 export function Blueprint({ size, dimensions, slots, shape, id, variant }: BlueprintProps & { variant?: 'mobile' }) {
+  if (id === 'delivery-status') return withFrame(<DeliveryStatusBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'message-bubble') return withFrame(<MessageBubbleBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'message-group') return withFrame(<MessageGroupBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'conversation-view') return withFrame(<ConversationViewBlueprint size={size} dimensions={dimensions} />);
   if (id === 'color-picker') return withFrame(<ColorPickerBlueprint size={size} dimensions={dimensions} />);
   if (id === 'rich-text-editor') return withFrame(<RichTextEditorBlueprint size={size} dimensions={dimensions} />);
   if (id === 'virtual-list') return withFrame(<VirtualListBlueprint size={size} dimensions={dimensions} />);
