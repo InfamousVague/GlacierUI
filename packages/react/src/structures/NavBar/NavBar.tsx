@@ -177,7 +177,8 @@ export function NavBarItem({
   const shape = context?.shape ?? 'rect';
   const edgeAccent = context?.edgeAccent ?? false;
   const sweep = context?.sweep ?? false;
-  const host = shapeHostProps({ shape, edgeAccent, sweep });
+  // A nav item is always a target, so its plate lifts and sweeps on hover.
+  const host = shapeHostProps({ shape, edgeAccent, sweep, lift: true });
   const item = (
     <Component
       {...host}

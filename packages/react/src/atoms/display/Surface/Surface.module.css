@@ -112,6 +112,9 @@
    These rules must out-specify the [data-elevation] paint above, hence the
    doubled attribute selectors. */
 .card[data-shape] {
+  /* a card's rectangle already has a plate-sized corner, so it keeps it rather
+     than dropping to the engine's default control plate corner */
+  --glacier-shape-radius: var(--glacier-radius-xl);
   --card-shape-overlay: var(--glacier-elevation-overlay-1);
   --glacier-shape-bg:
     linear-gradient(var(--card-shape-overlay), var(--card-shape-overlay)),

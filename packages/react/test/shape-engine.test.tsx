@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { render } from '@testing-library/react';
 import { shapes } from '@glacier/spec';
-import { Button, Pill, fx, staggerVars } from '@glacier/react';
+import { Button, Card, Pill, StatTile, fx, staggerVars } from '@glacier/react';
 
 /**
  * The shape engine: one aria-hidden layer under the content carries every
@@ -158,5 +158,46 @@ describe('light-animation utilities', () => {
     expect(items).toHaveLength(3);
     expect(items[2]!.getAttribute('style')).toContain('--glacier-stagger-i: 2');
     expect(items[2]!.className).toMatch(/riseIn/);
+  });
+});
+
+/**
+ * The lift gate. The hover depth, the widening accent edge and the sweep are
+ * affordances: they belong to a surface that actually responds to a pointer.
+ * Before this attribute existed every shaped host got them, so a static card
+ * lit up and lifted under the cursor. The CSS keys off `data-shape-lift`; this
+ * suite holds the components to the right answer.
+ */
+describe('the lift gate', () => {
+  it('a shaped Button always lifts', () => {
+    const { container } = render(<Button shape="slant">Go</Button>);
+    expect(container.querySelector('button')).toHaveAttribute('data-shape-lift');
+  });
+
+  it('a shaped Pill never lifts: it is not a target', () => {
+    const { container } = render(<Pill shape="slant">Tag</Pill>);
+    expect(container.querySelector('span')!.hasAttribute('data-shape-lift')).toBe(false);
+  });
+
+  it('a shaped StatTile never lifts', () => {
+    const { container } = render(<StatTile shape="notch" value="7" label="Decks" />);
+    expect(container.firstElementChild!.hasAttribute('data-shape-lift')).toBe(false);
+  });
+
+  it('a shaped Card lifts only when it is interactive', () => {
+    const still = render(<Card shape="notch">Body</Card>).container.firstElementChild!;
+    expect(still.hasAttribute('data-shape-lift')).toBe(false);
+
+    const clickable = render(
+      <Card shape="notch" interactive>
+        Body
+      </Card>,
+    ).container.firstElementChild!;
+    expect(clickable).toHaveAttribute('data-shape-lift');
+  });
+
+  it('the attribute never appears on an unshaped host', () => {
+    const { container } = render(<Button>Go</Button>);
+    expect(container.querySelector('button')!.hasAttribute('data-shape-lift')).toBe(false);
   });
 });

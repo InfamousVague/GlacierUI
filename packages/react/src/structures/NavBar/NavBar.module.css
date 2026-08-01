@@ -170,6 +170,9 @@
 }
 
 .item[data-shape] {
+  /* the item plate keeps the bar's own item corner (and whatever a host set
+     --glacier-navbar-item-radius to), not the engine's default */
+  --glacier-shape-radius: var(--glacier-navbar-item-radius, var(--glacier-radius-md));
   --glacier-shape-bg: transparent;
   --glacier-shape-border-color: transparent;
   /* the item draws no border of its own, so the plate has none to cover */

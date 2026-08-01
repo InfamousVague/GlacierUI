@@ -107,12 +107,9 @@
 
 /* ---- shaped pills --------------------------------------------------------
    A skewed or clipped capsule reads as a smudge, so a shaped pill trades the
-   full radius for plate corners; notch and edge square the plate off anyway.
-   The slant plate's waist also eats into the inline padding, so it buys the
-   token's worth of room back on both sides. */
-.pill[data-shape] {
-  border-radius: var(--glacier-radius-sm);
-}
+   full radius for the engine's plate corner (--glacier-shape-radius, applied
+   centrally on every shaped host). The slant plate's waist eats into the inline
+   padding, so it buys the token's worth of room back on both sides. */
 .sm[data-shape='slant'] {
   padding-inline: calc(var(--glacier-space-2) + var(--glacier-shape-slant-pad));
 }

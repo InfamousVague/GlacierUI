@@ -53,7 +53,9 @@ export function Button({
   const inert = disabled || loading;
   // Empty for a plain rectangle, so a default Button renders exactly the DOM it
   // rendered before shapes existed.
-  const host = shapeHostProps({ shape, edgeAccent, sweep });
+  // A button always lifts: the hover depth, the widening accent edge and the
+  // sweep are honest affordances here.
+  const host = shapeHostProps({ shape, edgeAccent, sweep, lift: true });
   if (skeleton) {
     return (
       <Skeleton
@@ -71,6 +73,7 @@ export function Button({
       disabled={inert}
       data-loading={loading || undefined}
       data-shape={host['data-shape']}
+      data-shape-lift={host['data-shape-lift']}
       whileTap={pressTap('control', reduce || inert)}
       transition={transition(Speed.Fast, Ease.Out)}
       {...rest}

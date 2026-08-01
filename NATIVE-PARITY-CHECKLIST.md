@@ -28,6 +28,25 @@ when validated.
       generated JSON), but the native binding is pending. Mapping when it lands:
       `slant` = RN transform skew; `notch` / `edge` need react-native-svg (RN has no
       clip-path); gradients need an RN gradient primitive. Web ships first by design.
+      Contract the native binding has to honour, not just the prop names:
+      - the plate corner is `--glacier-shape-radius` (never the host's own radius:
+        a capsule cannot be a plate), and Card / StatTile / NavBar item republish
+        their own value on the shaped selector;
+      - the notch and edge cuts are self-limiting - never more than 40% of the edge
+        being cut - so small surfaces get a proportional bevel instead of a
+        collapsed silhouette;
+      - the hover depth / widening accent edge / sweep are gated on the host being
+        interactive (`data-shape-lift` on the web), not on merely being shaped;
+      - shaped surfaces trade the elevation shadow ladder for the
+        `--glacier-shape-shadow` + `--glacier-shape-glow` pair, and shaped glass
+        keeps its tint and drops the blur.
+- [ ] Light-animation vocabulary: `fx.riseIn` / `fx.shimmer` / `fx.glowPulse` plus
+      `staggerVars(i)` over `--glacier-stagger-i` x `--glacier-stagger-step`
+      (mirrored in @glacier/motion as `Motion.RiseIn` / `staggerDelay` / the
+      `STAGGER_STEP_MS` re-export). RN has no CSS keyframes: the native binding is
+      Reanimated entering transitions with the same step, and the same rule that
+      every resting frame is the FINISHED frame so a reduced-motion device and a
+      frozen-rAF screenshot both land on it.
 
 
 ## Atoms (43)

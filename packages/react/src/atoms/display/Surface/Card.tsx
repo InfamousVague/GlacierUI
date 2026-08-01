@@ -41,7 +41,9 @@ export function Card({
 }: CardProps) {
   const reduce = useReducedMotion();
   // {} and null for a plain rect card, so the default markup is untouched.
-  const host = shapeHostProps({ shape });
+  // Only a clickable card lifts under the cursor; a static panel with a
+  // silhouette is still a static panel.
+  const host = shapeHostProps({ shape, lift: interactive });
   if (skeleton) {
     return (
       <div

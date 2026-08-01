@@ -13,6 +13,16 @@
 import type { Theme } from './color.ts';
 
 export const shapeGeometry = {
+  /**
+   * The plate corner. A silhouette needs a plate, and a plate cannot be a
+   * capsule: skewing or clipping a --glacier-radius-full control turns it into
+   * a leaning lozenge with no readable corners, which is why the hand-rolled
+   * prior art drew its slanted plates at radius-sm. So the engine gives every
+   * shaped host this radius, and a component whose rectangle already has a
+   * plate-sized corner (Card, StatTile, NavBar) republishes its own here to
+   * keep it.
+   */
+  'shape-radius': 'var(--glacier-radius-sm)',
   /** The skew of the `slant` parallelogram (PC's OW2-style menu plates). */
   'shape-slant-angle': '8deg',
   /** Corner cut depth for the `notch` plate (top inline-end + bottom inline-start). */

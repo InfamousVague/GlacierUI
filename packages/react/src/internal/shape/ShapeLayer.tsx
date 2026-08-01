@@ -16,6 +16,14 @@ export interface ShapeOptions {
   edgeAccent?: boolean;
   /** Slides the accent sweep in from the leading edge on hover and focus. */
   sweep?: boolean;
+  /**
+   * INTERNAL. Whether this host responds to a pointer at all. Only a lifting
+   * host gets the hover/focus depth, the widening accent edge and the sweep -
+   * a static shaped card must not glow under the cursor. Adopters pass their
+   * own notion of interactive (always true for a Button, `interactive` for a
+   * Card, never for a Pill or a StatTile); it is not a public prop.
+   */
+  lift?: boolean;
 }
 
 /**
@@ -35,9 +43,17 @@ function isPlain({ shape, edgeAccent, sweep }: ShapeOptions): boolean {
  * Returns an empty object in the plain case, so the attribute is absent rather
  * than present-and-default.
  */
-export function shapeHostProps(options: ShapeOptions): { className?: string; 'data-shape'?: ShapeName } {
+export function shapeHostProps(options: ShapeOptions): {
+  className?: string;
+  'data-shape'?: ShapeName;
+  'data-shape-lift'?: true;
+} {
   if (isPlain(options)) return {};
-  return { className: styles.host, 'data-shape': options.shape ?? 'rect' };
+  return {
+    className: styles.host,
+    'data-shape': options.shape ?? 'rect',
+    ...(options.lift ? { 'data-shape-lift': true as const } : {}),
+  };
 }
 
 /**

@@ -42,23 +42,37 @@
   isolation: isolate;
 }
 
+/* The plate corner, on the HOST, so the focus ring and the silhouette agree.
+ *
+ * A capsule cannot be a plate: skew a --glacier-radius-full control and the
+ * parallelogram reads as a leaning lozenge, clip one and the cuts land on an
+ * arc. --glacier-shape-radius is the plate corner (radius-sm by default);
+ * components whose rectangle already has a plate-sized corner republish their
+ * own value on the same selector. notch and edge square the layer off anyway,
+ * but the host keeps this radius because the focus outline follows it. */
+.host[data-shape] {
+  border-radius: var(--glacier-shape-radius);
+}
+
 /* Zero the host's own paint so only the silhouette shows.
  *
- * SPECIFICITY CONTRACT - do not "simplify" these selectors. `.host[data-shape]`
- * is 0-2-0 so it beats a single-class variant rule (`.solid`, 0-1-0) whatever
- * order the CSS-module bundle lands in. The interactive states double the
- * attribute (0-4-0) because variant hover rules carry a pseudo-class and a
- * :not() of their own (`.solid:hover:not(:disabled)`, 0-3-0) and a tie would
+ * SPECIFICITY CONTRACT - do not "simplify" these selectors. The base rule
+ * doubles the attribute (0-3-0) so it beats a two-class variant x tone rule
+ * (`.outline.accent` on Pill, 0-2-0) whatever order the CSS-module bundle lands
+ * in; at 0-2-0 it tied with those and lost, and a shaped pill wore its
+ * rectangular fill and border right through the cut plate. The interactive
+ * states triple it (0-5-0) because variant hover rules carry a pseudo-class and
+ * a :not() of their own (`.solid:hover:not(:disabled)`, 0-3-0) and a tie would
  * put us back at the mercy of bundle order.
  *
  * backdrop-filter goes too: it is clipped to the host's border box and cannot
  * follow the layer's polygon, so a shaped glass control would wear a
  * rectangular blur. Shaped glass keeps its tint and drops the blur. */
-.host[data-shape],
-.host[data-shape][data-shape]:hover,
-.host[data-shape][data-shape]:focus-visible,
-.host[data-shape][data-shape]:active,
-.host[data-shape][data-shape]:disabled {
+.host[data-shape][data-shape],
+.host[data-shape][data-shape][data-shape]:hover,
+.host[data-shape][data-shape][data-shape]:focus-visible,
+.host[data-shape][data-shape][data-shape]:active,
+.host[data-shape][data-shape][data-shape]:disabled {
   background: transparent;
   border-color: transparent;
   box-shadow: none;
@@ -78,6 +92,12 @@
   z-index: -1;
   pointer-events: none;
   border-radius: inherit;
+  /* The accents are children of the plate and must be cut by it. Without this
+     the edgeAccent stripe ignores the corner radius and paints as a detached
+     full-height bar beside a rect or slant plate (clip-path already clips
+     descendants, so notch and edge hid the bug). The hand-rolled prior art
+     carried overflow:hidden on its plate for exactly this reason. */
+  overflow: hidden;
   background: var(--glacier-shape-bg, transparent);
   border: var(--glacier-hairline) solid var(--glacier-shape-border-color, transparent);
   /* Resting depth is the adopter's call (a Card carries elevation at rest, a
@@ -106,16 +126,26 @@
 
 /* notch: the forge plate. Flat cuts at the top inline-end and bottom
    inline-start corners. The hairline terminates at each cut - the diagonal
-   itself carries no border, which is exactly what the prior art shipped. */
+   itself carries no border, which is exactly what the prior art shipped.
+ *
+ * SELF-LIMITING CUT. The token is one absolute length for a kit whose shaped
+ * surfaces run from a 22px pill to a 200px panel, and an 18px cut on a 22px
+ * pill eats the whole vertical edge: the plate stops reading as a notched
+ * rectangle and an outline pill degenerates into two floating hairlines. The
+ * percentage inside min() resolves per axis at the point of use - against the
+ * width in an x coordinate, the height in a y one - so the cut is never more
+ * than 40% of the edge it is cutting. A card or a button is nowhere near that
+ * ceiling and keeps the token exactly; a pill gets a proportional bevel. */
 .notch {
+  --notch-cut: min(var(--glacier-shape-notch), 40%);
   border-radius: 0;
   clip-path: polygon(
     0 0,
-    calc(100% - var(--glacier-shape-notch)) 0,
-    100% var(--glacier-shape-notch),
+    calc(100% - var(--notch-cut)) 0,
+    100% var(--notch-cut),
     100% 100%,
-    var(--glacier-shape-notch) 100%,
-    0 calc(100% - var(--glacier-shape-notch))
+    var(--notch-cut) 100%,
+    0 calc(100% - var(--notch-cut))
   );
 }
 
@@ -123,13 +153,17 @@
    readable as its own silhouette next to slant (a skew is also a parallelogram)
    and makes it mirror onto itself under RTL. */
 .edge {
+  /* self-limiting like the notch: the point never eats more than 40% of the
+     inline edge, so a narrow banner keeps a flat top instead of collapsing
+     into a diamond */
+  --edge-cut: min(var(--glacier-shape-edge-cut), 40%);
   border-radius: 0;
   clip-path: polygon(
-    var(--glacier-shape-edge-cut) 0,
-    calc(100% - var(--glacier-shape-edge-cut)) 0,
+    var(--edge-cut) 0,
+    calc(100% - var(--edge-cut)) 0,
     100% 50%,
-    calc(100% - var(--glacier-shape-edge-cut)) 100%,
-    var(--glacier-shape-edge-cut) 100%,
+    calc(100% - var(--edge-cut)) 100%,
+    var(--edge-cut) 100%,
     0 50%
   );
 }
@@ -142,12 +176,12 @@
 
 [dir='rtl'] .notch {
   clip-path: polygon(
-    var(--glacier-shape-notch) 0,
+    var(--notch-cut) 0,
     100% 0,
-    100% calc(100% - var(--glacier-shape-notch)),
-    calc(100% - var(--glacier-shape-notch)) 100%,
+    100% calc(100% - var(--notch-cut)),
+    calc(100% - var(--notch-cut)) 100%,
     0 100%,
-    0 var(--glacier-shape-notch)
+    0 var(--notch-cut)
   );
 }
 
@@ -189,35 +223,42 @@
   translate: var(--sweep-travel) 0;
 }
 
-/* ---- interaction --------------------------------------------------------- */
+/* ---- interaction ----------------------------------------------------------
+ *
+ * Gated on data-shape-lift, which an adopting component sets only when the
+ * surface actually responds to a pointer (every Button and NavBarItem, a Card
+ * only when it is `interactive`; never a Pill or a StatTile). Ungated, a static
+ * shaped card lit up and lifted under the cursor - an affordance the surface
+ * does not have. Adopters cannot reach the layer class, so the gate has to live
+ * here. */
 
-.host:hover .layer,
-.host:focus-visible .layer,
-.host:focus-within .layer {
+.host[data-shape-lift]:hover .layer,
+.host[data-shape-lift]:focus-visible .layer,
+.host[data-shape-lift]:focus-within .layer {
   filter: drop-shadow(var(--glacier-shape-shadow)) drop-shadow(var(--glacier-shape-glow));
 }
 
-.host:hover .edgeAccent::before,
-.host:focus-visible .edgeAccent::before,
-.host:focus-within .edgeAccent::before {
+.host[data-shape-lift]:hover .edgeAccent::before,
+.host[data-shape-lift]:focus-visible .edgeAccent::before,
+.host[data-shape-lift]:focus-within .edgeAccent::before {
   inline-size: var(--glacier-shape-accent-edge-active);
 }
 
-.host:hover .sweep::after,
-.host:focus-visible .sweep::after,
-.host:focus-within .sweep::after {
+.host[data-shape-lift]:hover .sweep::after,
+.host[data-shape-lift]:focus-visible .sweep::after,
+.host[data-shape-lift]:focus-within .sweep::after {
   opacity: 1;
   translate: 0 0;
 }
 
 /* A disabled control stays inert: no lift, no sweep. */
-.host[data-shape]:disabled .layer,
-.host[data-shape][aria-disabled='true'] .layer {
+.host[data-shape][data-shape]:disabled .layer,
+.host[data-shape][data-shape][aria-disabled='true'] .layer {
   filter: var(--glacier-shape-depth, none);
 }
 
-.host[data-shape]:disabled .sweep::after,
-.host[data-shape][aria-disabled='true'] .sweep::after {
+.host[data-shape][data-shape]:disabled .sweep::after,
+.host[data-shape][data-shape][aria-disabled='true'] .sweep::after {
   opacity: 0;
   translate: calc(-1 * var(--sweep-travel)) 0;
 }

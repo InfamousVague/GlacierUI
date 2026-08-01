@@ -207,10 +207,13 @@ export function ShapesMotionPage() {
       <Heading level={2}>{t(m.smSecMechanism)}</Heading>
       <Text tone={TextTone.Muted}>{prose(t(m.smMechanismIntro))}</Text>
       <ul>
+        <li>{prose(t(m.smMechRadius))}</li>
         <li>{prose(t(m.smMechFocus))}</li>
         <li>{prose(t(m.smMechHit))}</li>
         <li>{prose(t(m.smMechDepth))}</li>
+        <li>{prose(t(m.smMechLift))}</li>
         <li>{prose(t(m.smMechOverhang))}</li>
+        <li>{prose(t(m.smMechCut))}</li>
         <li>{prose(t(m.smMechBorder))}</li>
         <li>{prose(t(m.smMechRtl))}</li>
       </ul>
@@ -284,6 +287,7 @@ export function ShapesMotionPage() {
           <tbody>
             {(
               [
+                ['shape-radius', t(m.smTokRadius)],
                 ['shape-slant-angle', t(m.smTokSlantAngle)],
                 ['shape-notch', t(m.smTokNotch)],
                 ['shape-edge-cut', t(m.smTokEdgeCut)],

@@ -84,6 +84,9 @@
    hairline so the silhouette, the accent leading edge and the sweep are all one
    clipped element. Depth moves to the shape drop/glow pair. */
 .tile[data-shape] {
+  /* the tile's own corner is already plate-sized: keep it rather than dropping
+     to the engine's default control plate corner */
+  --glacier-shape-radius: var(--glacier-radius-lg);
   --glacier-shape-bg: var(--glacier-surface-raised);
   --glacier-shape-border-color: var(--glacier-border-subtle);
 }

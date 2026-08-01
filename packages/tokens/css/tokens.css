@@ -117,6 +117,7 @@
   --glacier-breakpoint-xl: 1280px;
 
   /* Shape geometry */
+  --glacier-shape-radius: var(--glacier-radius-sm);
   --glacier-shape-slant-angle: 8deg;
   --glacier-shape-notch: 18px;
   --glacier-shape-edge-cut: 14px;
