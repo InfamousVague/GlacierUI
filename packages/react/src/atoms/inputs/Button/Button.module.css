@@ -62,30 +62,42 @@
   font-size: var(--glacier-font-size-md);
 }
 
-/* variants */
+/* variants
+ *
+ * Each variant republishes its paint as --glacier-shape-bg /
+ * --glacier-shape-border-color beside its own declarations. A rectangular
+ * button never reads those properties, so its computed style is untouched; a
+ * shaped one hands the paint to the shape layer, which is the only element that
+ * can carry a non-rectangular silhouette. See internal/shape/ShapeLayer.module.css. */
 .solid {
   background: var(--glacier-accent-solid);
   color: var(--glacier-accent-contrast);
+  --glacier-shape-bg: var(--glacier-accent-solid);
 }
 .solid:hover:not(:disabled) {
   background: var(--glacier-accent-solid-hover);
+  --glacier-shape-bg: var(--glacier-accent-solid-hover);
 }
 
 .soft {
   background: var(--glacier-accent-soft);
   color: var(--glacier-accent-text);
+  --glacier-shape-bg: var(--glacier-accent-soft);
 }
 .soft:hover:not(:disabled) {
   background: var(--glacier-accent-soft-hover);
+  --glacier-shape-bg: var(--glacier-accent-soft-hover);
 }
 
 .outline {
   background: transparent;
   border-color: var(--glacier-border-strong);
   color: var(--glacier-text);
+  --glacier-shape-border-color: var(--glacier-border-strong);
 }
 .outline:hover:not(:disabled) {
   background: var(--glacier-hover);
+  --glacier-shape-bg: var(--glacier-hover);
 }
 
 .ghost {
@@ -94,17 +106,21 @@
 }
 .ghost:hover:not(:disabled) {
   background: var(--glacier-hover);
+  --glacier-shape-bg: var(--glacier-hover);
 }
 .ghost:active:not(:disabled) {
   background: var(--glacier-active);
+  --glacier-shape-bg: var(--glacier-active);
 }
 
 .danger {
   background: var(--glacier-danger-solid);
   color: var(--glacier-danger-contrast);
+  --glacier-shape-bg: var(--glacier-danger-solid);
 }
 .danger:hover:not(:disabled) {
   background: var(--glacier-danger-solid-hover);
+  --glacier-shape-bg: var(--glacier-danger-solid-hover);
 }
 
 .glass {
@@ -116,12 +132,49 @@
   box-shadow:
     inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight),
     var(--glacier-shadow-1);
+  /* A shaped glass button keeps the tint and loses the blur: backdrop-filter is
+     clipped to the host's rectangle and cannot follow the silhouette. */
+  --glacier-shape-bg: var(--glacier-glass-regular);
+  --glacier-shape-border-color: var(--glacier-glass-border);
 }
 .glass:hover:not(:disabled) {
   background: var(--glacier-glass-thick);
   box-shadow:
     inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight),
     var(--glacier-shadow-2);
+  --glacier-shape-bg: var(--glacier-glass-thick);
+}
+
+/* gradient: the loud accent fill, for hero and gamified moments. Hover lifts it
+   with a stacked highlight wash rather than a second gradient definition. */
+/* the shorthand, not background-image: a button's UA background is ButtonFace,
+   and it would sit under the gradient wherever a stop is not fully opaque */
+.gradient {
+  background: var(--glacier-gradient-accent);
+  color: var(--glacier-accent-contrast);
+  --glacier-shape-bg: var(--glacier-gradient-accent);
+}
+.gradient:hover:not(:disabled) {
+  background:
+    linear-gradient(var(--glacier-glass-highlight), var(--glacier-glass-highlight)),
+    var(--glacier-gradient-accent);
+  --glacier-shape-bg:
+    linear-gradient(var(--glacier-glass-highlight), var(--glacier-glass-highlight)),
+    var(--glacier-gradient-accent);
+}
+
+/* The slant plate's waist cuts into the inline padding by roughly
+   tan(angle) x height / 2 on each side, so a slanted button buys that room
+   back from the token. Every other shape clips inside the box and needs
+   nothing. */
+.sm[data-shape='slant'] {
+  padding-inline: calc(var(--glacier-space-4) + var(--glacier-shape-slant-pad));
+}
+.md[data-shape='slant'] {
+  padding-inline: calc(var(--glacier-space-5) + var(--glacier-shape-slant-pad));
+}
+.lg[data-shape='slant'] {
+  padding-inline: calc(var(--glacier-space-6) + var(--glacier-shape-slant-pad));
 }
 
 .fullWidth {

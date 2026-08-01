@@ -1,6 +1,7 @@
 import { pillVariants, tones } from '@glacier/spec';
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../../internal/cx.ts';
+import { ShapeLayer, shapeHostProps, type ShapeName } from '../../../internal/shape/ShapeLayer.tsx';
 import { useT } from '../../../i18n/LocaleProvider.tsx';
 import { kitMessages } from '../../../i18n/messages.ts';
 import { Skeleton } from '../../feedback/Skeleton/Skeleton.tsx';
@@ -19,6 +20,12 @@ export interface PillProps extends Omit<ComponentProps<'span'>, 'children'> {
   tone?: PillTone;
   variant?: PillVariant;
   size?: 'sm' | 'md';
+  /**
+   * Plate silhouette. `rect` is the untouched capsule; the gamified shapes hand
+   * the pill's paint to the shape layer and trade the capsule radius for plate
+   * corners.
+   */
+  shape?: ShapeName;
   /** Leading glyph, hidden from assistive tech. */
   icon?: ReactNode;
   /** When set, renders a trailing remove button that calls this on click, turning the pill into a removable tag. */
@@ -34,6 +41,7 @@ export function Pill({
   tone = 'neutral',
   variant = 'soft',
   size = 'md',
+  shape = 'rect',
   icon,
   onRemove,
   skeleton = false,
@@ -43,6 +51,8 @@ export function Pill({
   ...rest
 }: PillProps) {
   const t = useT();
+  // Empty for a plain rectangle: a default Pill renders the DOM it always did.
+  const host = shapeHostProps({ shape });
   if (skeleton) {
     return (
       <Skeleton
@@ -54,7 +64,12 @@ export function Pill({
     );
   }
   return (
-    <span className={cx(styles.pill, styles[variant], styles[tone], styles[size], glass && styles.glass, className)} {...rest}>
+    <span
+      className={cx(styles.pill, styles[variant], styles[tone], styles[size], glass && styles.glass, host.className, className)}
+      data-shape={host['data-shape']}
+      {...rest}
+    >
+      <ShapeLayer shape={shape} />
       {icon != null && (
         <span className={styles.icon} aria-hidden="true">
           {icon}

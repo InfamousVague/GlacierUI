@@ -1,0 +1,223 @@
+/* The shape layer: ONE mechanism for every gamified silhouette in the kit.
+ *
+ * WHY A LAYER. The obvious implementations both break the control. Skewing the
+ * host (PrettyCardboard's prior art) drags the focus ring and the hit area into
+ * the parallelogram - probing the box corners with elementFromPoint returns
+ * [TL,TR,BL,BR] = [false,true,true,false], i.e. two dead corners - and forces
+ * every consumer to counter-skew its content. Clipping the host loses the cut
+ * corner the same way ([true,false,true,true]) and eats the focus outline.
+ *
+ * So the host keeps its untouched CSS box - layout, padding, focus outline, hit
+ * area, its own pseudo-elements - and the engine injects one aria-hidden span
+ * underneath the content that carries the silhouette. Probed the same way, all
+ * three shapes return [true,true,true,true].
+ *
+ * WHAT THAT COSTS, stated plainly:
+ *   - The focus ring stays the host's upright rounded box, NOT the polygon. It
+ *     never clips and never skews; that is the point.
+ *   - The hit area is always the full box, including visually cut corners: a
+ *     few px of clickable-but-unpainted corner, traded for a target that never
+ *     shrinks.
+ *   - box-shadow would paint a rectangle behind a non-rectangular silhouette,
+ *     so shaped surfaces move their depth onto the layer's filter:drop-shadow
+ *     pair. drop-shadow has no spread, so this REPLACES the elevation ladder on
+ *     a shaped surface rather than adding to it.
+ *   - The slant parallelogram pokes tan(angle) x height / 2 outside the layout
+ *     box on each inline side (~3px at 8deg on a 42px control) and encroaches
+ *     on the padding by the same amount; adopters add --glacier-shape-slant-pad
+ *     to their inline padding under [data-shape='slant'].
+ *
+ * PAINT INDIRECTION. The host cannot paint its own background once it has a
+ * silhouette, so each adopting component republishes its variant paint as
+ * --glacier-shape-bg / --glacier-shape-border-color next to its normal
+ * declarations (a rect render computes identically - the custom properties are
+ * simply unused), and the rules below hand that paint to the layer.
+ *
+ * RTL is handled once, here: the skew sign flips, the notch polygon swaps for
+ * its mirror, and the sweep travels the other way. Consumers do nothing.
+ */
+
+.host {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Zero the host's own paint so only the silhouette shows.
+ *
+ * SPECIFICITY CONTRACT - do not "simplify" these selectors. `.host[data-shape]`
+ * is 0-2-0 so it beats a single-class variant rule (`.solid`, 0-1-0) whatever
+ * order the CSS-module bundle lands in. The interactive states double the
+ * attribute (0-4-0) because variant hover rules carry a pseudo-class and a
+ * :not() of their own (`.solid:hover:not(:disabled)`, 0-3-0) and a tie would
+ * put us back at the mercy of bundle order.
+ *
+ * backdrop-filter goes too: it is clipped to the host's border box and cannot
+ * follow the layer's polygon, so a shaped glass control would wear a
+ * rectangular blur. Shaped glass keeps its tint and drops the blur. */
+.host[data-shape],
+.host[data-shape][data-shape]:hover,
+.host[data-shape][data-shape]:focus-visible,
+.host[data-shape][data-shape]:active,
+.host[data-shape][data-shape]:disabled {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* The plate itself.
+ *
+ * inset is negative by --glacier-shape-bleed so the plate covers the host's own
+ * (now transparent) border instead of sitting inside it - an absolutely
+ * positioned child is laid out against the padding box. The default is the
+ * hairline every adopting component draws; a borderless host sets it to 0px. */
+.layer {
+  position: absolute;
+  inset: calc(-1 * var(--glacier-shape-bleed, var(--glacier-hairline)));
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: var(--glacier-shape-bg, transparent);
+  border: var(--glacier-hairline) solid var(--glacier-shape-border-color, transparent);
+  /* Resting depth is the adopter's call (a Card carries elevation at rest, a
+     Button does not); hover always adds the drop/glow pair below. */
+  filter: var(--glacier-shape-depth, none);
+  transition:
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    filter var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+/* ---- the silhouettes ---------------------------------------------------- */
+
+/* rect: the untouched default. It only ever renders as a layer when edgeAccent
+   or sweep is on, and then it simply follows the host's own radius. */
+.rect {
+  border-radius: inherit;
+}
+
+/* slant: the parallelogram. The transform lives on the layer, so the border
+   follows the skew while the content - a sibling, not a child - stays upright
+   with no counter-skew anywhere. */
+.slant {
+  transform: skewX(calc(-1 * var(--glacier-shape-slant-angle)));
+}
+
+/* notch: the forge plate. Flat cuts at the top inline-end and bottom
+   inline-start corners. The hairline terminates at each cut - the diagonal
+   itself carries no border, which is exactly what the prior art shipped. */
+.notch {
+  border-radius: 0;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--glacier-shape-notch)) 0,
+    100% var(--glacier-shape-notch),
+    100% 100%,
+    var(--glacier-shape-notch) 100%,
+    0 calc(100% - var(--glacier-shape-notch))
+  );
+}
+
+/* edge: the banner. Both inline ends angle in to a point, which keeps it
+   readable as its own silhouette next to slant (a skew is also a parallelogram)
+   and makes it mirror onto itself under RTL. */
+.edge {
+  border-radius: 0;
+  clip-path: polygon(
+    var(--glacier-shape-edge-cut) 0,
+    calc(100% - var(--glacier-shape-edge-cut)) 0,
+    100% 50%,
+    calc(100% - var(--glacier-shape-edge-cut)) 100%,
+    var(--glacier-shape-edge-cut) 100%,
+    0 50%
+  );
+}
+
+/* ---- RTL: mirrored once, centrally -------------------------------------- */
+
+[dir='rtl'] .slant {
+  transform: skewX(var(--glacier-shape-slant-angle));
+}
+
+[dir='rtl'] .notch {
+  clip-path: polygon(
+    var(--glacier-shape-notch) 0,
+    100% 0,
+    100% calc(100% - var(--glacier-shape-notch)),
+    calc(100% - var(--glacier-shape-notch)) 100%,
+    0 100%,
+    0 var(--glacier-shape-notch)
+  );
+}
+
+/* .edge is symmetric about the block axis: its mirror is itself. */
+
+/* ---- opt-in accents ------------------------------------------------------ */
+
+/* The accent leading edge. It is a pseudo-element of the LAYER, so it is
+   skewed and clipped with the silhouette for free. */
+.edgeAccent::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: var(--glacier-shape-accent-edge);
+  background: var(--glacier-accent-solid);
+  transition: inline-size var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+/* The hover sweep. Not a keyframe - a state-driven transition, so it collapses
+   with the duration tokens under reduced motion like everything else and its
+   resting state is always the finished frame (invisible, parked). */
+.sweep::after {
+  /* the engine's own geometry, not a public knob: how far the highlight is
+     parked outside the plate before it slides home */
+  --sweep-travel: 16%;
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--glacier-gradient-sweep);
+  opacity: 0;
+  translate: calc(-1 * var(--sweep-travel)) 0;
+  transition:
+    opacity var(--glacier-duration-fast) var(--glacier-ease-out),
+    translate var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+[dir='rtl'] .sweep::after {
+  translate: var(--sweep-travel) 0;
+}
+
+/* ---- interaction --------------------------------------------------------- */
+
+.host:hover .layer,
+.host:focus-visible .layer,
+.host:focus-within .layer {
+  filter: drop-shadow(var(--glacier-shape-shadow)) drop-shadow(var(--glacier-shape-glow));
+}
+
+.host:hover .edgeAccent::before,
+.host:focus-visible .edgeAccent::before,
+.host:focus-within .edgeAccent::before {
+  inline-size: var(--glacier-shape-accent-edge-active);
+}
+
+.host:hover .sweep::after,
+.host:focus-visible .sweep::after,
+.host:focus-within .sweep::after {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* A disabled control stays inert: no lift, no sweep. */
+.host[data-shape]:disabled .layer,
+.host[data-shape][aria-disabled='true'] .layer {
+  filter: var(--glacier-shape-depth, none);
+}
+
+.host[data-shape]:disabled .sweep::after,
+.host[data-shape][aria-disabled='true'] .sweep::after {
+  opacity: 0;
+  translate: calc(-1 * var(--sweep-travel)) 0;
+}

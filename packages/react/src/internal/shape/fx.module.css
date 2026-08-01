@@ -1,0 +1,82 @@
+/* The light-animation vocabulary: the game-feel set, as three opt-in classes.
+ *
+ * REDUCED-MOTION POLICY, applied here so no consumer has to think about it:
+ *
+ *   1. Every animation's BASE style is the FINISHED resting state. The
+ *      keyframes start offset and settle back (with `backwards` fill covering
+ *      the stagger delay), so a reduced-motion user, a frozen-rAF environment
+ *      and a mid-flight screenshot all land on the finished frame. Nothing here
+ *      animates INTO existence.
+ *   2. One-shots need no media query: their durations are motion tokens, and
+ *      the token file already collapses every --glacier-duration-* (and
+ *      --glacier-stagger-step) to 0.01ms under prefers-reduced-motion.
+ *   3. INFINITE loops must not become 0.01ms strobes when those durations
+ *      collapse, so shimmer and glowPulse declare their `animation` only inside
+ *      @media (prefers-reduced-motion: no-preference). Under reduce they simply
+ *      never start and the resting style above stands.
+ *
+ * STAGGER is data, not an nth-child chain: a consumer sets --glacier-stagger-i
+ * per item (see staggerVars in fx.ts) and the step size stays the
+ * --glacier-stagger-step token.
+ */
+
+@keyframes fxRise {
+  from {
+    opacity: 0;
+    translate: 0 var(--fx-rise-distance);
+  }
+}
+
+@keyframes fxShimmer {
+  from {
+    background-position: calc(-1 * var(--fx-shimmer-travel)) 0;
+  }
+  to {
+    background-position: var(--fx-shimmer-travel) 0;
+  }
+}
+
+@keyframes fxGlowPulse {
+  from {
+    filter: drop-shadow(var(--glacier-shape-glow));
+  }
+  to {
+    filter: none;
+  }
+}
+
+/* rise-in: the entrance. Resting style is the settled element - the keyframe
+   only supplies the offset it comes from. */
+.riseIn {
+  /* the engine's own geometry, not a public knob */
+  --fx-rise-distance: 14px;
+  animation: fxRise var(--glacier-duration-normal) var(--glacier-ease-out) backwards;
+  animation-delay: calc(var(--glacier-stagger-i, 0) * var(--glacier-stagger-step));
+}
+
+/* shimmer: a highlight travelling across the element. The resting frame parks
+   the highlight mid-element, so a still frame reads as a sheen, not a seam. */
+.shimmer {
+  --fx-shimmer-travel: 160%;
+  background-image: var(--glacier-gradient-sweep);
+  background-size: 260% 100%;
+  background-repeat: no-repeat;
+  background-position: 50% 0;
+}
+
+/* glow-pulse: the accent halo breathing. Resting frame is the halo present. */
+.glowPulse {
+  filter: drop-shadow(var(--glacier-shape-glow));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .shimmer {
+    /* the loop wants to read as a slow travel, not a flicker: three of the
+       longest duration token */
+    animation: fxShimmer calc(var(--glacier-duration-slower) * 3) var(--glacier-ease-in-out) infinite;
+  }
+
+  .glowPulse {
+    animation: fxGlowPulse calc(var(--glacier-duration-slower) * 3) var(--glacier-ease-in-out) infinite alternate;
+  }
+}

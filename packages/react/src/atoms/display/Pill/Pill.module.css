@@ -62,31 +62,38 @@
   opacity: 1;
 }
 
+/* Every tone x variant cell republishes its paint as --glacier-shape-bg /
+   --glacier-shape-border-color beside its own declarations: a rectangular pill
+   never reads them (its computed style is untouched), a shaped one hands that
+   paint to the shape layer, the only element that can carry a silhouette. */
+
 /* soft */
-.soft.neutral { background: var(--glacier-hover); color: var(--glacier-text-muted); }
-.soft.accent { background: var(--glacier-accent-soft); color: var(--glacier-accent-text); }
-.soft.success { background: var(--glacier-success-soft); color: var(--glacier-success-text); }
-.soft.warning { background: var(--glacier-warning-soft); color: var(--glacier-warning-text); }
-.soft.danger { background: var(--glacier-danger-soft); color: var(--glacier-danger-text); }
-.soft.info { background: var(--glacier-info-soft); color: var(--glacier-info-text); }
+.soft.neutral { background: var(--glacier-hover); color: var(--glacier-text-muted); --glacier-shape-bg: var(--glacier-hover); }
+.soft.accent { background: var(--glacier-accent-soft); color: var(--glacier-accent-text); --glacier-shape-bg: var(--glacier-accent-soft); }
+.soft.success { background: var(--glacier-success-soft); color: var(--glacier-success-text); --glacier-shape-bg: var(--glacier-success-soft); }
+.soft.warning { background: var(--glacier-warning-soft); color: var(--glacier-warning-text); --glacier-shape-bg: var(--glacier-warning-soft); }
+.soft.danger { background: var(--glacier-danger-soft); color: var(--glacier-danger-text); --glacier-shape-bg: var(--glacier-danger-soft); }
+.soft.info { background: var(--glacier-info-soft); color: var(--glacier-info-text); --glacier-shape-bg: var(--glacier-info-soft); }
 
 /* solid */
-.solid.neutral { background: var(--glacier-gray-9); color: var(--glacier-accent-contrast); }
-.solid.accent { background: var(--glacier-accent-solid); color: var(--glacier-accent-contrast); }
-.solid.success { background: var(--glacier-success-solid); color: var(--glacier-success-contrast); }
-.solid.warning { background: var(--glacier-warning-solid); color: var(--glacier-warning-contrast); }
-.solid.danger { background: var(--glacier-danger-solid); color: var(--glacier-danger-contrast); }
-.solid.info { background: var(--glacier-info-solid); color: var(--glacier-info-contrast); }
+.solid.neutral { background: var(--glacier-gray-9); color: var(--glacier-accent-contrast); --glacier-shape-bg: var(--glacier-gray-9); }
+.solid.accent { background: var(--glacier-accent-solid); color: var(--glacier-accent-contrast); --glacier-shape-bg: var(--glacier-accent-solid); }
+.solid.success { background: var(--glacier-success-solid); color: var(--glacier-success-contrast); --glacier-shape-bg: var(--glacier-success-solid); }
+.solid.warning { background: var(--glacier-warning-solid); color: var(--glacier-warning-contrast); --glacier-shape-bg: var(--glacier-warning-solid); }
+.solid.danger { background: var(--glacier-danger-solid); color: var(--glacier-danger-contrast); --glacier-shape-bg: var(--glacier-danger-solid); }
+.solid.info { background: var(--glacier-info-solid); color: var(--glacier-info-contrast); --glacier-shape-bg: var(--glacier-info-solid); }
 
 /* outline */
-.outline.neutral { border-color: var(--glacier-border-strong); color: var(--glacier-text-muted); }
-.outline.accent { border-color: var(--glacier-accent-border); color: var(--glacier-accent-text); }
-.outline.success { border-color: var(--glacier-success-border); color: var(--glacier-success-text); }
-.outline.warning { border-color: var(--glacier-warning-border); color: var(--glacier-warning-text); }
-.outline.danger { border-color: var(--glacier-danger-border); color: var(--glacier-danger-text); }
-.outline.info { border-color: var(--glacier-info-border); color: var(--glacier-info-text); }
+.outline.neutral { border-color: var(--glacier-border-strong); color: var(--glacier-text-muted); --glacier-shape-border-color: var(--glacier-border-strong); }
+.outline.accent { border-color: var(--glacier-accent-border); color: var(--glacier-accent-text); --glacier-shape-border-color: var(--glacier-accent-border); }
+.outline.success { border-color: var(--glacier-success-border); color: var(--glacier-success-text); --glacier-shape-border-color: var(--glacier-success-border); }
+.outline.warning { border-color: var(--glacier-warning-border); color: var(--glacier-warning-text); --glacier-shape-border-color: var(--glacier-warning-border); }
+.outline.danger { border-color: var(--glacier-danger-border); color: var(--glacier-danger-text); --glacier-shape-border-color: var(--glacier-danger-border); }
+.outline.info { border-color: var(--glacier-info-border); color: var(--glacier-info-text); --glacier-shape-border-color: var(--glacier-info-border); }
 
-/* glass - overrides the variant/tone background */
+/* glass - overrides the variant/tone background. A shaped glass pill keeps the
+   tint and drops the blur: backdrop-filter is clipped to the host rectangle and
+   cannot follow the silhouette. */
 .glass {
   background: var(--glacier-glass-regular);
   border-color: var(--glacier-glass-border);
@@ -94,4 +101,21 @@
   backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
   -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
   box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
+  --glacier-shape-bg: var(--glacier-glass-regular);
+  --glacier-shape-border-color: var(--glacier-glass-border);
+}
+
+/* ---- shaped pills --------------------------------------------------------
+   A skewed or clipped capsule reads as a smudge, so a shaped pill trades the
+   full radius for plate corners; notch and edge square the plate off anyway.
+   The slant plate's waist also eats into the inline padding, so it buys the
+   token's worth of room back on both sides. */
+.pill[data-shape] {
+  border-radius: var(--glacier-radius-sm);
+}
+.sm[data-shape='slant'] {
+  padding-inline: calc(var(--glacier-space-2) + var(--glacier-shape-slant-pad));
+}
+.md[data-shape='slant'] {
+  padding-inline: calc(var(--glacier-space-3) + var(--glacier-shape-slant-pad));
 }

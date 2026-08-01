@@ -289,6 +289,11 @@ export {
 } from './haptics/VisualFeedbackProvider.tsx';
 export { emitFeedback, subscribeFeedback, type FeedbackEvent } from './haptics/feedback.ts';
 
+// shapes & light animation - the shape layer itself is internal (components opt
+// in with a `shape` prop); what ships publicly is the vocabulary type and the
+// animation utilities. See internal/shape/fx.ts for the reduced-motion policy.
+export { fx, staggerVars, type FxName, type ShapeName } from './internal/shape/fx.ts';
+
 
 // --- chat suite: atoms ---
 export { DeliveryStatus, type DeliveryStatusSize, type DeliveryStatusProps } from './atoms/display/DeliveryStatus/DeliveryStatus.tsx';
