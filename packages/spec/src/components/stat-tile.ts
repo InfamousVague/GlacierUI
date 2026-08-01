@@ -1,5 +1,5 @@
 import type { ComponentSpec } from '../schema.ts';
-import { token } from '../vocab.ts';
+import { edgeAccentProp, shapeProp, token } from '../vocab.ts';
 
 export const statTileSpec: ComponentSpec = {
   name: 'StatTile',
@@ -21,9 +21,11 @@ export const statTileSpec: ComponentSpec = {
     { name: 'label', type: 'node', required: true, description: 'The muted label naming what the value measures.' },
     { name: 'hint', type: 'node', description: 'Optional trailing delta or hint on the value baseline.' },
     { name: 'glass', type: 'boolean', default: false, description: 'Renders the frosted glass material instead of a solid card.' },
+    shapeProp(),
+    edgeAccentProp(),
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder mirroring the anatomy: icon disc and hint bones follow the icon and hint props, around the value and label lines.' },
   ],
-  defaults: { glass: false, skeleton: false },
+  defaults: { glass: false, shape: 'rect', edgeAccent: false, skeleton: false },
   dimensions: {
     gap: token('space-3'),
     radius: token('radius-lg'),
@@ -49,7 +51,9 @@ export const statTileSpec: ComponentSpec = {
     'glass-regular', 'glass-border', 'glass-highlight', 'glass-saturate', 'blur-sm',
     'font-sans', 'font-size-xs', 'font-size-sm', 'font-size-lg', 'font-size-2xl',
     'font-weight-medium', 'font-weight-semibold', 'leading-md',
-    'text', 'text-muted',
+    'text', 'text-muted', 'accent-solid',
+    'shape-slant-angle', 'shape-notch', 'shape-edge-cut', 'shape-slant-pad',
+    'shape-accent-edge', 'shape-accent-edge-active', 'shape-shadow', 'shape-glow',
   ],
   a11y: {
     focusable: false,

@@ -50,7 +50,7 @@ describe('CSS declaration emitters', () => {
     expect(Object.fromEntries(decls)['size-md']).toBe(sizes.md);
   });
 
-  it('emits durations in ms and cubic-bezier easings for motion', () => {
+  it('emits durations in ms, cubic-bezier easings, and the stagger step for motion', () => {
     const decls = motionDecls();
     expectWellFormed(decls);
     const durations = decls.filter(([name]) => name.startsWith('duration-'));
@@ -62,13 +62,16 @@ describe('CSS declaration emitters', () => {
       expect(value).toMatch(/^cubic-bezier\(/);
       expect(value).toBe(cssEase(name.replace('ease-', '') as Parameters<typeof cssEase>[0]));
     }
+    expect(Object.fromEntries(decls)['stagger-step']).toMatch(/^\d+ms$/);
   });
 
-  it('collapses every duration to near-zero under reduced motion', () => {
+  it('collapses every duration and the stagger step to near-zero under reduced motion', () => {
     const reduced = reducedMotionDecls();
     expectWellFormed(reduced);
     const durationCount = motionDecls().filter(([name]) => name.startsWith('duration-')).length;
-    expect(reduced.length).toBe(durationCount);
+    // every duration role plus the stagger step, so staggered entrances land together
+    expect(reduced.length).toBe(durationCount + 1);
+    expect(Object.fromEntries(reduced)['stagger-step']).toBe('0.01ms');
     for (const [, value] of reduced) expect(value).toBe('0.01ms');
   });
 

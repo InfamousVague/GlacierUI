@@ -11,9 +11,10 @@
  * and never breaks an existing `size="lg"` string.
  */
 
-import { controlSizes, tones } from './vocab.ts';
+import { controlSizes, shapes, tones } from './vocab.ts';
 import { textSizes, textTones } from './components/text.ts';
 import { buttonVariants } from './components/button.ts';
+import { cardVariants } from './components/card.ts';
 import { skeletonVariants } from './components/skeleton.ts';
 import { scrollbarAppearances } from './components/scroll-area.ts';
 
@@ -63,6 +64,19 @@ export enum Variant {
   Ghost = 'ghost',
   Glass = 'glass',
   Danger = 'danger',
+  Gradient = 'gradient',
+  Wash = 'wash',
+}
+
+/**
+ * The plate silhouettes behind the `shape` prop (Button, Pill, Card,
+ * StatTile, NavBar items). Rect is the untouched rounded default.
+ */
+export enum Shape {
+  Rect = 'rect',
+  Slant = 'slant',
+  Notch = 'notch',
+  Edge = 'edge',
 }
 
 /** The Skeleton placeholder's shape variants (its own axis, not a visual style). */
@@ -94,10 +108,16 @@ type _toneCoversSemantic = AssertTrue<(typeof tones)[number] extends `${Tone}` ?
 type _textToneCovers = AssertTrue<(typeof textTones)[number] extends `${TextTone}` ? true : false>;
 type _textToneExact = AssertTrue<`${TextTone}` extends (typeof textTones)[number] ? true : false>;
 
-// Variant equals the button style vocab (the superset of the style variants);
-// SkeletonVariant equals the skeleton shape vocab.
-type _variantCovers = AssertTrue<(typeof buttonVariants)[number] extends `${Variant}` ? true : false>;
-type _variantExact = AssertTrue<`${Variant}` extends (typeof buttonVariants)[number] ? true : false>;
+// Variant equals the union of the button and card style vocabs (together the
+// superset of the kit's style variants); SkeletonVariant equals the skeleton
+// shape vocab.
+type StyleVariant = (typeof buttonVariants)[number] | (typeof cardVariants)[number];
+type _variantCovers = AssertTrue<StyleVariant extends `${Variant}` ? true : false>;
+type _variantExact = AssertTrue<`${Variant}` extends StyleVariant ? true : false>;
+
+// Shape must equal the shapes vocab exactly (both directions).
+type _shapeCovers = AssertTrue<(typeof shapes)[number] extends `${Shape}` ? true : false>;
+type _shapeExact = AssertTrue<`${Shape}` extends (typeof shapes)[number] ? true : false>;
 type _skelCovers = AssertTrue<(typeof skeletonVariants)[number] extends `${SkeletonVariant}` ? true : false>;
 type _skelExact = AssertTrue<`${SkeletonVariant}` extends (typeof skeletonVariants)[number] ? true : false>;
 type _scrollbarAppearanceExact = AssertTrue<`${ScrollbarAppearance}` extends (typeof scrollbarAppearances)[number] ? true : false>;

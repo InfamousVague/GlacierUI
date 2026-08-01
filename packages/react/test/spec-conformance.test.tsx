@@ -111,6 +111,15 @@ import {
   MessageBubble,
   MessageGroup,
   MessageMeta,
+  NavBar,
+  NavBarItem,
+  PageHeader,
+  Section,
+  CardGroup,
+  DataGrid,
+  Timeline,
+  TimelineScrubber,
+  Wizard,
 } from '../src/index.ts';
 import { Star } from '@glacier/icons';
 import { cloneElement, type ReactElement } from 'react';
@@ -435,7 +444,53 @@ const RENDER: Record<string, Renderer> = {
     </MessageBubble>
   ),
   'message-group': () => <MessageGroup group={MESSAGE_RUN} authorName="Ada" now={NOW} />,
-  // chat suite: organisms and structures
+  // structures and layout shelves
+  'nav-bar': (o) => (
+    <NavBar aria-label="Primary" orientation={o.variant as never}>
+      <NavBarItem icon={<Star size={16} />} label="Home" active />
+      <NavBarItem icon={<Star size={16} />} label="Library" badge={3} />
+    </NavBar>
+  ),
+  'page-header': () => <PageHeader title="Documents" description="Everything you saved." />,
+  section: () => (
+    <Section title="Overview" description="The essentials.">
+      Body
+    </Section>
+  ),
+  'card-group': () => (
+    <CardGroup>
+      <Card>A</Card>
+      <Card>B</Card>
+    </CardGroup>
+  ),
+  'data-grid': () => (
+    <DataGrid
+      aria-label="People"
+      columns={[
+        { key: 'name', header: 'Name' },
+        { key: 'status', header: 'Status' },
+      ]}
+      data={[{ id: 'ada', name: 'Ada', status: 'Active' }]}
+    />
+  ),
+  timeline: (o) => (
+    <Timeline
+      aria-label="Activity"
+      items={[{ id: 'e1', title: 'Deployed', timestamp: 'now', tone: o.tone as never }]}
+    />
+  ),
+  'timeline-scrubber': (o) => (
+    <TimelineScrubber aria-label="History" start={SENT} end={NOW} size={o.size as never} />
+  ),
+  wizard: () => (
+    <Wizard
+      aria-label="Setup"
+      steps={[
+        { id: 'one', label: 'Profile', content: 'First' },
+        { id: 'two', label: 'Review', content: 'Second' },
+      ]}
+    />
+  ),
 };
 
 describe('React renders every spec variant, tone, and size', () => {

@@ -1,5 +1,5 @@
 import type { ComponentSpec, PaintSpec, TokenRef } from '../schema.ts';
-import { compactSizes, toneSpecs, token } from '../vocab.ts';
+import { compactSizes, shapeProp, toneSpecs, token } from '../vocab.ts';
 
 export const pillVariants = ['soft', 'solid', 'outline'] as const;
 
@@ -52,6 +52,7 @@ export const pillSpec: ComponentSpec = {
     { name: 'tone', type: 'enum', values: [...toneSpecs().map((t) => t.name)], default: 'neutral', description: 'Semantic color family.' },
     { name: 'variant', type: 'enum', values: pillVariants, default: 'soft', description: 'Fill treatment.' },
     { name: 'size', type: 'enum', values: compactSizes, default: 'md', description: 'Compact size step.' },
+    shapeProp(),
     { name: 'icon', type: 'node', description: 'Leading glyph, hidden from assistive tech.' },
     { name: 'onRemove', type: 'handler', description: 'When set, renders a trailing remove button that calls this on click, turning the pill into a removable tag.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
@@ -69,7 +70,7 @@ export const pillSpec: ComponentSpec = {
     { name: 'sm', height: '1.375rem', paddingInline: token('space-2'), fontSize: token('font-size-xs') },
     { name: 'md', height: '1.75rem', paddingInline: token('space-3'), fontSize: token('font-size-sm') },
   ],
-  defaults: { tone: 'neutral', variant: 'soft', size: 'md', skeleton: false, glass: false },
+  defaults: { tone: 'neutral', variant: 'soft', size: 'md', shape: 'rect', skeleton: false, glass: false },
   dimensions: { radius: token('radius-full'), gap: token('space-1'), border: token('hairline') },
   // the ring belongs to the remove control, the pill itself never takes focus
   focusRing: { ring: token('focus-ring'), offset: '1px' },
@@ -81,6 +82,7 @@ export const pillSpec: ComponentSpec = {
     'success-contrast', 'success-border', 'warning-soft', 'warning-text', 'warning-solid', 'warning-contrast',
     'warning-border', 'danger-soft', 'danger-text', 'danger-solid', 'danger-contrast', 'danger-border',
     'info-soft', 'info-text', 'info-solid', 'info-contrast', 'info-border', 'focus-ring', 'duration-fast', 'ease-out',
+    'shape-slant-angle', 'shape-notch', 'shape-edge-cut', 'shape-slant-pad',
   ],
   a11y: {
     notes: [

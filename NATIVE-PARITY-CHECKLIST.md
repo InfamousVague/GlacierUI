@@ -22,6 +22,12 @@ when validated.
 - [ ] UI background accents (Halftone dots illustrations, etc) for the top right top left or other corner in the background of the app for visual flair
 - [x] Option for semi-transparent empty icon fill
 - [x] Support for 4 different size modes, from more cozy to more space like macos has
+- [ ] Shape axis (Button, Pill, Card, StatTile, NavBar items): the `shape` /
+      `edgeAccent` / `sweep` vocabulary and `--glacier-shape-*` + `--glacier-gradient-*`
+      tokens are landed in @glacier/spec and @glacier/tokens (language-agnostic, in the
+      generated JSON), but the native binding is pending. Mapping when it lands:
+      `slant` = RN transform skew; `notch` / `edge` need react-native-svg (RN has no
+      clip-path); gradients need an RN gradient primitive. Web ships first by design.
 
 
 ## Atoms (43)

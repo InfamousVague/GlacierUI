@@ -57,7 +57,8 @@ describe('token resolution', () => {
   it('resolves ramp-backed tokens per theme and literals as-is', () => {
     expect(resolveTokenColor('bg', 'light')).toMatch(/^oklch\(0\.993 /);
     expect(resolveTokenColor('bg', 'dark')).toMatch(/^oklch\(0\.14 /);
-    expect(resolveTokenColor('surface', 'light')).toBe('oklch(0.995 0 0)');
+    expect(resolveTokenColor('surface', 'light')).toMatch(/^oklch\(0\.981 /);
+    expect(resolveTokenColor('surface-raised', 'light')).toBe('oklch(0.995 0 0)');
     expect(resolveTokenColor('danger-solid', 'light')).toMatch(/^oklch\(0\.627 /);
     expect(() => resolveTokenColor('nope', 'light')).toThrow(/unknown color token/);
   });

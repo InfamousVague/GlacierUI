@@ -8,7 +8,7 @@
  * `'sm' | 'md' | 'lg'` union and the same tone list.
  */
 
-import type { Measure, SizeSpec, StyleSpec, TokenRef } from './schema.ts';
+import type { Measure, PropSpec, SizeSpec, StyleSpec, TokenRef } from './schema.ts';
 
 /** Write a token reference from its bare name: `token('space-4') === '$space-4'`. */
 export function token(name: string): TokenRef {
@@ -79,4 +79,60 @@ const TONE_DESCRIPTION: Record<Tone, string> = {
 /** The tones as reusable StyleSpec entries for a spec's `tones` field. */
 export function toneSpecs(names: readonly Tone[] = tones): StyleSpec[] {
   return names.map((name) => ({ name, description: TONE_DESCRIPTION[name] }));
+}
+
+// ---- shapes ----------------------------------------------------------------
+
+/**
+ * The silhouette vocabulary shared by every component with a `shape` prop.
+ * `rect` is today's rounded default and renders byte-identically to a
+ * component without the prop; the other shapes are the gamified plates. All
+ * geometry rides the `--glacier-shape-*` tokens and mirrors automatically
+ * under [dir='rtl'].
+ */
+export const shapes = ['rect', 'slant', 'notch', 'edge'] as const;
+type ShapeName = (typeof shapes)[number];
+
+export const SHAPE_DESCRIPTION: Record<ShapeName, string> = {
+  rect: 'The rounded-rectangle default. Identical to a component without the shape prop.',
+  slant: 'A skewed parallelogram plate ($shape-slant-angle); content stays upright and adds $shape-slant-pad inline.',
+  notch: 'Corners cut flat ($shape-notch) at the top inline-end and bottom inline-start, forge-plate style.',
+  edge: 'Both inline ends angled in by $shape-edge-cut, banner style.',
+};
+
+/** The shared `shape` prop, worded once so every adopting spec agrees. */
+export function shapeProp(description?: string): PropSpec {
+  return {
+    name: 'shape',
+    type: 'enum',
+    values: shapes,
+    default: 'rect',
+    description:
+      description ??
+      'Plate silhouette. rect is the untouched default; slant, notch, and edge are the gamified plates, RTL-mirrored automatically. The focus ring and hit area always follow the full box, and shaped surfaces carry depth on the shape drop/glow pair instead of the elevation shadows.',
+  };
+}
+
+/** The shared `edgeAccent` opt-in: the accent leading-edge stripe. */
+export function edgeAccentProp(description?: string): PropSpec {
+  return {
+    name: 'edgeAccent',
+    type: 'boolean',
+    default: false,
+    description:
+      description ??
+      'Paints the accent leading-edge stripe ($shape-accent-edge, widening to $shape-accent-edge-active on hover and focus) along the inline-start edge, clipped with the shape.',
+  };
+}
+
+/** The shared `sweep` opt-in: the hover gradient sweep. */
+export function sweepProp(description?: string): PropSpec {
+  return {
+    name: 'sweep',
+    type: 'boolean',
+    default: false,
+    description:
+      description ??
+      'Slides the $gradient-sweep highlight in from the leading edge on hover and focus-visible; a state-driven transition that collapses with the motion tokens under reduced motion.',
+  };
 }

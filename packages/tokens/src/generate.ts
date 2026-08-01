@@ -19,6 +19,8 @@ import { densityDecls, densityScale, type Density } from './density.ts';
 import { effectsDecls, glassDecls } from './effects.ts';
 import { layoutDecls } from './layout.ts';
 import { shadowDecls, elevationOverlayDecls } from './elevation.ts';
+import { shapeDecls, shapeShadowDecls } from './shape.ts';
+import { gradientDecls } from './gradient.ts';
 import { semanticDecls, statusDecls, themeOverrideDecls } from './semantic.ts';
 import { themePresetDecls, themePresets } from './theme-presets.ts';
 
@@ -45,8 +47,11 @@ const rootSections: Array<{ title: string; decls: Decl[] }> = [
   { title: 'Density & control sizing', decls: densityDecls('comfortable') },
   { title: 'Effects - blur, glass, hairline', decls: effectsDecls() },
   { title: 'Layout - containers & breakpoints', decls: layoutDecls() },
+  { title: 'Shape geometry', decls: shapeDecls() },
   { title: 'Color ramps', decls: rampDecls('light') },
   { title: 'Elevation', decls: [...shadowDecls('light'), ...elevationOverlayDecls('light')] },
+  { title: 'Shape depth - drop + glow for clipped/skewed surfaces', decls: shapeShadowDecls('light') },
+  { title: 'Gradients', decls: gradientDecls() },
   { title: 'Glass materials', decls: glassDecls('light') },
   { title: 'Semantic aliases', decls: semanticDecls() },
   { title: 'Status aliases', decls: statusDecls() },
@@ -59,6 +64,7 @@ const darkBlock = (indent: string): string[] => [
   '',
   ...section('Color ramps', rampDecls('dark'), indent),
   ...section('Elevation', [...shadowDecls('dark'), ...elevationOverlayDecls('dark')], indent),
+  ...section('Shape depth', shapeShadowDecls('dark'), indent),
   ...section('Glass materials', glassDecls('dark'), indent),
   ...section('Theme surfaces', themeOverrideDecls('dark'), indent),
 ];

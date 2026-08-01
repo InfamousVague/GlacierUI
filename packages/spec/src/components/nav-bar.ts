@@ -1,5 +1,5 @@
 import type { ComponentSpec } from '../schema.ts';
-import { token } from '../vocab.ts';
+import { edgeAccentProp, shapeProp, sweepProp, token } from '../vocab.ts';
 
 /** Orientations, exported so the React kit derives its union from here. */
 export const navBarOrientations = ['horizontal', 'vertical'] as const;
@@ -61,10 +61,15 @@ export const navBarSpec: ComponentSpec = {
       default: 'snappy',
       description: 'Spring preset for the active pill as it slides between items.',
     },
+    shapeProp(
+      'Bar-level plate silhouette, applied to every item plate. rect is the untouched default; slant, notch, and edge render the gamified item plates (the active pill is preserved), RTL-mirrored automatically. Focus rings and hit areas always follow the full item box.',
+    ),
+    edgeAccentProp('Paints the accent leading-edge stripe on each item plate, clipped with the bar shape.'),
+    sweepProp('Slides the gradient-sweep highlight across an item plate on hover and focus-visible.'),
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
     { name: 'children', type: 'node', description: 'The run of NavBarItem controls.' },
   ],
-  defaults: { orientation: 'horizontal', showLabels: false, spring: 'snappy', skeleton: false },
+  defaults: { orientation: 'horizontal', showLabels: false, spring: 'snappy', shape: 'rect', edgeAccent: false, sweep: false, skeleton: false },
   // the rail is the space-12 step of the scale (the classic slim ~3.5rem rail);
   // items are control-height-md squares in vertical and control-height-md tall in horizontal
   dimensions: {
@@ -105,8 +110,11 @@ export const navBarSpec: ComponentSpec = {
     'control-height-md', 'radius-md',
     'font-size-sm', 'font-weight-medium',
     'text', 'text-muted',
-    'hover', 'accent-soft', 'accent-text', 'focus-ring',
-    'duration-fast', 'ease-out',
+    'hover', 'accent-soft', 'accent-text', 'focus-ring', 'accent-solid',
+    'gradient-sweep',
+    'shape-slant-angle', 'shape-notch', 'shape-edge-cut', 'shape-slant-pad',
+    'shape-accent-edge', 'shape-accent-edge-active', 'shape-shadow', 'shape-glow',
+    'duration-fast', 'ease-out', 'stagger-step',
   ],
   a11y: {
     role: 'navigation',
@@ -121,7 +129,7 @@ export const navBarSpec: ComponentSpec = {
   },
   motion: {
     description:
-      'The active pill is a shared layout element that slides between items on the chosen spring; item colors ease on hover. Both respect reduced motion.',
+      'The active pill is a shared layout element that slides between items on the chosen spring; item colors ease on hover. With sweep set, the gradient-sweep highlight slides across an item plate on hover and focus-visible, and item runs may enter with the staggered rise-in. All of it respects reduced motion.',
     transition: { spring: 'snappy' },
   },
 };

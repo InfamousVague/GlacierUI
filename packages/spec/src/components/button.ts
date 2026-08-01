@@ -1,8 +1,8 @@
 import type { ComponentSpec } from '../schema.ts';
-import { controlSize, controlSizes, token } from '../vocab.ts';
+import { controlSize, controlSizes, edgeAccentProp, shapeProp, sweepProp, token } from '../vocab.ts';
 
 /** Visual style families, exported so the React kit derives its union from here. */
-export const buttonVariants = ['solid', 'soft', 'outline', 'ghost', 'glass', 'danger'] as const;
+export const buttonVariants = ['solid', 'soft', 'outline', 'ghost', 'glass', 'danger', 'gradient'] as const;
 
 export const buttonSpec: ComponentSpec = {
   name: 'Button',
@@ -20,6 +20,9 @@ export const buttonSpec: ComponentSpec = {
   props: [
     { name: 'variant', type: 'enum', values: buttonVariants, default: 'solid', description: 'Visual style family.' },
     { name: 'size', type: 'enum', values: controlSizes, default: 'md', description: 'Control size step.' },
+    shapeProp(),
+    edgeAccentProp(),
+    sweepProp(),
     { name: 'loading', type: 'boolean', default: false, description: 'Shows a spinner and blocks interaction.' },
     { name: 'fullWidth', type: 'boolean', default: false, description: 'Stretches to the container width.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Dims the button and blocks interaction.' },
@@ -33,13 +36,14 @@ export const buttonSpec: ComponentSpec = {
     { name: 'ghost', description: 'No fill until hovered, for low-emphasis actions.', paint: { text: token('text') }, tokens: { hover: token('hover') } },
     { name: 'glass', description: 'Frosted glass material for chrome over content.', paint: { background: token('glass-regular'), border: token('glass-border'), text: token('text') }, tokens: { hover: token('glass-thick') } },
     { name: 'danger', description: 'Filled with the danger color for destructive actions.', paint: { background: token('danger-solid'), text: token('danger-contrast') }, tokens: { hover: token('danger-solid-hover') } },
+    { name: 'gradient', description: 'Filled with the accent gradient, for hero and gamified moments.', paint: { background: token('gradient-accent'), text: token('accent-contrast') }, tokens: { hover: token('accent-solid-hover') } },
   ],
   sizes: [
     controlSize('sm', { paddingInline: token('space-4') }),
     controlSize('md', { paddingInline: token('space-5') }),
     controlSize('lg', { paddingInline: token('space-6') }),
   ],
-  defaults: { variant: 'solid', size: 'md', loading: false, fullWidth: false, disabled: false, skeleton: false },
+  defaults: { variant: 'solid', size: 'md', shape: 'rect', edgeAccent: false, sweep: false, loading: false, fullWidth: false, disabled: false, skeleton: false },
   dimensions: { radius: token('control-radius'), gap: token('space-2'), border: token('hairline') },
   states: [
     {
@@ -52,6 +56,7 @@ export const buttonSpec: ComponentSpec = {
         ghost: token('hover'),
         glass: token('glass-thick'),
         danger: token('danger-solid-hover'),
+        gradient: token('accent-solid-hover'),
       },
     },
     { name: 'active', description: 'Ghost presses to the active token; others rely on the tap scale.', tokens: { ghost: token('active') } },
@@ -67,7 +72,10 @@ export const buttonSpec: ComponentSpec = {
     'accent-solid', 'accent-solid-hover', 'accent-contrast', 'accent-soft', 'accent-soft-hover', 'accent-text',
     'border-strong', 'text', 'hover', 'active', 'danger-solid', 'danger-solid-hover', 'danger-contrast',
     'glass-regular', 'glass-thick', 'glass-border', 'glass-highlight', 'blur-sm', 'glass-saturate', 'shadow-1', 'shadow-2', 'focus-ring',
-    'duration-fast', 'ease-out',
+    'gradient-accent', 'gradient-sweep', 'accent-solid',
+    'shape-slant-angle', 'shape-notch', 'shape-edge-cut', 'shape-slant-pad',
+    'shape-accent-edge', 'shape-accent-edge-active', 'shape-shadow', 'shape-glow',
+    'duration-fast', 'ease-out', 'stagger-step',
   ],
   a11y: {
     role: 'button',
@@ -76,7 +84,8 @@ export const buttonSpec: ComponentSpec = {
     notes: ['A disabled or loading button is removed from the tab order and blocks activation.'],
   },
   motion: {
-    description: 'Presses inward on tap and eases its colors on hover; both respect reduced motion.',
+    description:
+      'Presses inward on tap and eases its colors on hover; with sweep set, the gradient-sweep highlight slides in from the leading edge on hover and focus-visible. All of it respects reduced motion through the duration tokens.',
     press: true,
     transition: { speed: 'fast', ease: 'out' },
   },
