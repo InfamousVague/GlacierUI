@@ -10,6 +10,7 @@ import {
 import { motion, useReducedMotion, type Transition } from 'motion/react';
 import { Spring, springTransition } from '@glacier/motion';
 import { cx } from '../../internal/cx.ts';
+import { ShapeLayer, shapeHostProps, type ShapeName } from '../../internal/shape/ShapeLayer.tsx';
 import { asPolymorphic } from '../../internal/poly.ts';
 import { CounterBadge } from '../../atoms/display/CounterBadge/CounterBadge.tsx';
 import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
@@ -28,6 +29,10 @@ interface NavBarContextValue {
   showLabels: boolean;
   layoutId: string;
   transition: Transition;
+  /** The bar-level plate silhouette, applied to every item. */
+  shape: ShapeName;
+  edgeAccent: boolean;
+  sweep: boolean;
 }
 const NavBarContext = createContext<NavBarContextValue | null>(null);
 
@@ -48,6 +53,16 @@ export interface NavBarProps extends ComponentProps<'nav'> {
   showLabels?: boolean;
   /** Spring preset for the active pill as it slides between items. */
   spring?: Spring;
+  /**
+   * Bar-level plate silhouette, applied to every item. 'rect' is the untouched
+   * default; the gamified plates put the bar in the game-menu register, with
+   * the sliding active pill preserved, and mirror under [dir='rtl'].
+   */
+  shape?: ShapeName;
+  /** Paints the accent leading-edge stripe on each item plate. */
+  edgeAccent?: boolean;
+  /** Slides the gradient sweep across an item plate on hover and focus-visible. */
+  sweep?: boolean;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
   children?: ReactNode;
@@ -65,6 +80,9 @@ export function NavBar({
   end,
   showLabels = false,
   spring = Spring.Snappy,
+  shape = 'rect',
+  edgeAccent = false,
+  sweep = false,
   skeleton = false,
   className,
   children,
@@ -95,10 +113,17 @@ export function NavBar({
     showLabels,
     layoutId: `${id}-active`,
     transition: reduce ? { duration: 0 } : springTransition(spring),
+    shape,
+    edgeAccent,
+    sweep,
   };
   return (
     <NavBarContext.Provider value={context}>
-      <nav className={cx(styles.nav, styles[orientation], className)} aria-label={ariaLabel} {...rest}>
+      <nav
+        className={cx(styles.nav, styles[orientation], shape !== 'rect' && styles.shaped, className)}
+        aria-label={ariaLabel}
+        {...rest}
+      >
         <div className={styles.items}>{children}</div>
         {end && <div className={styles.end}>{end}</div>}
       </nav>
@@ -147,9 +172,17 @@ export function NavBarItem({
   const vertical = context?.orientation === 'vertical';
   const labelsVisible = context ? context.showLabels && !vertical : true;
   const iconOnly = !labelsVisible;
+  // The plate register is a bar-level decision: an item outside a NavBar, or
+  // inside a plain one, keeps the untouched rectangular markup.
+  const shape = context?.shape ?? 'rect';
+  const edgeAccent = context?.edgeAccent ?? false;
+  const sweep = context?.sweep ?? false;
+  const host = shapeHostProps({ shape, edgeAccent, sweep });
   const item = (
     <Component
-      className={cx(styles.item, iconOnly ? styles.itemVertical : styles.itemHorizontal, className)}
+      {...host}
+      className={cx(styles.item, iconOnly ? styles.itemVertical : styles.itemHorizontal, host.className, className)}
+      data-edge-accent={edgeAccent || undefined}
       data-active={active || undefined}
       aria-current={active ? 'page' : undefined}
       aria-disabled={disabled || undefined}
@@ -157,6 +190,7 @@ export function NavBarItem({
       {...extra}
       {...rest}
     >
+      <ShapeLayer shape={shape} edgeAccent={edgeAccent} sweep={sweep} />
       {active &&
         (context ? (
           <motion.span

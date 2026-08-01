@@ -155,6 +155,60 @@
   flex: none;
 }
 
+/* ---- shaped item plates --------------------------------------------------
+   The game-menu register: with a bar-level shape every item becomes a plate
+   drawn by its shape layer, so the silhouette, the hairline, the accent leading
+   edge and the hover sweep are one clipped element. The sliding active pill is
+   preserved: it paints above the layer, inside the plate. */
+/* A cut plate overhangs its layout box (the parallelogram by tan(angle) x
+   height / 2 on each inline side), so a shaped bar opens its runs one step to
+   keep neighbouring plates from touching. */
+.shaped,
+.shaped .items,
+.shaped .end {
+  gap: var(--glacier-space-2);
+}
+
+.item[data-shape] {
+  --glacier-shape-bg: transparent;
+  --glacier-shape-border-color: transparent;
+  /* the item draws no border of its own, so the plate has none to cover */
+  --glacier-shape-bleed: 0px;
+}
+
+/* a cut silhouette earns a hairline: it is what makes the plate read as a plate.
+   An item that only opted into the accent edge or the sweep stays borderless. */
+.item[data-shape]:not([data-shape='rect']) {
+  --glacier-shape-border-color: var(--glacier-border-subtle);
+}
+
+/* the hover wash moves onto the plate; the host itself must stay unpainted or a
+   rectangle shows through the cut corners (hence out-specifying the rule above) */
+.item[data-shape]:hover:not([aria-disabled='true']):not([data-active]) {
+  background: transparent;
+  --glacier-shape-bg: var(--glacier-hover);
+}
+
+.item[data-shape][data-active] {
+  --glacier-shape-border-color: var(--glacier-accent-border);
+}
+
+/* the parallelogram's waist eats into the padding on both inline sides */
+.itemHorizontal[data-shape='slant'] {
+  padding-inline: calc(var(--glacier-space-3) + var(--glacier-shape-slant-pad));
+}
+
+/* the pill rides inside the plate rather than out to the layout box edges */
+.item[data-shape='slant'] .indicator {
+  inset-inline: var(--glacier-shape-slant-pad);
+}
+
+/* room for the accent leading edge at its widest (hover/focus) state. The rail's
+   square items keep their centered icon and let the stripe ride the edge. */
+.itemHorizontal[data-edge-accent] {
+  padding-inline-start: calc(var(--glacier-space-3) + var(--glacier-shape-accent-edge-active));
+}
+
 /* in the rail the badge pins to the top-right corner of the icon square */
 .itemVertical .badge {
   position: absolute;

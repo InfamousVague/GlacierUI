@@ -31,6 +31,15 @@
     var(--glacier-shadow-2);
 }
 
+/* wash: the quiet accent gradient over the raised surface, for gamified panels.
+   It rides the elevation shadow ladder like a solid card but paints its own
+   background-image, so the rules below re-assert it over the elevation overlay
+   (which is written at [data-elevation] specificity). */
+.wash {
+  background: var(--glacier-surface-raised);
+  border-color: var(--glacier-accent-border);
+}
+
 /* Each level pairs its shadow with an elevation overlay: transparent in the
    light theme where shadows carry the depth, a stepped white lift in dark
    where ink shadows vanish against the near-black page. Glass keeps its own
@@ -84,4 +93,69 @@
 .interactive:not(.glass)[data-elevation='5']:hover {
   box-shadow: var(--glacier-shadow-5);
   background-image: linear-gradient(var(--glacier-elevation-overlay-5), var(--glacier-elevation-overlay-5));
+}
+
+/* The wash gradient outranks the elevation overlay at rest and on hover. A
+   shaped wash card paints its plate instead (see below), so it opts out here. */
+.card.wash[data-elevation]:not([data-shape]),
+.card.wash.interactive[data-elevation]:not([data-shape]):hover {
+  background-image: var(--glacier-gradient-wash-accent);
+}
+
+/* ---- shaped cards --------------------------------------------------------
+   A shaped card hands its paint to the shape layer: the plate carries the
+   surface, the hairline and the depth, so the host's own background and
+   shadow ladder step aside. drop-shadow has no spread, so shaped surfaces get
+   the tokenized shape drop/glow pair INSTEAD of the elevation box-shadows -
+   the elevation prop still tints the plate through the overlay below, which is
+   what carries depth in the dark theme.
+   These rules must out-specify the [data-elevation] paint above, hence the
+   doubled attribute selectors. */
+.card[data-shape] {
+  --card-shape-overlay: var(--glacier-elevation-overlay-1);
+  --glacier-shape-bg:
+    linear-gradient(var(--card-shape-overlay), var(--card-shape-overlay)),
+    var(--glacier-surface-raised);
+  --glacier-shape-border-color: var(--glacier-border-subtle);
+  /* a card carries depth at rest, unlike a control: the plate wears the drop
+     shadow the elevation ladder used to paint on the host */
+  --glacier-shape-depth: drop-shadow(var(--glacier-shape-shadow));
+}
+
+/* elevation 0 is the flat step: no shadow on the host, none on the plate */
+.card[data-shape][data-elevation='0'] {
+  --card-shape-overlay: var(--glacier-elevation-overlay-0);
+  --glacier-shape-depth: none;
+}
+
+.card[data-shape][data-elevation='1'] { --card-shape-overlay: var(--glacier-elevation-overlay-1); }
+.card[data-shape][data-elevation='2'] { --card-shape-overlay: var(--glacier-elevation-overlay-2); }
+.card[data-shape][data-elevation='3'] { --card-shape-overlay: var(--glacier-elevation-overlay-3); }
+.card[data-shape][data-elevation='4'] { --card-shape-overlay: var(--glacier-elevation-overlay-4); }
+.card[data-shape][data-elevation='5'] { --card-shape-overlay: var(--glacier-elevation-overlay-5); }
+
+/* strip the rectangular paint the elevation rules wrote on the host: it would
+   otherwise show as a rectangle behind the cut silhouette */
+.card[data-shape][data-elevation],
+.card[data-shape][data-elevation]:hover {
+  box-shadow: none;
+  background-image: none;
+}
+
+/* wash and glass swap the plate's paint, not the host's */
+.card.wash[data-shape] {
+  --glacier-shape-bg: var(--glacier-gradient-wash-accent);
+  --glacier-shape-border-color: var(--glacier-accent-border);
+}
+
+/* A shaped glass card keeps the glass tint on its plate; the engine drops the
+   host's blur, which is clipped to the border box and cannot follow the cut. */
+.card.glass[data-shape] {
+  --glacier-shape-bg: var(--glacier-glass-regular);
+  --glacier-shape-border-color: var(--glacier-glass-border);
+}
+
+/* the parallelogram's waist eats into the padding on both inline sides */
+.card[data-shape='slant'] {
+  padding-inline: calc(var(--glacier-space-5) + var(--glacier-shape-slant-pad));
 }

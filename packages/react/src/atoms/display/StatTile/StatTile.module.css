@@ -79,6 +79,38 @@
   box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
 }
 
+/* ---- shaped tiles --------------------------------------------------------
+   The forge-plate register: the shape layer takes over the tile's surface and
+   hairline so the silhouette, the accent leading edge and the sweep are all one
+   clipped element. Depth moves to the shape drop/glow pair. */
+.tile[data-shape] {
+  --glacier-shape-bg: var(--glacier-surface-raised);
+  --glacier-shape-border-color: var(--glacier-border-subtle);
+}
+
+/* the plate keeps the glass tint; the engine drops the host's blur, which is
+   clipped to the border box and cannot follow the cut */
+.tile.glass[data-shape] {
+  --glacier-shape-bg: var(--glacier-glass-regular);
+  --glacier-shape-border-color: var(--glacier-glass-border);
+}
+
+/* the parallelogram's waist eats into the padding on both inline sides */
+.tile[data-shape='slant'] {
+  padding-inline: calc(var(--glacier-space-4) + var(--glacier-shape-slant-pad));
+}
+
+/* the notch cuts the trailing top corner, so the trailing padding grows to
+   clear it - the dkForge plate's asymmetric padding, tokenized */
+.tile[data-shape='notch'] {
+  padding-inline-end: calc(var(--glacier-space-4) + var(--glacier-shape-notch) / 2);
+}
+
+/* the accent leading edge sits inside the plate: give the content room for it */
+.tile[data-edge-accent] {
+  padding-inline-start: calc(var(--glacier-space-4) + var(--glacier-shape-accent-edge-active));
+}
+
 /* the icon disc's skeleton bone rides the same offset as the live disc */
 .skeletonIcon {
   flex: none;

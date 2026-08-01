@@ -45,8 +45,10 @@ const DEFAULT_LABELS: PlayerCardLabels = {
 export interface PlayerCardProps
   // Built on the Card's own surface rather than a bare div: the Card is a motion
   // element, so its drag handlers are not the DOM's, and its `layout` is
-  // framer-motion's animation flag rather than ours. Both are omitted.
-  extends Omit<CardProps, 'children' | 'title' | 'defaultValue' | 'skeleton' | 'layout'> {
+  // framer-motion's animation flag rather than ours. Both are omitted, and so is
+  // `shape`: on a PlayerCard that word names the seek waveform, not the plate
+  // silhouette, so the player keeps the meaning its own prop already had.
+  extends Omit<CardProps, 'children' | 'title' | 'defaultValue' | 'skeleton' | 'layout' | 'shape'> {
   /** Album art, placed and sized by the layout. */
   artwork?: ReactNode;
   /** How the card arranges what it holds. */

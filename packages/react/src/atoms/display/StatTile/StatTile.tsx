@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactNode } from 'react';
 import { SkeletonVariant } from '@glacier/spec';
 import { cx } from '../../../internal/cx.ts';
+import { ShapeLayer, shapeHostProps, type ShapeName } from '../../../internal/shape/ShapeLayer.tsx';
 import { Skeleton } from '../../feedback/Skeleton/Skeleton.tsx';
 import styles from './StatTile.module.css';
 
@@ -15,6 +16,13 @@ export interface StatTileProps extends ComponentProps<'div'> {
   hint?: ReactNode;
   /** Renders the frosted glass material instead of a solid card. */
   glass?: boolean;
+  /**
+   * Plate silhouette. 'rect' is the untouched default; the gamified plates put
+   * a row of tiles in the forge-plate register and mirror under [dir='rtl'].
+   */
+  shape?: ShapeName;
+  /** Paints the accent leading-edge stripe along the tile's inline-start edge. */
+  edgeAccent?: boolean;
   /** Renders a placeholder with the component's exact geometry. */
   skeleton?: boolean;
 }
@@ -30,16 +38,26 @@ export function StatTile({
   label,
   hint,
   glass = false,
+  shape = 'rect',
+  edgeAccent = false,
   skeleton = false,
   className,
   ...rest
 }: StatTileProps) {
+  // {} and null for a plain rect tile, so the default markup is untouched.
+  const host = shapeHostProps({ shape, edgeAccent });
   if (skeleton) {
     // Mirrors the live anatomy, keyed off the same props: the icon disc bone
     // renders when the host's tile carries an icon, and a hint bone joins the
     // value row when a hint will, so nothing shifts when the data lands.
     return (
-      <div className={cx(styles.tile, glass && styles.glass, className)} {...rest}>
+      <div
+        {...host}
+        className={cx(styles.tile, glass && styles.glass, host.className, className)}
+        data-edge-accent={edgeAccent || undefined}
+        {...rest}
+      >
+        <ShapeLayer shape={shape} edgeAccent={edgeAccent} />
         {icon != null && (
           <Skeleton
             width="2.25rem"
@@ -61,7 +79,13 @@ export function StatTile({
     );
   }
   return (
-    <div className={cx(styles.tile, glass && styles.glass, className)} {...rest}>
+    <div
+      {...host}
+      className={cx(styles.tile, glass && styles.glass, host.className, className)}
+      data-edge-accent={edgeAccent || undefined}
+      {...rest}
+    >
+      <ShapeLayer shape={shape} edgeAccent={edgeAccent} />
       {icon != null && (
         <span className={styles.icon} aria-hidden="true">
           {icon}
