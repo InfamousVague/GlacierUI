@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box, Text, Heading, Size, TextTone, useT } from '@glacier/react';
+import { Box, NavBar, NavBarItem, Text, Heading, Size, TextTone, useT } from '@glacier/react';
 import { Award, Compass, Library, Route, Settings } from '@glacier/icons';
 import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
@@ -34,6 +34,33 @@ function DemoNav({ K, orientation }: { K: PlatformKit; orientation?: 'horizontal
         {item('certificates', awardIcon, 'Certificates')}
       </K.NavBar>
     </Box>
+  );
+}
+
+/**
+ * The shaped register: a bar-level `shape` threaded to every item plate, with
+ * the accent edge and the hover sweep on. Web-only, so it is a plain demo
+ * rather than a cross-platform one - React Native has no clip-path.
+ */
+function ShapedNav() {
+  const t = useT();
+  const [active, setActive] = useState('library');
+  const item = (id: string, icon: typeof libraryIcon, label: string, badge?: number) => (
+    <NavBarItem icon={icon} label={label} badge={badge} active={active === id} onClick={() => setActive(id)} />
+  );
+  return (
+    <NavBar
+      aria-label={t(m.navAriaPrimary)}
+      shape="slant"
+      edgeAccent
+      sweep
+      showLabels
+      end={item('settings', settingsIcon, 'Settings')}
+    >
+      {item('library', libraryIcon, 'Library')}
+      {item('discover', compassIcon, 'Discover', 3)}
+      {item('paths', routeIcon, 'Paths')}
+    </NavBar>
   );
 }
 
@@ -79,6 +106,19 @@ export function NavBarPage() {
       />
 
       <Example
+        title={t(m.navExShapesTitle)}
+        description={prose(t(m.navExShapesDesc))}
+        code={`<NavBar aria-label="Primary" shape="slant" edgeAccent sweep showLabels
+  end={<NavBarItem icon={settingsIcon} label="Settings" />}>
+  <NavBarItem icon={libraryIcon} label="Library" active />
+  <NavBarItem icon={compassIcon} label="Discover" badge={3} />
+  <NavBarItem icon={routeIcon} label="Paths" />
+</NavBar>`}
+      >
+        <ShapedNav />
+      </Example>
+
+      <Example
         title={t(m.exSkeleton)}
         description={t(m.navEx3Desc)}
         component="NavBar"
@@ -102,6 +142,9 @@ export function NavBarPage() {
           { name: 'end', type: 'ReactNode', description: t(m.navPropEnd) },
           { name: 'showLabels', type: 'boolean', default: 'false', description: t(m.navPropShowLabels) },
           { name: 'spring', type: 'Spring', default: 'Spring.Snappy', description: t(m.navPropSpring) },
+          { name: 'shape', type: "'rect' | 'slant' | 'notch' | 'edge'", default: "'rect'", description: t(m.navPropShape) },
+          { name: 'edgeAccent', type: 'boolean', default: 'false', description: t(m.propEdgeAccent) },
+          { name: 'sweep', type: 'boolean', default: 'false', description: t(m.propSweep) },
           { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.navPropSkeleton) },
         ]}
       />

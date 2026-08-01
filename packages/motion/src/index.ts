@@ -10,7 +10,16 @@
  */
 
 import type { TargetAndTransition, Transition } from 'motion/react';
-import { durations, easings } from '@glacier/tokens';
+import { durations, easings, STAGGER_STEP_MS } from '@glacier/tokens';
+
+/**
+ * The per-item delay behind staggered entrances, in milliseconds - the JS
+ * mirror of `--glacier-stagger-step`. Re-exported from @glacier/tokens rather
+ * than restated here so the CSS stagger (the `riseIn` utility's
+ * `--glacier-stagger-i` data attribute) and the framer-motion stagger can
+ * never drift apart.
+ */
+export { STAGGER_STEP_MS };
 
 /** Every micro-animation the kit ships. Values are stable kebab-case ids. */
 export enum Motion {
@@ -22,6 +31,7 @@ export enum Motion {
   SlideDown = 'slide-down',
   SlideLeft = 'slide-left',
   SlideRight = 'slide-right',
+  RiseIn = 'rise-in',
   Collapse = 'collapse',
   Expand = 'expand',
   Shake = 'shake',
@@ -114,6 +124,17 @@ export function motionProps(kind: Motion, speed?: Speed, ease?: Ease): MotionPro
       return { initial: { opacity: 0, x: 8 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: 8 }, transition: t(Speed.Normal, Ease.Out) };
     case Motion.SlideRight:
       return { initial: { opacity: 0, x: -8 }, animate: { opacity: 1, x: 0 }, exit: { opacity: 0, x: -8 }, transition: t(Speed.Normal, Ease.Out) };
+    case Motion.RiseIn:
+      // The game-feel entrance: a longer lift than SlideUp, meant to be
+      // staggered across a row of plates (see staggerDelay). The CSS twin is
+      // the `riseIn` utility in the react kit's shape engine, which starts
+      // from the same 14px offset.
+      return {
+        initial: { opacity: 0, y: 14 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: 14 },
+        transition: t(Speed.Normal, Ease.Out),
+      };
     case Motion.Collapse:
       return {
         initial: { height: 'auto', opacity: 1 },
@@ -138,6 +159,24 @@ export function motionProps(kind: Motion, speed?: Speed, ease?: Ease): MotionPro
     case Motion.Shimmer:
       return { animate: { opacity: [0.45, 1, 0.45] }, transition: { duration: 1.4, ease: 'easeInOut', repeat: Infinity } };
   }
+}
+
+/**
+ * The transition for item `i` of a staggered entrance: the base transition
+ * with a delay of `i x STAGGER_STEP_MS`, so a row of plates rises one after
+ * another instead of all at once.
+ *
+ *   {items.map((item, i) => (
+ *     <motion.li key={item.id} {...motionProps(Motion.RiseIn)} transition={staggerDelay(i)} />
+ *   ))}
+ *
+ * Stagger is data, not an nth-child chain: the index is the input, so a
+ * filtered or reordered list still counts from zero. Under reduced motion pass
+ * `staggerDelay(0)` (or skip the entrance entirely) - the CSS twin collapses
+ * on its own because --glacier-stagger-step drops to 0.01ms there.
+ */
+export function staggerDelay(index: number, base: Transition = transition(Speed.Normal, Ease.Out)): Transition {
+  return { ...base, delay: (index * STAGGER_STEP_MS) / 1000 };
 }
 
 /**

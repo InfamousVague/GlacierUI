@@ -196,6 +196,30 @@ export function PillPage() {
       </Example>
 
       <Example
+        title={t(m.pillExShapesTitle)}
+        description={prose(t(m.pillExShapesDesc))}
+        code={`<Pill shape="slant" tone={Tone.Accent}>Ranked</Pill>
+<Pill shape="notch" tone={Tone.Accent}>Season 4</Pill>
+<Pill shape="edge" tone={Tone.Accent} variant={Variant.Outline}>Season pass</Pill>
+<Pill shape="notch" size={Size.Small} tone={Tone.Accent}>Ranked</Pill>`}
+      >
+        <Row gap={4} wrap>
+          <Pill shape="slant" tone={Tone.Accent}>
+            {t(m.smPillSmall)}
+          </Pill>
+          <Pill shape="notch" tone={Tone.Accent}>
+            {t(m.smPillMedium)}
+          </Pill>
+          <Pill shape="edge" tone={Tone.Accent} variant={Variant.Outline}>
+            {t(m.smPlateEdge)}
+          </Pill>
+          <Pill shape="notch" size={Size.Small} tone={Tone.Accent}>
+            {t(m.smPillSmall)}
+          </Pill>
+        </Row>
+      </Example>
+
+      <Example
         title={t(m.exSkeleton)}
         description={prose(t(m.pillEx7Desc))}
         code={`<Pill skeleton size={Size.Small} />
@@ -233,6 +257,12 @@ export function PillPage() {
             type: "'sm' | 'md'",
             default: "'md'",
             description: t(m.pillPropSize),
+          },
+          {
+            name: 'shape',
+            type: "'rect' | 'slant' | 'notch' | 'edge'",
+            default: "'rect'",
+            description: t(m.propShape),
           },
           {
             name: 'icon',

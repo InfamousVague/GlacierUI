@@ -21,6 +21,7 @@ import { TypographyPage } from './pages/foundations/TypographyPage.tsx';
 import { SpacingPage } from './pages/foundations/SpacingPage.tsx';
 import { LayoutPage } from './pages/foundations/LayoutPage.tsx';
 import { ShapePage } from './pages/foundations/ShapePage.tsx';
+import { ShapesMotionPage } from './pages/foundations/ShapesMotionPage.tsx';
 import { MaterialsPage } from './pages/foundations/MaterialsPage.tsx';
 import { HapticsPage } from './pages/foundations/HapticsPage.tsx';
 import { NativePage } from './pages/foundations/NativePage.tsx';
@@ -138,6 +139,7 @@ const PAGES = {
   spacing: { group: 'Foundations', el: <SpacingPage /> },
   layout: { group: 'Foundations', el: <LayoutPage /> },
   shape: { group: 'Foundations', el: <ShapePage /> },
+  shapesmotion: { group: 'Foundations', el: <ShapesMotionPage /> },
   materials: { group: 'Foundations', el: <MaterialsPage /> },
   haptics: { group: 'Foundations', el: <HapticsPage /> },
   native: { group: 'Foundations', el: <NativePage /> },

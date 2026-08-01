@@ -65,6 +65,28 @@ export function ButtonPage() {
       />
 
       <Example
+        title={t(m.btnExShapesTitle)}
+        description={prose(t(m.btnExShapesDesc))}
+        code={`<Button shape="slant" edgeAccent sweep>Play</Button>
+<Button shape="notch" variant={Variant.Soft} edgeAccent sweep>New deck</Button>
+<Button shape="edge">Season pass</Button>
+<Button variant={Variant.Gradient}>Continue</Button>
+<Button variant={Variant.Gradient} shape="slant" edgeAccent sweep>Continue</Button>`}
+      >
+        <Button shape="slant" edgeAccent sweep>
+          {t(m.smPlateSlant)}
+        </Button>
+        <Button shape="notch" variant={Variant.Soft} edgeAccent sweep>
+          {t(m.smPlateNotch)}
+        </Button>
+        <Button shape="edge">{t(m.smPlateEdge)}</Button>
+        <Button variant={Variant.Gradient}>{t(m.btnDemoContinue)}</Button>
+        <Button variant={Variant.Gradient} shape="slant" edgeAccent sweep>
+          {t(m.btnDemoContinue)}
+        </Button>
+      </Example>
+
+      <Example
         title={t(m.btnEx3Title)}
         description={prose(t(m.btnEx3Desc))}
         code={`const [saving, setSaving] = useState(false);
@@ -158,7 +180,7 @@ export function ButtonPage() {
         props={[
           {
             name: 'variant',
-            type: "'solid' | 'soft' | 'outline' | 'ghost' | 'glass' | 'danger'",
+            type: "'solid' | 'soft' | 'outline' | 'ghost' | 'glass' | 'danger' | 'gradient'",
             default: "'solid'",
             description: t(m.btnPropVariant),
           },
@@ -167,6 +189,24 @@ export function ButtonPage() {
             type: "'sm' | 'md' | 'lg'",
             default: "'md'",
             description: t(m.btnPropSize),
+          },
+          {
+            name: 'shape',
+            type: "'rect' | 'slant' | 'notch' | 'edge'",
+            default: "'rect'",
+            description: t(m.propShape),
+          },
+          {
+            name: 'edgeAccent',
+            type: 'boolean',
+            default: 'false',
+            description: t(m.propEdgeAccent),
+          },
+          {
+            name: 'sweep',
+            type: 'boolean',
+            default: 'false',
+            description: t(m.propSweep),
           },
           {
             name: 'loading',

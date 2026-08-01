@@ -80,6 +80,18 @@ export function StatTilePage() {
       />
 
       <Example
+        title={t(m.sttExShapesTitle)}
+        description={prose(t(m.sttExShapesDesc))}
+        code={`<StatTile shape="notch" edgeAccent icon={bounceIcon} value="7" label="Decks forged" />
+<StatTile shape="slant" edgeAccent icon={usersIcon} value="12,480" label="Matches played" hint="+4.2%" />
+<StatTile shape="edge" icon={revenueIcon} value="$48.2k" label="Season revenue" />`}
+      >
+        <StatTile shape="notch" edgeAccent icon={bounceIcon} value="7" label={t(m.smStatDecks)} />
+        <StatTile shape="slant" edgeAccent icon={usersIcon} value="12,480" label={t(m.smStatLabel)} hint="+4.2%" />
+        <StatTile shape="edge" icon={revenueIcon} value="$48.2k" label={t(m.stattileRevenue)} />
+      </Example>
+
+      <Example
         title={t(m.exGlass)}
         description={t(m.sttEx5Desc)}
         component="StatTile"
@@ -108,6 +120,8 @@ export function StatTilePage() {
           { name: 'label', type: 'ReactNode', description: t(m.sttPropLabel) },
           { name: 'icon', type: 'ReactNode', description: t(m.sttPropIcon) },
           { name: 'hint', type: 'ReactNode', description: t(m.sttPropHint) },
+          { name: 'shape', type: "'rect' | 'slant' | 'notch' | 'edge'", default: "'rect'", description: t(m.propShape) },
+          { name: 'edgeAccent', type: 'boolean', default: 'false', description: t(m.propEdgeAccent) },
           { name: 'glass', type: 'boolean', default: 'false', description: t(m.sttPropGlass) },
           { name: 'skeleton', type: 'boolean', default: 'false', description: t(m.sttPropSkeleton) },
         ]}

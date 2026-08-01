@@ -138,6 +138,33 @@ export function SurfacesPage() {
       />
 
       <Example
+        title={t(m.surfExShapesTitle)}
+        description={prose(t(m.surfExShapesDesc))}
+        code={`<Card shape="notch">Forge plate</Card>
+<Card shape="slant">Menu plate</Card>
+<Card variant={Variant.Wash}>Wash card</Card>`}
+      >
+        <Card shape="notch" style={{ width: '15rem' }}>
+          <strong>{t(m.smPlateNotch)}</strong>
+          <Text size={Size.Small} tone={TextTone.Muted}>
+            {t(m.smCardBody)}
+          </Text>
+        </Card>
+        <Card shape="slant" style={{ width: '15rem' }}>
+          <strong>{t(m.smPlateSlant)}</strong>
+          <Text size={Size.Small} tone={TextTone.Muted}>
+            {t(m.smCardBody)}
+          </Text>
+        </Card>
+        <Card variant={Variant.Wash} style={{ width: '15rem' }}>
+          <strong>{t(m.smGradientVariants)}</strong>
+          <Text size={Size.Small} tone={TextTone.Muted}>
+            {t(m.smWashBody)}
+          </Text>
+        </Card>
+      </Example>
+
+      <Example
         title={t(m.exSkeleton)}
         description={t(m.surfEx5Desc)}
         code={`<Card skeleton elevation={1} />
@@ -182,9 +209,15 @@ export function SurfacesPage() {
           },
           {
             name: 'variant',
-            type: "'solid' | 'glass'",
+            type: "'solid' | 'glass' | 'wash'",
             default: "'solid'",
             description: t(m.surfPropVariant),
+          },
+          {
+            name: 'shape',
+            type: "'rect' | 'slant' | 'notch' | 'edge'",
+            default: "'rect'",
+            description: t(m.propShape),
           },
           {
             name: 'skeleton',
