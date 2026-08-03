@@ -4594,10 +4594,13 @@ function CardFanBlueprint({ dimensions }: BlueprintProps) {
   const radius = fmt(dimensions?.radius);
   const gap = fmt(dimensions?.gap);
 
-  const H = 212;
+  const H = 190;
   const X = 44;
   const W = 312;
-  const BASE = 162;
+  // The fan's own mass, not its baseline, is what should sit centred: the arc
+  // bows downward, so a baseline placed at the middle leaves the drawing
+  // bottom-heavy. This puts the cards either side of the frame's centre line.
+  const BASE = 140;
 
   // Seven large cards rather than eleven small ones. A blueprint is read, not
   // counted: the spread, the lean and the overlap are all legible at seven, and
@@ -4620,7 +4623,10 @@ function CardFanBlueprint({ dimensions }: BlueprintProps) {
       <line x1={X} y1={BASE + 12} x2={X + W} y2={BASE + 12} stroke={C.edge} strokeWidth={1} strokeDasharray="3 3" />
       <line x1={X} y1={BASE + 7} x2={X} y2={BASE + 17} stroke={C.line} strokeWidth={1.5} />
       <line x1={X + W} y1={BASE + 7} x2={X + W} y2={BASE + 17} stroke={C.line} strokeWidth={1.5} />
-      <text x={X + W / 2} y={BASE + 28} textAnchor="middle" className="bpLabel" fill={C.faint}>
+      {/* Beside the ticks it belongs to rather than on a row of its own. The
+          separate label row above the fan was most of the empty space, and it
+          held the drawing down by a band it did not need. */}
+      <text x={X} y={BASE + 28} className="bpLabel" fill={C.faint}>
         {t(m.bpFixedTrack)}
       </text>
 
@@ -4646,12 +4652,18 @@ function CardFanBlueprint({ dimensions }: BlueprintProps) {
       })}
 
       {/* What the pointer is doing to the fan. */}
-      <text x={X + W} y={50} textAnchor="end" className="bpLabel" fill={C.faint}>
+      <text
+        x={X + (placements[Math.round(FOCUS)]?.offset ?? 0.5) * track + CARD_W / 2}
+        y={BASE - CARD_H - 24}
+        textAnchor="middle"
+        className="bpLabel"
+        fill={C.faint}
+      >
         {t(m.bpFocusOpens)}
       </text>
       {/* Anchored at the start rather than hung off the left end: the track
           leaves only ~44 units of margin there, and the label is wider. */}
-      <text x={X} y={50} className="bpLabel" fill={C.faint}>
+      <text x={X + W} y={BASE + 28} textAnchor="end" className="bpLabel" fill={C.faint}>
         {t(m.bpEndsPinned)}
       </text>
 
