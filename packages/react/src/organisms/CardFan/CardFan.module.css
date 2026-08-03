@@ -1,0 +1,83 @@
+.root {
+  --fan-card-h: calc(var(--fan-width) * 1.4);
+  /* Room for the arc and for a magnified card to grow into: a fan clipped at
+     its own bounds loses exactly the card the pointer is on. */
+  padding-block: var(--glacier-space-6) var(--glacier-space-2);
+  font-family: var(--glacier-font-sans);
+}
+
+/* The track. A fixed length the cards are distributed across — the fan holds its
+   silhouette at any count, which is the whole reason for the slinky. */
+.fan {
+  position: relative;
+  /* Every card is absolutely positioned, so the fan contributes no intrinsic
+     width and a shrink-to-fit ancestor collapses it — below one card's width
+     the track goes negative and the whole hand stacks in a corner. A fan needs
+     room for at least a couple of cards to be a fan at all. */
+  min-width: calc(var(--fan-width) * 2);
+  height: calc(var(--fan-card-h) + var(--glacier-space-6));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Placed by fraction along the track, not by flow: `--slink` is 0 for the card
+   at the near end and 1 for the one at the far end, and the space between them
+   is whatever is left of the strip after one card's width.
+
+   Position is animated, transform is not: the transform carries the lean and
+   the bow, which are set per render, so easing it would fight them. */
+.item {
+  position: absolute;
+  inset-block-end: 0;
+  /* max() so a container narrower than one card cannot produce a negative
+     track and push the cards backwards past the near end. */
+  inset-inline-start: calc(var(--slink, 0.5) * max(0px, 100% - var(--fan-width)));
+  width: var(--fan-width);
+  transform-origin: 50% 100%;
+  cursor: pointer;
+  transition: inset-inline-start var(--glacier-duration-normal) var(--glacier-ease-out);
+}
+
+.item:focus-visible {
+  outline: none;
+}
+
+.item:focus-visible .lift {
+  outline: 2px solid var(--glacier-accent-soft);
+  outline-offset: 2px;
+  border-radius: var(--glacier-radius-lg);
+}
+
+/* The magnification raises this layer, not the card, so growing does not move
+   the footprint the neighbours are placed against. */
+.lift {
+  transform-origin: 50% 100%;
+  transition: transform var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.item[data-selected] .lift {
+  box-shadow: var(--glacier-shadow-3);
+  border-radius: var(--glacier-radius-lg);
+}
+
+.root[data-disabled] {
+  opacity: 0.5;
+}
+
+.root[data-disabled] .item {
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The spread stays — it is what makes a large fan legible, not decoration —
+     but nothing eases into place and nothing grows. */
+  .item,
+  .lift {
+    transition: none;
+  }
+
+  .lift {
+    transform: none !important;
+  }
+}

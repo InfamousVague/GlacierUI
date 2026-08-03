@@ -17,3 +17,4 @@ export { AppShell, type AppShellProps } from './AppShell.tsx';
 export { Menu, MenuItem, MenuSeparator, MenuLabel, ContextMenu, MenuSub, type MenuProps, type MenuItemProps, type ContextMenuProps, type MenuSubProps } from './Menu.tsx';
 export { AlertDialogHost, type AlertDialogHostProps } from './AlertDialogHost.tsx';
 export { ConversationView, type ConversationViewProps, type ConversationViewLabels } from './ConversationView.tsx';
+export { CardFan, type CardFanProps, type CardFanItem, type CardFanSize } from './CardFan.tsx';

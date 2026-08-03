@@ -98,6 +98,7 @@ import { DataGridPage } from './pages/organisms/DataGridPage.tsx';
 // Organisms
 import { AppShellPage } from './pages/organisms/AppShellPage.tsx';
 import { CalendarViewPage } from './pages/organisms/CalendarViewPage.tsx';
+import { CardFanPage } from './pages/organisms/CardFanPage.tsx';
 import { SortableListPage } from './pages/organisms/SortableListPage.tsx';
 import { VirtualListPage } from './pages/organisms/VirtualListPage.tsx';
 import { RichTextEditorPage } from './pages/organisms/RichTextEditorPage.tsx';
@@ -191,6 +192,7 @@ const PAGES = {
   toast: { group: 'Molecules', el: <ToastPage /> },
   appshell: { group: 'Organisms', el: <AppShellPage /> },
   calendarview: { group: 'Organisms', el: <CalendarViewPage /> },
+  cardfan: { group: 'Organisms', el: <CardFanPage /> },
   sortablelist: { group: 'Organisms', el: <SortableListPage /> },
   virtuallist: { group: 'Organisms', el: <VirtualListPage /> },
   richtexteditor: { group: 'Organisms', el: <RichTextEditorPage /> },

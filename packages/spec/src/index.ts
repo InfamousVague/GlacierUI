@@ -37,6 +37,7 @@ export * from './components/number-input.ts';
 export * from './components/menu.ts';
 export * from './components/pill.ts';
 export * from './components/calendar-view.ts';
+export * from './components/card-fan.ts';
 export * from './components/sortable-list.ts';
 export * from './components/virtual-list.ts';
 export * from './components/rich-text-editor.ts';
@@ -141,6 +142,7 @@ import { numberInputSpec } from './components/number-input.ts';
 import { menuSpec } from './components/menu.ts';
 import { pillSpec } from './components/pill.ts';
 import { calendarViewSpec } from './components/calendar-view.ts';
+import { cardFanSpec } from './components/card-fan.ts';
 import { sortableListSpec } from './components/sortable-list.ts';
 import { virtualListSpec } from './components/virtual-list.ts';
 import { richTextEditorSpec } from './components/rich-text-editor.ts';
@@ -276,6 +278,7 @@ export const specs: ComponentSpec[] = [
   toastSpec,
   modalSpec,
   calendarViewSpec,
+  cardFanSpec,
   sortableListSpec,
   virtualListSpec,
   richTextEditorSpec,

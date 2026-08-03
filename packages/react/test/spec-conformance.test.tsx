@@ -120,6 +120,7 @@ import {
   Timeline,
   TimelineScrubber,
   Wizard,
+  CardFan,
 } from '../src/index.ts';
 import { Star } from '@glacier/icons';
 import { cloneElement, type ReactElement } from 'react';
@@ -285,6 +286,14 @@ const RENDER: Record<string, Renderer> = {
   'color-picker': (o) => <ColorPicker defaultValue="#3b82f6" size={o.size as never} aria-label="Colour" />,
   'rich-text-editor': () => <RichTextEditor defaultValue="hi" aria-label="Notes" />,
   'virtual-list': () => <VirtualList count={0} itemSize={40} renderItem={() => 'Row'} aria-label="Rows" />,
+  'card-fan': (o) => (
+    <CardFan
+      items={[{ id: 'a' }, { id: 'b' }, { id: 'c' }]}
+      renderItem={(item) => item.id}
+      size={o.size as 'sm' | 'md' | 'lg'}
+      aria-label="Hand"
+    />
+  ),
   'sortable-list': (o) => (
     <SortableList items={[{ id: 'a' }]} onReorder={() => {}} renderItem={() => 'Row'} size={o.size as never} />
   ),

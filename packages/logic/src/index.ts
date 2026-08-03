@@ -380,3 +380,17 @@ export const press = {
 } as const;
 
 export type PressScale = keyof typeof press;
+
+// Card fan: the slinky spread, shared so both bindings lay a fan out identically.
+export {
+  slinkyOffsets,
+  restFocus,
+  focusFromTrack,
+  fanSlinky,
+  fanLean,
+  fanBow,
+  fanPlacements,
+  fanMagnify,
+  type SlinkyOptions,
+  type FanPlacement,
+} from './card-fan.ts';

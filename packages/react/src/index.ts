@@ -49,7 +49,7 @@ export { Callout, type CalloutProps, type CalloutTone } from './atoms/feedback/C
 export { CodeBlock, type CodeBlockProps } from './atoms/display/CodeBlock/CodeBlock.tsx';
 export { SegmentedBar, type SegmentedBarProps } from './atoms/feedback/SegmentedBar/SegmentedBar.tsx';
 export { Banner, type BannerProps, type BannerTone } from './atoms/feedback/Banner/Banner.tsx';
-export { Announcements, type AnnouncementsProps, type AnnouncementItem, type AnnouncementTone } from './atoms/feedback/Announcements/Announcements.tsx';
+export { Announcements, type AnnouncementsProps, type AnnouncementItem, type AnnouncementTone, type AnnouncementMotion } from './atoms/feedback/Announcements/Announcements.tsx';
 export { EmptyState, type EmptyStateProps } from './atoms/feedback/EmptyState/EmptyState.tsx';
 export { Steps, type StepsProps, type StepsTone, type StepsSize } from './atoms/feedback/Steps/Steps.tsx';
 export { RadioCard, type RadioCardProps } from './atoms/inputs/RadioCard/RadioCard.tsx';
@@ -187,6 +187,13 @@ export {
   type SortableListProps,
   type SortableItemLike,
 } from './organisms/SortableList/SortableList.tsx';
+export {
+  CardFan,
+  cardFanRestFocus,
+  type CardFanProps,
+  type CardFanItem,
+  type CardFanSize,
+} from './organisms/CardFan/CardFan.tsx';
 export {
   CalendarView,
   type CalendarViewProps,
