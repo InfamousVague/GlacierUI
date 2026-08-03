@@ -1,7 +1,7 @@
-// shared enum vocabulary — Size.Large, Tone.Accent, TextTone.Muted, Variant.Soft, SkeletonVariant.Circle
+// shared enum vocabulary - Size.Large, Tone.Accent, TextTone.Muted, Variant.Soft, SkeletonVariant.Circle
 export { Size, Tone, TextTone, Variant, SkeletonVariant, ScrollbarAppearance } from '@glacier/spec';
 
-// writing direction — live resolution for event handlers, a hook for render output
+// writing direction - live resolution for event handlers, a hook for render output
 export { resolveDirection, useDirection, type Direction } from './internal/direction.ts';
 
 // atoms

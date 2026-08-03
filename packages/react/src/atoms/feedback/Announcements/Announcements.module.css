@@ -44,6 +44,104 @@
   white-space: nowrap;
 }
 
+/* An update that opens something. A bare button: it carries the strip's own
+   type and colour, and only the pointer and the focus ring say it is live. */
+.itemButton {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  min-width: 0;
+  border: 0;
+  border-radius: var(--glacier-radius-md);
+  padding: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.itemButton:hover .content {
+  color: var(--glacier-text);
+}
+
+.itemButton:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: 2px;
+}
+
+/* ---- marquee motion ------------------------------------------------------
+   The whole list travels past instead of taking turns. */
+
+/* Fade both ends so updates enter and leave rather than being chopped off. */
+.marqueeRoot .viewport {
+  mask-image: linear-gradient(to right, transparent, black var(--glacier-space-8), black calc(100% - var(--glacier-space-8)), transparent);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: travel var(--glacier-announcements-travel, 42s) linear infinite;
+}
+
+/* Hovering or focusing holds the news still - the strip moves at a browsing
+   pace, not a reading one, and an update you cannot catch cannot be clicked
+   either. The pause control does the same thing deliberately. */
+.marqueeRoot:hover .track,
+.marqueeRoot:focus-within .track,
+.marqueeRoot[data-paused] .track {
+  animation-play-state: paused;
+}
+
+.run {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--glacier-space-6);
+  padding-inline-end: var(--glacier-space-6);
+}
+
+/* Same width as the run it duplicates, which is what makes -50% exact. */
+.clone {
+  display: flex;
+  flex: none;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  white-space: nowrap;
+}
+
+/* Nothing to truncate against inside a max-content track: the strip is as wide
+   as its news, and an ellipsis here would only ever be a bug. */
+.marqueeRoot .content {
+  flex: none;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* -50% is exactly one run: the track is two identical runs, so at the moment
+   the animation resets, run two is sitting where run one began. Any other
+   number would show a seam. */
+@keyframes travel {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* RTL reads the other way, so the strip has to travel the other way too - the
+   shared keyframe would send updates off the side they enter from. */
+[dir='rtl'] .track {
+  animation-name: travelRtl;
+}
+
+@keyframes travelRtl {
+  from { transform: translateX(0); }
+  to { transform: translateX(50%); }
+}
+
 .controls {
   display: flex;
   flex: none;
@@ -94,8 +192,22 @@
   to { opacity: 1; transform: translateX(0); }
 }
 
+/* A strip that never stops moving is exactly what this setting is for. The
+   marquee still says everything - it just says it all at once, statically, and
+   lets the row scroll if it must. */
 @media (prefers-reduced-motion: reduce) {
   .message { animation: none; }
+
+  .track { animation: none; }
+
+  .marqueeRoot .viewport {
+    overflow-x: auto;
+    mask-image: none;
+  }
+
+  /* One run is the whole content; the duplicate exists only to hide the loop's
+     seam, and with no loop it is just the same news printed twice. */
+  .clone { display: none; }
 }
 
 .srOnly {
