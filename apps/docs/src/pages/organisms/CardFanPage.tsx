@@ -8,24 +8,25 @@ import { m } from '../../i18n.ts';
 interface Card {
   id: string;
   label: string;
-  tone: string;
 }
 
-const TONES = ['accent', 'success', 'warning', 'danger', 'info', 'neutral'];
-
-/** A hand of plain coloured cards — the fan is the component, not the card. */
 function hand(size: number): Card[] {
-  return Array.from({ length: size }, (_, i) => ({
-    id: `c${i}`,
-    label: String(i + 1),
-    tone: TONES[i % TONES.length]!,
-  }));
+  return Array.from({ length: size }, (_, i) => ({ id: `c${i}`, label: String(i + 1) }));
 }
 
 /**
  * The card body is the caller's. The fan owns only where each one sits, how far
  * it leans, and which one is magnified — so a demo can draw whatever it likes
  * inside and still get the same spread.
+ */
+/**
+ * A blueprint card back: the same navy, dot grid and cyan line work the
+ * component drawings use.
+ *
+ * One face for every card, deliberately. Six tints made the demo a colour
+ * chart, and the eye read the colours as meaning something — but the component
+ * being shown is the *placement*, and a uniform back is what lets you see the
+ * spread, the lean and the overlap instead of the deck.
  */
 function FanCard({ card }: { card: Card }) {
   return (
@@ -35,15 +36,38 @@ function FanCard({ card }: { card: Card }) {
         display: 'grid',
         placeItems: 'center',
         borderRadius: 'var(--glacier-radius-lg)',
-        border: 'var(--glacier-hairline) solid var(--glacier-border)',
-        background: `var(--glacier-${card.tone}-soft)`,
-        color: `var(--glacier-${card.tone}-text)`,
-        fontFamily: 'var(--glacier-font-mono)',
-        fontSize: 'var(--glacier-font-size-lg)',
+        border: 'var(--glacier-hairline) solid var(--glacier-accent-border)',
+        background: 'var(--glacier-accent-soft)',
+        // The blueprints' 16px dot lattice, as a background rather than an SVG
+        // pattern so a card costs one element.
+        backgroundImage:
+          'radial-gradient(circle at 1px 1px, var(--glacier-accent-border) 0.75px, transparent 0.75px)',
+        backgroundSize: '16px 16px',
         boxShadow: 'var(--glacier-shadow-2)',
+        overflow: 'hidden',
+        position: 'relative',
       }}
     >
-      {card.label}
+      {/* An inset rule, the way a blueprint frames its subject. */}
+      <span
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: '6px',
+          border: 'var(--glacier-hairline) solid var(--glacier-accent-border)',
+          borderRadius: 'var(--glacier-radius-md)',
+        }}
+      />
+      <span
+        style={{
+          position: 'relative',
+          color: 'var(--glacier-accent-text)',
+          fontFamily: 'var(--glacier-font-mono)',
+          fontSize: 'var(--glacier-font-size-lg)',
+        }}
+      >
+        {card.label}
+      </span>
     </div>
   );
 }
