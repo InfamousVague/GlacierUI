@@ -394,3 +394,17 @@ export {
   type SlinkyOptions,
   type FanPlacement,
 } from './card-fan.ts';
+
+// Halftone masks: dots on a fixed grid whose radius rides a positional ramp,
+// dissolving by hashed dropout rather than by opacity. Computed because an
+// even grid of smoothly varying dots is arithmetic, not draughtsmanship.
+export {
+  halftoneRamp,
+  halftoneDots,
+  halftoneSvg,
+  halftoneDataUri,
+  type HalftoneOrigin,
+  type HalftoneOptions,
+  type HalftoneDot,
+  type HalftoneSvgOptions,
+} from './halftone.ts';
