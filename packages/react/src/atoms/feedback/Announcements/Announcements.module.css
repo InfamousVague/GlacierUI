@@ -13,6 +13,14 @@
   color: var(--glacier-text-muted);
 }
 
+/* Pinned: never shrinks, never travels, never gets clipped by the viewport's
+   overflow or faded by the marquee's edge mask. */
+.tag {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+}
+
 .viewport {
   flex: 1 1 auto;
   min-width: 0;

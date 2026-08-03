@@ -25,6 +25,7 @@ export const announcementsSpec: ComponentSpec = {
     'A compact application-chrome ticker for short updates, either stepping through them one at a time with previous, next, and pause controls or scrolling the whole list past continuously, and optionally opening each update on activation.',
   element: 'section',
   anatomy: [
+    { name: 'tag', description: 'Optional fixed label pinned before the viewport, outside the travelling area, so it stays put while the updates move past it.' },
     { name: 'viewport', description: 'Clipped flexible area containing the current announcement message.', required: true },
     { name: 'label', description: 'Optional short category preceding the announcement content.' },
     { name: 'content', description: 'The current announcement message, single-line truncated when needed.', required: true },
@@ -43,6 +44,7 @@ export const announcementsSpec: ComponentSpec = {
         ],
       },
     },
+    { name: 'tag', type: 'node', description: 'Fixed content pinned at the leading edge, before the viewport. Unlike an item label it belongs to the strip rather than to any one update, so it does not travel with them - it names what the strip IS.' },
     { name: 'tone', type: 'enum', values: [...announcementTones], default: 'info', description: 'Semantic color family for the soft strip surface and border.' },
     { name: 'motion', type: 'enum', values: [...announcementMotions], default: 'step', description: 'Whether one update is shown at a time and swapped on the interval, or the whole list scrolls past continuously.' },
     { name: 'index', type: 'number', description: 'Controlled zero-based index of the visible update. Step motion only.' },

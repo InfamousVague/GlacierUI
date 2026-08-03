@@ -87,6 +87,22 @@ describe('Announcements', () => {
       expect(onItemSelect).toHaveBeenCalledWith(items[1], 1);
     });
 
+    it('pins the tag outside the travelling area', () => {
+      const { container } = render(
+        <Announcements items={items} motion="marquee" tag={<span data-testid="tag">New</span>} />,
+      );
+      const tag = screen.getByTestId('tag');
+      // The whole point of the slot: a tag inside the viewport would be clipped
+      // by its overflow, faded by the marquee's edge mask, and would scroll
+      // away with the first update.
+      const viewport = container.querySelector('[aria-live="off"]');
+      expect(viewport).not.toBeNull();
+      expect(viewport?.contains(tag)).toBe(false);
+      // ...and it is not duplicated into the seam-hiding clone either, which is
+      // what would happen if it had been folded in with the items.
+      expect(screen.getAllByTestId('tag')).toHaveLength(1);
+    });
+
     it('has no axe violations', async () => {
       const { container } = render(<Announcements items={items} motion="marquee" onItemSelect={() => {}} />);
       expect((await axe.run(container, { rules: AXE_RULES })).violations).toEqual([]);

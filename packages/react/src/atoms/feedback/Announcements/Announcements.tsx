@@ -22,6 +22,15 @@ export interface AnnouncementItem {
 export interface AnnouncementsProps extends Omit<ComponentProps<'section'>, 'children'> {
   /** Updates to rotate through. At least one item is required. */
   items: readonly AnnouncementItem[];
+  /**
+   * Fixed content pinned at the leading edge, before the viewport.
+   *
+   * Unlike an item's own `label`, this belongs to the STRIP rather than to any
+   * one update, so it does not travel with them - it names what the strip is
+   * ("New", "Status", "Live") and stays put while the news moves past it. A
+   * Pill or Badge is the usual thing to put here.
+   */
+  tag?: ReactNode;
   /** Semantic color family for the strip. */
   tone?: AnnouncementTone;
   /**
@@ -93,6 +102,7 @@ function clampIndex(index: number, length: number) {
  */
 export function Announcements({
   items,
+  tag,
   tone = 'info',
   motion = 'step',
   index,
@@ -204,6 +214,11 @@ export function Announcements({
       }}
     >
       <span id={labelId} className={styles.srOnly}>{t(kitMessages.announcementsUpdates)}</span>
+      {/* Outside the viewport on purpose: inside it the tag would be clipped by
+          the overflow, faded by the marquee's edge mask, and - worst - would
+          scroll away with the first update, which is the one thing a strip
+          label must never do. */}
+      {tag != null && <span className={styles.tag}>{tag}</span>}
       <div className={styles.viewport} aria-labelledby={labelId} aria-live="off">
         {marquee ? (
           // Two identical runs travelling exactly one run's width before
