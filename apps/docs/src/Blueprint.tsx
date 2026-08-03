@@ -1,5 +1,7 @@
 import { getSpec, seekBarSpec, type Measure, type SizeSpec } from '@glacier/spec';
 import {
+  fanPlacements,
+  fanSlinky,
   seekBarGeometry,
   SEEK_VIEW_WIDTH,
   SEEK_VIEW_HEIGHT,
@@ -4585,6 +4587,77 @@ function RichTextEditorBlueprint({ dimensions }: BlueprintProps) {
   );
 }
 
+// CardFan: the track with its fixed ends, the cards distributed across it by
+// weight, and the bulge the pointer opens.
+function CardFanBlueprint({ dimensions }: BlueprintProps) {
+  const t = useT();
+  const radius = fmt(dimensions?.radius);
+  const gap = fmt(dimensions?.gap);
+
+  const H = 250;
+  const X = 44;
+  const W = 312;
+  const BASE = 186;
+
+  const COUNT = 11;
+  const CARD_W = 34;
+  const CARD_H = 50;
+  // Focused just right of centre, so the drawing shows a bulge rather than the
+  // symmetric resting state — the asymmetry is the thing worth drawing.
+  const FOCUS = 6.2;
+  const placements = fanPlacements(COUNT, FOCUS, CARD_W, fanSlinky(COUNT));
+  const track = W - CARD_W;
+
+  return (
+    <svg viewBox={`0 0 400 ${H}`} className="bpSvg" role="img" aria-label={t(m.bpBlueprintOfTheCardFan)}>
+      <Defs />
+
+      {/* The track: a fixed length, drawn because it is the thing that does not
+          move however many cards sit on it. */}
+      <line x1={X} y1={BASE + 14} x2={X + W} y2={BASE + 14} stroke={C.edge} strokeWidth={1} strokeDasharray="3 3" />
+      <line x1={X} y1={BASE + 9} x2={X} y2={BASE + 19} stroke={C.line} strokeWidth={1.5} />
+      <line x1={X + W} y1={BASE + 9} x2={X + W} y2={BASE + 19} stroke={C.line} strokeWidth={1.5} />
+      <text x={X + W / 2} y={BASE + 30} textAnchor="middle" className="bpLabel" fill={C.faint}>
+        {t(m.bpFixedTrack)}
+      </text>
+
+      {placements.map((placement, index) => {
+        const x = X + placement.offset * track;
+        const y = BASE - CARD_H + placement.lift;
+        const focused = Math.abs(index - FOCUS) < 0.6;
+        return (
+          <g key={index} transform={`rotate(${placement.rotate} ${x + CARD_W / 2} ${y + CARD_H})`}>
+            <rect
+              x={x}
+              y={focused ? y - 10 : y}
+              width={CARD_W}
+              height={CARD_H}
+              rx={4}
+              fill={focused ? C.fill : C.content}
+              fillOpacity={focused ? 1 : 0.22}
+              stroke={focused ? C.line : C.edge}
+              strokeWidth={focused ? 1.5 : 1}
+            />
+          </g>
+        );
+      })}
+
+      {/* What the pointer is doing to the fan. */}
+      <text x={X + W * 0.62} y={54} textAnchor="middle" className="bpLabel" fill={C.faint}>
+        {t(m.bpFocusOpens)}
+      </text>
+      {/* Anchored at the start rather than hung off the left end: the track
+          leaves only ~44 units of margin there, and the label is wider. */}
+      <text x={X} y={54} className="bpLabel" fill={C.faint}>
+        {t(m.bpEndsPinned)}
+      </text>
+
+      <BpTitle />
+      <Foot y={H - 12} parts={[radius && `${t(m.bpRadius)}: ${radius}`, gap && `${t(m.bpGap)}: ${gap}`]} />
+    </svg>
+  );
+}
+
 // ColorPicker: the swatch, the three channel tracks each carrying the gradient
 // it traverses, the hex field, and a preset row with one entry ringed.
 function ColorPickerBlueprint({ dimensions }: BlueprintProps) {
@@ -5348,6 +5421,7 @@ export function Blueprint({ size, dimensions, slots, shape, id, variant }: Bluep
   if (id === 'message-bubble') return withFrame(<MessageBubbleBlueprint size={size} dimensions={dimensions} />);
   if (id === 'message-group') return withFrame(<MessageGroupBlueprint size={size} dimensions={dimensions} />);
   if (id === 'conversation-view') return withFrame(<ConversationViewBlueprint size={size} dimensions={dimensions} />);
+  if (id === 'card-fan') return withFrame(<CardFanBlueprint size={size} dimensions={dimensions} />);
   if (id === 'color-picker') return withFrame(<ColorPickerBlueprint size={size} dimensions={dimensions} />);
   if (id === 'rich-text-editor') return withFrame(<RichTextEditorBlueprint size={size} dimensions={dimensions} />);
   if (id === 'virtual-list') return withFrame(<VirtualListBlueprint size={size} dimensions={dimensions} />);

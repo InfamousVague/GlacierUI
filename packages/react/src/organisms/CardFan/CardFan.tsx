@@ -152,7 +152,8 @@ export function CardFan<T extends CardFanItem = CardFanItem>({
               className={styles.item}
               style={{
                 ['--slink' as string]: placement.offset,
-                transform: `translateY(${placement.lift * spread}px) rotate(${placement.rotate * spread}deg)`,
+                ['--fan-lift' as string]: `${placement.lift * spread}px`,
+                ['--fan-rotate' as string]: `${placement.rotate * spread}deg`,
               }}
             >
               <Skeleton width="100%" height="var(--fan-card-h)" radius="var(--glacier-radius-lg)" />
@@ -199,9 +200,13 @@ export function CardFan<T extends CardFanItem = CardFanItem>({
               className={styles.item}
               data-selected={isSelected || undefined}
               style={{
+                // Selection outranks the whole fan; otherwise the placement's
+                // own order applies, which is index-based so cards overlap
+                // consistently instead of leaving paint order to decide.
+                zIndex: isSelected ? 100000 : placement.z,
                 ['--slink' as string]: placement.offset,
-                zIndex: isSelected ? 30 : placement.z,
-                transform: `translateY(${placement.lift * spread}px) rotate(${placement.rotate * spread}deg)`,
+                ['--fan-lift' as string]: `${placement.lift * spread}px`,
+                ['--fan-rotate' as string]: `${placement.rotate * spread}deg`,
               }}
               onFocus={() => setCursor(index)}
               onClick={() => !disabled && setSelected(item.id)}

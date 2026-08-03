@@ -15,6 +15,9 @@
      the track goes negative and the whole hand stacks in a corner. A fan needs
      room for at least a couple of cards to be a fan at all. */
   min-width: calc(var(--fan-width) * 2);
+  /* So the cards can express their place along the track in container units,
+     and the whole placement can be a transform without anyone measuring it. */
+  container-type: inline-size;
   height: calc(var(--fan-card-h) + var(--glacier-space-6));
   margin: 0;
   padding: 0;
@@ -25,18 +28,29 @@
    at the near end and 1 for the one at the far end, and the space between them
    is whatever is left of the strip after one card's width.
 
-   Position is animated, transform is not: the transform carries the lean and
-   the bow, which are set per render, so easing it would fight them. */
+   Position, bow and lean are one transform: they are all set together per
+   render, so there is nothing to be gained by keeping them apart and a great
+   deal lost — an animated layout property reflows the fan on every frame. */
 .item {
   position: absolute;
   inset-block-end: 0;
-  /* max() so a container narrower than one card cannot produce a negative
-     track and push the cards backwards past the near end. */
-  inset-inline-start: calc(var(--slink, 0.5) * max(0px, 100% - var(--fan-width)));
+  inset-inline-start: 0;
   width: var(--fan-width);
+  /* The whole placement in one composited property. `100cqw` is the fan's own
+     width, so the track — what is left of it after one card — is expressible
+     in CSS, and nothing has to measure the container to place a card. `max()`
+     keeps the track from going negative in a box narrower than one card. */
+  transform: translateX(calc(var(--slink, 0.5) * max(0px, 100cqw - var(--fan-width))))
+    translateY(var(--fan-lift, 0px)) rotate(var(--fan-rotate, 0deg));
   transform-origin: 50% 100%;
   cursor: pointer;
-  transition: inset-inline-start var(--glacier-duration-normal) var(--glacier-ease-out);
+  /* Transform, not `inset-inline-start`. Both express the same placement, but
+     one is a layout property: transitioning it on forty cards relaid out the
+     whole fan every frame of a sweep. A transform is composited, so the same
+     motion costs no layout and no paint. */
+  transition: transform var(--glacier-duration-normal) var(--glacier-ease-out);
+  /* The fan is swept continuously, so the cards are worth their own layers. */
+  will-change: transform;
 }
 
 .item:focus-visible {

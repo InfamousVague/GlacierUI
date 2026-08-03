@@ -2,6 +2,7 @@ import { Heading, Size, Text, TextTone, useT } from '@glacier/react';
 import { useState } from 'react';
 import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { type PlatformKit } from '../../platforms.tsx';
+import { ComponentBlueprint } from '../../Blueprint.tsx';
 import { m } from '../../i18n.ts';
 
 interface Card {
@@ -76,6 +77,10 @@ export function CardFanPage() {
         {t(m.cfLede)}
       </Text>
       <Text tone={TextTone.Muted}>{prose(t(m.cfWhySlinky))}</Text>
+
+      <Heading level={2}>{t(m.secAnatomy)}</Heading>
+      <Text tone={TextTone.Muted}>{t(m.cfAnatomy)}</Text>
+      <ComponentBlueprint specId="card-fan" />
 
       <Heading level={2}>{t(m.secExamples)}</Heading>
 

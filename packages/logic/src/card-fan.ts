@@ -152,7 +152,11 @@ export interface FanPlacement {
   rotate: number;
   /** Downward displacement that bows the fan into an arc. */
   lift: number;
-  /** Stacking order, so a focused item sits above its neighbours. */
+  /**
+   * Stacking order. Its base is the index, so every item consistently overlaps
+   * the one before it the way a real fan does; the focused item is lifted far
+   * enough above that to clear any count.
+   */
   z: number;
 }
 
@@ -203,9 +207,13 @@ export function fanPlacements(
       offset,
       rotate: away * lean,
       lift: Math.abs(away) * bow,
-      // Only a focused item rises, and by whole steps, so neighbours never
-      // trade places on a sub-pixel change in the pointer.
-      z: focus === null ? 0 : Math.max(0, Math.round(20 * Math.exp(-(((index - focus) / 1.2) ** 2)))),
+      // Index first, so the fan has a stable overlap even at rest. Without it
+      // only the items near the focus carry a z and the rest fall back to
+      // paint order — which makes them pop over one another as the bulge
+      // passes. The lift is an order of magnitude above any plausible count,
+      // so the focused item clears the whole fan rather than only its
+      // neighbours.
+      z: index + (focus === null ? 0 : Math.round(1000 * Math.exp(-(((index - focus) / 1.2) ** 2)))),
     };
   });
 }

@@ -170,14 +170,19 @@ describe('fanPlacements', () => {
     expect(placements[3]!.lift).toBeCloseTo(0, 6);
   });
 
-  it('raises only the focused item above its neighbours', () => {
-    const placements = fanPlacements(9, 4, 132);
-    expect(placements[4]!.z).toBeGreaterThan(placements[2]!.z);
-    expect(placements[8]!.z).toBe(0);
+  it('raises the focused item clear of the whole fan, not just its neighbours', () => {
+    const placements = fanPlacements(40, 20, 132);
+    const top = Math.max(...placements.map((p) => p.z));
+    expect(placements[20]!.z).toBe(top);
+    // Clear of the far end too, or a card at index 39 would paint over it.
+    expect(placements[20]!.z).toBeGreaterThan(placements[39]!.z);
   });
 
-  it('leaves every item level when nothing is focused', () => {
-    expect(fanPlacements(9, null, 132).every((p) => p.z === 0)).toBe(true);
+  it('overlaps in order at rest, rather than leaving paint order to decide', () => {
+    // Every item carrying a z is what stops cards popping over one another as
+    // the bulge passes.
+    const placements = fanPlacements(9, null, 132);
+    expect(placements.map((p) => p.z)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8]);
   });
 
   it('is empty for an empty fan', () => {
