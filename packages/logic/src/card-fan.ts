@@ -6,14 +6,14 @@
  * per-item step and forty cards run off both edges, or shrink the step and
  * forty cards become one illegible smear with only the last readable.
  *
- * A slinky decouples the track from its contents. The track is a FIXED length —
- * the width of the strip, the angle the fan may sweep — and items are
+ * A slinky decouples the track from its contents. The track is a FIXED length -
+ * the width of the strip, the angle the fan may sweep - and items are
  * distributed across it by weight rather than by count. With nothing focused
  * every item weighs the same and the result is the even spread. Focus one and
  * it and its neighbours weigh more, claiming more track; the rest weigh what
  * they always did but have less track left, so they compress. The ends stay
- * pinned, so the silhouette never moves and can never overflow — which is the
- * whole point — and the compressed items bunch toward the side away from the
+ * pinned, so the silhouette never moves and can never overflow - which is the
+ * whole point - and the compressed items bunch toward the side away from the
  * pointer, the way a slinky's coils pile up at one end when you lift the other.
  *
  * Positions come back as fractions of the track (0 at the first item, 1 at the
@@ -40,7 +40,7 @@ export interface SlinkyOptions {
 
 /**
  * Enough to lift an item clear of its neighbours without the far end collapsing
- * into a single edge — past about 3 the items outside the bulge stop being
+ * into a single edge - past about 3 the items outside the bulge stop being
  * separable at all, which trades one unreadable fan for another.
  */
 const GAIN = 1.8;
@@ -48,7 +48,7 @@ const GAIN = 1.8;
 /**
  * A little over two items each way: wide enough that the expansion reads as the
  * fan opening rather than one item popping out, narrow enough that a large fan
- * still reveals only a handful at a time — which is what makes forty items
+ * still reveals only a handful at a time - which is what makes forty items
  * navigable instead of merely visible.
  */
 const REACH = 2.2;
@@ -56,8 +56,8 @@ const REACH = 2.2;
 /**
  * Where each of `count` items sits along its track, as a fraction from 0 to 1.
  *
- * `focus` is a FRACTIONAL index — 0 is the first item, `count - 1` the last, and
- * 3.5 is the seam between the fourth and fifth — so a pointer sliding across the
+ * `focus` is a FRACTIONAL index - 0 is the first item, `count - 1` the last, and
+ * 3.5 is the seam between the fourth and fifth - so a pointer sliding across the
  * fan moves the bulge continuously instead of snapping item to item. Pass null
  * for the resting, evenly spread state.
  */
@@ -94,7 +94,7 @@ export function slinkyOffsets(count: number, focus: number | null, options: Slin
   }
 
   // Pin the ends. Without this the fan shrinks toward its middle as soon as
-  // anything is focused, because the outermost half-slices grow with it — and a
+  // anything is focused, because the outermost half-slices grow with it - and a
   // fan that changes size under the pointer is the overflow problem this exists
   // to solve.
   const first = centres[0] ?? 0;
@@ -107,7 +107,7 @@ export function slinkyOffsets(count: number, focus: number | null, options: Slin
  * A fan's resting focus: its own middle.
  *
  * This is what puts the density at the ENDS rather than spreading everything
- * evenly — the centre items claim the room and the outer ones tuck in behind
+ * evenly - the centre items claim the room and the outer ones tuck in behind
  * each other, which is both how a fan of cards sits in a hand and the only way a
  * forty-item fan fits the strip a seven-item one does.
  */
@@ -137,7 +137,7 @@ export function focusFromTrack(position: number, length: number, count: number):
  *
  * A large fan should not be reduced to five readable items and two solid blocks:
  * forty items want the bulge spread over eight, not two. Gentler than a reveal
- * animation would be — a fan is somewhere you work, and an item that has to be
+ * animation would be - a fan is somewhere you work, and an item that has to be
  * chased is worse than one that is merely small.
  */
 export function fanSlinky(count: number): SlinkyOptions {
@@ -165,7 +165,7 @@ export interface FanPlacement {
  *
  * Capped, and derived from the count rather than the index: with forty items an
  * index-driven tilt puts the outermost cards on their sides. A fan is a fan at
- * any size — only the density inside it changes.
+ * any size - only the density inside it changes.
  */
 export function fanLean(count: number): number {
   return Math.min(13, count * 1.75);
@@ -209,7 +209,7 @@ export function fanPlacements(
       lift: Math.abs(away) * bow,
       // Index first, so the fan has a stable overlap even at rest. Without it
       // only the items near the focus carry a z and the rest fall back to
-      // paint order — which makes them pop over one another as the bulge
+      // paint order - which makes them pop over one another as the bulge
       // passes. The lift is an order of magnitude above any plausible count,
       // so the focused item clears the whole fan rather than only its
       // neighbours.
@@ -223,7 +223,7 @@ export function fanPlacements(
  * pointer, tapering to nothing about two items away.
  *
  * The same gaussian the layout uses, so the item that claims the most track is
- * the one that grows — a bulge whose largest item was not its widest would read
+ * the one that grows - a bulge whose largest item was not its widest would read
  * as two effects fighting.
  */
 export function fanMagnify(index: number, focus: number | null, amount = 0.3, reach = 1.2): number {

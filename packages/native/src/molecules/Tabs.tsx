@@ -45,8 +45,8 @@ const BOX = dimensionsFor(tabsSpec);
  * A resolved measurement value. `dimensionsFor` returns token names (e.g.
  * `space-1`) for tokenized values and raw CSS lengths for the rest (the
  * underline's `2px` thickness is declared inline in the spec, not as a token). A
- * token name is wrapped in its custom property; a raw length — anything starting
- * with a digit or dot — passes straight through so it never becomes
+ * token name is wrapped in its custom property; a raw length - anything starting
+ * with a digit or dot - passes straight through so it never becomes
  * `var(--glacier-2px)`.
  */
 function metric(value: string | undefined, fallback: string): string {

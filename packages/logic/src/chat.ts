@@ -1,5 +1,5 @@
 /**
- * Chat logic — the rules every chat surface reads from: how a flat message log
+ * Chat logic - the rules every chat surface reads from: how a flat message log
  * collapses into author runs, where the separators land, how a reaction bar
  * tallies, and what a bubble's corners, timestamp, and status resolve to.
  *
@@ -15,7 +15,7 @@
  * dependency list where a freshly-allocated `Date` would re-render a virtualised
  * transcript on every tick; and equal moments compare equal with `===`, which is
  * exactly the identity a stable list key needs. Calendar arithmetic still goes
- * through the local-date constructor — see `calendar-view.ts`, whose `dayKey`
+ * through the local-date constructor - see `calendar-view.ts`, whose `dayKey`
  * and `startOfDay` are reused here rather than re-implemented, because a day is
  * not always 86,400,000ms and a transcript that loses a day twice a year is
  * worse than one with no date rows at all.
@@ -42,7 +42,7 @@ export interface Reaction {
   emoji: string;
   /** Who reacted; also how the viewer's own reaction is recognised. */
   actorId: string;
-  /** Optional, and deliberately unused for ordering — see `aggregateReactions`. */
+  /** Optional, and deliberately unused for ordering - see `aggregateReactions`. */
   at?: Millis;
 }
 
@@ -67,7 +67,7 @@ export interface ChatAttachment {
 /**
  * One message. Deliberately thin: everything a chat surface *decides* is
  * derived from these fields, and anything a particular app also needs rides
- * along on its own subtype — every function here is generic over `M extends
+ * along on its own subtype - every function here is generic over `M extends
  * ChatMessage`, so extra fields survive grouping untouched.
  */
 export interface ChatMessage {
@@ -82,7 +82,7 @@ export interface ChatMessage {
   text?: string;
   attachments?: ChatAttachment[];
   reactions?: Reaction[];
-  /** Omitted for anything received — status is about the viewer's own outbox. */
+  /** Omitted for anything received - status is about the viewer's own outbox. */
   status?: DeliveryStatus;
   /** The message this one answers, for a quoted preview. */
   replyToId?: string;
@@ -110,15 +110,15 @@ export interface MessageGroup<M extends ChatMessage = ChatMessage> {
   authorId: string;
   /** In render order, never empty. */
   messages: M[];
-  /** The first message's time — what a group header prints. */
+  /** The first message's time - what a group header prints. */
   startedAt: Millis;
-  /** The last message's time — what a trailing stamp prints. */
+  /** The last message's time - what a trailing stamp prints. */
   endedAt: Millis;
   /** `YYYY-MM-DD`, local. Groups never span days, so one key always fits. */
   dayKey: string;
   /** The least advanced status among the members; see `leastDelivery`. */
   status?: DeliveryStatus;
-  /** The run is a single message that refused to merge — a system notice. */
+  /** The run is a single message that refused to merge - a system notice. */
   standalone: boolean;
   /**
    * This run picked up where an earlier run from the same author left off,
@@ -178,15 +178,15 @@ function makeGroup<M extends ChatMessage>(messages: M[], continued: boolean): Me
 }
 
 /**
- * Collapses a chronological log into author runs — the core of the whole suite,
+ * Collapses a chronological log into author runs - the core of the whole suite,
  * because it decides where avatars, headers, and bubble tails appear.
  *
  * A run breaks when any of these is true of a message and the one before it:
  *
  * 1. **The author changed.** Compared by id, never by name.
  * 2. **The pause was longer than the window.** Measured as an *absolute*
- *    distance, so a message that arrives stamped slightly in the past — which
- *    optimistic sends and unsynced client clocks produce constantly — still
+ *    distance, so a message that arrives stamped slightly in the past - which
+ *    optimistic sends and unsynced client clocks produce constantly - still
  *    groups with its neighbour instead of the sign of the subtraction deciding
  *    the layout. A genuinely large backwards jump still breaks, which is the
  *    honest read: the two messages are not from the same moment.
@@ -202,7 +202,7 @@ function makeGroup<M extends ChatMessage>(messages: M[], continued: boolean): Me
  * deliberately not done here: the caller owns the transcript's order (a paged
  * history and a live tail are stitched differently), and silently reordering
  * would move a message out from under a reader's cursor. Out-of-order input
- * therefore produces out-of-order groups — correctly grouped, still in the
+ * therefore produces out-of-order groups - correctly grouped, still in the
  * order it was handed over.
  */
 export function groupMessages<M extends ChatMessage>(
@@ -258,15 +258,15 @@ export function bubblePosition(indexInGroup: number, groupLength: number): Bubbl
 }
 
 /**
- * Which shape a timestamp should take. Not the text — the *shape*; see
+ * Which shape a timestamp should take. Not the text - the *shape*; see
  * `messageTimestamp` for why no English appears in this module.
  *
- * - `time` — the clock, e.g. "9:41 AM". What a bubble's own stamp shows.
- * - `yesterday` — the previous calendar day, spelled by the caller's
+ * - `time` - the clock, e.g. "9:41 AM". What a bubble's own stamp shows.
+ * - `yesterday` - the previous calendar day, spelled by the caller's
  *   `Intl.RelativeTimeFormat(locale, { numeric: 'auto' }).format(-1, 'day')`.
- * - `weekday` — within the last week, e.g. "Tuesday".
- * - `date` — this year, e.g. "Mar 3".
- * - `dateWithYear` — any other year, e.g. "Mar 3, 2024".
+ * - `weekday` - within the last week, e.g. "Tuesday".
+ * - `date` - this year, e.g. "Mar 3".
+ * - `dateWithYear` - any other year, e.g. "Mar 3, 2024".
  */
 export type MessageTimestampKind = 'time' | 'yesterday' | 'weekday' | 'date' | 'dateWithYear';
 
@@ -276,7 +276,7 @@ export type MessageTimestampStyle =
   | 'auto'
   /** Always the clock, whatever day it was. */
   | 'time'
-  /** Always the calendar date — what a date separator row prints. */
+  /** Always the calendar date - what a date separator row prints. */
   | 'date';
 
 /**
@@ -284,7 +284,7 @@ export type MessageTimestampStyle =
  * structurally rather than imported.
  *
  * Two reasons: commons must not reach for a platform lib, and Hermes ships
- * without full ICU on some builds — a binding that has to hand-roll the
+ * without full ICU on some builds - a binding that has to hand-roll the
  * formatting should still be handed the same description of what to print,
  * rather than a type it cannot satisfy. The shape is assignable to
  * `Intl.DateTimeFormatOptions`, so the common case is a direct spread.
@@ -299,7 +299,7 @@ export interface MessageTimestampFormat {
 }
 
 /**
- * A moment plus a description of how to spell it — never a spelled string.
+ * A moment plus a description of how to spell it - never a spelled string.
  *
  * Formatting a date is locale work, and a design system that returns "Mar 3"
  * has just hardcoded English into every app that consumes it. So this returns
@@ -328,7 +328,7 @@ const WEEKDAY_HORIZON = 7;
 /**
  * Chooses how to spell a message's time relative to `now`.
  *
- * The ladder — clock, "Yesterday", weekday, date, date with year — exists
+ * The ladder - clock, "Yesterday", weekday, date, date with year - exists
  * because each rung is the shortest label that is still unambiguous at that
  * distance. "Tuesday" is perfect three days back and a lie eight days back,
  * which is why the weekday rung stops one short of a full week rather than at
@@ -340,7 +340,7 @@ const WEEKDAY_HORIZON = 7;
  * moment on today's date shows the clock, and anything further shows a date.
  *
  * `now` is a required parameter rather than a `Date.now()` default, so tests
- * and screenshots are not clock-dependent — the same reason `calendar-view`
+ * and screenshots are not clock-dependent - the same reason `calendar-view`
  * injects `today`.
  */
 export function messageTimestamp(
@@ -394,8 +394,8 @@ export type ChatSequenceItem<M extends ChatMessage = ChatMessage> =
 export interface InsertSeparatorsOptions {
   /**
    * The id of the first unread message, captured once when the conversation
-   * opened. Pinning an id — rather than recomputing "first message I have not
-   * read" on every render — is the entire trick behind a stable divider.
+   * opened. Pinning an id - rather than recomputing "first message I have not
+   * read" on every render - is the entire trick behind a stable divider.
    */
   unreadAnchorId?: string;
   /**
@@ -423,12 +423,12 @@ export interface InsertSeparatorsOptions {
  * - The anchor is an id, resolved from `unreadAnchorId` first. New messages
  *   arriving append after it, so the divider stays exactly where the reader
  *   left it and only its `count` grows. Recomputing the divider from a
- *   read-watermark on every render is what makes dividers jump — the watermark
+ *   read-watermark on every render is what makes dividers jump - the watermark
  *   advances as the client marks messages read, and the line walks down the
  *   screen under the reader's eyes.
  * - `lastReadAt` is consulted only when the anchor id is missing or no longer
  *   in the transcript (deleted, or paged out). It picks the first message after
- *   the watermark that the viewer did not send — your own message arriving in
+ *   the watermark that the viewer did not send - your own message arriving in
  *   another window must never mark itself unread.
  * - When the anchor falls mid-run, the run is split so the line lands in the
  *   right place, and the trailing half is flagged `continued` so the renderer
@@ -526,7 +526,7 @@ export interface ReactionSummary {
   count: number;
   /** Drives the "you reacted" outline, and whether tapping adds or removes. */
   reactedByViewer: boolean;
-  /** Everyone who reacted, first-seen order — the tooltip's list. */
+  /** Everyone who reacted, first-seen order - the tooltip's list. */
   actors: string[];
 }
 
@@ -572,7 +572,7 @@ export function aggregateReactions(reactions: Reaction[], viewerId?: string): Re
 /** Which sentence a typing indicator should render. */
 export type TypingKey = 'none' | 'one' | 'two' | 'several' | 'many';
 
-/** Who is typing, resolved into what a template needs — never into a sentence. */
+/** Who is typing, resolved into what a template needs - never into a sentence. */
 export interface TypingState {
   /** Which template to render. */
   key: TypingKey;
@@ -588,14 +588,14 @@ export interface TypingState {
  * Resolves who is typing into a template choice plus its slots.
  *
  * No English is returned. "Ana and Bo are typing" is three translation problems
- * at once — the conjunction, the verb agreement, and the word order, none of
- * which survive a naive join in Japanese or Arabic — so this returns the
+ * at once - the conjunction, the verb agreement, and the word order, none of
+ * which survive a naive join in Japanese or Arabic - so this returns the
  * decision and `formatTyping` (or the caller's own catalog) supplies the words.
  * The `{name}` placeholder syntax is deliberately the same one the kit's message
  * catalog interpolates, so a typing string is an ordinary catalog entry.
  *
  * `max` is the number of names the row has room for. On overflow one slot is
- * given back to the "and N others" phrase — the same trade `splitOverflow`
+ * given back to the "and N others" phrase - the same trade `splitOverflow`
  * makes in `calendar-view`, for the same reason: the summary occupies a slot,
  * so showing `max` names *plus* the summary overflows the row it was measured
  * for.
@@ -671,7 +671,7 @@ export type AttachmentKind = 'image' | 'video' | 'audio' | 'file';
 /**
  * Extensions worth recognising when the mime type is missing or useless. Kept
  * short on purpose: this is a fallback, and anything not listed still renders
- * as a file card, which is never wrong — only less rich.
+ * as a file card, which is never wrong - only less rich.
  */
 const EXTENSION_KINDS: Record<string, AttachmentKind> = {
   jpg: 'image', jpeg: 'image', png: 'image', gif: 'image', webp: 'image',
@@ -691,14 +691,14 @@ const VAGUE_MIME = new Set(['application/octet-stream', 'binary/octet-stream', '
 /**
  * Picks the renderer for an attachment.
  *
- * The mime type is trusted first — it is what the sender's platform actually
- * measured — with two exceptions that matter in practice: a parameterised type
+ * The mime type is trusted first - it is what the sender's platform actually
+ * measured - with two exceptions that matter in practice: a parameterised type
  * (`image/jpeg; charset=binary`) has its parameters stripped, and the
  * placeholder types above are ignored so a `clip.mp4` posted as
  * `application/octet-stream` still plays instead of becoming a download link.
  *
- * The file name is a URL as often as it is a name — callers pass `attachment.url`
- * when they have nothing else — so the path, query, and fragment are stripped
+ * The file name is a URL as often as it is a name - callers pass `attachment.url`
+ * when they have nothing else - so the path, query, and fragment are stripped
  * before the extension is read.
  */
 export function attachmentKind(mimeType?: string, fileName?: string): AttachmentKind {
@@ -726,8 +726,8 @@ function extensionOf(nameOrUrl: string): string {
  * advertise.
  *
  * `sending` through `read` is the natural progression. `failed` is ranked below
- * all of them, which is not chronologically true — a failed send got further
- * than one still queued — but is the right summary: a run holding one failed
+ * all of them, which is not chronologically true - a failed send got further
+ * than one still queued - but is the right summary: a run holding one failed
  * message must show failed, because it is the only state that asks the user to
  * do something. Ranking it lowest makes that fall out of a plain minimum
  * instead of needing a special case at every call site.
@@ -752,7 +752,7 @@ export function deliveryRank(status: DeliveryStatus): number {
  * that carry a status.
  *
  * Messages with no status are received messages, which have no outbound state
- * to report, so they are skipped rather than dragging the group to "unknown" —
+ * to report, so they are skipped rather than dragging the group to "unknown" -
  * otherwise a single received message in a run would silently hide the sender's
  * own failed send.
  */

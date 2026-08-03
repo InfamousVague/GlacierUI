@@ -1,5 +1,5 @@
 /**
- * Status and chrome decisions — the small, load-bearing answers the message
+ * Status and chrome decisions - the small, load-bearing answers the message
  * atoms and the conversation chrome need before anything is painted: which
  * SHAPE a delivery state draws, how much of a quoted message survives, and what
  * a connection does between losing the network and getting it back.
@@ -10,7 +10,7 @@
  * exists to make impossible.
  *
  * `chat.ts` owns the transcript rules (grouping, separators, timestamps, typing
- * state, delivery ordering) and is consumed here rather than re-derived —
+ * state, delivery ordering) and is consumed here rather than re-derived -
  * `deliveryRank` in particular, which is the one authority on how far along a
  * message is.
  *
@@ -28,19 +28,19 @@ import { deliveryRank, type DeliveryStatus } from './chat.ts';
  * The mark a delivery indicator draws.
  *
  * Every one of these is a different SILHOUETTE, not a different colour, and that
- * is the whole point. The tick cluster is the smallest thing in a transcript —
- * roughly the height of a lowercase letter — which makes it precisely where
+ * is the whole point. The tick cluster is the smallest thing in a transcript -
+ * roughly the height of a lowercase letter - which makes it precisely where
  * colour-only meaning fails: a red failed tick and a blue read tick are the same
  * grey mark to a monochrome display, a colour-blind reader, or anyone glancing
  * at a phone in sunlight. So:
  *
- * - `clock` — queued, nothing has left the device yet.
- * - `check` — one tick: the server has it.
- * - `double-check` — two ticks: their device has it.
- * - `check-circle` — a tick enclosed in a solid disc: they read it. Solid mass
+ * - `clock` - queued, nothing has left the device yet.
+ * - `check` - one tick: the server has it.
+ * - `double-check` - two ticks: their device has it.
+ * - `check-circle` - a tick enclosed in a solid disc: they read it. Solid mass
  *   against the bare strokes of `double-check`, so "read" and "delivered" differ
  *   by fill and outline, not only by hue.
- * - `alert` — a triangle. Deliberately not a tick at all: a failure is the one
+ * - `alert` - a triangle. Deliberately not a tick at all: a failure is the one
  *   state that asks the user to do something, and it should not be readable as a
  *   variation on success.
  */
@@ -89,7 +89,7 @@ export function deliveryTone(status: DeliveryStatus): DeliveryTone {
  * Acknowledgements race. A `sent` ack routinely lands after the `read` receipt
  * it logically precedes (two different servers, two different sockets, one
  * unlucky retry), and applying it blind walks the ticks backwards in front of
- * the sender — which reads as the message being un-read. `deliveryRank` already
+ * the sender - which reads as the message being un-read. `deliveryRank` already
  * orders the states, so the fix is a maximum rather than a special case at every
  * call site.
  *

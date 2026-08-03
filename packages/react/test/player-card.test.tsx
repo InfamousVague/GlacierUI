@@ -30,7 +30,7 @@ describe('PlayerCard', () => {
     const button = screen.getByRole('button', { name: 'Play' });
     await userEvent.click(button);
     expect(onPlayingChange).toHaveBeenCalledWith(true);
-    // the same button is still there, now labelled Pause — focus survives
+    // the same button is still there, now labelled Pause - focus survives
     expect(screen.getByRole('button', { name: 'Pause' })).toBe(button);
     await userEvent.click(button);
     expect(onPlayingChange).toHaveBeenLastCalledWith(false);

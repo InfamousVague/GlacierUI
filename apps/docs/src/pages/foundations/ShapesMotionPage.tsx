@@ -562,20 +562,20 @@ export function ShapesMotionPage() {
             {(
               [
                 ['Button', true, true, true, 'gradient'],
-                ['Pill', true, false, false, '—'],
+                ['Pill', true, false, false, '-'],
                 ['Card', true, false, false, 'wash'],
-                ['StatTile', true, true, false, '—'],
-                ['NavBar', true, true, true, '—'],
+                ['StatTile', true, true, false, '-'],
+                ['NavBar', true, true, true, '-'],
               ] as const
             ).map(([name, shape, edge, sweep, variant]) => (
               <tr key={name}>
                 <td>
                   <code>{name}</code>
                 </td>
-                <td>{shape ? '✓' : '—'}</td>
-                <td>{edge ? '✓' : '—'}</td>
-                <td>{sweep ? '✓' : '—'}</td>
-                <td>{variant === '—' ? '—' : <code>{variant}</code>}</td>
+                <td>{shape ? '✓' : '-'}</td>
+                <td>{edge ? '✓' : '-'}</td>
+                <td>{sweep ? '✓' : '-'}</td>
+                <td>{variant === '-' ? '-' : <code>{variant}</code>}</td>
               </tr>
             ))}
           </tbody>

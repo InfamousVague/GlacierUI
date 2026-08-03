@@ -60,7 +60,7 @@ export interface DeliveryStatusProps extends Omit<ComponentProps<'span'>, 'child
   status?: DeliveryStatusValue;
   /**
    * A run's states, collapsed with `leastDelivery` to the least advanced of
-   * them — so a stack holding one failed send says failed rather than claiming
+   * them - so a stack holding one failed send says failed rather than claiming
    * the "read" of whichever message happened to be last. Ignored when `status`
    * is set.
    */
@@ -70,7 +70,7 @@ export interface DeliveryStatusProps extends Omit<ComponentProps<'span'>, 'child
   label?: string;
   /**
    * Hides the glyph from assistive tech. Only for a bubble whose own accessible
-   * name already reports the state — otherwise the mark is unreadable to anyone
+   * name already reports the state - otherwise the mark is unreadable to anyone
    * not looking at it.
    */
   decorative?: boolean;
@@ -92,7 +92,7 @@ const SIZE_TOKEN: Record<DeliveryStatusSize, string> = {
  * The rule the whole component exists to hold: **no two states share a
  * silhouette.** A clock, one tick, two ticks, a tick inside a solid disc, a
  * warning triangle. It would be easier to draw "delivered" and "read" as the
- * same double tick in two colours — most chat apps do — but this is the
+ * same double tick in two colours - most chat apps do - but this is the
  * smallest element in a transcript, about the height of a lowercase letter, and
  * that is precisely the size at which hue stops carrying meaning: a colour-blind
  * reader, a monochrome display, or a phone in sunlight all reduce it to the same
@@ -103,7 +103,7 @@ const SIZE_TOKEN: Record<DeliveryStatusSize, string> = {
  * transcript holds hundreds of these, and hundreds of live regions would re-read
  * the conversation every time a receipt landed.
  *
- * Retrying a failed send belongs to the bubble, not here — the mark reports, it
+ * Retrying a failed send belongs to the bubble, not here - the mark reports, it
  * never acts, so it never becomes a tap target the size of a letter.
  */
 export function DeliveryStatus({

@@ -1,5 +1,5 @@
 /**
- * Conversation-view logic — the two axes a rendered thread has to keep apart,
+ * Conversation-view logic - the two axes a rendered thread has to keep apart,
  * plus the handful of numbers a scrolling transcript needs on both platforms.
  *
  * `chat.ts` owns what a transcript IS (where runs break, how a stack's status
@@ -7,9 +7,9 @@
  * round one message is. Neither of them knows who is reading. That is the gap
  * this module fills, and it is exactly one question asked twice:
  *
- * 1. **Authorship** — local or remote. Whose side of the conversation this run
+ * 1. **Authorship** - local or remote. Whose side of the conversation this run
  *    came from. Decided by comparing ids, and nothing else.
- * 2. **Acknowledgement** — optimistic or confirmed. Whether the server has the
+ * 2. **Acknowledgement** - optimistic or confirmed. Whether the server has the
  *    message yet. Decided by the delivery status, and nothing else.
  *
  * They are independent, and the reason to say so out loud is that they are
@@ -17,7 +17,7 @@
  * ends up wearing a tick. It cannot mean anything. A tick reports what *our*
  * server told *us* about *our* outbox; about a message someone else sent, we
  * know only that it arrived. So the resolver below does not merely decline to
- * render a remote status — it strips one when the caller's data carries it,
+ * render a remote status - it strips one when the caller's data carries it,
  * because a transport that helpfully stamps every row `delivered` is a real
  * thing and a remote bubble wearing a tick is a lie the reader cannot detect.
  *
@@ -46,8 +46,8 @@ import {
  *
  * `local`/`remote` rather than `own`/`other` because this is about which client
  * produced the message, which is what decides whether a delivery state exists
- * at all. The message molecules speak `own` — that is a *presentation* fact,
- * the edge a bubble hugs — and `conversationOwn` is the one-line bridge.
+ * at all. The message molecules speak `own` - that is a *presentation* fact,
+ * the edge a bubble hugs - and `conversationOwn` is the one-line bridge.
  */
 export type MessageAuthorship = 'local' | 'remote';
 
@@ -68,11 +68,11 @@ export function conversationOwn(authorship: MessageAuthorship): boolean {
  *
  * Two of these are the axis proper and the third is its dead end:
  *
- * - `optimistic` — on screen because the client put it there. Nothing has come
+ * - `optimistic` - on screen because the client put it there. Nothing has come
  *   back yet. The client is asserting the send, not reporting it.
- * - `confirmed` — the server has it, and everything after that (their device
+ * - `confirmed` - the server has it, and everything after that (their device
  *   has it, they read it) is further along the same road.
- * - `failed` — unacknowledged, like `optimistic`, but no longer waiting.
+ * - `failed` - unacknowledged, like `optimistic`, but no longer waiting.
  *
  * `failed` gets its own name rather than folding into `optimistic` because the
  * two want opposite treatment. An optimistic message should be *quieter* than a
@@ -99,7 +99,7 @@ export function messageAck(status: DeliveryStatus): MessageAck {
 }
 
 /**
- * Whether a run should be drawn provisionally — visibly lighter than a settled
+ * Whether a run should be drawn provisionally - visibly lighter than a settled
  * one, because the client is asserting it rather than reporting it.
  *
  * Only `optimistic`, deliberately. This is the whole restraint budget for the
@@ -114,8 +114,8 @@ export function isProvisional(ack: MessageAck | undefined): boolean {
  * The status assumed for a local message that arrived without one.
  *
  * `sent`, not `sending`. A caller who never sets `status` is not modelling
- * optimistic sends at all — their transcript is history the server already
- * has — and defaulting to `sending` would paint every message they ever
+ * optimistic sends at all - their transcript is history the server already
+ * has - and defaulting to `sending` would paint every message they ever
  * rendered as permanently in flight, a spinner-shaped state that nothing will
  * ever resolve. `sent` is the weakest claim that is true for such a caller: the
  * server has it, and nothing is asserted about the other end.
@@ -138,7 +138,7 @@ export interface ConversationRun<M extends ChatMessage = ChatMessage> {
   own: boolean;
   /**
    * The run's delivery state, least-advanced-first per `leastDelivery`.
-   * **Undefined on a remote run, always** — that is the invariant.
+   * **Undefined on a remote run, always** - that is the invariant.
    */
   status?: DeliveryStatus;
   /** Which side of the acknowledgement axis. Undefined exactly when `status` is. */
@@ -154,7 +154,7 @@ export interface ConversationRunsOptions {
    * Set false to resolve every run with no delivery state at all.
    *
    * For the skeleton, which renders local and remote runs to hold the real
-   * geometry but must not claim a delivery state it does not have — a
+   * geometry but must not claim a delivery state it does not have - a
    * placeholder reading "Read" is a lie with a tick next to it.
    */
   delivery?: boolean;
@@ -184,7 +184,7 @@ function normalise<M extends ChatMessage>(
  * anything, they are allowed to say about delivery.
  *
  * The caller passes a `viewerId` rather than pre-tagging each message, because
- * ownership is not a property of a message — the same message is "mine" in one
+ * ownership is not a property of a message - the same message is "mine" in one
  * window and "theirs" in another, and asking every caller to fan a viewer out
  * over a thousand rows is how a transcript ends up with two sources of truth
  * for who is talking.
@@ -244,7 +244,7 @@ export const CONVERSATION_STICK_SLOP = 32;
  *
  * This is the entire stick-to-bottom policy, and keeping it this small is
  * deliberate. A transcript that scrolls itself is only ever correct in one
- * case — the reader was already at the bottom when something arrived — and
+ * case - the reader was already at the bottom when something arrived - and
  * every other case is the viewport being yanked out from under somebody. The
  * heavier machinery (anchoring to a specific row, preserving the offset while
  * older pages prepend) belongs to a virtualised list, not to this.
@@ -277,7 +277,7 @@ export interface ConversationSkeletonRun {
 /**
  * The shape of the placeholder thread.
  *
- * A transcript's geometry is not its text — it is the zig-zag of runs down
+ * A transcript's geometry is not its text - it is the zig-zag of runs down
  * alternating edges, and the fact that some runs are one bubble and some are
  * three. So the placeholder is a real conversation shape rather than a column
  * of identical bars: it opens on a remote run (the common case, since you open

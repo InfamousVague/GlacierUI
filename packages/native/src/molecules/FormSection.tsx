@@ -1,5 +1,5 @@
 /**
- * FormSection — the native binding of @glacier/react's molecules/Fieldset/FormSection.
+ * FormSection - the native binding of @glacier/react's molecules/Fieldset/FormSection.
  *
  * The web component is a page-level grouping: a titled, labelled <section> whose
  * body is often one or more Fieldsets. It composes the kit's Heading (the title),

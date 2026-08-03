@@ -40,7 +40,7 @@ const CHECK_COLOR = t(paintFor(checkboxSpec, 'states', 'checked').check ?? 'acce
  * is visually identical to @glacier/react's Checkbox. A rotated bordered View
  * draws the check (a bar for the indeterminate dash); the box fills with the
  * accent when checked, and the whole control is a Pressable row that toggles on
- * tap. The web draw-in animation is a device follow-up — the resting visual is
+ * tap. The web draw-in animation is a device follow-up - the resting visual is
  * pixel-matched.
  */
 export function Checkbox({

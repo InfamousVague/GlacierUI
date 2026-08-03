@@ -1,10 +1,10 @@
 /**
- * @glacier/native — RichTextEditor.
+ * @glacier/native - RichTextEditor.
  *
  * The React Native binding of @glacier/react's RichTextEditor: a markdown
- * editor with a formatting toolbar. Every transform — what Bold does to a
+ * editor with a formatting toolbar. Every transform - what Bold does to a
  * selection, which marks are active at the caret, how a block prefix toggles
- * across lines — comes from @glacier/logic, so a press of Bold produces
+ * across lines - comes from @glacier/logic, so a press of Bold produces
  * byte-identical text on both platforms.
  *
  * This is the payoff of choosing markdown over contenteditable: the value is a
@@ -248,7 +248,7 @@ export function RichTextEditor({
           one pixel slides the highlight out from under the caret.
 
           Not TextInput children, which render styled text on a device but not
-          through react-native-web — the docs would then show a highlight the
+          through react-native-web - the docs would then show a highlight the
           native pane could not actually be demonstrating. */}
       <View style={{ position: 'relative' }}>
         <RNText

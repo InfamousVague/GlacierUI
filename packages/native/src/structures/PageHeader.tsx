@@ -51,7 +51,7 @@ const TEXT_COLOR = t((pageHeaderSpec.paint?.text ?? '$text').replace(/^\$/, ''))
 /**
  * A resolved measurement value. `dimensionsFor` hands back bare token names
  * alongside raw CSS lengths; wrap the token names in the custom property and let
- * a raw length — anything that starts with a digit or dot — pass through.
+ * a raw length - anything that starts with a digit or dot - pass through.
  */
 function metric(value: string | undefined, fallback: string): string {
   const v = value ?? fallback;
@@ -135,7 +135,7 @@ export function PageHeader({
 
   // The shared wrapping row: the title block grows to `wrapBasis`, so the actions
   // hug the trailing edge on wide layouts and drop to their own line on narrow
-  // widths — flex-wrap does all the work, no JS measurement.
+  // widths - flex-wrap does all the work, no JS measurement.
   const row = {
     flexDirection: 'row' as const,
     flexWrap: 'wrap' as const,
@@ -179,7 +179,7 @@ export function PageHeader({
         <View style={row}>
           <View style={titleBlock}>
             {/* Explicit heights so each placeholder matches its live text size
-                (title 2xl, description md, meta sm) — `1em` alone would resolve
+                (title 2xl, description md, meta sm) - `1em` alone would resolve
                 to the inherited base size and shift layout on content arrival. */}
             <Skeleton variant="text" width="12rem" height={t('font-size-2xl')} />
             {has(description) && <Skeleton variant="text" width="18rem" height={t('font-size-md')} />}

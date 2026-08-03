@@ -10,7 +10,7 @@
   gap: var(--message-gutter-gap);
   min-width: 0;
   /* A transcript is prose. PlayerCard disables selection because it is a
-     control and a drag across it should scrub; a message is the opposite — the
+     control and a drag across it should scrub; a message is the opposite - the
      single most common thing a reader does with one is select and copy it. */
   user-select: text;
   -webkit-user-select: text;
@@ -103,7 +103,7 @@
 }
 
 /* In a bubble transcript the avatar belongs to the end of the run, beside the
-   message the tail points out of — that is the message the author just sent. */
+   message the tail points out of - that is the message the author just sent. */
 .message[data-layout='bubble'] .gutter {
   align-items: flex-end;
 }
@@ -138,7 +138,7 @@
 }
 
 /* The path is authored pointing physically right, and `tailScaleX` in commons
-   decides which way it should point — the same function the native binding
+   decides which way it should point - the same function the native binding
    calls, so the two cannot disagree. SVG has no logical axis, so a right-to-left
    page is the one thing that function cannot know from here; it is inverted
    below rather than duplicated, which keeps the decision itself in one place.

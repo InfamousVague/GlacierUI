@@ -58,7 +58,7 @@ const iconPad = (size: InputSize): string => (size === 'lg' ? 'space-10' : 'spac
  * the DOM contract.
  *
  * Resting visuals only: the web eases the border and paints a 3px focus glow
- * (a box-shadow). Focus here is a resting approximation — the border swaps to
+ * (a box-shadow). Focus here is a resting approximation - the border swaps to
  * the focus-ring (or danger) color on focus/blur, and on react-native-web the
  * glow rides along as a box-shadow; a device build simply drops the glow. The
  * frosted `glass` material is the resting tint only (no backdrop blur on-device).

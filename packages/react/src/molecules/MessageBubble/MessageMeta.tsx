@@ -36,7 +36,7 @@ export interface MessageMetaProps extends Omit<ComponentProps<'span'>, 'children
   status?: DeliveryStatus;
   /**
    * A run's delivery states, collapsed with `leastDelivery` to the least
-   * advanced of them — so a stack holding one failed send says failed, not
+   * advanced of them - so a stack holding one failed send says failed, not
    * "read", which is what the last message in it might otherwise claim.
    */
   statuses?: (DeliveryStatus | undefined)[];
@@ -62,7 +62,7 @@ export interface MessageMetaProps extends Omit<ComponentProps<'span'>, 'children
  *
  * It carries two things that look decorative and are not. The status is the only
  * signal that a message did not go out, so it is always paired with a written
- * word — an icon alone is unreadable to anything that is not looking at the
+ * word - an icon alone is unreadable to anything that is not looking at the
  * screen. And a run's status is the *least* advanced of its members rather than
  * the last one's: a stack whose final message was read still holds a failed send
  * two messages up, and reporting "read" would hide the one thing the user has to
@@ -144,7 +144,7 @@ export function MessageMeta({
             // role="img" here would make a screen reader say it twice.
             decorative
             // Inside an accent fill the mark's own quiet greys are unreadable, so
-            // it borrows the bubble's contrast colour — except failure, which is
+            // it borrows the bubble's contrast colour - except failure, which is
             // the one status worth clashing for. Inline rather than a rule,
             // because it is the call site, not the mark, that knows what it has
             // been dropped onto.

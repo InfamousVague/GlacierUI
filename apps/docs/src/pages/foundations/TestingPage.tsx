@@ -66,7 +66,7 @@ getByRole('checkbox')   getByRole('switch')   getByRole('radio')   getByRole('sl
 // Input, SearchField, Textarea (or getByLabelText); NumberInput
 getByRole('textbox')    getByRole('spinbutton')
 
-// Select — trigger, then options
+// Select - trigger, then options
 getByRole('button')     getByRole('option', { name })
 
 // Tabs / TabbedPanel / TabStrip

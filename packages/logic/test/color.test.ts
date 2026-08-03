@@ -268,7 +268,7 @@ describe('hue is circular, so a control must stop short of a full turn', () => {
     // CSS does allow a negative hue angle; this parser's number pattern does
     // not take a sign, so it declines the whole string instead of reading it
     // as 340deg. Pinned because it is a real limit, not because it is desirable
-    // — nothing in the kit emits one, and the picker cannot produce one.
+    // - nothing in the kit emits one, and the picker cannot produce one.
     expect(parseOklch('oklch(0.64 0.162 -20)')).toBeNull();
   });
 });

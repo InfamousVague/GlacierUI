@@ -75,7 +75,7 @@ export interface MessageBubbleProps extends Omit<ComponentProps<'div'>, 'content
  * @glacier/logic rather than by this component. That indirection is the point.
  * A run of four messages has to read as one utterance, and it only does so if
  * the corners facing a neighbour tighten while the corners facing open space
- * stay round — so the stacked edge behaves like a single tall shape that has
+ * stay round - so the stacked edge behaves like a single tall shape that has
  * been sliced, and the free edge keeps the silhouette that says which side of
  * the conversation it came from. Both bindings ask the same function, so a run
  * cannot break differently on a phone than it does in a browser.
@@ -84,8 +84,8 @@ export interface MessageBubbleProps extends Omit<ComponentProps<'div'>, 'content
  * name and time as a header line. Alignment means nothing in a single-column
  * transcript, so the header does the work colour and position do in a bubble.
  *
- * Which edge is "mine" is expressed logically — the viewer's messages take the
- * *trailing* edge, not the right one — so an Arabic transcript mirrors as a
+ * Which edge is "mine" is expressed logically - the viewer's messages take the
+ * *trailing* edge, not the right one - so an Arabic transcript mirrors as a
  * whole and the viewer's own words stay on the side their language puts them.
  * The one thing that cannot be logical is the tail's path, since SVG has no
  * writing direction; see the stylesheet for how that is inverted exactly once.

@@ -4,7 +4,7 @@ import { defineMessages } from '../../i18n/locale.ts';
  * The transcript's own strings.
  *
  * A delivery status is a glyph on screen, so these words are the entire status
- * for anyone not looking at it — leaving them in English would make the one part
+ * for anyone not looking at it - leaving them in English would make the one part
  * of a message that is not user content the one part that is untranslated.
  *
  * Authored here rather than in the kit catalog only because that file is

@@ -1,4 +1,4 @@
-// layout — barrel (split from the flat src barrel).
+// layout - barrel (split from the flat src barrel).
 export {
   Box,
   type BoxProps,

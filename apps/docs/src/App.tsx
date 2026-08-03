@@ -394,7 +394,7 @@ function DocsApp({ locale, onLocaleChange }: { locale: Locale; onLocaleChange: (
         label: t(pageTitles[id]),
         group: t(groupTitles[PAGES[id].group]),
         // Component names first, then the concept words someone reaches for
-        // when they cannot recall the name — "audio" has to find SeekBar.
+        // when they cannot recall the name - "audio" has to find SeekBar.
         keywords: `${(pageTags[id] ?? []).join(' ')} ${pageConcepts[id] ?? ''}`.trim(),
       })),
     [t],

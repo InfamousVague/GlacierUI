@@ -43,7 +43,7 @@ export interface CalendarEventEditorProps {
  * element to anchor to. One surface for both also means one thing to translate,
  * test, and mirror on native.
  *
- * Validation is per-field and shown only after a save attempt — marking a title
+ * Validation is per-field and shown only after a save attempt - marking a title
  * as required while the user is still walking toward the field is nagging, not
  * helping.
  */

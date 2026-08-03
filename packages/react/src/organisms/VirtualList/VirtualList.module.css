@@ -18,7 +18,7 @@
 }
 
 /* The spacer: as tall as the entire list. This is what makes the scrollbar
-   honest — it describes how much data there is, not how much is rendered. */
+   honest - it describes how much data there is, not how much is rendered. */
 .canvas {
   position: relative;
   width: 100%;

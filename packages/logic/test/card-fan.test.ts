@@ -67,7 +67,7 @@ describe('slinkyOffsets', () => {
   });
 
   it('collapses to the even spread at zero gain', () => {
-    // Exact in arithmetic, not in binary floating point — the pin divides by a
+    // Exact in arithmetic, not in binary floating point - the pin divides by a
     // span that is only approximately 0.8.
     const offsets = slinkyOffsets(5, 2, { gain: 0 });
     [0, 0.25, 0.5, 0.75, 1].forEach((expected, i) => expect(offsets[i]!).toBeCloseTo(expected, 10));

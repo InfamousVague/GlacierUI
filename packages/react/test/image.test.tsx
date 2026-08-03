@@ -54,7 +54,7 @@ describe('Image', () => {
 
   // Regression: the internal onLoad/onError used to sit BEFORE the {...rest}
   // spread, so a caller passing either one silently replaced the handler that
-  // clears the loading state — leaving the image stuck behind its skeleton.
+  // clears the loading state - leaving the image stuck behind its skeleton.
   it('runs a caller onLoad without losing its own loading state', () => {
     const onLoad = vi.fn();
     const { container } = render(<Image src="/cover.jpg" alt="Cover" onLoad={onLoad} />);

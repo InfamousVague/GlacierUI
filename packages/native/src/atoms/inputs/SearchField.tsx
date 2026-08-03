@@ -55,7 +55,7 @@ const ICON_INSET: Record<SearchFieldSize, string> = {
 
 // The leading magnifier and trailing clear glyphs, matching the web SVGs. Both
 // are 1em (relative to the field's inherited font size) and painted with
-// text-subtle — the web strokes with currentColor off the icon/clear `color`.
+// text-subtle - the web strokes with currentColor off the icon/clear `color`.
 const MagnifierGlyph = (
   <Svg width="1em" height="1em" viewBox="0 0 16 16" fill="none">
     <Circle cx={7} cy={7} r={4.5} stroke={t('text-subtle')} strokeWidth={1.5} />
@@ -84,7 +84,7 @@ const ClearGlyph = (
  * paint. The focus ring is a resting approximation: the border swaps to the
  * focus-ring token on focus (via onFocus/onBlur), with no 3px accent-soft bloom
  * (a box-shadow the device runtime cannot cheaply reproduce). Glass renders the
- * resting tint only — the backdrop blur and inset highlight are web-only no-ops.
+ * resting tint only - the backdrop blur and inset highlight are web-only no-ops.
  *
  * Web-only, accepted-but-noop here: the surrounding Field context (id,
  * aria-describedby, aria-invalid) has no native equivalent, and the clear
@@ -118,7 +118,7 @@ export function SearchField({
   const borderColor = glass ? t('glass-border') : focused ? FOCUS_BORDER : t(bare(BASE.border) ?? 'border');
 
   // Solid surface, transparent under glass (the wrapper carries the material),
-  // sunken when disabled — matching `.input`, `.glass .input`, `.input:disabled`.
+  // sunken when disabled - matching `.input`, `.glass .input`, `.input:disabled`.
   const backgroundColor = disabled
     ? DISABLED_BG
     : glass
@@ -133,7 +133,7 @@ export function SearchField({
         alignItems: 'center',
         width: '100%',
         // The frosted material sits on the wrapper so it rounds to match the
-        // input behind it (native cannot blur — resting tint only).
+        // input behind it (native cannot blur - resting tint only).
         ...(glass ? { backgroundColor: t('glass-regular'), borderRadius: t(BOX.radius ?? 'radius-lg') } : null),
       }}
     >

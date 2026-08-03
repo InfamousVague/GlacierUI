@@ -90,7 +90,7 @@
 }
 
 /* sizes match Input. Height and font apply to root + trigger, but the inline
-   padding is the trigger's own — on the root it would inset and widen the whole
+   padding is the trigger's own - on the root it would inset and widen the whole
    control (a visible left indent whenever the root is not full width). */
 .sm {
   height: var(--glacier-control-height-sm);

@@ -29,12 +29,12 @@ export interface SurfaceProps extends Omit<ViewProps, 'children'> {
  *
  * The spec's `text` paint role is intentionally dropped from the container: the
  * web relies on CSS color inheritance, but RN `<Text>` does not inherit from a
- * parent `<View>`, so — like Card — content brings its own `<Text>` color.
+ * parent `<View>`, so - like Card - content brings its own `<Text>` color.
  *
  * Resting visuals only. `glass` renders its resting tint (`glass-regular`); the
  * web's `backdrop-filter` blur has no native runtime and is accepted-but-noop
  * (as in Avatar/Card/Checkbox). The web's glass `border-color` is also a noop
- * there — the base surface sets no border width/style, so nothing is painted —
+ * there - the base surface sets no border width/style, so nothing is painted -
  * and is likewise omitted here.
  */
 export function Surface({ level = 1, skeleton = false, glass = false, children, style, ...rest }: SurfaceProps) {

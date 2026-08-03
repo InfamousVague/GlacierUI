@@ -28,7 +28,7 @@ const DIMS = dimensionsFor(emptyStateSpec);
 /**
  * A resolved measurement value. `dimensionsFor` hands back token names alongside
  * raw CSS lengths; wrap the token names in the custom property and let a raw
- * length — anything that starts with a digit or dot — pass through so it never
+ * length - anything that starts with a digit or dot - pass through so it never
  * becomes `var(--glacier-4rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -61,7 +61,7 @@ const container = {
  * currentColor SVG picks it up on react-native-web), matching Pill's icon slot;
  * we never render our own glyph. Text color + font size live on each <Text>
  * (they do not inherit from a parent View in React Native). This is the resting
- * visual only — the component itself does not animate; in skeleton mode the
+ * visual only - the component itself does not animate; in skeleton mode the
  * placeholders inherit Skeleton's own static wash (its shimmer is a device
  * follow-up).
  */
@@ -113,7 +113,7 @@ export function EmptyState({
       <Text
         accessibilityRole="header"
         // react-native-web turns `accessibilityRole="header"` into a bare <h1>,
-        // but the DOM kit's EmptyState is an <h2> — so the same empty state
+        // but the DOM kit's EmptyState is an <h2> - so the same empty state
         // injected a level-1 heading on native and a level-2 one on web, and an
         // empty state dropped inside a page outranked that page's own title.
         // aria-level pins it to the DOM kit's level on both.

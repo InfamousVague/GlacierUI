@@ -6,26 +6,26 @@ import { paintFor, dimensionsFor } from '../resolve.ts';
 import { Skeleton } from '../atoms/feedback/Skeleton.tsx';
 
 /**
- * Timeline — the @glacier/native binding of the web Timeline (a vertical
+ * Timeline - the @glacier/native binding of the web Timeline (a vertical
  * activity feed: an ordered list of events, each with a tone-colored marker on
  * a connector rail and a content column of actor, title, timestamp, description,
  * media, and actions).
  *
  * Paint + geometry are read from `timelineSpec` through the shared resolvers so
  * this cannot drift from Timeline.module.css:
- *   - per-tone marker paint via `paintFor(timelineSpec, 'tones', tone)` —
+ *   - per-tone marker paint via `paintFor(timelineSpec, 'tones', tone)` -
  *     `background` fills the dot/disc, `text` is the glyph color drawn on it
  *     (neutral fills with text-subtle so the surface glyph keeps contrast).
  *   - all box metrics via `dimensionsFor` (markerSize=size-lg, dotSize=size-xs,
  *     connectorWidth=hairline, railGap=space-3 item gap, headerGap=space-2,
  *     item/compactPaddingBlock, mediaRadius, and the content-column offsets).
- * The one gap the spec does not expose — the rail's internal marker↔connector
- * space (CSS `.rail { gap: space-1 }`) — is referenced as t('space-1') directly.
+ * The one gap the spec does not expose - the rail's internal marker↔connector
+ * space (CSS `.rail { gap: space-1 }`) - is referenced as t('space-1') directly.
  *
  * Layout: each item is a plain <View> row (rail column + content column) rather
  * than depending on the native Stack/Row. The rail stretches to the item height
  * (flexbox align-items: stretch) so its flex-grow connector spans the gap the
- * content column's paddingBottom opens beneath each event — exactly like the web.
+ * content column's paddingBottom opens beneath each event - exactly like the web.
  *
  * Text color/fontSize live on <Text> (RN has no CSS inheritance, and a bare
  * string cannot sit in a View): the web root's font-size-sm / text color are
@@ -35,10 +35,10 @@ import { Skeleton } from '../atoms/feedback/Skeleton.tsx';
  * react-native-web (matching Pill's icon slot); on device that color is a noop.
  *
  * Resting visuals only, and no focus/interaction: the feed itself takes no tab
- * order (matching the web) — any interactive content lives inside the consumer's
+ * order (matching the web) - any interactive content lives inside the consumer's
  * `actions`/`actor` nodes and keeps its own semantics. The skeleton branch mirrors
  * the web's exact rail geometry with the Skeleton atom (a static tinted block on
- * this binding — no shimmer runtime). The web-only `className` / `style` escape
+ * this binding - no shimmer runtime). The web-only `className` / `style` escape
  * hatches are not part of ViewProps and are accepted-but-noop.
  */
 
@@ -87,8 +87,8 @@ const DIMS = dimensionsFor(timelineSpec);
 
 /**
  * A resolved measurement value. `dimensionsFor` returns bare token names (e.g.
- * `space-3`); they get wrapped in the custom property, while a raw length — one
- * that starts with a digit or dot — passes straight through so it never becomes
+ * `space-3`); they get wrapped in the custom property, while a raw length - one
+ * that starts with a digit or dot - passes straight through so it never becomes
  * `var(--glacier-0.5rem)`. (Timeline declares only tokens, but the guard keeps
  * this identical to the other bindings.)
  */
@@ -180,7 +180,7 @@ export function Timeline({
         const hasIcon = item.icon != null;
         return (
           <View key={item.id} accessibilityRole="listitem" style={{ flexDirection: 'row', columnGap: itemGap }}>
-            {/* rail — decorative marker + connector column */}
+            {/* rail - decorative marker + connector column */}
             <View aria-hidden={true} style={{ alignItems: 'center', rowGap: railInnerGap, width: markerSize }}>
               <View
                 style={{
@@ -241,7 +241,7 @@ export function Timeline({
                 {item.timestamp != null && (
                   <Text
                     style={{
-                      // margin-inline-start: auto — hug the end of the header row.
+                      // margin-inline-start: auto - hug the end of the header row.
                       marginLeft: 'auto',
                       color: t('text-subtle'),
                       fontSize: t('font-size-xs'),

@@ -86,7 +86,7 @@ const [playing, setPlaying] = useState(false);
   artwork={<Image src={cover} alt="" aspectRatio={1} radius="md" />}
   title="Oboe Concerto No. 2 in D minor"
   subtitle="Tomaso Albinoni"
-  album="Oboe Concertos, Op. 9 — III. Allegro"
+  album="Oboe Concertos, Op. 9 - III. Allegro"
   duration={205}
   value={position}
   onValueChange={setPosition}

@@ -7,7 +7,7 @@ import { t } from '../tokens.ts';
 import { Skeleton } from '../atoms/feedback/Skeleton.tsx';
 
 /**
- * TreeView — the @glacier/native binding of the web TreeView (a hierarchical list
+ * TreeView - the @glacier/native binding of the web TreeView (a hierarchical list
  * of expandable rows: chevron slot, optional icon, label, optional trailing slot,
  * indented by depth, with animated branches and single selection).
  *
@@ -29,7 +29,7 @@ import { Skeleton } from '../atoms/feedback/Skeleton.tsx';
  * Resting visuals only. WAI-ARIA roving-tabindex keyboard navigation (arrow
  * walk / expand / collapse / Home / End), the height + opacity branch animation,
  * the hover wash, the frosted-glass backdrop-filter blur, and RTL chevron/indent
- * mirroring are web/device concerns with no animation or focus runtime here —
+ * mirroring are web/device concerns with no animation or focus runtime here -
  * tapping a row selects it (and toggles a parent), and the glass surface keeps its
  * material fill/border/radius without the live blur. `className` is a web-only
  * escape hatch, accepted-but-noop.
@@ -73,13 +73,13 @@ export interface TreeViewProps extends Omit<ViewProps, 'children' | 'style' | 'a
 }
 
 // Size-independent geometry read once from the spec: radius, gap, paddingInline,
-// paddingBlock, indent — all token names.
+// paddingBlock, indent - all token names.
 const DIM = dimensionsFor(treeViewSpec);
 
 /**
  * A resolved measurement. `dimensionsFor` hands back bare token names; a name is
- * wrapped in its custom property, while a raw length — anything starting with a
- * digit or dot — passes straight through so it never becomes `var(--glacier-1rem)`.
+ * wrapped in its custom property, while a raw length - anything starting with a
+ * digit or dot - passes straight through so it never becomes `var(--glacier-1rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
   const v = value ?? fallback;

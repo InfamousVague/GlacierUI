@@ -19,7 +19,7 @@ const FILTERS: Record<OtpFieldType, RegExp> = {
 
 // Cell width per size. This is the ONE geometry the spec does not declare
 // (the spec sizes give height/fontSize/gap/radius); it lives only in the web
-// CSS, so it is mirrored here verbatim — same values the web SKELETON_CELL uses.
+// CSS, so it is mirrored here verbatim - same values the web SKELETON_CELL uses.
 const CELL_WIDTH: Record<OtpFieldSize, string> = {
   sm: '2rem',
   md: '2.5rem',
@@ -81,7 +81,7 @@ const ERROR_ACTIVE_BORDER = paintFor(otpFieldSpec, 'states', 'error')['active-bo
  * The Glacier OtpField, rendered with React Native primitives. Where the web
  * kit stretches one invisible <input> across presentation cells (for native
  * autocomplete="one-time-code"), React Native has no invisible-input-over-cells
- * trick, so this renders a row of single-character <TextInput> cells — the
+ * trick, so this renders a row of single-character <TextInput> cells - the
  * shape the native binding calls for. Each cell is painted and sized from the
  * otpField spec through the shared resolvers (border/background/radius/height/
  * fontSize/font-mono), so the RESTING visual matches @glacier/react's OtpField

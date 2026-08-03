@@ -1,5 +1,5 @@
 /**
- * Calendar event editing — the draft model behind the editor popover.
+ * Calendar event editing - the draft model behind the editor popover.
  *
  * An editor cannot work on a `CalendarEvent` directly: its `start` is a single
  * `Date`, while the form has separate date, start-time, and end-time fields
@@ -111,7 +111,7 @@ export function draftForDate(date: Date, defaults: Partial<CalendarEventDraft> =
  * What is wrong with a draft, as field errors rather than one message, so the
  * form can mark the field the user has to fix.
  *
- * An empty end is valid — plenty of events have no stated finish. An end
+ * An empty end is valid - plenty of events have no stated finish. An end
  * *before* its start is not, and is the one mistake a time field invites.
  */
 export function validateDraft(draft: CalendarEventDraft): DraftErrors {
@@ -167,7 +167,7 @@ export function eventFromDraft(draft: CalendarEventDraft, id: string): CalendarE
 }
 
 /**
- * Replaces an event in a list, or appends it when the id is new — the whole
+ * Replaces an event in a list, or appends it when the id is new - the whole
  * update a host has to perform when the editor reports a save.
  *
  * Returns a new array; the input is never mutated, so a caller holding the

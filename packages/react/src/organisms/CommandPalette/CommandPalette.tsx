@@ -30,7 +30,7 @@ export interface CommandPaletteProps {
   onOpenChange: (open: boolean) => void;
   /**
    * Every command the palette can run, in the order they should be offered.
-   * Priority is the caller's to decide — the palette filters and groups but
+   * Priority is the caller's to decide - the palette filters and groups but
    * never reorders.
    */
   commands: CommandDescriptor[];
@@ -78,7 +78,7 @@ function Highlight({ text, query }: { text: string; query: string }) {
  *
  * One text field drives the whole surface: typing narrows the list, the arrow
  * keys move a cursor through it, and Enter runs what the cursor is on. Focus
- * never leaves the field — the active row is named by `aria-activedescendant`
+ * never leaves the field - the active row is named by `aria-activedescendant`
  * rather than focused, which is what lets a single input control a list.
  *
  * Matching, grouping, and cursor movement all live in @glacier/logic, so this
@@ -116,7 +116,7 @@ export function CommandPalette({
   const [cursor, setCursor] = useState(0);
 
   // Every keystroke rebuilds the list, so the cursor has to be re-seated on the
-  // new top row — otherwise it keeps an index that now points at a different
+  // new top row - otherwise it keeps an index that now points at a different
   // command, and Enter runs something the user never looked at.
   useEffect(() => setCursor(firstCommandCursor(matches)), [matches]);
 
@@ -222,7 +222,7 @@ export function CommandPalette({
               // `groupCommands` builds groups from ADJACENT runs, so one name can
               // legitimately head several groups in an interleaved list. Keying by name
               // then hands React duplicate keys, and its reconciliation leaves whole
-              // stale runs mounted when a query narrows the list — the palette keeps
+              // stale runs mounted when a query narrows the list - the palette keeps
               // showing rows that no longer match. The first index is unique.
               <li key={group.matches[0]?.index ?? -1} role="presentation">
                 {/* Presentational: the option order already carries the

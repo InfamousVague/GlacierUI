@@ -45,7 +45,7 @@ const BORDER = bare(BASE.border) ?? 'border-subtle';
 
 // The monospace code area style, matching the web `.pre` rule (font-mono,
 // font-size-xs, line-height leading-md, color text). lineHeight takes the
-// unitless `leading-md` multiplier — on react-native-web it becomes
+// unitless `leading-md` multiplier - on react-native-web it becomes
 // `line-height: var(--glacier-leading-md)` and resolves exactly like the DOM.
 const CODE_TEXT = {
   fontFamily: t('font-mono'),
@@ -66,14 +66,14 @@ const CODE_TEXT = {
  * because the DOM renders markup; the native binding instead highlights `code`
  * itself via Shiki's `codeToTokens` (see highlight.ts) and paints each token as a
  * colored <Text> span. Same theme, same colors. Shiki is a lazy, optional import
- * — with no `language`, or if it is unavailable, the plain `code` renders.
+ * - with no `language`, or if it is unavailable, the plain `code` renders.
  *
  * WEB-ONLY features the native binding drops (accepted-but-noop, documented):
  *   - Copy-to-clipboard: the copy chip renders as a resting visual only (no
  *     clipboard write, no "Copied" flip); `showCopy` still toggles it.
  *   - Horizontal scroll of long lines (web `overflow-x: auto`), the glass
  *     backdrop-blur/inset highlight, and the copy-hover wash have no native
- *     runtime equivalent here — the resting visual is matched.
+ *     runtime equivalent here - the resting visual is matched.
  */
 export function CodeBlock({
   code,
@@ -200,7 +200,7 @@ export function CodeBlock({
       <View style={{ padding: t(DIMS.prePadding ?? 'space-4') }}>
         {hlLines ? (
           // Highlighted: one <Text> per line holding colored nested <Text> token
-          // spans (React Native's inline rich-text idiom — preserves whitespace
+          // spans (React Native's inline rich-text idiom - preserves whitespace
           // and wraps like text). Each token color is a `var(--shiki-*)` the
           // browser resolves, so it matches the web CodeBlock exactly.
           hlLines.map((tokens, i) => (

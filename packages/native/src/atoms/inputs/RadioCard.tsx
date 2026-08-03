@@ -44,7 +44,7 @@ const BOX = dimensionsFor(radioCardSpec);
  * A resolved measurement value. `dimensionsFor` returns bare token names (e.g.
  * `space-4`) alongside raw CSS lengths (the indicator's `1.25rem` is declared
  * inline, not as a token). Token names get wrapped in the custom property; a raw
- * length — anything that starts with a digit or dot — passes straight through so
+ * length - anything that starts with a digit or dot - passes straight through so
  * it never becomes `var(--glacier-1.25rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -81,7 +81,7 @@ const CHECK_COLOR = t('accent-contrast');
  * centered on the trailing edge instead of pinning to the top-right corner.
  *
  * Resting visuals only. The web spring-in of the corner check on select is a
- * device follow-up — the resting selected state is pixel-matched. `value`/`name`
+ * device follow-up - the resting selected state is pixel-matched. `value`/`name`
  * are DOM form attributes with no native form owner and are accepted-but-noop.
  */
 export function RadioCard({

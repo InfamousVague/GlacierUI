@@ -1,5 +1,5 @@
 /**
- * @glacier/native — Toast.
+ * @glacier/native - Toast.
  *
  * The React Native binding of @glacier/react's Toast: a spec-driven notification
  * pill in five tones (plus a frosted glass material) with an optional leading
@@ -63,7 +63,7 @@ const DIMS = dimensionsFor(toastSpec);
 /**
  * A resolved measurement value. Bare token names (e.g. `space-3`) get wrapped in
  * the custom property; a raw CSS length (the dismiss `1.25rem`, the `28rem` max
- * width, the skeleton sizes) — anything starting with a digit or dot — passes
+ * width, the skeleton sizes) - anything starting with a digit or dot - passes
  * straight through so it never becomes `var(--glacier-1.25rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -167,7 +167,7 @@ export function Toast({
       {icon != null && (
         <View
           style={{
-            // flex: none — the glyph never shrinks; `color` is the currentColor
+            // flex: none - the glyph never shrinks; `color` is the currentColor
             // source for an SVG glyph on react-native-web, matching `.icon`.
             flexShrink: 0,
             flexDirection: 'row',
@@ -295,7 +295,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {current && (
         <View
           // box-none: the overlay itself never captures touches (they fall
-          // through to the page), but the pill inside stays interactive —
+          // through to the page), but the pill inside stays interactive -
           // matching the web `.viewport { pointer-events: none }` +
           // `.pill { pointer-events: auto }`.
           pointerEvents="box-none"

@@ -1,5 +1,5 @@
 /**
- * @glacier/native — the React Native binding of the Glacier kit.
+ * @glacier/native - the React Native binding of the Glacier kit.
  *
  * Components render View/Text/Pressable/Image, painted and sized from
  * @glacier/spec + @glacier/tokens through the shared @glacier/logic resolvers,

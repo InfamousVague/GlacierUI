@@ -80,11 +80,11 @@ const CloseIcon = (
  *   it follows a root `data-layout='floating'` attribute on react-native-web (and
  *   is simply flush on device, where there is no document).
  * - Fully controlled: `open` is required with no uncontrolled fallback, exactly as
- *   the web is, so there is no useControlled seam here — the render is driven by
+ *   the web is, so there is no useControlled seam here - the render is driven by
  *   `open` and dismissal calls `onClose`.
  *
  * Resting visuals only. The web's backdrop fade + edge spring-in (and the reduced
- * motion path) are a device follow-up — the resting OPEN state is pixel-matched
+ * motion path) are a device follow-up - the resting OPEN state is pixel-matched
  * and the Modal appears without a mismatched half-animation (`animationType="none"`).
  * The overlay/panel `backdrop-filter` blur and the panel's inset-highlight + shadow-5
  * have no React Native equivalent and are dropped. Focus trapping, body-scroll lock,

@@ -34,7 +34,7 @@ const BOX = dimensionsFor(meterSpec);
  * A resolved measurement value. `sizeFor`/`dimensionsFor` return token names
  * (e.g. `space-1`) alongside raw CSS lengths (the meter's `height: 0.375rem` is
  * declared inline, not as a token). Token names get wrapped in the custom
- * property; a raw length — anything that starts with a digit or dot — passes
+ * property; a raw length - anything that starts with a digit or dot - passes
  * straight through so it never becomes `var(--glacier-0.375rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -56,7 +56,7 @@ function autoTone(ratio: number): 'danger' | 'warning' | 'success' {
  * @glacier/react's Meter and cannot drift from it. Empty segments paint the
  * track; filled segments paint the resolved tone's solid (for 'auto' the tone is
  * graded per level, exactly like the web kit). This renders the resting visual
- * only — the web kit eases each segment's fill color when the level changes; that
+ * only - the web kit eases each segment's fill color when the level changes; that
  * transition is a no-op here (no animation runtime).
  *
  * Accessibility: the web div sets role="meter" plus aria-valuemin/max/now. Only

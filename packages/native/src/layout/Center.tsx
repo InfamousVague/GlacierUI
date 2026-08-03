@@ -5,7 +5,7 @@ import { t } from '../tokens.ts';
 /**
  * The Glacier Center, rendered with React Native primitives.
  *
- * Center is a pure layout primitive with no @glacier/spec — the web renders a
+ * Center is a pure layout primitive with no @glacier/spec - the web renders a
  * single box with `.center` (`display: grid; place-items: center`) plus the
  * shared box style props. RN has no CSS grid, so the two-axis centering is
  * emulated with flexbox: a `<View>` (default `flexDirection: column`) with
@@ -28,7 +28,7 @@ import { t } from '../tokens.ts';
  *    `backdrop-filter` blur has no native runtime.
  *  - `height="screen"` uses `minHeight: '100vh'` (resolved by react-native-web
  *    for the docs); a device build would swap this for a Dimensions value.
- *  - `width="fit"` emits `fit-content` (web-only) — on a device this falls back
+ *  - `width="fit"` emits `fit-content` (web-only) - on a device this falls back
  *    to intrinsic sizing.
  *  - Web-only props `as` (polymorphic element) and `className` are accepted but
  *    have no effect. `style` is honored as an escape hatch (merged last).

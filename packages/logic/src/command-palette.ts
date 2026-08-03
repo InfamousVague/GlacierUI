@@ -1,5 +1,5 @@
 /**
- * Command palette logic — the matching, grouping, and cursor rules behind a
+ * Command palette logic - the matching, grouping, and cursor rules behind a
  * ⌘K overlay. All of it is decisions rather than pixels, so both bindings share
  * one answer to "what does this query match, and where does the cursor go".
  */
@@ -13,7 +13,7 @@ export interface CommandDescriptor {
   /** Optional heading this command files under, e.g. "Navigation". */
   group?: string;
   /**
-   * Extra words the query should match but the list should not show — aliases,
+   * Extra words the query should match but the list should not show - aliases,
    * old names, the thing a user would guess before learning the real label.
    */
   keywords?: string;
@@ -33,7 +33,7 @@ export interface CommandDescriptor {
 export interface CommandMatch<T extends CommandDescriptor = CommandDescriptor> {
   item: T;
   matchedKeyword?: string;
-  /** Position in the flat result order — the index the cursor addresses. */
+  /** Position in the flat result order - the index the cursor addresses. */
   index: number;
 }
 
@@ -52,7 +52,7 @@ const escapeRe = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g,
  * How well a single term hit an item, lower being better, or null for a miss.
  *
  * The tiers are about *where* the term landed, not how many characters it
- * shares — "seek" should put SeekBar above a component that merely lists seek
+ * shares - "seek" should put SeekBar above a component that merely lists seek
  * as a keyword, and that is a fact about position, not a similarity score.
  */
 function rankTerm(item: CommandDescriptor, term: string): number | null {
@@ -75,7 +75,7 @@ function rankTerm(item: CommandDescriptor, term: string): number | null {
  *   `audio` even though no single field contains that phrase. A single
  *   contiguous substring test cannot: it asks the user to type a fragment that
  *   exists verbatim, which means guessing the label they are searching for.
- * - **Results are tiered by where the term landed** — label prefix, then a word
+ * - **Results are tiered by where the term landed** - label prefix, then a word
  *   start inside the label, then anywhere in the label, then group or keywords.
  *   An item is ranked by its *worst* term, so a command has to be a good match
  *   for the whole query rather than a great match for one word of it.
@@ -84,7 +84,7 @@ function rankTerm(item: CommandDescriptor, term: string): number | null {
  * measure and no tie-break that a reader has to trust; ties keep the caller's
  * order, so the caller still decides priority within a tier. An empty query
  * returns everything, in the given order, so opening the palette shows the full
- * menu — and because every item then ranks equally, `groupCommands` still sees
+ * menu - and because every item then ranks equally, `groupCommands` still sees
  * the caller's grouping intact.
  */
 export function matchCommands<T extends CommandDescriptor>(items: T[], query: string): CommandMatch<T>[] {
@@ -105,7 +105,7 @@ export function matchCommands<T extends CommandDescriptor>(items: T[], query: st
       worst = Math.max(worst, rank);
     }
 
-    // Only worth naming when the label alone would not explain the hit — the
+    // Only worth naming when the label alone would not explain the hit - the
     // row otherwise looks unrelated to what the user typed.
     const words = (item.keywords ?? '').split(/\s+/).filter(Boolean);
     const matchedKeyword = terms.every((term) => rankTerm(item, term) === 3)
@@ -141,7 +141,7 @@ export function groupCommands<T extends CommandDescriptor>(matches: CommandMatch
 
 /**
  * Where the cursor lands after a move, skipping disabled rows and wrapping at
- * both ends — the movement every palette has, so arrowing past the last row
+ * both ends - the movement every palette has, so arrowing past the last row
  * returns to the first instead of dead-ending.
  *
  * Returns -1 when nothing is selectable, which is also the "no cursor" value,
@@ -167,7 +167,7 @@ export function moveCommandCursor<T extends CommandDescriptor>(
 }
 
 /**
- * The first row the cursor should rest on for a fresh result set — used on open
+ * The first row the cursor should rest on for a fresh result set - used on open
  * and after every keystroke, so the top runnable command is always one Enter
  * away.
  */

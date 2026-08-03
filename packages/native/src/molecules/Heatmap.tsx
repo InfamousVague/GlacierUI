@@ -114,7 +114,7 @@ function levelOf(value: number, max: number, levels: number): number {
 /**
  * One shaded tile: the sunken track plus, once it fills, an absolutely
  * positioned accent-9 overlay whose opacity is the level's share of the top
- * step — the native equivalent of the web `.cell::before { opacity: alpha }`.
+ * step - the native equivalent of the web `.cell::before { opacity: alpha }`.
  * `overflow: 'hidden'` clips the overlay to the rounded corners. Used for both
  * grid cells (`space-4`) and legend swatches (`space-3`).
  */

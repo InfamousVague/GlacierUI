@@ -44,7 +44,7 @@ const GripIcon = (
 );
 
 /**
- * A list whose rows can be reordered by dragging a handle — or entirely from
+ * A list whose rows can be reordered by dragging a handle - or entirely from
  * the keyboard, which is the part most drag-and-drop implementations skip.
  *
  * Two gestures, one model. A pointer drag tracks the handle and drops on

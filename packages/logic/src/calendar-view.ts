@@ -1,5 +1,5 @@
 /**
- * Calendar view logic — the grid building, event bucketing, and navigation
+ * Calendar view logic - the grid building, event bucketing, and navigation
  * behind a scheduler surface. All of it is arithmetic rather than pixels, so
  * both bindings lay out the same month from the same inputs.
  *
@@ -38,7 +38,7 @@ export interface CalendarEvent {
 /** One cell in a grid: a date plus everything the cell needs to paint itself. */
 export interface CalendarDay {
   date: Date;
-  /** `YYYY-MM-DD` in local time — the bucket key, and a stable React key. */
+  /** `YYYY-MM-DD` in local time - the bucket key, and a stable React key. */
   key: string;
   /** False for the leading and trailing days borrowed from adjacent months. */
   inMonth: boolean;
@@ -135,7 +135,7 @@ export function buildMonthGrid(anchor: Date, options: GridOptions = {}): Calenda
 /**
  * The week `anchor` falls in, as seven days.
  *
- * Every day is `inMonth: true` — a week view has no adjacent month to borrow
+ * Every day is `inMonth: true` - a week view has no adjacent month to borrow
  * from, so dimming the days that happen to fall outside the anchor's month
  * would only make the week look broken.
  */
@@ -173,7 +173,7 @@ function byDayOrder(a: CalendarEvent, b: CalendarEvent): number {
 /**
  * Groups events by the day key of every day they touch.
  *
- * A multi-day event is filed under each day it spans, not only its first — a
+ * A multi-day event is filed under each day it spans, not only its first - a
  * conference that runs Tuesday to Thursday should appear on Wednesday, which is
  * the day someone checking their Wednesday actually looks at.
  *
@@ -220,7 +220,7 @@ export const MONTH_CELL_LIMIT = 3;
 
 /**
  * Splits a day's events into the ones a month cell shows and a count of the
- * rest. Shared so both bindings overflow at the same point — a cell that shows
+ * rest. Shared so both bindings overflow at the same point - a cell that shows
  * three on one platform and four on the other is a layout that cannot be
  * designed against.
  */
@@ -230,7 +230,7 @@ export function splitOverflow(
 ): { shown: CalendarEvent[]; hidden: number } {
   if (events.length <= limit) return { shown: events, hidden: 0 };
   // Show one fewer than the limit, because the "+N more" line occupies a slot
-  // of its own — otherwise the cell is one row taller than it was measured for.
+  // of its own - otherwise the cell is one row taller than it was measured for.
   const shown = events.slice(0, Math.max(0, limit - 1));
   return { shown, hidden: events.length - shown.length };
 }

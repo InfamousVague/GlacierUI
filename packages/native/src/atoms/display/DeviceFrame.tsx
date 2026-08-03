@@ -28,7 +28,7 @@ export interface DeviceFrameProps extends Omit<ViewProps, 'style' | 'children'> 
 // Size-independent box metrics read once from the spec. Only `bezel` is a real
 // token here; `radius`/`screenRadius` are declared in the spec as prose
 // ("14% of frame width", "…minus the bezel") because they are computed from the
-// frame width, not a fixed token — so the two constants below mirror the CSS
+// frame width, not a fixed token - so the two constants below mirror the CSS
 // (`calc(width * 0.14)` and `radius - bezel`) rather than the resolver.
 const BOX = dimensionsFor(deviceFrameSpec);
 const BEZEL = t(BOX.bezel ?? 'space-2');
@@ -74,7 +74,7 @@ export function DeviceFrame({
   ...rest
 }: DeviceFrameProps) {
   const dims = sizeFor(deviceFrameSpec, size);
-  // `diameter` is a raw length (e.g. `17rem`), not a token — used directly.
+  // `diameter` is a raw length (e.g. `17rem`), not a token - used directly.
   const screenWidth = width !== undefined ? toLength(width) : (dims.diameter ?? '17rem');
   const radius = `calc(${screenWidth} * ${RADIUS_RATIO})`;
   // Concentric inner radii: the inner rim insets by half a bezel, the screen by
@@ -90,7 +90,7 @@ export function DeviceFrame({
       accessibilityRole="group"
       style={{
         position: 'relative',
-        alignSelf: 'flex-start', // display: inline-block — shrink to content.
+        alignSelf: 'flex-start', // display: inline-block - shrink to content.
         width: screenWidth,
         padding: BEZEL,
         borderRadius: radius,

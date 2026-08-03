@@ -43,7 +43,7 @@ const BOX = dimensionsFor(iconButtonSpec);
  *   color plus the size font-size, so a currentColor / em-sized SVG inherits
  *   them on react-native-web (this binding does not render its own glyph).
  *
- * Resting visuals only — the web's hover color ease and the focus-ring bloom are
+ * Resting visuals only - the web's hover color ease and the focus-ring bloom are
  * motion the native binding does not run; the glass variant's backdrop blur and
  * shadow have no React Native equivalent and are dropped.
  */

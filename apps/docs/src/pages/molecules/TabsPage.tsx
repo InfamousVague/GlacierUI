@@ -7,8 +7,8 @@ import { type PlatformKit } from '../../platforms.tsx';
 import { m } from '../../i18n.ts';
 
 /**
- * A controlled Tabs demo. Selection is lifted into state here — not into the
- * Example's `render` (which runs once per pane and cannot hold hooks) — so each
+ * A controlled Tabs demo. Selection is lifted into state here - not into the
+ * Example's `render` (which runs once per pane and cannot hold hooks) - so each
  * comparison pane manages its own selection and the status line stays in sync.
  * `K` is the platform kit (the DOM kit or the RN kit) the demo renders through.
  */

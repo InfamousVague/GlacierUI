@@ -9,7 +9,7 @@ import { defineMessages } from './locale.ts';
  * compile error here exactly as it would be there.
  *
  * The `{emoji}` and `{count}` placeholders are interpolated by the kit's
- * `format`, which is also what `formatReactionLabel` in commons speaks — so the
+ * `format`, which is also what `formatReactionLabel` in commons speaks - so the
  * DOM binding can hand a translated template straight to the shared formatter.
  */
 export const reactionMessages = defineMessages({

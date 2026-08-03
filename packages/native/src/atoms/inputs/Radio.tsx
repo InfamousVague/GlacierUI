@@ -46,7 +46,7 @@ const DOT_COLOR = t(CHECKED.dot ?? 'accent-solid');
  * indicator; unlike the Checkbox it keeps its surface fill when checked and only
  * the border shifts to the accent while an accent inner dot appears. The whole
  * control is a Pressable row that selects on tap. The web dot-pop spring is a
- * device follow-up — the resting visual is pixel-matched.
+ * device follow-up - the resting visual is pixel-matched.
  */
 export function Radio({
   label,
@@ -92,7 +92,7 @@ export function Radio({
   }
 
   // The ring keeps its surface fill in every state (glass swaps in the frosted
-  // tint — native cannot blur, so this is the resting tint only). Only the
+  // tint - native cannot blur, so this is the resting tint only). Only the
   // border shifts to the accent when checked, mirroring the web `.dot` rules.
   const backgroundColor = glass ? t('glass-regular') : t(bare(BASE.background) ?? 'surface');
   const borderColor = isChecked

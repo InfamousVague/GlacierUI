@@ -30,7 +30,7 @@ const CHECKED = paintFor(switchSpec, 'states', 'checked');
 // that does not flip with theme), so they are matched here rather than derived.
 // NB: react-native-web silently drops a literal `oklch()` color string (it only
 // passes `var(--glacier-*)` tokens through), so the web's `oklch(0.995 0 0)` is
-// given here as its sRGB equivalent — otherwise the thumb renders transparent.
+// given here as its sRGB equivalent - otherwise the thumb renders transparent.
 const THUMB_COLOR = 'rgb(253, 253, 253)';
 
 /**
@@ -39,7 +39,7 @@ const THUMB_COLOR = 'rgb(253, 253, 253)';
  * padding, radius) and the on-state accent fill from the spec's `checked` state,
  * so it stays visually identical to @glacier/react's Switch. The thumb slides by
  * flex alignment (left when off, right when on); the spring is a device
- * follow-up (rule 7 — resting visual only). State is controlled/uncontrolled via
+ * follow-up (rule 7 - resting visual only). State is controlled/uncontrolled via
  * useControlled and toggled by the Pressable.
  */
 export function Switch({
@@ -59,7 +59,7 @@ export function Switch({
     onChange: onCheckedChange,
   });
 
-  const dims = sizeFor(switchSpec, size); // { diameter, height } — raw rem values
+  const dims = sizeFor(switchSpec, size); // { diameter, height } - raw rem values
   const trackWidth = (size === 'sm' ? BOX.trackWidthSm : BOX.trackWidthMd) ?? '2.75rem';
   const radius = t(BOX.radius ?? 'radius-full');
   const padding = BOX.trackPadding ?? '0.125rem';

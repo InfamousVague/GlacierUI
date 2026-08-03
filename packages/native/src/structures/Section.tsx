@@ -1,5 +1,5 @@
 /**
- * Section — the native binding of @glacier/react's structures/Section.
+ * Section - the native binding of @glacier/react's structures/Section.
  *
  * A `compose` structure: a titled page region built from a heading row (title +
  * muted description stacked at the start, end-aligned actions), a token-driven

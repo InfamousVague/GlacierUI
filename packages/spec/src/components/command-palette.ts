@@ -51,7 +51,7 @@ export const commandPaletteSpec: ComponentSpec = {
     topOffset: '12vh',
     maxHeight: 'min(28rem, 70vh)',
     // The `size` prop steps the PANEL's width, not a control's box, so these
-    // live here rather than in `sizes` — that field describes control heights
+    // live here rather than in `sizes` - that field describes control heights
     // and paddings, and this component's a11y role is a combobox, so declaring
     // them there made the auditor rightly ask for a height no panel has.
     //
@@ -69,7 +69,7 @@ export const commandPaletteSpec: ComponentSpec = {
     },
     {
       name: 'disabled',
-      description: 'A command listed but not runnable — shown so its absence is not mysterious, but the cursor steps over it and it cannot be pressed.',
+      description: 'A command listed but not runnable - shown so its absence is not mysterious, but the cursor steps over it and it cannot be pressed.',
       tokens: { text: token('text-subtle') },
     },
     {
@@ -89,7 +89,7 @@ export const commandPaletteSpec: ComponentSpec = {
     border: token('glass-border'),
   },
   // The query field is the only focusable thing in the palette, so the ring is
-  // the field's own — matching SearchField, which is what actually renders here.
+  // the field's own - matching SearchField, which is what actually renders here.
   focusRing: { ring: token('accent-soft'), offset: '0' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
@@ -112,7 +112,7 @@ export const commandPaletteSpec: ComponentSpec = {
     notes: [
       'The field is the combobox and the list is its listbox; focus never leaves the field, so typing and arrowing are the same gesture.',
       'The active row is named by aria-activedescendant rather than being focused, which is what lets one field drive the whole list.',
-      'Group headings are presentational — the option order already carries the grouping for a screen reader reading top to bottom.',
+      'Group headings are presentational - the option order already carries the grouping for a screen reader reading top to bottom.',
       'A disabled command is announced with aria-disabled instead of being hidden, so it can be found and its state understood.',
     ],
   },

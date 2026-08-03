@@ -64,7 +64,7 @@ export interface CalendarViewProps extends Omit<ComponentProps<'div'>, 'onSelect
    * Turns on the built-in editor: pressing an event opens it for editing, and
    * double-pressing empty day space opens a blank one on that day.
    *
-   * The calendar still does not own the events — it reports what the user did
+   * The calendar still does not own the events - it reports what the user did
    * through the three callbacks below and re-renders from the `events` you pass
    * back. `upsertEvent` and `removeEvent` in @glacier/logic do that update.
    */
@@ -92,7 +92,7 @@ const Chevron = ({ back }: { back?: boolean }) => (
 /**
  * A scheduler surface: events laid over a month grid, a week, or an agenda.
  *
- * Distinct from `DatePicker`, which is an input — this one shows what is
+ * Distinct from `DatePicker`, which is an input - this one shows what is
  * *scheduled*, and its day cells are content rather than choices. All the date
  * arithmetic, bucketing, and paging live in @glacier/logic, so the native
  * calendar builds the same grid from the same inputs.
@@ -152,7 +152,7 @@ export function CalendarView({
   const gridRef = useRef<HTMLDivElement>(null);
 
   // The editor's working copy. Null closes it, which also means the editor is
-  // inert — and costs nothing — for every calendar that is not `editable`.
+  // inert - and costs nothing - for every calendar that is not `editable`.
   const [draft, setDraft] = useState<CalendarEventDraft | null>(null);
 
   // Ids are minted per calendar rather than globally: `useId` is stable across
@@ -187,7 +187,7 @@ export function CalendarView({
 
   const saveEvent = (event: CalendarEvent) => {
     // Which callback fires is decided by the draft that produced the event, not
-    // by searching `events` — a host editing a filtered subset would otherwise
+    // by searching `events` - a host editing a filtered subset would otherwise
     // see a create for an event it already has.
     if (draft?.id !== undefined) onEventChange?.(event);
     else onEventCreate?.(event);
@@ -436,7 +436,7 @@ export function CalendarView({
    *
    * One instance for the whole body rather than one per cell: `ContextMenu` is
    * `display: contents`, so it adds no box, and its rows are built from
-   * whatever the pointer landed on. It also covers touch — the same component
+   * whatever the pointer landed on. It also covers touch - the same component
    * opens on a long press, which is the gesture that has to stand in for a
    * right-click on a device with no second button.
    */
@@ -505,7 +505,7 @@ export function CalendarView({
         />
         {/* Double-press is the shortcut, not the affordance: it cannot be
             reached from a keyboard and cannot be discovered by looking. This
-            button is the way in, and it adds to the selected day — or today,
+            button is the way in, and it adds to the selected day - or today,
             which is where an unaimed "new event" belongs. */}
         {editable && (
           <Button

@@ -5,7 +5,7 @@ import { groupTitles, m, pageTitles } from '../../i18n.ts';
 /**
  * The parity catalog. Each documented component is listed under the docs
  * section it lives in, paired with the name it carries (or *would* carry) in
- * `@glacier/native`. Support is never asserted here — it is read live from the
+ * `@glacier/native`. Support is never asserted here - it is read live from the
  * native kit's runtime exports, so a component flips to "at parity" the moment
  * `@glacier/native` exports its binding, with no edit to this file.
  *

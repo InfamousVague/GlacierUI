@@ -2,7 +2,7 @@
  * Colour conversion and parsing for the picker.
  *
  * OKLCH is the working space, because that is the space the kit's own ramps are
- * authored in — a picker that thought in HSL would hand back colours that do
+ * authored in - a picker that thought in HSL would hand back colours that do
  * not sit on the same perceptual footing as every token around them.
  *
  * The conversions here are the standard OKLab matrices, written out rather than
@@ -170,7 +170,7 @@ export function parseOklch(input: string): Oklch | null {
 /**
  * The maximum chroma the picker's chroma axis spans.
  *
- * Not a hard limit of OKLCH — chroma is unbounded in principle — but past this
+ * Not a hard limit of OKLCH - chroma is unbounded in principle - but past this
  * every hue is well outside sRGB and the slider would spend most of its travel
  * on colours that all clamp to the same thing.
  */
@@ -180,7 +180,7 @@ export const MAX_CHROMA = 0.37;
 export const HUE_STEP = 1;
 
 /**
- * The largest hue a control should offer — one step short of a full turn.
+ * The largest hue a control should offer - one step short of a full turn.
  *
  * Not 360. Hue is circular, so 360° *is* 0°, and `parseOklch` normalises it to
  * the canonical 0 on the way back in. A slider whose max is 360 therefore reads
@@ -204,7 +204,7 @@ export function inSrgbGamut(color: Oklch, tolerance = 0.02): boolean {
 /**
  * A readable foreground for a background: whichever of black or white has more
  * contrast. Uses OKLCH lightness, which is perceptual, rather than sRGB
- * luminance — the whole reason the kit works in this space.
+ * luminance - the whole reason the kit works in this space.
  */
 export function readableOn(background: Oklch): '#000000' | '#ffffff' {
   return background.l > 0.6 ? '#000000' : '#ffffff';
@@ -218,7 +218,7 @@ export type ColorChannel = 'l' | 'c' | 'h' | 'a';
  * range.
  *
  * One ramp for both bindings. The web joins these into a `linear-gradient` and
- * native paints them as a run of solid segments — neither derives its own
+ * native paints them as a run of solid segments - neither derives its own
  * stops, so a track cannot come out a different colour on one platform than the
  * other. It also makes the ramp truer than a handful of CSS stops: the browser
  * interpolates between stops in sRGB, which bends an OKLCH ramp, while every
@@ -226,7 +226,7 @@ export type ColorChannel = 'l' | 'c' | 'h' | 'a';
  *
  * `steps` trades smoothness against work. The web interpolates between stops so
  * a handful would do there, but native paints one flat view per sample and any
- * band wide enough to see is a visible step — a lightness ramp is the worst
+ * band wide enough to see is a visible step - a lightness ramp is the worst
  * case, crossing the whole L range in one track. The default puts a band at
  * roughly two pixels on a typical rail, which reads as continuous; it is a
  * default rather than a constant because the cost is a view per sample, and a

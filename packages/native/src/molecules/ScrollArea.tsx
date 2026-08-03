@@ -3,7 +3,7 @@ import { ScrollView, View, type ViewProps } from 'react-native';
 import { ScrollbarAppearance, scrollAreaOrientations, type scrollbarAppearances } from '@glacier/spec';
 
 /**
- * ScrollArea — the @glacier/native binding of the web molecule.
+ * ScrollArea - the @glacier/native binding of the web molecule.
  *
  * KIND: scroll. The scrollable region is a real <ScrollView> (vertical by
  * default, `horizontal` when the orientation flips), so wheel / drag / touch
@@ -21,21 +21,21 @@ import { ScrollbarAppearance, scrollAreaOrientations, type scrollbarAppearances 
  * it cannot drift from @glacier/react's ScrollArea.
  *
  * Web-only, accepted-but-noop on this binding (reported in the wave notes):
- *   - edge fade masks — the transparent-to-opaque CSS `mask-image` ramp (and the
+ *   - edge fade masks - the transparent-to-opaque CSS `mask-image` ramp (and the
  *     scroll listener + ResizeObserver that toggle it) has no React Native core
  *     runtime; the real scrollable content renders without the decorative fade.
  *     The spec marks the fades purely decorative, exposing no content/state to
  *     assistive tech, so nothing is lost semantically. A masked/gradient-overlay
  *     approximation is a device follow-up.
- *   - themed scrollbar color/thickness — RN exposes only show/hide for the native
+ *   - themed scrollbar color/thickness - RN exposes only show/hide for the native
  *     indicator, not its `border-strong` tint or `space-2` width.
- *   - focus ring + keyboard scrolling — the viewport's `:focus-visible` accent
+ *   - focus ring + keyboard scrolling - the viewport's `:focus-visible` accent
  *     ring and Arrow/Page/Home/End scrolling are DOM/keyboard concerns; taps and
  *     drags scroll here.
- *   - text color / font-family — the root's `text` + `font-sans` cascade is
+ *   - text color / font-family - the root's `text` + `font-sans` cascade is
  *     dropped from the container, since RN <Text> does not inherit from a parent
  *     <View> (same as Surface / Card); content brings its own <Text>.
- *   - className — DOM escape hatch, accepted for parity and ignored.
+ *   - className - DOM escape hatch, accepted for parity and ignored.
  */
 
 /** Which axis the content overflows and scrolls along. Derived from the spec. */
@@ -72,7 +72,7 @@ export interface ScrollAreaProps extends Omit<ViewProps, 'children' | 'style'> {
  * <View> wraps a <ScrollView> that holds the overflowing content and does the
  * actual scrolling. `orientation` picks the scroll axis, `maxHeight` caps that
  * axis, and `hideScrollbar` drops the platform scroll indicator while every
- * scroll input keeps working — mirroring @glacier/react's ScrollArea.
+ * scroll input keeps working - mirroring @glacier/react's ScrollArea.
  */
 export function ScrollArea({
   maxHeight,

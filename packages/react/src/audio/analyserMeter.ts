@@ -2,7 +2,7 @@ import { rms, type LoudnessMeter } from '@glacier/logic';
 
 /**
  * Wires a Web Audio analyser onto a playing `<audio>` (or `<video>`) element and
- * hands back a loudness meter — the sampler `useLiveLevels` reads to build a
+ * hands back a loudness meter - the sampler `useLiveLevels` reads to build a
  * SeekBar's waveform while the track plays, instead of measuring the file up
  * front.
  *

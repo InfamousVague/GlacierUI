@@ -6,7 +6,7 @@ import { t } from '../../tokens.ts';
 import { sizeFor, dimensionsFor } from '../../resolve.ts';
 
 /**
- * Rating — the @glacier/native binding of the DOM kit's Rating atom.
+ * Rating - the @glacier/native binding of the DOM kit's Rating atom.
  *
  * Mapping (mirrors Rating.module.css + ratingSpec):
  *  - A row of star cells. Each cell is a 1em x 1em box, where 1em is the size's
@@ -33,7 +33,7 @@ import { sizeFor, dimensionsFor } from '../../resolve.ts';
 // Derived from the spec so the size union cannot drift from the web kit.
 export type RatingSize = (typeof ratingSizes)[number];
 
-// The lucide "star" glyph — the same single closed-outline path the web inlines
+// The lucide "star" glyph - the same single closed-outline path the web inlines
 // (Rating.tsx), kept here rather than pulled from @glacier/icons so the native
 // kit stays free of the lucide dependency, exactly as the DOM kit does.
 const STAR_PATH =
@@ -46,7 +46,7 @@ const STAR_STROKE = { strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'r
 const bare = (v?: string): string | undefined => (v?.startsWith('$') ? v.slice(1) : v);
 
 // The fill paint (warning-solid) comes from the spec's base paint; the empty
-// outline paints border-strong and the skeleton bone the hover wash — both
+// outline paints border-strong and the skeleton bone the hover wash - both
 // declared on ratingSpec.tokens, mirroring `.starFill` / `.starBase` / the web
 // star-clipped Skeleton bone.
 const FILL_COLOR = t(bare((ratingSpec.paint as { text?: string }).text) ?? 'warning-solid');
@@ -91,7 +91,7 @@ function StarCell({ fill, size }: { fill: number; size: string }) {
         <Path d={STAR_PATH} fill="none" stroke={OUTLINE_COLOR} {...STAR_STROKE} />
       </Svg>
       {pct > 0 && (
-        // overflow-hidden wrapper at the fill width, over a full-size star —
+        // overflow-hidden wrapper at the fill width, over a full-size star -
         // mirrors `.fillWrap { overflow: hidden; width: pct% }` in the CSS.
         <View style={{ position: 'absolute', top: 0, left: 0, width: `${pct}%`, height: size, overflow: 'hidden' }}>
           <View style={{ width: size, height: size }}>

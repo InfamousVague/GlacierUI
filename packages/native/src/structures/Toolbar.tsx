@@ -37,7 +37,7 @@ export interface ToolbarProps extends Omit<ViewProps, 'children' | 'style'> {
  *
  * Slots and middle content arrive as ReactNode props/children and render as-is;
  * each slot is a plain <View> row with the same space-3 gap the web slot uses.
- * The toolbar sets no text color of its own — its content brings its own <Text>,
+ * The toolbar sets no text color of its own - its content brings its own <Text>,
  * and RN text does not inherit color (nor font-family) from a parent View, so
  * the web's container-level `font-family: font-sans` is a no-op here.
  *

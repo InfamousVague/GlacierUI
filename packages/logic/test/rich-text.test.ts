@@ -205,7 +205,7 @@ describe('tokenizeMarkdown', () => {
 
   const kindsOf = (text: string) => tokenizeMarkdown(text).map((t) => [t.kind, text.slice(t.start, t.end)]);
 
-  it('reproduces the source exactly — the invariant both editors rest on', () => {
+  it('reproduces the source exactly - the invariant both editors rest on', () => {
     for (const sample of [
       '',
       'plain text',
@@ -276,7 +276,7 @@ describe('tokenizeMarkdown', () => {
   });
 
   it('leaves an unclosed delimiter as plain text', () => {
-    // The common state while the pair is still being typed — it must not
+    // The common state while the pair is still being typed - it must not
     // swallow the rest of the document.
     expect(tokenizeMarkdown('**hanging').every((t) => t.kind === 'text')).toBe(true);
   });
@@ -322,7 +322,7 @@ describe('activeMarks with the caret inside a mark', () => {
 
   it('reports the mark from anywhere inside it, not just at its edges', () => {
     const text = '**bold text**';
-    // Dead centre, between "bold" and "text" — the case that used to report
+    // Dead centre, between "bold" and "text" - the case that used to report
     // nothing because the delimiters were not immediately adjacent.
     expect(at(text, 7)).toEqual(['bold']);
   });
@@ -395,7 +395,7 @@ describe('toggleBlock on an empty line', () => {
   });
 
   it('leaves the caret after the marker, ready to type', () => {
-    // Before this, pressing Heading on an empty document did nothing at all —
+    // Before this, pressing Heading on an empty document did nothing at all -
     // the moment the button is most likely to be pressed.
     const result = toggleBlock('', empty, 'heading');
     expect(result.selection).toEqual({ start: 2, end: 2 });

@@ -9,10 +9,10 @@ import { t } from '../tokens.ts';
  * This is a `compose` binding: the nav landmark, the `<ol>` list, and the
  * per-crumb `<li>` are plain <View>s (flexDirection: 'row'), and each crumb
  * label / separator is a <Text> (React Native cannot render a bare string inside
- * a View, and text color does not inherit through a parent View — hard rule 4).
+ * a View, and text color does not inherit through a parent View - hard rule 4).
  *
  * Paint + geometry (from Breadcrumbs.module.css; breadcrumbsSpec.paint is
- * intentionally empty — the CSS module owns the crumb/link/separator paint as
+ * intentionally empty - the CSS module owns the crumb/link/separator paint as
  * bare tokens, which are wrapped by t() here so they cannot drift from the DOM
  * kit):
  * - `.list`  gap: space-2, flex-wrap: wrap, align-items: center.
@@ -20,7 +20,7 @@ import { t } from '../tokens.ts';
  * - `.link`  color: inherit (text-subtle at rest); text-decoration: none. The
  *   web anchor is a raw `<a class=".link">`, NOT the accent-colored Link kit
  *   component, so it maps to a <Text accessibilityRole="link"> in the subtle
- *   color — not the native Link sibling. `href` is DOM-only (no-op on device;
+ *   color - not the native Link sibling. `href` is DOM-only (no-op on device;
  *   wire navigation through the surrounding view). Its :hover -> text color is a
  *   hover affordance the native binding does not run (resting visuals only).
  * - `.current`  color: text; font-weight: 600 (font-weight-semibold token).
@@ -43,7 +43,7 @@ export interface BreadcrumbItem {
   label: ReactNode;
   /**
    * Anchor href. DOM-only; accepted for prop parity with the web crumb but has
-   * no effect on native — wire navigation through the surrounding view. (No-op.)
+   * no effect on native - wire navigation through the surrounding view. (No-op.)
    */
   href?: string;
   current?: boolean;
@@ -59,16 +59,16 @@ export interface BreadcrumbsProps extends Omit<ViewProps, 'children' | 'style'> 
 export function Breadcrumbs({ items, separator = DEFAULT_SEPARATOR, className: _className, ...rest }: BreadcrumbsProps) {
   const visibleItems = items.filter((item) => item !== undefined);
   return (
-    // .root — the nav landmark (matching the web `<nav aria-label="Breadcrumb">`;
+    // .root - the nav landmark (matching the web `<nav aria-label="Breadcrumb">`;
     // React Native has no "navigation" role, so the label carries the landmark).
     <View accessibilityLabel="Breadcrumb" style={{ flexDirection: 'row', alignItems: 'center' }} {...rest}>
-      {/* .list — the ordered trail. */}
+      {/* .list - the ordered trail. */}
       <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', columnGap: t('space-2'), rowGap: t('space-2') }}>
         {visibleItems.map((item, index) => {
           const isCurrent = item.current ?? index === visibleItems.length - 1;
           const showSeparator = index < visibleItems.length - 1;
           return (
-            // .item — one crumb plus its trailing separator.
+            // .item - one crumb plus its trailing separator.
             <View key={`${String(item.label)}-${index}`} style={{ flexDirection: 'row', alignItems: 'center', columnGap: t('space-2') }}>
               {isCurrent ? (
                 // .current
@@ -76,16 +76,16 @@ export function Breadcrumbs({ items, separator = DEFAULT_SEPARATOR, className: _
                   {item.label}
                 </Text>
               ) : item.href ? (
-                // .link — subtle inline anchor (raw `<a>`, not the accent Link kit).
+                // .link - subtle inline anchor (raw `<a>`, not the accent Link kit).
                 <Text accessibilityRole="link" style={{ color: t('text-subtle'), fontFamily: t('font-sans'), fontSize: t('font-size-md'), lineHeight: t('leading-md'), textDecorationLine: 'none' }}>
                   {item.label}
                 </Text>
               ) : (
-                // .text — a plain, non-linked crumb.
+                // .text - a plain, non-linked crumb.
                 <Text style={{ color: t('text-subtle'), fontFamily: t('font-sans'), fontSize: t('font-size-md'), lineHeight: t('leading-md') }}>{item.label}</Text>
               )}
               {showSeparator && (
-                // .separator — hidden from assistive tech (web `aria-hidden="true"`).
+                // .separator - hidden from assistive tech (web `aria-hidden="true"`).
                 <Text aria-hidden style={{ color: t('text-subtle'), fontFamily: t('font-sans'), fontSize: t('font-size-md'), lineHeight: t('leading-md') }}>
                   {separator}
                 </Text>

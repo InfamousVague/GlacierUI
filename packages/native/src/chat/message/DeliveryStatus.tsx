@@ -1,7 +1,7 @@
 // The Glacier DeliveryStatus, rendered with React Native primitives: how far a
 // sent message got, as one small mark. The status-to-SHAPE table and the
 // least-advanced collapse both come from @glacier/logic, and every colour and
-// box comes from the delivery-status spec through the shared resolvers — so the
+// box comes from the delivery-status spec through the shared resolvers - so the
 // silhouette a phone draws is the silhouette the web draws.
 
 import { View, type ViewProps } from 'react-native';
@@ -51,7 +51,7 @@ export interface DeliveryStatusProps extends Omit<ViewProps, 'children' | 'style
   labels?: Partial<DeliveryLabels>;
   /**
    * An explicit glyph colour, for a caller that has dropped the mark onto a
-   * surface the tone table knows nothing about — an accent-filled bubble, where
+   * surface the tone table knows nothing about - an accent-filled bubble, where
    * both the quiet greys and the accent tint go unreadable.
    *
    * The DOM binding needs no such prop: a stylesheet there can simply outrank
@@ -68,7 +68,7 @@ const STROKE = Number(dimensionsFor(deliveryStatusSpec).stroke ?? 1.75);
 /**
  * No two states share a silhouette: a clock, one tick, two ticks, a tick inside
  * a solid disc, a warning triangle. This is the smallest element in a
- * transcript, which is precisely the size at which hue stops carrying meaning —
+ * transcript, which is precisely the size at which hue stops carrying meaning -
  * so colour is layered on top for the two states worth spending it on, never
  * underneath as the only signal.
  *

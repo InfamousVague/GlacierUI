@@ -57,7 +57,7 @@ html[data-scrollbar-track='hidden'] {
    pill floating a space-1 gutter clear of every edge. The inset is a SYMMETRIC
    transparent border with background-clip: padding-box, applied equally on all
    four sides so the padding-box corners all round by the same (radius-full −
-   space-1) amount — asymmetric insets would round each corner differently and
+   space-1) amount - asymmetric insets would round each corner differently and
    shear the pill ends. Equal insets also keep the track and thumb the same
    space-2 width and clear of rounded, overflow-clipped containers (the sidebar
    card), with no per-orientation or RTL handling needed. WebKit ignores logical
@@ -234,7 +234,7 @@ body::before {
 
 /* Prose chrome renders through the kit's Heading/Text components now, so they
    own type (size, weight, color). These rules keep only the page's vertical
-   rhythm — the margins between title, lede, and sections. */
+   rhythm - the margins between title, lede, and sections. */
 .content > h1 {
   margin: 0 0 var(--glacier-space-2);
 }
@@ -260,7 +260,7 @@ body::before {
    real kit components, and a <li> in there belongs to the component, not to the
    page. Without it this rule outweighs a component's own class (0,1,1 beats
    0,1,0) and quietly repaints anything that happens to render a list or a
-   paragraph — which is how SortableList's items ended up muted on web while the
+   paragraph - which is how SortableList's items ended up muted on web while the
    native binding, rendering plain views, showed the colour both had declared. */
 .content :is(p, li):not(.exampleDemo *) {
   color: var(--glacier-text-muted);
@@ -862,7 +862,7 @@ code {
 }
 
 /* Scrolls away with the page. The opaque background and stacking context that
-   made it sit over the cards went with the stickiness — nothing passes under
+   made it sit over the cards went with the stickiness - nothing passes under
    it now, so it does not need to hide anything. */
 .bpGalleryFilters {
   display: flex;
@@ -890,7 +890,7 @@ code {
 
 /* A uniform grid, not flex-wrap. Wrapping laid the chips out at their natural
    widths, so each line ended somewhere different and the two rows never lined
-   up with each other — the "haphazard" look.
+   up with each other - the "haphazard" look.
 
    A FIXED four columns, not auto-fit: auto-fit sizes each grid independently,
    so the 8-chip purpose row and the 4-chip layer row resolved to different
@@ -918,7 +918,7 @@ code {
 /* ---- categorical hues ----------------------------------------------------
 
    The kit ships four distinct hues (accent 228, warning 75, success 150,
-   danger 25 — info is a duplicate of accent), and this row needs eight
+   danger 25 - info is a duplicate of accent), and this row needs eight
    telling-apart colours. Rather than reuse the semantic ramps, which would
    attach "danger" to Media and "success" to Data for no reason, each purpose
    gets its own hue driven through the SAME recipe every kit ramp is built on:
@@ -974,8 +974,8 @@ code {
 
 /* The layer row gets a PROGRESSION rather than the purpose row's spread, because
    the two axes are different in kind. Purposes are unordered categories, so they
-   get hues scattered around the wheel. Layers are an ordered scale — Atoms
-   compose into Molecules compose into Organisms — so they step evenly through
+   get hues scattered around the wheel. Layers are an ordered scale - Atoms
+   compose into Molecules compose into Organisms - so they step evenly through
    one blue-to-violet family. The eye reads the first row as "a set of options"
    and the second as "a sequence", which is what they respectively are, and
    nothing in the layer row pairs off against a purpose that happens to sit at a
@@ -1016,7 +1016,7 @@ code {
   color: oklch(var(--chip-text-l) var(--chip-c) var(--chip-h));
 }
 
-/* Selected, the chip's own fill IS the soft step — so a soft badge would
+/* Selected, the chip's own fill IS the soft step - so a soft badge would
    vanish into it. The badge steps up to the border lightness to stay a
    distinct object against its parent. */
 .bpGalleryFilterChips [data-kind][aria-pressed='true'] [role='status'],
@@ -1082,7 +1082,7 @@ code {
 
 /* Category headings own the space around them. The gallery stacks section after
    section with no wrapper gap, and the kit's Heading carries no default margin
-   — spacing is the layout's job, not the type's — so without this a heading
+ - spacing is the layout's job, not the type's - so without this a heading
    touches the cards on both sides and reads as belonging to neither. */
 .bpGallerySection {
   margin-top: var(--glacier-space-12);
@@ -1093,7 +1093,7 @@ code {
   margin-top: var(--glacier-space-6);
 }
 
-/* Bound tighter below than above — smaller than the gap between cards, so the
+/* Bound tighter below than above - smaller than the gap between cards, so the
    heading groups with the grid it names instead of floating between two. */
 .bpGallerySection > h2 {
   margin-bottom: var(--glacier-space-3);

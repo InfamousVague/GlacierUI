@@ -8,7 +8,7 @@ import { m } from '../../i18n.ts';
 /**
  * A controlled radio group. A native radio has no `name`-based DOM owner to
  * enforce single-select, so exclusivity is driven by lifting the selected value
- * into state and passing `checked`/`onCheckedChange` to every radio — the
+ * into state and passing `checked`/`onCheckedChange` to every radio - the
  * parent-owned-group path. Each comparison pane renders its own instance.
  */
 function RadioGroup({

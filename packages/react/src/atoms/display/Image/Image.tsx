@@ -81,7 +81,7 @@ export function Image({
           {...rest}
           // After the spread, not before: these drive the component's own
           // loading state, and a caller passing onLoad used to replace them
-          // silently — leaving the image stuck behind its skeleton forever.
+          // silently - leaving the image stuck behind its skeleton forever.
           // The caller's handler still runs; it just no longer displaces ours.
           onLoad={(event) => {
             setStatus('loaded');

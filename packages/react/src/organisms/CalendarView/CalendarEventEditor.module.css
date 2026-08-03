@@ -7,7 +7,7 @@
   gap: var(--glacier-space-2);
 }
 
-/* Two fields that read as a pair share a row — it halves the height of the
+/* Two fields that read as a pair share a row - it halves the height of the
    sheet, which is what keeps this a form rather than a scroll. Falls to one
    column when the panel is too narrow to give each control a usable width. */
 .pair {

@@ -1,4 +1,4 @@
-// Sidebar — the @glacier/native binding of the web structure. A vertical nav
+// Sidebar - the @glacier/native binding of the web structure. A vertical nav
 // column (optional pinned header, a scrollable body of SidebarSection groups,
 // optional pinned footer) composed from View/Text/Pressable/ScrollView, painted
 // and sized from `sidebarSpec` through the shared resolvers so it cannot drift
@@ -19,7 +19,7 @@ const ACTIVE = paintFor(sidebarSpec, 'states', 'active');
 /**
  * A resolved measurement. The resolvers hand back bare token names for
  * tokenized values and raw CSS lengths for the rest; wrap a token name in its
- * custom property and let a raw length — anything starting with a digit or dot —
+ * custom property and let a raw length - anything starting with a digit or dot -
  * pass straight through so it never becomes `var(--glacier-1.125rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -90,15 +90,15 @@ export interface SidebarItemProps extends Omit<PressableProps, 'children' | 'sty
  * @glacier/react's Sidebar.
  *
  * Web-only, accepted-but-noop on this binding (reported in the wave notes):
- *   - spring / the sliding pill — the web pill is one shared framer-motion layout
+ *   - spring / the sliding pill - the web pill is one shared framer-motion layout
  *     element that slides between items on the chosen spring. There is no motion
  *     runtime here, so each active item paints its own RESTING accent-soft pill
  *     and `spring` has no animated effect (kept for a 1:1 contract).
- *   - hover wash + focus ring — resting visuals only; the item hover background
+ *   - hover wash + focus ring - resting visuals only; the item hover background
  *     and the :focus-visible accent ring are not run.
- *   - themed scrollbar — the body's thin themed scrollbar becomes the platform
+ *   - themed scrollbar - the body's thin themed scrollbar becomes the platform
  *     scroll indicator (RN exposes only show/hide, not its tint/width).
- *   - font-family cascade / className — the container's `font-sans` does not
+ *   - font-family cascade / className - the container's `font-sans` does not
  *     cascade to RN <Text> (content brings its own), and `className` is ignored.
  * The Sidebar is a plain container: give it a nav landmark and an aria-label at
  * the call site, exactly as on the web.

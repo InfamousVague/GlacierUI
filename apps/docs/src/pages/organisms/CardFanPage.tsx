@@ -16,7 +16,7 @@ function hand(size: number): Card[] {
 
 /**
  * The card body is the caller's. The fan owns only where each one sits, how far
- * it leans, and which one is magnified — so a demo can draw whatever it likes
+ * it leans, and which one is magnified - so a demo can draw whatever it likes
  * inside and still get the same spread.
  */
 /**
@@ -24,7 +24,7 @@ function hand(size: number): Card[] {
  * component drawings use.
  *
  * One face for every card, deliberately. Six tints made the demo a colour
- * chart, and the eye read the colours as meaning something — but the component
+ * chart, and the eye read the colours as meaning something - but the component
  * being shown is the *placement*, and a uniform back is what lets you see the
  * spread, the lean and the overlap instead of the deck.
  */
@@ -129,7 +129,7 @@ export function CardFanPage() {
         platformLayout="stacked"
         render={(K) => <FanDemo K={K} count={40} />}
         code={`// The same strip, forty cards. The track is fixed and the cards are
-// distributed across it by weight, so the fan cannot overflow — it just
+// distributed across it by weight, so the fan cannot overflow - it just
 // gets denser, and opens up wherever the pointer is.
 <CardFan items={fortyCards} renderItem={renderCard} />`}
       />

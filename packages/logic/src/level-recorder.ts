@@ -1,5 +1,5 @@
 /**
- * Level recorder — builds a SeekBar's `levels` array from audio as it plays,
+ * Level recorder - builds a SeekBar's `levels` array from audio as it plays,
  * instead of measuring the file up front.
  *
  * The model is simple: the track is divided into a fixed number of buckets, and
@@ -8,9 +8,9 @@
  * only ever claims to know about audio that has actually been heard.
  *
  * This is renderer- and platform-agnostic on purpose: it takes a loudness
- * number and a position, nothing more. Each binding supplies its own meter —
+ * number and a position, nothing more. Each binding supplies its own meter -
  * a Web Audio `AnalyserNode` on the web, a native player's metering on a
- * device — and neither has to re-derive the bookkeeping.
+ * device - and neither has to re-derive the bookkeeping.
  */
 
 import { useEffect, useRef, useState } from 'react';
@@ -95,7 +95,7 @@ export function createLevelRecorder({
 /**
  * Records levels from a playing source and re-renders as they fill in.
  *
- * Pure React and timers only — no DOM, no React Native — so the same hook backs
+ * Pure React and timers only - no DOM, no React Native - so the same hook backs
  * both bindings. All either platform supplies is a `meter`: an `AnalyserNode`
  * on the web, a player's metering on a device.
  *

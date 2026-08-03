@@ -15,7 +15,7 @@ declare module 'react-native' {
   export type Style = Record<string, unknown>;
   // A falsy style (null/undefined/false) is valid in React Native, and style
   // arrays can nest arbitrarily (`[a, [b, c], cond && d]`), so StyleProp is
-  // recursive — matching RN's own flattening behavior.
+  // recursive - matching RN's own flattening behavior.
   export type StyleProp = Style | false | null | undefined | ReadonlyArray<StyleProp>;
 
   // The shared accessibility/test props every primitive accepts. Listed
@@ -121,7 +121,7 @@ declare module 'react-native' {
     defaultValue?: string;
     placeholder?: string;
     placeholderTextColor?: string;
-    /** Caret and selection tint — the device-side counterpart to `caretColor`. */
+    /** Caret and selection tint - the device-side counterpart to `caretColor`. */
     selectionColor?: string;
     editable?: boolean;
     multiline?: boolean;
@@ -135,7 +135,7 @@ declare module 'react-native' {
     onBlur?: () => void;
     onKeyPress?: (e: { nativeEvent: { key: string } }) => void;
     onSubmitEditing?: () => void;
-    /** Controlled caret/selection range — how a caret is restored after an edit. */
+    /** Controlled caret/selection range - how a caret is restored after an edit. */
     selection?: { start: number; end: number };
     onSelectionChange?: (e: { nativeEvent: { selection: { start: number; end: number } } }) => void;
     /** Where text sits in a multiline box; RN centres it vertically by default. */
@@ -159,7 +159,7 @@ declare module 'react-native' {
         layoutMeasurement: { width: number; height: number };
       };
     }) => void;
-    /** Fires when the content grows or shrinks — a new message, in a transcript. */
+    /** Fires when the content grows or shrinks - a new message, in a transcript. */
     onContentSizeChange?: (width: number, height: number) => void;
     stickyHeaderIndices?: number[];
     /** Whether a tap that lands while the keyboard is up reaches the row under
@@ -210,7 +210,7 @@ declare module 'react-native' {
 
   export interface AnimatedValue {
     interpolate(config: { inputRange: number[]; outputRange: Array<string | number> }): unknown;
-    /** Jumps to a value without animating — for what is already tracking a finger. */
+    /** Jumps to a value without animating - for what is already tracking a finger. */
     setValue(value: number): void;
   }
 

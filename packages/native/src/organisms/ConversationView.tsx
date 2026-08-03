@@ -1,8 +1,8 @@
 // The Glacier ConversationView, rendered with React Native primitives: a
 // scrolling thread built from a flat message log and the reader's id.
 //
-// Both axes it exists to keep apart — local/remote authorship and
-// optimistic/confirmed acknowledgement — are resolved by `conversationRuns` in
+// Both axes it exists to keep apart - local/remote authorship and
+// optimistic/confirmed acknowledgement - are resolved by `conversationRuns` in
 // @glacier/logic, the same function the DOM kit calls, so a remote bubble
 // cannot grow a tick on one platform and not the other. Geometry and the
 // provisional alpha come from conversationViewSpec through the shared
@@ -45,7 +45,7 @@ const DIMS = dimensionsFor(conversationViewSpec);
 
 /**
  * A resolved measurement. Token names get wrapped in the custom property; a raw
- * value the spec declares inline — the alpha, which sits on no scale — passes
+ * value the spec declares inline - the alpha, which sits on no scale - passes
  * through so it never becomes `var(--glacier-0.65)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -107,9 +107,9 @@ export interface ConversationViewProps<M extends ChatMessage = ChatMessage> {
  * **Authorship** (local/remote) decides the edge and the fill; **acknowledgement**
  * (optimistic/confirmed) decides only whether the run is drawn provisionally.
  * They are independent, and their interaction is a hard rule rather than a
- * default: a remote run shows no delivery mark at all — a tick is a claim about
+ * default: a remote run shows no delivery mark at all - a tick is a claim about
  * our own outbox, and there is nothing behind that claim for a message someone
- * else sent — while a local run always shows one, filled in when the caller
+ * else sent - while a local run always shows one, filled in when the caller
  * modelled no statuses, because a local message reporting nothing is
  * indistinguishable from one that never sent.
  *
@@ -117,7 +117,7 @@ export interface ConversationViewProps<M extends ChatMessage = ChatMessage> {
  * one does the opposite: full strength, danger border, because it is the only
  * row in a transcript that asks the reader to act.
  *
- * Sticking to the bottom is one comparison — `atBottom` in @glacier/logic — and
+ * Sticking to the bottom is one comparison - `atBottom` in @glacier/logic - and
  * it fires only from `onContentSizeChange`, which is the moment a message
  * actually lands. A reader who has scrolled up is never moved.
  */
@@ -166,7 +166,7 @@ export function ConversationView<M extends ChatMessage = ChatMessage>({
         // centres, because there is nothing below it for a bottom anchor to
         // mean anything against.
         justifyContent: isEmpty ? 'center' : 'flex-end',
-        // Wider than the gap inside a run — that difference is the whole
+        // Wider than the gap inside a run - that difference is the whole
         // grouping signal.
         gap: GAP,
         paddingVertical: PADDING_BLOCK,

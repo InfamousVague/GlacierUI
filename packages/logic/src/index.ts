@@ -1,5 +1,5 @@
 /**
- * @glacier/logic — the renderer-agnostic layer.
+ * @glacier/logic - the renderer-agnostic layer.
  *
  * Everything here is pure React or plain TypeScript: no `document`, no DOM
  * elements, no `react-native` imports. It is the shared brain that both the DOM
@@ -12,7 +12,7 @@
  * WHAT BELONGS HERE, since the answer surprises people.
  *
  * The unit of sharing is a PLATFORM, not a component. A module earns its place
- * by being imported by BOTH bindings — not by being used by many components. It
+ * by being imported by BOTH bindings - not by being used by many components. It
  * is normal, and correct, for a module here to serve exactly one component:
  * `seek-bar.ts` has one component and two implementations, and those two
  * implementations are the whole reason it exists. Left in either binding, the
@@ -31,9 +31,9 @@
  * one depend on the other. @glacier/native imports nothing from @glacier/react,
  * and should not start: that package carries ~154 CSS-module imports and
  * framer-motion, none of which belong in a Metro bundle. Physically co-locating
- * each module with its component is achievable — it needs a per-component
+ * each module with its component is achievable - it needs a per-component
  * folder (logic + spec + web + native together) with the two kits reduced to
- * barrels — but that is a repo-layout change, not a constraint of this package.
+ * barrels - but that is a repo-layout change, not a constraint of this package.
  *
  * WHAT DOES NOT BELONG HERE.
  *

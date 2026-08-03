@@ -1,4 +1,4 @@
-// AlertDialog — the @glacier/native binding of @glacier/react's AlertDialog
+// AlertDialog - the @glacier/native binding of @glacier/react's AlertDialog
 // organism. A deliberate confirmation dialog: a full-screen scrim (the spec's
 // `overlay`) centers a glass panel whose title/description/body sit above a
 // Cancel + confirmation footer. Paint (scrim, glass-thick surface, per-tone
@@ -63,7 +63,7 @@ const OPEN = paintFor(alertDialogSpec, 'states', 'open');
 // The confirmation action reuses the Button's md geometry so it lines up exactly
 // with the Cancel Button beside it; its paint comes from the alert-dialog tone
 // tokens (neutral: accent-solid/accent-contrast, danger: danger-solid/
-// danger-contrast) — the same values the web Button variant resolves to.
+// danger-contrast) - the same values the web Button variant resolves to.
 const BTN = dimensionsFor(buttonSpec); // radius, gap
 const BTN_MD = sizeFor(buttonSpec, 'md'); // height, paddingInline, fontSize
 
@@ -82,7 +82,7 @@ const BTN_MD = sizeFor(buttonSpec, 'md'); // height, paddingInline, fontSize
  * and, when the title is a string, an `accessibilityLabel`); the panel's
  * backdrop-filter blur, layered inset glass highlight and drop shadow (no RN
  * backdrop-filter / inset shadow); and the overflow-y auto scroll on tall
- * content (a device ScrollView follow-up — short content renders faithfully).
+ * content (a device ScrollView follow-up - short content renders faithfully).
  */
 export function AlertDialog({
   open,
@@ -100,7 +100,7 @@ export function AlertDialog({
   style,
 }: AlertDialogProps) {
   // Fully controlled, mirroring the web `if (!open) return null`. When closed
-  // the dialog renders nothing (there is no trigger — `open` is owned outside).
+  // the dialog renders nothing (there is no trigger - `open` is owned outside).
   if (!open) return null;
 
   const tonePaint = paintFor(alertDialogSpec, 'tones', tone);

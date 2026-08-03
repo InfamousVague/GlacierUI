@@ -1,4 +1,4 @@
-// structures — barrel (split from the flat src barrel).
+// structures - barrel (split from the flat src barrel).
 export { PageHeader, type PageHeaderProps, type PageHeaderAction } from './PageHeader.tsx';
 export { Toolbar, type ToolbarProps } from './Toolbar.tsx';
 export { TitleBar, type TitleBarProps } from './TitleBar.tsx';

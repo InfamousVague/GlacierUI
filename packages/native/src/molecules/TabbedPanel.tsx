@@ -7,14 +7,14 @@ import { CounterBadge } from '../atoms/display/CounterBadge.tsx';
 /**
  * The Glacier TabbedPanel, rendered with React Native primitives. A framed
  * panel with a header row of tabs over a bounded content body that switches per
- * active tab. This organism has no ComponentSpec, so — like the web
- * TabbedPanel.module.css it mirrors — paint and geometry are read straight from
+ * active tab. This organism has no ComponentSpec, so - like the web
+ * TabbedPanel.module.css it mirrors - paint and geometry are read straight from
  * the same `--glacier-*` tokens (wrapped by `t()`), keeping it visually
  * identical to @glacier/react's TabbedPanel.
  *
  * Structure mirrors the web: a `surface-raised` panel (hairline border,
- * radius-xl, shadow-1, clipped) wraps a `surface` header — a tab row plus an
- * optional trailing actions slot — over a padded body. Each tab is a Pressable
+ * radius-xl, shadow-1, clipped) wraps a `surface` header - a tab row plus an
+ * optional trailing actions slot - over a padded body. Each tab is a Pressable
  * that selects on press (controlled or uncontrolled via commons useControlled);
  * the resting label colors are text-muted (idle), text (selected) and
  * text-disabled (disabled), and the selected tab carries the accent-solid
@@ -25,7 +25,7 @@ import { CounterBadge } from '../atoms/display/CounterBadge.tsx';
  * accepted-but-noop: the framer-motion underline `layoutId` slide and the body
  * fade/rise on tab change (the resting selected indicator and body are painted
  * directly); the tablist's horizontal overflow scrolling (rendered as a plain
- * row — Tier A ships no ScrollView); and the WAI-ARIA arrow/Home/End keyboard
+ * row - Tier A ships no ScrollView); and the WAI-ARIA arrow/Home/End keyboard
  * navigation and hover/focus-ring states, which are DOM-only (the RN primitive
  * shim exposes no onKeyDown). `className` and any DOM rest props are web-only
  * and ignored. Tab switching remains fully functional via press.

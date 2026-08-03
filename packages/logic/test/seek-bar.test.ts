@@ -168,7 +168,7 @@ describe('seekBarGeometry', () => {
     const levels = [1, 0.15, 1];
     // every zigzag corner reaches the same height; a spike's corner is only as
     // tall as the passage under it, so the set of corner heights has more than
-    // one member (comparing overall spread would not tell them apart — loud
+    // one member (comparing overall spread would not tell them apart - loud
     // levels at both ends reach full amplitude either way)
     const cornerHeights = (shape: SeekBarShape): Set<number> =>
       new Set(
@@ -283,7 +283,7 @@ describe('seekBarSkeleton', () => {
     const bone = seekBarSkeleton('line');
     expect(bone.shape).toBe('wave');
     // the placeholder draws the full run, which actually deflects off the
-    // centerline — the ahead run of a wave is a flat rail by design
+    // centerline - the ahead run of a wave is a flat rail by design
     const { playedPath } = seekBarGeometry({ shape: bone.shape, progress: 1, levels: bone.levels });
     expect(points(playedPath).some((p) => Math.abs(p.y - MID_Y) > 1)).toBe(true);
   });

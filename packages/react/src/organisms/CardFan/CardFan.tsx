@@ -59,7 +59,7 @@ const WIDTHS: Record<CardFanSize, string> = {
  * silhouette never moves and the fan cannot overflow. All of that arithmetic is
  * in @glacier/logic, so the native fan lays out identically.
  *
- * Placement is a track position, not a transform — the two are kept apart so the
+ * Placement is a track position, not a transform - the two are kept apart so the
  * transform stays free for the lean, the lift and any drag the caller adds. It
  * also means a pointer sweeping a forty-card fan reshapes it by writing one
  * custom property per card, without re-rendering forty cards a frame.
@@ -89,8 +89,8 @@ export function CardFan<T extends CardFanItem = CardFanItem>({
     onChange: onSelect as ((value: string | undefined) => void) | undefined,
   });
 
-  // Which card the fan is opening around. Null is rest — an evenly weighted
-  // spread — and a number is a fractional index, so a pointer sliding across
+  // Which card the fan is opening around. Null is rest - an evenly weighted
+  // spread - and a number is a fractional index, so a pointer sliding across
   // moves the bulge continuously instead of snapping card to card.
   const [focus, setFocus] = useState<number | null>(null);
 
@@ -214,7 +214,7 @@ export function CardFan<T extends CardFanItem = CardFanItem>({
             >
               {/* The magnification raises this inner layer rather than the card
                   itself, so a card grows out of the fan without its footprint
-                  moving — which would otherwise drag its neighbours with it. */}
+                  moving - which would otherwise drag its neighbours with it. */}
               <div className={styles.lift} style={{ transform: `scale(${scale})` }}>
                 {renderItem(item, index)}
               </div>

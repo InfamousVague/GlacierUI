@@ -50,7 +50,7 @@ export interface VirtualListProps extends Omit<ComponentProps<'div'>, 'children'
  *
  * A tall spacer holds the true scroll height so the scrollbar describes the
  * data, and a small absolutely-positioned window holds the rows that are
- * currently on screen. The arithmetic — which rows, how tall, how far down —
+ * currently on screen. The arithmetic - which rows, how tall, how far down -
  * all comes from @glacier/logic, so the native list renders the same slice
  * for the same scroll position.
  *

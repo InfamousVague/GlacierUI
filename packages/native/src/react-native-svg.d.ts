@@ -2,7 +2,7 @@
  * Ambient types for the slice of `react-native-svg` the Glacier native kit uses.
  *
  * react-native-svg ships its own types, but they pull in the full React Native
- * type tree (which we deliberately do not install — the web docs only need
+ * type tree (which we deliberately do not install - the web docs only need
  * react-native-web). This shim declares just the SVG primitives the kit's
  * vector atoms (ProgressRing, Spinner, Sparkline, Meter arcs) render, kept
  * intentionally permissive: every SVG attribute is accepted as an unknown-typed

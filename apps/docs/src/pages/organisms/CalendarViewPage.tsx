@@ -64,7 +64,7 @@ function EditableCalendarDemo({ K }: { K: PlatformKit }) {
 
 /**
  * Selection is stateful, so it lives in its own wrapper the render callback
- * mounts once per pane — a callback cannot hold hooks.
+ * mounts once per pane - a callback cannot hold hooks.
  */
 function SelectableCalendarDemo({ K }: { K: PlatformKit }) {
   const t = useT();
@@ -74,7 +74,7 @@ function SelectableCalendarDemo({ K }: { K: PlatformKit }) {
   return (
     // width:100% because this wrapper is a flex item in the example pane: left
     // to `auto` it sizes to its content, and the calendar inside asking for
-    // 100% of it makes that circular — which resolves to max-content and spills
+    // 100% of it makes that circular - which resolves to max-content and spills
     // out of the pane.
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--glacier-space-3)', width: '100%' }}>
       <K.CalendarView

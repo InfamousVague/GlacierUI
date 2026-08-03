@@ -1,5 +1,5 @@
 // The Glacier PlayerCard, rendered with React Native primitives: an audio
-// transport in a card — what is playing, a seek bar with its elapsed and total
+// transport in a card - what is playing, a seek bar with its elapsed and total
 // times, and the play, skip, shuffle, and repeat controls under it. The transport
 // logic (time formatting, the repeat cycle, the density scale) comes from
 // @glacier/logic, the same functions the DOM kit calls, so the two cannot
@@ -356,7 +356,7 @@ export function PlayerCard({
         // leave a selection highlight behind the buttons
         userSelect: 'none' as never,
         // a loading card reads as an outline waiting to be filled, not a solid
-        // slab — the placeholders inside are what should carry it
+        // slab - the placeholders inside are what should carry it
         ...(skeleton ? { backgroundColor: 'transparent' } : null),
       }}
     >

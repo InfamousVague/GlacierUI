@@ -80,7 +80,7 @@ export const colorPickerSpec: ComponentSpec = {
     notes: [
       'Each slider is a real range input with aria-valuetext naming the channel and its value, so "lightness 64%" is announced rather than a bare number.',
       'The hex field is the non-visual route to an exact colour: a picker that can only be driven by dragging a gradient cannot be used without sight.',
-      'Colour is never the only channel of information — the current value is always shown as text as well as a swatch.',
+      'Colour is never the only channel of information - the current value is always shown as text as well as a swatch.',
       'Presets carry their colour in their accessible name, since a row of unlabelled swatches is a row of unlabelled buttons.',
     ],
   },

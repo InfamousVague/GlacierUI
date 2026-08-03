@@ -4,14 +4,14 @@ import { tableSpec } from '@glacier/spec';
 import { t } from '../tokens.ts';
 
 /**
- * Table — the @glacier/native binding of the web organism.
+ * Table - the @glacier/native binding of the web organism.
  *
  * KIND: scroll. The web `.wrap` is an `overflow-x: auto` box, so the whole table
  * lives inside a horizontal <ScrollView>. Rows are composed from View/Text (no
  * DOM <table>): a rowgroup of header cells over a rowgroup of body rows, each row
  * a flex-row whose bottom hairline spans the full width (matching the web's
  * collapsed horizontal borders). The item/column data contract is identical to
- * @glacier/react's Table — same `columns` (key/header/align/render) and `data`.
+ * @glacier/react's Table - same `columns` (key/header/align/render) and `data`.
  *
  * Paint is read from `tableSpec` (background → surface, text → text); the rest of
  * the geometry (radius-md wrap, hairline `border` dividers, space-3/space-4 cell
@@ -25,7 +25,7 @@ import { t } from '../tokens.ts';
  * horizontally once its columns exceed the available space; header and body
  * columns stay aligned because they share those widths. Custom-render columns
  * use a conservative width floor. Long-table virtualization is likewise a
- * follow-up — every row renders. `className` is accepted for parity and ignored.
+ * follow-up - every row renders. `className` is accepted for parity and ignored.
  */
 
 export interface TableColumn {
@@ -222,7 +222,7 @@ export function Table({ columns, data, caption, emptyState, className: _classNam
           )}
         </View>
 
-        {/* Caption — caption-side: bottom in the web CSS, so it renders below. */}
+        {/* Caption - caption-side: bottom in the web CSS, so it renders below. */}
         {caption != null
           ? asText(caption, {
               paddingVertical: t('space-2'),

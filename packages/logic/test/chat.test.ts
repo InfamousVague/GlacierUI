@@ -26,7 +26,7 @@ import {
  * the day crossing, the backwards clock, and the divider that must not move.
  *
  * Every moment is built with the local-date constructor so the suite reads the
- * same in any timezone — an ISO string with a `Z` would land on a different
+ * same in any timezone - an ISO string with a `Z` would land on a different
  * calendar day for anyone east or west of Greenwich and take the day-boundary
  * assertions with it.
  */
@@ -251,7 +251,7 @@ describe('groupMessages', () => {
     const rich: Rich = { id: 'a', authorId: 'ana', at: at(2024, 3, 3), threadId: 't1' };
     const [group] = groupMessages<Rich>([rich]);
     expect(group?.messages[0]?.threadId).toBe('t1');
-    // and the very same object, not a copy — identity is what memoisation reads
+    // and the very same object, not a copy - identity is what memoisation reads
     expect(group?.messages[0]).toBe(rich);
   });
 
@@ -556,7 +556,7 @@ describe('insertSeparators', () => {
   });
 
   it('honours an explicit anchor on the viewer’s own message', () => {
-    // The caller pinned it deliberately — usually "mark unread from here".
+    // The caller pinned it deliberately - usually "mark unread from here".
     const divider = sequence({ unreadAnchorId: 'a', viewerId: 'ana' }).find((i) => i.kind === 'unread');
     expect(divider?.kind === 'unread' && divider.key).toBe('unread:a');
   });
@@ -589,7 +589,7 @@ describe('aggregateReactions', () => {
   });
 
   it('orders by first appearance, so a chip never moves under a finger', () => {
-    // Count order would put 👍 first here too — the tell is that 🎉, with one
+    // Count order would put 👍 first here too - the tell is that 🎉, with one
     // reaction, stays ahead of an emoji that arrives later with more.
     const summary = aggregateReactions([
       { emoji: '🎉', actorId: 'ana' },

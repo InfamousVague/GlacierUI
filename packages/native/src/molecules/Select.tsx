@@ -1,5 +1,5 @@
 /**
- * @glacier/native — Select.
+ * @glacier/native - Select.
  *
  * The React Native binding of @glacier/react's Select: an Input-metric trigger
  * that toggles a glass listbox of options. Paint (surface trigger, glass-thick
@@ -15,7 +15,7 @@
  *   document body; it renders as an absolutely-positioned View inside the
  *   relative root, pinned below the trigger (top 100% + the web's 8px anchor
  *   gap). Collision-aware flip (the web's open-up branch), live scroll/resize
- *   reflow, and the RTL right-edge anchoring are dropped — the menu always opens
+ *   reflow, and the RTL right-edge anchoring are dropped - the menu always opens
  *   below, inline-start aligned, floored at the trigger width. The dynamic
  *   120–416px max-height clamp becomes a fixed 26rem (416px) scroll cap.
  * - Outside-pointer dismissal (the web pointerdown listener) has no anchored
@@ -25,8 +25,8 @@
  *   Enter/Escape roving) are web/device follow-ups; taps select here.
  * - `name` (the hidden form input) and `className` are DOM concepts with no
  *   native owner and are accepted-but-noop. The web reads its invalid/id/
- *   described-by wiring from FieldContext, which does not exist here, so — like
- *   the native Input — `invalid` is surfaced as a direct prop.
+ *   described-by wiring from FieldContext, which does not exist here, so - like
+ *   the native Input - `invalid` is surfaced as a direct prop.
  */
 import { useState, type ReactNode } from 'react';
 import { View, Text, Pressable, ScrollView, type ViewProps } from 'react-native';

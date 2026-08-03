@@ -1,5 +1,5 @@
 /**
- * @glacier/native — Menu (+ ContextMenu, MenuSub, MenuItem, MenuSeparator, MenuLabel).
+ * @glacier/native - Menu (+ ContextMenu, MenuSub, MenuItem, MenuSeparator, MenuLabel).
  *
  * The React Native binding of @glacier/react's Menu: a trigger that toggles a
  * glass panel of action rows. Paint (the glass-thick surface + glass-border
@@ -25,7 +25,7 @@
  *   backdrop blur/inset highlight are web/device follow-ups.
  * - ContextMenu is summoned on a touch long-press (the web contextmenu/500ms
  *   long-press path) and anchored below the wrapped target rather than at the
- *   exact pointer coordinates — RN has no pointer position without a gesture
+ *   exact pointer coordinates - RN has no pointer position without a gesture
  *   handler, so the zero-size virtual pointer anchor is a device follow-up.
  * - MenuSub opens its flyout on press (the web hover intent-delay + arrow-key
  *   open) and pins it inline-end of the row (right, LTR assumption; RTL flip is a
@@ -145,7 +145,7 @@ export interface MenuProps {
   trigger: ReactElement;
   /**
    * Where to place the menu relative to the trigger. Accepted for web parity;
-   * native approximates to below/inline-start (no flip/clamp — see the header).
+   * native approximates to below/inline-start (no flip/clamp - see the header).
    */
   placement?: Placement;
   open?: boolean;
@@ -205,7 +205,7 @@ export function Menu({
 // ---- ContextMenu -------------------------------------------------------------
 
 export interface ContextMenuProps {
-  /** The menu content — MenuItem, MenuSub, MenuSeparator, MenuLabel rows. */
+  /** The menu content - MenuItem, MenuSub, MenuSeparator, MenuLabel rows. */
   content: ReactNode;
   onOpenChange?: (open: boolean) => void;
   /** Accessible label for the menu panel. */
@@ -287,14 +287,14 @@ export interface MenuSubProps {
   className?: string;
   /** Style for the row Pressable. */
   style?: StyleProp;
-  /** The flyout content — MenuItem rows, separators, or deeper MenuSubs. */
+  /** The flyout content - MenuItem rows, separators, or deeper MenuSubs. */
   children?: ReactNode;
 }
 
 /**
  * A flyout submenu row inside a Menu or ContextMenu. Renders like a MenuItem
  * with a trailing chevron; pressing it toggles a flyout that pins inline-end of
- * the row (the web opens on hover/arrow — a device follow-up). Nests. The flyout
+ * the row (the web opens on hover/arrow - a device follow-up). Nests. The flyout
  * closes when its ancestor panel closes.
  */
 export function MenuSub({

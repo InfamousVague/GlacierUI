@@ -1,5 +1,5 @@
 /**
- * @glacier/native — DatePicker.
+ * @glacier/native - DatePicker.
  *
  * The React Native binding of @glacier/react's DatePicker: an Input-metric
  * trigger (a leading CalendarDays glyph + the formatted value) that opens the
@@ -24,7 +24,7 @@
  * - Outside-press dismissal (the web pointerdown listener), the open scale/fade
  *   motion and reduced-motion branch, the hover border wash, and the keyboard
  *   model (open on Enter/Space, roving day focus, Escape-to-close with trigger
- *   refocus) are dropped — tapping the trigger toggles the panel and tapping a
+ *   refocus) are dropped - tapping the trigger toggles the panel and tapping a
  *   day selects and closes it.
  * - `name` (the hidden ISO yyyy-MM-dd form input) has no form owner on native
  *   and is accepted-but-noop; the web's FieldContext wiring (id / aria-describedby

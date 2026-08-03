@@ -1,4 +1,4 @@
-// FloatingPanel — the @glacier/native binding of @glacier/react's FloatingPanel
+// FloatingPanel - the @glacier/native binding of @glacier/react's FloatingPanel
 // organism. A non-modal floating glass panel: a header grab-bar with a title and
 // close button sits above a scrollable body. Paint (glass-thick surface,
 // glass-border hairline, border-subtle handle divider) and geometry (min/max
@@ -10,7 +10,7 @@
 // React Native has no document.body portal and no `position: fixed`, so the panel
 // is approximated as an absolutely-positioned View placed at `defaultPosition`
 // (top/left), rendered inline where it is mounted rather than portalled to the
-// screen root — non-modal, so the page underneath stays interactive (no Modal,
+// screen root - non-modal, so the page underneath stays interactive (no Modal,
 // which would cover/trap the screen). A true body portal + viewport-fixed
 // positioning + collision clamping is a device follow-up.
 //
@@ -28,8 +28,8 @@
 //   shadow have no React Native equivalent and are dropped (resting paint only).
 // - The open fade/scale-in motion (and its reduced-motion path): the panel renders
 //   at its resting open geometry; the spring is a device follow-up.
-// - The body's font-size (sm) inheritance is web-only — RN text sizing lives on
-//   each Text — so body content supplies its own type.
+// - The body's font-size (sm) inheritance is web-only - RN text sizing lives on
+//   each Text - so body content supplies its own type.
 import { type ReactNode } from 'react';
 import { View, ScrollView, type ViewProps, type StyleProp } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
@@ -69,7 +69,7 @@ export interface FloatingPanelProps extends Omit<ViewProps, 'children' | 'style'
 // wrapped by t().
 const DIMS = dimensionsFor(floatingPanelSpec);
 // The open-state paint carries the glass surface + border (the shadow token has
-// no RN equivalent). The base `paint` map's text color is web-only inheritance —
+// no RN equivalent). The base `paint` map's text color is web-only inheritance -
 // RN has none, and per the kit rules color lives on <Text>, so the Heading/body
 // content carry their own color rather than the panel View.
 const OPEN = paintFor(floatingPanelSpec, 'states', 'open');
@@ -85,7 +85,7 @@ const CloseIcon = (
 /**
  * The Glacier FloatingPanel, rendered with React Native primitives. Fully
  * controlled: `open` is required with no uncontrolled fallback, mirroring the
- * web `if (!open) return null`, so there is no useControlled seam — the render is
+ * web `if (!open) return null`, so there is no useControlled seam - the render is
  * driven by `open` and dismissal calls `onClose`.
  */
 export function FloatingPanel({

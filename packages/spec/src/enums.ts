@@ -1,5 +1,5 @@
 /**
- * Enum vocabulary — named constants for the loose string props, so components
+ * Enum vocabulary - named constants for the loose string props, so components
  * read `size={Size.Large}` / `tone={Tone.Accent}` / `tone={TextTone.Muted}`
  * instead of `size="lg"` / `tone="accent"` / `tone="muted"`. Mirrors the
  * `@glacier/motion` enum pattern (Motion, Speed, Ease, Spring).

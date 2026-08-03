@@ -1,12 +1,12 @@
 /**
- * TimeSeriesChart — the @glacier/native binding of the web organism.
+ * TimeSeriesChart - the @glacier/native binding of the web organism.
  *
  * The web kit canvas-renders the plot with uPlot; react-native has no canvas, so
  * this redraws the same picture with react-native-svg. The line/area series, the
  * horizontal gridlines, and the axes are a normalized `viewBox="0 0 100 100"
  * preserveAspectRatio="none"` SVG (exactly the fluid, container-following geometry
  * uPlot produces), with `vectorEffect="non-scaling-stroke"` holding the 2px series
- * and hairline grid strokes constant despite the non-uniform scale — the same
+ * and hairline grid strokes constant despite the non-uniform scale - the same
  * technique the native Sparkline uses. Axis tick labels are plain <Text> overlays
  * (react-native-svg's <Text> is not in the kit's SVG shim) positioned in the same
  * fractional space, so labels and marks stay aligned without measuring pixels.
@@ -204,7 +204,7 @@ export function TimeSeriesChart({
   const xTicks = timeTickIndices(times.length, 4);
 
   // Build one line path per contiguous (non-null) run so gaps break the line,
-  // and — for area — a filled polygon dropped to the value floor.
+  // and - for area - a filled polygon dropped to the value floor.
   const buildPaths = (values: (number | null)[]) => {
     const segments: { x: number; y: number }[][] = [];
     let current: { x: number; y: number }[] = [];
@@ -234,7 +234,7 @@ export function TimeSeriesChart({
 
   return (
     <View {...rest} style={[rootStyle, style as never]}>
-      {/* Header: readout slot (hover value row — a device follow-up) + legend. */}
+      {/* Header: readout slot (hover value row - a device follow-up) + legend. */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', columnGap: t('space-3'), minHeight: '1.25rem' }}>
         <View aria-hidden={true} style={{ flexShrink: 1, overflow: 'hidden' }} />
         {showLegendRow && (

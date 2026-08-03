@@ -30,7 +30,7 @@
   /* A short conversation sits at the FOOT of the pane rather than floating at
      its top, which is where a reader's eye goes and where the composer would
      be. `min-height` only sets a floor, so once the thread outgrows the pane
-     its own height wins and `justify-content` has nothing left to distribute —
+     its own height wins and `justify-content` has nothing left to distribute -
      which is why this does not hit the usual "flex centring clips the
      overflowing start" trap: that needs a container shorter than its content,
      and this one never is. */
@@ -40,7 +40,7 @@
 }
 
 /* Full width so a run can still align its own contents to whichever edge its
-   authorship earned — the run decides the side, the wrapper only stacks. */
+   authorship earned - the run decides the side, the wrapper only stacks. */
 .run {
   min-width: 0;
   transition: opacity var(--glacier-duration-fast) var(--glacier-ease-out);
@@ -55,7 +55,7 @@
 
    Deliberately NOT applied to a failed send. Failure is unacknowledged too, but
    it is the one row in a transcript that asks the reader to act, and quieting it
-   is the exact wrong move — see the `failed` state in the spec. */
+   is the exact wrong move - see the `failed` state in the spec. */
 .run[data-provisional] {
   opacity: var(--conversation-provisional-opacity);
 }
@@ -74,7 +74,7 @@
   outline-offset: -2px;
 }
 
-/* An empty thread is a centred stop, not a column anchored to the bottom edge —
+/* An empty thread is a centred stop, not a column anchored to the bottom edge -
    there is nothing below it for the anchor to mean anything against. */
 .conversation[data-empty] .thread {
   justify-content: center;
@@ -82,7 +82,7 @@
 
 /* A loading thread reads as an outline waiting to be filled. The bones inside
    are what the eye should follow, so the thread itself paints nothing and stays
-   inert to assistive tech — announced content that is not content yet is worse
+   inert to assistive tech - announced content that is not content yet is worse
    than silence in a live region.
 
    No specificity trick is needed here, unlike PlayerCard: that component is

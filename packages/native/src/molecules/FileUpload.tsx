@@ -1,5 +1,5 @@
 /**
- * FileUpload — the native binding of @glacier/react's FileUpload molecule.
+ * FileUpload - the native binding of @glacier/react's FileUpload molecule.
  *
  * A dashed dropzone (icon + prompt + hint, with an optional count summary) over
  * a list of accepted files, each a glyph + middle-truncated name + locale-sized
@@ -9,7 +9,7 @@
  *
  * WEB-ONLY, accepted-but-inert here (documented): there is no DOM `input[type=file]`,
  * so the native chooser, drag-and-drop, and form participation do not exist. The
- * dropzone is a Pressable whose browse action is inert — a device document-picker
+ * dropzone is a Pressable whose browse action is inert - a device document-picker
  * is the follow-up. Because nothing feeds files in, the validation props (`accept`,
  * `maxSize`, `maxFiles`, `multiple`, `onReject`) and the form props (`name`, `id`)
  * are accepted-but-inert; `maxFiles` still renders the count summary. The full
@@ -82,7 +82,7 @@ const DIMS = dimensionsFor(fileUploadSpec);
 /**
  * A resolved measurement value. `dimensionsFor` hands back token names alongside
  * any raw CSS lengths the spec declares inline; wrap the token names in the
- * custom property and let a raw length — anything starting with a digit or dot —
+ * custom property and let a raw length - anything starting with a digit or dot -
  * pass through so it never becomes `var(--glacier-space-2)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -92,7 +92,7 @@ function metric(value: string | undefined, fallback: string): string {
 
 const SIZE_UNITS = ['byte', 'kilobyte', 'megabyte', 'gigabyte', 'terabyte'] as const;
 
-/** Formats a byte count as a short size, e.g. `1.2 MB` (fixed `en` — no locale natively). */
+/** Formats a byte count as a short size, e.g. `1.2 MB` (fixed `en` - no locale natively). */
 function formatFileSize(bytes: number): string {
   let value = bytes;
   let unit = 0;

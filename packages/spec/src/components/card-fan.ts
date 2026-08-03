@@ -10,7 +10,7 @@ export const cardFanSpec: ComponentSpec = {
   category: 'organism',
   status: 'draft',
   summary:
-    'A hand of cards spread along a fixed arc, dense at its ends and opening up around the pointer — so forty items occupy the same strip as seven and stay separable.',
+    'A hand of cards spread along a fixed arc, dense at its ends and opening up around the pointer - so forty items occupy the same strip as seven and stay separable.',
   element: 'ul',
   anatomy: [
     { name: 'fan', description: 'The track. A fixed length that the items are distributed across, which is what stops the fan overflowing however many it holds.', required: true },
@@ -36,8 +36,8 @@ export const cardFanSpec: ComponentSpec = {
     gap: token('space-2'),
     border: token('hairline'),
     // Card widths, written as CSS lengths and passed through verbatim by both
-    // bindings. Not `sizes`: that carries the schema's control measures —
-    // height, padding, and the like — and a card's width is not one of them.
+    // bindings. Not `sizes`: that carries the schema's control measures -
+    // height, padding, and the like - and a card's width is not one of them.
     // The fan scales its whole arc from this, so the three are the size scale.
     widthSm: '5rem',
     widthMd: '8.25rem',
@@ -83,14 +83,14 @@ export const cardFanSpec: ComponentSpec = {
     ],
     notes: [
       'A fan is a list of choices, so it is a listbox rather than a decorative stack: each card is an option with a name, and the selected one is reported as such.',
-      'Roving focus — one card is tabbable and the arrows move within, so Tab leaves the fan rather than walking forty cards.',
+      'Roving focus - one card is tabbable and the arrows move within, so Tab leaves the fan rather than walking forty cards.',
       'The keyboard moves the focus and the fan opens around it, so the same spreading that helps a pointer helps someone who has none.',
       'Magnification is suppressed under reduced motion; the layout still opens, because the spread is what makes a large fan legible rather than an embellishment on it.',
     ],
   },
   motion: {
     description:
-      'Cards settle into their place along the track rather than snapping, and the magnification eases separately. The two are kept apart on purpose: placement animates the track position while the transform stays free for the lean, the bow and any drag. Under reduced motion both are dropped and cards move straight to their placements — the spread itself stays, because it is what makes a large fan legible rather than an embellishment on it.',
+      'Cards settle into their place along the track rather than snapping, and the magnification eases separately. The two are kept apart on purpose: placement animates the track position while the transform stays free for the lean, the bow and any drag. Under reduced motion both are dropped and cards move straight to their placements - the spread itself stays, because it is what makes a large fan legible rather than an embellishment on it.',
     transition: { speed: 'normal', ease: 'out' },
   },
 };

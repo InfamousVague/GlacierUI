@@ -9,7 +9,7 @@ import { m } from '../../i18n.ts';
 /**
  * A controlled SegmentedControl paired with a live readout of the selected
  * value. Selection is lifted into this wrapper so each comparison pane owns its
- * own state — the render prop is run once per pane and cannot hold hooks itself.
+ * own state - the render prop is run once per pane and cannot hold hooks itself.
  * `K` is the platform kit (the DOM kit or the RN kit) the demo renders through.
  */
 function SegmentedViewDemo({ K }: { K: PlatformKit }) {

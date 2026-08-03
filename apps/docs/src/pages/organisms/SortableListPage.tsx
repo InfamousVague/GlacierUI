@@ -11,7 +11,7 @@ interface Row {
 }
 
 /**
- * The list is controlled, so each demo owns the order in its own state — which
+ * The list is controlled, so each demo owns the order in its own state - which
  * is also the point being demonstrated: nothing moves unless the caller takes
  * the array the list hands back.
  */

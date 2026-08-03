@@ -1,7 +1,7 @@
 /**
- * @glacier/native — Spotlight.
+ * @glacier/native - Spotlight.
  *
- * The React Native binding of @glacier/react's Spotlight: a guided-tour step —
+ * The React Native binding of @glacier/react's Spotlight: a guided-tour step -
  * a dimmed full-screen backdrop plus a glass callout carrying a title, body,
  * step count, and Back / Next / Close controls. Geometry (the callout's
  * radius-xl and space-2 gap) is read from the spotlight spec through the shared
@@ -18,13 +18,13 @@
  * wrapped with useControlled and it renders nothing when closed. Escape and the
  * Android back button both route to onClose via onRequestClose.
  *
- * Web-parity notes — deliberate approximations of DOM-only machinery:
+ * Web-parity notes - deliberate approximations of DOM-only machinery:
  * - Anchored placement: the web anchors the callout to `targetRef` with the
  *   shared floating-ui engine (flip + clamp) and re-parents it to document.body.
  *   React Native has no portal or floating-ui and cannot measure an arbitrary
  *   target cheaply, so the callout is CENTERED over the scrim instead. `targetRef`
  *   and `placement` are kept in the contract for 1:1 docs parity but do not drive
- *   position here — collision-aware anchored placement is a device follow-up.
+ *   position here - collision-aware anchored placement is a device follow-up.
  * - Cutout highlight: the web punches a click-through, rounded "hole" around the
  *   target (a giant spread shadow on a ring, `cutoutPadding` wide) so the
  *   highlighted element stays interactive. RN cannot punch a shadow hole or make

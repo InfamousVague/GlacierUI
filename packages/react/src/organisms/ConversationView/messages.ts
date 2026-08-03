@@ -1,7 +1,7 @@
 import { defineMessages } from '../../i18n/locale.ts';
 
 /**
- * The thread's own strings — the ones that are not user content.
+ * The thread's own strings - the ones that are not user content.
  *
  * The region's name and the empty state are the only English a transcript would
  * otherwise contain, which makes them the only part of a translated chat app

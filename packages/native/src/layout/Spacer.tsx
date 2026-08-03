@@ -9,7 +9,7 @@ import { View, type ViewProps } from 'react-native';
  * Native has no `flex` shorthand, so it is expanded to the equivalent
  * longhands: flexGrow 1 (take all free space), flexShrink 1, flexBasis 0. The
  * `align-self: stretch` maps 1:1 so the spacer fills the cross axis. There is no
- * paint or geometry to read from a spec — the whole component is flex behaviour.
+ * paint or geometry to read from a spec - the whole component is flex behaviour.
  *
  * `className` is web-only (styling escape hatch) and is accepted-but-noop on
  * native; it is dropped rather than forwarded to the View.

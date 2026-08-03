@@ -64,7 +64,7 @@ const BASE_TEXT = t((BASE.text ?? '$text-muted').replace(/^\$/, ''));
  *   a Pressable, and text color does not inherit from a parent View); a
  *   currentColor / em-sized icon inherits them on react-native-web.
  *
- * Resting visuals only — the web's hover color ease and focus-ring bloom are
+ * Resting visuals only - the web's hover color ease and focus-ring bloom are
  * motion the native binding does not run; glass drops its backdrop blur +
  * saturate + inset highlight (no React Native equivalent), keeping the tint.
  * `className` / `onClick` are web-only DOM props; native uses `onPress`.

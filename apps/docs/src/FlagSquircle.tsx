@@ -15,7 +15,7 @@ import type { Locale } from '@glacier/react';
 const SQUIRCLE = 'M0,12 C0,4 4,0 12,0 C20,0 24,4 24,12 C24,20 20,24 12,24 C4,24 0,20 0,12 Z';
 
 const FLAGS: Record<Locale, ReactNode> = {
-  // United Kingdom — simplified Union Jack (centered crosses).
+  // United Kingdom - simplified Union Jack (centered crosses).
   en: (
     <>
       <rect width="24" height="24" fill="#012169" />
@@ -25,14 +25,14 @@ const FLAGS: Record<Locale, ReactNode> = {
       <path d="M12,0 V24 M0,12 H24" stroke="#C8102E" strokeWidth="4" />
     </>
   ),
-  // Spain — red / (wider) gold / red.
+  // Spain - red / (wider) gold / red.
   es: (
     <>
       <rect width="24" height="24" fill="#AA151B" />
       <rect y="6" width="24" height="12" fill="#F1BF00" />
     </>
   ),
-  // France — blue / white / red verticals.
+  // France - blue / white / red verticals.
   fr: (
     <>
       <rect width="8" height="24" fill="#002395" />
@@ -40,7 +40,7 @@ const FLAGS: Record<Locale, ReactNode> = {
       <rect x="16" width="8" height="24" fill="#ED2939" />
     </>
   ),
-  // Germany — black / red / gold horizontals.
+  // Germany - black / red / gold horizontals.
   de: (
     <>
       <rect width="24" height="8" fill="#000000" />
@@ -48,14 +48,14 @@ const FLAGS: Record<Locale, ReactNode> = {
       <rect y="16" width="24" height="8" fill="#FFCE00" />
     </>
   ),
-  // Japan — red disc on white.
+  // Japan - red disc on white.
   ja: (
     <>
       <rect width="24" height="24" fill="#ffffff" />
       <circle cx="12" cy="12" r="6" fill="#BC002D" />
     </>
   ),
-  // Portugal — green / red with a hint of the armillary ring at the seam.
+  // Portugal - green / red with a hint of the armillary ring at the seam.
   pt: (
     <>
       <rect width="24" height="24" fill="#FF0000" />
@@ -63,7 +63,7 @@ const FLAGS: Record<Locale, ReactNode> = {
       <circle cx="9.6" cy="12" r="3" fill="none" stroke="#FFCB00" strokeWidth="1.3" />
     </>
   ),
-  // China — a single gold star on red.
+  // China - a single gold star on red.
   zh: (
     <>
       <rect width="24" height="24" fill="#DE2910" />
@@ -73,7 +73,7 @@ const FLAGS: Record<Locale, ReactNode> = {
       />
     </>
   ),
-  // Saudi Arabia — green with the horizontal sword line hinted.
+  // Saudi Arabia - green with the horizontal sword line hinted.
   ar: (
     <>
       <rect width="24" height="24" fill="#006C35" />

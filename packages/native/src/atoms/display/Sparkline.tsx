@@ -44,7 +44,7 @@ const BOX = dimensionsFor(sparklineSpec);
  * A resolved measurement value. `sizeFor`/`dimensionsFor` return token names
  * (e.g. `space-2`) alongside raw CSS lengths (the sizes' `1.5rem` height and
  * `1.5px` thickness are declared inline, not as tokens). Token names get the
- * custom property; a raw length — anything starting with a digit or dot — passes
+ * custom property; a raw length - anything starting with a digit or dot - passes
  * through so it never becomes `var(--glacier-1.5rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -68,7 +68,7 @@ function project(data: number[], min: number, max: number): { x: number; y: numb
  * geometry the DOM kit draws (react-native-svg resolves to a real DOM <svg> on
  * react-native-web, and stroke/fill accept the `var(--glacier-*)` token strings),
  * with `vectorEffect="non-scaling-stroke"` keeping the stroke a constant width
- * despite the non-uniform viewBox scaling — pixel-identical to @glacier/react's
+ * despite the non-uniform viewBox scaling - pixel-identical to @glacier/react's
  * Sparkline and unable to drift from it. Bars, the dashed baseline, and the
  * end-point dot are absolutely-positioned Views mirroring the CSS spans.
  *

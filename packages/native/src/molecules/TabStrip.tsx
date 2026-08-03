@@ -7,7 +7,7 @@ import { t } from '../tokens.ts';
 import { paintFor, dimensionsFor } from '../resolve.ts';
 
 /**
- * TabStrip — the @glacier/native binding of the web organism.
+ * TabStrip - the @glacier/native binding of the web organism.
  *
  * KIND: compose. This composes native primitives (View / Pressable / Text +
  * react-native-svg) into the same role="tablist" of role="tab" buttons the DOM
@@ -25,14 +25,14 @@ import { paintFor, dimensionsFor } from '../resolve.ts';
  *
  * Interactivity is controlled state (useControlled): tapping a tab selects it
  * (reporting via onValueChange), the nested close Pressable reports onClose. The
- * active tab renders its underline as a RESTING absolute element — no motion
+ * active tab renders its underline as a RESTING absolute element - no motion
  * runtime on this binding, so the `spring` preset is accepted for prop parity
  * but has no animated effect (the web springs the shared layout element).
  *
  * Web-only, accepted-but-noop on native (reported in the wave notes):
- *   - spring          — no framer-motion layout animation here (resting underline).
- *   - className        — DOM escape hatch, ignored.
- *   - keyboard nav (Arrow/Home/End/Delete) and roving tabindex/focus — DOM-only.
+ *   - spring - no framer-motion layout animation here (resting underline).
+ *   - className - DOM escape hatch, ignored.
+ *   - keyboard nav (Arrow/Home/End/Delete) and roving tabindex/focus - DOM-only.
  *
  * Overflowing tabs retain their intrinsic width inside a horizontal ScrollView,
  * keeping the strip bounded by its parent on both native and React Native Web.
@@ -74,8 +74,8 @@ export interface TabStripProps extends Omit<ViewProps, 'children' | 'style'> {
  * A resolved measurement value. The resolvers return token names (e.g.
  * `space-3`) for tokenized values and raw CSS lengths for the rest (the close
  * control's `1.25rem` box and the label's `12rem` cap are declared inline, not
- * as tokens). A token name is wrapped in its custom property; a raw length —
- * anything starting with a digit or dot — passes straight through so it never
+ * as tokens). A token name is wrapped in its custom property; a raw length -
+ * anything starting with a digit or dot - passes straight through so it never
  * becomes `var(--glacier-1.25rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -110,7 +110,7 @@ function CloseGlyph({ color }: { color: string }) {
  * The Glacier TabStrip, rendered with React Native primitives. The strip is a
  * flex-row View with the border-subtle baseline hairline; each tab is a
  * Pressable that selects on tap and carries an optional leading icon, an
- * ellipsized label, a nested close Pressable, and — when active — the resting
+ * ellipsized label, a nested close Pressable, and - when active - the resting
  * accent-solid underline. Paint and geometry come from the tab-strip spec so it
  * stays pixel-identical to @glacier/react's TabStrip.
  */

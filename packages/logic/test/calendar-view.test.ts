@@ -118,7 +118,7 @@ describe('buildMonthGrid', () => {
   });
 
   it('still fills six rows for a short month', () => {
-    // February 2027 is exactly four weeks and starts on a Monday — the case a
+    // February 2027 is exactly four weeks and starts on a Monday - the case a
     // five-row grid would collapse on.
     const feb = buildMonthGrid(d(2027, 1, 10), { today: TODAY, weekStartsOn: 1 });
     expect(feb).toHaveLength(MONTH_ROWS);

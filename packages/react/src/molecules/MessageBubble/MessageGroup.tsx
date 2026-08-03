@@ -26,7 +26,7 @@ export type { ChatMessageGroup };
  *
  * The reactions, attachments, and quoted-reply components are built separately;
  * this is the contract between them and the run. It carries the message plus the
- * geometry facts a decoration might need — a reaction bar under the last bubble
+ * geometry facts a decoration might need - a reaction bar under the last bubble
  * of a run sits beside a tail, and one under a middle bubble does not.
  */
 export interface MessageSlotContext<M extends ChatMessage = ChatMessage> {
@@ -38,7 +38,7 @@ export interface MessageSlotContext<M extends ChatMessage = ChatMessage> {
   /** The viewer wrote it. */
   own: boolean;
   layout: MessageLayout;
-  /** This is the message that ends the run — the one wearing the tail. */
+  /** This is the message that ends the run - the one wearing the tail. */
   last: boolean;
 }
 
@@ -91,7 +91,7 @@ export interface MessageGroupProps<M extends ChatMessage = ChatMessage>
  *
  * The `continued` flag is the subtle case and the one most easily got wrong.
  * When the unread divider lands mid-run, `insertSeparators` splits the run and
- * marks the trailing half continued — it is the same person still talking, with
+ * marks the trailing half continued - it is the same person still talking, with
  * a line drawn through their sentence. Repeating the avatar and name there would
  * turn one speaker into two and make the divider look like a change of author,
  * so a continued run suppresses both while keeping the gutter reserved, and its

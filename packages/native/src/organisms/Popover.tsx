@@ -1,5 +1,5 @@
 /**
- * @glacier/native — Popover.
+ * @glacier/native - Popover.
  *
  * The React Native binding of @glacier/react's Popover: a floating glass panel
  * anchored to a trigger. Paint (the glass-thick surface + glass-border hairline
@@ -72,8 +72,8 @@ const PANEL_BORDER = t(OPEN.border ?? 'glass-border');
  * A resolved measurement value. `dimensionsFor` returns bare token names (e.g.
  * `space-3`) for tokenized values and raw CSS lengths for the rest (the panel's
  * `12rem` min-width and `12px` offset are declared inline, not as tokens). A
- * token name is wrapped in its custom property; a raw length — anything starting
- * with a digit or dot — passes straight through so it never becomes
+ * token name is wrapped in its custom property; a raw length - anything starting
+ * with a digit or dot - passes straight through so it never becomes
  * `var(--glacier-12rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -135,7 +135,7 @@ function anchorStyle(placement: Placement, gap: string): Style {
  * The trigger is cloned to wire its press to the open toggle (composing any
  * existing onPress) and to carry aria-haspopup/aria-expanded, exactly like the
  * web cloneElement. Open state is controlled/uncontrolled through the shared
- * `useControlled` hook — the same contract the web kit uses.
+ * `useControlled` hook - the same contract the web kit uses.
  */
 export function Popover({
   trigger,

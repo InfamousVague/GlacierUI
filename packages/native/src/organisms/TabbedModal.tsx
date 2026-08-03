@@ -1,8 +1,8 @@
-// TabbedModal — the React Native binding of @glacier/react's TabbedModal.
+// TabbedModal - the React Native binding of @glacier/react's TabbedModal.
 // A settings-style dialog: a fixed left nav rail (vertical tablist) beside a
 // scrollable right pane (tabpanel). The web composes the kit's Modal; native has
 // no Modal binding yet, so this synthesizes the same chrome from the RN Modal
-// primitive — a scrim backdrop that closes on press plus a centered glass panel —
+// primitive - a scrim backdrop that closes on press plus a centered glass panel -
 // and reads every paint/geometry token from the tabbed-modal and modal specs
 // through the shared resolvers, so it cannot drift from the DOM kit.
 
@@ -53,7 +53,7 @@ export interface TabbedModalProps {
  * A resolved measurement value: `dimensionsFor`/`sizeFor` hand back bare token
  * names (e.g. `space-6`) for tokenized values and raw CSS lengths (the panel's
  * `48rem` max-width, declared inline) for the rest. A token name gets wrapped in
- * its custom property; a raw length — anything starting with a digit or dot —
+ * its custom property; a raw length - anything starting with a digit or dot -
  * passes straight through so it never becomes `var(--glacier-48rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -103,8 +103,8 @@ const CloseIcon = (
  * geometry come from the modal and tabbed-modal specs through the shared
  * resolvers, so it stays visually identical to @glacier/react's TabbedModal.
  *
- * Selection is controlled/uncontrolled through the shared `useControlled` hook —
- * the same contract the web kit uses — and taps switch sections. Resting visuals
+ * Selection is controlled/uncontrolled through the shared `useControlled` hook -
+ * the same contract the web kit uses - and taps switch sections. Resting visuals
  * only: the web springs the dialog open, slides the rail pill between sections as
  * a shared framer-motion layout element, and cross-fades the pane on change; this
  * binding has no animation runtime, so it paints the resting OPEN state (the pill
@@ -112,7 +112,7 @@ const CloseIcon = (
  * only device transition). Arrow-key roving, focus trap, scroll lock, portal, and
  * the panel's backdrop blur/shadow are web concerns dropped or approximated here;
  * `className` is accepted-but-noop for prop parity. On device, pane text children
- * need their own color — Text does not inherit the pane color as CSS does on web.
+ * need their own color - Text does not inherit the pane color as CSS does on web.
  */
 export function TabbedModal({
   open,

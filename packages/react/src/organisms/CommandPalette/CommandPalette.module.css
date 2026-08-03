@@ -149,7 +149,7 @@
   color: var(--glacier-accent-solid);
 }
 
-/* A disabled row is quiet by definition — a bright mark inside it would read as
+/* A disabled row is quiet by definition - a bright mark inside it would read as
    actionable, so the highlight only carries weight there. */
 .option[data-disabled] .mark {
   color: inherit;

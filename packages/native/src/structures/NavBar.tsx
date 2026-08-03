@@ -1,5 +1,5 @@
 /**
- * NavBar — the @glacier/native binding of the web structure.
+ * NavBar - the @glacier/native binding of the web structure.
  *
  * KIND: compose. A navigation bar/rail built from native primitives (View /
  * Pressable / Text + the CounterBadge / Skeleton siblings), matching
@@ -23,16 +23,16 @@
  *
  * RESTING VISUALS ONLY. Web-only fidelity that is accepted-but-noop here
  * (reported in the wave notes):
- *   - spring / the sliding pill — there is no motion runtime on this binding, so
+ *   - spring / the sliding pill - there is no motion runtime on this binding, so
  *     the active pill renders as a RESTING absolute element under the item and
  *     `spring` is accepted for prop parity with no animated effect (the web
  *     springs a shared layout element between items).
- *   - hover wash + focus ring + the color-ease transition — pointer/focus states
+ *   - hover wash + focus ring + the color-ease transition - pointer/focus states
  *     the native binding does not run.
- *   - as / href / target / rel — DOM polymorphism (render an <a>); every item is
+ *   - as / href / target / rel - DOM polymorphism (render an <a>); every item is
  *     a Pressable here (accessibilityRole flips to "link" when linked). Wire
  *     navigation through onPress. Accepted for a 1:1 contract, otherwise no-op.
- *   - className — DOM escape hatch, ignored.
+ *   - className - DOM escape hatch, ignored.
  */
 
 import { createContext, useContext, type ElementType, type ReactNode } from 'react';

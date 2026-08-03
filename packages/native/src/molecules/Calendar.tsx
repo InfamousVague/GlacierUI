@@ -1,5 +1,5 @@
 /**
- * @glacier/native — Calendar.
+ * @glacier/native - Calendar.
  *
  * The React Native binding of @glacier/react's Calendar: an inline month grid
  * for picking a single date or a from/to range. The web kit delegates its grid
@@ -24,7 +24,7 @@
  *   per instance with `dateFnsLocale` exactly like the web.
  * - Range-band corner rounding is LTR-only (the web's logical inline-start/end
  *   flips under RTL). Day-paint transitions, the reduced-motion branch, and
- *   hover washes are resting-state only — the pressed state stands in for hover.
+ *   hover washes are resting-state only - the pressed state stands in for hover.
  * - `className` is a DOM concept with no native owner and is accepted-but-noop.
  */
 import { useState } from 'react';

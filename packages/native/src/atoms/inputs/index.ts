@@ -1,4 +1,4 @@
-// atoms/inputs — barrel (split from the flat src barrel).
+// atoms/inputs - barrel (split from the flat src barrel).
 export { Button, type ButtonProps, type ButtonVariant, type ButtonSize } from './Button.tsx';
 export { Switch, type SwitchProps, type SwitchSize } from './Switch.tsx';
 export { Checkbox, type CheckboxProps } from './Checkbox.tsx';

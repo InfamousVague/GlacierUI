@@ -1,5 +1,5 @@
 /**
- * Player transport logic — the parts of an audio player that are decisions
+ * Player transport logic - the parts of an audio player that are decisions
  * rather than pixels, shared so both bindings behave identically.
  */
 
@@ -20,12 +20,12 @@ export function formatDuration(seconds: number): string {
 /**
  * How the card arranges what it holds.
  *
- * - `stacked` — heading, bar, then controls in a column. The default, and the
+ * - `stacked` - heading, bar, then controls in a column. The default, and the
  *   one that survives being squeezed into a narrow column.
- * - `inline` — artwork top-aligned on the leading edge with the title, artist,
+ * - `inline` - artwork top-aligned on the leading edge with the title, artist,
  *   and album beside it; the bar and controls then break to their own rows and
  *   span the full width, so the seek bar is never squeezed into a column.
- * - `square` — artwork as a square hero with the bar and controls beneath it,
+ * - `square` - artwork as a square hero with the bar and controls beneath it,
  *   the shape a phone's now-playing screen wants.
  */
 export type PlayerLayout = 'stacked' | 'inline' | 'square';
@@ -95,7 +95,7 @@ export function playerMetrics(density: PlayerDensity): PlayerMetrics {
  * How wide each placeholder is while the card loads.
  *
  * Shared so the two bindings cannot size their bones differently: left to their
- * own defaults they do not agree — the DOM kit's text placeholder is a fixed
+ * own defaults they do not agree - the DOM kit's text placeholder is a fixed
  * `14ch`, which is about right for a title and three times too wide for a
  * `1:24` readout, while the native one is a fixed block that would make every
  * line the same length. Both read these instead.
@@ -111,16 +111,16 @@ export const playerSkeletonWidths = {
 /**
  * Repeat modes, in the order the button cycles through them.
  *
- * - `off` — stop at the end of the track.
- * - `all` — loop the queue.
- * - `one` — loop this track.
+ * - `off` - stop at the end of the track.
+ * - `all` - loop the queue.
+ * - `one` - loop this track.
  */
 export type PlayerRepeat = 'off' | 'all' | 'one';
 
 const REPEAT_ORDER: PlayerRepeat[] = ['off', 'all', 'one'];
 
 /**
- * The mode a press moves to. Off to all to one and back to off — the order
+ * The mode a press moves to. Off to all to one and back to off - the order
  * every player uses, so the button needs no explanation.
  */
 export function nextRepeat(mode: PlayerRepeat): PlayerRepeat {

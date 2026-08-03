@@ -8,7 +8,7 @@ import { dimensionsFor } from '../../resolve.ts';
 /**
  * The Glacier Slider, rendered with React Native primitives. The web control is
  * a styled `<input type="range">`; native has no such element, so this composes
- * the same three anatomy parts by hand — a full-width `track` (segment-track
+ * the same three anatomy parts by hand - a full-width `track` (segment-track
  * tint), a leading `fill` (accent-solid) sized to the value, and the round
  * iOS-style `thumb` (slider-thumb + inset glass highlight and shadow-2). Every
  * measurement (control height, track height, thumb diameter, vertical length,
@@ -42,7 +42,7 @@ export interface SliderProps extends Omit<ViewProps, 'style' | 'children'> {
   step?: number;
   onValueChange?: (value: number) => void;
   /**
-   * Lay the rail vertically, filling from the bottom (min) up — for volume and
+   * Lay the rail vertically, filling from the bottom (min) up - for volume and
    * the like. The rail length is the spec's `verticalLength` (the web
    * `--slider-length` custom property is not exposed on native).
    */
@@ -57,7 +57,7 @@ export interface SliderProps extends Omit<ViewProps, 'style' | 'children'> {
   /** Dims the slider and blocks interaction. */
   disabled?: boolean;
   /**
-   * Paints the rail as a run of solid segments instead of one flat tint — a
+   * Paints the rail as a run of solid segments instead of one flat tint - a
    * gradient without a gradient library, which is what the web track gets from
    * `linear-gradient`. Feed it `channelRamp` from @glacier/logic so both
    * bindings travel the same colours.
@@ -70,7 +70,7 @@ export interface SliderProps extends Omit<ViewProps, 'style' | 'children'> {
   /**
    * Rail thickness, overriding the spec's. The ColorPicker's web track is
    * taller than a plain slider's so the gradient reads as a band rather than a
-   * line, and the control collapses to the rail's own height there — the row is
+   * line, and the control collapses to the rail's own height there - the row is
    * the rail, with the thumb overhanging it.
    */
   trackHeight?: string;
@@ -149,7 +149,7 @@ export function Slider({
   const railH = trackHeight ?? TRACK_H;
   // Matching the web means matching its box too: there the input *is* the
   // track, so the row is only as tall as the rail. Worth knowing this trades
-  // away touch target — the thumb overhangs and stays grabbable on the DOM, but
+  // away touch target - the thumb overhangs and stays grabbable on the DOM, but
   // a device build will not deliver touches outside the parent's bounds.
   const controlH = trackHeight ?? CONTROL_H;
   // Both follow whichever thumb is drawn.
@@ -190,7 +190,7 @@ export function Slider({
 
   // The round handle, shared by both orientations and the skeleton bone shape.
   // Over a painted rail the thumb is a ring with nothing in it, so the colour
-  // it sits on stays visible — the one thing the user is actually looking at.
+  // it sits on stays visible - the one thing the user is actually looking at.
   // The dark hairline outside it is what keeps a white ring legible on the pale
   // end of a ramp, where a plain white thumb would disappear.
   const thumb = painted ? (
@@ -265,7 +265,7 @@ export function Slider({
 
   // The thumb travels between the rail's ends rather than across them: its
   // *edges* reach the ends, not its centre. Centring it on the value would hang
-  // half of it off the rail at both extremes — which a range input never does,
+  // half of it off the rail at both extremes - which a range input never does,
   // because the browser insets thumb travel by half the thumb. The offset axis
   // still centres the thumb across the rail's thickness.
   const travel = `calc(${fillPct / 100} * (100% - ${size}))`;

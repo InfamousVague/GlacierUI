@@ -1,5 +1,5 @@
 /**
- * @glacier/native — Modal.
+ * @glacier/native - Modal.
  *
  * The React Native binding of @glacier/react's Modal: a centered glass dialog
  * rendered over a full-screen scrim. Paint (the glass-thick panel, its
@@ -10,7 +10,7 @@
  *
  * It leans on the react-native <Modal> host for the overlay layer: an
  * absolute-fill Pressable paints the scrim and closes on press (the web overlay
- * onClick), and the panel View sits centered on top — a plain sibling above the
+ * onClick), and the panel View sits centered on top - a plain sibling above the
  * backdrop, so pressing the panel does not fall through to it (mirrors the web
  * stopPropagation). Fully controlled through `open` + `onClose`, exactly like
  * the web: there is no uncontrolled/defaultOpen path, so nothing is wrapped with
@@ -66,8 +66,8 @@ const BOX = dimensionsFor(modalSpec);
 /**
  * A resolved measurement value. The spec mixes tokenized dimensions (`space-6`,
  * `radius-2xl`) with raw CSS lengths (each size's `28rem`-style max-width). A
- * token name is wrapped in its custom property; a raw length — anything starting
- * with a digit or dot — passes straight through so it never becomes
+ * token name is wrapped in its custom property; a raw length - anything starting
+ * with a digit or dot - passes straight through so it never becomes
  * `var(--glacier-28rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {

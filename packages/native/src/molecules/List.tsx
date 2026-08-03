@@ -5,7 +5,7 @@ import { t } from '../tokens.ts';
 import { paintFor, sizeFor, dimensionsFor } from '../resolve.ts';
 
 /**
- * List + ListItem — the @glacier/native binding of the web molecules.
+ * List + ListItem - the @glacier/native binding of the web molecules.
  *
  * KIND: scroll. The List is the scroll container: it renders a <ScrollView>
  * whose contentContainerStyle carries the inter-row gap (the web `<ul>` grid
@@ -29,16 +29,16 @@ import { paintFor, sizeFor, dimensionsFor } from '../resolve.ts';
  * rules (sm: space-2 / font-size-xs, md: space-3 / font-size-sm).
  *
  * Web-only, accepted-but-noop on native (documented):
- *   - virtualization — a long List/Table would use a virtualized/windowed list;
+ *   - virtualization - a long List/Table would use a virtualized/windowed list;
  *     this binding renders the real scrollable content in a ScrollView. A
  *     virtualized (FlatList) variant is a device follow-up.
- *   - href navigation — the web renders an <a> that navigates; native has no
+ *   - href navigation - the web renders an <a> that navigates; native has no
  *     router, so an `href` row is a Pressable with link semantics but no
  *     navigation. Wire it through `onClick`/onPress on device.
- *   - onClick's MouseEvent — the web handler receives a DOM MouseEvent; the
+ *   - onClick's MouseEvent - the web handler receives a DOM MouseEvent; the
  *     native Pressable has none, so it is called with no argument.
- *   - className — DOM escape hatch, ignored.
- *   - hover / focus-visible washes and the row color transition — hover/motion
+ *   - className - DOM escape hatch, ignored.
+ *   - hover / focus-visible washes and the row color transition - hover/motion
  *     the resting native binding does not run.
  */
 
@@ -63,7 +63,7 @@ export interface ListItemProps extends Omit<ViewProps, 'children'> {
   disabled?: boolean;
   /**
    * Renders the row with link semantics. DOM-only navigation; accepted for prop
-   * parity with the web ListItem but does not navigate on native (no-op) — wire
+   * parity with the web ListItem but does not navigate on native (no-op) - wire
    * navigation through `onClick`/onPress on device.
    */
   href?: string;
@@ -92,7 +92,7 @@ const LIST_DIMS = dimensionsFor(listSpec); // { gap, border, radius }
 const ITEM_DIMS = dimensionsFor(listItemSpec); // { gap: space-3, radius: radius-lg }
 
 // The row's base card paint, the selected treatment, the disabled title, and the
-// divided divider color — all read straight from the specs.
+// divided divider color - all read straight from the specs.
 const ITEM_BASE = (listItemSpec.paint ?? {}) as { background?: string; text?: string; border?: string };
 const SELECTED = paintFor(listItemSpec, 'states', 'selected'); // { background, border, text }
 const DISABLED = paintFor(listItemSpec, 'states', 'disabled'); // { text }

@@ -37,7 +37,7 @@ describe('VirtualList', () => {
   it('renders only a windowful of a huge list', () => {
     withViewport(400, () => {
       setup();
-      // 10 visible plus overscan — not ten thousand.
+      // 10 visible plus overscan - not ten thousand.
       expect(rows().length).toBeGreaterThan(0);
       expect(rows().length).toBeLessThan(25);
     });

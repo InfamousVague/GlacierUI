@@ -29,7 +29,7 @@ interface DemoCard {
  * A controlled radio-card group. A native radio group has no `name`-based DOM
  * owner to enforce single-select, so exclusivity is driven by lifting the
  * selected value into state and passing `checked`/`onCheckedChange` to every
- * card — the parent-owned-group path the web kit documents. Each comparison pane
+ * card - the parent-owned-group path the web kit documents. Each comparison pane
  * renders its own instance, so Web and Native each manage their own selection.
  * `K` is the platform kit (the DOM kit or the RN kit) the demo renders through.
  */

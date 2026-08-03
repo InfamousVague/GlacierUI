@@ -25,7 +25,7 @@ const BOX = dimensionsFor(pillSpec);
  * A resolved measurement value. `sizeFor`/`dimensionsFor` return token names
  * (e.g. `space-3`) alongside raw CSS lengths (the pill's `height: 1.375rem` is
  * declared inline, not as a token). Token names get wrapped in the custom
- * property; a raw length — anything that starts with a digit — passes straight
+ * property; a raw length - anything that starts with a digit - passes straight
  * through so it never becomes `var(--glacier-1.375rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {

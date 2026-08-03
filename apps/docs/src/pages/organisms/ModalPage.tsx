@@ -9,8 +9,8 @@ import { m } from '../../i18n.ts';
  * Each Modal demo owns its own open state, so it is lifted into a module-level
  * wrapper component the render function mounts once per pane (a render callback
  * cannot hold hooks). The trigger and the footer/body content stay on the web
- * kit — they are token-identical across bindings and their `onClick` fires in
- * both panes — while only the overlay under test swaps to `K.Modal`, so the
+ * kit - they are token-identical across bindings and their `onClick` fires in
+ * both panes - while only the overlay under test swaps to `K.Modal`, so the
  * Native pane exercises the real react-native <Modal> shell. `K` is the platform
  * kit (the DOM kit or the RN kit) the demo renders through.
  */

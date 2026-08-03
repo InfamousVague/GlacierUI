@@ -4,7 +4,7 @@ import { t } from '../tokens.ts';
 import type { NativeStyle } from '../resolve.ts';
 
 /**
- * Row — the horizontal flow primitive, rendered with React Native primitives.
+ * Row - the horizontal flow primitive, rendered with React Native primitives.
  *
  * Unlike the kit's atoms this has NO @glacier/spec: it is a pure flexbox
  * wrapper, the native twin of @glacier/react's <Row>. It renders a single
@@ -207,7 +207,7 @@ export function Row({
   if (pl !== undefined) s.paddingLeft = t(`space-${pl}`);
 
   // Surface. accent/accentSoft drop the inherited text color; glass is its
-  // resting tint only (backdrop blur is a noop) — same as Surface & Card.
+  // resting tint only (backdrop blur is a noop) - same as Surface & Card.
   if (background === 'transparent') s.backgroundColor = 'transparent';
   else if (background) s.backgroundColor = t(BACKGROUND_TOKEN[background]);
 

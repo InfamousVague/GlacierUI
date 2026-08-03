@@ -19,7 +19,7 @@ const BOX = dimensionsFor(stepsSpec);
  * A resolved measurement value. `sizeFor`/`dimensionsFor` return token names
  * (e.g. `space-2`) alongside raw CSS lengths (the dot's `0.5rem` diameter is
  * declared inline in the spec, not as a token). Token names get wrapped in the
- * custom property; a raw length — anything that starts with a digit or dot —
+ * custom property; a raw length - anything that starts with a digit or dot -
  * passes straight through so it never becomes `var(--glacier-0.5rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -29,8 +29,8 @@ function metric(value: string | undefined, fallback: string): string {
 
 /**
  * Marker font-size and check-glyph size per size step. The web keeps these as
- * raw rems in Steps.module.css (not tokenized in the spec), so — like the web
- * Steps component's own DIAMETER/MARKER maps — they are mirrored verbatim here.
+ * raw rems in Steps.module.css (not tokenized in the spec), so - like the web
+ * Steps component's own DIAMETER/MARKER maps - they are mirrored verbatim here.
  */
 const MARKER_FONT: Record<StepsSize, string> = { sm: '0.625rem', md: '0.6875rem' };
 const CHECK_REM: Record<StepsSize, string> = { sm: '0.625rem', md: '0.75rem' };
@@ -82,7 +82,7 @@ function Check({ size, color }: { size: string; color: string }) {
  * The dots variant is a row of circular Views: completed and current dots fill
  * solid in the tone (the current one enlarged via `transform: scale`), upcoming
  * dots sit hollow on the surface with a hairline ring. The connected variant
- * joins larger circular markers with connector lines — a check on completed
+ * joins larger circular markers with connector lines - a check on completed
  * markers, an inset ring on the current one, optional numbers.
  *
  * Resting visuals only: the web eases the current dot's enlarging transform on

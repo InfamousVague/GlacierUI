@@ -1,6 +1,6 @@
 /**
  * The Glacier ResizableSplitPane, rendered with React Native primitives. It
- * hosts exactly two children — a start pane and an end pane — and sizes the
+ * hosts exactly two children - a start pane and an end pane - and sizes the
  * start pane to a fraction (`ratio`/`defaultRatio`) of the container, laid out
  * with flex per orientation (a row with a vertical divider when horizontal, a
  * column with a horizontal divider when vertical). The corner radius, divider
@@ -116,8 +116,8 @@ const Divider = View as unknown as ComponentType<
 
 /**
  * A container that splits into two panes with a divider between them. It hosts
- * exactly two children — a start pane sized to `ratio` (or `defaultRatio`) of
- * the container and an end pane that fills the rest — laid out side by side when
+ * exactly two children - a start pane sized to `ratio` (or `defaultRatio`) of
+ * the container and an end pane that fills the rest - laid out side by side when
  * `orientation="horizontal"` or stacked when `"vertical"`.
  */
 export function ResizableSplitPane({

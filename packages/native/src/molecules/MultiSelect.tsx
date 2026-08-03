@@ -1,5 +1,5 @@
 /**
- * @glacier/native — MultiSelect
+ * @glacier/native - MultiSelect
  *
  * The React Native binding of @glacier/react's MultiSelect: an editable
  * multi-value combobox that filters options, renders selected values as

@@ -140,7 +140,7 @@ export function BlueprintGallery() {
   const [query, setQuery] = useState('');
   // Sets, not single values: the filters are additive within a row, so "Input
   // or Media" is expressible. Empty means no constraint rather than none
-  // selected — a filter row that starts with everything excluded shows an empty
+  // selected - a filter row that starts with everything excluded shows an empty
   // page, which reads as broken.
   const [kinds, setKinds] = useState<Set<Kind>>(new Set());
   const [layers, setLayers] = useState<Set<string>>(new Set());

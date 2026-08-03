@@ -28,7 +28,7 @@ const BOX = dimensionsFor(progressBarSpec);
  * A resolved measurement value. `sizeFor` returns token names alongside raw CSS
  * lengths (the track's `height: 0.375rem` is declared inline in the spec's sizes,
  * not as a token). A token name gets wrapped in the custom property; a raw length
- * — anything starting with a digit or dot — passes straight through so it never
+ * - anything starting with a digit or dot - passes straight through so it never
  * becomes `var(--glacier-0.375rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -47,7 +47,7 @@ function metric(value: string | undefined, fallback: string): string {
  * opacity pulse under reduced motion); reproducing those on-device (no animation
  * runtime here) is a follow-up. The static geometry is exact: a determinate bar
  * holds its computed width, and an indeterminate bar shows the 40% fill at the
- * track's left edge — the sweep animation's static (pre-animation) position.
+ * track's left edge - the sweep animation's static (pre-animation) position.
  */
 export function ProgressBar({
   value,

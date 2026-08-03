@@ -1,5 +1,5 @@
 /**
- * @glacier/native — CommandPalette.
+ * @glacier/native - CommandPalette.
  *
  * The React Native binding of @glacier/react's CommandPalette: a ⌘K overlay
  * that searches every action in the app. Matching, grouping, and cursor
@@ -19,7 +19,7 @@
  *   forty.
  * - Pressing a row is the primary way to run a command here. Arrow-key movement
  *   is wired through onKeyPress and Enter through onSubmitEditing, so a
- *   hardware keyboard drives the same cursor — but a touch device has no arrow
+ *   hardware keyboard drives the same cursor - but a touch device has no arrow
  *   keys, and the cursor is moved by the press itself instead.
  * - The global ⌘K chord is a web/desktop affordance and has no React Native
  *   equivalent; the host app opens the palette. The `shortcut` prop is accepted
@@ -115,7 +115,7 @@ const DISABLED_TONE = TEXT_TONES[paintFor(commandPaletteSpec, 'states', 'disable
  *
  * This is why the widths are not numbers: the stylesheet writes them in rem, so
  * they follow the reader's text-size preference. A pixel constant here matched
- * only at the default scale — which is exactly how the native panel ended up
+ * only at the default scale - which is exactly how the native panel ended up
  * wider than the web one.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -156,7 +156,7 @@ function Highlight({
       {segments.map((segment, i) =>
         segment.match ? (
           // A disabled row is quiet by definition, so the mark there carries
-          // weight only — a bright accent inside it would read as actionable.
+          // weight only - a bright accent inside it would read as actionable.
           <Text key={i} size="sm" tone={tone === undefined ? 'accent' : tone} weight="semibold">
             {segment.text}
           </Text>
@@ -288,7 +288,7 @@ export function CommandPalette({
                 // `groupCommands` builds groups from ADJACENT runs, so one name can
                 // legitimately head several groups in an interleaved list. Keying by name
                 // then hands React duplicate keys, and its reconciliation leaves whole
-                // stale runs mounted when a query narrows the list — the palette keeps
+                // stale runs mounted when a query narrows the list - the palette keeps
                 // showing rows that no longer match. The first index is unique.
                 <View key={group.matches[0]?.index ?? -1}>
                   {group.group != null && (

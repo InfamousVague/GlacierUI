@@ -6,7 +6,7 @@ import { paintFor, dimensionsFor } from '../../resolve.ts';
 import { Skeleton } from './Skeleton.tsx';
 
 /**
- * Callout — the @glacier/native binding of the web Callout (a bordered message
+ * Callout - the @glacier/native binding of the web Callout (a bordered message
  * block in five tones with an optional leading icon and bold title).
  *
  * Paint and geometry are read from calloutSpec through the shared resolvers, so
@@ -26,7 +26,7 @@ import { Skeleton } from './Skeleton.tsx';
  * glass-border hairline, body text lifted to full-strength `text`); the web's
  * backdrop blur and inset highlight shadow are material effects with no
  * on-device equivalent, so they are dropped (accepted-but-noop). role maps to
- * accessibilityRole — `alert` for warning/danger, `note` otherwise — matching
+ * accessibilityRole - `alert` for warning/danger, `note` otherwise - matching
  * the web semantics.
  */
 
@@ -45,7 +45,7 @@ export interface CalloutProps extends Omit<ViewProps, 'style' | 'children'> {
 }
 
 // Size-independent box + type metrics read once from the spec (radius, gap,
-// border, paddingInline/Block, bodyGap, fontSize) — all bare token names.
+// border, paddingInline/Block, bodyGap, fontSize) - all bare token names.
 const DIMS = dimensionsFor(calloutSpec);
 
 /**
@@ -104,7 +104,7 @@ export function Callout({
       {icon != null && (
         <View
           style={{
-            // flex: none — the glyph never shrinks; align it to the top so it
+            // flex: none - the glyph never shrinks; align it to the top so it
             // sits with the first line, matching the web `.icon` rule. `color`
             // is the currentColor source for an SVG glyph on react-native-web.
             flexShrink: 0,

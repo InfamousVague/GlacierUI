@@ -1,4 +1,4 @@
-// Glacier SegmentedControl — the React Native binding. A row of Pressable
+// Glacier SegmentedControl - the React Native binding. A row of Pressable
 // segments over a hairline glass track, with the selected segment lifting its
 // label and a filled highlight painted behind it. Paint and geometry are read
 // from the segmented-control spec through the shared resolvers, so it stays
@@ -43,8 +43,8 @@ export interface SegmentedControlProps extends Omit<ViewProps, 'children'> {
 
 // Size-independent box metrics (radius, track padding, hairline) read once from
 // the spec. The spec also declares `gap: space-2`, but the web `.root` does not
-// apply a gap — segments sit adjacent and the highlight fills each one via
-// `inset: 0` — so this binding omits it to stay pixel-identical to the CSS.
+// apply a gap - segments sit adjacent and the highlight fills each one via
+// `inset: 0` - so this binding omits it to stay pixel-identical to the CSS.
 const BOX = dimensionsFor(segmentedControlSpec);
 
 // Top-level track paint (the glass fill + hairline border). Native cannot blur,
@@ -78,7 +78,7 @@ const SegmentRoot = View as unknown as ComponentType<ViewProps & { ref?: { curre
 
 /**
  * A resolved measurement value. `sizeFor`/`dimensionsFor` return bare token
- * names (`space-4`, `control-radius`) alongside raw CSS values — the track
+ * names (`space-4`, `control-radius`) alongside raw CSS values - the track
  * padding is an off-scale `0.1875rem` and each size's height is a
  * `calc(var(--glacier-control-height-md) - 0.375rem)` expression. A bare token
  * name (lowercase identifier) is wrapped in its custom property; anything with a
@@ -96,12 +96,12 @@ function metric(value: string | undefined, fallback: string): string {
  * whose label lifts from the muted resting color to full text color and weight
  * when selected, and the selected segment mounts the highlight as an
  * absolutely-positioned View (inset:0) behind the label. Selection is
- * controlled/uncontrolled through the shared `useControlled` hook — the same
+ * controlled/uncontrolled through the shared `useControlled` hook - the same
  * contract the web kit uses.
  *
  * A single measured thumb slides between segments at the requested preset's
  * tempo, while a pressed label scales to 0.96 like the web control. The glass
- * track is the resting tint only — native cannot blur.
+ * track is the resting tint only - native cannot blur.
  */
 export function SegmentedControl({
   options,

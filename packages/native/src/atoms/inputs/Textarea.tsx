@@ -58,7 +58,7 @@ const INVALID = paintFor(textareaSpec, 'states', 'invalid'); // { border: 'dange
  * CSS transition are a device follow-up; the focus border-color swap is done live
  * via onFocus/onBlur state as a resting approximation. `glass` is the frosted
  * tint only (RN cannot blur), matching the other atoms. The web binding pulls
- * id / aria-describedby / aria-invalid from a surrounding Field — there is no
+ * id / aria-describedby / aria-invalid from a surrounding Field - there is no
  * native FieldContext here, so drive invalid styling at the app level.
  */
 export function Textarea({

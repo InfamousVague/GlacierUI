@@ -74,11 +74,11 @@
 }
 
 /* The thumb is a ring rather than a filled dot, so the colour under it stays
-   visible — the one thing the user is actually looking at.
+   visible - the one thing the user is actually looking at.
 
    `box-sizing` is stated rather than inherited: a range thumb is a UA pseudo
    that the global reset's `*` does not reach, so its default differs by engine
-   — content-box paints this ring 20px across, border-box 16px. Native draws it
+ - content-box paints this ring 20px across, border-box 16px. Native draws it
    border-box, and a diameter that must match across two bindings cannot be left
    to a browser default. */
 .track::-webkit-slider-thumb {

@@ -9,7 +9,7 @@ import { Checkbox } from '../atoms/inputs/Checkbox.tsx';
 import { Skeleton } from '../atoms/feedback/Skeleton.tsx';
 
 /**
- * DataGrid — the @glacier/native binding of the web organism.
+ * DataGrid - the @glacier/native binding of the web organism.
  *
  * KIND: scroll table. The web `.wrap` is an `overflow: auto` box, so the whole
  * grid lives inside a horizontal <ScrollView> (border-md surface); when
@@ -19,9 +19,9 @@ import { Skeleton } from '../atoms/feedback/Skeleton.tsx';
  * flex-row Views of View/Text/Pressable cells, every one carrying the collapsed
  * bottom hairline the web draws with `border-collapse`.
  *
- * Paint and geometry are read from `dataGridSpec` through the shared resolvers —
+ * Paint and geometry are read from `dataGridSpec` through the shared resolvers -
  * surface/border paint, the accent-soft selected-row tint, the accent-text
- * sorted-header color, and the radius/hairline/space-* metrics — so the binding
+ * sorted-header color, and the radius/hairline/space-* metrics - so the binding
  * cannot drift from the DOM kit. The columns / data / sort / selection prop
  * contract is identical to @glacier/react's DataGrid; sorting is client-side
  * unless `manualSort` defers it, and selection is multi-select through the
@@ -29,15 +29,15 @@ import { Skeleton } from '../atoms/feedback/Skeleton.tsx';
  *
  * Web-only, accepted-but-noop on this binding (device follow-ups):
  *   - the roving-tabindex keyboard grid (Arrow/Home/End navigation, per-cell
- *     data-r/data-c focus, the `:focus-visible` ring) — RN has no key model here;
+ *     data-r/data-c focus, the `:focus-visible` ring) - RN has no key model here;
  *     tap a sortable header to cycle sort, tap a checkbox to toggle a row.
- *   - virtualization — every row renders; feed the visible slice + `manualSort`
+ *   - virtualization - every row renders; feed the visible slice + `manualSort`
  *     for very large datasets, exactly as the web docs advise.
- *   - the sort-indicator color crossfade and skeleton shimmer — resting visuals
+ *   - the sort-indicator color crossfade and skeleton shimmer - resting visuals
  *     only; the static geometry is pixel-matched.
- *   - i18n — this kit has no locale runtime, so the select/empty labels emit the
+ *   - i18n - this kit has no locale runtime, so the select/empty labels emit the
  *     default English strings (same fallback as the Pagination/Steps bindings).
- *   - className — DOM escape hatch, accepted for parity and ignored.
+ *   - className - DOM escape hatch, accepted for parity and ignored.
  */
 
 /** A row's stable identity. Every row must carry an `id`. */
@@ -171,7 +171,7 @@ function SortIcon({ direction, color }: { direction?: SortDirection; color: stri
 
 /**
  * The Glacier DataGrid, rendered with React Native primitives. Visually and
- * behaviorally matched to @glacier/react's DataGrid — column-driven header and
+ * behaviorally matched to @glacier/react's DataGrid - column-driven header and
  * cells, client (or manual) sorting via tappable sortable headers, multi-select
  * through the leading checkbox column, loading/skeleton/empty states, horizontal
  * overflow, and a vertically-scrolling body under an optional sticky header.

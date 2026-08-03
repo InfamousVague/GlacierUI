@@ -28,7 +28,7 @@ import { t } from '../tokens.ts';
  *    viewport). Scalars apply as-is.
  *  - The web Box is `display: block`; an RN <View> is always flex-column. This
  *    is an inherent RN difference and matches for the common container case
- *    (Box carries no gap/align/justify of its own — those live on Stack/Row/Grid).
+ *    (Box carries no gap/align/justify of its own - those live on Stack/Row/Grid).
  *  - `background: 'accent' | 'accentSoft'` also set a *text* color on the web via
  *    CSS inheritance; RN <Text> does not inherit from a parent <View>, so (like
  *    Surface/Card) only the background is taken and content brings its own color.

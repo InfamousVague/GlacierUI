@@ -6,7 +6,7 @@ import { dimensionsFor, paintFor } from '../resolve.ts';
 import { Skeleton } from '../atoms/feedback/Skeleton.tsx';
 
 /**
- * Field — the @glacier/native binding of the web Field (a form-control wrapper
+ * Field - the @glacier/native binding of the web Field (a form-control wrapper
  * that stacks a label, the wrapped control, and a reserved meta line holding a
  * hint or an error).
  *
@@ -30,7 +30,7 @@ import { Skeleton } from '../atoms/feedback/Skeleton.tsx';
  * Web-only wiring dropped: the DOM Field generates an id and provides a
  * FieldContext (id / describedBy / invalid) so the wrapped control picks up
  * htmlFor + aria-describedby + aria-invalid. There is no FieldContext in the
- * native kit — the native Input/Textarea surface `invalid` as a direct prop — so
+ * native kit - the native Input/Textarea surface `invalid` as a direct prop - so
  * the children render as-is and the caller passes `invalid` to the control. The
  * error still carries accessibilityRole="alert" so it is announced on arrival.
  * `className` (and other DOM-only attrs) are accepted-but-noop.

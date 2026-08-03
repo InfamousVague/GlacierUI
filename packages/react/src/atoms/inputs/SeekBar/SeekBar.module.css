@@ -39,7 +39,7 @@
 
 /* Cap and weight are classified once in @glacier/logic and arrive as data
    attributes, so this binding and the native one cannot disagree about which
-   shapes butt — while the pixel values stay here, themeable. */
+   shapes butt - while the pixel values stay here, themeable. */
 .root[data-cap='round'] .stroke {
   stroke-linecap: round;
 }
@@ -81,7 +81,7 @@
 
    The thumb's position is deliberately NOT transitioned. Both it and the played
    run are drawn from the same `progress`, but the run is an SVG path whose `d`
-   no CSS transition can follow — it repaints the moment progress changes. Easing
+   no CSS transition can follow - it repaints the moment progress changes. Easing
    only the thumb therefore desynchronizes them: on any jump (End, a keyed seek,
    a controlled update from `timeupdate`) the paint arrives first and the thumb
    trails it for the length of the transition, which reads as the bar running
@@ -97,7 +97,7 @@
   transform: translate(-50%, -50%);
   border-radius: var(--glacier-radius-full);
   background: var(--seek-from, var(--glacier-accent-solid));
-  /* height only — see above */
+  /* height only - see above */
   transition: height var(--glacier-duration-fast) var(--glacier-ease-out);
 }
 

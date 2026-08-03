@@ -67,14 +67,14 @@ const BrokenGlyph = (
 
 /**
  * The Glacier Image, rendered with React Native primitives. The frame (aspect
- * ratio, corner radius, sunken fill) and the fit are read from the image spec —
+ * ratio, corner radius, sunken fill) and the fit are read from the image spec -
  * background from the spec's top-level paint, radius from the shared radius
- * scale — so it matches @glacier/react's Image and cannot drift from it. An
+ * scale - so it matches @glacier/react's Image and cannot drift from it. An
  * <Image> holds the box while it loads (a Skeleton overlay stands in), fits the
  * source with resizeMode, and swaps in a fallback glyph on error.
  *
  * Resting visuals only: the web fades the image in on decode (opacity
- * transition) — here the loaded image is shown at full opacity with no
+ * transition) - here the loaded image is shown at full opacity with no
  * animation runtime. The `loading` hint is DOM-only and a no-op.
  */
 export function Image({

@@ -7,7 +7,7 @@ import { m } from '../../i18n.ts';
 
 /**
  * A controlled combobox demo. The committed value and the input query are
- * component-local, so each comparison pane drives its own selection — `render`
+ * component-local, so each comparison pane drives its own selection - `render`
  * is called once per pane and cannot hold hooks itself. `K` is the platform kit
  * (the DOM kit or the RN kit) the demo renders through.
  */

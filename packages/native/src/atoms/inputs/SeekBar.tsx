@@ -1,7 +1,7 @@
 // The Glacier SeekBar, rendered with React Native primitives: the audio
 // transport scrubber, painted as a plain rail, a squiggle behind the playhead,
 // or a waveform of the track's levels. The curves themselves come from
-// `seekBarGeometry` in @glacier/logic — the same function the DOM kit calls —
+// `seekBarGeometry` in @glacier/logic - the same function the DOM kit calls -
 // so the two bindings cannot draw different waves, and paint and geometry are
 // read from `seekBarSpec` through the shared resolvers.
 
@@ -175,7 +175,7 @@ export function SeekBar({
 
   if (skeleton) {
     // The placeholder is the control at rest: half the run textured, half flat
-    // ahead of it, with the playhead in between — the same picture the DOM kit
+    // ahead of it, with the playhead in between - the same picture the DOM kit
     // draws, from the same shared definition.
     const bone = seekBarSkeleton(shape);
     const boneGeometry = seekBarGeometry({
@@ -295,7 +295,7 @@ export function SeekBar({
         position: 'relative',
         // Stretch to the parent's cross axis rather than asking for width:100%.
         // A percentage resolves against the parent, and a parent that sizes to
-        // its content — a plain flex column — has no width until its children
+        // its content - a plain flex column - has no width until its children
         // do, so a percentage width collapses to zero and the whole painting
         // disappears. Stretching has no such circularity.
         alignSelf: 'stretch',
@@ -358,7 +358,7 @@ export function SeekBar({
       </Svg>
       {/* A slim vertical pill rather than a round knob: on the wave shapes a
           disc would sit on top of the levels it is meant to be reading. The
-          mark shapes drop it entirely — the break in the comb is the playhead. */}
+          mark shapes drop it entirely - the break in the comb is the playhead. */}
       {seekBarHasThumb(shape) && (
         <View
           aria-hidden={true}

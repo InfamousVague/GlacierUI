@@ -1,12 +1,12 @@
 /**
- * Rich text editing — the selection-to-markdown transforms behind a formatting
+ * Rich text editing - the selection-to-markdown transforms behind a formatting
  * toolbar.
  *
  * Markdown over `contenteditable` is a deliberate choice. A contenteditable
  * surface is a DOM-only construct with no React Native equivalent, so an editor
  * built on it could never have a native binding. These transforms are pure
  * string arithmetic over a plain text value and a selection range, which every
- * platform's text input already provides — so Bold means exactly the same thing
+ * platform's text input already provides - so Bold means exactly the same thing
  * on both, and it is testable without a browser.
  */
 
@@ -92,14 +92,14 @@ export function toggleMark(text: string, selection: TextSelection, mark: Markdow
 }
 
 /**
- * Which marks are already applied around the selection — what a toolbar reads
+ * Which marks are already applied around the selection - what a toolbar reads
  * to show a pressed button.
  */
 export function activeMarks(text: string, selection: TextSelection): MarkdownMark[] {
   const { start, end } = safeSelection(text, selection);
   const tokens = tokenizeMarkdown(text);
 
-  // Every run the selection covers — or, for a caret, the run it sits in. A
+  // Every run the selection covers - or, for a caret, the run it sits in. A
   // caret between two runs takes the one it is at the end of as well as the one
   // it is at the start of, so typing at either boundary of `**bold**` reports
   // bold rather than only doing so dead centre.
@@ -152,7 +152,7 @@ function lineRange(text: string, selection: TextSelection): { start: number; end
  * Applies or removes a block form across every line the selection touches.
  *
  * Removal only happens when *every* touched line already carries the prefix. A
- * mixed selection — some lines quoted, some not — applies the prefix to the
+ * mixed selection - some lines quoted, some not - applies the prefix to the
  * rest, which is what makes a second press finish the job rather than undoing
  * half of it.
  */
@@ -169,7 +169,7 @@ export function toggleBlock(text: string, selection: TextSelection, block: Markd
 
   // Blank lines are skipped below, so that prefixing a multi-line selection
   // does not quote the empty lines separating its paragraphs. On a single empty
-  // line that rule would mean the button does nothing at all — which is exactly
+  // line that rule would mean the button does nothing at all - which is exactly
   // the moment it is most likely to be pressed, before anything has been typed.
   // There the prefix is inserted and the caret lands after it, ready to type.
   if (lines.length === 1 && lines[0]!.length === 0) {
@@ -202,7 +202,7 @@ export function toggleBlock(text: string, selection: TextSelection, block: Markd
 /**
  * Wraps the selection in a markdown link.
  *
- * With no selection, the URL becomes the label too — a bare `[](url)` gives the
+ * With no selection, the URL becomes the label too - a bare `[](url)` gives the
  * user an invisible link they then have to find and fix.
  */
 export function insertLink(text: string, selection: TextSelection, url: string): EditResult {
@@ -224,7 +224,7 @@ export interface MarkShortcutEvent {
 }
 
 /**
- * The mark a keyboard shortcut asks for, or null. ⌘/Ctrl + B, I, and E — the
+ * The mark a keyboard shortcut asks for, or null. ⌘/Ctrl + B, I, and E - the
  * chords every editor uses, so they need no explanation.
  */
 export function markForShortcut(event: MarkShortcutEvent): MarkdownMark | null {
@@ -241,7 +241,7 @@ export function markForShortcut(event: MarkShortcutEvent): MarkdownMark | null {
 /**
  * What a run of characters is, for an editor that styles its own source.
  *
- * `marker` is the syntax itself — the asterisks, the backticks, the `> `. It is
+ * `marker` is the syntax itself - the asterisks, the backticks, the `> `. It is
  * kept in the text rather than hidden, and drawn quietly, so the document still
  * reads as markdown while the content it wraps takes the styling it describes.
  */
@@ -267,7 +267,7 @@ export interface MarkdownToken {
   start: number;
   /** Exclusive. */
   end: number;
-  /** Marks enclosing this run, outermost first — `**a _b_**` makes `b` both. */
+  /** Marks enclosing this run, outermost first - `**a _b_**` makes `b` both. */
   marks: MarkdownMark[];
   /** The block the run sits in, when it is not a plain paragraph. */
   block?: MarkdownBlock;
@@ -291,7 +291,7 @@ const BLOCK_PATTERNS: { block: MarkdownBlock; re: RegExp }[] = [
  *
  * The result is a *complete, ordered, non-overlapping cover* of the input:
  * concatenating every token's slice reproduces the source exactly. That is the
- * property the editors depend on — both bindings draw the highlight as a layer
+ * property the editors depend on - both bindings draw the highlight as a layer
  * behind a real text input, and a single dropped or duplicated character would
  * slide the rest of the document out from under the caret.
  *
@@ -366,7 +366,7 @@ export function tokenizeMarkdown(text: string): MarkdownToken[] {
 
     scanInline(text, cursor, lineEnd, [], block, push);
 
-    // The newline terminates this line, so it carries the line's block —
+    // The newline terminates this line, so it carries the line's block -
     // otherwise a selection over two quoted lines would look mixed.
     if (lineEnd < text.length) push('text', lineEnd, lineEnd + 1, [], block);
     lineStart = lineEnd + 1;
@@ -478,7 +478,7 @@ function matchLink(
  *
  * One list rather than a grammar per language, deliberately. The editor
  * highlights whatever is typed in a fence *as the user types it*, often before
- * the language tag exists — so it cannot dispatch on one, and shipping real
+ * the language tag exists - so it cannot dispatch on one, and shipping real
  * grammars would mean bundling a highlighter the kit has always declined to.
  * The result is honest about what it is: comments, strings, numbers, and words
  * that are keywords almost everywhere. Anything it does not know stays plain,
@@ -511,7 +511,7 @@ function scanCode(text: string, from: number, to: number, push: Push): void {
   while (i < to) {
     const ch = text[i]!;
 
-    // Line comment — runs to the end of the line either way.
+    // Line comment - runs to the end of the line either way.
     if ((ch === '/' && text[i + 1] === '/') || ch === '#') {
       flush(i);
       push('code-comment', i, to, []);

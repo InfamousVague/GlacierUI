@@ -4,11 +4,11 @@ import { useControlled } from '@glacier/logic';
 import { t } from '../tokens.ts';
 
 /**
- * Accordion — the @glacier/native binding of the web Accordion (a vertically
+ * Accordion - the @glacier/native binding of the web Accordion (a vertically
  * stacked list of disclosure panels that expand to reveal content).
  *
  * `accordionSpec` declares no paint or dimensions (its `paint` is `{}` and it
- * has no `sizes`/`dimensions`) — the web reads its box + type tokens straight
+ * has no `sizes`/`dimensions`) - the web reads its box + type tokens straight
  * from Accordion.module.css. So there is nothing to pull through the resolvers;
  * instead the exact CSS tokens are mirrored here via `t()` (bare names wrapped
  * in `var(--glacier-*)`), and the two raw rems the web hardcodes for the chevron
@@ -24,7 +24,7 @@ import { t } from '../tokens.ts';
  * Open state is uncontrolled (there is no controlled `open` prop on the web
  * component either): it is seeded from `defaultOpen` and owned internally via
  * useControlled, and each trigger is a Pressable that toggles it. Resting
- * visuals only — the expand/collapse is state-driven (the open panel is mounted,
+ * visuals only - the expand/collapse is state-driven (the open panel is mounted,
  * the closed one is not), with no height animation runtime on this binding.
  *
  * Text color + fontSize live on <Text> (a bare string cannot sit in a View and
@@ -105,7 +105,7 @@ export function Accordion({ items, defaultOpen, allowMultiple = false, ...rest }
             >
               <Text
                 style={{
-                  // `.trigger` is `color: inherit` / `font: inherit` — the
+                  // `.trigger` is `color: inherit` / `font: inherit` - the
                   // ambient body type (regular weight, base size).
                   flexShrink: 1,
                   color: t('text'),

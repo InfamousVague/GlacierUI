@@ -43,7 +43,7 @@ const MARK_GLYPH: Record<MarkdownMark, string> = { bold: 'B', italic: 'I', code:
 const BLOCK_GLYPH: Record<MarkdownBlock, string> = { heading: 'H', quote: '❝', bullet: '•', number: '1.' };
 
 /**
- * A markdown editor with a formatting toolbar — the writable counterpart to
+ * A markdown editor with a formatting toolbar - the writable counterpart to
  * `CodeBlock`.
  *
  * Markdown over `contenteditable`, deliberately. A contenteditable surface is a
@@ -51,7 +51,7 @@ const BLOCK_GLYPH: Record<MarkdownBlock, string> = { heading: 'H', quote: '❝',
  * could never have a native binding; and it means reimplementing selection,
  * undo, spellcheck, and dictation, all of which a plain `<textarea>` already
  * does properly. The value here is a string, and every transform is pure string
- * arithmetic living in @glacier/logic — so Bold does exactly the same thing
+ * arithmetic living in @glacier/logic - so Bold does exactly the same thing
  * in the native editor.
  *
  * The toolbar reads the document as well as writing to it: a control is pressed
@@ -83,7 +83,7 @@ export function RichTextEditor({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const highlightRef = useRef<HTMLDivElement>(null);
 
-  // The layer does not scroll itself — it is offset to follow the textarea, so
+  // The layer does not scroll itself - it is offset to follow the textarea, so
   // a long document stays aligned once the textarea starts scrolling.
   const syncScroll = () => {
     const layer = highlightRef.current;
@@ -123,8 +123,8 @@ export function RichTextEditor({
     // through toolbar work the same as through typing. Assigning `value` from
     // React replaces the field's contents outright, which discards that history.
     //
-    // Only the changed span is rewritten — the common prefix and suffix are left
-    // alone — so undo returns the document a step at a time instead of swapping
+    // Only the changed span is rewritten - the common prefix and suffix are left
+    // alone - so undo returns the document a step at a time instead of swapping
     // the whole thing.
     const el = textareaRef.current;
     if (el && typeof document.execCommand === 'function') {

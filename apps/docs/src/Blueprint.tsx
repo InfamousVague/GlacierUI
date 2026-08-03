@@ -76,7 +76,7 @@ const C = {
 function HDim({ x1, x2, y, label, above = true }: { x1: number; x2: number; y: number; label: string; above?: boolean }) {
   const mid = (x1 + x2) / 2;
   const A = 6;
-  // Outward on a span too short to hold both heads — see VDim for why.
+  // Outward on a span too short to hold both heads - see VDim for why.
   const head = Math.abs(x2 - x1) < A * 2 ? -A : A;
   return (
     <g stroke={C.line} strokeWidth={1.25} fill="none" strokeLinecap="round" strokeLinejoin="round">
@@ -117,7 +117,7 @@ function VDim({
   const A = 6;
   // Arrowheads normally point inward, into the span they measure. On a span
   // shorter than the two heads combined they would pass through each other and
-  // fuse into a solid bowtie — which is what a 7-unit gap between two slider
+  // fuse into a solid bowtie - which is what a 7-unit gap between two slider
   // tracks produced. Flipping them outward is the drafting convention for a
   // tight dimension, and it keeps the tips on the lines they mark.
   const head = Math.abs(y2 - y1) < A * 2 ? -A : A;
@@ -3785,7 +3785,7 @@ function TimeSeriesChartBlueprint({ dimensions }: BlueprintProps) {
 
 
 /**
- * SeekBar blueprint: the four parts the spec names — the track, the played run
+ * SeekBar blueprint: the four parts the spec names - the track, the played run
  * behind the playhead, the run still ahead, and the thumb. The wave is drawn
  * from the same geometry the component uses, so the picture is the component
  * rather than an impression of it.
@@ -3861,7 +3861,7 @@ function SeekBarBlueprint({ size, dimensions }: BlueprintProps) {
 
 
 /**
- * PlayerCard blueprint: the card as it actually assembles — artwork beside the
+ * PlayerCard blueprint: the card as it actually assembles - artwork beside the
  * heading lines, the seek bar with its clock under them, and the transport row
  * with its one solid control. The bar is drawn from the same geometry the
  * component uses, so the diagram cannot drift from the thing it documents.
@@ -3959,7 +3959,7 @@ function PlayerCardBlueprint({ dimensions }: BlueprintProps) {
 
 // CommandPalette: the scrim with the panel pinned near its top, the query field
 // across the panel's width, and a grouped option list under it with the cursor
-// on one row. Drawn as the palette actually sits — top-anchored, not centred —
+// on one row. Drawn as the palette actually sits - top-anchored, not centred -
 // because that placement is the point: the field lands in the same spot however
 // many commands match.
 function CommandPaletteBlueprint({ dimensions }: BlueprintProps) {
@@ -4016,7 +4016,7 @@ function CommandPaletteBlueprint({ dimensions }: BlueprintProps) {
       <Defs />
 
       {/* the scrim: the whole canvas is the overlay, so it is named rather than
-          drawn — a fill here would bury the grid the figure is measured on */}
+          drawn - a fill here would bury the grid the figure is measured on */}
       <text x={16} y={H - 26} className="bpLabel" fill={C.faint}>
         {t(m.bpScrim)}
       </text>
@@ -4103,7 +4103,7 @@ function CommandPaletteBlueprint({ dimensions }: BlueprintProps) {
 }
 
 // CalendarView: the header row, the weekday strip, and the six-by-seven grid
-// with events laid into a few cells. Drawn at the real proportions — six rows
+// with events laid into a few cells. Drawn at the real proportions - six rows
 // even though the month fits in five, since that fixed height is the point.
 function CalendarViewBlueprint({ dimensions }: BlueprintProps) {
   const t = useT();
@@ -4158,7 +4158,7 @@ function CalendarViewBlueprint({ dimensions }: BlueprintProps) {
         <rect key={col} x={cellX(col) + cw / 2 - 8} y={weekdayY} width={16} height={5} rx={2.5} fill={C.line} opacity={0.4} />
       ))}
       {/* The side labels are set vertically. The grid is 320 units wide in a
-          400 canvas, leaving ~40 either side — nowhere near enough for a
+          400 canvas, leaving ~40 either side - nowhere near enough for a
           horizontal word, so "weekdays" and "day cell" used to run off the
           left edge and "event" and "+N more" off the right. Rotated, they need
           only their line height, which the margin does have. */}
@@ -4276,7 +4276,7 @@ function CalendarViewBlueprint({ dimensions }: BlueprintProps) {
 
 // SortableList: four rows with their grips, one of them lifted off the stack
 // and the rows it passed shifted up into the gap it left. Drawn mid-drag,
-// because the resting state is just a list — the reordering is the component.
+// because the resting state is just a list - the reordering is the component.
 function SortableListBlueprint({ dimensions }: BlueprintProps) {
   const t = useT();
   const radius = fmt(dimensions?.radius);
@@ -4291,7 +4291,7 @@ function SortableListBlueprint({ dimensions }: BlueprintProps) {
   const Y = 58;
 
   // Row 0 is lifted and heading for slot 2, so rows 1 and 2 have shifted up one
-  // slot and row 3 is untouched — the same arithmetic `shiftFor` returns.
+  // slot and row 3 is untouched - the same arithmetic `shiftFor` returns.
   const LIFTED = 0;
   const TARGET = 2;
   const slotY = (slot: number) => Y + slot * (rowH + G);
@@ -4387,7 +4387,7 @@ function SortableListBlueprint({ dimensions }: BlueprintProps) {
 }
 
 // VirtualList: the tall spacer standing for the whole list, the viewport
-// clipping it, and the small window of real rows inside — with the overscan
+// clipping it, and the small window of real rows inside - with the overscan
 // rows shown outside the viewport edges, since they are the part of the design
 // that is otherwise invisible.
 function VirtualListBlueprint({ dimensions }: BlueprintProps) {
@@ -4475,7 +4475,7 @@ function VirtualListBlueprint({ dimensions }: BlueprintProps) {
 }
 
 // RichTextEditor: the toolbar row over the text area, in one frame, with one
-// control shown pressed — the state that makes the toolbar readable rather than
+// control shown pressed - the state that makes the toolbar readable rather than
 // only operable.
 function RichTextEditorBlueprint({ dimensions }: BlueprintProps) {
   const t = useT();
@@ -4606,7 +4606,7 @@ function CardFanBlueprint({ dimensions }: BlueprintProps) {
   const CARD_W = 56;
   const CARD_H = 76;
   // Focused just right of centre, so the drawing shows a bulge rather than the
-  // symmetric resting state — the asymmetry is the thing worth drawing.
+  // symmetric resting state - the asymmetry is the thing worth drawing.
   const FOCUS = 4.2;
   const placements = fanPlacements(COUNT, FOCUS, CARD_W, fanSlinky(COUNT));
   const track = W - CARD_W;
@@ -4821,7 +4821,7 @@ const bpm = defineMessages({
   bpAvatarOnce: { en: 'avatar (once)', es: 'avatar (una vez)', fr: 'avatar (une fois)', de: 'Avatar (einmal)', ja: 'アバター（1度）', pt: 'avatar (uma vez)', zh: '头像（一次）', ar: 'صورة (مرة)' },
   bpNameOnce: { en: 'name (once)', es: 'nombre (una vez)', fr: 'nom (une fois)', de: 'Name (einmal)', ja: '名前（1度）', pt: 'nome (uma vez)', zh: '姓名（一次）', ar: 'اسم (مرة)' },
   bpOneMetaLine: { en: 'one meta line', es: 'una línea meta', fr: 'une ligne méta', de: 'eine Meta-Zeile', ja: 'メタ行は1つ', pt: 'uma linha meta', zh: '一行元信息', ar: 'سطر بيانات واحد' },
-  bpContinuedRun: { en: 'continued — no avatar, no name, gutter kept', es: 'continuada: sin avatar, sin nombre, canaleta conservada', fr: 'continuée — sans avatar, sans nom, gouttière conservée', de: 'fortgesetzt — kein Avatar, kein Name, Spalte bleibt', ja: '継続 ― アバターも名前もなし、余白列は保持', pt: 'continuada — sem avatar, sem nome, goteira mantida', zh: '续接——无头像、无姓名，保留栏位', ar: 'متواصلة — بلا صورة ولا اسم، مع إبقاء العمود' },
+  bpContinuedRun: { en: 'continued - no avatar, no name, gutter kept', es: 'continuada: sin avatar, sin nombre, canaleta conservada', fr: 'continuée - sans avatar, sans nom, gouttière conservée', de: 'fortgesetzt - kein Avatar, kein Name, Spalte bleibt', ja: '継続 ― アバターも名前もなし、余白列は保持', pt: 'continuada - sem avatar, sem nome, goteira mantida', zh: '续接——无头像、无姓名，保留栏位', ar: 'متواصلة - بلا صورة ولا اسم، مع إبقاء العمود' },
   bpAuthorship: { en: 'authorship', es: 'autoría', fr: 'paternité', de: 'Urheberschaft', ja: '作者', pt: 'autoria', zh: '作者身份', ar: 'النسبة' },
   bpAcknowledgement: { en: 'acknowledgement', es: 'acuse', fr: 'accusé', de: 'Bestätigung', ja: '承認', pt: 'reconhecimento', zh: '确认状态', ar: 'الإقرار' },
   bpRemote: { en: 'remote', es: 'remoto', fr: 'distant', de: 'entfernt', ja: 'リモート', pt: 'remoto', zh: '远端', ar: 'بعيدة' },
@@ -4953,7 +4953,7 @@ function DeliveryMark({ shape, x, y, s }: { shape: DeliveryGlyph; x: number; y: 
 
 /**
  * DeliveryStatus: the five states side by side, each in its own glyph box, so
- * the claim the component exists to hold — no two states share a silhouette —
+ * the claim the component exists to hold - no two states share a silhouette -
  * is a thing you can check by looking rather than a sentence you have to trust.
  */
 function DeliveryStatusBlueprint({ size, dimensions }: BlueprintProps) {
@@ -5000,7 +5000,7 @@ function DeliveryStatusBlueprint({ size, dimensions }: BlueprintProps) {
         );
       })}
 
-      {/* the glyph box, dimensioned once — every state draws in the same square */}
+      {/* the glyph box, dimensioned once - every state draws in the same square */}
       <HDim x1={X0} x2={X0 + S} y={Y + S + 32} label={iconSize ?? t(m.bpAuto)} above={false} />
       <text x={X0 + S + 12} y={Y + S + 36} className="bpLabel" fill={C.faint}>
         {t(bpm.bpGlyphBox)}
@@ -5146,8 +5146,8 @@ function MessageBubbleBlueprint({ dimensions }: BlueprintProps) {
 
 /**
  * MessageGroup: the head of a run above the continued half of one, so the thing
- * the `continued` flag actually does — suppress the avatar and the name while
- * keeping the gutter reserved — is visible as a difference between two figures
+ * the `continued` flag actually does - suppress the avatar and the name while
+ * keeping the gutter reserved - is visible as a difference between two figures
  * rather than described in a caption.
  */
 function MessageGroupBlueprint({ dimensions }: BlueprintProps) {
@@ -5202,7 +5202,7 @@ function MessageGroupBlueprint({ dimensions }: BlueprintProps) {
         );
       })}
       {/* The tail the run ends on, drawn from the shared path and mirrored by
-          `tailScaleX` rather than by a second hand-authored `d` — which is also
+          `tailScaleX` rather than by a second hand-authored `d` - which is also
           why the bottom-leading corner of that bubble is square. */}
       <g
         transform={`translate(${SX} ${r.bottom - messageTail.height}) scale(${tailScaleX('start')} 1)`}
@@ -5224,7 +5224,7 @@ function MessageGroupBlueprint({ dimensions }: BlueprintProps) {
       </text>
       {bubbles(a)}
       {/* In a bubble transcript the avatar belongs to the END of the run, beside
-          the message the tail points out of — that is what the author just sent. */}
+          the message the tail points out of - that is what the author just sent. */}
       <circle cx={GX + G / 2} cy={a.bottom - G / 2} r={G / 2} fill={C.content} fillOpacity={0.3} stroke={C.edge} strokeWidth={1.25} />
       <text x={GX - 8} y={a.bottom - G / 2 + 3} textAnchor="end" className="bpLabel" fill={C.faint}>
         {t(bpm.bpAvatarOnce)}
@@ -5255,7 +5255,7 @@ function MessageGroupBlueprint({ dimensions }: BlueprintProps) {
         {t(bpm.bpContinuedRun)}
       </text>
 
-      {/* the gutter's width — it must be exactly the avatar's diameter, or the
+      {/* the gutter's width - it must be exactly the avatar's diameter, or the
           two halves of a split run stop lining up */}
       {gutter && <HDim x1={GX} x2={GX + G} y={a.bottom + 40} label={gutter} />}
 
@@ -5279,7 +5279,7 @@ function MessageGroupBlueprint({ dimensions }: BlueprintProps) {
 /**
  * ConversationView: the two axes, drawn as two independent columns of labels
  * either side of one thread. Authorship decides which edge a run hugs; the
- * acknowledgement decides only whether it steps back — and the remote run, at
+ * acknowledgement decides only whether it steps back - and the remote run, at
  * the top, carries no delivery mark at all, which is the invariant the whole
  * component exists to hold.
  */
@@ -5399,7 +5399,7 @@ function ConversationViewBlueprint({ dimensions }: BlueprintProps) {
         );
       })}
 
-      {/* the gap BETWEEN runs, wider than the one inside a run — that difference
+      {/* the gap BETWEEN runs, wider than the one inside a run - that difference
           is the whole grouping signal, so it is the measurement worth drawing */}
       {gap && <VDim x={SX + 8} y1={119} y2={135} label={gap} horizontal />}
 

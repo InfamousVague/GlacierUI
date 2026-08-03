@@ -21,7 +21,7 @@ export const sortableListSpec: ComponentSpec = {
     { name: 'live', description: 'The live region that announces each keyboard move.', required: true },
   ],
   props: [
-    { name: 'items', type: 'array', required: true, item: { type: 'object', description: 'A row: id, and whatever else the renderer needs.' }, description: 'The rows in their current order. Controlled — the list reports a new order and the caller decides whether to take it.' },
+    { name: 'items', type: 'array', required: true, item: { type: 'object', description: 'A row: id, and whatever else the renderer needs.' }, description: 'The rows in their current order. Controlled - the list reports a new order and the caller decides whether to take it.' },
     { name: 'onReorder', type: 'handler', required: true, description: 'Called with the reordered array once a drag is dropped or a keyboard move committed. Not called when an item is returned to where it started.' },
     { name: 'renderItem', type: 'handler', required: true, description: 'Renders one row\'s content. The handle and row chrome are the list\'s.' },
     { name: 'getLabel', type: 'handler', description: 'The name announced for a row as it moves. Defaults to the row\'s id, which is rarely what a person wants read aloud.' },
@@ -82,7 +82,7 @@ export const sortableListSpec: ComponentSpec = {
     ],
     notes: [
       'Reordering is fully operable from the keyboard, not only by dragging: lift, move, drop. A list that can only be sorted with a mouse cannot be sorted by everyone.',
-      'Every move is announced in a live region, naming the row and its new position — the only feedback a non-sighted user gets that the drag did anything.',
+      'Every move is announced in a live region, naming the row and its new position - the only feedback a non-sighted user gets that the drag did anything.',
       'The handle is a button with its own accessible name, so it is reachable and describable rather than being a decorative grip.',
       'Escape restores the original order, so an accidental lift is recoverable without having to count moves back.',
     ],

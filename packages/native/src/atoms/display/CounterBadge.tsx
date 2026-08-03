@@ -103,7 +103,7 @@ export function CounterBadge({
         style={{
           color: (paint.color as string) ?? t('text'),
           fontSize: t(dims.fontSize ?? 'font-size-xs'),
-          // line-height:1 — the glyph box is exactly the font size, matching
+          // line-height:1 - the glyph box is exactly the font size, matching
           // the web `.badge { line-height: 1 }` so the pill height is not padded.
           lineHeight: t(dims.fontSize ?? 'font-size-xs') as never,
           fontFamily: t('font-sans'),

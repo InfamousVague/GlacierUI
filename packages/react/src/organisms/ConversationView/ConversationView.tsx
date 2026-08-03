@@ -35,7 +35,7 @@ export type { ConversationRun };
 
 /**
  * The spec's measurements, read once. `provisionalOpacity` is a raw number
- * rather than a token — alpha does not sit on any scale — so anything starting
+ * rather than a token - alpha does not sit on any scale - so anything starting
  * with a digit or dot passes through instead of becoming `var(--glacier-0.65)`.
  */
 const DIMS = dimensionsFor(conversationViewSpec);
@@ -58,7 +58,7 @@ export interface ConversationViewProps<M extends ChatMessage = ChatMessage>
   messages: M[];
   /**
    * The reading user. Authorship is derived from this, so a caller never tags
-   * a message as own or other — the same log renders correctly in two windows
+   * a message as own or other - the same log renders correctly in two windows
    * signed in as two different people.
    */
   viewerId: string;
@@ -95,17 +95,17 @@ export interface ConversationViewProps<M extends ChatMessage = ChatMessage>
  * It exists to keep two axes apart that are constantly conflated, and almost
  * everything about the component follows from that:
  *
- * **Authorship — local or remote.** Which client produced the message. It
+ * **Authorship - local or remote.** Which client produced the message. It
  * decides the edge, the fill, and which side of the column the run hugs, and it
  * is derived here from `viewerId` rather than demanded of the caller, because
  * "mine" is not a property of a message: the same row is mine in one window and
  * theirs in another.
  *
- * **Acknowledgement — optimistic or confirmed.** Whether the server has it.
+ * **Acknowledgement - optimistic or confirmed.** Whether the server has it.
  * This is about delivery, not authorship, and it exists on the local side only.
  *
  * The interaction is the part worth stating: **a remote run never shows a
- * tick, and a local run always does.** Not "does not by default" — never.
+ * tick, and a local run always does.** Not "does not by default" - never.
  * `conversationRuns` strips a status off a remote message rather than declining
  * to draw one, because a delivery mark is a claim about our outbox and there is
  * nothing behind that claim for a message someone else sent; a transport that
@@ -123,7 +123,7 @@ export interface ConversationViewProps<M extends ChatMessage = ChatMessage>
  *
  * Scrolling is deliberately thin. It follows the live end while the reader is
  * already there and does nothing at all once they have scrolled up. There is no
- * anchoring, no offset preservation across prepends, no jump-to-latest button —
+ * anchoring, no offset preservation across prepends, no jump-to-latest button -
  * the heavy machinery belongs to a virtualised list, and the honest version of
  * "stick to bottom" is one comparison, in @glacier/logic, shared with native.
  */
@@ -158,7 +158,7 @@ export function ConversationView<M extends ChatMessage = ChatMessage>({
     // The placeholder travels the identical grouping and side path the loaded
     // thread will, so it cannot settle into a different layout than the one it
     // was holding. `delivery: false` keeps it from claiming a state it has not
-    // got — a bone captioned "Read" is a lie with a tick beside it.
+    // got - a bone captioned "Read" is a lie with a tick beside it.
     if (skeleton) {
       return conversationRuns(conversationSkeletonMessages(now ?? 0), CONVERSATION_SKELETON_VIEWER, {
         delivery: false,
@@ -209,7 +209,7 @@ export function ConversationView<M extends ChatMessage = ChatMessage>({
       // was already being told.
       //
       // A placeholder is none of that yet. Announcing bones in a live region is
-      // worse than silence, and the whole subtree is hidden instead — which is
+      // worse than silence, and the whole subtree is hidden instead - which is
       // also why the tab stop goes with it, since a focusable node inside an
       // aria-hidden one is a dead end.
       role={skeleton ? undefined : 'log'}
@@ -236,7 +236,7 @@ export function ConversationView<M extends ChatMessage = ChatMessage>({
                 <div
                   key={run.key}
                   className={styles.run}
-                  // Both axes, side by side and independently queryable — which
+                  // Both axes, side by side and independently queryable - which
                   // is the whole point of the component, so it is also how it
                   // is tested and how an app hangs its own affordances off it.
                   data-authorship={run.authorship}

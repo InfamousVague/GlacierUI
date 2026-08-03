@@ -48,7 +48,7 @@
    auto-height container that sizes every row to the tallest one. Without it the
    busy week stretches and the quiet weeks stay short, and a month grid whose
    rows are different heights stops reading as a grid. `min-height` alone only
-   sets a floor — it does not stop a row from growing. */
+   sets a floor - it does not stop a row from growing. */
 .grid {
   display: grid;
   grid-auto-rows: 1fr;
@@ -57,7 +57,7 @@
 
 /* Fixed, not a floor. A month grid whose height tracks its busiest day changes
    size as you page, so the controls above it and the page below it move under
-   the pointer — press Next twice and the button has walked away from the
+   the pointer - press Next twice and the button has walked away from the
    cursor. splitOverflow caps a cell at MONTH_CELL_LIMIT lines and chips never
    wrap, so the tallest a cell can be is knowable, and this is it: the date, a
    gap, then three slots. Derived from the same tokens the parts are drawn from,
@@ -165,7 +165,7 @@ button.chip:hover {
   min-width: 0;
 }
 
-/* The time is context, the title is the thing — so the title gets the space and
+/* The time is context, the title is the thing - so the title gets the space and
    the time never pushes it out of the cell. */
 .chipTime {
   flex: none;
@@ -243,7 +243,7 @@ button.chip:hover {
 }
 
 /* The hover preview's two lines. Stacked rather than inline because the title
-   is the thing being previewed and the time is its subtitle — and because a
+   is the thing being previewed and the time is its subtitle - and because a
    long title on one line would just recreate the clipping the preview exists
    to undo. */
 .preview {

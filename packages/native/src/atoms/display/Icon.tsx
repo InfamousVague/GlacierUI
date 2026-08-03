@@ -1,5 +1,5 @@
 /**
- * Icon — the native binding's icon surface.
+ * Icon - the native binding's icon surface.
  *
  * Icons live in @glacier/icons, the one place both kits pull glyphs from. On a
  * device build that package resolves to lucide-react-native (drawn through

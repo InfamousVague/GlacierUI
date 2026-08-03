@@ -108,7 +108,7 @@ export interface PlayerCardProps
  * total times, and the play, skip, shuffle, and repeat controls under it.
  *
  * Every piece of state is controllable or left to the card, and a control whose
- * handler is omitted is not rendered at all — so the same component covers a
+ * handler is omitted is not rendered at all - so the same component covers a
  * bare play/pause strip and a full transport without a pile of `show*` flags.
  *
  * There is one tree, not a separate skeleton tree: `skeleton` is threaded into

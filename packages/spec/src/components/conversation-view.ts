@@ -73,18 +73,18 @@ export const conversationViewSpec: ComponentSpec = {
     },
     {
       name: 'remote',
-      description: 'A run from anyone but the reader: the raised surface on the leading edge, and — the invariant this component exists to hold — no delivery mark at all. A tick reports what our server said about our outbox; about a message someone else sent, we know only that it arrived, so a tick here would be a claim with nothing behind it.',
+      description: 'A run from anyone but the reader: the raised surface on the leading edge, and - the invariant this component exists to hold - no delivery mark at all. A tick reports what our server said about our outbox; about a message someone else sent, we know only that it arrived, so a tick here would be a claim with nothing behind it.',
       paint: { background: token('surface-raised'), text: token('text') },
     },
     {
       name: 'local',
-      description: 'A run the reader wrote: the accent fill on the trailing edge, and always a delivery mark. Always, including when the caller modelled no statuses — a local message that reports nothing is indistinguishable from one that never sent.',
+      description: 'A run the reader wrote: the accent fill on the trailing edge, and always a delivery mark. Always, including when the caller modelled no statuses - a local message that reports nothing is indistinguishable from one that never sent.',
       paint: { background: token('accent-solid'), text: token('accent-contrast') },
     },
     {
       name: 'optimistic',
       description:
-        'A local run the server has not acknowledged. It keeps its fill and its text exactly — restated here so a port binds "does not repaint" rather than inventing a second colour — and steps back by `provisionalOpacity` alone. A hue change would make an in-flight message and a settled one two different colours, and the reader would have to learn the second one to recognise the first; alpha says "not yet" without saying "wrong", and resolves by simply going away.',
+        'A local run the server has not acknowledged. It keeps its fill and its text exactly - restated here so a port binds "does not repaint" rather than inventing a second colour - and steps back by `provisionalOpacity` alone. A hue change would make an in-flight message and a settled one two different colours, and the reader would have to learn the second one to recognise the first; alpha says "not yet" without saying "wrong", and resolves by simply going away.',
       paint: { background: token('accent-solid'), text: token('accent-contrast') },
     },
     {
@@ -131,12 +131,12 @@ export const conversationViewSpec: ComponentSpec = {
       'role="log" with aria-live="polite": a thread is an append-only record, and polite is what stops an arriving message from cutting off whatever the reader was already being told.',
       'The scroll region is focusable and named, because a scrollable region that cannot be focused cannot be read by keyboard alone.',
       'Authorship is announced by each run, which is labelled by its author; the thread itself does not repeat it.',
-      'The delivery state travels with a translated word, never the glyph alone — and only ever on the local side, so a screen reader is never told a delivery fact about a message the viewer did not send.',
+      'The delivery state travels with a translated word, never the glyph alone - and only ever on the local side, so a screen reader is never told a delivery fact about a message the viewer did not send.',
     ],
   },
   motion: {
     description:
-      'The thread follows the live end without animating to it. An eased scroll on arrival would move text a reader is mid-sentence in, and the one case where following is correct — the reader is already at the bottom — is the case where there is nothing to travel.',
+      'The thread follows the live end without animating to it. An eased scroll on arrival would move text a reader is mid-sentence in, and the one case where following is correct - the reader is already at the bottom - is the case where there is nothing to travel.',
     transition: { speed: 'fast', ease: 'out' },
   },
 };

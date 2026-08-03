@@ -1,5 +1,5 @@
 /**
- * Sortable list logic — the reordering arithmetic behind drag-and-drop and its
+ * Sortable list logic - the reordering arithmetic behind drag-and-drop and its
  * keyboard equivalent. Pure array and geometry work, so both bindings drop an
  * item in the same place from the same gesture.
  */
@@ -86,7 +86,7 @@ export function shiftFor(index: number, from: number, to: number): number {
 }
 
 /**
- * Whether a reorder actually changed anything — used to decide whether to
+ * Whether a reorder actually changed anything - used to decide whether to
  * report a change at the end of a drag. A drag that returns an item to where it
  * started is not a change, and firing one would mark a form dirty for a gesture
  * the user visibly undid.

@@ -1,16 +1,16 @@
 /**
- * @glacier/native — VirtualList.
+ * @glacier/native - VirtualList.
  *
  * The React Native binding of @glacier/react's VirtualList: renders only the
- * rows the scroller can show. The windowing arithmetic — which slice, how tall
- * the spacer is, how far down the window sits — comes from @glacier/logic, so
+ * rows the scroller can show. The windowing arithmetic - which slice, how tall
+ * the spacer is, how far down the window sits - comes from @glacier/logic, so
  * this list renders the same rows for the same scroll position as the web one.
  *
  * Web-parity notes:
  * - Built on ScrollView with an absolutely-positioned window rather than
  *   FlatList. FlatList would virtualize too, but with its own windowing rules,
  *   and the two bindings would then disagree about which rows exist at a given
- *   offset — the exact drift this package exists to prevent.
+ *   offset - the exact drift this package exists to prevent.
  * - Scroll events are throttled by the platform; on web they fire per frame.
  * - The listbox/option roles and the aria-setsize positions are web-only; the
  *   rows here carry accessibilityRole and their index for the same purpose.

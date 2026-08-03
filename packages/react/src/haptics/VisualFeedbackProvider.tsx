@@ -115,7 +115,7 @@ export function VisualFeedbackProvider({
   const lastPressRef = useRef(-Infinity);
   const lastBusRef = useRef(-Infinity);
   // The most recent pointer position, used as the origin for programmatic
-  // (bus-driven) feedback that carries no coordinates of its own — so a haptic
+  // (bus-driven) feedback that carries no coordinates of its own - so a haptic
   // fired by a control the user is pressing (a NumberInput stepper, a slider
   // drag) radiates from that control, not the middle of the screen.
   const lastPointerRef = useRef<{ x: number; y: number } | null>(null);

@@ -6,7 +6,7 @@ import { dimensionsFor, type NativeStyle } from '../../resolve.ts';
 import { Skeleton } from '../feedback/Skeleton.tsx';
 
 /**
- * StatTile — the @glacier/native binding of the web StatTile (a compact stat
+ * StatTile - the @glacier/native binding of the web StatTile (a compact stat
  * micro-card: an optional leading icon disc, a prominent value, and a muted
  * label, with an optional trailing delta/hint on the value baseline).
  *
@@ -22,7 +22,7 @@ import { Skeleton } from '../feedback/Skeleton.tsx';
  * color does not inherit across a View in React Native). The icon arrives as a
  * decorative ReactNode and is wrapped in the sunken disc carrying `text-muted`
  * as its `color`, so a currentColor SVG picks it up on react-native-web,
- * matching the web `.icon` rule — we never render our own glyph.
+ * matching the web `.icon` rule - we never render our own glyph.
  *
  * This is the resting visual only; the component itself does not animate and is
  * not tappable (the web `.tile` has no active/press scale). The web glass
@@ -49,7 +49,7 @@ export interface StatTileProps extends Omit<ViewProps, 'style' | 'children'> {
 
 // Size-independent box + type metrics read once from the spec: gap, radius,
 // border, paddingBlock/Inline, the icon disc size + radius, and the
-// value/label/hint font sizes — token names, plus the disc's raw 2.25rem length.
+// value/label/hint font sizes - token names, plus the disc's raw 2.25rem length.
 const DIMS = dimensionsFor(statTileSpec);
 
 // The resting solid surface lives on the spec's top-level paint (there is no
@@ -64,7 +64,7 @@ const BASE_TEXT = strip(BASE.text, 'text');
 /**
  * A resolved measurement value. `dimensionsFor` hands back token names alongside
  * raw CSS lengths; wrap the token names in the custom property and let a raw
- * length — anything that starts with a digit or dot — pass through so it never
+ * length - anything that starts with a digit or dot - pass through so it never
  * becomes `var(--glacier-2.25rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {

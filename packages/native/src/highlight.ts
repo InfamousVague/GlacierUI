@@ -5,15 +5,15 @@ import { useEffect, useState } from 'react';
  *
  * React Native has no DOM, so the web kit's `codeToHtml` (which emits `<span>`
  * markup) cannot be used. Shiki also exposes `codeToTokens`, which returns pure
- * data — an array of lines, each an array of `{ content, color }` tokens — with
+ * data - an array of lines, each an array of `{ content, color }` tokens - with
  * no renderer assumptions. The CodeBlock renders each token as a nested <Text>,
  * so the same highlighter drives both platforms.
  *
  * The theme is Shiki's CSS-variables theme with the SAME `--shiki-*` prefix the
  * docs use, so a token's color is `var(--shiki-…)`: on react-native-web the
  * browser resolves it against the docs' palette (identical to the web CodeBlock,
- * and theme-reactive). On a device a token→color swap resolves those vars — the
- * device follow-up — but the tokenization itself runs anywhere (Shiki ships a
+ * and theme-reactive). On a device a token→color swap resolves those vars - the
+ * device follow-up - but the tokenization itself runs anywhere (Shiki ships a
  * pure-JS engine, no WASM/DOM). Shiki is a lazy, optional import: if it is not
  * installed the hook returns null and CodeBlock falls back to plain monospace.
  */

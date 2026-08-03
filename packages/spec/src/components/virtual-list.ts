@@ -17,7 +17,7 @@ export const virtualListSpec: ComponentSpec = {
     { name: 'empty', description: 'What shows when there are no rows at all.' },
   ],
   props: [
-    { name: 'count', type: 'number', required: true, description: 'How many rows there are in total. The list never receives the data itself — only how much of it there is.' },
+    { name: 'count', type: 'number', required: true, description: 'How many rows there are in total. The list never receives the data itself - only how much of it there is.' },
     { name: 'itemSize', type: 'number', required: true, description: 'Height of one row in pixels. Every row is this tall; variable heights are out of scope by design.' },
     { name: 'renderItem', type: 'handler', required: true, description: 'Renders the row at an index. Called only for rows inside the window.' },
     { name: 'height', type: 'string', description: 'Viewport height. Defaults to filling its parent, which is usually what a full-page list wants.' },
@@ -62,7 +62,7 @@ export const virtualListSpec: ComponentSpec = {
       { keys: 'Home, End', action: 'Jumps to the first or last row.' },
     ],
     notes: [
-      'Rows carry aria-setsize and aria-posinset naming the position in the WHOLE list, not the window — without them a screen reader announces "row 3 of 12" while the user is at item 40,000.',
+      'Rows carry aria-setsize and aria-posinset naming the position in the WHOLE list, not the window - without them a screen reader announces "row 3 of 12" while the user is at item 40,000.',
       'The viewport is the scroll container and takes focus, so keyboard scrolling works without every row being tabbable.',
       'Only windowed rows exist in the DOM. Anything that must be findable by browser find-in-page or reachable by Tab does not belong in a virtualized list.',
       'The spacer preserves the true scroll height, so the scrollbar communicates how much data there is rather than how much is rendered.',

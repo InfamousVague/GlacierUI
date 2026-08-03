@@ -1,17 +1,17 @@
 /**
- * Seek bar geometry — the shared brain behind the audio scrubber's painting.
+ * Seek bar geometry - the shared brain behind the audio scrubber's painting.
  *
  * Every shape resolves to the same two things: a path for the played portion
  * and a path for the portion still ahead of the playhead. Level bars are stroked
  * segments rather than filled rects, so a shape swap never changes how a
- * renderer draws — it draws exactly two stroked paths, always. That keeps the
+ * renderer draws - it draws exactly two stroked paths, always. That keeps the
  * DOM and native bindings from re-deriving any of this and drifting apart.
  *
  * Coordinates live in a 0..100 by 0..100 box that both bindings stretch with
  * `preserveAspectRatio="none"`, so a wavelength is a percentage of the bar's
  * width and the wave keeps the same number of cycles at any pixel size. Stroke
  * weight is the renderer's business (a non-scaling stroke in px), which is why
- * nothing here knows about thickness — only `seekBarStroke` classifies it.
+ * nothing here knows about thickness - only `seekBarStroke` classifies it.
  */
 
 /** The shared viewBox the geometry is authored in. */
@@ -31,22 +31,22 @@ const EPSILON = 0.001;
  * How the bar paints progress.
  *
  * Smooth curves:
- * - `line` — a plain rail, the familiar seek bar.
- * - `wave` — an even squiggle behind the playhead, flat rail ahead of it.
- * - `waveform` — the squiggle's amplitude follows `levels`, so the whole track
+ * - `line` - a plain rail, the familiar seek bar.
+ * - `wave` - an even squiggle behind the playhead, flat rail ahead of it.
+ * - `waveform` - the squiggle's amplitude follows `levels`, so the whole track
  *   is a rough picture of the audio, louder passages swelling wider.
- * - `swell` — the squiggle grows from flat at the start of the track to full
+ * - `swell` - the squiggle grows from flat at the start of the track to full
  *   height at the playhead, then settles to a flat rail ahead of it. Reads as a
  *   build rather than an even texture.
  *
  * Sharp curves, drawn corner-to-corner rather than sampled, so the points stay
  * genuinely pointed at any width:
- * - `zigzag` — an even triangle wave.
- * - `spikes` — a triangle wave whose peaks follow `levels`.
+ * - `zigzag` - an even triangle wave.
+ * - `spikes` - a triangle wave whose peaks follow `levels`.
  *
  * Level marks:
- * - `bars` — level bars standing on the baseline.
- * - `mirror` — level bars mirrored around the centerline, the editor look.
+ * - `bars` - level bars standing on the baseline.
+ * - `mirror` - level bars mirrored around the centerline, the editor look.
  */
 export type SeekBarShape =
   | 'line'
@@ -89,7 +89,7 @@ export interface SeekBarGeometry {
 }
 
 /**
- * How a shape wants to be stroked. Classification only — the pixel values stay
+ * How a shape wants to be stroked. Classification only - the pixel values stay
  * with each renderer (CSS custom properties on the web, spec dimensions on
  * native) so themes keep control, while the choice itself is made in one place.
  */
@@ -119,7 +119,7 @@ export interface SeekBarPaint {
 }
 
 /**
- * Resolves a tone to token names — never to colour values, so themes keep
+ * Resolves a tone to token names - never to colour values, so themes keep
  * control and the DOM kit can wrap them in `var()` while native wraps them in
  * its own `t()`. Shared so a tone cannot mean two different things.
  *
@@ -134,8 +134,8 @@ export function seekBarPaint(tone: SeekBarTone): SeekBarPaint {
 /**
  * How visible the run ahead of the playhead is.
  *
- * - `muted` — the segment track, tuned for the page's base surface.
- * - `contrast` — lifted for raised surfaces. `segment-track` is a translucent
+ * - `muted` - the segment track, tuned for the page's base surface.
+ * - `contrast` - lifted for raised surfaces. `segment-track` is a translucent
  *   near-black, so on a card it sits a few hundredths of a lightness step from
  *   the surface underneath and effectively disappears; this keeps the unplayed
  *   run legible there.
@@ -162,12 +162,12 @@ export function seekBarRail(rail: SeekBarRail): SeekBarRailPaint {
 /**
  * How the played run is filled.
  *
- * - `solid` — one token, laid flat.
- * - `tonal` — a ramp inside one family, from the tone's solid to its lighter
+ * - `solid` - one token, laid flat.
+ * - `tonal` - a ramp inside one family, from the tone's solid to its lighter
  *   text token. Quiet; reads as depth rather than as a gradient.
- * - `blend` — a ramp that travels to another family, so the hue genuinely
+ * - `blend` - a ramp that travels to another family, so the hue genuinely
  *   moves along the bar. This is the one that looks like a gradient.
- * - `fade` — the tone dissolving toward transparent, for a run that should
+ * - `fade` - the tone dissolving toward transparent, for a run that should
  *   trail off rather than stop.
  */
 export type SeekBarFill = 'solid' | 'tonal' | 'blend' | 'fade';
@@ -233,8 +233,8 @@ export function seekBarGradient(tone: SeekBarTone, fill: SeekBarFill): SeekBarSt
 
 /**
  * Renders a stop to a colour string. `wrap` turns a token name into whatever
- * the platform understands — `var(--glacier-*)` on the web, the native kit's
- * own resolver on a device — so both bindings compose identical strings and a
+ * the platform understands - `var(--glacier-*)` on the web, the native kit's
+ * own resolver on a device - so both bindings compose identical strings and a
  * gradient cannot mean two different things.
  */
 export function seekBarStopColor(stop: SeekBarStop, wrap: (token: string) => string): string {
@@ -251,7 +251,7 @@ export function seekBarStopColor(stop: SeekBarStop, wrap: (token: string) => str
 /**
  * A gentle, deterministic waveform for the loading placeholder. Real levels are
  * exactly what a bar does not have yet while it loads, and the level shapes
- * would otherwise draw a uniform picket fence — this gives them something that
+ * would otherwise draw a uniform picket fence - this gives them something that
  * reads as audio.
  */
 const SKELETON_LEVEL_COUNT = 40;
@@ -264,7 +264,7 @@ const SKELETON_LEVELS: number[] = Array.from({ length: SKELETON_LEVEL_COUNT }, (
 
 /**
  * Where the placeholder puts its playhead. Half way, so the bar shows both of
- * its states at once — textured behind, flat ahead — which is what the loaded
+ * its states at once - textured behind, flat ahead - which is what the loaded
  * control actually looks like.
  */
 const SKELETON_PROGRESS = 0.5;
@@ -279,7 +279,7 @@ export interface SeekBarSkeleton {
  * What the loading placeholder should draw for a shape.
  *
  * A placeholder's job is to say "an audio bar is arriving here", and a flat rail
- * says the opposite — it reads as an empty control rather than a loading one. So
+ * says the opposite - it reads as an empty control rather than a loading one. So
  * `line`, the one shape with no texture of its own, borrows the squiggle; every
  * other shape keeps its own silhouette. Drawn at half progress with a thumb, so
  * the shape of the real control comes through rather than a bare stripe.
@@ -306,7 +306,7 @@ export function seekBarHasThumb(shape: SeekBarShape): boolean {
 
 /**
  * Clamps into 0..1, mapping anything non-finite to 0. A NaN would otherwise
- * flow straight into the path strings and blank the whole bar — one bad
+ * flow straight into the path strings and blank the whole bar - one bad
  * coordinate from a host platform should degrade to "no progress", never to an
  * unpainted control.
  */
@@ -364,8 +364,8 @@ function sinePath(from: number, to: number, o: WaveOptions): string {
 
 /**
  * Builds a triangle run from its corners only. A sampled triangle would round
- * its points off at exactly the scale you notice, so the vertices — the extrema
- * at each quarter and three-quarter wavelength — are emitted directly and the
+ * its points off at exactly the scale you notice, so the vertices - the extrema
+ * at each quarter and three-quarter wavelength - are emitted directly and the
  * straight segments between them do the rest.
  */
 function trianglePath(from: number, to: number, o: WaveOptions): string {
@@ -391,7 +391,7 @@ function linePath(from: number, to: number): string {
 /**
  * Level marks as stroked segments. Each is one `M`/`L` pair in a single path,
  * so the whole comb costs one node per side and the renderer's butt cap decides
- * how the ends look — no rect radius to be distorted by the stretch.
+ * how the ends look - no rect radius to be distorted by the stretch.
  */
 function marksPath(
   played: boolean,
@@ -461,7 +461,7 @@ export function seekBarGeometry({
 
   return {
     playedPath: run(0, cut, wave),
-    // The even shapes settle to a flat rail ahead of the playhead — the read of
+    // The even shapes settle to a flat rail ahead of the playhead - the read of
     // the reference design, where the texture is what has been heard. The
     // modulated ones keep drawing the levels so the passage coming up stays
     // visible.

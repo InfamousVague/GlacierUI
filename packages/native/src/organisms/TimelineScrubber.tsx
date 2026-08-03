@@ -66,7 +66,7 @@ const LIVE_SNAP = 0.995;
 
 /**
  * A resolved measurement: token names (e.g. `space-2`) get the custom property;
- * a raw CSS length — anything starting with a digit or dot — passes through so
+ * a raw CSS length - anything starting with a digit or dot - passes through so
  * it never becomes `var(--glacier-2px)`. Mirrors Sparkline's `metric`.
  */
 function metric(value: string | undefined, fallback: string): string {
@@ -115,7 +115,7 @@ const Track = Pressable as unknown as ComponentType<
  *
  * Interaction: the track is a Pressable that jumps the playhead to the tap
  * position (a tap in the trailing 0.5% snaps back to live), fired through the
- * shared `useControlled` so controlled/uncontrolled behavior matches the web —
+ * shared `useControlled` so controlled/uncontrolled behavior matches the web -
  * `value === undefined` pins to the live edge, exactly as on web. Precise
  * pointer-drag scrubbing, the drag-time glow and floating readout, keyboard
  * stepping, and the live-dot pulse are pointer/motion affordances with no

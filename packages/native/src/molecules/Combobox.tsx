@@ -1,4 +1,4 @@
-// Combobox — the React Native binding of @glacier/react's molecules/Combobox.
+// Combobox - the React Native binding of @glacier/react's molecules/Combobox.
 // An editable input plus a filtered option list rendered in an anchored floating
 // layer. Paint and geometry are read from the combobox spec through the shared
 // resolvers, so the resting visual matches the DOM kit and cannot drift.

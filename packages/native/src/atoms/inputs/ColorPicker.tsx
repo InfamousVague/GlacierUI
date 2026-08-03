@@ -1,9 +1,9 @@
 /**
- * @glacier/native — ColorPicker.
+ * @glacier/native - ColorPicker.
  *
  * The React Native binding of @glacier/react's ColorPicker: lightness, chroma,
- * and hue over a live swatch. Every colour decision — the OKLCH↔sRGB matrices,
- * the hex parsing, the gamut test, the readable-on choice — comes from
+ * and hue over a live swatch. Every colour decision - the OKLCH↔sRGB matrices,
+ * the hex parsing, the gamut test, the readable-on choice - comes from
  * @glacier/logic, so the two pickers resolve a drag to byte-identical colour.
  *
  * Web-parity notes:
@@ -170,8 +170,8 @@ export function ColorPicker({
         }}
       >
         {/* Raw RN Text here, not the kit Text: this label needs an arbitrary
-            colour — black or white, whichever is readable on the swatch behind
-            it — and the kit Text only exposes the token tones. */}
+            colour - black or white, whichever is readable on the swatch behind
+            it - and the kit Text only exposes the token tones. */}
         <RNText style={{ color: readableOn(color), fontFamily: t('font-mono'), fontSize: t('font-size-xs') }}>
           {hex}
         </RNText>
@@ -232,7 +232,7 @@ export function ColorPicker({
         {!displayable && (
           // Mirrors the web's `.gamut { flex: none }`. Without it the label is
           // the flexible half of the row and wraps to two lines, while the hex
-          // field — which has a whole field's worth of slack — keeps its width.
+          // field - which has a whole field's worth of slack - keeps its width.
           // `Text` takes no style, so the rule lives on a wrapper.
           <View style={{ flexShrink: 0 }}>
           <Text size="xs" tone="muted">

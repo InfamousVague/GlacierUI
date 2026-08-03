@@ -28,7 +28,7 @@ export default defineConfig({
   optimizeDeps: {
     // Vite's dep pre-bundler (esbuild) does not honor resolve.extensions, so on
     // its own it follows react-native-svg's non-web build, whose Fabric files
-    // import `react-native/Libraries/.../codegenNativeComponent` — a subpath the
+    // import `react-native/Libraries/.../codegenNativeComponent` - a subpath the
     // `react-native` -> `react-native-web` alias rewrites to a file that does not
     // exist. Teaching esbuild to prefer `.web.*` makes it resolve the clean web
     // build (ReactNativeSVG.web.js -> elements.web.js), which never touches Fabric.

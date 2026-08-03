@@ -1,5 +1,5 @@
 /**
- * Virtual list windowing — deciding which slice of a long list is worth
+ * Virtual list windowing - deciding which slice of a long list is worth
  * rendering. Pure arithmetic, so both bindings render the same rows for the
  * same scroll position.
  */
@@ -29,7 +29,7 @@ export interface VirtualWindowOptions {
    * Extra rows to render beyond each edge of the viewport.
    *
    * Without it, a row is created at the exact moment it becomes visible, and
-   * any work it does on mount — measuring, decoding an image, a first paint —
+   * any work it does on mount - measuring, decoding an image, a first paint -
    * happens inside the frame that is already trying to scroll. A small buffer
    * moves that work off the visible edge. Three is enough to cover a fast
    * flick without rendering a screenful of rows nobody sees.
@@ -45,7 +45,7 @@ const clamp = (n: number, min: number, max: number): number => (n < min ? min : 
  * Fixed row heights only, deliberately: variable heights require measuring
  * every row and correcting the scroll offset as estimates are replaced, which
  * is a different and much larger component. A list with uniform rows is the
- * common case and it is exactly computable — no measurement, no estimation, no
+ * common case and it is exactly computable - no measurement, no estimation, no
  * drift.
  *
  * Non-finite or negative inputs settle at an empty window rather than
@@ -66,7 +66,7 @@ export function virtualWindow(options: VirtualWindowOptions): VirtualWindow {
 
   const firstVisible = Math.floor(safeScroll / safeSize);
   // The viewport almost never lands on a row boundary, so the last visible row
-  // is the one containing its bottom edge — hence the ceil rather than a
+  // is the one containing its bottom edge - hence the ceil rather than a
   // division of the height alone.
   const lastVisible = Math.ceil((safeScroll + safeViewport) / safeSize) - 1;
 
@@ -85,9 +85,9 @@ export function virtualWindow(options: VirtualWindowOptions): VirtualWindow {
  * showing the row would yank it under the user for no reason.
  *
  * `align` chooses where a row that must be scrolled to ends up:
- * - `auto` — the nearest edge, so the list moves as little as possible.
- * - `start` / `end` — pinned to that edge.
- * - `center` — centred, which is what a search result wants so its context is
+ * - `auto` - the nearest edge, so the list moves as little as possible.
+ * - `start` / `end` - pinned to that edge.
+ * - `center` - centred, which is what a search result wants so its context is
  *   visible on both sides.
  */
 export function scrollOffsetForIndex(options: {

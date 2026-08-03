@@ -17,7 +17,7 @@ export const calendarViewSpec: ComponentSpec = {
   element: 'div',
   anatomy: [
     { name: 'header', description: 'The title of the current range, the previous/next/today controls, and the view switch.', required: true },
-    { name: 'title', description: 'The range in words — the month and year, or the span a week or agenda covers.', required: true },
+    { name: 'title', description: 'The range in words - the month and year, or the span a week or agenda covers.', required: true },
     { name: 'nav', description: 'Previous, today, and next. Today is a separate control rather than a keyboard secret.' },
     { name: 'switch', description: 'The month/week/agenda segmented control.' },
     { name: 'weekdays', description: 'The weekday header row, in the order the week starts on.' },
@@ -105,7 +105,7 @@ export const calendarViewSpec: ComponentSpec = {
       'The month grid is a real grid: rows are weeks and cells are days, so a screen reader can navigate it two-dimensionally instead of as one long list.',
       'Only one day cell is tabbable at a time; the arrows move focus within the grid. Tab therefore leaves the calendar rather than walking 42 cells.',
       'Each cell names its full date, not just its number, so "15" is announced as the date it is rather than a bare digit.',
-      'The agenda view is a list, not a grid — it has no second axis to navigate, and pretending otherwise would announce a structure that is not there.',
+      'The agenda view is a list, not a grid - it has no second axis to navigate, and pretending otherwise would announce a structure that is not there.',
     ],
   },
   motion: {

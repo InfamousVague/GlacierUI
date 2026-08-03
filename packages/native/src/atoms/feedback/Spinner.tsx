@@ -32,7 +32,7 @@ const DEFAULT_LABEL = String(spinnerSpec.defaults?.['aria-label'] ?? 'Loading');
  * (e.g. `radius-full`, `size-md`) alongside raw CSS lengths (the spinner's
  * `1em` / `1.875rem` diameters and `2px` / `3px` borders are declared inline,
  * not as tokens). A token name gets wrapped in its custom property; a raw
- * length — anything that starts with a digit or a dot — passes straight through
+ * length - anything that starts with a digit or a dot - passes straight through
  * so it never becomes `var(--glacier-2px)`.
  */
 function metric(value: string | undefined, fallback: string): string {

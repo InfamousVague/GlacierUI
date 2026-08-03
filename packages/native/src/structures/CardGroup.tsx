@@ -1,5 +1,5 @@
 /*
- * CardGroup — a titled/repeating layout shelf for card surfaces, rendered with
+ * CardGroup - a titled/repeating layout shelf for card surfaces, rendered with
  * React Native primitives. The web version is a real CSS grid
  * (`repeat(auto-fill, minmax(min(100%, var(--card-group-min)), 1fr))`) or a
  * single-column list. React Native has no CSS grid, so grid mode is EMULATED
@@ -76,7 +76,7 @@ const GAP_FALLBACK: Record<CardGroupDensity, Record<CardGroupGap, string>> = {
  * A layout shelf for repeated surfaces such as Cards and StatTiles, rendered
  * with React Native primitives. In grid mode it lays each child in a flex cell
  * whose `flexBasis` is `minItemWidth` and that grows to share leftover space and
- * wraps to a new row once another `minItemWidth` track no longer fits — a close
+ * wraps to a new row once another `minItemWidth` track no longer fits - a close
  * analogue of `auto-fill` that reflows with no media queries. In list mode it
  * stacks children full-width in a single column. Purely visual: it renders a
  * plain <View> with no role, so add list semantics on top when the content is

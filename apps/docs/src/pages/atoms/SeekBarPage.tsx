@@ -19,7 +19,7 @@ import { ComponentBlueprint } from '../../Blueprint.tsx';
 import { m } from '../../i18n.ts';
 
 /**
- * An illustrative level series for the static shape examples — a slow swell
+ * An illustrative level series for the static shape examples - a slow swell
  * with a ripple over it. The live demo below measures real audio instead; this
  * only exists so the shapes can be compared against identical input.
  */
@@ -37,7 +37,7 @@ const DURATION = 174; // 2:54, a typical track
  * Streamed rather than bundled: the kit ships no audio, and nothing about this
  * track is precomputed. Musopen's recording of Albinoni's Oboe Concerto No. 2,
  * public domain (CC0), served by Wikimedia with `Access-Control-Allow-Origin`,
- * which the analyser requires — cross-origin media taints the graph and reads
+ * which the analyser requires - cross-origin media taints the graph and reads
  * as silence.
  */
 const TRACK_URL =
@@ -284,7 +284,7 @@ const play = () => {
 <SeekBar duration={174} defaultValue={84} shape="wave" tone="success" aria-label="Seek" />
 <SeekBar duration={174} defaultValue={84} shape="wave" tone="danger" aria-label="Seek" />
 
-{/* the fill decides how it is laid down — every ramp mixes in OKLCH */}
+{/* the fill decides how it is laid down - every ramp mixes in OKLCH */}
 <SeekBar duration={174} defaultValue={84} shape="wave" fill="tonal" aria-label="Seek" />
 <SeekBar duration={174} defaultValue={84} shape="wave" fill="blend" aria-label="Seek" />
 <SeekBar duration={174} defaultValue={84} shape="wave" fill="fade" aria-label="Seek" />

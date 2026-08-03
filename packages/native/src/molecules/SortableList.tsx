@@ -1,14 +1,14 @@
 /**
- * @glacier/native — SortableList.
+ * @glacier/native - SortableList.
  *
  * The React Native binding of @glacier/react's SortableList: rows reordered by
- * dragging a handle. Every reorder decision — which slot the pointer is over,
- * how far each row shifts, whether anything actually changed — comes from
+ * dragging a handle. Every reorder decision - which slot the pointer is over,
+ * how far each row shifts, whether anything actually changed - comes from
  * @glacier/logic, so a drop lands in the same slot as it would on the web.
  * Paint and geometry are read from the sortable-list spec.
  *
  * The drag uses the responder system rather than Pressable: a Pressable reports
- * that a press happened, while a reorder needs the whole gesture — grant, every
+ * that a press happened, while a reorder needs the whole gesture - grant, every
  * move, and release. `onStartShouldSetResponder` claims it at touch-down so the
  * handle owns the gesture instead of a parent scroll view stealing it.
  *
@@ -90,7 +90,7 @@ const Row = Animated.View as unknown as ComponentType<ViewProps & { onLayout?: (
 const SHIFT_DURATION = 150;
 
 /**
- * Approximates `--glacier-ease-out` — `cubic-bezier(0.16, 1, 0.3, 1)`, a strong
+ * Approximates `--glacier-ease-out` - `cubic-bezier(0.16, 1, 0.3, 1)`, a strong
  * ease-out that covers most of the distance early. It is an approximation and
  * not that curve: evaluating a bezier needs a solver, and over a 150ms slot
  * shift the difference is not a thing anyone can see.
@@ -100,7 +100,7 @@ const easeOut = (value: number): number => 1 - Math.pow(1 - value, 4);
 /**
  * Zero when the reader asked for less motion.
  *
- * The web binding gets this free — its transition is expressed in a token the
+ * The web binding gets this free - its transition is expressed in a token the
  * reduced-motion media query already rewrites to 0.01ms. Nothing rewrites a
  * number in JavaScript, so the query has to be read directly. Guarded because
  * `matchMedia` is a DOM API: on a real device this is simply absent, and the
@@ -174,7 +174,7 @@ export function SortableList<T extends SortableItemLike>({
   };
 
   // The last target each row was sent to, so a re-render mid-drag does not
-  // restart an animation that is already running to the same place — which is
+  // restart an animation that is already running to the same place - which is
   // what turns a smooth shift into a stutter.
   const targets = useRef(new Map<string, number>()).current;
 
@@ -319,7 +319,7 @@ export function SortableList<T extends SortableItemLike>({
               {/* The kit's Text, not react-native's: a bare RNText carries none
                   of the token font, size, or colour, so a plain string item
                   rendered dim and small next to the web's `--glacier-text` at
-                  `font-size-sm`. Called once — `renderItem` is the caller's
+                  `font-size-sm`. Called once - `renderItem` is the caller's
                   function and may not be cheap or free of side effects. */}
               {typeof content === 'string' ? <Text size="sm">{content}</Text> : content}
             </View>

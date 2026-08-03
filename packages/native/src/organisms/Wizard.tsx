@@ -10,12 +10,12 @@ import { Skeleton } from '../atoms/feedback/Skeleton.tsx';
 import { Button } from '../atoms/inputs/Button.tsx';
 
 /**
- * Wizard — the @glacier/native binding of the web organism (a stepped flow: a
+ * Wizard - the @glacier/native binding of the web organism (a stepped flow: a
  * connected numbered Steps header, one labelled panel at a time, and a gated
  * Previous/Next footer where Next runs the step's validate before advancing).
  *
- * COMPOSITION. It wraps the native siblings — <Steps> (connected/numbered),
- * <Heading>, <Skeleton>, <Button> — and lays them out in plain <View>s so it
+ * COMPOSITION. It wraps the native siblings - <Steps> (connected/numbered),
+ * <Heading>, <Skeleton>, <Button> - and lays them out in plain <View>s so it
  * never depends on Stack/Row (generated in the same wave). Geometry is read
  * from `wizardSpec` through the shared resolver (dimensionsFor): the column gap
  * (`space-5`), footer gap (`space-3`), skeleton content gap (`space-2`), panel
@@ -42,7 +42,7 @@ import { Button } from '../atoms/inputs/Button.tsx';
  * reported: `className`/`style` escape hatches, focus-move-to-panel, the
  * visually-hidden "Step X of Y" heading prefix (the native <Steps> already
  * announces position as its group label), and the localized kit labels (no i18n
- * runtime here — the defaults emit "Previous"/"Next"/"Done" like Steps emits its
+ * runtime here - the defaults emit "Previous"/"Next"/"Done" like Steps emits its
  * default "Step n of N"). The native <Button> has no `loading` prop, so the
  * validating async state maps to a disabled footer instead of a spinner.
  */
@@ -117,8 +117,8 @@ const DIMS = dimensionsFor(wizardSpec);
  * A resolved measurement value. `dimensionsFor` returns bare token names
  * (e.g. `space-5`) alongside raw CSS lengths (the reserved error height `1lh`
  * is declared inline in the spec, not as a token). Token names get wrapped in
- * the custom property; a raw length — anything that starts with a digit or dot
- * — passes straight through so it never becomes `var(--glacier-1lh)`.
+ * the custom property; a raw length - anything that starts with a digit or dot
+ * - passes straight through so it never becomes `var(--glacier-1lh)`.
  */
 function metric(value: string | undefined, fallback: string): string {
   const v = value ?? fallback;
@@ -172,7 +172,7 @@ export function Wizard({
 
   // Drop any gate message from the step that was left, including externally
   // driven controlled jumps that bypass the handlers. (The web also moves focus
-  // into the panel here — web-only, omitted on this binding.)
+  // into the panel here - web-only, omitted on this binding.)
   useEffect(() => {
     setError(null);
   }, [current]);
@@ -283,7 +283,7 @@ export function Wizard({
       </View>
       {/* The web marks this the polite live region (role="status" aria-live);
           the native stub declares no live-region prop, so it is a plain
-          reserved-height slot here — accepted-but-noop, reported in notes. */}
+          reserved-height slot here - accepted-but-noop, reported in notes. */}
       <View style={{ minHeight: errorMinHeight }}>
         {error && (
           <Text key={error.nonce} style={{ color: ERROR_COLOR, fontSize: errorFontSize, fontFamily: t('font-sans') }}>

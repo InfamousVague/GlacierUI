@@ -302,7 +302,7 @@ describe('CommandPalette', () => {
   // Regression: groups are built from ADJACENT runs, so one name can head
   // several groups in an interleaved list. Keying the group by its name handed
   // React duplicate keys, and reconciliation then left whole stale runs mounted
-  // when a query narrowed the list — the palette went on showing rows that no
+  // when a query narrowed the list - the palette went on showing rows that no
   // longer matched.
   it('drops every non-matching row when groups repeat a name', () => {
     const interleaved: CommandDescriptor[] = [

@@ -51,7 +51,7 @@
   color: var(--glacier-text);
 }
 
-/* Pressed means the mark is already applied at the caret — the toolbar reading
+/* Pressed means the mark is already applied at the caret - the toolbar reading
    the document, not just writing to it. */
 .control[aria-pressed='true'] {
   background: var(--glacier-accent-soft);
@@ -93,7 +93,7 @@
 }
 
 /* Every property that decides where a character lands. The highlight and the
-   textarea must agree on all of it or the two drift apart mid-line — which is
+   textarea must agree on all of it or the two drift apart mid-line - which is
    why they share one class rather than repeating values that could be edited
    apart. */
 .editorText {
@@ -118,7 +118,7 @@
   display: block;
   background: transparent;
   /* The glyphs come from the layer beneath; the textarea contributes only its
-     caret and selection. `color: transparent` keeps both — a hidden textarea
+     caret and selection. `color: transparent` keeps both - a hidden textarea
      would take the caret with it. */
   color: transparent;
   caret-color: var(--glacier-text);
@@ -136,7 +136,7 @@
   user-select: none;
 }
 
-/* The syntax itself, kept in the document but spoken quietly — the text still
+/* The syntax itself, kept in the document but spoken quietly - the text still
    reads as markdown while the content takes the styling the markers describe. */
 .run[data-kind='marker'] {
   color: var(--glacier-text-subtle);

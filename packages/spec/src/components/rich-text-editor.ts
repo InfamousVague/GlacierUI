@@ -82,7 +82,7 @@ export const richTextEditorSpec: ComponentSpec = {
     notes: [
       'The editor is a real textarea, so it inherits the platform\'s own editing, selection, spellcheck, dictation, and undo rather than reimplementing them badly.',
       'Toolbar controls report their state with aria-pressed, which is what makes the toolbar readable rather than merely operable.',
-      'The toolbar is a group labelled as formatting controls, so it is skippable — someone typing does not want to Tab through eight buttons first.',
+      'The toolbar is a group labelled as formatting controls, so it is skippable - someone typing does not want to Tab through eight buttons first.',
       'Tab leaves the field. Trapping Tab to insert an indent makes a form impossible to complete from the keyboard.',
     ],
   },

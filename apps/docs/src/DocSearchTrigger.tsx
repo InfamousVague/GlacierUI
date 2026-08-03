@@ -11,7 +11,7 @@ interface DocSearchTriggerProps {
  * It looks like a field but is a button, because that is what it now is: the
  * actual searching happens in the kit's CommandPalette, which owns the ⌘K chord
  * and opens over the page. Keeping the field shape preserves the thing people
- * scan the toolbar for — a search box — while the ⌘K hint says how to reach it
+ * scan the toolbar for - a search box - while the ⌘K hint says how to reach it
  * without the mouse.
  *
  * A read-only input would have been the other way to keep the shape, but it

@@ -27,7 +27,7 @@ const TEXT_TOKEN = (labelSpec.paint?.text ?? '$text').replace(/^\$/, '');
  * danger-text token (the spec lists it under `tokens`, so it is referenced by
  * name) and hidden from assistive tech, matching the web's aria-hidden asterisk;
  * convey requiredness on the paired control itself. React Native has no <label>
- * element, so there is no htmlFor equivalent — associate the field at the app
+ * element, so there is no htmlFor equivalent - associate the field at the app
  * level. The `skeleton` prop renders through the native Skeleton at the label's
  * exact font-size, exactly as the web Label does.
  */

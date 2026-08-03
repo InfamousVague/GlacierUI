@@ -1,5 +1,5 @@
 /*
- * Stack — the vertical flow primitive, rendered with React Native primitives.
+ * Stack - the vertical flow primitive, rendered with React Native primitives.
  *
  * This is a spec-less LAYOUT primitive: a single <View> whose flex box maps the
  * web `Stack` prop contract onto React Native styles. The web renders a
@@ -25,7 +25,7 @@
  *    they degrade to `auto` / no-op on a real RN build.
  *  - `background="glass"` renders only its resting tint (`glass-regular`); the
  *    web's `backdrop-filter` blur has no native runtime (as in Surface/Card).
- *    `background="accent"/"accentSoft"` set only the container fill — the web
+ *    `background="accent"/"accentSoft"` set only the container fill - the web
  *    also sets a `color`, but RN <Text> does not inherit color from a parent
  *    <View>, so content brings its own <Text> color (as in Surface/Card).
  *  - `as` (polymorphic element) and `className` are DOM-only and accepted-but-
@@ -155,7 +155,7 @@ const borderColorFor = (border: Exclude<BorderToken, false>): string => {
 };
 
 /**
- * Stack — a vertical flow. Children stack with a token gap and no margins, so
+ * Stack - a vertical flow. Children stack with a token gap and no margins, so
  * the rhythm is always even. Defaults to gap 4 and stretched children,
  * identical to @glacier/react's Stack.
  */

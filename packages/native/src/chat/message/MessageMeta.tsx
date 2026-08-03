@@ -1,8 +1,8 @@
 // The Glacier MessageMeta, rendered with React Native primitives: the timestamp
 // and delivery status line under a message or a run. The mark itself is the
-// DeliveryStatus atom rather than a second glyph table — same component the
+// DeliveryStatus atom rather than a second glyph table - same component the
 // standalone mark uses, so a bubble and a delivery indicator cannot draw the
-// same state differently — and how a run's several statuses collapse to one
+// same state differently - and how a run's several statuses collapse to one
 // comes from @glacier/logic, the same function the DOM kit calls.
 
 import { View, Text as RNText } from 'react-native';
@@ -117,7 +117,7 @@ export function MessageMeta({
           size="sm"
           label={text[resolved]}
           // Inside an accent fill both the quiet greys and the accent tint go
-          // unreadable, so the mark borrows the bubble's contrast colour —
+          // unreadable, so the mark borrows the bubble's contrast colour -
           // except failure, which is the one status worth clashing for.
           color={own && resolved !== 'failed' ? t('accent-contrast') : undefined}
         />

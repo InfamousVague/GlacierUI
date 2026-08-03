@@ -1,4 +1,4 @@
-// molecules — barrel (split from the flat src barrel).
+// molecules - barrel (split from the flat src barrel).
 export { Field, type FieldProps } from './Field.tsx';
 export { Fieldset, type FieldsetProps } from './Fieldset.tsx';
 export { FormSection, type FormSectionProps } from './FormSection.tsx';

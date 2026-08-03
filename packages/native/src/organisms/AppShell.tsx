@@ -1,7 +1,7 @@
 /**
- * @glacier/native — AppShell.
+ * @glacier/native - AppShell.
  *
- * The React Native binding of @glacier/react's AppShell: the app frame — a
+ * The React Native binding of @glacier/react's AppShell: the app frame - a
  * persistent sidebar landmark beside a main column that stacks an optional
  * header over a scrollable content region, laid out with flex. Paint (the
  * sidebar `surface` fill, the `glass-thin` header tint, the `glass-border`
@@ -84,7 +84,7 @@ const RADIUS = t(DIMS.radius ?? 'radius-xl');
 const BORDER = t(DIMS.border ?? 'hairline');
 
 // Paint read from the spec states. The `floating` state carries the same tokens
-// the flush sidebar uses — `surface` fill and the `glass-border` hairline — so
+// the flush sidebar uses - `surface` fill and the `glass-border` hairline - so
 // the sidebar surface + every hairline (sidebar inline-end rule, header bottom
 // rule, floating card borders) come from one source. The header's `glass-thin`
 // tint is bound on the component token (per the sticky-state note) with no state

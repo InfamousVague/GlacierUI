@@ -1,4 +1,4 @@
-// atoms/display — barrel (split from the flat src barrel).
+// atoms/display - barrel (split from the flat src barrel).
 export { Icon, type IconProps } from './Icon.tsx';
 export { IconBackfill, type IconBackfillProps } from './IconBackfill.tsx';
 export { Text, type TextProps, type TextSize, type TextToneName, type TextWeight, type TextAlign } from './Text.tsx';

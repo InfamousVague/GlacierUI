@@ -4,8 +4,8 @@
  * Almost every case here is really the same assertion from a different side: a
  * delivery state belongs to the local half of the conversation and to nothing
  * else. The interesting failures are the ones where a caller's data disagrees
- * with that — a synced transcript that stamps every row `delivered`, or a local
- * message with no status at all — because those are the cases where a renderer
+ * with that - a synced transcript that stamps every row `delivered`, or a local
+ * message with no status at all - because those are the cases where a renderer
  * that merely "does not draw a remote tick by default" quietly draws one.
  */
 

@@ -41,7 +41,7 @@ const SELECTED = paintStyle(filterChipSpec, 'states', 'selected');
  * A resolved measurement value. `sizeFor`/`dimensionsFor` return bare token
  * names (e.g. `space-2`) alongside raw CSS lengths (the chip's `height:
  * 1.75rem` is declared inline, not as a token). Token names get wrapped in the
- * custom property; a raw length — anything starting with a digit or dot —
+ * custom property; a raw length - anything starting with a digit or dot -
  * passes straight through so it never becomes `var(--glacier-1.75rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {

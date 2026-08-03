@@ -1,11 +1,11 @@
 /**
- * Kbd — the React Native binding of @glacier/react's Kbd.
+ * Kbd - the React Native binding of @glacier/react's Kbd.
  *
  * A monospace key cap with a raised 2px bottom edge. Paint (surface-sunken
  * fill, text-muted label, hairline border) and geometry (radius, padding,
  * font-size) are read from `kbdSpec` through the shared resolvers, so it stays
  * pixel-identical to the DOM kit and cannot drift. The label lives in <Text>
- * (color + fontSize must sit on Text — a View does not inherit them). `glass`
+ * (color + fontSize must sit on Text - a View does not inherit them). `glass`
  * swaps in the frosted material tint; the web's backdrop blur/saturate and the
  * inset highlight have no React Native runtime, so they are accepted-but-noop
  * and only the resting tint remains. `skeleton` delegates to the shared
@@ -38,8 +38,8 @@ const PAINT = (kbdSpec.paint ?? {}) as { background?: string; text?: string; bor
 
 /**
  * A resolved measurement value. A token name gets wrapped in its custom
- * property; a raw length — anything starting with a digit or dot (`0.8em`,
- * `2px`) — passes straight through so it never becomes `var(--glacier-0.8em)`.
+ * property; a raw length - anything starting with a digit or dot (`0.8em`,
+ * `2px`) - passes straight through so it never becomes `var(--glacier-0.8em)`.
  */
 function metric(value: string | undefined, fallback: string): string {
   const v = value ?? fallback;
@@ -71,7 +71,7 @@ export function Kbd({ skeleton = false, glass = false, children, ...rest }: KbdP
     <View
       accessibilityRole="text"
       style={{
-        // display: inline-block — shrink to content, never stretch the row.
+        // display: inline-block - shrink to content, never stretch the row.
         alignSelf: 'flex-start',
         flexDirection: 'row',
         alignItems: 'center',
@@ -82,7 +82,7 @@ export function Kbd({ skeleton = false, glass = false, children, ...rest }: KbdP
         borderColor,
         borderStyle: 'solid',
         borderWidth: metric(DIMS.border, 'hairline'),
-        // The raised bottom edge — the key-cap tell.
+        // The raised bottom edge - the key-cap tell.
         borderBottomWidth: metric(DIMS.borderBottom, '2px'),
         borderRadius: metric(DIMS.radius, 'radius-sm'),
       }}
@@ -92,7 +92,7 @@ export function Kbd({ skeleton = false, glass = false, children, ...rest }: KbdP
         style={{
           color: textColor,
           fontSize,
-          // line-height:1 — the glyph box equals the font size (web `.kbd`).
+          // line-height:1 - the glyph box equals the font size (web `.kbd`).
           lineHeight: fontSize as never,
           fontFamily: t('font-mono'),
         }}

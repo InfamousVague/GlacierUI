@@ -37,7 +37,7 @@ export const seekBarSpec: ComponentSpec = {
     { name: 'track', description: 'The full duration; takes the pointer so a press anywhere seeks there.', required: true },
     { name: 'played', description: 'The stroked run behind the playhead, in the accent. Level shapes butt their caps so an equalizer reads flat-topped; wave shapes round theirs.', required: true },
     { name: 'ahead', description: 'The stroked run still to play, in the muted track color.', required: true },
-    { name: 'thumb', description: 'The draggable playhead on the continuous shapes: a slim vertical pill, kept narrow so it never hides the wave underneath it. The mark shapes (bars, mirror) omit it — the break between painted and unpainted marks already lands the position on a gap, which reads cleaner than a pill covering a mark.', required: false },
+    { name: 'thumb', description: 'The draggable playhead on the continuous shapes: a slim vertical pill, kept narrow so it never hides the wave underneath it. The mark shapes (bars, mirror) omit it - the break between painted and unpainted marks already lands the position on a gap, which reads cleaner than a pill covering a mark.', required: false },
   ],
   props: [
     { name: 'duration', type: 'number', required: true, description: 'Track length in seconds.' },
@@ -124,7 +124,7 @@ export const seekBarSpec: ComponentSpec = {
   },
   motion: {
     description:
-      'Position never eases. The played run is an SVG path that repaints the instant progress changes and cannot be transitioned, so easing the thumb alone would let the paint arrive ahead of its own playhead on every jump; the two are drawn from one value and move as one. Only size animates — the thumb thickens while the pointer is down — and that snaps under reduced motion.',
+      'Position never eases. The played run is an SVG path that repaints the instant progress changes and cannot be transitioned, so easing the thumb alone would let the paint arrive ahead of its own playhead on every jump; the two are drawn from one value and move as one. Only size animates - the thumb thickens while the pointer is down - and that snaps under reduced motion.',
     transition: { speed: 'fast', ease: 'out' },
   },
 };

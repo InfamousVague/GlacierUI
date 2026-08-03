@@ -25,14 +25,14 @@ import { t } from '../tokens.ts';
  *
  * Public prop contract matches @glacier/react's Pagination 1:1 (page, total,
  * pageSize, onPageChange, siblingCount, boundaryCount). `page` is fully driven
- * by the parent via `onPageChange`, exactly like the web — there is no internal
+ * by the parent via `onPageChange`, exactly like the web - there is no internal
  * state, so no `useControlled` is needed. Web-only escape hatches (className,
  * style, DOM nav attributes) are not part of this surface.
  *
  * Resting visuals only: the web control has no rest animation; the Pressable's
  * `press.control` dip matches the shared tap feedback used across the kit. The
  * web builds the "Previous"/"Next" labels through the React i18n provider; this
- * binding has no locale runtime, so it emits the default English strings — the
+ * binding has no locale runtime, so it emits the default English strings - the
  * same fallback the native Steps binding uses.
  */
 

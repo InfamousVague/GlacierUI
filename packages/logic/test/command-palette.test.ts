@@ -105,7 +105,7 @@ describe('moveCommandCursor', () => {
   });
 
   it('skips a disabled row', () => {
-    // index 2 is `save`, disabled — down from `open` lands on `theme`.
+    // index 2 is `save`, disabled - down from `open` lands on `theme`.
     expect(moveCommandCursor(all, 1, 1)).toBe(3);
   });
 
@@ -181,7 +181,7 @@ describe('isCommandShortcut', () => {
   });
 });
 
-describe('matchCommands — keyword and multi-term search', () => {
+describe('matchCommands - keyword and multi-term search', () => {
   const kit = [
     { id: 'slider', label: 'Slider', group: 'Atoms', keywords: 'form input range value drag' },
     { id: 'seekbar', label: 'Seek Bar', group: 'Atoms', keywords: 'audio video media player scrub sound' },
@@ -297,7 +297,7 @@ describe('highlightSegments', () => {
 
   it('marks each term of a multi-term query', () => {
     // Matching ANDs terms across fields, so highlighting has to be term-wise
-    // too — marking the whole query as one string would mark nothing here.
+    // too - marking the whole query as one string would mark nothing here.
     expect(marked('Rich Text Editor', 'rich editor')).toEqual(['Rich', 'Editor']);
   });
 

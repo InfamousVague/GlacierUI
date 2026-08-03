@@ -1,16 +1,16 @@
 /**
- * Message presentation — the measurements and mappings a rendered message needs,
+ * Message presentation - the measurements and mappings a rendered message needs,
  * as opposed to the rules about the transcript itself.
  *
  * `chat.ts` owns WHAT a transcript is: where runs break, where separators land,
  * which slot in a run a message occupies, which status a stack advertises. This
- * module owns HOW WIDE and HOW ROUND — the handful of numbers and names that a
+ * module owns HOW WIDE and HOW ROUND - the handful of numbers and names that a
  * DOM bubble and a React Native bubble must agree on or the two kits quietly
  * draw different chat apps.
  *
  * Delivery is NOT here. Which shape a status draws, which token tints it, and
  * what it is called all live in `status.ts`, because the same answers are needed
- * by the standalone delivery mark as by a bubble's meta line — and a second copy
+ * by the standalone delivery mark as by a bubble's meta line - and a second copy
  * of that table is how "delivered" and "read" end up sharing a silhouette on one
  * surface and not the other.
  *
@@ -33,11 +33,11 @@ import { deliveryLabels, type DeliveryLabels } from './status.ts';
  * The two chat layouts, which are genuinely different products rather than two
  * skins of one.
  *
- * - `bubble` — iMessage, WhatsApp, Signal. A tinted, rounded, edge-aligned
+ * - `bubble` - iMessage, WhatsApp, Signal. A tinted, rounded, edge-aligned
  *   capsule whose corners encode its place in a run, sized to its content and
  *   capped well short of the column so authorship is legible from shape and
  *   position alone.
- * - `row` — Slack, Discord, IRC. Full-width prose with an avatar gutter and a
+ * - `row` - Slack, Discord, IRC. Full-width prose with an avatar gutter and a
  *   name/time header, no fill at all. Alignment carries no meaning here, so the
  *   header has to say who is talking.
  */
@@ -62,8 +62,8 @@ export type MessageSide = 'start' | 'end';
  * bottom-trailing corner, so a sent message travels the shortest possible
  * distance from where it was typed to where it lands.
  *
- * In `row` layout every message takes the leading edge regardless of author —
- * a Slack transcript is a single column and alignment says nothing — so callers
+ * In `row` layout every message takes the leading edge regardless of author -
+ * a Slack transcript is a single column and alignment says nothing - so callers
  * in that layout pass the side straight through rather than deriving it here.
  */
 export function messageSide(own: boolean): MessageSide {
@@ -110,7 +110,7 @@ const FLUSH = 'radius-none';
  * four separate lozenges say "four separate thoughts", which is a lie about the
  * conversation.
  *
- * Only the outer edge — the one the run hugs — carries the geometry. The inner
+ * Only the outer edge - the one the run hugs - carries the geometry. The inner
  * edge faces the empty half of the column, so it stays round the whole way down
  * and gives the stack its silhouette. That asymmetry is what makes a bubble run
  * recognisable at a glance, and it is why the side has to be passed in.
@@ -137,7 +137,7 @@ export function bubbleCorners(
  * Whether this bubble is the one that gets the tail.
  *
  * One tail per run, on the message that ends it, because the tail marks where
- * the utterance is anchored to its author — repeating it on every bubble turns a
+ * the utterance is anchored to its author - repeating it on every bubble turns a
  * stack into a row of separate speech balloons and undoes the corner geometry
  * above. `only` counts as a run of one.
  */
@@ -151,7 +151,7 @@ export function bubbleHasTail(position: BubblePosition, tails: boolean): boolean
  * React Native has no `::after`, so a CSS-only tail would have to be
  * re-invented for the native binding and would drift the first time either side
  * was tweaked. An SVG path is the one description both bindings render natively
- * — `<path>` on the DOM, `react-native-svg`'s `Path` on device — from these
+ * - `<path>` on the DOM, `react-native-svg`'s `Path` on device - from these
  * exact numbers.
  *
  * Authored pointing toward the physical right, with its inline-start edge on the
@@ -172,8 +172,8 @@ export const messageTail = {
 /**
  * Which way the tail points, as a horizontal scale factor.
  *
- * The path is physical — SVG has no logical axis and no amount of `direction`
- * on an ancestor will mirror a `d` attribute — so this is the one place in the
+ * The path is physical - SVG has no logical axis and no amount of `direction`
+ * on an ancestor will mirror a `d` attribute - so this is the one place in the
  * message layer where the writing direction has to be reasoned about explicitly.
  * The rule is simply "point away from the transcript's centre", which flips both
  * with the side and with the direction.
@@ -201,7 +201,7 @@ export const BUBBLE_MAX_WIDTH = '72%';
 
 /** The measurements one layout resolves to; spacing as bare token names. */
 export interface MessageMetrics {
-  /** Between two bubbles inside one run — tight, because they are one utterance. */
+  /** Between two bubbles inside one run - tight, because they are one utterance. */
   stackGap: string;
   /** Between the avatar gutter and the run's content. */
   gutterGap: string;
@@ -272,7 +272,7 @@ export interface MessageLabels extends DeliveryLabels {
 
 /**
  * The English fallbacks, shared so the two bindings cannot disagree about the
- * shape of the label set — the DOM kit overlays its translation catalog on top
+ * shape of the label set - the DOM kit overlays its translation catalog on top
  * of these, and a native app passes its own.
  */
 export const defaultMessageLabels: MessageLabels = {

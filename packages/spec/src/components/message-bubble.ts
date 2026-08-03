@@ -105,7 +105,7 @@ export const messageBubbleSpec: ComponentSpec = {
     },
     {
       name: 'row',
-      description: 'Row layout paints nothing at all — no fill, no border, no alignment. The header line and the avatar gutter carry authorship instead.',
+      description: 'Row layout paints nothing at all - no fill, no border, no alignment. The header line and the avatar gutter carry authorship instead.',
       tokens: { text: token('text'), header: token('text-muted') },
     },
     {
@@ -131,7 +131,7 @@ export const messageBubbleSpec: ComponentSpec = {
   a11y: {
     focusable: false,
     keyboard: [
-      { keys: 'Tab', action: 'Skips the bubble itself and lands on whatever is interactive inside it — a link, a reaction chip, an attachment.' },
+      { keys: 'Tab', action: 'Skips the bubble itself and lands on whatever is interactive inside it - a link, a reaction chip, an attachment.' },
     ],
     notes: [
       'A message is prose, not a control: the body stays selectable and is never given a role that would stop a screen reader reading it as text.',
@@ -211,7 +211,7 @@ export const messageGroupSpec: ComponentSpec = {
     },
     {
       name: 'standalone',
-      description: 'A run of one that refused to merge — a system notice or call record. It keeps its own row and never grows a tail.',
+      description: 'A run of one that refused to merge - a system notice or call record. It keeps its own row and never grows a tail.',
       tokens: { text: token('text-subtle') },
     },
     { name: 'skeleton', description: 'Placeholder messages at the run\'s real footprint.' },

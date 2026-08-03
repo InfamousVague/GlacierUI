@@ -1,4 +1,4 @@
-// organisms — barrel (split from the flat src barrel).
+// organisms - barrel (split from the flat src barrel).
 export { Timeline, type TimelineProps, type TimelineItem, type TimelineTone } from './Timeline.tsx';
 export { Wizard, type WizardProps, type WizardStep } from './Wizard.tsx';
 export { Table, type TableProps, type TableColumn } from './Table.tsx';

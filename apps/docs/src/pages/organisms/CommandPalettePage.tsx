@@ -6,7 +6,7 @@ import { ComponentBlueprint } from '../../Blueprint.tsx';
 import { m } from '../../i18n.ts';
 
 /**
- * Each palette demo owns its own open state, so — as with Modal — it lives in a
+ * Each palette demo owns its own open state, so - as with Modal - it lives in a
  * module-level wrapper the render callback mounts once per pane (a callback
  * cannot hold hooks). The trigger stays on the web kit, since it is
  * token-identical across bindings and its press fires in both panes; only the

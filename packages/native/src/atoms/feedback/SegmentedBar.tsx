@@ -34,8 +34,8 @@ const BOX = dimensionsFor(segmentedBarSpec);
  * A resolved measurement value. The resolvers return token names (e.g. `space-1`)
  * for tokenized values and raw CSS lengths for the rest (the bar's `height:
  * 0.625rem` and the slice's `2px` micro radius are declared inline, not as
- * tokens). A token name gets wrapped in its custom property; a raw length —
- * anything starting with a digit or dot — passes straight through so it never
+ * tokens). A token name gets wrapped in its custom property; a raw length -
+ * anything starting with a digit or dot - passes straight through so it never
  * becomes `var(--glacier-0.625rem)`.
  */
 function metric(value: string | undefined, fallback: string): string {

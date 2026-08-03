@@ -8,7 +8,7 @@ import { m } from '../../i18n.ts';
 /**
  * A controlled MultiSelect demo. `value`/`onValueChange` and
  * `inputValue`/`onInputValueChange` are lifted into local state so each
- * comparison pane owns its own selection and query — the render function runs
+ * comparison pane owns its own selection and query - the render function runs
  * once per pane and cannot itself hold hooks. `K` is the platform kit (the DOM
  * kit or the RN kit) the demo renders through.
  */

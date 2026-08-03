@@ -1,4 +1,4 @@
-// atoms/feedback — barrel (split from the flat src barrel).
+// atoms/feedback - barrel (split from the flat src barrel).
 export { Skeleton, type SkeletonProps, type SkeletonVariant } from './Skeleton.tsx';
 export { ProgressRing, type ProgressRingProps, type ProgressRingTone } from './ProgressRing.tsx';
 export { Banner, type BannerProps, type BannerTone } from './Banner.tsx';

@@ -34,7 +34,7 @@ export interface MessageSlotContext<M extends ChatMessage = ChatMessage> {
   position: BubblePosition;
   own: boolean;
   layout: MessageLayout;
-  /** This is the message that ends the run — the one wearing the tail. */
+  /** This is the message that ends the run - the one wearing the tail. */
   last: boolean;
 }
 
@@ -68,7 +68,7 @@ export interface MessageGroupProps<M extends ChatMessage = ChatMessage> {
  *
  * The `continued` flag is the case worth spelling out. When the unread divider
  * lands mid-run, `insertSeparators` splits the run and marks the trailing half
- * continued — the same person is still talking, with a line drawn through their
+ * continued - the same person is still talking, with a line drawn through their
  * sentence. Repeating the avatar and name there would turn one speaker into two
  * and make the divider read as a change of author, so a continued run suppresses
  * both while keeping the gutter reserved, and its messages stay on exactly the

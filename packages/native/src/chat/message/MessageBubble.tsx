@@ -1,7 +1,7 @@
 // The Glacier MessageBubble, rendered with React Native primitives: one message,
 // as either an edge-aligned tinted capsule or a full-width row. Every decision
-// that shapes it — which edge authorship takes, which corner radius each slot in
-// a run gets, whether this message wears the tail, and the tail's own path —
+// that shapes it - which edge authorship takes, which corner radius each slot in
+// a run gets, whether this message wears the tail, and the tail's own path -
 // comes from @glacier/logic, the same functions the DOM kit calls, so a run
 // cannot break differently on a phone than it does in a browser.
 
@@ -50,7 +50,7 @@ export interface MessageBubbleProps {
    * Everything else here is expressed logically and flips by itself, but an SVG
    * path has no writing direction, so the tail's mirror has to be a value. The
    * DOM binding gets this from a `:dir(rtl)` rule; a device build wires it to
-   * `I18nManager.isRTL`, which is why it is a prop rather than a global read —
+   * `I18nManager.isRTL`, which is why it is a prop rather than a global read -
    * the docs render both directions on one page.
    */
   rtl?: boolean;
@@ -84,7 +84,7 @@ export interface MessageBubbleProps {
  *
  * The corner geometry is the part worth understanding. A run of messages has to
  * read as one utterance, and it only does if the corners facing a neighbour
- * tighten while the corners facing open space stay round — the stacked edge
+ * tighten while the corners facing open space stay round - the stacked edge
  * behaves like one tall shape that has been sliced, and the free edge keeps the
  * silhouette that says which side of the conversation it came from. That is
  * `bubbleCorners`, and both bindings ask it rather than deciding for themselves.
@@ -195,7 +195,7 @@ export function MessageBubble({
           ) : (
             children != null && (
               // React Native inherits no colour across a View, so the body has
-              // to state its own — which is why it is a bare RN Text with the
+              // to state its own - which is why it is a bare RN Text with the
               // text spec's metrics rather than the kit's Text atom, whose tone
               // list has no accent-contrast in it.
               <RNText
@@ -227,7 +227,7 @@ export function MessageBubble({
           )}
           {/* The same path the DOM kit draws, from the same constants. An SVG
               rather than a pseudo-element precisely because this binding has no
-              pseudo-elements — solving it here first is what keeps one tail
+              pseudo-elements - solving it here first is what keeps one tail
               instead of two. */}
           {showTail && (
             <View

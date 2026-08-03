@@ -1,5 +1,5 @@
 /**
- * Fieldset — the native binding of @glacier/react's molecules/Fieldset.
+ * Fieldset - the native binding of @glacier/react's molecules/Fieldset.
  *
  * The web component leans on the real <fieldset>/<legend> pair: the legend names
  * the group for assistive tech and the NATIVE `disabled` attribute cascades to
@@ -38,7 +38,7 @@ export interface FieldsetProps extends Omit<ViewProps, 'children' | 'style'> {
    * Dims the group's own legend/description. On the web this is the native
    * fieldset `disabled` attribute, which the browser cascades to every nested
    * control; React Native has no such cascade, so nested controls must be
-   * disabled individually — only the resting dim is reproduced here.
+   * disabled individually - only the resting dim is reproduced here.
    */
   disabled?: boolean;
   /** Draws the classic hairline box with the legend at the top of the box. */

@@ -15,12 +15,12 @@ import { Skeleton } from '../feedback/Skeleton.tsx';
  * Web-parity notes (from `.link` in Typography.module.css + linkSpec):
  * - Color is the spec's top-level `paint.text` ($accent-text) and the weight is
  *   the web `.link` `font-weight-medium`; both live on the <Text>, never a
- *   parent View. Token names only — no transcribed literals.
+ *   parent View. Token names only - no transcribed literals.
  * - `borderRadius` comes from the spec's `dimensions.radius` (radius-xs); on the
  *   web it rounds the focus-ring corner.
  * - No font-size: the web `.link` declares none, so the link inherits the
  *   surrounding text size just like the DOM `<a>` (nested RN <Text> inherits its
- *   parent's font size). Hard rule 2 — the spec declares no size, so none is
+ *   parent's font size). Hard rule 2 - the spec declares no size, so none is
  *   invented here.
  * - Resting `text-decoration: none`. The hover underline (+0.2em offset), the
  *   color-ease transition and the focus-ring bloom are hover/motion the native
@@ -29,7 +29,7 @@ import { Skeleton } from '../feedback/Skeleton.tsx';
  * - `skeleton` mirrors the web exactly: an 8ch text-variant Skeleton.
  *
  * `href` / `target` / `rel` are accepted for 1:1 prop parity with the web Link
- * but are DOM-only and have no effect on device (no-ops) — see LinkProps.
+ * but are DOM-only and have no effect on device (no-ops) - see LinkProps.
  */
 
 // Size-independent box metrics (radius) read once from the spec.
@@ -45,7 +45,7 @@ export interface LinkProps extends Omit<RNTextProps, 'children' | 'style'> {
   skeleton?: boolean;
   /**
    * Anchor href. DOM-only; accepted for prop parity with the web Link but has no
-   * effect on native — wire navigation through `onPress` instead. (No-op.)
+   * effect on native - wire navigation through `onPress` instead. (No-op.)
    */
   href?: string;
   /** DOM anchor target. Accepted for prop parity; no effect on native. (No-op.) */

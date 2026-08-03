@@ -78,8 +78,8 @@ export interface SeekBarProps extends Omit<ComponentProps<'div'>, 'onChange' | '
 
 /**
  * The transport scrubber for audio: press or drag anywhere on the bar to seek.
- * `shape` decides how it paints — a plain rail, a squiggle behind the playhead,
- * or a waveform of the track's `levels` — while the interaction, semantics, and
+ * `shape` decides how it paints - a plain rail, a squiggle behind the playhead,
+ * or a waveform of the track's `levels` - while the interaction, semantics, and
  * geometry stay identical across all of them.
  */
 export function SeekBar({

@@ -1,10 +1,10 @@
 /**
- * @glacier/native — CalendarView.
+ * @glacier/native - CalendarView.
  *
  * The React Native binding of @glacier/react's CalendarView: a scheduler
  * surface showing events over a month grid, a week, or an agenda. Every date
- * decision — which days a range covers, which day an event belongs to, where
- * paging lands — comes from @glacier/logic, so this calendar builds the same
+ * decision - which days a range covers, which day an event belongs to, where
+ * paging lands - comes from @glacier/logic, so this calendar builds the same
  * grid from the same inputs as the web one. Paint and geometry are read from
  * the calendar-view spec through the shared resolvers.
  *
@@ -249,8 +249,8 @@ export function CalendarView({
       backgroundColor: t(tone.bg),
       minWidth: 0,
       // Mirrors the web chip. Both are no-ops on a touch device and only take
-      // effect where there is a cursor to shape — react-native-web, macOS,
-      // Windows — which is exactly where the caret was showing up.
+      // effect where there is a cursor to shape - react-native-web, macOS,
+      // Windows - which is exactly where the caret was showing up.
       cursor: 'pointer' as const,
       userSelect: 'none' as const,
     };
@@ -365,7 +365,7 @@ export function CalendarView({
   return (
     // width AND alignSelf: a View is width:auto by default, so inside a
     // non-flex parent alignSelf does nothing and the root shrink-to-fits its
-    // widest row — which is how the header ran off the pane.
+    // widest row - which is how the header ran off the pane.
     <View style={{ width: '100%', rowGap: t('space-2'), alignSelf: 'stretch', overflow: 'hidden' }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: t('space-3'), flexWrap: 'wrap' }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', columnGap: t('space-1') }}>

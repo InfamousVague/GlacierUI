@@ -1,5 +1,5 @@
 /*
- * Grid — the two-dimensional flow primitive, rendered with React Native
+ * Grid - the two-dimensional flow primitive, rendered with React Native
  * primitives.
  *
  * Like Stack/Row this is a spec-less LAYOUT primitive (a pure flexbox wrapper),
@@ -13,7 +13,7 @@
  *
  * ── The grid approximation ──────────────────────────────────────────────────
  * The container is a flex row that wraps, with a token `gap`. Each child is
- * wrapped in a cell <View> that carries the track width — the web renders
+ * wrapped in a cell <View> that carries the track width - the web renders
  * children directly as grid items; the cell wrapper is the mechanism RN needs to
  * size each track:
  *   • Fixed `columns=N`: each cell is `flexBasis: calc((100% - (N-1)*gap)/N)`
@@ -21,7 +21,7 @@
  *     line and children floor at zero and never overflow (matching minmax(0,1fr)).
  *   • `minChildWidth`: each cell is `flexBasis: minChildWidth` with `flexGrow: 1`
  *     so cells fill the line and wrap once another minChildWidth track no longer
- *     fits — a close analogue of `auto-fit` that reflows with no media queries.
+ *     fits - a close analogue of `auto-fit` that reflows with no media queries.
  *
  * ── Approximations / web-only surface (report) ──────────────────────────────
  *  - Responsive props (gap/columns/padding accept a per-breakpoint object on
@@ -34,7 +34,7 @@
  *    backdrop-filter blur has no native runtime and is a noop.
  *  - `width='fit'` emits `fit-content` and `height='screen'` emits `100vh`;
  *    `flexBasis` uses `calc()`/`rem`. These resolve on react-native-web (docs)
- *    but have no device equivalent — web-parity only.
+ *    but have no device equivalent - web-parity only.
  *  - `as` (polymorphic element) and `className` are DOM-only and accepted-but-
  *    noop. `style` passes through to the <View> as an escape hatch (applied last
  *    so it wins, mirroring the web's `...style`).
@@ -162,7 +162,7 @@ const borderColorFor = (border: Exclude<BorderToken, false>): string => {
 };
 
 /**
- * Grid — an equal-column layout. Give it a fixed `columns` count or a
+ * Grid - an equal-column layout. Give it a fixed `columns` count or a
  * `minChildWidth` to auto-fit as many tracks as fit; children never overflow
  * since each track floors at zero. Defaults (gap 4, columns 1) match
  * @glacier/react's Grid.

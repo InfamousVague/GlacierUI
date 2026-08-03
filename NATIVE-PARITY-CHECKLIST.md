@@ -1,13 +1,13 @@
-# Glacier Native Parity — Validation Checklist
+# Glacier Native Parity - Validation Checklist
 
 Every component in the kit, by category. Open each component's doc page, flip the
 **Web / Native** toggle to **Both**, and confirm the two panes match. Check it off
 when validated.
 
-- **Full parity** — every documented component now has a `@glacier/native` binding
+- **Full parity** - every documented component now has a `@glacier/native` binding
   (all 96, Calendar + DatePicker included). `tsc` clean, docs build passing.
 - Each page has at least one cross-platform example with a Web / Native toggle.
-- `▲ overlay` — the native binding exists and the trigger renders; the interactive
+- `▲ overlay` - the native binding exists and the trigger renders; the interactive
   open state / precise floating-ui placement is a device-parity follow-up, so the
   side-by-side comparison shows the resting trigger.
 
@@ -158,7 +158,7 @@ when validated.
 
 ## Layout primitives (7)
 
-_No dedicated component pages — validate via any page that uses them, or the Layout foundations page._
+_No dedicated component pages - validate via any page that uses them, or the Layout foundations page._
 
 - [x] Box
 - [x] Center

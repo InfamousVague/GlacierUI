@@ -1,8 +1,8 @@
 /**
- * @glacier/native — CardFan.
+ * @glacier/native - CardFan.
  *
- * The React Native binding of @glacier/react's CardFan. Every placement — the
- * slinky offsets, the lean, the bow, the magnification — comes from
+ * The React Native binding of @glacier/react's CardFan. Every placement - the
+ * slinky offsets, the lean, the bow, the magnification - comes from
  * @glacier/logic, so the two fans lay out identically from the same numbers.
  *
  * Web-parity notes:
@@ -54,7 +54,7 @@ const WIDTHS: Record<CardFanSize, number> = {
 const ASPECT = 1.4;
 
 // The shim models only the subset of events the kit consumes, so the track View
-// is typed through a local alias — the same convention Slider and SortableList
+// is typed through a local alias - the same convention Slider and SortableList
 // use for their own responders.
 type LayoutEvent = { nativeEvent: { layout: { width: number } } };
 type TouchEvent = { nativeEvent: { locationX: number } };

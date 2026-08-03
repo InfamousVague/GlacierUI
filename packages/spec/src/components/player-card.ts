@@ -78,7 +78,7 @@ export const playerCardSpec: ComponentSpec = {
       tokens: { on: token('accent-text') },
     },
     { name: 'disabled', description: 'Halved opacity; the seek bar and every control ignore input.' },
-    { name: 'skeleton', description: 'Every part loads as its own placeholder — the bar traces its shape and each control keeps its own footprint — so the card holds the exact layout it will settle into rather than collapsing to a block.' },
+    { name: 'skeleton', description: 'Every part loads as its own placeholder - the bar traces its shape and each control keeps its own footprint - so the card holds the exact layout it will settle into rather than collapsing to a block.' },
   ],
   // the card, seek bar, and buttons carry the paint
   paint: {},
@@ -100,7 +100,7 @@ export const playerCardSpec: ComponentSpec = {
       'The card is a group labelled by its title, so a screen reader announces what the controls belong to before reading them.',
       'Play/pause is one button whose label changes with the state rather than two swapped buttons, so focus survives the toggle.',
       'Shuffle and repeat report their state with aria-pressed; repeat also names the mode in its label, since a three-state control cannot be described by pressed alone.',
-      'The elapsed and total readouts are decorative — the seek bar already speaks the position through aria-valuetext.',
+      'The elapsed and total readouts are decorative - the seek bar already speaks the position through aria-valuetext.',
     ],
   },
   motion: {
