@@ -4188,7 +4188,7 @@ function CalendarViewBlueprint({ dimensions }: BlueprintProps) {
                 y={cellY(row)}
                 width={cw}
                 height={ch}
-                rx={4}
+                rx={6}
                 fill={isSelected ? C.fill : 'none'}
                 stroke={isSelected ? C.line : C.edge}
                 strokeWidth={isSelected ? 1.5 : 1}
@@ -4594,17 +4594,20 @@ function CardFanBlueprint({ dimensions }: BlueprintProps) {
   const radius = fmt(dimensions?.radius);
   const gap = fmt(dimensions?.gap);
 
-  const H = 250;
+  const H = 212;
   const X = 44;
   const W = 312;
-  const BASE = 186;
+  const BASE = 162;
 
-  const COUNT = 11;
-  const CARD_W = 34;
-  const CARD_H = 50;
+  // Seven large cards rather than eleven small ones. A blueprint is read, not
+  // counted: the spread, the lean and the overlap are all legible at seven, and
+  // at eleven the cards were too narrow to show that they are cards at all.
+  const COUNT = 7;
+  const CARD_W = 56;
+  const CARD_H = 76;
   // Focused just right of centre, so the drawing shows a bulge rather than the
   // symmetric resting state — the asymmetry is the thing worth drawing.
-  const FOCUS = 6.2;
+  const FOCUS = 4.2;
   const placements = fanPlacements(COUNT, FOCUS, CARD_W, fanSlinky(COUNT));
   const track = W - CARD_W;
 
@@ -4614,10 +4617,10 @@ function CardFanBlueprint({ dimensions }: BlueprintProps) {
 
       {/* The track: a fixed length, drawn because it is the thing that does not
           move however many cards sit on it. */}
-      <line x1={X} y1={BASE + 14} x2={X + W} y2={BASE + 14} stroke={C.edge} strokeWidth={1} strokeDasharray="3 3" />
-      <line x1={X} y1={BASE + 9} x2={X} y2={BASE + 19} stroke={C.line} strokeWidth={1.5} />
-      <line x1={X + W} y1={BASE + 9} x2={X + W} y2={BASE + 19} stroke={C.line} strokeWidth={1.5} />
-      <text x={X + W / 2} y={BASE + 30} textAnchor="middle" className="bpLabel" fill={C.faint}>
+      <line x1={X} y1={BASE + 12} x2={X + W} y2={BASE + 12} stroke={C.edge} strokeWidth={1} strokeDasharray="3 3" />
+      <line x1={X} y1={BASE + 7} x2={X} y2={BASE + 17} stroke={C.line} strokeWidth={1.5} />
+      <line x1={X + W} y1={BASE + 7} x2={X + W} y2={BASE + 17} stroke={C.line} strokeWidth={1.5} />
+      <text x={X + W / 2} y={BASE + 28} textAnchor="middle" className="bpLabel" fill={C.faint}>
         {t(m.bpFixedTrack)}
       </text>
 
@@ -4629,7 +4632,7 @@ function CardFanBlueprint({ dimensions }: BlueprintProps) {
           <g key={index} transform={`rotate(${placement.rotate} ${x + CARD_W / 2} ${y + CARD_H})`}>
             <rect
               x={x}
-              y={focused ? y - 10 : y}
+              y={focused ? y - 14 : y}
               width={CARD_W}
               height={CARD_H}
               rx={4}
@@ -4643,12 +4646,12 @@ function CardFanBlueprint({ dimensions }: BlueprintProps) {
       })}
 
       {/* What the pointer is doing to the fan. */}
-      <text x={X + W * 0.62} y={54} textAnchor="middle" className="bpLabel" fill={C.faint}>
+      <text x={X + W} y={50} textAnchor="end" className="bpLabel" fill={C.faint}>
         {t(m.bpFocusOpens)}
       </text>
       {/* Anchored at the start rather than hung off the left end: the track
           leaves only ~44 units of margin there, and the label is wider. */}
-      <text x={X} y={54} className="bpLabel" fill={C.faint}>
+      <text x={X} y={50} className="bpLabel" fill={C.faint}>
         {t(m.bpEndsPinned)}
       </text>
 
