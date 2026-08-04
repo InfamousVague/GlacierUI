@@ -178,6 +178,9 @@
 .meta {
   display: inline-flex;
   align-items: center;
+  /* The receipt line below takes a full basis and therefore its own row; the
+     stamp and the glyph stay on one line above it. */
+  flex-wrap: wrap;
   gap: var(--glacier-space-1);
   font-size: var(--glacier-font-size-xs);
   line-height: var(--glacier-leading-xs);
@@ -201,6 +204,19 @@
 .metaIcon {
   flex: none;
   display: inline-flex;
+}
+
+/* The read history: when it was read, or who read it. One step quieter than the
+   stamp above it, because it answers a question the tick already asked rather
+   than announcing something new - and on its own row, so a reader arriving does
+   not reflow the timestamp. */
+.receipt {
+  flex-basis: 100%;
+  color: var(--glacier-text-subtle);
+}
+
+.meta[data-own] .receipt {
+  color: inherit;
 }
 
 /* In a bubble transcript the run's stamp sits under the last bubble, on the
@@ -253,4 +269,28 @@
 /* A system notice is not a person talking, so it neither aligns nor fills. */
 .group[data-standalone] .stack {
   align-items: center;
+}
+
+/* ---- skeleton ------------------------------------------------------------ */
+
+/* A loading message is a placeholder for a message, not a message containing a
+   placeholder. The bubble was keeping its full paint — the accent fill for own
+   messages, the border, the shadow and the tail — with a bone sitting inside
+   it, so a pending outgoing message rendered as a bright blue bubble with a
+   grey bar in it rather than as something loading.
+   The bone is the whole shape here; the bubble only holds it. */
+/* Matched against `[data-layout][data-own]`, which is what paints an outgoing
+   bubble accent — a plainer selector loses to it on specificity and the blue
+   survives the skeleton. */
+.message[data-skeleton] .bubble,
+.message[data-skeleton][data-layout='bubble'][data-own] .bubble {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+/* The tail points out of a bubble that is not being drawn. */
+.message[data-skeleton] .tail {
+  display: none;
 }
