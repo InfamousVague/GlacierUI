@@ -1,7 +1,18 @@
+/* The 2px is OUTER space, and it is what the backfill needs that a bare glyph
+   does not. The silhouette is drawn with a 4-unit stroke so it reads as a
+   filled shape rather than a traced one, which pushes it past the glyph's own
+   bounds - flush against a button edge, a chip border or the next icon along,
+   that bleed reads as the fill touching something it should not. The padding
+   gives it somewhere to bleed into.
+
+   It grows the icon's box by 4px in each axis. That is deliberate and it is
+   why this lives here rather than on every call site: an icon that is filled
+   should sit slightly further from its neighbours than one that is not. */
 .root {
   display: inline-grid;
   place-items: center;
   flex: none;
+  padding: 2px;
   color: currentColor;
   line-height: 1;
 }

@@ -16,7 +16,7 @@ export const iconSpec: ComponentSpec = {
     },
     {
       name: 'backfill',
-      description: 'Optional IconBackfill wrapper: a 33%-opacity silhouette of the glyph itself, painted from the resolved icon color.',
+      description: 'Optional IconBackfill wrapper: a 33%-opacity silhouette of the glyph itself, painted from the resolved icon color, with 2px of outer space so the silhouette does not bleed into whatever sits beside it.',
     },
   ],
   props: [
@@ -38,7 +38,7 @@ export const iconSpec: ComponentSpec = {
     { name: 'lg', diameter: '24px' },
   ],
   defaults: { size: 24, color: 'currentColor', strokeWidth: 2, backfill: false, absoluteStrokeWidth: false },
-  dimensions: { strokeWidth: '2px', backfillOpacity: '33%' },
+  dimensions: { strokeWidth: '2px', backfillOpacity: '33%', backfillInset: '2px' },
   // strokes currentColor, so it carries no paint of its own
   paint: {},
   tokens: [],
