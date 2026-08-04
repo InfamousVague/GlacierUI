@@ -183,3 +183,35 @@ describe('halftoneDataUri', () => {
     );
   });
 });
+
+describe('non-square fields', () => {
+  it('gives the long axis proportionally more cells', () => {
+    const dots = halftoneDots({ cols: 24, rows: 6, dissolve: 0 });
+    expect(dots).toHaveLength(144);
+    expect(new Set(dots.map((d) => Number(d.cx.toFixed(6)))).size).toBe(24);
+    expect(new Set(dots.map((d) => Number(d.cy.toFixed(6)))).size).toBe(6);
+  });
+
+  it('sizes radii by the TIGHTER axis, so dots cannot overlap on it', () => {
+    // 24 columns and 6 rows in a unit box: the rows are four times as far
+    // apart, so a radius scaled to the columns is what keeps them apart.
+    const dots = halftoneDots({ cols: 24, rows: 6, dissolve: 0, maxRadius: 0.5 });
+    const rowPitch = 1 / 6;
+    for (const dot of dots) expect(dot.r).toBeLessThanOrEqual(rowPitch / 2 + 1e-9);
+  });
+
+  it('emits a wide viewBox with circles, not ellipses', () => {
+    const svg = halftoneSvg({ width: 400, height: 100, cols: 20, rows: 5, dissolve: 0 });
+    expect(svg).toContain('viewBox="0 0 400 100"');
+    // One radius per circle - an ellipse would need rx/ry, which is exactly the
+    // failure this is here to prevent.
+    expect(svg).not.toContain('<ellipse');
+    const rs = [...svg.matchAll(/r="([\d.]+)"/g)].map((m) => Number(m[1]));
+    expect(new Set(rs).size).toBeGreaterThan(1); // still a ramp
+    for (const r of rs) expect(r).toBeLessThanOrEqual(Math.min(400, 100) / 2);
+  });
+
+  it('is unchanged for square targets - cols/rows default to cells', () => {
+    expect(halftoneDots({ cells: 12, seed: 2 })).toEqual(halftoneDots({ cells: 12, cols: 12, rows: 12, seed: 2 }));
+  });
+});

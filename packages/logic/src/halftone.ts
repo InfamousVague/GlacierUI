@@ -45,6 +45,17 @@ export type HalftoneOrigin =
 export interface HalftoneOptions {
   /** Dots across the widest axis. More cells = finer texture. */
   cells?: number;
+  /**
+   * Columns and rows, when the target is not square.
+   *
+   * A square field stretched onto a wide box turns every dot into a flat
+   * streak, and at any real density the streaks merge into lines - which stops
+   * reading as a halftone entirely. Giving the long axis proportionally more
+   * cells keeps the dots round once the mask is scaled to fit. Both default to
+   * `cells`, so a square target needs neither.
+   */
+  cols?: number;
+  rows?: number;
   /** Where the field is densest. */
   origin?: HalftoneOrigin;
   /**
@@ -153,17 +164,22 @@ export function halftoneRamp(u: number, v: number, origin: HalftoneOrigin): numb
  * at the thin end most of the grid is gone.
  */
 export function halftoneDots(options: HalftoneOptions = {}): HalftoneDot[] {
-  const { cells, origin, maxRadius, minRadius, falloff, dissolve, seed } = { ...DEFAULTS, ...options };
-  const n = Math.max(1, Math.floor(cells));
-  const step = 1 / n;
+  const { cells, cols, rows, origin, maxRadius, minRadius, falloff, dissolve, seed } = { ...DEFAULTS, ...options };
+  const nx = Math.max(1, Math.floor(cols ?? cells));
+  const ny = Math.max(1, Math.floor(rows ?? cells));
+  const stepX = 1 / nx;
+  const stepY = 1 / ny;
+  // The radius is in units of the SMALLER cell, so a non-square grid still
+  // yields round dots that cannot overlap on the tighter axis.
+  const step = Math.min(stepX, stepY);
   const dots: HalftoneDot[] = [];
 
-  for (let row = 0; row < n; row += 1) {
-    for (let col = 0; col < n; col += 1) {
+  for (let row = 0; row < ny; row += 1) {
+    for (let col = 0; col < nx; col += 1) {
       // Cell CENTRES, so the field is inset by half a cell on every side and
       // no dot is clipped in half by the viewBox edge.
-      const u = (col + 0.5) * step;
-      const v = (row + 0.5) * step;
+      const u = (col + 0.5) * stepX;
+      const v = (row + 0.5) * stepY;
       const t = Math.min(1, Math.max(0, halftoneRamp(u, v, origin)));
       const shaped = Math.pow(t, falloff);
 
@@ -183,6 +199,10 @@ export function halftoneDots(options: HalftoneOptions = {}): HalftoneDot[] {
 export interface HalftoneSvgOptions extends HalftoneOptions {
   /** Side of the square viewBox. Only affects the numbers, not the look. */
   size?: number;
+  /** Non-square viewBox. Both default to `size`. Set these AND cols/rows in
+   *  proportion, or the dots come out oval. */
+  width?: number;
+  height?: number;
   /** The dots' colour. White is what a luminance mask wants. */
   fill?: string;
   /** Behind the dots. Black is what a luminance mask wants. */
@@ -198,14 +218,19 @@ export interface HalftoneSvgOptions extends HalftoneOptions {
  * reads: white shows the masked colour, black cuts it away.
  */
 export function halftoneSvg(options: HalftoneSvgOptions = {}): string {
-  const { size = 1000, fill = '#fff', background = '#000', precision = 2, ...rest } = options;
-  const round = (value: number) => Number((value * size).toFixed(precision));
+  const { size = 1000, width, height, fill = '#fff', background = '#000', precision = 2, ...rest } = options;
+  const w = width ?? size;
+  const h = height ?? size;
+  const round = (value: number) => Number(value.toFixed(precision));
+  // The radius scales by the SHORTER side, so a dot stays a circle in a wide
+  // viewBox instead of being drawn as an ellipse the renderer then stretches.
+  const r0 = Math.min(w, h);
   const dots = halftoneDots(rest)
-    .map((dot) => `<circle cx="${round(dot.cx)}" cy="${round(dot.cy)}" r="${round(dot.r)}"/>`)
+    .map((dot) => `<circle cx="${round(dot.cx * w)}" cy="${round(dot.cy * h)}" r="${round(dot.r * r0)}"/>`)
     .join('');
   return (
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" width="${size}" height="${size}">` +
-    `<rect width="${size}" height="${size}" fill="${background}"/>` +
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}">` +
+    `<rect width="${w}" height="${h}" fill="${background}"/>` +
     `<g fill="${fill}">${dots}</g>` +
     `</svg>`
   );
