@@ -191,7 +191,11 @@ export function MessageBubble({
           {replyTo}
           {attachments}
           {skeleton ? (
-            <Skeleton variant="text" />
+            // A width, because a bone has none of its own: the web passes 18ch
+            // and native was passing nothing, so the bone collapsed and took
+            // the bubble down with it — a message-shaped placeholder rendered
+            // as a sliver. Roughly the same 18 characters at this text size.
+            <Skeleton variant="text" width={144} />
           ) : (
             children != null && (
               // React Native inherits no colour across a View, so the body has
