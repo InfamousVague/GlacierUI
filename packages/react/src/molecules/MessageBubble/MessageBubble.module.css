@@ -273,24 +273,51 @@
 
 /* ---- skeleton ------------------------------------------------------------ */
 
-/* A loading message is a placeholder for a message, not a message containing a
-   placeholder. The bubble was keeping its full paint — the accent fill for own
-   messages, the border, the shadow and the tail — with a bone sitting inside
-   it, so a pending outgoing message rendered as a bright blue bubble with a
-   grey bar in it rather than as something loading.
-   The bone is the whole shape here; the bubble only holds it. */
-/* Matched against `[data-layout][data-own]`, which is what paints an outgoing
-   bubble accent — a plainer selector loses to it on specificity and the blue
-   survives the skeleton. */
+/* A loading message wears the bubble's own silhouette rather than standing a
+   bar inside it: same corner geometry, same padding, same tail — so the
+   placeholder occupies exactly the shape the message will, and nothing shifts
+   when the text lands.
+
+   The bubble becomes the bone, which means it takes Skeleton's paint. The
+   declarations mirror `.skeleton` rather than being imported, because a CSS
+   module cannot share a class across files; the shimmer is deliberately keyed
+   to the viewport in both, so one wave crosses every placeholder on screen at
+   the same rate instead of each bubble running its own. */
 .message[data-skeleton] .bubble,
 .message[data-skeleton][data-layout='bubble'][data-own] .bubble {
-  background: transparent;
+  background-color: var(--glacier-hover);
+  background-image: linear-gradient(
+    100deg,
+    var(--glacier-hover) 0%,
+    var(--glacier-active) 50%,
+    var(--glacier-hover) 100%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 45vw 100%;
+  animation: bubbleShimmer 1.8s linear infinite;
   border-color: transparent;
   box-shadow: none;
-  padding: 0;
 }
 
-/* The tail points out of a bubble that is not being drawn. */
-.message[data-skeleton] .tail {
-  display: none;
+/* The tail is part of the silhouette, so it is boned too — both sides, since an
+   outgoing tail is otherwise painted accent. */
+.message[data-skeleton] .tail,
+.message[data-skeleton][data-own] .tail {
+  fill: var(--glacier-hover);
+}
+
+/* The content still reserves the bubble's size — that is what gives the
+   placeholder a message-shaped box — but none of it is drawn. */
+.message[data-skeleton] .bubble > * {
+  visibility: hidden;
+}
+
+@keyframes bubbleShimmer {
+  from {
+    background-position: -45vw 0;
+  }
+  to {
+    background-position: 145vw 0;
+  }
 }
