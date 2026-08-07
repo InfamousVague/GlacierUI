@@ -19,6 +19,8 @@ import styles from './ArrowGlass.module.css';
 interface ArrowGlassProps {
   /** Resolved placement from useAnchoredPosition; null hides the tip. */
   placement: Placement | null | undefined;
+  /** Trigger center projected onto the tipped edge, in panel px. */
+  tipAt?: number;
   /** Tip protrusion depth in px. */
   tip?: number;
   /** Half the tip's base width in px. */
@@ -45,6 +47,7 @@ function buildPath(
   h: number,
   r: number,
   placement: Placement,
+  tipAt: number | undefined,
   tip: number,
   tipHalf: number,
   tipInset: number,
@@ -53,11 +56,16 @@ function buildPath(
   const radius = Math.max(0, Math.min(r, Math.min(w, h) / 2 - 1));
 
   // tip center along the tipped edge
-  const tipAt = (extent: number) =>
+  const tipAtFromAlign = (extent: number) =>
     align === 'start' ? tipInset + tipHalf : align === 'end' ? extent - tipInset - tipHalf : extent / 2;
 
+  const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(value, max));
+
   if (side === 'top' || side === 'bottom') {
-    const tx = tipAt(w);
+    const tx =
+      tipAt === undefined
+        ? tipAtFromAlign(w)
+        : clamp(tipAt, radius + tipHalf, w - radius - tipHalf);
     const box = side === 'top' ? { top: 0, left: 0, width: w, height: h + tip } : { top: -tip, left: 0, width: w, height: h + tip };
     // panel rect occupies y in [y0, y0+h]; tip dips beyond it
     const y0 = side === 'top' ? 0 : tip;
@@ -71,7 +79,10 @@ function buildPath(
     return { d, box };
   }
 
-  const ty = tipAt(h);
+  const ty =
+    tipAt === undefined
+      ? tipAtFromAlign(h)
+      : clamp(tipAt, radius + tipHalf, h - radius - tipHalf);
   const box = side === 'left' ? { top: 0, left: 0, width: w + tip, height: h } : { top: 0, left: -tip, width: w + tip, height: h };
   const x0 = side === 'left' ? 0 : tip;
   const x1 = x0 + w;
@@ -84,7 +95,7 @@ function buildPath(
   return { d, box };
 }
 
-export function ArrowGlass({ placement, tip = 6, tipHalf = 7, tipInset = 14 }: ArrowGlassProps) {
+export function ArrowGlass({ placement, tipAt, tip = 6, tipHalf = 7, tipInset = 14 }: ArrowGlassProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [shape, setShape] = useState<ReturnType<typeof buildPath> | null>(null);
 
@@ -97,14 +108,14 @@ export function ArrowGlass({ placement, tip = 6, tipHalf = 7, tipInset = 14 }: A
       if (!w || !h) return;
       // the sizing probe carries the panel's resolved corner radius in px
       const r = parseFloat(getComputedStyle(hostRef.current!).borderTopLeftRadius) || 0;
-      setShape(buildPath(w, h, r, placement, tip, tipHalf, tipInset));
+      setShape(buildPath(w, h, r, placement, tipAt, tip, tipHalf, tipInset));
     };
     measure();
     if (typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(measure);
     observer.observe(host);
     return () => observer.disconnect();
-  }, [placement, tip, tipHalf, tipInset]);
+  }, [placement, tipAt, tip, tipHalf, tipInset]);
 
   const style = shape
     ? {

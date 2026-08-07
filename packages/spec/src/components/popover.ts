@@ -36,6 +36,18 @@ export const popoverPlacements = [
   'inline-end-end',
 ] as const;
 
+/**
+ * What opens the panel.
+ *
+ * Press is the default and the honest one: the panel is asked for, and the same
+ * gesture puts it away. Hover is for a trigger that already does something of
+ * its own - a mute button that shows the fader while the pointer is on it - so
+ * the panel costs no press at all. It opens on focus as well as on pointer, and
+ * Tab from the trigger hands focus to the panel, since a portalled panel is not
+ * where the next Tab would otherwise land.
+ */
+export const popoverOpenOns = ['press', 'hover'] as const;
+
 export const popoverSpec: ComponentSpec = {
   name: 'Popover',
   id: 'popover',
@@ -61,11 +73,19 @@ export const popoverSpec: ComponentSpec = {
     { name: 'open', type: 'boolean', description: 'Controlled open state; pair with onOpenChange.' },
     { name: 'defaultOpen', type: 'boolean', default: false, description: 'Initial open state when uncontrolled.' },
     { name: 'onOpenChange', type: 'handler', description: 'Fires with the next open state on toggle, outside press, or Escape.' },
+    {
+      name: 'openOn',
+      type: 'enum',
+      values: popoverOpenOns,
+      default: 'press',
+      description:
+        'What opens the panel. Hover opens it on pointer and on focus and leaves the trigger\'s own press alone, for a trigger that already does something; the panel does not take focus when it opens that way.',
+    },
     { name: 'aria-label', type: 'string', description: 'Accessible label for the panel when it has no heading.' },
     { name: 'className', type: 'string', description: 'Extra class names merged onto the panel.' },
     { name: 'children', type: 'node', description: 'The panel content.' },
   ],
-  defaults: { placement: 'bottom-start', defaultOpen: false },
+  defaults: { placement: 'bottom-start', defaultOpen: false, openOn: 'press' },
   // fixed panel metrics; size does not vary
   dimensions: {
     minWidth: '12rem',
@@ -120,6 +140,7 @@ export const popoverSpec: ComponentSpec = {
       'Give the panel an aria-label when it has no visible heading.',
       'On open the panel receives focus; on Escape or outside pointer press it closes and focus returns to the trigger.',
       'Not a focus trap: focus can leave the panel, which does not close it.',
+      'Opened on hover, the panel opens on focus too and takes no focus of its own, the trigger keeps its own press and gains no aria-haspopup, and Tab from the trigger moves focus into the panel so a portalled fader is still reachable.',
     ],
   },
   motion: {

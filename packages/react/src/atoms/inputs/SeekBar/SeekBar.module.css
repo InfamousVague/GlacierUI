@@ -76,6 +76,15 @@
   stroke: var(--seek-rail-hover, var(--glacier-border-strong));
 }
 
+/* The tracer is the bar a moment ago: the same tone at half opacity, so it
+   reads as the played run's own shadow rather than as a separate control. The
+   solid token even under a gradient - a second paint server would ramp on its
+   own schedule and the shadow would drift out of family with what casts it. */
+.tracer {
+  stroke: var(--seek-from, var(--glacier-accent-solid));
+  opacity: 0.5;
+}
+
 /* A slim vertical pill rather than a round knob: on the waveform shapes a disc
    would sit on top of the levels it is meant to be reading.
 

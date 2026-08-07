@@ -47,3 +47,19 @@ export { Toast, ToastProvider, useToast, type ToastProps, type ToastOptions, typ
 export { FileUpload, type FileUploadProps, type FileUploadRejection, type FileUploadRejectionReason } from './FileUpload.tsx';
 export { Calendar, type CalendarProps, type CalendarMode, type CalendarRange } from './Calendar.tsx';
 export { DatePicker, type DatePickerProps, type ControlSize } from './DatePicker.tsx';
+// The player strip's three parts, each standing on its own so an app that wants
+// a different strip can build one out of the same pieces.
+export { TrackInfo, type TrackInfoProps, type TrackInfoSize, type TrackInfoAlign } from './TrackInfo.tsx';
+export {
+  TransportControls,
+  type TransportControlsProps,
+  type TransportControlsLabels,
+  type TransportEmphasis,
+} from './TransportControls.tsx';
+export {
+  VolumeBar,
+  type VolumeBarProps,
+  type VolumeBarLabels,
+  type VolumeBarSize,
+  type VolumeReadout,
+} from './VolumeBar.tsx';

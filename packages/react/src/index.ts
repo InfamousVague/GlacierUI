@@ -35,6 +35,16 @@ export {
 // Web-only adapter: turns a playing media element into the loudness meter that
 // @glacier/logic' useLiveLevels records a SeekBar's waveform from.
 export { createAnalyserMeter, type AnalyserMeter } from './audio/analyserMeter.ts';
+// Re-exported from @glacier/logic rather than left there: the meter above is
+// only good for feeding these, and an app that consumes the kit as a package
+// has no reason to reach past it for the other half of the pair.
+export { useBeat, type UseBeatOptions, type LoudnessMeter } from '@glacier/logic';
+// The waveform half of that same pair: records a SeekBar's `levels` from the
+// meter while a track plays, so it is re-exported here for the same reason.
+export { useLiveLevels, type UseLiveLevelsOptions } from '@glacier/logic';
+// Same reason: VolumeBar and PlayerBar hand out a fader position, and this is
+// the multiplier that position asks an audio element for.
+export { volumeAmplitude, volumeGain } from '@glacier/logic';
 export { Skeleton, type SkeletonProps } from './atoms/feedback/Skeleton/Skeleton.tsx';
 export { Toggle, type ToggleProps } from './atoms/inputs/Toggle/Toggle.tsx';
 export { Meter, type MeterProps, type MeterTone } from './atoms/feedback/Meter/Meter.tsx';
@@ -71,6 +81,27 @@ export {
   type PlayerLayout,
   type PlayerDensity,
 } from './molecules/PlayerCard/PlayerCard.tsx';
+// The player strip's three parts, each standing on its own so an app that wants
+// a different strip can build one out of the same pieces.
+export {
+  TrackInfo,
+  type TrackInfoProps,
+  type TrackInfoSize,
+  type TrackInfoAlign,
+} from './molecules/TrackInfo/TrackInfo.tsx';
+export {
+  TransportControls,
+  type TransportControlsProps,
+  type TransportControlsLabels,
+  type TransportEmphasis,
+} from './molecules/TransportControls/TransportControls.tsx';
+export {
+  VolumeBar,
+  type VolumeBarProps,
+  type VolumeBarLabels,
+  type VolumeBarSize,
+  type VolumeReadout,
+} from './molecules/VolumeBar/VolumeBar.tsx';
 export { Fieldset, type FieldsetProps } from './molecules/Fieldset/Fieldset.tsx';
 export { FormSection, type FormSectionProps } from './molecules/Fieldset/FormSection.tsx';
 export { Calendar, type CalendarProps, type CalendarMode, type CalendarRange } from './molecules/DatePicker/Calendar.tsx';
@@ -94,6 +125,14 @@ export {
   type DensitySelectorProps,
   type DensityMode,
 } from './molecules/DensitySelector/DensitySelector.tsx';
+export {
+  AudioEqualizer,
+  type AudioEqualizerProps,
+  type AudioEqualizerBand,
+  type AudioEqualizerPreset,
+  type AudioEqualizerLabels,
+  type AudioEqualizerSize,
+} from './molecules/AudioEqualizer/AudioEqualizer.tsx';
 export { ScrollArea, type ScrollAreaProps, type ScrollAreaOrientation, type ScrollbarAppearanceName } from './molecules/ScrollArea/ScrollArea.tsx';
 export { Carousel, type CarouselProps } from './molecules/Carousel/Carousel.tsx';
 export { Combobox, type ComboboxProps, type ComboboxOption } from './molecules/Combobox/Combobox.tsx';
@@ -171,6 +210,12 @@ export {
 
 // organisms
 export { ColorPicker, type ColorPickerProps } from './organisms/ColorPicker/ColorPicker.tsx';
+export {
+  PlayerBar,
+  type PlayerBarProps,
+  type PlayerBarLabels,
+  type PlayerBarPosition,
+} from './organisms/PlayerBar/PlayerBar.tsx';
 export {
   RichTextEditor,
   type RichTextEditorProps,
@@ -304,7 +349,19 @@ export { fx, staggerVars, type FxName, type ShapeName } from './internal/shape/f
 
 // --- chat suite: atoms ---
 export { DeliveryStatus, type DeliveryStatusSize, type DeliveryStatusProps } from './atoms/display/DeliveryStatus/DeliveryStatus.tsx';
+export { TypingIndicator, type TypingIndicatorProps, type TypingTemplates } from './molecules/MessageBar/TypingIndicator.tsx';
 // --- chat suite: molecules ---
+export {
+  MessageBar,
+  type MessageBarProps,
+  type MessageBarLabels,
+  type MessageBarState,
+  type StagedAttachmentContext,
+  type ComposerSubmitMode,
+  type ComposerSubmission,
+  type DraftCountMode,
+  type ReplyPreview,
+} from './molecules/MessageBar/MessageBar.tsx';
 export { MessageBubble, type MessageBubbleProps } from './molecules/MessageBubble/MessageBubble.tsx';
 export { MessageGroup, type MessageSlotContext, type MessageGroupProps } from './molecules/MessageBubble/MessageGroup.tsx';
 export { MessageMeta, type MessageMetaProps } from './molecules/MessageBubble/MessageMeta.tsx';

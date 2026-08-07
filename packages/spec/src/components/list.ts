@@ -29,6 +29,8 @@ export const listSpec: ComponentSpec = {
   states: [
     { name: 'divided', description: 'Direct rows are separated by a hairline.', tokens: { border: token('border') } },
   ],
+  // the container is transparent; it sets the text color the rows inherit
+  paint: { text: token('text') },
   tokens: [
     'space-1', 'space-2', 'space-3', 'space-4', 'control-height-sm', 'control-height-md',
     'font-sans', 'font-size-xs', 'font-size-sm', 'radius-lg', 'hairline', 'border', 'text',
@@ -70,6 +72,8 @@ export const listItemSpec: ComponentSpec = {
     { name: 'selected', description: 'Selected rows use the accent-soft surface and accent text.', tokens: { background: token('accent-soft'), text: token('accent-text') } },
     { name: 'disabled', description: 'Disabled rows use the disabled text token and block button activation.', tokens: { text: token('text-disabled') } },
   ],
+  // the row rests transparent and inherits its text from List
+  paint: {},
   tokens: [
     'space-1', 'space-2', 'space-3', 'space-4', 'font-size-xs', 'leading-sm', 'radius-lg',
     'hover', 'focus-ring', 'accent-soft', 'accent-text', 'text', 'text-muted', 'text-disabled',

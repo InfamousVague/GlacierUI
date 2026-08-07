@@ -17,6 +17,7 @@ import {
   type PlayerDensity,
   type PlayerLayout,
   type PlayerRepeat,
+  type SeekBarBeat,
 } from '@glacier/logic';
 import { t } from '../../tokens.ts';
 import { Card } from './Card.tsx';
@@ -100,6 +101,16 @@ export interface PlayerCardProps {
    */
   rail?: SeekBarRail;
   levels?: number[];
+  beat?: SeekBarBeat;
+  /** How hard the beat deforms the seek bar. Forwarded straight through. */
+  intensity?: number;
+  /**
+   * Draws the seek bar's tracer, the shadow trailing the beat. On here, unlike
+   * on a bare bar: a card is a now-playing surface, where the bar is the thing
+   * being looked at rather than a rail under something else. Without a `beat`
+   * there is nothing to trail, so a still card pays nothing for it.
+   */
+  tracer?: boolean;
   /** Formats the elapsed and total readouts. */
   formatTime?: (seconds: number) => string;
   /** Dims the card and blocks every control. */
@@ -115,6 +126,7 @@ const ART_WIDTH: Record<PlayerLayout, number | '100%'> = {
   stacked: 56,
   inline: 80,
   square: '100%',
+  bar: 32,
 };
 
 /**
@@ -153,6 +165,9 @@ export function PlayerCard({
   fill,
   rail = 'contrast',
   levels,
+  beat,
+  intensity,
+  tracer = true,
   formatTime = formatDuration,
   disabled = false,
   skeleton = false,
@@ -221,122 +236,158 @@ export function PlayerCard({
     </View>
   );
 
+  const seekBar = (
+    <SeekBar
+      duration={duration}
+      value={position}
+      onValueChange={setPosition}
+      onSeekEnd={onSeekEnd}
+      shape={shape}
+      tone={tone}
+      fill={fill}
+      rail={rail}
+      levels={levels}
+      beat={beat}
+      intensity={intensity}
+      tracer={tracer}
+      formatTime={formatTime}
+      disabled={disabled}
+      skeleton={skeleton}
+      aria-label={text.seek}
+    />
+  );
+
+  // Decoration: the seek bar already speaks the position through its
+  // accessibility value, so repeating it would double-announce.
+  const elapsed = skeleton ? (
+    <Skeleton variant="text" width={playerSkeletonWidths.clock} />
+  ) : (
+    <Text size="xs" tone="muted" mono>
+      {formatTime(position)}
+    </Text>
+  );
+  const total = skeleton ? (
+    <Skeleton variant="text" width={playerSkeletonWidths.clock} />
+  ) : (
+    <Text size="xs" tone="subtle" mono>
+      {formatTime(duration)}
+    </Text>
+  );
+
   const scrubber = (
     // The bar and its clock are one unit: the times are the bar's endpoints, so
     // they sit tight under it and the density gap separates the group.
     <View style={{ gap: t('space-1'), minWidth: 0 }}>
-      <SeekBar
-        duration={duration}
-        value={position}
-        onValueChange={setPosition}
-        onSeekEnd={onSeekEnd}
-        shape={shape}
-        tone={tone}
-        fill={fill}
-        rail={rail}
-        levels={levels}
-        formatTime={formatTime}
-        disabled={disabled}
-        skeleton={skeleton}
-        aria-label={text.seek}
-      />
-      {/* Decoration: the seek bar already speaks the position through its
-          accessibility value, so repeating it would double-announce. */}
+      {seekBar}
       <View aria-hidden={true} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        {skeleton ? (
-          <>
-            <Skeleton variant="text" width={playerSkeletonWidths.clock} />
-            <Skeleton variant="text" width={playerSkeletonWidths.clock} />
-          </>
-        ) : (
-          <>
-            <Text size="xs" tone="muted" mono>
-              {formatTime(position)}
-            </Text>
-            <Text size="xs" tone="subtle" mono>
-              {formatTime(duration)}
-            </Text>
-          </>
-        )}
+        {elapsed}
+        {total}
       </View>
     </View>
   );
 
+  /**
+   * The bar layout's scrubber: the same bar, with its clocks as endpoints on
+   * either side rather than a caption underneath, since a one-line card has no
+   * row to put them on.
+   */
+  const barScrubber = (
+    <View style={{ flex: 1, minWidth: 0, flexDirection: 'row', alignItems: 'center', gap: t('space-2') }}>
+      <View aria-hidden={true}>{elapsed}</View>
+      <View style={{ flex: 1, minWidth: 0 }}>{seekBar}</View>
+      <View aria-hidden={true}>{total}</View>
+    </View>
+  );
+
+  const shuffleControl = hasShuffle && (
+    <IconButton
+      variant="ghost"
+      size={metrics.controlSize}
+      disabled={disabled}
+      skeleton={skeleton}
+      aria-label={text.shuffle}
+      accessibilityState={{ selected: isShuffling }}
+      onPress={() => setShuffling(!isShuffling)}
+    >
+      <Shuffle size={metrics.controlIcon} color={isShuffling ? onColor : offColor} />
+    </IconButton>
+  );
+
+  const skipBackControl = onSkipBack && (
+    <IconButton
+      variant="ghost"
+      size={metrics.controlSize}
+      disabled={disabled}
+      skeleton={skeleton}
+      aria-label={text.skipBack}
+      onPress={onSkipBack}
+    >
+      <SkipBack size={metrics.controlIcon} color={offColor} />
+    </IconButton>
+  );
+
+  // One button whose label changes, not two that swap, so focus survives the
+  // toggle.
+  const playControl = (
+    <IconButton
+      variant="solid"
+      size={metrics.playSize}
+      disabled={disabled}
+      skeleton={skeleton}
+      aria-label={isPlaying ? text.pause : text.play}
+      onPress={() => setPlaying(!isPlaying)}
+    >
+      {isPlaying ? (
+        <Pause size={metrics.playIcon} color={t('accent-contrast')} />
+      ) : (
+        <Play size={metrics.playIcon} color={t('accent-contrast')} />
+      )}
+    </IconButton>
+  );
+
+  const skipForwardControl = onSkipForward && (
+    <IconButton
+      variant="ghost"
+      size={metrics.controlSize}
+      disabled={disabled}
+      skeleton={skeleton}
+      aria-label={text.skipForward}
+      onPress={onSkipForward}
+    >
+      <SkipForward size={metrics.controlIcon} color={offColor} />
+    </IconButton>
+  );
+
+  const repeatControl = hasRepeat && (
+    <IconButton
+      variant="ghost"
+      size={metrics.controlSize}
+      disabled={disabled}
+      skeleton={skeleton}
+      // three states cannot be described by a pressed flag alone, so the
+      // label names the mode as well
+      aria-label={text.repeat(repeatMode)}
+      accessibilityState={{ selected: repeatMode !== 'off' }}
+      onPress={() => setRepeatMode(nextRepeat(repeatMode))}
+    >
+      {repeatMode === 'one' ? (
+        <Repeat1 size={metrics.controlIcon} color={onColor} />
+      ) : (
+        // 'all' is engaged and tints; 'off' stays quiet
+        <Repeat size={metrics.controlIcon} color={repeatMode === 'all' ? onColor : offColor} />
+      )}
+    </IconButton>
+  );
+
+  const transportRow = { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: transportGap } as const;
+
   const transport = (
-    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: transportGap }}>
-      {hasShuffle && (
-        <IconButton
-          variant="ghost"
-          size={metrics.controlSize}
-          disabled={disabled}
-          skeleton={skeleton}
-          aria-label={text.shuffle}
-          accessibilityState={{ selected: isShuffling }}
-          onPress={() => setShuffling(!isShuffling)}
-        >
-          <Shuffle size={metrics.controlIcon} color={isShuffling ? onColor : offColor} />
-        </IconButton>
-      )}
-      {onSkipBack && (
-        <IconButton
-          variant="ghost"
-          size={metrics.controlSize}
-          disabled={disabled}
-          skeleton={skeleton}
-          aria-label={text.skipBack}
-          onPress={onSkipBack}
-        >
-          <SkipBack size={metrics.controlIcon} color={offColor} />
-        </IconButton>
-      )}
-      {/* One button whose label changes, not two that swap, so focus survives
-          the toggle. */}
-      <IconButton
-        variant="solid"
-        size={metrics.playSize}
-        disabled={disabled}
-        skeleton={skeleton}
-        aria-label={isPlaying ? text.pause : text.play}
-        onPress={() => setPlaying(!isPlaying)}
-      >
-        {isPlaying ? (
-          <Pause size={metrics.playIcon} color={t('accent-contrast')} />
-        ) : (
-          <Play size={metrics.playIcon} color={t('accent-contrast')} />
-        )}
-      </IconButton>
-      {onSkipForward && (
-        <IconButton
-          variant="ghost"
-          size={metrics.controlSize}
-          disabled={disabled}
-          skeleton={skeleton}
-          aria-label={text.skipForward}
-          onPress={onSkipForward}
-        >
-          <SkipForward size={metrics.controlIcon} color={offColor} />
-        </IconButton>
-      )}
-      {hasRepeat && (
-        <IconButton
-          variant="ghost"
-          size={metrics.controlSize}
-          disabled={disabled}
-          skeleton={skeleton}
-          // three states cannot be described by a pressed flag alone, so the
-          // label names the mode as well
-          aria-label={text.repeat(repeatMode)}
-          accessibilityState={{ selected: repeatMode !== 'off' }}
-          onPress={() => setRepeatMode(nextRepeat(repeatMode))}
-        >
-          {repeatMode === 'one' ? (
-            <Repeat1 size={metrics.controlIcon} color={onColor} />
-          ) : (
-            // 'all' is engaged and tints; 'off' stays quiet
-            <Repeat size={metrics.controlIcon} color={repeatMode === 'all' ? onColor : offColor} />
-          )}
-        </IconButton>
-      )}
+    <View style={transportRow}>
+      {shuffleControl}
+      {skipBackControl}
+      {playControl}
+      {skipForwardControl}
+      {repeatControl}
     </View>
   );
 
@@ -360,10 +411,30 @@ export function PlayerCard({
         ...(skeleton ? { backgroundColor: 'transparent' } : null),
       }}
     >
-      {/* Inline pairs the art with the text as a header row, top-aligned, then
+      {/* Bar puts the whole card on one line: the transport leads, what is
+          playing rides beside it, the seek bar takes what is left between its
+          two clocks, and the modes close the row out. */}
+      {layout === 'bar' ? (
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap }}>
+          <View style={transportRow}>
+            {skipBackControl}
+            {playControl}
+            {skipForwardControl}
+          </View>
+          {art}
+          <View style={{ flexShrink: 1, minWidth: 0 }}>{heading}</View>
+          {barScrubber}
+          {(shuffleControl || repeatControl) && (
+            <View style={transportRow}>
+              {shuffleControl}
+              {repeatControl}
+            </View>
+          )}
+        </View>
+      ) : /* Inline pairs the art with the text as a header row, top-aligned, then
           breaks: the bar and controls get the card's full width rather than
-          being squeezed into the column beside the art. */}
-      {layout === 'inline' ? (
+          being squeezed into the column beside the art. */
+      layout === 'inline' ? (
         <View style={{ gap }}>
           <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap }}>
             {art}

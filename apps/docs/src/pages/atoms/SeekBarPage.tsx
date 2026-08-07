@@ -4,7 +4,9 @@ import {
   Heading,
   Row,
   SeekBar,
+  Slider,
   Stack,
+  Switch,
   Text,
   TextTone,
   Size,
@@ -12,7 +14,7 @@ import {
   createAnalyserMeter,
   useT,
 } from '@glacier/react';
-import { useLiveLevels, type LoudnessMeter } from '@glacier/logic';
+import { SEEK_DEFAULT_INTENSITY, SEEK_MAX_INTENSITY, useBeat, useLiveLevels, type LoudnessMeter } from '@glacier/logic';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
@@ -42,6 +44,14 @@ const DURATION = 174; // 2:54, a typical track
  */
 const TRACK_URL =
   'https://upload.wikimedia.org/wikipedia/commons/3/38/Albinoni%2C_Concerto_for_Oboe_and_Strings_No._2_in_D_minor%2C_Op._9%2C_III._Allegro.ogg';
+
+/**
+ * Something with a backbeat, for the demo that has to prove the bar is moving
+ * with the music rather than on a timer: Kevin MacLeod's "Funky Chunk",
+ * CC BY 3.0, served CORS-clean by Wikimedia like the concerto above.
+ */
+const FUNK_URL =
+  'https://upload.wikimedia.org/wikipedia/commons/a/a2/Funky_Chunk_%28ISRC_USUAN1500054%29.mp3';
 
 function format(seconds: number): string {
   const whole = Math.max(0, Math.floor(seconds));
@@ -145,6 +155,121 @@ function LiveAudioDemo() {
   );
 }
 
+/**
+ * The default shape, deforming to the beat.
+ *
+ * The bar itself has no idea audio exists: `useBeat` reads the same meter the
+ * levels come from, finds the hits, and hands back a pulse and the ripples
+ * still travelling. Everything else is an ordinary transport.
+ */
+function BeatDemo() {
+  const t = useT();
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [meter, setMeter] = useState<LoudnessMeter | null>(null);
+  const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [intensity, setIntensity] = useState(SEEK_DEFAULT_INTENSITY);
+  const [tracer, setTracer] = useState(true);
+
+  const progress = duration > 0 ? position / duration : 0;
+  // `at` is where a hit lands on the bar, so the ripples leave the playhead
+  // rather than a fixed point.
+  const beat = useBeat({ meter, active: playing, at: progress });
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const onTime = () => setPosition(audio.currentTime);
+    const onMeta = () => setDuration(audio.duration || 0);
+    const onEnded = () => setPlaying(false);
+    audio.addEventListener('timeupdate', onTime);
+    audio.addEventListener('loadedmetadata', onMeta);
+    audio.addEventListener('ended', onEnded);
+    return () => {
+      audio.removeEventListener('timeupdate', onTime);
+      audio.removeEventListener('loadedmetadata', onMeta);
+      audio.removeEventListener('ended', onEnded);
+    };
+  }, []);
+
+  const toggle = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (!audio.paused) {
+      audio.pause();
+      setPlaying(false);
+      return;
+    }
+    // Same constraint as the demo above: the AudioContext has to be built
+    // inside the gesture that starts playback.
+    setMeter(() => createAnalyserMeter(audio).meter);
+    void audio.play();
+    setPlaying(true);
+  }, []);
+
+  const seek = useCallback((seconds: number) => {
+    setPosition(seconds);
+    if (audioRef.current) audioRef.current.currentTime = seconds;
+  }, []);
+
+  return (
+    <Stack gap={4} width="full" maxWidth="sm">
+      <audio ref={audioRef} src={FUNK_URL} crossOrigin="anonymous" preload="metadata" />
+      <Row gap={4}>
+        <Button variant={Variant.Soft} onClick={toggle}>
+          {playing ? t(m.seekPause) : t(m.seekPlay)}
+        </Button>
+        <Stack gap={2} grow>
+          {/* no shape: swell is the default, and it is the one that has the
+              most to deform */}
+          <SeekBar
+            duration={duration}
+            value={position}
+            onValueChange={seek}
+            beat={beat}
+            intensity={intensity}
+            tracer={tracer}
+            aria-label={t(m.seekDemoLabel)}
+          />
+          <Row justify="between">
+            <Text as="span" size={Size.XSmall} tone={TextTone.Muted} mono>
+              {format(position)}
+            </Text>
+            <Text as="span" size={Size.XSmall} tone={TextTone.Subtle} mono>
+              {format(duration)}
+            </Text>
+          </Row>
+        </Stack>
+      </Row>
+      {/* the knob that sets how far the beat is allowed to push the bar: drag
+          it while the track plays and the same beats read louder or vanish */}
+      <Row gap={3} align="center">
+        <Text as="span" size={Size.Small} tone={TextTone.Muted} style={{ width: '6rem', flex: 'none' }}>
+          {t(m.seekIntensityLabel)}
+        </Text>
+        <div style={{ width: '12rem' }}>
+          <Slider
+            aria-label={t(m.seekIntensityLabel)}
+            min={0}
+            max={SEEK_MAX_INTENSITY}
+            step={0.1}
+            value={intensity}
+            onValueChange={setIntensity}
+          />
+        </div>
+        <Text as="span" size={Size.Small} weight="semibold" mono>
+          {intensity.toFixed(1)}x
+        </Text>
+      </Row>
+      <Switch label={t(m.seekTracerLabel)} checked={tracer} onCheckedChange={setTracer} />
+      <Text size={Size.XSmall} tone={TextTone.Subtle}>
+        {t(m.seekFunkCredit)}
+      </Text>
+    </Stack>
+  );
+}
+
 /** A worked transport: the bar drives a position readout. */
 function PlayerDemo() {
   const t = useT();
@@ -235,6 +360,29 @@ const play = () => {
   shape="waveform" levels={levels} aria-label="Seek" />`}
       >
         <LiveAudioDemo />
+      </Example>
+
+      <Example
+        title={t(m.seekEx9Title)}
+        description={prose(t(m.seekEx9Desc))}
+        code={`// useBeat reads the same meter the levels come from and hands back the
+// two things the bar draws with: how hard the music is hitting right now,
+// and the hits still travelling outward as ripples.
+const beat = useBeat({ meter, active: playing, at: progress });
+
+// swell is the default shape, so this is the whole change
+<SeekBar duration={duration} value={position} onValueChange={seek}
+  beat={beat} aria-label="Seek" />
+
+// intensity sets how far a beat is allowed to push the bar: 1 is the
+// default, 0 holds it still without tearing the meter down, and 3 is as
+// far as it goes before the swell just sits clamped. tracer draws the
+// bar as it stood a moment ago, in the same tone at half opacity, sinking
+// back toward flat between hits and thrown out again by the next one.
+<SeekBar duration={duration} value={position} onValueChange={seek}
+  beat={beat} intensity={2} tracer aria-label="Seek" />`}
+      >
+        <BeatDemo />
       </Example>
 
       <Example
@@ -370,6 +518,9 @@ const play = () => {
           },
           { name: 'fill', type: "'solid' | 'tonal' | 'blend' | 'fade'", default: "'solid'", description: t(m.seekPropFill) },
           { name: 'levels', type: 'number[]', description: t(m.seekPropLevels) },
+          { name: 'beat', type: '{ pulse: number; ripples: SeekBarRipple[] }', description: t(m.seekPropBeat) },
+          { name: 'intensity', type: 'number', default: '1', description: t(m.seekPropIntensity) },
+          { name: 'tracer', type: 'boolean', default: 'false', description: t(m.seekPropTracer) },
           { name: 'step', type: 'number', default: '5', description: t(m.seekPropStep) },
           { name: 'formatTime', type: '(seconds: number) => string', description: t(m.seekPropFormatTime) },
           { name: 'size', type: "'sm' | 'md'", default: "'md'", description: t(m.seekPropSize) },
@@ -384,7 +535,9 @@ const play = () => {
       <PropsTable
         props={[
           { name: 'useLiveLevels', type: '(options) => number[]', description: t(m.seekApiUseLiveLevels) },
+          { name: 'useBeat', type: '(options) => SeekBarBeat', description: t(m.seekApiUseBeat) },
           { name: 'createLevelRecorder', type: '(options) => LevelRecorder', description: t(m.seekApiRecorder) },
+          { name: 'createBeatTracker', type: '(options) => BeatTracker', description: t(m.seekApiBeatTracker) },
           { name: 'rms', type: '(samples) => number', description: t(m.seekApiRms) },
           { name: 'createAnalyserMeter', type: '(element) => AnalyserMeter', description: t(m.seekApiAnalyser) },
         ]}
@@ -402,6 +555,7 @@ const play = () => {
         <li>{prose(t(m.seekUse1))}</li>
         <li>{prose(t(m.seekUse2))}</li>
         <li>{prose(t(m.seekUse3))}</li>
+        <li>{prose(t(m.seekUse4))}</li>
       </ul>
     </>
   );

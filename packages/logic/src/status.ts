@@ -19,7 +19,6 @@
  * their only callers.
  */
 
-import { useEffect, useRef, useState } from 'react';
 import { deliveryRank, type DeliveryStatus } from './chat.ts';
 
 // ---- delivery ---------------------------------------------------------------

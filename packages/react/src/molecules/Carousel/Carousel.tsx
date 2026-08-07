@@ -34,6 +34,12 @@ export interface CarouselProps extends ComponentProps<'div'> {
   children?: ReactNode;
   /** Shows prev/next controls that appear when the strip overflows. */
   showControls?: boolean;
+  /**
+   * Advance to the next page every this-many milliseconds, looping back to the
+   * start at the end. Off when unset. Pauses while the pointer is over the strip
+   * or focus is inside it, and never runs under prefers-reduced-motion.
+   */
+  autoPlay?: number;
   /** Space between cards; any CSS length or a `var(--glacier-space-*)`. */
   gap?: string;
   /** Accessible label for the scrollable region. */
@@ -50,6 +56,7 @@ export interface CarouselProps extends ComponentProps<'div'> {
 export function Carousel({
   children,
   showControls = false,
+  autoPlay,
   gap = 'var(--glacier-space-4)',
   className,
   style,
@@ -61,6 +68,9 @@ export function Carousel({
   const [overflowing, setOverflowing] = useState(false);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
+  // Held while the pointer is over the strip or focus is inside it, so autoplay
+  // never yanks the strip out from under someone reading or tabbing through it.
+  const paused = useRef(false);
 
   const sync = useCallback(() => {
     const el = scrollerRef.current;
@@ -113,10 +123,34 @@ export function Carousel({
     el.scrollBy({ left: direction * sign * el.clientWidth * 0.8, behavior: 'smooth' });
   }
 
+  // Autoplay: page forward on the interval, looping to the start at the end.
+  // Held by hover/focus and skipped entirely when the user asks for less motion.
+  useEffect(() => {
+    if (!autoPlay || !overflowing) return;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    const id = window.setInterval(() => {
+      const el = scrollerRef.current;
+      if (!el || paused.current) return;
+      const max = el.scrollWidth - el.clientWidth;
+      const sign = resolveDirection(el) === 'rtl' ? -1 : 1;
+      if (Math.abs(el.scrollLeft) >= max - 1) el.scrollTo({ left: 0, behavior: 'smooth' });
+      else el.scrollBy({ left: sign * el.clientWidth * 0.8, behavior: 'smooth' });
+    }, autoPlay);
+    return () => window.clearInterval(id);
+  }, [autoPlay, overflowing]);
+
   const rootStyle = { '--carousel-gap': gap, ...style } as CSSProperties;
 
   return (
-    <div {...rest} className={cx(styles.root, className)} style={rootStyle}>
+    <div
+      {...rest}
+      className={cx(styles.root, className)}
+      style={rootStyle}
+      onPointerEnter={() => { paused.current = true; }}
+      onPointerLeave={() => { paused.current = false; }}
+      onFocusCapture={() => { paused.current = true; }}
+      onBlurCapture={() => { paused.current = false; }}
+    >
       {showControls && (
         <span className={cx(styles.controlSlot, styles.prev)} data-hidden={!overflowing || undefined}>
           <IconButton

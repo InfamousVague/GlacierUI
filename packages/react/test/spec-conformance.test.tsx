@@ -37,6 +37,10 @@ import {
   NumberInput,
   Pill,
   PlayerCard,
+  PlayerBar,
+  TrackInfo,
+  TransportControls,
+  VolumeBar,
   ProgressBar,
   ProgressRing,
   Radio,
@@ -99,6 +103,7 @@ import {
   Breadcrumbs,
   Pagination,
   Accordion,
+  AudioEqualizer,
   Table,
   Sparkline,
   Fieldset,
@@ -108,9 +113,11 @@ import {
   DatePicker,
   TimeSeriesChart,
   DeliveryStatus,
+  MessageBar,
   MessageBubble,
   MessageGroup,
   MessageMeta,
+  TypingIndicator,
   NavBar,
   NavBarItem,
   PageHeader,
@@ -307,6 +314,10 @@ const RENDER: Record<string, Renderer> = {
     <CommandPalette open={false} onOpenChange={() => {}} commands={[]} onRun={() => {}} size={o.size as never} />
   ),
   'player-card': (o) => <PlayerCard duration={205} title="Allegro" density={o.variant as never} />,
+  'track-info': (o) => <TrackInfo title="Allegro" subtitle="Albinoni" size={o.size as never} />,
+  'transport-controls': (o) => <TransportControls emphasis={o.variant as never} />,
+  'volume-bar': (o) => <VolumeBar size={o.size as never} />,
+  'player-bar': (o) => <PlayerBar duration={205} title="Allegro" position={o.variant as never} />,
   modal: (o) => (
     <Modal open={false} onClose={() => {}} size={o.size as never}>
       Body
@@ -413,6 +424,7 @@ const RENDER: Record<string, Renderer> = {
       ]}
     />
   ),
+  'audio-equalizer': (o) => <AudioEqualizer aria-label="Playback equalizer" size={o.size as never} />,
   table: () => (
     <Table
       columns={[
@@ -446,6 +458,7 @@ const RENDER: Record<string, Renderer> = {
   // chat suite: atoms
   'delivery-status': (o) => <DeliveryStatus status={o.tone as never} size={o.size as never} />,
   'message-meta': () => <MessageMeta at={SENT} now={NOW} status="read" />,
+  'typing-indicator': () => <TypingIndicator names={['Ada', 'Grace']} />,
   // chat suite: molecules
   'message-bubble': () => (
     <MessageBubble own position="last" tail at={SENT} now={NOW}>
@@ -453,6 +466,7 @@ const RENDER: Record<string, Renderer> = {
     </MessageBubble>
   ),
   'message-group': () => <MessageGroup group={MESSAGE_RUN} authorName="Ada" now={NOW} />,
+  'message-bar': () => <MessageBar defaultValue="Hello" maxLength={280} />,
   // structures and layout shelves
   'nav-bar': (o) => (
     <NavBar aria-label="Primary" orientation={o.variant as never}>

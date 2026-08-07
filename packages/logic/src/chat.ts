@@ -84,6 +84,18 @@ export interface ChatMessage {
   reactions?: Reaction[];
   /** Omitted for anything received - status is about the viewer's own outbox. */
   status?: DeliveryStatus;
+  /**
+   * When it was read, epoch millis. The history behind the `read` rung: the
+   * status says *that* it was opened and this says *when*, which is the
+   * difference between a tick and a receipt.
+   */
+  readAt?: Millis;
+  /**
+   * Who has read it. Only meaningful in a thread with more than two people,
+   * where a single `read` tick cannot say which of five participants opened it;
+   * see `readReceipt`.
+   */
+  readBy?: MessageReader[];
   /** The message this one answers, for a quoted preview. */
   replyToId?: string;
   editedAt?: Millis;
@@ -388,7 +400,13 @@ export function formatMessageTimestamp(stamp: MessageTimestamp, locale?: string)
  */
 export type ChatSequenceItem<M extends ChatMessage = ChatMessage> =
   | { kind: 'day'; key: string; dayKey: string; at: Millis }
-  | { kind: 'unread'; key: string; at: Millis; count: number }
+  /**
+   * `anchorId` is the message the divider settled on, published rather than
+   * left to be read back out of `key`: a caller that started from a watermark
+   * has to pin the resolved id to stop the line walking down the screen, and
+   * asking it to parse a key format for that is asking it to break later.
+   */
+  | { kind: 'unread'; key: string; at: Millis; count: number; anchorId: string }
   | { kind: 'group'; key: string; group: MessageGroup<M> };
 
 export interface InsertSeparatorsOptions {
@@ -461,7 +479,10 @@ export function insertSeparators<M extends ChatMessage>(
     }
 
     const at = anchorPlaced || anchorId === undefined ? -1 : group.messages.findIndex((m) => m.id === anchorId);
-    if (at === -1) {
+    // The second test is implied by the first - `at` is only ever non-negative
+    // when an anchor resolved - but stating it is what lets the divider below
+    // publish a defined `anchorId` without a cast.
+    if (at === -1 || anchorId === undefined) {
       pushGroup(group);
       continue;
     }
@@ -473,6 +494,7 @@ export function insertSeparators<M extends ChatMessage>(
     items.push({
       kind: 'unread',
       key: `unread:${anchorId}`,
+      anchorId,
       at: (tail[0] as M).at,
       count: remaining,
     });
@@ -569,6 +591,140 @@ export function aggregateReactions(reactions: Reaction[], viewerId?: string): Re
   return [...byEmoji.values()];
 }
 
+/**
+ * One person's read of one message.
+ *
+ * Separate from `Reaction` even though the shape rhymes, because a reaction is
+ * something the reader chose to say and a receipt is something their client
+ * reported. Conflating them is how "seen by" ends up in a menu that also offers
+ * to remove it.
+ */
+export interface MessageReader {
+  /** Who read it. The identity, and the de-duplication key. */
+  actorId: string;
+  /** Their display name, already resolved by the caller. */
+  name?: string;
+  /** When they read it. The latest of these is what a receipt line prints. */
+  at?: Millis;
+}
+
+/** Which sentence a read receipt should render; the shapes `TypingKey` has. */
+export type ReadReceiptKey = 'none' | 'one' | 'two' | 'several' | 'many';
+
+/**
+ * Who has read a message, resolved into what a template needs.
+ *
+ * Deliberately the same shape as `TypingState`. "Ana and Bo are typing" and
+ * "Read by Ana and Bo" are the same three translation problems at once - the
+ * conjunction, the verb agreement, and the word order - and solving them twice
+ * is how one of the two lines ends up joined with a hardcoded comma.
+ *
+ * This is the thing a single tick cannot say. `read` on a group message is
+ * ambiguous about which of five people opened it, and the delivery ladder has
+ * exactly one rung to be ambiguous with.
+ */
+export interface ReadReceipt {
+  key: ReadReceiptKey;
+  /** The names to show, in the order they were given. */
+  names: string[];
+  /** How many readers are hidden behind the "and N others" phrase. */
+  others: number;
+  /** Everyone who read it, shown or not. */
+  total: number;
+  /** The latest read moment, which is what "Read 9:41 AM" prints. */
+  at?: Millis;
+}
+
+/**
+ * Tallies readers into a template choice plus its slots.
+ *
+ * A repeated actor counts once, for the reason `aggregateReactions` de-dupes:
+ * servers replay events and an optimistic update races its own acknowledgement.
+ *
+ * A reader whose name has not loaded still counts toward the total but never
+ * becomes a blank in the list, so an unresolved profile shortens the sentence
+ * instead of producing "Read by  and Bo". When nobody is named, the count is
+ * the whole answer and the state degrades to the overflow phrase with no names
+ * in front of it.
+ *
+ * `max` is how many names the line has room for, and on overflow one slot goes
+ * back to the summary - the same trade `typingText` and `splitOverflow` make,
+ * because the summary occupies a slot too.
+ */
+export function readReceipt(readers: MessageReader[], max = 2): ReadReceipt {
+  const seen = new Set<string>();
+  const unique: MessageReader[] = [];
+  for (const reader of readers) {
+    if (seen.has(reader.actorId)) continue;
+    seen.add(reader.actorId);
+    unique.push(reader);
+  }
+
+  const total = unique.length;
+  if (total === 0) return { key: 'none', names: [], others: 0, total: 0 };
+
+  const at = unique.reduce<Millis | undefined>(
+    (latest, reader) =>
+      reader.at === undefined ? latest : latest === undefined ? reader.at : Math.max(latest, reader.at),
+    undefined,
+  );
+  const stamp = at === undefined ? {} : { at };
+  const named = unique.map((reader) => reader.name ?? '').filter((name) => name.trim() !== '');
+
+  if (named.length === 0) return { key: 'many', names: [], others: total, total, ...stamp };
+
+  const limit = Math.max(1, Math.floor(max));
+  if (named.length === total && total <= limit) {
+    const key: ReadReceiptKey = total === 1 ? 'one' : total === 2 ? 'two' : 'several';
+    return { key, names: named, others: 0, total, ...stamp };
+  }
+
+  const shown = named.slice(0, Math.max(1, limit - 1));
+  return { key: 'many', names: shown, others: total - shown.length, total, ...stamp };
+}
+
+/**
+ * The sentences a read receipt needs, one per shape. Every template may use
+ * `{names}` (the shown names, joined), `{first}`, `{last}`, `{count}` (how many
+ * are hidden), `{total}`, and `{time}`.
+ */
+export interface ReadReceiptTemplates {
+  /** Rendered when nobody has read it. Omit for the usual empty string. */
+  none?: string;
+  /** e.g. `'Read {time}'` in a two-person thread, `'Read by {first}'` in a group. */
+  one: string;
+  /** e.g. `'Read by {first} and {last}'` */
+  two: string;
+  /** e.g. `'Read by {names}'` */
+  several: string;
+  /** e.g. `'Read by {first} and {count} others'` */
+  many: string;
+}
+
+/**
+ * Renders a read receipt with caller-supplied templates.
+ *
+ * `time` arrives already spelled, because formatting a moment is locale work
+ * that `messageTimestamp` and the caller's `Intl` already own; handing this
+ * function a number would give it a second, worse opinion about clocks.
+ */
+export function formatReadReceipt(
+  receipt: ReadReceipt,
+  templates: ReadReceiptTemplates,
+  options: { time?: string; join?: (names: string[]) => string } = {},
+): string {
+  const { time = '', join = (names: string[]) => names.join(', ') } = options;
+  if (receipt.key === 'none') return templates.none ?? '';
+  return interpolate(templates[receipt.key], {
+    names: join(receipt.names),
+    first: receipt.names[0] ?? '',
+    last: receipt.names[receipt.names.length - 1] ?? '',
+    count: receipt.others,
+    total: receipt.total,
+    time,
+  });
+}
+
 /** Which sentence a typing indicator should render. */
 export type TypingKey = 'none' | 'one' | 'two' | 'several' | 'many';
 
@@ -635,6 +791,25 @@ export interface TypingTemplates {
   /** e.g. `'{first} and {count} others are typing'` */
   many: string;
 }
+
+/**
+ * English fallbacks for the typing row, so a binding without a catalog still
+ * says something legible. Both kits merge a caller's templates over these.
+ */
+export const defaultTypingTemplates: TypingTemplates = {
+  one: '{first} is typing',
+  two: '{first} and {last} are typing',
+  several: '{names} are typing',
+  many: '{first} and {count} others are typing',
+};
+
+/** English fallbacks for the read line, under the same rule. */
+export const defaultReadReceiptTemplates: ReadReceiptTemplates = {
+  one: 'Read by {first}',
+  two: 'Read by {first} and {last}',
+  several: 'Read by {names}',
+  many: 'Read by {first} and {count} others',
+};
 
 /** Interpolates `{name}` placeholders, matching the kit catalog's `format`. */
 function interpolate(template: string, params: Record<string, string | number>): string {

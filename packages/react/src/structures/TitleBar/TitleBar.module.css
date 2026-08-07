@@ -44,6 +44,15 @@
   justify-self: end;
 }
 
+/* The bar refuses selection so the drag gesture wins over a stray swipe, but a
+   field in a slot is somewhere to type: the text inside one has to be
+   selectable again or it cannot be corrected. */
+.slot :is(input, textarea),
+.center :is(input, textarea) {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
 .center {
   justify-self: center;
   display: inline-flex;

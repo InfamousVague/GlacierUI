@@ -182,7 +182,7 @@ describe('PlayerCard', () => {
   });
 
   it('places the artwork per layout', () => {
-    for (const layout of ['stacked', 'inline', 'square'] as const) {
+    for (const layout of ['stacked', 'inline', 'square', 'bar'] as const) {
       const { container, unmount } = render(
         <PlayerCard duration={205} layout={layout} artwork={<img alt="" src="x" />} />,
       );
@@ -191,6 +191,25 @@ describe('PlayerCard', () => {
       expect(container.querySelector('img')).not.toBeNull();
       unmount();
     }
+  });
+
+  it('keeps every control when the bar layout splits the transport', () => {
+    // The bar breaks the transport into two groups; the controls themselves are
+    // the same ones, so nothing may go missing on the way across.
+    const { container } = render(
+      <PlayerCard
+        title="Allegro"
+        duration={205}
+        layout="bar"
+        onSkipBack={() => undefined}
+        onSkipForward={() => undefined}
+        onShuffleChange={() => undefined}
+        onRepeatChange={() => undefined}
+      />,
+    );
+    expect(container.querySelectorAll('button')).toHaveLength(5);
+    // the seek bar still owns the position, so the clocks stay decoration
+    expect(screen.getByRole('slider')).toBeTruthy();
   });
 
   it('has no axe violations', async () => {

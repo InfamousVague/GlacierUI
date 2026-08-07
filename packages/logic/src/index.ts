@@ -61,6 +61,8 @@ export {
   seekBarStopColor,
   SEEK_VIEW_WIDTH,
   SEEK_VIEW_HEIGHT,
+  SEEK_MAX_INTENSITY,
+  SEEK_DEFAULT_INTENSITY,
   type SeekBarShape,
   type SeekBarGeometry,
   type SeekBarGeometryOptions,
@@ -72,6 +74,8 @@ export {
   type SeekBarRail,
   type SeekBarRailPaint,
   type SeekBarSkeleton,
+  type SeekBarBeat,
+  type SeekBarRipple,
 } from './seek-bar.ts';
 
 // Player transport logic: time formatting and the repeat cycle, shared so both
@@ -86,6 +90,18 @@ export {
   type PlayerDensity,
   type PlayerMetrics,
 } from './player.ts';
+
+// Inline-player logic: the countdown readout and the decibel fader a docked
+// transport strip adds on top of the transport above.
+export {
+  formatGain,
+  formatRemaining,
+  stripTransportDensity,
+  transportPlaySize,
+  volumeAmplitude,
+  volumeGain,
+  VOLUME_FLOOR_DB,
+} from './player-bar.ts';
 
 // Calendar grid building, event bucketing, and paging. Dependency-free local
 // date arithmetic, shared so both bindings lay out the same month.
@@ -214,6 +230,7 @@ export {
   messageAck,
   isProvisional,
   conversationRuns,
+  conversationRunOf,
   atBottom,
   conversationSkeletonMessages,
   conversationSkeletonRuns,
@@ -239,6 +256,10 @@ export {
   formatMessageTimestamp,
   insertSeparators,
   aggregateReactions,
+  readReceipt,
+  formatReadReceipt,
+  defaultReadReceiptTemplates,
+  defaultTypingTemplates,
   typingText,
   formatTyping,
   attachmentKind,
@@ -263,11 +284,47 @@ export {
   type ChatSequenceItem,
   type InsertSeparatorsOptions,
   type ReactionSummary,
+  type MessageReader,
+  type ReadReceipt,
+  type ReadReceiptKey,
+  type ReadReceiptTemplates,
   type TypingKey,
   type TypingState,
   type TypingTemplates,
   type AttachmentKind,
 } from './chat.ts';
+
+// Compose rules: the Enter-key policy, the send-enablement test, draft counting
+// and its budget states, staged-attachment transitions, and the quoted reply
+// preview. Shared so the one keystroke that cannot be taken back means the same
+// thing on both platforms - including while an input method is open.
+export {
+  composerKeyAction,
+  composerSubmitModeFor,
+  composerCanSend,
+  composerSubmission,
+  composerSubmitModes,
+  defaultComposerLabels,
+  draftCount,
+  draftCountModes,
+  draftMeter,
+  draftMeterStates,
+  stageAttachments,
+  unstageAttachment,
+  replyPreview,
+  DRAFT_NEAR_LIMIT,
+  REPLY_PREVIEW_LIMIT,
+  type ComposerKeyAction,
+  type ComposerKeyEvent,
+  type ComposerSendability,
+  type ComposerSubmission,
+  type ComposerLabels,
+  type ComposerSubmitMode,
+  type DraftCountMode,
+  type DraftMeter,
+  type DraftMeterState,
+  type ReplyPreview,
+} from './composer.ts';
 
 // Conversation-list rules: snippet truncation, the unread cap, row timestamps,
 // marker precedence, section grouping, and the windowing arithmetic. Shared so a
@@ -287,9 +344,7 @@ export {
 // Attachment presentation: aspect clamps, the album mosaic expressed as rows of
 // weights (the one tiling primitive both platforms render identically), file-name
 // middle truncation, size formatting, and glyph routing.
-// Compose rules: the send-enablement test, auto-grow row maths, the Enter-key
-// policy, attachment state transitions, and mention matching layered over the
-// command palette's matcher.
+// Mention matching, layered over the command palette's matcher.
 // Message bubble geometry: which corners a bubble flattens given its place in a
 // run, the tail path both bindings draw from one set of numbers, and the
 // per-layout metrics behind the bubble and row presentations.
@@ -334,6 +389,17 @@ export {
   type LoudnessMeter,
   type UseLiveLevelsOptions,
 } from './level-recorder.ts';
+
+// Finds the beat in the same meter the levels come from, so a SeekBar can
+// deform in time with what is playing. Shared for the same reason: only the
+// meter is platform-specific, never the detection.
+export {
+  createBeatTracker,
+  useBeat,
+  type BeatTracker,
+  type BeatTrackerOptions,
+  type UseBeatOptions,
+} from './beat.ts';
 
 /**
  * Controlled/uncontrolled state in one hook. Pass `value` to control it, or

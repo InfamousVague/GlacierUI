@@ -20,6 +20,12 @@
   border-inline-end: var(--glacier-hairline) solid var(--glacier-border-subtle);
 }
 
+/* The line is the caller's to drop: with it gone the rail keeps its spacing but
+   reads as one surface with the pane. */
+.layout[data-divider='none'] .rail {
+  border-inline-end: 0;
+}
+
 .railItem {
   position: relative;
   display: flex;
@@ -135,6 +141,10 @@
     border-inline-end: 0;
     border-block-end: var(--glacier-hairline) solid var(--glacier-border-subtle);
     scrollbar-width: none;
+  }
+
+  .layout[data-divider='none'] .rail {
+    border-block-end: 0;
   }
 
   .rail::-webkit-scrollbar {

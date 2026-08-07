@@ -24,8 +24,9 @@ export const tabbedModalSpec: ComponentSpec = {
     { name: 'onValueChange', type: 'handler', description: 'Called with the next active section id.' },
     { name: 'title', type: 'node', description: 'Heading shown above the two panes.' },
     { name: 'footer', type: 'node', description: 'Action row passed through to the underlying Modal, rendered below both panes.' },
+    { name: 'divider', type: 'boolean', default: true, description: 'The hairline between the nav rail and the pane. Turn it off where the sections read as one surface without a rule splitting them.' },
   ],
-  defaults: {},
+  defaults: { divider: true },
   dimensions: {
     radius: token('radius-2xl'),
     gap: token('space-6'),

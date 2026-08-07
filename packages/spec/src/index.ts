@@ -43,6 +43,7 @@ export * from './components/virtual-list.ts';
 export * from './components/rich-text-editor.ts';
 export * from './components/color-picker.ts';
 export * from './components/command-palette.ts';
+export * from './components/player-bar.ts';
 export * from './components/player-card.ts';
 export * from './components/popover.ts';
 export * from './components/progress-bar.ts';
@@ -70,6 +71,9 @@ export * from './components/toast.ts';
 export * from './components/toggle.ts';
 export * from './components/toolbar.ts';
 export * from './components/tooltip.ts';
+export * from './components/track-info.ts';
+export * from './components/transport-controls.ts';
+export * from './components/volume-bar.ts';
 export * from './components/stat-tile.ts';
 export * from './components/device-frame.ts';
 export * from './components/filter-chip.ts';
@@ -82,6 +86,7 @@ export * from './components/heatmap.ts';
 export * from './components/breadcrumbs.ts';
 export * from './components/pagination.ts';
 export * from './components/accordion.ts';
+export * from './components/audio-equalizer.ts';
 export * from './components/table.ts';
 export * from './components/drawer.ts';
 export * from './components/alert-dialog.ts';
@@ -115,6 +120,7 @@ export * from './components/page-header.ts';
 export * from './components/delivery-status.ts';
 export * from './components/conversation-view.ts';
 export * from './components/message-bubble.ts';
+export * from './components/message-bar.ts';
 
 import type { ComponentSpec } from './schema.ts';
 import { appShellSpec } from './components/app-shell.ts';
@@ -148,6 +154,7 @@ import { virtualListSpec } from './components/virtual-list.ts';
 import { richTextEditorSpec } from './components/rich-text-editor.ts';
 import { colorPickerSpec } from './components/color-picker.ts';
 import { commandPaletteSpec } from './components/command-palette.ts';
+import { playerBarSpec } from './components/player-bar.ts';
 import { playerCardSpec } from './components/player-card.ts';
 import { popoverSpec } from './components/popover.ts';
 import { progressBarSpec } from './components/progress-bar.ts';
@@ -174,6 +181,9 @@ import { toastSpec } from './components/toast.ts';
 import { toggleSpec } from './components/toggle.ts';
 import { toolbarSpec } from './components/toolbar.ts';
 import { tooltipSpec } from './components/tooltip.ts';
+import { trackInfoSpec } from './components/track-info.ts';
+import { transportControlsSpec } from './components/transport-controls.ts';
+import { volumeBarSpec } from './components/volume-bar.ts';
 import { statTileSpec } from './components/stat-tile.ts';
 import { deviceFrameSpec } from './components/device-frame.ts';
 import { filterChipSpec } from './components/filter-chip.ts';
@@ -186,6 +196,7 @@ import { heatmapSpec } from './components/heatmap.ts';
 import { breadcrumbsSpec } from './components/breadcrumbs.ts';
 import { paginationSpec } from './components/pagination.ts';
 import { accordionSpec } from './components/accordion.ts';
+import { audioEqualizerSpec } from './components/audio-equalizer.ts';
 import { tableSpec } from './components/table.ts';
 import { drawerSpec } from './components/drawer.ts';
 import { alertDialogSpec } from './components/alert-dialog.ts';
@@ -220,6 +231,7 @@ import { timeSeriesChartSpec } from './components/time-series-chart.ts';
 import { deliveryStatusSpec } from './components/delivery-status.ts';
 import { conversationViewSpec } from './components/conversation-view.ts';
 import { messageBubbleSpec, messageGroupSpec, messageMetaSpec } from './components/message-bubble.ts';
+import { messageBarSpec, typingIndicatorSpec } from './components/message-bar.ts';
 
 /** Bump when the schema shape changes in a breaking way. */
 export const SPEC_VERSION = '0.1.0';
@@ -285,6 +297,10 @@ export const specs: ComponentSpec[] = [
   colorPickerSpec,
   commandPaletteSpec,
   playerCardSpec,
+  trackInfoSpec,
+  transportControlsSpec,
+  volumeBarSpec,
+  playerBarSpec,
   popoverSpec,
   menuSpec,
   appShellSpec,
@@ -304,6 +320,7 @@ export const specs: ComponentSpec[] = [
   breadcrumbsSpec,
   paginationSpec,
   accordionSpec,
+  audioEqualizerSpec,
   tableSpec,
   drawerSpec,
   alertDialogSpec,
@@ -328,9 +345,11 @@ export const specs: ComponentSpec[] = [
   wizardSpec,
   deliveryStatusSpec,
   messageMetaSpec,
+  typingIndicatorSpec,
   conversationViewSpec,
   messageBubbleSpec,
   messageGroupSpec,
+  messageBarSpec,
 ];
 
 /** Specs keyed by id for O(1) lookup. */

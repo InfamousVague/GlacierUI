@@ -22,6 +22,7 @@ import {
   useControlled,
   SEEK_VIEW_HEIGHT,
   SEEK_VIEW_WIDTH,
+  type SeekBarBeat,
 } from '@glacier/logic';
 import { t } from '../../tokens.ts';
 import { sizeFor, dimensionsFor } from '../../resolve.ts';
@@ -70,6 +71,28 @@ export interface SeekBarProps
   rail?: SeekBarRail;
   /** Normalized 0-1 loudness samples for the waveform, spikes, bars, and mirror shapes. */
   levels?: number[];
+  /**
+   * Live beat state - a 0-1 `pulse` and the hits still travelling as `ripples`.
+   * The squiggle swells with the pulse and each hit ripples outward, so the bar
+   * deforms in time with the music. `useBeat` in `@glacier/logic` produces this
+   * from a player's metering. Ignored by `line`.
+   */
+  beat?: SeekBarBeat;
+  /**
+   * How hard the `beat` deforms the bar, from 0 (still) to
+   * `SEEK_MAX_INTENSITY`. Defaults to `SEEK_DEFAULT_INTENSITY` (1). Turn it up
+   * for a bar that is the hero of a now-playing screen, down for one sitting in
+   * a dense list.
+   */
+  intensity?: number;
+  /**
+   * Draws a tracer under the played run: a half-opacity copy of the bar in its
+   * own tone, lagging the beat by a fixed slice of time. It holds its shape
+   * only as long as the beat it trails does, sinking back toward the flat rail
+   * between hits and being thrown out again by the next one. Needs a `beat` to
+   * lag behind.
+   */
+  tracer?: boolean;
   /** Formats a position for the accessibility value. Defaults to m:ss. */
   formatTime?: (seconds: number) => string;
   /** Bar height step. */
@@ -123,7 +146,6 @@ const Track = View as unknown as ComponentType<
   > & {
     ref?: { current: { measureInWindow?: (cb: (x: number) => void) => void } | null };
     onLayout?: (e: LayoutEvent) => void;
-    accessibilityValue?: { min: number; max: number; now: number; text?: string };
     onStartShouldSetResponder?: () => boolean;
     onMoveShouldSetResponder?: () => boolean;
     onResponderGrant?: (e: SeekResponderEvent) => void;
@@ -150,6 +172,9 @@ export function SeekBar({
   fill = 'solid',
   rail = 'muted',
   levels,
+  beat,
+  intensity,
+  tracer = false,
   formatTime = formatDuration,
   size = 'md',
   disabled = false,
@@ -226,7 +251,14 @@ export function SeekBar({
     );
   }
 
-  const { playedPath, aheadPath } = seekBarGeometry({ shape, progress, levels });
+  const { playedPath, aheadPath, tracerPath, tracerFade } = seekBarGeometry({
+    shape,
+    progress,
+    levels,
+    beat,
+    intensity,
+    tracer,
+  });
   // Cap and weight come from the same classifier the DOM kit uses, so an
   // equalizer butts its caps identically on both platforms.
   const stroke = seekBarStroke(shape);
@@ -333,6 +365,24 @@ export function SeekBar({
         )}
         {/* The viewBox stretches to the bar's box, so only a non-scaling stroke
             keeps an even weight and a round cap actually round. */}
+        {/* Drawn first so it sits under both runs: it is the bar's shadow, and
+            a shadow that covers what casts it is just a second bar. The tone's
+            solid colour even under a gradient - a second ramp would drift out
+            of family with the run it is trailing. Half opacity carries the
+            fade, so the shadow leaves entirely as the last of the beat dies
+            rather than lying under a stopped bar as a flat line. */}
+        {tracerPath !== undefined && tracerPath !== '' && (
+          <Path
+            d={tracerPath}
+            fill="none"
+            stroke={t(paint.from)}
+            strokeOpacity={0.5 * (tracerFade ?? 1)}
+            strokeWidth={strokeWidth}
+            strokeLinecap={stroke.cap}
+            strokeLinejoin="round"
+            vectorEffect="non-scaling-stroke"
+          />
+        )}
         {aheadPath !== '' && (
           <Path
             d={aheadPath}

@@ -90,6 +90,16 @@
     background: var(--glacier-accent-soft);
 }
 
+/* A row that opens on click reads as a target: the pointer changes and the row
+   lifts on hover. */
+.interactiveRow {
+    cursor: pointer;
+}
+
+.interactiveRow:hover {
+    background: var(--glacier-hover);
+}
+
 .emptyCell {
     padding: var(--glacier-space-8) var(--glacier-space-4);
     text-align: center;

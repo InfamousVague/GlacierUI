@@ -55,13 +55,16 @@ export const seekBarSpec: ComponentSpec = {
       item: { type: 'number', description: 'One normalized 0-1 loudness sample; samples spread evenly across the duration.' },
       description: 'Loudness samples read by the waveform, spikes, bars, and mirror shapes. Omitted, every sample reads as full, so the modulated shapes degrade to their even counterparts and the level shapes to an even comb.',
     },
+    { name: 'beat', type: 'object', description: 'Live beat state - a 0-1 pulse and the hits still travelling as ripples. The squiggle swells with the pulse and each ripple bumps it as it passes, so the bar deforms in time with what is playing. The plain line ignores it, and reduced motion drops it entirely.' },
+    { name: 'intensity', type: 'number', default: 1, description: 'How hard the beat deforms the bar, from 0 (still) to 3. The default of 1 is the tuned baseline: the beat reads as the music without the bar drawing attention to itself. Scales the swell and the ripples together, so turning it up reads as a more emphatic bar rather than a different effect, and 0 holds the bar still without the caller tearing down its meter.' },
+    { name: 'tracer', type: 'boolean', default: false, description: "Draws a tracer under the played run: a half-opacity copy of the bar in its own tone, lagging the beat by a fixed slice of time. It holds its shape only as long as the beat it trails does, sinking back toward the flat rail between hits and being thrown out again by the next one, so it reads as something settling behind the bar rather than a second copy of it. Needs a beat to lag behind; without one there is nothing to hold it out, so nothing is drawn." },
     { name: 'step', type: 'number', default: 5, description: 'Arrow-key step in seconds; Page keys move by ten steps.' },
     { name: 'formatTime', type: 'handler', description: 'Formats a position for aria-valuetext. Defaults to m:ss.' },
     { name: 'size', type: 'enum', values: compactSizes, default: 'md', description: 'Bar height step.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Dims the bar and blocks pointer and keyboard input.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },
   ],
-  defaults: { defaultValue: 0, shape: 'swell', rail: 'muted', tone: 'accent', fill: 'solid', step: 5, size: 'md', disabled: false, skeleton: false },
+  defaults: { defaultValue: 0, shape: 'swell', rail: 'muted', tone: 'accent', fill: 'solid', intensity: 1, tracer: false, step: 5, size: 'md', disabled: false, skeleton: false },
   dimensions: {
     height: '2rem',
     strokeWidth: '3px',
@@ -91,6 +94,16 @@ export const seekBarSpec: ComponentSpec = {
       name: 'hover',
       description: 'The bar lifts its ahead run toward the strong border so the whole control reads as grabbable.',
       tokens: { ahead: token('border-strong') },
+    },
+    {
+      name: 'beat',
+      description: 'Fed live beat state, the squiggle breathes with the music: the pulse swells the whole run by up to a third of its height, and each hit rises as a crest at the playhead and travels outward, thinning as it goes. Geometry only - no colour changes - so the bar still reads as one control. How far it goes is the intensity prop\'s to set.',
+      behavioral: true,
+    },
+    {
+      name: 'tracer',
+      description: "A second copy of the played run, drawn underneath in the tone's own solid colour at half opacity and lagging the beat by a fixed slice of time. Unlike the bar, which always draws its full body, the tracer keeps only as much of its resting shape as the beat it trails still carries: each hit throws it out and it settles back toward the rail until the next one catches it. The solid token even under a gradient: a second ramp would drift out of family with the run it is trailing.",
+      tokens: { tracer: token('accent-solid') },
     },
     { name: 'focus-visible', description: 'A 2px accent ring outlines the track.', tokens: { ring: token('focus-ring') } },
     { name: 'disabled', description: 'Halved opacity, pointer and keyboard input ignored.' },
@@ -124,7 +137,7 @@ export const seekBarSpec: ComponentSpec = {
   },
   motion: {
     description:
-      'Position never eases. The played run is an SVG path that repaints the instant progress changes and cannot be transitioned, so easing the thumb alone would let the paint arrive ahead of its own playhead on every jump; the two are drawn from one value and move as one. Only size animates - the thumb thickens while the pointer is down - and that snaps under reduced motion.',
+      'Position never eases. The played run is an SVG path that repaints the instant progress changes and cannot be transitioned, so easing the thumb alone would let the paint arrive ahead of its own playhead on every jump; the two are drawn from one value and move as one. Only size animates - the thumb thickens while the pointer is down - and that snaps under reduced motion. The beat deformation is not a transition either: the shape is redrawn per frame from live audio, which is why reduced motion drops it rather than shortening it.',
     transition: { speed: 'fast', ease: 'out' },
   },
 };

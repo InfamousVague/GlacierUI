@@ -49,7 +49,7 @@ when validated.
       frozen-rAF screenshot both land on it.
 
 
-## Atoms (43)
+## Atoms (44)
 
 - [x] Avatar
 - [x] Banner
@@ -94,8 +94,12 @@ when validated.
 - [x] Text
 - [x] Textarea
 - [x] Toggle
+- [ ] TypingIndicator
+  - [ ] Not yet validated: the dot pulse is CSS keyframes on the web and the
+        resting frame on native, which is also the web's reduced-motion frame.
+        The sentence is the content on both, so the panes should read alike.
 
-## Molecules (21)
+## Molecules (22)
 
 - [x] Accordion
 - [x] Breadcrumbs
@@ -109,6 +113,12 @@ when validated.
 - [x] FormSection
 - [x] Heatmap
 - [x] List
+- [ ] MessageBar
+  - [ ] Not yet validated on a device. The height seam is the one to check: the
+        web grows through a hidden twin under CSS grid, native through
+        `onContentSizeChange`, both clamped by the same minRows / maxRows.
+  - [ ] The submit chord is a prop on both bindings, deliberately, so a device
+        build has to pass `modifier` rather than expecting it to be inferred.
 - [x] MultiSelect &nbsp;`▲ overlay`
 - [x] Pagination
 - [x] ScrollArea

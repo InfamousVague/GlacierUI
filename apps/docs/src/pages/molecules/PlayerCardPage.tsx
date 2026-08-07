@@ -1,5 +1,17 @@
-import { Heading, Image, PlayerCard, Stack, Text, TextTone, Size, useT, type PlayerRepeat } from '@glacier/react';
-import { useState } from 'react';
+import {
+  Heading,
+  Image,
+  PlayerCard,
+  Stack,
+  Text,
+  TextTone,
+  Size,
+  createAnalyserMeter,
+  useT,
+  type PlayerRepeat,
+} from '@glacier/react';
+import { useBeat, type LoudnessMeter } from '@glacier/logic';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Example, PropsTable, prose } from '../../docs-ui.tsx';
 import { ComponentBlueprint } from '../../Blueprint.tsx';
 import { m } from '../../i18n.ts';
@@ -30,33 +42,103 @@ const ART = `data:image/svg+xml;utf8,${encodeURIComponent(
 
 const artwork = <Image src={ART} alt="" aspectRatio={1} radius="md" />;
 
-/** The card driving real state, so the controls visibly do something. */
+/**
+ * Streamed rather than bundled: the kit ships no audio, and nothing about this
+ * track is precomputed. Kevin MacLeod's "Funky Chunk", CC BY 3.0, served by
+ * Wikimedia with `Access-Control-Allow-Origin` - which the analyser requires,
+ * since cross-origin media taints the graph and reads as silence. Something
+ * with a backbeat on purpose: this is the example that has to prove the bar is
+ * moving with the music rather than on a timer.
+ */
+const TRACK_URL =
+  'https://upload.wikimedia.org/wikipedia/commons/a/a2/Funky_Chunk_%28ISRC_USUAN1500054%29.mp3';
+
+/**
+ * The whole card, driving a real track.
+ *
+ * None of the transport is simulated: the position comes off the element, the
+ * bar seeks it, and `useBeat` reads a Web Audio analyser on that same element
+ * to find the hits the seek bar deforms on. The card knows nothing about any of
+ * it - `beat` arrives as a prop, the way `duration` does.
+ */
 function FullPlayer() {
   const t = useT();
-  const [position, setPosition] = useState(84);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [meter, setMeter] = useState<LoudnessMeter | null>(null);
+  const [position, setPosition] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [shuffle, setShuffle] = useState(false);
   const [repeat, setRepeat] = useState<PlayerRepeat>('off');
+
+  // `at` is where a hit lands on the bar, so ripples leave the playhead rather
+  // than a fixed point.
+  const beat = useBeat({ meter, active: playing, at: duration > 0 ? position / duration : 0 });
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const onTime = () => setPosition(audio.currentTime);
+    const onMeta = () => setDuration(audio.duration || 0);
+    const onEnded = () => setPlaying(false);
+    audio.addEventListener('timeupdate', onTime);
+    audio.addEventListener('loadedmetadata', onMeta);
+    audio.addEventListener('ended', onEnded);
+    return () => {
+      audio.removeEventListener('timeupdate', onTime);
+      audio.removeEventListener('loadedmetadata', onMeta);
+      audio.removeEventListener('ended', onEnded);
+    };
+  }, []);
+
+  const seek = useCallback((seconds: number) => {
+    setPosition(seconds);
+    if (audioRef.current) audioRef.current.currentTime = seconds;
+  }, []);
+
+  const toggle = useCallback((next: boolean) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (next) {
+      // Built here, inside the click on the card's own play button: an
+      // AudioContext created before the first user gesture starts suspended,
+      // and on WebKit never recovers.
+      setMeter(() => createAnalyserMeter(audio).meter);
+      void audio.play();
+    } else {
+      audio.pause();
+    }
+    setPlaying(next);
+  }, []);
+
   return (
-    <PlayerCard
-      layout="inline"
-      artwork={artwork}
-      title={t(m.playerDemoTitle)}
-      subtitle={t(m.playerDemoArtist)}
-      album={t(m.playerDemoAlbum)}
-      duration={DURATION}
-      value={position}
-      onValueChange={setPosition}
-      playing={playing}
-      onPlayingChange={setPlaying}
-      onSkipBack={() => setPosition(0)}
-      onSkipForward={() => setPosition(DURATION)}
-      shuffle={shuffle}
-      onShuffleChange={setShuffle}
-      repeat={repeat}
-      onRepeatChange={setRepeat}
-      levels={LEVELS}
-    />
+    <Stack gap={2} width="full">
+      {/* crossOrigin is what keeps the analyser readable; without it the graph
+          is tainted and every reading comes back silent */}
+      <audio ref={audioRef} src={TRACK_URL} crossOrigin="anonymous" preload="metadata" />
+      <PlayerCard
+        layout="inline"
+        artwork={artwork}
+        title={t(m.playerDemoTitle)}
+        subtitle={t(m.playerDemoArtist)}
+        album={t(m.playerDemoAlbum)}
+        duration={duration}
+        value={position}
+        onValueChange={seek}
+        playing={playing}
+        onPlayingChange={toggle}
+        onSkipBack={() => seek(0)}
+        onSkipForward={() => seek(duration)}
+        shuffle={shuffle}
+        onShuffleChange={setShuffle}
+        repeat={repeat}
+        onRepeatChange={setRepeat}
+        beat={beat}
+      />
+      <Text size={Size.XSmall} tone={TextTone.Subtle}>
+        {t(m.seekFunkCredit)}
+      </Text>
+    </Stack>
   );
 }
 
@@ -78,27 +160,37 @@ export function PlayerCardPage() {
       <Example
         title={t(m.playerEx1Title)}
         description={prose(t(m.playerEx1Desc))}
-        code={`const [position, setPosition] = useState(84);
-const [playing, setPlaying] = useState(false);
+        code={`// the analyser has to be built inside the gesture that starts playback
+const beat = useBeat({ meter, active: playing, at: position / duration });
 
+const toggle = (next: boolean) => {
+  if (next) {
+    setMeter(() => createAnalyserMeter(audioRef.current).meter);
+    void audioRef.current.play();
+  } else {
+    audioRef.current.pause();
+  }
+  setPlaying(next);
+};
+
+<audio ref={audioRef} src={track} crossOrigin="anonymous" preload="metadata" />
 <PlayerCard
   layout="inline"
   artwork={<Image src={cover} alt="" aspectRatio={1} radius="md" />}
-  title="Oboe Concerto No. 2 in D minor"
-  subtitle="Tomaso Albinoni"
-  album="Oboe Concertos, Op. 9 - III. Allegro"
-  duration={205}
+  title="Funky Chunk"
+  subtitle="Kevin MacLeod"
+  duration={duration}
   value={position}
-  onValueChange={setPosition}
+  onValueChange={seek}
   playing={playing}
-  onPlayingChange={setPlaying}
-  onSkipBack={() => setPosition(0)}
-  onSkipForward={() => setPosition(205)}
+  onPlayingChange={toggle}
+  onSkipBack={() => seek(0)}
+  onSkipForward={() => seek(duration)}
   shuffle={shuffle}
   onShuffleChange={setShuffle}
   repeat={repeat}
   onRepeatChange={setRepeat}
-  levels={levels}
+  beat={beat}
 />`}
       >
         <div style={{ width: '100%', maxWidth: '28rem' }}>
@@ -194,44 +286,61 @@ const [playing, setPlaying] = useState(false);
         component="PlayerCard"
         code={`<PlayerCard layout="stacked" artwork={art} title="…" duration={205} defaultValue={84} />
 <PlayerCard layout="inline"  artwork={art} title="…" subtitle="artist" album="album" duration={205} defaultValue={84} />
-<PlayerCard layout="square"  artwork={art} duration={205} defaultValue={84} />`}
+<PlayerCard layout="square"  artwork={art} duration={205} defaultValue={84} />
+<PlayerCard layout="bar"     artwork={art} title="…" subtitle="artist" duration={205} defaultValue={84} />`}
         render={(K) => (
-          <Stack gap={5} width="full" maxWidth="md">
-            <K.PlayerCard
-              layout="stacked"
-              artwork={artwork}
-              title={t(m.playerDemoTitle)}
-              subtitle={t(m.playerDemoArtist)}
-              album={t(m.playerDemoAlbum)}
-              duration={DURATION}
-              defaultValue={84}
-              levels={LEVELS}
-              onSkipBack={() => undefined}
-              onSkipForward={() => undefined}
-            />
-            <K.PlayerCard
-              layout="inline"
-              artwork={artwork}
-              title={t(m.playerDemoTitle)}
-              subtitle={t(m.playerDemoArtist)}
-              album={t(m.playerDemoAlbum)}
-              duration={DURATION}
-              defaultValue={84}
-              levels={LEVELS}
-              onSkipBack={() => undefined}
-              onSkipForward={() => undefined}
-            />
-            <div style={{ maxWidth: '17rem' }}>
+          <Stack gap={5} width="full">
+            <Stack gap={5} width="full" maxWidth="md">
               <K.PlayerCard
-                layout="square"
+                layout="stacked"
                 artwork={artwork}
+                title={t(m.playerDemoTitle)}
+                subtitle={t(m.playerDemoArtist)}
+                album={t(m.playerDemoAlbum)}
                 duration={DURATION}
                 defaultValue={84}
                 levels={LEVELS}
                 onSkipBack={() => undefined}
                 onSkipForward={() => undefined}
               />
-            </div>
+              <K.PlayerCard
+                layout="inline"
+                artwork={artwork}
+                title={t(m.playerDemoTitle)}
+                subtitle={t(m.playerDemoArtist)}
+                album={t(m.playerDemoAlbum)}
+                duration={DURATION}
+                defaultValue={84}
+                levels={LEVELS}
+                onSkipBack={() => undefined}
+                onSkipForward={() => undefined}
+              />
+              <div style={{ maxWidth: '17rem' }}>
+                <K.PlayerCard
+                  layout="square"
+                  artwork={artwork}
+                  duration={DURATION}
+                  defaultValue={84}
+                  levels={LEVELS}
+                  onSkipBack={() => undefined}
+                  onSkipForward={() => undefined}
+                />
+              </div>
+            </Stack>
+            {/* the bar wants the full width the others are held back from */}
+            <K.PlayerCard
+              layout="bar"
+              artwork={artwork}
+              title={t(m.playerDemoTitle)}
+              subtitle={t(m.playerDemoArtist)}
+              duration={DURATION}
+              defaultValue={84}
+              levels={LEVELS}
+              onSkipBack={() => undefined}
+              onSkipForward={() => undefined}
+              onShuffleChange={() => undefined}
+              onRepeatChange={() => undefined}
+            />
           </Stack>
         )}
       />
@@ -267,7 +376,7 @@ const [playing, setPlaying] = useState(false);
       <PropsTable
         props={[
           { name: 'artwork', type: 'ReactNode', description: t(m.playerPropArtwork) },
-          { name: 'layout', type: "'stacked' | 'inline' | 'square'", default: "'stacked'", description: t(m.playerPropLayout) },
+          { name: 'layout', type: "'stacked' | 'inline' | 'square' | 'bar'", default: "'stacked'", description: t(m.playerPropLayout) },
           { name: 'density', type: "'compact' | 'comfortable' | 'spacious'", default: "'comfortable'", description: t(m.playerPropDensity) },
           { name: 'title', type: 'ReactNode', description: t(m.playerPropTitle) },
           { name: 'subtitle', type: 'ReactNode', description: t(m.playerPropSubtitle) },
@@ -286,7 +395,7 @@ const [playing, setPlaying] = useState(false);
           { name: 'onShuffleChange', type: '(on: boolean) => void', description: t(m.playerPropShuffle) },
           { name: 'repeat', type: "'off' | 'all' | 'one'", description: t(m.playerPropRepeat) },
           { name: 'onRepeatChange', type: '(mode) => void', description: t(m.playerPropRepeat) },
-          { name: 'shape / tone / fill / levels', type: 'SeekBar props', description: t(m.playerPropSeek) },
+          { name: 'shape / tone / fill / levels / beat / intensity / tracer', type: 'SeekBar props', description: t(m.playerPropSeek) },
           { name: 'formatTime', type: '(seconds: number) => string', description: t(m.playerPropFormatTime) },
           { name: 'labels', type: 'Partial<PlayerCardLabels>', description: t(m.playerPropLabels) },
           { name: 'disabled', type: 'boolean', default: 'false', description: t(m.seekPropDisabled) },

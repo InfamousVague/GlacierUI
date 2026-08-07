@@ -11,6 +11,8 @@ import {
   messageSide,
   type MessageLabels,
   type MessageLayout,
+  type MessageSide,
+  type ReadReceiptTemplates,
 } from '@glacier/logic';
 import type { CSSProperties, ComponentProps, ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
@@ -51,6 +53,15 @@ export interface MessageGroupProps<M extends ChatMessage = ChatMessage>
   own?: boolean;
   /** The reading user, compared against the run's authorId. */
   viewerId?: string;
+  /**
+   * Overrides the edge authorship would choose, for the whole run.
+   *
+   * Logical, never physical, so a right-to-left transcript still mirrors as a
+   * whole. This is how a thread becomes one column of bubbles without lying
+   * about `own` - which would move the run and silently take its delivery
+   * state with it, since a run that is not local is not allowed one.
+   */
+  side?: MessageSide;
   /** Drawn once at the head of the run, never on a continued one. */
   avatar?: ReactNode;
   /** Drawn once at the head of the run, never on a continued one. */
@@ -77,6 +88,10 @@ export interface MessageGroupProps<M extends ChatMessage = ChatMessage>
   renderReplyTo?: (context: MessageSlotContext<M>) => ReactNode;
   /** Translated delivery and edited words. */
   labels?: Partial<MessageLabels>;
+  /** How many reader names the run's receipt line has room for. */
+  readByMax?: number;
+  /** Translated read-receipt sentences, one per shape. */
+  receiptTemplates?: Partial<ReadReceiptTemplates>;
   /** Renders the run as placeholders at its real footprint. */
   skeleton?: boolean;
 }
@@ -106,6 +121,7 @@ export function MessageGroup<M extends ChatMessage = ChatMessage>({
   layout = 'bubble',
   own,
   viewerId,
+  side,
   avatar,
   authorName,
   authorLabel,
@@ -117,6 +133,8 @@ export function MessageGroup<M extends ChatMessage = ChatMessage>({
   renderAttachments,
   renderReplyTo,
   labels,
+  readByMax,
+  receiptTemplates,
   skeleton = false,
   className,
   style,
@@ -124,7 +142,10 @@ export function MessageGroup<M extends ChatMessage = ChatMessage>({
 }: MessageGroupProps<M>) {
   const isOwn = own ?? (viewerId !== undefined && group.authorId === viewerId);
   const metrics = messageMetrics(layout);
-  const side = layout === 'row' ? 'start' : messageSide(isOwn);
+  // A row transcript is one column, so authorship moves nothing there; an
+  // explicit side outranks both, and is the only way to pin a bubble run to one
+  // edge without lying about who wrote it.
+  const resolvedSide = side ?? (layout === 'row' ? 'start' : messageSide(isOwn));
   // A system notice is not a person talking, so it never grows a tail even at
   // the end of what is technically a run of one.
   const wantsTails = tails && layout === 'bubble' && !group.standalone;
@@ -138,6 +159,13 @@ export function MessageGroup<M extends ChatMessage = ChatMessage>({
 
   const statuses = group.messages.map((message) => message.status);
   const label = authorLabel ?? (typeof authorName === 'string' ? authorName : undefined);
+
+  // The run reports one receipt, not one per bubble, and it is the last
+  // message's - the same message the run's stamp already prints. A receipt per
+  // bubble would say the same sentence four times down a single utterance.
+  const last = group.messages[group.messages.length - 1];
+  const receiptAt = isOwn ? last?.readAt : undefined;
+  const receiptBy = isOwn ? last?.readBy : undefined;
 
   const header = showHeader && (authorName != null || layout === 'row') && (
     <div className={styles.header}>
@@ -164,12 +192,24 @@ export function MessageGroup<M extends ChatMessage = ChatMessage>({
         now={now}
         locale={locale}
         statuses={statuses}
+        readAt={receiptAt}
+        readBy={receiptBy}
+        readByMax={readByMax}
+        receiptTemplates={receiptTemplates}
         labels={labels}
         skeleton={skeleton}
       />
     ) : (
-      statuses.some((status) => status !== undefined) && (
-        <MessageMeta statuses={statuses} announceTime={false} labels={labels} />
+      (statuses.some((status) => status !== undefined) || receiptAt !== undefined || receiptBy !== undefined) && (
+        <MessageMeta
+          statuses={statuses}
+          readAt={receiptAt}
+          readBy={receiptBy}
+          readByMax={readByMax}
+          receiptTemplates={receiptTemplates}
+          announceTime={false}
+          labels={labels}
+        />
       )
     );
 
@@ -178,7 +218,7 @@ export function MessageGroup<M extends ChatMessage = ChatMessage>({
       className={cx(styles.group, className)}
       style={{ ...vars, ...style }}
       data-layout={layout}
-      data-side={side}
+      data-side={resolvedSide}
       data-own={isOwn || undefined}
       data-continued={group.continued || undefined}
       data-standalone={group.standalone || undefined}
@@ -203,6 +243,11 @@ export function MessageGroup<M extends ChatMessage = ChatMessage>({
               key={message.id}
               layout={layout}
               own={isOwn}
+              // Forwarded rather than left to the bubble's own derivation, or
+              // an override set on the run would reach the group's alignment
+              // and stop at the bubble's corner geometry - which is exactly the
+              // kind of half-applied prop nobody notices until a screenshot.
+              side={resolvedSide}
               position={position}
               tail={bubbleHasTail(position, wantsTails)}
               edited={message.editedAt !== undefined}

@@ -1,7 +1,9 @@
 import {
   type BubblePosition,
   type DeliveryStatus,
+  type MessageReader,
   type Millis,
+  type ReadReceiptTemplates,
 } from '@glacier/logic';
 import {
   BUBBLE_MAX_WIDTH,
@@ -51,6 +53,17 @@ export interface MessageBubbleProps extends Omit<ComponentProps<'div'>, 'content
   locale?: string;
   /** How far along the send is; omitted for anything received. */
   status?: DeliveryStatus;
+  /**
+   * When it was read. Drawn only on the viewer's own message: a receipt about
+   * something you received says nothing, exactly as a delivery tick there does.
+   */
+  readAt?: Millis;
+  /** Who read it, for a group thread where one tick cannot name them. */
+  readBy?: MessageReader[];
+  /** How many reader names the receipt line has room for. */
+  readByMax?: number;
+  /** Translated read-receipt sentences, one per shape. */
+  receiptTemplates?: Partial<ReadReceiptTemplates>;
   /** Marks a message its author changed after sending. */
   edited?: boolean;
   /** Replaces the default timestamp and status line entirely. */
@@ -103,6 +116,10 @@ export function MessageBubble({
   now,
   locale,
   status,
+  readAt,
+  readBy,
+  readByMax,
+  receiptTemplates,
   edited = false,
   meta,
   reactions,
@@ -143,7 +160,13 @@ export function MessageBubble({
     '--message-tail-scale': tailScaleX(resolvedSide),
   } as CSSProperties;
 
-  const hasMeta = meta !== undefined || at !== undefined || status !== undefined || edited;
+  // A receipt is a claim about the viewer's own outbox, so it is drawn only on
+  // the viewer's own message - the same rule the delivery tick lives under, for
+  // the same reason: "Read by Ana" under something Ana sent you is nonsense.
+  const receiptAt = own ? readAt : undefined;
+  const receiptBy = own ? readBy : undefined;
+  const hasReceipt = receiptAt !== undefined || (receiptBy !== undefined && receiptBy.length > 0);
+  const hasMeta = meta !== undefined || at !== undefined || status !== undefined || edited || hasReceipt;
 
   return (
     <div
@@ -176,6 +199,10 @@ export function MessageBubble({
                 now={now}
                 locale={locale}
                 status={status}
+                readAt={receiptAt}
+                readBy={receiptBy}
+                readByMax={readByMax}
+                receiptTemplates={receiptTemplates}
                 edited={edited}
                 own={own && layout === 'bubble'}
                 labels={labels}

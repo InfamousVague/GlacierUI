@@ -80,6 +80,18 @@ describe('DataGrid', () => {
     expect(nameColumn()).toEqual(['Charlie', 'Alice', 'Bob']);
   });
 
+  it('opens a row on click and on Enter, reporting its id', () => {
+    const onRowActivate = vi.fn();
+    render(<DataGrid aria-label="People" columns={COLUMNS} data={DATA} onRowActivate={onRowActivate} />);
+    // click a cell: the whole row opens
+    fireEvent.click(screen.getByText('Charlie'));
+    expect(onRowActivate).toHaveBeenCalledWith(1);
+    // Enter on the focused row opens it too
+    fireEvent.focus(screen.getByText('Alice'));
+    fireEvent.keyDown(screen.getByRole('grid'), { key: 'Enter' });
+    expect(onRowActivate).toHaveBeenLastCalledWith(2);
+  });
+
   it('selects a single row and reports the next selection', () => {
     const onSelectionChange = vi.fn();
     render(<DataGrid aria-label="People" columns={COLUMNS} data={DATA} selectable onSelectionChange={onSelectionChange} />);

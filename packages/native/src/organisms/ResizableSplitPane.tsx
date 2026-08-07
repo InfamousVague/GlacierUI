@@ -96,7 +96,6 @@ const Root = View as unknown as ComponentType<ViewProps & { onLayout?: (event: L
 const Divider = View as unknown as ComponentType<
   Omit<ViewProps, 'onResponderGrant' | 'onResponderMove' | 'onPointerDown' | 'onPointerMove' | 'onPointerUp'> & {
     hitSlop?: number;
-    accessibilityValue?: { min: number; max: number; now: number };
     accessibilityActions?: Array<{ name: string }>;
     onAccessibilityAction?: (event: AccessibilityActionEvent) => void;
     onResponderGrant?: (event: ResponderDragEvent) => void;

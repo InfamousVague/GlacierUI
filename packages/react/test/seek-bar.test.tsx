@@ -51,6 +51,27 @@ describe('SeekBar', () => {
     expect(screen.getByRole('slider')).toHaveAttribute('aria-valuetext', '84 sec');
   });
 
+  it('deforms with a beat, as far as intensity lets it', () => {
+    const beat = { pulse: 0.8, ripples: [{ at: 0.5, age: 0.2, strength: 1 }] };
+    /** Height of the tallest deflection in the played run. */
+    const spread = (intensity?: number) => {
+      const { container } = render(
+        <SeekBar duration={100} value={100} beat={beat} intensity={intensity} aria-label="Seek" />,
+      );
+      const d = container.querySelector('path')?.getAttribute('d') ?? '';
+      const ys = [...d.matchAll(/-?[\d.]+ (-?[\d.]+)/g)].map((mm) => Number(mm[1]));
+      return Math.max(...ys) - Math.min(...ys);
+    };
+    const still = spread(0);
+    expect(spread()).toBeGreaterThan(still);
+    expect(spread(2)).toBeGreaterThan(spread());
+    // 0 is the bar the same props draw with no beat at all
+    const { container } = render(<SeekBar duration={100} value={100} aria-label="Seek" />);
+    const d = container.querySelector('path')?.getAttribute('d') ?? '';
+    const ys = [...d.matchAll(/-?[\d.]+ (-?[\d.]+)/g)].map((mm) => Number(mm[1]));
+    expect(still).toBe(Math.max(...ys) - Math.min(...ys));
+  });
+
   it('clamps a value outside the duration', () => {
     const { rerender } = render(<SeekBar duration={100} value={500} aria-label="Seek" />);
     expect(screen.getByRole('slider')).toHaveAttribute('aria-valuenow', '100');

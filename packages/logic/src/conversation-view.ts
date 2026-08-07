@@ -168,6 +168,16 @@ function normalise<M extends ChatMessage>(
 ): MessageGroup<M> {
   const messages = group.messages.map((message) => {
     const status = !delivery || !local ? undefined : message.status ?? CONVERSATION_ASSUMED_STATUS;
+    // Read history lives under the same rule as the tick, and for the same
+    // reason: "Read by Ana" beneath something Ana sent you is not a fact about
+    // anything. A transport that syncs receipts onto every row it touches is
+    // ordinary, so the receipt is stripped rather than merely left undrawn.
+    const strippedReceipt =
+      (!delivery || !local) && (message.readAt !== undefined || message.readBy !== undefined);
+    if (strippedReceipt) {
+      const { readAt: _readAt, readBy: _readBy, ...rest } = message;
+      return { ...rest, status } as M;
+    }
     // Identity is preserved where nothing changed, so a confirmed remote
     // transcript re-renders without allocating a second copy of itself.
     return status === message.status ? message : ({ ...message, status } as M);
@@ -197,22 +207,39 @@ export function conversationRuns<M extends ChatMessage>(
   options: ConversationRunsOptions = {},
 ): ConversationRun<M>[] {
   const { windowMs, delivery = true } = options;
-  return groupMessages(messages, windowMs === undefined ? {} : { windowMs }).map((group) => {
-    const authorship = messageAuthorship(group.authorId, viewerId);
-    const local = authorship === 'local';
-    const normalised = normalise(group, local, delivery);
-    const status = normalised.status;
-    const ack = status === undefined ? undefined : messageAck(status);
-    return {
-      key: normalised.id,
-      group: normalised,
-      authorship,
-      own: local,
-      status,
-      ack,
-      provisional: isProvisional(ack),
-    };
-  });
+  return groupMessages(messages, windowMs === undefined ? {} : { windowMs }).map((group) =>
+    conversationRunOf(group, viewerId, { delivery }),
+  );
+}
+
+/**
+ * Resolves one already-grouped run against the reader.
+ *
+ * Split out of `conversationRuns` because `insertSeparators` can cut a run in
+ * half at the unread divider, and the trailing half is a new group that still
+ * needs both axes answered. Re-deriving them at the call site would be a second
+ * opinion about who wrote a message; this is the first one, reused.
+ */
+export function conversationRunOf<M extends ChatMessage>(
+  group: MessageGroup<M>,
+  viewerId: string,
+  options: { delivery?: boolean } = {},
+): ConversationRun<M> {
+  const { delivery = true } = options;
+  const authorship = messageAuthorship(group.authorId, viewerId);
+  const local = authorship === 'local';
+  const normalised = normalise(group, local, delivery);
+  const status = normalised.status;
+  const ack = status === undefined ? undefined : messageAck(status);
+  return {
+    key: normalised.id,
+    group: normalised,
+    authorship,
+    own: local,
+    status,
+    ack,
+    provisional: isProvisional(ack),
+  };
 }
 
 // ---- scrolling --------------------------------------------------------------

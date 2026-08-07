@@ -93,6 +93,16 @@ export interface PlayerCardProps
    */
   rail?: SeekBarProps['rail'];
   levels?: number[];
+  beat?: SeekBarProps['beat'];
+  intensity?: SeekBarProps['intensity'];
+  /**
+   * Draws the seek bar's tracer, the shadow trailing the beat. On here, unlike
+   * on a bare bar: a card is a now-playing surface, where the bar is the thing
+   * being looked at rather than a rail under something else, and it has the
+   * room to carry a second run. It costs a still card nothing either way -
+   * without a `beat` there is nothing to trail, so nothing is drawn.
+   */
+  tracer?: SeekBarProps['tracer'];
   /** Formats the elapsed and total readouts. */
   formatTime?: (seconds: number) => string;
   /** Dims the card and blocks every control. */
@@ -142,6 +152,9 @@ export function PlayerCard({
   fill,
   rail = 'contrast',
   levels,
+  beat,
+  intensity,
+  tracer = true,
   formatTime = formatDuration,
   disabled = false,
   skeleton = false,
@@ -239,113 +252,152 @@ export function PlayerCard({
     </div>
   );
 
+  const seekBar = (
+    <SeekBar
+      className={styles.seek}
+      duration={duration}
+      value={position}
+      onValueChange={seek}
+      onSeekEnd={onSeekEnd}
+      shape={shape}
+      tone={tone}
+      fill={fill}
+      rail={rail}
+      levels={levels}
+      beat={beat}
+      intensity={intensity}
+      tracer={tracer}
+      formatTime={formatTime}
+      disabled={disabled}
+      skeleton={skeleton}
+      aria-label={text.seek}
+    />
+  );
+
+  // The clock is decoration: the seek bar already speaks the position through
+  // aria-valuetext, so repeating it would double-announce.
+  const elapsed = skeleton ? (
+    <Skeleton variant="text" width={playerSkeletonWidths.clock} />
+  ) : (
+    <Text as="span" size="xs" tone="muted" mono>
+      {formatTime(position)}
+    </Text>
+  );
+  const total = skeleton ? (
+    <Skeleton variant="text" width={playerSkeletonWidths.clock} />
+  ) : (
+    <Text as="span" size="xs" tone="subtle" mono>
+      {formatTime(duration)}
+    </Text>
+  );
+
   const scrubber = (
     <div className={styles.scrubber}>
-      <SeekBar
-        duration={duration}
-        value={position}
-        onValueChange={seek}
-        onSeekEnd={onSeekEnd}
-        shape={shape}
-        tone={tone}
-        fill={fill}
-        rail={rail}
-        levels={levels}
-        formatTime={formatTime}
-        disabled={disabled}
-        skeleton={skeleton}
-        aria-label={text.seek}
-      />
-      {/* The clock is decoration: the seek bar already speaks the position
-          through aria-valuetext, so repeating it would double-announce. */}
+      {seekBar}
       <div className={styles.times} aria-hidden="true">
-        {skeleton ? (
-          <>
-            <Skeleton variant="text" width={playerSkeletonWidths.clock} />
-            <Skeleton variant="text" width={playerSkeletonWidths.clock} />
-          </>
-        ) : (
-          <>
-            <Text as="span" size="xs" tone="muted" mono>
-              {formatTime(position)}
-            </Text>
-            <Text as="span" size="xs" tone="subtle" mono>
-              {formatTime(duration)}
-            </Text>
-          </>
-        )}
+        {elapsed}
+        {total}
       </div>
     </div>
   );
 
+  /**
+   * The bar layout's scrubber: the same bar, with its clocks as endpoints on
+   * either side rather than a caption underneath, since a one-line card has no
+   * row to put them on.
+   */
+  const barScrubber = (
+    <div className={styles.barScrubber}>
+      <div className={styles.clock} aria-hidden="true">
+        {elapsed}
+      </div>
+      {seekBar}
+      <div className={styles.clock} aria-hidden="true">
+        {total}
+      </div>
+    </div>
+  );
+
+  const shuffleControl = hasShuffle && (
+    <IconButton
+      variant="ghost"
+      size={metrics.controlSize}
+      disabled={disabled}
+      skeleton={skeleton}
+      aria-label={text.shuffle}
+      aria-pressed={isShuffling}
+      data-on={isShuffling || undefined}
+      onClick={toggleShuffle}
+    >
+      <Shuffle size={metrics.controlIcon} />
+    </IconButton>
+  );
+
+  const skipBackControl = onSkipBack && (
+    <IconButton
+      variant="ghost"
+      size={metrics.controlSize}
+      disabled={disabled}
+      skeleton={skeleton}
+      aria-label={text.skipBack}
+      onClick={onSkipBack}
+    >
+      <SkipBack size={metrics.controlIcon} />
+    </IconButton>
+  );
+
+  // One button whose label changes, not two that swap, so focus survives the
+  // toggle.
+  const playControl = (
+    <IconButton
+      variant="solid"
+      size={metrics.playSize}
+      disabled={disabled}
+      skeleton={skeleton}
+      aria-label={isPlaying ? text.pause : text.play}
+      onClick={togglePlaying}
+    >
+      {isPlaying ? <Pause size={metrics.playIcon} /> : <Play size={metrics.playIcon} />}
+    </IconButton>
+  );
+
+  const skipForwardControl = onSkipForward && (
+    <IconButton
+      variant="ghost"
+      size={metrics.controlSize}
+      disabled={disabled}
+      skeleton={skeleton}
+      aria-label={text.skipForward}
+      onClick={onSkipForward}
+    >
+      <SkipForward size={metrics.controlIcon} />
+    </IconButton>
+  );
+
+  const repeatControl = hasRepeat && (
+    <IconButton
+      variant="ghost"
+      size={metrics.controlSize}
+      disabled={disabled}
+      skeleton={skeleton}
+      // three states cannot be described by a pressed flag alone, so the
+      // label names the mode as well
+      aria-label={text.repeat(repeatMode)}
+      aria-pressed={repeatMode !== 'off'}
+      data-on={repeatMode !== 'off' || undefined}
+      onClick={cycleRepeat}
+    >
+      {repeatMode === 'one' ? <Repeat1 size={metrics.controlIcon} /> : <Repeat size={metrics.controlIcon} />}
+    </IconButton>
+  );
+
   const transport = (
     <div className={styles.transport}>
-      {hasShuffle && (
-        <IconButton
-          variant="ghost"
-          size={metrics.controlSize}
-          disabled={disabled}
-          skeleton={skeleton}
-          aria-label={text.shuffle}
-          aria-pressed={isShuffling}
-          data-on={isShuffling || undefined}
-          onClick={toggleShuffle}
-        >
-          <Shuffle size={metrics.controlIcon} />
-        </IconButton>
-      )}
-      {onSkipBack && (
-        <IconButton
-          variant="ghost"
-          size={metrics.controlSize}
-          disabled={disabled}
-          skeleton={skeleton}
-          aria-label={text.skipBack}
-          onClick={onSkipBack}
-        >
-          <SkipBack size={metrics.controlIcon} />
-        </IconButton>
-      )}
-      {/* One button whose label changes, not two that swap, so focus survives
-          the toggle. */}
-      <IconButton
-        variant="solid"
-        size={metrics.playSize}
-        disabled={disabled}
-        skeleton={skeleton}
-        aria-label={isPlaying ? text.pause : text.play}
-        onClick={togglePlaying}
-      >
-        {isPlaying ? <Pause size={metrics.playIcon} /> : <Play size={metrics.playIcon} />}
-      </IconButton>
-      {onSkipForward && (
-        <IconButton
-          variant="ghost"
-          size={metrics.controlSize}
-          disabled={disabled}
-          skeleton={skeleton}
-          aria-label={text.skipForward}
-          onClick={onSkipForward}
-        >
-          <SkipForward size={metrics.controlIcon} />
-        </IconButton>
-      )}
-      {hasRepeat && (
-        <IconButton
-          variant="ghost"
-          size={metrics.controlSize}
-          disabled={disabled}
-          skeleton={skeleton}
-          // three states cannot be described by a pressed flag alone, so the
-          // label names the mode as well
-          aria-label={text.repeat(repeatMode)}
-          aria-pressed={repeatMode !== 'off'}
-          data-on={repeatMode !== 'off' || undefined}
-          onClick={cycleRepeat}
-        >
-          {repeatMode === 'one' ? <Repeat1 size={metrics.controlIcon} /> : <Repeat size={metrics.controlIcon} />}
-        </IconButton>
-      )}
+      {shuffleControl}
+      {skipBackControl}
+      {playControl}
+      {skipForwardControl}
+      {repeatControl}
     </div>
   );
 
@@ -366,10 +418,33 @@ export function PlayerCard({
       {...rest}
     >
       <div className={styles.body}>
-        {/* Inline pairs the art with the text as a header row, top-aligned, then
+        {/* Bar puts the whole card on one line: the transport leads, what is
+            playing rides beside it, the seek bar takes what is left between its
+            two clocks, and the modes close the row out. The transport splits in
+            two here rather than sitting as one block, so the buttons that move
+            the track stay under the thumb and the ones that change how it plays
+            step out of the way. */}
+        {layout === 'bar' ? (
+          <>
+            <div className={styles.transport}>
+              {skipBackControl}
+              {playControl}
+              {skipForwardControl}
+            </div>
+            {art}
+            {heading}
+            {barScrubber}
+            {(shuffleControl || repeatControl) && (
+              <div className={styles.transport}>
+                {shuffleControl}
+                {repeatControl}
+              </div>
+            )}
+          </>
+        ) : /* Inline pairs the art with the text as a header row, top-aligned, then
             breaks: the bar and controls get the card's full width rather than
-            being squeezed into the column beside the art. */}
-        {layout === 'inline' ? (
+            being squeezed into the column beside the art. */
+        layout === 'inline' ? (
           <>
             <div className={styles.header}>
               {art}

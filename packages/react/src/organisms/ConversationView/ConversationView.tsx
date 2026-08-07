@@ -1,19 +1,27 @@
 import {
   dimensionsFor,
+  formatMessageTimestamp,
+  insertSeparators,
+  messageTimestamp,
   type ChatMessage,
+  type ChatSequenceItem,
   type MessageLabels,
   type MessageLayout,
+  type MessageSide,
   type Millis,
+  type ReadReceiptTemplates,
 } from '@glacier/logic';
 // re-exported from packages/logic/src/index.ts.
 import {
   CONVERSATION_SKELETON_VIEWER,
   atBottom,
+  conversationRunOf,
   conversationRuns,
   conversationSkeletonMessages,
   type ConversationRun,
 } from '@glacier/logic';
 import {
+  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -25,7 +33,8 @@ import {
 // re-exported from packages/spec/src/index.ts.
 import { conversationViewSpec } from '@glacier/spec';
 import { cx } from '../../internal/cx.ts';
-import { useT } from '../../i18n/LocaleProvider.tsx';
+import { useLocale, useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import { EmptyState } from '../../atoms/feedback/EmptyState/EmptyState.tsx';
 import { MessageGroup, type MessageSlotContext } from '../../molecules/MessageBubble/MessageGroup.tsx';
 import { conversationMessages } from './messages.ts';
@@ -63,12 +72,51 @@ export interface ConversationViewProps<M extends ChatMessage = ChatMessage>
    */
   viewerId: string;
   layout?: MessageLayout;
+  /**
+   * Pins every run to one edge, keeping the bubbles, the fill, and the delivery
+   * marks.
+   *
+   * Logical, never physical, so a right-to-left transcript mirrors as a whole.
+   * The alternative an app would otherwise reach for - lying about `own` to
+   * move a run - has a side effect it will not notice: a run that is not local
+   * is not allowed a delivery state, so faking authorship silently deletes
+   * every tick in the thread.
+   */
+  side?: MessageSide;
   /** The instant timestamps are read against. */
   now?: Millis;
   /** BCP-47 tag for the timestamp formatter. */
   locale?: string;
   /** Pause after which a new run begins; defaults to the shared window. */
   groupWindowMs?: number;
+  /**
+   * Weaves a date row in wherever the local calendar day changes. Off by
+   * default: a thread of today's messages does not need a row saying today.
+   */
+  dayHeaders?: boolean;
+  /**
+   * The id of the first unread message, captured once when the thread opened.
+   *
+   * Pinning an id rather than recomputing from a read watermark is the entire
+   * trick behind a divider that stays where the reader left it: messages append
+   * after it and only its count grows.
+   */
+  unreadAnchorId?: string;
+  /**
+   * Fallback watermark, consulted only when no anchor id resolves. It picks the
+   * first message after the mark that the viewer did not send.
+   */
+  lastReadAt?: Millis;
+  /**
+   * Reports the anchor the divider settled on, so a caller reading from
+   * `lastReadAt` on the first render can pin it and stop the line walking down
+   * the screen as messages are marked read.
+   */
+  onUnreadAnchor?: (anchorId: string | undefined) => void;
+  /** How many reader names a run's receipt line has room for. */
+  readByMax?: number;
+  /** Translated read-receipt sentences, one per shape. */
+  receiptTemplates?: Partial<ReadReceiptTemplates>;
   /** The avatar for one author, drawn once at the head of each run. */
   avatarFor?: (authorId: string) => ReactNode;
   /** The display name for one author, drawn once at the head of each run. */
@@ -131,9 +179,16 @@ export function ConversationView<M extends ChatMessage = ChatMessage>({
   messages,
   viewerId,
   layout = 'bubble',
+  side,
   now,
   locale,
   groupWindowMs,
+  dayHeaders = false,
+  unreadAnchorId,
+  lastReadAt,
+  onUnreadAnchor,
+  readByMax,
+  receiptTemplates,
   avatarFor,
   authorNameFor,
   renderBody,
@@ -148,6 +203,7 @@ export function ConversationView<M extends ChatMessage = ChatMessage>({
   ...rest
 }: ConversationViewProps<M>) {
   const t = useT();
+  const activeLocale = useLocale();
   const scroller = useRef<HTMLDivElement>(null);
   // A ref, not state: whether the reader is parked at the end must be readable
   // inside the layout effect that runs before paint, and re-rendering the whole
@@ -166,6 +222,38 @@ export function ConversationView<M extends ChatMessage = ChatMessage>({
     }
     return conversationRuns(messages, viewerId, groupWindowMs === undefined ? {} : { windowMs: groupWindowMs });
   }, [skeleton, messages, viewerId, groupWindowMs, now]);
+
+  // The separators are opt-in and cost nothing when nobody asked for them: a
+  // thread of today's messages does not want a row saying today, and a caller
+  // who has not modelled unread state should not get a divider guessed for
+  // them. `insertSeparators` is the authority when they are asked for, so the
+  // anchoring rule that keeps the line still is not re-invented here.
+  const wantsSeparators = dayHeaders || unreadAnchorId !== undefined || lastReadAt !== undefined;
+
+  const sequence: ChatSequenceItem<M>[] | undefined = useMemo(() => {
+    if (!wantsSeparators || skeleton) return undefined;
+    return insertSeparators(
+      runs.map((run) => run.group),
+      {
+        dayHeaders,
+        ...(unreadAnchorId === undefined ? {} : { unreadAnchorId }),
+        ...(lastReadAt === undefined ? {} : { lastReadAt }),
+        viewerId,
+      },
+    );
+  }, [wantsSeparators, skeleton, runs, dayHeaders, unreadAnchorId, lastReadAt, viewerId]);
+
+  // Reported rather than left to be read off the divider's key: a caller who
+  // started from a watermark has to pin the resolved id, or the line walks down
+  // the screen as its own client marks messages read.
+  const anchor = sequence?.find((item) => item.kind === 'unread');
+  const anchorId = anchor?.kind === 'unread' ? anchor.anchorId : undefined;
+  const reported = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (reported.current === anchorId) return;
+    reported.current = anchorId;
+    onUnreadAnchor?.(anchorId);
+  }, [anchorId, onUnreadAnchor]);
 
   // What "the thread changed at its end" means, in one primitive: a new tail
   // message, a removed one, or the tail's delivery advancing. Comparing this
@@ -230,35 +318,76 @@ export function ConversationView<M extends ChatMessage = ChatMessage>({
                 description={t(conversationMessages.conversationEmptyBody)}
               />
             )
-          : runs.map((run) => {
-              const name = authorNameFor?.(run.group.authorId);
-              return (
-                <div
-                  key={run.key}
-                  className={styles.run}
-                  // Both axes, side by side and independently queryable - which
-                  // is the whole point of the component, so it is also how it
-                  // is tested and how an app hangs its own affordances off it.
-                  data-authorship={run.authorship}
-                  data-ack={run.ack}
-                  data-provisional={run.provisional || undefined}
-                >
-                  <MessageGroup
-                    group={run.group}
-                    layout={layout}
-                    own={run.own}
-                    avatar={avatarFor?.(run.group.authorId)}
-                    authorName={name}
-                    now={now}
-                    locale={locale}
-                    renderBody={renderBody}
-                    labels={labels}
-                    skeleton={skeleton}
-                  />
-                </div>
-              );
-            })}
+          : sequence === undefined
+            ? runs.map(renderRun)
+            : sequence.map((item) => {
+                if (item.kind === 'group') {
+                  // The divider can cut a run in half, and the trailing half is
+                  // a new group that still needs both axes answered. It is
+                  // re-resolved through the same function `conversationRuns`
+                  // uses, never a second opinion written here.
+                  return renderRun(conversationRunOf(item.group, viewerId));
+                }
+                if (item.kind === 'day') {
+                  return (
+                    <div key={item.key} className={styles.day} role="separator">
+                      <span className={styles.dayLabel}>
+                        {formatMessageTimestamp(
+                          messageTimestamp(item.at, now ?? Date.now(), 'auto'),
+                          locale ?? activeLocale,
+                        )}
+                      </span>
+                    </div>
+                  );
+                }
+                return (
+                  <div
+                    key={item.key}
+                    className={styles.unread}
+                    role="separator"
+                    // The count is the label rather than a badge beside it: the
+                    // line's whole job is to say how much was missed, and a
+                    // separator whose accessible name omits the number is a
+                    // horizontal rule to anything not looking at it.
+                    aria-label={t(kitMessages.conversationUnreadCount, { count: item.count })}
+                  >
+                    <span className={styles.unreadLabel}>{t(kitMessages.conversationUnread)}</span>
+                  </div>
+                );
+              })}
       </div>
     </div>
   );
+
+  function renderRun(run: ConversationRun<M>) {
+    const name = authorNameFor?.(run.group.authorId);
+    return (
+      <div
+        key={run.key}
+        className={styles.run}
+        // Both axes, side by side and independently queryable - which is the
+        // whole point of the component, so it is also how it is tested and how
+        // an app hangs its own affordances off it.
+        data-authorship={run.authorship}
+        data-ack={run.ack}
+        data-provisional={run.provisional || undefined}
+      >
+        <MessageGroup
+          group={run.group}
+          layout={layout}
+          own={run.own}
+          side={side}
+          avatar={avatarFor?.(run.group.authorId)}
+          authorName={name}
+          now={now}
+          locale={locale}
+          renderBody={renderBody}
+          labels={labels}
+          readByMax={readByMax}
+          receiptTemplates={receiptTemplates}
+          skeleton={skeleton}
+        />
+      </div>
+    );
+  }
 }

@@ -38,6 +38,8 @@ export interface VirtualAnchor {
 interface Computed {
   style: CSSProperties;
   placement: Placement;
+  /** Trigger center projected onto the panel edge the arrow sits on, in px. */
+  arrowOffset: number;
 }
 
 // longest first, so 'inline-start' is not mistaken for side 'inline' + align 'start'
@@ -104,6 +106,10 @@ function compute(
 
   const transformOrigin = side === 'bottom' ? 'top' : side === 'top' ? 'bottom' : side === 'right' ? 'left' : 'right';
 
+  const arrowOffset = vertical
+    ? trigger.left + trigger.width / 2 - left
+    : trigger.top + trigger.height / 2 - top;
+
   return {
     // reports the RESOLVED physical side (post logical resolution and flip),
     // so arrows and data-placement can point at real screen geometry
@@ -115,6 +121,7 @@ function compute(
       transformOrigin,
       zIndex: 200,
     },
+    arrowOffset,
   };
 }
 
@@ -129,25 +136,32 @@ export function useAnchoredPosition(
   triggerRef: RefObject<HTMLElement | VirtualAnchor | null>,
   floatingRef: RefObject<HTMLElement | null>,
   options: AnchorOptions = {},
-): { style: CSSProperties; placement: Placement } | null {
+): { style: CSSProperties; placement: Placement; arrowOffset: number } | null {
   // React state carries only the side-dependent bits (transform origin +
   // placement for arrows / data-placement). The scroll-tracked geometry -
   // top/left/min-width - is written straight to the node so it never has to
   // wait for a React commit.
-  const [result, setResult] = useState<{ style: CSSProperties; placement: Placement } | null>(null);
+  const [result, setResult] = useState<{
+    style: CSSProperties;
+    placement: Placement;
+    arrowOffset: number;
+  } | null>(null);
   const placement = options.placement ?? 'bottom-start';
   const offset = options.offset ?? 8;
   const padding = options.padding ?? 8;
   const matchWidth = options.matchWidth ?? false;
   const lastPlacement = useRef<Placement | null>(null);
+  const lastArrowOffset = useRef<number | null>(null);
 
   useLayoutEffect(() => {
     if (!open) {
       setResult(null);
       lastPlacement.current = null;
+      lastArrowOffset.current = null;
       return;
     }
     lastPlacement.current = null; // force a fresh commit on (re)open
+    lastArrowOffset.current = null;
 
     const update = () => {
       const anchor = triggerRef.current;
@@ -172,15 +186,24 @@ export function useAnchoredPosition(
       floatingEl.style.left = `${next.style.left as number}px`;
       floatingEl.style.zIndex = '200';
       floatingEl.style.transformOrigin = String(next.style.transformOrigin);
+      floatingEl.style.setProperty('--arrow-tip-at', `${Math.round(next.arrowOffset)}px`);
       if (matchWidth) floatingEl.style.minWidth = `${Math.round(trigger.width)}px`;
 
-      // Re-render only when the resolved side flips, so arrows / data-placement
-      // can follow - not on every scroll frame.
-      if (next.placement !== lastPlacement.current) {
+      // Re-render when the resolved side flips OR the arrow's projected anchor
+      // point moves, so the tip can keep tracking a trigger while clamped.
+      const roundedArrow = Math.round(next.arrowOffset);
+      if (next.placement !== lastPlacement.current || roundedArrow !== lastArrowOffset.current) {
         lastPlacement.current = next.placement;
+        lastArrowOffset.current = roundedArrow;
         setResult({
           placement: next.placement,
-          style: { position: 'fixed', zIndex: 200, transformOrigin: next.style.transformOrigin },
+          style: {
+            position: 'fixed',
+            zIndex: 200,
+            transformOrigin: next.style.transformOrigin,
+            '--arrow-tip-at': `${roundedArrow}px`,
+          } as CSSProperties,
+          arrowOffset: roundedArrow,
         });
       }
     };

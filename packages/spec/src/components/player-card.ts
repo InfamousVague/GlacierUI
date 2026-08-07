@@ -5,7 +5,7 @@ import { token } from '../vocab.ts';
 export const playerRepeatModes = ['off', 'all', 'one'] as const;
 
 /** How the card arranges what it holds. */
-export const playerLayouts = ['stacked', 'inline', 'square'] as const;
+export const playerLayouts = ['stacked', 'inline', 'square', 'bar'] as const;
 
 /** How tightly the card is packed; a subset of the app-wide density words. */
 export const playerDensities = ['compact', 'comfortable', 'spacious'] as const;
@@ -28,8 +28,8 @@ export const playerCardSpec: ComponentSpec = {
     { name: 'play', description: 'The play/pause control, the one solid button in a row of quiet ones so the primary action is obvious.', required: true },
   ],
   props: [
-    { name: 'artwork', type: 'node', description: 'Album art. A thumbnail beside the heading when stacked, on the leading edge when inline, and the square hero when square.' },
-    { name: 'layout', type: 'enum', values: playerLayouts, default: 'stacked', description: 'How the card arranges what it holds. Inline top-aligns the artwork beside the title, artist, and album, then breaks so the seek bar spans the card\'s full width.' },
+    { name: 'artwork', type: 'node', description: 'Album art. A thumbnail beside the heading when stacked, on the leading edge when inline, the square hero when square, and a small chip in the row when bar.' },
+    { name: 'layout', type: 'enum', values: playerLayouts, default: 'stacked', description: 'How the card arranges what it holds. Inline top-aligns the artwork beside the title, artist, and album, then breaks so the seek bar spans the card\'s full width. Bar puts the whole card on one line, with the transport leading and the mode toggles closing it out.' },
     { name: 'density', type: 'enum', values: playerDensities, default: 'comfortable', description: 'How tightly it is packed: the row gaps, control sizes, and glyph sizes all step together.' },
     { name: 'title', type: 'node', description: 'What is playing.' },
     { name: 'subtitle', type: 'node', description: 'A second line, usually the artist.' },
@@ -54,6 +54,9 @@ export const playerCardSpec: ComponentSpec = {
     { name: 'tone', type: 'string', description: "The seek bar's colour family; forwarded straight through." },
     { name: 'fill', type: 'string', description: "How the seek bar's played run is filled; forwarded straight through." },
     { name: 'levels', type: 'array', item: { type: 'number', description: 'One normalized 0-1 loudness sample.' }, description: "The seek bar's loudness samples; forwarded straight through." },
+    { name: 'beat', type: 'object', description: "The seek bar's live beat state; forwarded straight through, so a card's bar deforms with the music like a bare one does." },
+    { name: 'intensity', type: 'number', description: "How hard the beat deforms the seek bar, from 0 (still) to 3; forwarded straight through, so the bar's own default stands unless the card overrides it." },
+    { name: 'tracer', type: 'boolean', default: true, description: "Draws the seek bar's tracer - the shadow trailing the beat. On in a card, unlike on a bare bar: the card is a now-playing surface, where the bar is what is being looked at. Idle without a `beat`." },
     { name: 'formatTime', type: 'handler', description: 'Formats the elapsed and total readouts. Defaults to m:ss, or h:mm:ss past an hour.' },
     { name: 'disabled', type: 'boolean', default: false, description: 'Dims the card and blocks every control.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders a placeholder with the exact geometry.' },

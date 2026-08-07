@@ -67,6 +67,7 @@ export const dataGridSpec: ComponentSpec = {
     { name: 'selectedIds', type: 'array', description: 'Controlled list of selected row ids.', item: { type: 'string', description: 'A selected row id (string or number).' } },
     { name: 'defaultSelectedIds', type: 'array', description: 'Initially selected row ids when uncontrolled.', item: { type: 'string', description: 'A selected row id (string or number).' } },
     { name: 'onSelectionChange', type: 'handler', description: 'Called with the next full list of selected ids whenever selection changes.' },
+    { name: 'onRowActivate', type: 'handler', description: 'Called with a row id when the row is clicked or opened with Enter; the row then reads as a target with a pointer cursor and a hover.' },
     { name: 'loading', type: 'boolean', default: false, description: 'Show skeleton rows and mark the grid aria-busy.' },
     { name: 'loadingRows', type: 'number', default: 5, description: 'How many skeleton rows to show while loading.' },
     { name: 'emptyState', type: 'node', description: 'Content shown when there are no rows and not loading.' },

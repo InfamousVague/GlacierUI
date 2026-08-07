@@ -17,6 +17,7 @@ export const carouselSpec: ComponentSpec = {
   props: [
     { name: 'children', type: 'node', required: true, description: 'The card children laid out in the horizontal strip; each becomes a snap target.' },
     { name: 'showControls', type: 'boolean', default: false, description: 'Renders prev/next controls that appear when the strip overflows.' },
+    { name: 'autoPlay', type: 'number', description: 'Advance to the next page every this-many milliseconds, looping at the end. Pauses on hover and focus, and never runs under prefers-reduced-motion.' },
     { name: 'gap', type: 'token', default: '$space-4', description: 'Space between cards; any CSS length or a space token.' },
     { name: 'aria-label', type: 'string', description: 'Accessible name for the scrollable region.' },
     { name: 'className', type: 'string', description: 'Extra class on the root wrapper.' },

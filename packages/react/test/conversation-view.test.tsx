@@ -219,6 +219,94 @@ describe('empty and loading', () => {
   });
 });
 
+describe('one column, without lying about who wrote it', () => {
+  it('pins every run to a logical edge while keeping the fill and the ticks', () => {
+    // The alternative an app reaches for - faking `own` to move a run - has a
+    // side effect it will not notice: a run that is not local is not allowed a
+    // delivery state, so the whole thread quietly loses its ticks.
+    const { container } = view(
+      [message({ id: 'a', authorId: 'bo' }), message({ id: 'b', status: 'read' })],
+      { side: 'start' },
+    );
+    expect(runs(container).map((r) => r.querySelector('[data-side]')?.getAttribute('data-side'))).toEqual([
+      'start',
+      'start',
+    ]);
+    // still mine, still filled, still reporting
+    expect(runs(container)[1]).toHaveAttribute('data-authorship', 'local');
+    expect(container.querySelector('[data-own][data-side="start"]')).not.toBeNull();
+  });
+
+  it('reaches the bubble geometry, not only the run alignment', () => {
+    // A side that stopped at the group would leave every bubble cutting its
+    // corners for the edge it is no longer on.
+    const { container } = view([message({ id: 'a' })], { side: 'start' });
+    const bubble = container.querySelector('[data-position]') as HTMLElement;
+    expect(bubble).toHaveAttribute('data-side', 'start');
+  });
+});
+
+describe('read history', () => {
+  it('draws neither separator until one is asked for', () => {
+    // A thread of today's messages does not want a row saying today, and a
+    // caller who has not modelled unread state should not get a divider guessed
+    // for them.
+    const { container } = view([message({ id: 'a' }), message({ id: 'b', authorId: 'bo' })]);
+    expect(container.querySelectorAll('[role="separator"]')).toHaveLength(0);
+  });
+
+  it('weaves a date row in wherever the calendar day changes', () => {
+    const yesterday = AT - 24 * 60 * 60 * 1000;
+    const { container } = view(
+      [message({ id: 'a', at: yesterday }), message({ id: 'b', at: AT })],
+      { dayHeaders: true },
+    );
+    expect(container.querySelectorAll('[role="separator"]')).toHaveLength(2);
+  });
+
+  it('draws the unread line above its anchor and names it with the count', () => {
+    const { container } = view(
+      [
+        message({ id: 'a', authorId: 'bo' }),
+        message({ id: 'b', authorId: 'bo', at: AT + 60_000 }),
+        message({ id: 'c', authorId: 'bo', at: AT + 120_000 }),
+      ],
+      { unreadAnchorId: 'b' },
+    );
+    const divider = container.querySelector('[role="separator"]') as HTMLElement;
+    // A separator whose accessible name omits the number is a horizontal rule
+    // to anything not looking at it.
+    expect(divider).toHaveAttribute('aria-label', '2 unread messages');
+    // and the run was cut at the anchor rather than the line being pushed to a
+    // group boundary
+    expect(runs(container)).toHaveLength(2);
+  });
+
+  it('reports the anchor it settled on, so a watermark caller can pin it', () => {
+    const onUnreadAnchor = vi.fn();
+    view(
+      [message({ id: 'a', authorId: 'bo' }), message({ id: 'b', authorId: 'bo', at: AT + 60_000 })],
+      { lastReadAt: AT + 1, onUnreadAnchor },
+    );
+    expect(onUnreadAnchor).toHaveBeenCalledWith('b');
+  });
+
+  it('strips a read receipt off a remote run, exactly as it strips the tick', () => {
+    // A transport that syncs receipts onto every row it touches is ordinary,
+    // and "Read by Ana" under something Ana sent you is not a fact about
+    // anything.
+    const { container } = view([
+      message({ id: 'a', authorId: 'bo', readBy: [{ actorId: 'ana', name: 'Ana' }] }),
+    ]);
+    expect(container.textContent).not.toContain('Read by');
+  });
+
+  it('names the readers on the viewer\'s own run', () => {
+    view([message({ id: 'a', readBy: [{ actorId: 'bo', name: 'Bo' }] })]);
+    expect(screen.getByText('Read by Bo')).toBeInTheDocument();
+  });
+});
+
 describe('accessibility', () => {
   it('is a focusable, named, politely-live log', () => {
     const { container } = view([message({ id: 'a' })], { label: 'Chat with Bo' });

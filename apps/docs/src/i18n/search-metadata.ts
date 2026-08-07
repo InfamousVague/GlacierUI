@@ -24,6 +24,7 @@ export const pageConcepts: Record<string, string> = {
   "radiocard": "form input choose option radio card",
   "fileupload": "form input file upload attach drop drag document",
   "slider": "form input range value drag track",
+  "equalizer": "audio equalizer eq frequency band gain db preset playback tone",
   "toggle": "form input switch on off boolean enable",
   "colorpicker": "form input color colour swatch hue palette hex",
   "richtexteditor": "form input text editor wysiwyg format bold italic markdown",

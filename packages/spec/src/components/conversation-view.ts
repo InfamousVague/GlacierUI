@@ -1,6 +1,6 @@
 import type { ComponentSpec } from '../schema.ts';
 import { token } from '../vocab.ts';
-import { messageDeliveryStatuses, messageLayouts } from './message-bubble.ts';
+import { messageDeliveryStatuses, messageLayouts, messageSides } from './message-bubble.ts';
 
 /**
  * Whose client produced a message.
@@ -26,6 +26,8 @@ export const conversationViewSpec: ComponentSpec = {
     { name: 'scroller', description: 'The scroll region itself. Owns the overflow, keeps itself pinned to the live end while the reader is already there, and is focusable so the thread can be scrolled from the keyboard.', required: true },
     { name: 'thread', description: 'The column of runs inside the scroller, bottom-anchored so a short conversation sits at the foot of the pane rather than floating at its top.', required: true },
     { name: 'run', description: 'One author\'s run, rendered by MessageGroup. Carries the resolved authorship and acknowledgement as data attributes so a run can be found by either axis.' },
+    { name: 'day', description: 'The date row between two calendar days. Emitted only where the day key changes, and never inside a run, because a run cannot span a day.' },
+    { name: 'unread', description: 'The line marking where the reader left off, with its count. Anchored to a message id rather than recomputed, so it does not walk down the screen as the client marks messages read.' },
     { name: 'empty', description: 'What a conversation with no messages shows instead of a blank pane.' },
     { name: 'skeleton', description: 'The placeholder thread: real runs on alternating edges, holding the geometry the loaded transcript will settle into.' },
   ],
@@ -33,9 +35,14 @@ export const conversationViewSpec: ComponentSpec = {
     { name: 'messages', type: 'array', required: true, description: 'The transcript as a flat, chronological log. Grouped into runs by `groupMessages`; the order given is the order rendered.', item: { type: 'object', description: 'One ChatMessage: id, authorId, at, and optionally text, status, editedAt, breaksGroup.' } },
     { name: 'viewerId', type: 'string', required: true, description: 'The reading user. Authorship is derived from this against each run\'s authorId, so no caller ever pre-tags a message as own or other.' },
     { name: 'layout', type: 'enum', values: messageLayouts, default: 'bubble', description: 'Forwarded to every run. Bubble encodes authorship in edge and fill; row encodes it in a header.' },
+    { name: 'side', type: 'enum', values: messageSides, description: 'Pins every run to one edge, keeping the bubbles, the fill, and the delivery marks. Logical, never physical, so a right-to-left transcript mirrors as a whole. The alternative - lying about `own` to move a run - would silently take the delivery state with it, since a run that is not local is not allowed one.' },
     { name: 'now', type: 'number', description: 'The instant timestamps are read against; injected so a thread renders deterministically.' },
     { name: 'locale', type: 'string', description: 'BCP-47 tag for the timestamp formatter.' },
     { name: 'groupWindowMs', type: 'number', description: 'Pause after which a new run begins. Defaults to the shared five-minute window.' },
+    { name: 'dayHeaders', type: 'boolean', default: false, description: 'Weaves a date row in wherever the local calendar day changes. Off by default, because a thread of today\'s messages does not need a row saying today; on, it is what makes a scrollback legible.' },
+    { name: 'unreadAnchorId', type: 'string', description: 'The id of the first unread message, captured once when the thread opened. Pinning an id rather than recomputing from a read watermark is the entire trick behind a divider that stays where the reader left it: new messages append after it and only its count grows.' },
+    { name: 'lastReadAt', type: 'number', description: 'Fallback watermark, consulted only when no anchor id resolves. It picks the first message after the mark that the viewer did not send, since your own message arriving in another window must never mark itself unread.' },
+    { name: 'onUnreadAnchor', type: 'handler', description: 'Reports the anchor the divider settled on, so a caller reading from `lastReadAt` on first render can pin it and stop the line from walking down the screen.' },
     { name: 'avatarFor', type: 'handler', description: 'Returns the avatar for one author id; drawn once at the head of each run.' },
     { name: 'authorNameFor', type: 'handler', description: 'Returns the display name for one author id; drawn once at the head of each run.' },
     { name: 'renderBody', type: 'handler', description: 'Replaces the default text rendering for one message; receives the message and its slot context.' },
@@ -53,7 +60,7 @@ export const conversationViewSpec: ComponentSpec = {
     { name: 'onAtBottomChange', type: 'handler', description: 'Called when the reader arrives at or leaves the live end, so a caller can show its own jump-to-latest affordance.' },
     { name: 'skeleton', type: 'boolean', default: false, description: 'Renders the placeholder thread at the geometry the loaded one will settle into.' },
   ],
-  defaults: { layout: 'bubble', stick: true, skeleton: false },
+  defaults: { layout: 'bubble', stick: true, dayHeaders: false, skeleton: false },
   dimensions: {
     /** Between two runs. Wider than the gap inside a run, which is what makes a run read as one utterance. */
     gap: token('space-4'),
@@ -94,6 +101,16 @@ export const conversationViewSpec: ComponentSpec = {
       tokens: { glyph: token('danger-text') },
     },
     {
+      name: 'day',
+      description: 'The date row: a centred label on a hairline rule, quiet enough to be scanned past and structured enough to be found when the reader is looking for a day.',
+      tokens: { text: token('text-subtle'), rule: token('border-subtle') },
+    },
+    {
+      name: 'unread',
+      description: 'The line where the reader left off. The one separator drawn in the accent, because it is the only one the reader is looking for, and it holds its place while messages arrive below it rather than sliding down under their eyes.',
+      tokens: { text: token('accent-text'), rule: token('accent-border') },
+    },
+    {
       name: 'empty',
       description: 'A conversation with nothing in it yet: a centred, muted stop rather than a blank pane the reader will read as a failure to load.',
       tokens: { text: token('text-muted') },
@@ -114,10 +131,12 @@ export const conversationViewSpec: ComponentSpec = {
   focusRing: { ring: token('focus-ring'), offset: '-2px' },
   transition: { duration: token('duration-fast'), ease: token('ease-out') },
   tokens: [
-    'space-3', 'space-4',
-    'surface-raised', 'accent-solid', 'accent-contrast',
+    'space-2', 'space-3', 'space-4',
+    'surface-raised', 'accent-solid', 'accent-contrast', 'accent-text', 'accent-border',
     'danger-border', 'danger-text',
-    'text', 'text-muted',
+    'border-subtle', 'hairline',
+    'text', 'text-muted', 'text-subtle',
+    'font-size-xs', 'leading-xs',
     'focus-ring', 'duration-fast', 'ease-out',
   ],
   a11y: {

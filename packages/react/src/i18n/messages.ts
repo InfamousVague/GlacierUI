@@ -100,6 +100,59 @@ export const kitMessages = defineMessages({
   densityMoreSpace: { en: 'More Space', es: 'Más espacio', fr: 'Plus d’espace', de: 'Mehr Platz', ja: '間隔を広く', pt: 'Mais espaço', zh: '更多间距', ar: 'مساحة أكبر' },
   /** Parameterized: t(kitMessages.stepOf, { step, total }). */
   stepOf: { en: 'Step {step} of {total}', es: 'Paso {step} de {total}', fr: 'Étape {step} sur {total}', de: 'Schritt {step} von {total}', ja: 'ステップ {step}/{total}', pt: 'Etapa {step} de {total}', zh: '第 {step} 步，共 {total} 步', ar: 'الخطوة {step} من {total}' },
+
+  // --- the composer -------------------------------------------------------
+  // The bar's own words. The submit hint in particular is not decoration: Enter
+  // sends something that cannot be recalled, and the reader least likely to
+  // have discovered that by accident is the one who never sees the visible hint.
+  messageBarLabel: { en: 'Message', es: 'Mensaje', fr: 'Message', de: 'Nachricht', ja: 'メッセージ', pt: 'Mensagem', zh: '消息', ar: 'رسالة' },
+  messageBarPlaceholder: { en: 'Write a message', es: 'Escribe un mensaje', fr: 'Écrivez un message', de: 'Nachricht schreiben', ja: 'メッセージを入力', pt: 'Escreva uma mensagem', zh: '写条消息', ar: 'اكتب رسالة' },
+  messageBarSend: { en: 'Send', es: 'Enviar', fr: 'Envoyer', de: 'Senden', ja: '送信', pt: 'Enviar', zh: '发送', ar: 'إرسال' },
+  messageBarAttach: { en: 'Add attachment', es: 'Añadir adjunto', fr: 'Ajouter une pièce jointe', de: 'Anhang hinzufügen', ja: '添付を追加', pt: 'Adicionar anexo', zh: '添加附件', ar: 'إضافة مرفق' },
+  messageBarAttachments: { en: 'Attachments', es: 'Adjuntos', fr: 'Pièces jointes', de: 'Anhänge', ja: '添付ファイル', pt: 'Anexos', zh: '附件', ar: 'المرفقات' },
+  /** Parameterized: t(kitMessages.messageBarRemoveAttachment, { name }). */
+  messageBarRemoveAttachment: { en: 'Remove {name}', es: 'Quitar {name}', fr: 'Retirer {name}', de: '{name} entfernen', ja: '{name} を削除', pt: 'Remover {name}', zh: '移除 {name}', ar: 'إزالة {name}' },
+  messageBarHintEnter: { en: 'Press Enter to send, Shift plus Enter for a new line', es: 'Pulsa Intro para enviar, Mayús más Intro para una línea nueva', fr: 'Appuyez sur Entrée pour envoyer, Maj plus Entrée pour une nouvelle ligne', de: 'Enter zum Senden, Umschalt plus Enter für eine neue Zeile', ja: 'Enter で送信、Shift と Enter で改行', pt: 'Prima Enter para enviar, Shift mais Enter para uma nova linha', zh: '按 Enter 发送，Shift 加 Enter 换行', ar: 'اضغط Enter للإرسال، وShift مع Enter لسطر جديد' },
+  /** Parameterized: t(kitMessages.messageBarHintModifier, { modifier }). */
+  messageBarHintModifier: { en: 'Press {modifier} plus Enter to send, Enter for a new line', es: 'Pulsa {modifier} más Intro para enviar, Intro para una línea nueva', fr: 'Appuyez sur {modifier} plus Entrée pour envoyer, Entrée pour une nouvelle ligne', de: '{modifier} plus Enter zum Senden, Enter für eine neue Zeile', ja: '{modifier} と Enter で送信、Enter で改行', pt: 'Prima {modifier} mais Enter para enviar, Enter para uma nova linha', zh: '按 {modifier} 加 Enter 发送，Enter 换行', ar: 'اضغط {modifier} مع Enter للإرسال، وEnter لسطر جديد' },
+  /** Parameterized: t(kitMessages.messageBarReplyingTo, { name }). */
+  messageBarReplyingTo: { en: 'Replying to {name}', es: 'Respondiendo a {name}', fr: 'En réponse à {name}', de: 'Antwort an {name}', ja: '{name} に返信中', pt: 'A responder a {name}', zh: '正在回复 {name}', ar: 'رد على {name}' },
+  messageBarReplying: { en: 'Replying to a message', es: 'Respondiendo a un mensaje', fr: 'En réponse à un message', de: 'Antwort auf eine Nachricht', ja: 'メッセージに返信中', pt: 'A responder a uma mensagem', zh: '正在回复一条消息', ar: 'رد على رسالة' },
+  messageBarCancelReply: { en: 'Cancel reply', es: 'Cancelar la respuesta', fr: 'Annuler la réponse', de: 'Antwort verwerfen', ja: '返信をやめる', pt: 'Cancelar a resposta', zh: '取消回复', ar: 'إلغاء الرد' },
+  messageBarEditing: { en: 'Editing a message', es: 'Editando un mensaje', fr: 'Modification d’un message', de: 'Nachricht wird bearbeitet', ja: 'メッセージを編集中', pt: 'A editar uma mensagem', zh: '正在编辑一条消息', ar: 'تعديل رسالة' },
+  messageBarCancelEdit: { en: 'Cancel editing', es: 'Cancelar la edición', fr: 'Annuler la modification', de: 'Bearbeiten abbrechen', ja: '編集をやめる', pt: 'Cancelar a edição', zh: '取消编辑', ar: 'إلغاء التعديل' },
+  /** Parameterized: t(kitMessages.messageBarCount, { count, max }). */
+  messageBarCount: { en: '{count} of {max}', es: '{count} de {max}', fr: '{count} sur {max}', de: '{count} von {max}', ja: '{max} 中 {count}', pt: '{count} de {max}', zh: '{count}/{max}', ar: '{count} من {max}' },
+  /** Parameterized: t(kitMessages.messageBarRemaining, { remaining }). */
+  messageBarRemaining: { en: '{remaining} characters left', es: 'Quedan {remaining} caracteres', fr: 'Il reste {remaining} caractères', de: 'Noch {remaining} Zeichen', ja: '残り {remaining} 文字', pt: 'Faltam {remaining} caracteres', zh: '还剩 {remaining} 个字符', ar: 'بقي {remaining} حرفًا' },
+  /** Parameterized: t(kitMessages.messageBarOver, { over }). */
+  messageBarOver: { en: '{over} characters over the limit', es: '{over} caracteres por encima del límite', fr: '{over} caractères au-delà de la limite', de: '{over} Zeichen über dem Limit', ja: '制限を {over} 文字超えています', pt: '{over} caracteres acima do limite', zh: '超出限制 {over} 个字符', ar: '{over} حرفًا فوق الحد' },
+  // The visible hint's key caps. In the catalog rather than typed into the JSX
+  // because a keyboard sold in one market does not always print what one sold in
+  // another does, and a hint naming a key the reader cannot find is worse than
+  // no hint at all.
+  messageBarKeyEnter: { en: 'Enter', es: 'Intro', fr: 'Entrée', de: 'Enter', ja: 'Enter', pt: 'Enter', zh: 'Enter', ar: 'Enter' },
+  messageBarKeyShift: { en: 'Shift', es: 'Mayús', fr: 'Maj', de: 'Umschalt', ja: 'Shift', pt: 'Shift', zh: 'Shift', ar: 'Shift' },
+  messageBarTypingOne: { en: '{first} is typing', es: '{first} está escribiendo', fr: '{first} est en train d’écrire', de: '{first} schreibt', ja: '{first} が入力中', pt: '{first} está a escrever', zh: '{first} 正在输入', ar: '{first} يكتب الآن' },
+  messageBarTypingTwo: { en: '{first} and {last} are typing', es: '{first} y {last} están escribiendo', fr: '{first} et {last} sont en train d’écrire', de: '{first} und {last} schreiben', ja: '{first} と {last} が入力中', pt: '{first} e {last} estão a escrever', zh: '{first} 和 {last} 正在输入', ar: '{first} و{last} يكتبان الآن' },
+  messageBarTypingSeveral: { en: '{names} are typing', es: '{names} están escribiendo', fr: '{names} sont en train d’écrire', de: '{names} schreiben', ja: '{names} が入力中', pt: '{names} estão a escrever', zh: '{names} 正在输入', ar: '{names} يكتبون الآن' },
+  messageBarTypingMany: { en: '{first} and {count} others are typing', es: '{first} y {count} más están escribiendo', fr: '{first} et {count} autres sont en train d’écrire', de: '{first} und {count} weitere schreiben', ja: '{first} ほか {count} 人が入力中', pt: '{first} e mais {count} estão a escrever', zh: '{first} 和另外 {count} 人正在输入', ar: '{first} و{count} آخرون يكتبون الآن' },
+
+  // --- read history -------------------------------------------------------
+  // A tick says a message was opened; these say when, or by whom. The group
+  // shapes exist because "read" on a five-person thread is ambiguous, and one
+  // rung on the delivery ladder has no way to be less so.
+  /** Parameterized: t(kitMessages.messageReadAt, { time }). */
+  messageReadAt: { en: 'Read {time}', es: 'Leído a las {time}', fr: 'Lu à {time}', de: 'Gelesen um {time}', ja: '{time} に既読', pt: 'Lido às {time}', zh: '{time} 已读', ar: 'قُرئت في {time}' },
+  messageReadByOne: { en: 'Read by {first}', es: 'Leído por {first}', fr: 'Lu par {first}', de: 'Gelesen von {first}', ja: '{first} が既読', pt: 'Lido por {first}', zh: '{first} 已读', ar: 'قرأها {first}' },
+  messageReadByTwo: { en: 'Read by {first} and {last}', es: 'Leído por {first} y {last}', fr: 'Lu par {first} et {last}', de: 'Gelesen von {first} und {last}', ja: '{first} と {last} が既読', pt: 'Lido por {first} e {last}', zh: '{first} 和 {last} 已读', ar: 'قرأها {first} و{last}' },
+  messageReadBySeveral: { en: 'Read by {names}', es: 'Leído por {names}', fr: 'Lu par {names}', de: 'Gelesen von {names}', ja: '{names} が既読', pt: 'Lido por {names}', zh: '{names} 已读', ar: 'قرأها {names}' },
+  messageReadByMany: { en: 'Read by {first} and {count} others', es: 'Leído por {first} y {count} más', fr: 'Lu par {first} et {count} autres', de: 'Gelesen von {first} und {count} weiteren', ja: '{first} ほか {count} 人が既読', pt: 'Lido por {first} e mais {count}', zh: '{first} 和另外 {count} 人已读', ar: 'قرأها {first} و{count} آخرون' },
+
+  // --- transcript separators ----------------------------------------------
+  conversationUnread: { en: 'Unread messages', es: 'Mensajes sin leer', fr: 'Messages non lus', de: 'Ungelesene Nachrichten', ja: '未読メッセージ', pt: 'Mensagens não lidas', zh: '未读消息', ar: 'رسائل غير مقروءة' },
+  /** Parameterized: t(kitMessages.conversationUnreadCount, { count }). */
+  conversationUnreadCount: { en: '{count} unread messages', es: '{count} mensajes sin leer', fr: '{count} messages non lus', de: '{count} ungelesene Nachrichten', ja: '未読 {count} 件', pt: '{count} mensagens não lidas', zh: '{count} 条未读消息', ar: '{count} رسائل غير مقروءة' },
 });
 
 export type KitMessageKey = keyof typeof kitMessages;

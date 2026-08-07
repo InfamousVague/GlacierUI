@@ -39,6 +39,19 @@ describe('TabbedModal', () => {
     expect(screen.getByRole('tabpanel')).toHaveTextContent('Privacy settings');
   });
 
+  it('drops the rail-to-pane line when the divider is turned off', async () => {
+    const { rerender } = render(
+      <TabbedModal open onClose={() => {}} title="Settings" sections={sections} />,
+    );
+    // The layout is the tablist's parent; by default it carries no divider flag.
+    const layout = (await screen.findByRole('tablist')).parentElement;
+    expect(layout).not.toHaveAttribute('data-divider');
+    rerender(
+      <TabbedModal open onClose={() => {}} title="Settings" sections={sections} divider={false} />,
+    );
+    expect(layout).toHaveAttribute('data-divider', 'none');
+  });
+
   it('opens to defaultValue and honours a controlled value', async () => {
     const onValueChange = vi.fn();
     const { rerender } = render(

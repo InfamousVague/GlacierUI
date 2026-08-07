@@ -79,6 +79,60 @@ describe('Popover', () => {
   });
 });
 
+describe('Popover opened on hover', () => {
+  const hovered = (onClick?: () => void) =>
+    render(
+      <Popover aria-label="Volume" openOn="hover" trigger={<Button onClick={onClick}>Mute</Button>}>
+        <Text>Panel content</Text>
+      </Popover>,
+    );
+
+  it('opens under the pointer and leaves the trigger its own press', async () => {
+    const onClick = vi.fn();
+    hovered(onClick);
+    const trigger = screen.getByRole('button', { name: 'Mute' });
+    // nothing pops on the press, so it does not say anything does
+    expect(trigger).not.toHaveAttribute('aria-haspopup');
+
+    fireEvent.pointerEnter(trigger);
+    expect(await screen.findByRole('dialog', { name: 'Volume' })).toHaveTextContent('Panel content');
+
+    fireEvent.click(trigger);
+    expect(onClick).toHaveBeenCalledOnce();
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('stays open while the pointer crosses to the panel', async () => {
+    hovered();
+    const trigger = screen.getByRole('button', { name: 'Mute' });
+    fireEvent.pointerEnter(trigger);
+    const dialog = await screen.findByRole('dialog', { name: 'Volume' });
+
+    // the gap between the two is a place the pointer passes through, not one
+    // it left for
+    fireEvent.pointerLeave(trigger);
+    fireEvent.pointerEnter(dialog);
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+
+    fireEvent.pointerLeave(dialog);
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+  });
+
+  it('opens on focus without taking it, and hands it over on Tab', async () => {
+    hovered();
+    const trigger = screen.getByRole('button', { name: 'Mute' });
+    trigger.focus();
+    const dialog = await screen.findByRole('dialog', { name: 'Volume' });
+    // the keyboard is still on the trigger: the panel showed itself, it was
+    // not gone to
+    expect(trigger).toHaveFocus();
+    // and it portals past the trigger, so Tab is walked across by hand
+    fireEvent.keyDown(trigger, { key: 'Tab' });
+    expect(dialog).toHaveFocus();
+  });
+});
+
 describe('Popover in RTL', () => {
   afterEach(() => {
     vi.restoreAllMocks();

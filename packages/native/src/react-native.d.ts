@@ -27,7 +27,15 @@ declare module 'react-native' {
     accessibilityLabel?: string;
     accessibilityHint?: string;
     accessibilityState?: { disabled?: boolean; selected?: boolean; checked?: boolean | 'mixed'; expanded?: boolean; busy?: boolean };
+    /**
+     * What a range control currently reads. `text` is the native counterpart of
+     * the web's `aria-valuetext`: it lets a fader announce '-18dB' rather than
+     * the bare number, which on a decibel rail means nothing on its own.
+     */
+    accessibilityValue?: { min?: number; max?: number; now?: number; text?: string };
     accessibilityElementsHidden?: boolean;
+    /** Announces changes inside this subtree; `polite` never cuts off a reader. */
+    accessibilityLiveRegion?: 'none' | 'polite' | 'assertive';
     importantForAccessibility?: 'auto' | 'yes' | 'no' | 'no-hide-descendants';
     nativeID?: string;
     pointerEvents?: 'auto' | 'none' | 'box-none' | 'box-only';
@@ -133,7 +141,26 @@ declare module 'react-native' {
     onChangeText?: (text: string) => void;
     onFocus?: () => void;
     onBlur?: () => void;
-    onKeyPress?: (e: { nativeEvent: { key: string } }) => void;
+    /**
+     * The modifier flags ride on the native event because a composer's submit
+     * policy is decided from them; `preventDefault` is what stops a claimed
+     * Enter also inserting a newline. react-native-web forwards all of these
+     * from the DOM event, and a device build reports the subset it has.
+     */
+    onKeyPress?: (e: {
+      nativeEvent: {
+        key: string;
+        shiftKey?: boolean;
+        metaKey?: boolean;
+        ctrlKey?: boolean;
+        altKey?: boolean;
+        /** An input method is mid-composition, so this key is the IME's. */
+        isComposing?: boolean;
+      };
+      preventDefault?: () => void;
+    }) => void;
+    /** Fires when the text's measured height changes - how a field auto-grows. */
+    onContentSizeChange?: (e: { nativeEvent: { contentSize: { width: number; height: number } } }) => void;
     onSubmitEditing?: () => void;
     /** Controlled caret/selection range - how a caret is restored after an edit. */
     selection?: { start: number; end: number };
@@ -182,7 +209,16 @@ declare module 'react-native' {
   export const Text: ComponentType<TextProps>;
   export const Pressable: ComponentType<PressableProps>;
   export const Image: ComponentType<ImageProps>;
-  export const TextInput: ComponentType<TextInputProps>;
+  /** The imperative handle a TextInput ref hands back. */
+  export interface TextInputHandle {
+    focus(): void;
+    blur(): void;
+  }
+
+  // On the component rather than on TextInputProps, for the same reason
+  // ScrollView's is: a component that spreads the props should not advertise a
+  // handle it never forwards.
+  export const TextInput: ComponentType<TextInputProps & { ref?: Ref<TextInputHandle> }>;
   /** The imperative handle a ScrollView ref hands back. */
   export interface ScrollViewHandle {
     scrollTo(options: { x?: number; y?: number; animated?: boolean }): void;

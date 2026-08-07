@@ -66,6 +66,58 @@
   }
 }
 
+/* ---- separators ----------------------------------------------------------- */
+
+/* Both rows are a centred label on a rule, built the same way so the pair reads
+   as one family and only the tone tells them apart. The rule is drawn by two
+   flex-filling pseudo-elements rather than a background gradient, because the
+   label has to sit in a real gap rather than on top of a painted line. */
+.day,
+.unread {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  min-width: 0;
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-xs);
+  /* The stamp and the count label the messages under them; a drag across the
+     transcript should not sweep them into the copied text. */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.day::before,
+.day::after,
+.unread::before,
+.unread::after {
+  content: '';
+  flex: 1;
+  height: var(--glacier-hairline);
+}
+
+.day::before,
+.day::after {
+  background: var(--glacier-border-subtle);
+}
+
+/* The one separator drawn in the accent, because it is the only one the reader
+   is looking for. A date row is scanned past; this is the row they opened the
+   thread to find. */
+.unread::before,
+.unread::after {
+  background: var(--glacier-accent-border);
+}
+
+.dayLabel {
+  flex: none;
+  color: var(--glacier-text-subtle);
+}
+
+.unreadLabel {
+  flex: none;
+  color: var(--glacier-accent-text);
+}
+
 /* An inset ring rather than an outset one: the scroller's edge is usually flush
    with a pane, and an outset ring would be clipped by the very overflow this
    element owns. */

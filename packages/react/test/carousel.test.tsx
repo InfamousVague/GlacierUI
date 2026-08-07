@@ -109,6 +109,34 @@ describe('Carousel', () => {
     expect(scrollBy.mock.calls[0]?.[0].left).toBeGreaterThan(0);
   });
 
+  it('autoplays forward on the interval and loops at the end', () => {
+    vi.useFakeTimers();
+    try {
+      render(
+        <Carousel autoPlay={3000} aria-label="Featured">
+          {items.map((i) => (
+            <Card key={i}>{i}</Card>
+          ))}
+        </Carousel>,
+      );
+      const scroller = mockScroller(1000, 300, 0);
+      const scrollBy = vi.fn();
+      const scrollTo = vi.fn();
+      scroller.scrollBy = scrollBy as unknown as typeof scroller.scrollBy;
+      scroller.scrollTo = scrollTo as unknown as typeof scroller.scrollTo;
+      fireEvent.scroll(scroller);
+      // A tick before the end pages forward.
+      vi.advanceTimersByTime(3000);
+      expect(scrollBy).toHaveBeenCalledTimes(1);
+      // At the end it loops back to the start rather than paging past it.
+      Object.defineProperty(scroller, 'scrollLeft', { configurable: true, writable: true, value: 700 });
+      vi.advanceTimersByTime(3000);
+      expect(scrollTo).toHaveBeenCalledWith(expect.objectContaining({ left: 0 }));
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('translates vertical wheel movement into horizontal scroll', () => {
     render(
       <Carousel aria-label="Featured">

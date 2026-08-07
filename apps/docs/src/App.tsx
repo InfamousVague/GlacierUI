@@ -74,10 +74,12 @@ import { SparklinePage } from './pages/atoms/SparklinePage.tsx';
 // Molecules
 import { FieldPage } from './pages/molecules/FieldPage.tsx';
 import { PlayerCardPage } from './pages/molecules/PlayerCardPage.tsx';
+import { PlayerBarPage } from './pages/organisms/PlayerBarPage.tsx';
 import { SelectPage } from './pages/molecules/SelectPage.tsx';
 import { ComboboxPage } from './pages/molecules/ComboboxPage.tsx';
 import { MultiSelectPage } from './pages/molecules/MultiSelectPage.tsx';
 import { SegmentedPage } from './pages/molecules/SegmentedPage.tsx';
+import { AudioEqualizerPage } from './pages/molecules/AudioEqualizerPage.tsx';
 import { TabsPage } from './pages/molecules/TabsPage.tsx';
 import { TooltipPage } from './pages/molecules/TooltipPage.tsx';
 import { ToastPage } from './pages/molecules/ToastPage.tsx';
@@ -106,6 +108,7 @@ import { ColorPickerPage } from './pages/organisms/ColorPickerPage.tsx';
 import { DeliveryStatusPage } from './pages/atoms/DeliveryStatusPage.tsx';
 import { MessageBubblePage } from './pages/molecules/MessageBubblePage.tsx';
 import { MessageGroupPage } from './pages/molecules/MessageGroupPage.tsx';
+import { MessageBarPage } from './pages/molecules/MessageBarPage.tsx';
 import { ConversationViewPage } from './pages/organisms/ConversationViewPage.tsx';
 import { CommandPalettePage } from './pages/organisms/CommandPalettePage.tsx';
 import { ModalPage } from './pages/organisms/ModalPage.tsx';
@@ -187,6 +190,7 @@ const PAGES = {
   combobox: { group: 'Molecules', el: <ComboboxPage /> },
   multiselect: { group: 'Molecules', el: <MultiSelectPage /> },
   segmented: { group: 'Molecules', el: <SegmentedPage /> },
+  equalizer: { group: 'Molecules', el: <AudioEqualizerPage /> },
   tabs: { group: 'Molecules', el: <TabsPage /> },
   tooltip: { group: 'Molecules', el: <TooltipPage /> },
   toast: { group: 'Molecules', el: <ToastPage /> },
@@ -197,9 +201,11 @@ const PAGES = {
   virtuallist: { group: 'Organisms', el: <VirtualListPage /> },
   richtexteditor: { group: 'Organisms', el: <RichTextEditorPage /> },
   colorpicker: { group: 'Organisms', el: <ColorPickerPage /> },
+  playerbar: { group: 'Organisms', el: <PlayerBarPage /> },
   deliverystatus: { group: 'Atoms', el: <DeliveryStatusPage /> },
   messagebubble: { group: 'Molecules', el: <MessageBubblePage /> },
   messagegroup: { group: 'Molecules', el: <MessageGroupPage /> },
+  messagebar: { group: 'Molecules', el: <MessageBarPage /> },
   conversationview: { group: 'Organisms', el: <ConversationViewPage /> },
   commandpalette: { group: 'Organisms', el: <CommandPalettePage /> },
   modal: { group: 'Organisms', el: <ModalPage /> },

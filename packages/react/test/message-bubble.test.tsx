@@ -294,6 +294,56 @@ describe('MessageGroup', () => {
   });
 });
 
+describe('read history', () => {
+  it('turns the bare word into the moment the sender was waiting for', () => {
+    render(<MessageBubble own status="read" readAt={AT} now={NOW} locale="en-US">hi</MessageBubble>);
+    expect(screen.getByText(/^Read /)).toBeInTheDocument();
+  });
+
+  it('names the readers instead, because a group tick cannot say which of five', () => {
+    render(
+      <MessageBubble own status="read" readBy={[{ actorId: 'b', name: 'Bo' }, { actorId: 'c', name: 'Cy' }]}>
+        hi
+      </MessageBubble>,
+    );
+    expect(screen.getByText('Read by Bo and Cy')).toBeInTheDocument();
+  });
+
+  it('gives a slot back to the summary rather than overflowing the line', () => {
+    render(
+      <MessageBubble
+        own
+        status="read"
+        readBy={[
+          { actorId: 'b', name: 'Bo' },
+          { actorId: 'c', name: 'Cy' },
+          { actorId: 'd', name: 'Di' },
+        ]}
+      >
+        hi
+      </MessageBubble>,
+    );
+    expect(screen.getByText('Read by Bo and 2 others')).toBeInTheDocument();
+  });
+
+  it('says nothing at all on a message the viewer received', () => {
+    // A receipt is a claim about our own outbox, the same rule the tick lives
+    // under: "Read by Bo" beneath something Bo sent you is not a fact.
+    const { container } = render(
+      <MessageBubble status="read" readBy={[{ actorId: 'b', name: 'Bo' }]}>hi</MessageBubble>,
+    );
+    expect(container.textContent).not.toContain('Read by');
+  });
+
+  it('reports the run once, on its last message, not once per bubble', () => {
+    const group = run(3);
+    const last = group.messages[group.messages.length - 1];
+    if (last) last.readBy = [{ actorId: 'b', name: 'Bo' }];
+    render(<MessageGroup group={group} own now={NOW} />);
+    expect(screen.getAllByText('Read by Bo')).toHaveLength(1);
+  });
+});
+
 describe('the stylesheet holds the two decisions the DOM cannot show', () => {
   // Read from the runner's root rather than from import.meta.url: under jsdom
   // the module URL is an http one and cannot be turned into a path.

@@ -41,6 +41,14 @@ describe('matchCommands', () => {
     expect(match?.matchedKeyword).toBe('dark');
   });
 
+  it('surfaces the tightest keyword run when several terms hit only keywords', () => {
+    const items = [
+      { id: 'song', label: 'A Song', keywords: 'artist album hey, girl you know the rest of the lyric goes here' },
+    ];
+    const [match] = matchCommands(items, 'girl you know');
+    expect(match?.matchedKeyword).toBe('…girl you know…');
+  });
+
   it('leaves matchedKeyword unset when the label itself matched', () => {
     const [match] = matchCommands(commands, 'toggle');
     expect(match?.item.id).toBe('theme');

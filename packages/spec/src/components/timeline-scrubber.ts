@@ -75,7 +75,9 @@ export const timelineScrubberSpec: ComponentSpec = {
     { name: 'default', description: 'Track on the sunken surface, activity backdrop as an area chart with a 1px accent-solid crest over an accent-soft wash, playhead line in the accent solid.' },
     {
       name: 'live',
-      description: 'The playhead hugs the trailing edge and moves with the advancing window.',
+      description:
+        'The playhead hugs the trailing edge and moves with the advancing window. Position only - the playhead keeps its accent paint.',
+      behavioral: true,
     },
     {
       name: 'scrubbing',
@@ -84,7 +86,9 @@ export const timelineScrubberSpec: ComponentSpec = {
     },
     {
       name: 'past',
-      description: 'Scrubbed away from the live edge: the playhead remains on the inspected moment.',
+      description:
+        'Scrubbed away from the live edge: the playhead remains on the inspected moment. Position only - no repaint against the live state.',
+      behavioral: true,
     },
     {
       name: 'glass',

@@ -18,3 +18,4 @@ export { Menu, MenuItem, MenuSeparator, MenuLabel, ContextMenu, MenuSub, type Me
 export { AlertDialogHost, type AlertDialogHostProps } from './AlertDialogHost.tsx';
 export { ConversationView, type ConversationViewProps, type ConversationViewLabels } from './ConversationView.tsx';
 export { CardFan, type CardFanProps, type CardFanItem, type CardFanSize } from './CardFan.tsx';
+export { PlayerBar, type PlayerBarProps, type PlayerBarLabels, type PlayerBarPosition } from './PlayerBar.tsx';

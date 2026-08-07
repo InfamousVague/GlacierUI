@@ -72,6 +72,7 @@ function useSections(): Section[] {
     { spec: 'combobox', page: 'combobox', title: t(pageTitles.combobox), blurb: t(m.bpgComboboxBlurb) , kinds: ['input'] },
     { spec: 'multi-select', page: 'multiselect', title: t(pageTitles.multiselect), blurb: t(m.bpgMultiSelectBlurb) , kinds: ['input'] },
     { spec: 'segmented-control', page: 'segmented', title: t(pageTitles.segmented), blurb: t(m.bpgSegmentedControlBlurb) , kinds: ['input', 'navigation'] },
+    { spec: 'audio-equalizer', page: 'equalizer', title: t(pageTitles.equalizer), blurb: 'Multi-band playback equalizer with presets.', kinds: ['input', 'media'] },
     { spec: 'tabs', page: 'tabs', title: t(pageTitles.tabs), blurb: t(m.bpgTabsBlurb) , kinds: ['navigation'] },
     { spec: 'tooltip', page: 'tooltip', title: t(pageTitles.tooltip), blurb: t(m.bpgTooltipBlurb) , kinds: ['overlay'] },
     { spec: 'toast', page: 'toast', title: t(pageTitles.toast), blurb: t(m.bpgToastBlurb) , kinds: ['feedback', 'overlay'] },

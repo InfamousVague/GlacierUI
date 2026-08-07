@@ -27,8 +27,12 @@ export function formatDuration(seconds: number): string {
  *   span the full width, so the seek bar is never squeezed into a column.
  * - `square` - artwork as a square hero with the bar and controls beneath it,
  *   the shape a phone's now-playing screen wants.
+ * - `bar` - everything on one line: the transport leads, what is playing rides
+ *   beside it, the seek bar takes the space left between its two clocks, and
+ *   the mode toggles close the row out. The shape a docked now-playing strip
+ *   wants, so it needs width rather than height.
  */
-export type PlayerLayout = 'stacked' | 'inline' | 'square';
+export type PlayerLayout = 'stacked' | 'inline' | 'square' | 'bar';
 
 /**
  * How tightly the card is packed. Deliberately a subset of the app-wide density

@@ -48,6 +48,65 @@ const norm = (value: string): string => value.trim().toLowerCase();
 
 const escapeRe = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+/** Longest keyword snippet worth surfacing as a row's match context. */
+const KEYWORD_SNIPPET_MAX_WORDS = 12;
+
+/**
+ * The stretch of `keywords` worth showing as why a row matched.
+ *
+ * A single term names just the word it hit, as before. Several terms return the
+ * tightest run of words that holds them all, so a phrase typed against long
+ * keyword text (a lyric, a description) surfaces the line it landed on rather
+ * than one lonely word out of it - and the caller can highlight every term
+ * inside that run. Ellipses mark a snippet clipped from a longer keyword string.
+ */
+function keywordSnippet(keywords: string, terms: string[]): string | undefined {
+  const words = keywords.split(/\s+/).filter(Boolean);
+  if (!words.length) return undefined;
+
+  const lower = words.map(norm);
+  const present = terms.filter((term) => lower.some((word) => word.includes(term)));
+  if (!present.length) return undefined;
+  const [only] = present;
+  if (present.length === 1 && only !== undefined) {
+    return words.find((_, i) => (lower[i] ?? '').includes(only));
+  }
+
+  // Minimum window over the words that contains an occurrence of every term.
+  const seen = new Map<string, number>();
+  let covered = 0;
+  let left = 0;
+  let best: [number, number] | null = null;
+  for (let right = 0; right < words.length; right += 1) {
+    const wordRight = lower[right] ?? '';
+    for (const term of present) {
+      if (wordRight.includes(term)) {
+        const next = (seen.get(term) ?? 0) + 1;
+        seen.set(term, next);
+        if (next === 1) covered += 1;
+      }
+    }
+    while (covered === present.length) {
+      if (!best || right - left < best[1] - best[0]) best = [left, right];
+      const wordLeft = lower[left] ?? '';
+      for (const term of present) {
+        if (wordLeft.includes(term)) {
+          const next = (seen.get(term) ?? 0) - 1;
+          seen.set(term, next);
+          if (next === 0) covered -= 1;
+        }
+      }
+      left += 1;
+    }
+  }
+  if (!best) return undefined;
+
+  const [start] = best;
+  const end = Math.min(best[1], start + KEYWORD_SNIPPET_MAX_WORDS - 1);
+  const snippet = words.slice(start, end + 1).join(' ');
+  return `${start > 0 ? '…' : ''}${snippet}${end < words.length - 1 ? '…' : ''}`;
+}
+
 /**
  * How well a single term hit an item, lower being better, or null for a miss.
  *
@@ -107,9 +166,8 @@ export function matchCommands<T extends CommandDescriptor>(items: T[], query: st
 
     // Only worth naming when the label alone would not explain the hit - the
     // row otherwise looks unrelated to what the user typed.
-    const words = (item.keywords ?? '').split(/\s+/).filter(Boolean);
     const matchedKeyword = terms.every((term) => rankTerm(item, term) === 3)
-      ? words.find((word) => terms.some((term) => norm(word).includes(term)))
+      ? keywordSnippet(item.keywords ?? '', terms)
       : undefined;
 
     scored.push({ item, rank: worst, order, matchedKeyword });

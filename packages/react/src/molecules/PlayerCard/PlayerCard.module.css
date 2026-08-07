@@ -120,3 +120,51 @@
   /* the controls carry the card at this size, so they get room to breathe */
   gap: var(--player-transport-gap);
 }
+
+/* Bar: one line, the shape a docked now-playing strip wants. The body turns
+   into a row, so the density gap that separated the card's rows now separates
+   its groups, and the seek bar takes whatever the fixed groups leave. */
+.card[data-layout='bar'] .body {
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Art rides along as a chip rather than a thumbnail: at one line tall it can
+   only be as tall as the transport beside it. */
+.card[data-layout='bar'] .artwork {
+  width: 2rem;
+  flex: none;
+}
+
+/* What is playing gives way to the bar: it truncates down to nothing rather
+   than pushing the scrubber out of the row. */
+.card[data-layout='bar'] .heading {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+/* Neither control group shrinks - a half-width button is not a button. */
+.card[data-layout='bar'] .transport {
+  flex: none;
+}
+
+/* The bar's clocks are its endpoints here rather than a caption under it, so
+   the group is a row and the bar itself is the only part that flexes. */
+.barScrubber {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+}
+
+.clock {
+  flex: none;
+  /* holds its box as the seconds tick, so the bar never jitters */
+  font-variant-numeric: tabular-nums;
+}
+
+.card[data-layout='bar'] .seek {
+  flex: 1;
+  min-width: 0;
+}

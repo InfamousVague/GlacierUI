@@ -1,11 +1,15 @@
 import {
   formatMessageTimestamp,
+  formatReadReceipt,
   leastDelivery,
   messageTimestamp,
+  readReceipt,
   type DeliveryStatus,
+  type MessageReader,
   type MessageTimestamp,
   type MessageTimestampStyle,
   type Millis,
+  type ReadReceiptTemplates,
 } from '@glacier/logic';
 import {
   type MessageLabels,
@@ -13,6 +17,7 @@ import {
 import type { ComponentProps, ReactNode } from 'react';
 import { cx } from '../../internal/cx.ts';
 import { useLocale, useT } from '../../i18n/LocaleProvider.tsx';
+import { kitMessages } from '../../i18n/messages.ts';
 import { DeliveryStatus as DeliveryMark } from '../../atoms/display/DeliveryStatus/DeliveryStatus.tsx';
 import { Skeleton } from '../../atoms/feedback/Skeleton/Skeleton.tsx';
 import { messageMessages } from './messages.ts';
@@ -40,6 +45,21 @@ export interface MessageMetaProps extends Omit<ComponentProps<'span'>, 'children
    * "read", which is what the last message in it might otherwise claim.
    */
   statuses?: (DeliveryStatus | undefined)[];
+  /**
+   * When it was read. The tick says *that* a message was opened and this says
+   * *when*, which is the difference between a status and a receipt - and the
+   * fact the sender was actually waiting for.
+   */
+  readAt?: Millis;
+  /**
+   * Who read it. The only honest answer in a group thread, where one `read`
+   * tick cannot say which of five people opened the message.
+   */
+  readBy?: MessageReader[];
+  /** How many reader names the line has room for before "and N others". */
+  readByMax?: number;
+  /** Translated read-receipt sentences, one per shape. */
+  receiptTemplates?: Partial<ReadReceiptTemplates>;
   /** Marks a message its author changed after sending. */
   edited?: boolean;
   /** Sits inside an accent-filled bubble, so the line takes the contrast colour. */
@@ -75,6 +95,10 @@ export function MessageMeta({
   timestampStyle = 'time',
   status,
   statuses,
+  readAt,
+  readBy,
+  readByMax = 2,
+  receiptTemplates,
   edited = false,
   own = false,
   announceTime = true,
@@ -108,6 +132,33 @@ export function MessageMeta({
   const stamp = at === undefined ? undefined : messageTimestamp(at, now, timestampStyle);
   const time: ReactNode =
     stamp === undefined ? undefined : formatTimestamp(stamp, locale ?? activeLocale);
+
+  // The read history, which is a different fact from the tick above it: the
+  // glyph says a message was opened, this says when, or by whom. `readBy` wins
+  // over `readAt` where both are given, because naming the readers answers the
+  // question a group thread is actually asking - a single "Read" there is
+  // ambiguous about which of five people it means.
+  const tally = readBy !== undefined && readBy.length > 0 ? readReceipt(readBy, readByMax) : undefined;
+  const readMoment = readAt ?? tally?.at;
+  const readTime =
+    readMoment === undefined
+      ? ''
+      : formatTimestamp(messageTimestamp(readMoment, now, 'time'), locale ?? activeLocale);
+  const receipt = tally
+    ? formatReadReceipt(
+        tally,
+        {
+          one: t(kitMessages.messageReadByOne),
+          two: t(kitMessages.messageReadByTwo),
+          several: t(kitMessages.messageReadBySeveral),
+          many: t(kitMessages.messageReadByMany),
+          ...receiptTemplates,
+        },
+        { time: readTime, join: (names) => joinNames(names, locale ?? activeLocale) },
+      )
+    : readMoment === undefined
+      ? ''
+      : t(kitMessages.messageReadAt, { time: readTime });
 
   if (skeleton) {
     return (
@@ -156,6 +207,22 @@ export function MessageMeta({
           <span className={styles.srOnly}>{statusLabel}</span>
         </>
       )}
+      {/* Its own line rather than another item in the row: a group receipt is a
+          sentence and the line above it is a row of glyphs, and letting the two
+          share a line would reflow the stamp every time a reader arrived. */}
+      {receipt !== '' && <span className={styles.receipt}>{receipt}</span>}
     </span>
   );
+}
+
+/**
+ * Joins reader names the way the reader's own language joins a list.
+ *
+ * `Intl.ListFormat` is missing from a few older engines, so its absence
+ * degrades to the plain comma `formatReadReceipt` already defaults to.
+ */
+function joinNames(list: string[], locale: string): string {
+  const ListFormat = (Intl as { ListFormat?: new (locale?: string, options?: { style: string; type: string }) => { format(items: string[]): string } }).ListFormat;
+  if (ListFormat === undefined) return list.join(', ');
+  return new ListFormat(locale, { style: 'long', type: 'conjunction' }).format(list);
 }

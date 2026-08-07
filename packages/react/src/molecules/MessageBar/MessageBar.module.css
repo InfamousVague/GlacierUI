@@ -1,0 +1,288 @@
+/* Every measurement arrives as a --message-bar-* custom property resolved once
+   from the spec, so the stylesheet keeps deciding how the space is spent while
+   the numbers stay one source shared with the native binding. */
+
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--message-bar-stack-gap);
+  min-width: 0;
+}
+
+/* The frame. It owns the surface, the corner, and - because the frame is what
+   the user perceives as the control - the focus ring, which is why the ring is
+   drawn here on :focus-within rather than on the textarea inside it. A ring
+   around the inner field with this border still outside it reads as two boxes. */
+.bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--message-bar-stack-gap);
+  min-width: 0;
+  padding: var(--message-bar-padding-block) var(--message-bar-padding-inline);
+  /* Deliberately the bubble's own corner: the bar should read as the shape the
+     draft is about to become. */
+  border-radius: var(--message-bar-radius);
+  border: var(--message-bar-border) solid var(--glacier-border);
+  background: var(--glacier-surface-raised);
+  color: var(--glacier-text);
+  transition:
+    border-color var(--glacier-duration-fast) var(--glacier-ease-out),
+    box-shadow var(--glacier-duration-fast) var(--glacier-ease-out),
+    background-color var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.bar:focus-within {
+  border-color: var(--glacier-focus-ring);
+  box-shadow: 0 0 0 3px var(--glacier-accent-soft);
+}
+
+.composer[data-disabled] .bar {
+  background: var(--glacier-surface-sunken);
+  color: var(--glacier-text-subtle);
+}
+
+/* A bar pinned over a scrolling transcript is the one place in the kit where
+   content passes under a control, so the material goes on the frame - never on
+   the field, which would put a second blurred pane inside the first. */
+.composer[data-glass] .bar {
+  background: var(--glacier-glass-regular);
+  border-color: var(--glacier-glass-border);
+  backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glacier-blur-sm)) saturate(var(--glacier-glass-saturate));
+  box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
+}
+
+/* ---- the field row -------------------------------------------------------- */
+
+.row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--message-bar-gap);
+  min-width: 0;
+}
+
+/**
+ * The grower: a grid whose hidden twin carries the same text under the same
+ * typography, both children in the one cell, so the row is as tall as the
+ * taller of them. No measurement, no resize observer, and no reflow written by
+ * hand on every keystroke - the browser does the arithmetic it is already good
+ * at. The native binding reaches the same height through onContentSizeChange;
+ * see the `grower` entry in the spec's anatomy for why that divergence is
+ * recorded rather than hidden.
+ */
+.grower {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  min-height: calc(var(--message-bar-line) * var(--message-bar-min-rows));
+  max-height: calc(var(--message-bar-line) * var(--message-bar-max-rows));
+  /* Past the cap the frame stops growing and this scrolls, so a long draft
+     never pushes the transcript off the screen. */
+  overflow-y: auto;
+}
+
+.grower::after {
+  /* The trailing space is load-bearing: without it the twin does not grow on
+     the keystroke that opens a new line, and the field jumps a frame late. */
+  content: attr(data-replicated-value) ' ';
+  visibility: hidden;
+}
+
+/* Both children share one cell and must therefore share one set of metrics -
+   read from the same custom properties rather than typed twice, because a twin
+   whose font drifts from the field's is a field that stops growing correctly
+   and no test would notice. */
+.grower > .field,
+.grower::after {
+  grid-area: 1 / 1 / 2 / 2;
+  min-width: 0;
+  padding: var(--message-bar-field-padding-block) var(--message-bar-field-padding-inline);
+  font-family: var(--glacier-font-sans);
+  font-size: var(--message-bar-font-size);
+  line-height: var(--message-bar-leading);
+  letter-spacing: inherit;
+  /* The author's newlines are theirs; collapsing them turns a stack trace into
+     one paragraph, and would also break the twin's height. */
+  white-space: pre-wrap;
+  /* A pasted URL has no break opportunity, so without this one draft sets the
+     width of the whole bar. */
+  overflow-wrap: anywhere;
+}
+
+.field {
+  border: 0;
+  margin: 0;
+  resize: none;
+  /* The grower scrolls, not the field, so the twin and the text stay in step. */
+  overflow: hidden;
+  background: none;
+  color: inherit;
+  /* The frame carries the ring; a second one inside it would read as two
+     controls sharing a border. */
+  outline: none;
+}
+
+.field::placeholder {
+  color: var(--glacier-text-subtle);
+}
+
+.field:disabled {
+  cursor: not-allowed;
+}
+
+/* ---- banner, tray, meter, hint -------------------------------------------- */
+
+.banner {
+  display: flex;
+  align-items: center;
+  gap: var(--message-bar-gap);
+  min-width: 0;
+  padding-inline: var(--message-bar-field-padding-inline);
+  /* An accent rule on the leading edge, so the strip reads as attached to the
+     draft below it rather than as a notice floating above it. */
+  border-inline-start: 2px solid var(--glacier-accent-border);
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-xs);
+  color: var(--glacier-text-muted);
+}
+
+.bannerText {
+  min-width: 0;
+  flex: 1;
+  /* One line, always. The banner says which message is being answered; it is
+     not a second reading of it. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bannerAuthor {
+  color: var(--glacier-text);
+  font-weight: var(--glacier-font-weight-semibold);
+}
+
+.tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--glacier-space-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--glacier-space-1);
+  max-width: 14rem;
+  padding: var(--glacier-space-1) var(--glacier-space-2);
+  border-radius: var(--glacier-radius-md);
+  background: var(--glacier-surface-sunken);
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-xs);
+  color: var(--glacier-text-muted);
+}
+
+.chipName {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Absent until the budget starts to matter. A live count is noise on screen and
+   a firehose in a live region; what a writer needs is the moment it matters. */
+.meter {
+  flex: none;
+  align-self: flex-end;
+  padding-block: var(--message-bar-field-padding-block);
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--message-bar-leading);
+  color: var(--glacier-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.composer[data-meter='near'] .meter {
+  color: var(--glacier-warning-text);
+}
+
+.composer[data-meter='over'] .meter {
+  color: var(--glacier-danger-text);
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-1);
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-xs);
+  color: var(--glacier-text-subtle);
+}
+
+/* ---- typing --------------------------------------------------------------- */
+
+.typing {
+  display: flex;
+  align-items: center;
+  gap: var(--typing-gap);
+  min-height: calc(var(--glacier-leading-xs) * var(--glacier-font-size-xs));
+  font-size: var(--glacier-font-size-xs);
+  line-height: var(--glacier-leading-xs);
+  color: var(--glacier-text-muted);
+}
+
+.dots {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--typing-dot-gap);
+  flex: none;
+}
+
+.dot {
+  width: var(--typing-dot-size);
+  height: var(--typing-dot-size);
+  border-radius: var(--glacier-radius-full);
+  background: currentColor;
+  animation: typingPulse 1.2s var(--glacier-ease-in-out) infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes typingPulse {
+  0%,
+  60%,
+  100% {
+    opacity: 0.35;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+/* The sentence beside the dots still says who is typing, so nothing is lost by
+   stopping them - which is the test for whether an animation may be removed. */
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation: none;
+  }
+}
+
+/* Announced but never drawn. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

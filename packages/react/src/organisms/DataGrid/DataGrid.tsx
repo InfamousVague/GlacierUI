@@ -82,8 +82,8 @@ export interface DataGridProps extends Omit<ComponentProps<'div'>, 'onSelect'> {
   selectable?: boolean;
   selectedIds?: DataGridRowId[];
   defaultSelectedIds?: DataGridRowId[];
-  onSelectionChange?: (ids: DataGridRowId[]) => void;
-  // States
+  onSelectionChange?: (ids: DataGridRowId[]) => void;    /** Called with a row's id when it is clicked or Enter opens it. */
+    onRowActivate?: (id: DataGridRowId) => void;  // States
   loading?: boolean;
   loadingRows?: number;
   emptyState?: ReactNode;
@@ -120,6 +120,7 @@ export function DataGrid({
   selectedIds: controlledSelected,
   defaultSelectedIds = [],
   onSelectionChange,
+  onRowActivate,
   loading = false,
   loadingRows = 5,
   emptyState,
@@ -211,6 +212,15 @@ export function DataGrid({
   function onKeyDown(e: KeyboardEvent<HTMLTableElement>) {
     const r = activeR;
     const c = activeC;
+    // Enter opens the focused data row, the way a double-click or a tap does.
+    if (e.key === 'Enter' && onRowActivate && r >= 1) {
+      const row = sortedData[r - 1];
+      if (row) {
+        e.preventDefault();
+        onRowActivate(row.id);
+        return;
+      }
+    }
     let nr = r;
     let nc = c;
     switch (e.key) {
@@ -369,7 +379,7 @@ export function DataGrid({
               const r = ri + 1;
               const isSelected = selectedSet.has(row.id);
               return (
-                <tr key={row.id} role="row" aria-rowindex={r + 1} aria-selected={selectable ? isSelected : undefined} className={cx(isSelected && styles.selectedRow)}>
+                <tr key={row.id} role="row" aria-rowindex={r + 1} aria-selected={selectable ? isSelected : undefined} data-interactive={onRowActivate ? '' : undefined} className={cx(isSelected && styles.selectedRow, onRowActivate && styles.interactiveRow)} onClick={onRowActivate ? () => onRowActivate(row.id) : undefined}>
                   {selectable ? (
                     <td
                       role="gridcell"
@@ -379,6 +389,8 @@ export function DataGrid({
                       tabIndex={tabIndexFor(r, 0)}
                       onFocus={onCellFocus(r, 0)}
                       className={styles.selectCell}
+                      // The checkbox is its own control; a tick is not a row open.
+                      onClick={(e) => e.stopPropagation()}
                       onKeyDown={(e) => {
                         if (e.key === ' ') { e.preventDefault(); toggleRow(row.id); }
                       }}

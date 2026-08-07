@@ -10,8 +10,10 @@ import {
   seekBarStroke,
   SEEK_VIEW_HEIGHT,
   SEEK_VIEW_WIDTH,
+  type SeekBarBeat,
 } from '@glacier/logic';
 import { seekBarShapes, seekBarTones, seekBarFills, seekBarRails } from '@glacier/spec';
+import { useReducedMotion } from 'motion/react';
 import {
   useCallback,
   useId,
@@ -62,6 +64,32 @@ export interface SeekBarProps extends Omit<ComponentProps<'div'>, 'onChange' | '
    * mirror shapes. Omitted, every sample reads as full.
    */
   levels?: number[];
+  /**
+   * Live beat state - a 0-1 `pulse` and the hits still travelling as `ripples`.
+   * The squiggle swells with the pulse and each hit rises as a crest and
+   * ripples outward, so the bar deforms in time with the music. `useBeat` in
+   * `@glacier/logic` produces this from the same meter the levels come from.
+   * Ignored by `line`, and dropped entirely under reduced motion.
+   */
+  beat?: SeekBarBeat;
+  /**
+   * How hard the `beat` deforms the bar, from 0 (still) to
+   * `SEEK_MAX_INTENSITY`. Defaults to `SEEK_DEFAULT_INTENSITY` (1), the tuned
+   * baseline. Turn it up for a bar that is the hero
+   * of a now-playing screen, down for one sitting in a dense list. Setting 0
+   * leaves the bar still without the caller having to tear down its meter.
+   */
+  intensity?: number;
+  /**
+   * Draws a tracer under the played run: a half-opacity copy of the bar in its
+   * own tone, lagging the beat by a fixed slice of time. It holds its shape
+   * only as long as the beat it trails does, sinking back toward the flat rail
+   * between hits and being thrown out again by the next one - so it reads as
+   * something settling behind the bar rather than a second copy of it. Needs a
+   * `beat` to lag behind; without one there is nothing to hold it out, so
+   * nothing is drawn. Dropped under reduced motion along with the beat itself.
+   */
+  tracer?: boolean;
   /** Arrow-key step in seconds; Page keys move by ten steps. */
   step?: number;
   /** Formats a position for aria-valuetext. Defaults to m:ss. */
@@ -93,6 +121,9 @@ export function SeekBar({
   fill = 'solid',
   rail = 'muted',
   levels,
+  beat,
+  intensity,
+  tracer = false,
   step = 5,
   formatTime = formatDuration,
   size = 'md',
@@ -108,6 +139,10 @@ export function SeekBar({
   const gradientId = useId();
   const [scrubbing, setScrubbing] = useState(false);
   const [current, setCurrent] = useControlled(value, defaultValue);
+  // The beat is a per-frame reshape of the path, not a transition, so there is
+  // nothing to shorten under reduced motion - the honest answer is to draw the
+  // bar at rest and let the audio be the only thing moving.
+  const reducedMotion = useReducedMotion();
 
   const span = Math.max(duration, 0);
   const position = Math.min(Math.max(current, 0), span);
@@ -235,7 +270,14 @@ export function SeekBar({
     );
   }
 
-  const { playedPath, aheadPath } = seekBarGeometry({ shape, progress, levels });
+  const { playedPath, aheadPath, tracerPath, tracerFade } = seekBarGeometry({
+    shape,
+    progress,
+    levels,
+    beat: reducedMotion ? undefined : beat,
+    intensity,
+    tracer,
+  });
   // The cap and weight class come from the shared classifier, so the two
   // bindings cannot disagree about which shapes butt their caps; the CSS below
   // still owns the actual pixel values, keeping them themeable.
@@ -320,6 +362,20 @@ export function SeekBar({
         )}
         {/* The viewBox stretches to the bar's box, so only a non-scaling stroke
             keeps an even weight and a round cap actually round. */}
+        {/* Drawn first so it sits under both runs: it is the bar's shadow, and
+            a shadow that covers what casts it is just a second bar. The half
+            opacity is the stylesheet's; this multiplies into it, taking the
+            shadow away entirely as the last of the beat dies rather than
+            leaving a flat line lying under a stopped bar. */}
+        {tracerPath && (
+          <path
+            className={cx(styles.stroke, styles.tracer)}
+            d={tracerPath}
+            strokeOpacity={tracerFade}
+            vectorEffect="non-scaling-stroke"
+            fill="none"
+          />
+        )}
         {aheadPath && (
           <path
             className={cx(styles.stroke, styles.ahead)}

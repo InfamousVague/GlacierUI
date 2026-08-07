@@ -57,6 +57,12 @@ export interface TabbedModalProps {
   title?: ReactNode;
   /** Action row passed through to the underlying Modal, below both panes. */
   footer?: ReactNode;
+  /**
+   * The hairline between the nav rail and the pane. On by default; turn it off
+   * where the sections are few enough to read as one surface without a rule
+   * splitting them.
+   */
+  divider?: boolean;
   className?: string;
 }
 
@@ -76,6 +82,7 @@ export function TabbedModal({
   onValueChange,
   title,
   footer,
+  divider = true,
   className,
 }: TabbedModalProps) {
   const id = useId();
@@ -123,7 +130,7 @@ export function TabbedModal({
 
   return (
     <Modal open={open} onClose={onClose} title={title} footer={footer} size={Size.XLarge}>
-      <div className={cx(styles.layout, className)} data-modal-overflow="contained">
+      <div className={cx(styles.layout, className)} data-modal-overflow="contained" data-divider={divider ? undefined : 'none'}>
         <div
           role="tablist"
           aria-orientation={narrow ? 'horizontal' : 'vertical'}
