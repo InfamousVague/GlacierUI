@@ -6,6 +6,17 @@ const FOCUSABLE =
 let scrollLockCount = 0;
 let previousOverflow = '';
 
+/**
+ * The open layers, bottom to top. Dialogs stack - a confirmation over a
+ * settings sheet, a detail card over a tabbed modal - and when they do, only
+ * the TOP layer may answer the keyboard: without this, every open dialog's
+ * document listener fires on one Escape (closing the whole stack at once),
+ * and the lower dialog's Tab trap yanks focus out of the upper one, whose
+ * panel is portaled outside it. Closing out of order is allowed; a layer is
+ * removed wherever it sits.
+ */
+const layerStack: symbol[] = [];
+
 function focusableElements(dialog: HTMLElement): HTMLElement[] {
   return [...dialog.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((element) => !element.hasAttribute('disabled'));
 }
@@ -45,10 +56,17 @@ export function useDialogLayer({
     scrollLockCount += 1;
     document.body.style.overflow = 'hidden';
 
+    const layer = Symbol('dialog-layer');
+    layerStack.push(layer);
+    const isTop = () => layerStack[layerStack.length - 1] === layer;
+
     const dialog = dialogRef.current;
     (latest.current.initialFocusRef?.current ?? dialog)?.focus();
 
     const onKeyDown = (event: globalThis.KeyboardEvent) => {
+      // A covered layer stays silent: the top one answers, and when it closes
+      // the next becomes the top and answers the key after that.
+      if (!isTop()) return;
       if (event.key === 'Escape') {
         if (latest.current.dismissible) {
           event.preventDefault();
@@ -80,6 +98,8 @@ export function useDialogLayer({
 
     document.addEventListener('keydown', onKeyDown);
     return () => {
+      const at = layerStack.indexOf(layer);
+      if (at !== -1) layerStack.splice(at, 1);
       scrollLockCount = Math.max(0, scrollLockCount - 1);
       if (scrollLockCount === 0) document.body.style.overflow = previousOverflow;
       document.removeEventListener('keydown', onKeyDown);

@@ -114,6 +114,32 @@ describe('Modal', () => {
     expect(document.body.style.overflow).toBe('');
   });
 
+  it('stacks: Escape closes only the top dialog, then the one beneath', () => {
+    // A detail dialog over a settings dialog - the marketplace pattern. One
+    // Escape must peel one layer, not collapse the whole stack.
+    let outerClosed = 0;
+    let innerClosed = 0;
+    const Stacked = ({ inner }: { inner: boolean }) => (
+      <>
+        <Modal open onClose={() => outerClosed++} title="Settings">
+          <Text>Base</Text>
+        </Modal>
+        <Modal open={inner} onClose={() => innerClosed++} title="Detail">
+          <Text>Top</Text>
+        </Modal>
+      </>
+    );
+    const { rerender } = render(<Stacked inner />);
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(innerClosed).toBe(1);
+    expect(outerClosed).toBe(0);
+    // The top layer closes; the survivor becomes the top and takes the next.
+    rerender(<Stacked inner={false} />);
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(outerClosed).toBe(1);
+    expect(innerClosed).toBe(1);
+  });
+
   it('has no axe violations', async () => {
     render(<Harness />);
     const results = await axe.run(screen.getByRole('dialog'), { rules: AXE_RULES });
