@@ -1,0 +1,30 @@
+/* The transport row. The density's gap arrives as --transport-gap, resolved
+   once in @glacier/logic so a compact row is the same row on both platforms. */
+.transport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--transport-gap);
+  /* a transport is a control, not prose: dragging across it should never leave
+     a selection highlight behind the buttons */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* An engaged mode tints its own control, so shuffle-on or repeat-on is visible
+   without having to compare it against its neighbours. */
+.transport [data-on] {
+  color: var(--glacier-accent-text);
+}
+
+.transport[data-disabled] {
+  opacity: 0.5;
+}
+
+/* Quiet emphasis: the play control keeps the size step that marks it as the
+   primary action but drops the disc behind it, and takes the full text colour
+   so it still reads as the one to press. On a chrome strip a filled disc is
+   the loudest thing on a bar that is not the subject of the screen. */
+.transport[data-emphasis='quiet'] .play {
+  color: var(--glacier-text);
+}

@@ -16,6 +16,9 @@
   gap: var(--glacier-space-1);
   width: 100%;
   box-sizing: border-box;
+  /* the chevron is pinned to this box rather than carried along by the row it
+     happens to end up in; see .indicator */
+  position: relative;
   border: var(--glacier-hairline) solid var(--glacier-border);
   border-radius: var(--glacier-radius-lg);
   background: var(--glacier-surface);
@@ -54,21 +57,26 @@
   box-shadow: inset 0 var(--glacier-hairline) 0 var(--glacier-glass-highlight);
 }
 
+/* The trailing padding is the chevron's room, the same reserve the Combobox
+   keeps: a tag that filled the box edge to edge would otherwise run under it. */
 .control.sm {
   min-height: var(--glacier-control-height-sm);
-  padding: var(--glacier-space-1) var(--glacier-space-2);
+  padding-block: var(--glacier-space-1);
+  padding-inline: var(--glacier-space-2) var(--glacier-space-8);
   font-size: var(--glacier-font-size-xs);
 }
 
 .control.md {
   min-height: var(--glacier-control-height-md);
-  padding: var(--glacier-space-1) var(--glacier-space-3);
+  padding-block: var(--glacier-space-1);
+  padding-inline: var(--glacier-space-3) var(--glacier-space-8);
   font-size: var(--glacier-font-size-sm);
 }
 
 .control.lg {
   min-height: var(--glacier-control-height-lg);
-  padding: var(--glacier-space-2) var(--glacier-space-4);
+  padding-block: var(--glacier-space-2);
+  padding-inline: var(--glacier-space-4) var(--glacier-space-10);
   font-size: var(--glacier-font-size-md);
 }
 
@@ -139,8 +147,17 @@
   cursor: not-allowed;
 }
 
+/* Out of the wrap and onto the trailing edge. In the row it was a flex item
+   after the query input, so once the tags filled a line it wrapped down with
+   the input and the field grew a second row holding nothing but a chevron.
+   It marks the control, not the last tag - so it is placed against the box and
+   centred on it, wherever the tags happen to break. */
 .indicator {
+  position: absolute;
+  inset-inline-end: var(--glacier-space-3);
+  inset-block: 0;
   display: inline-flex;
+  align-items: center;
   flex: none;
   color: var(--glacier-text-subtle);
   pointer-events: none;

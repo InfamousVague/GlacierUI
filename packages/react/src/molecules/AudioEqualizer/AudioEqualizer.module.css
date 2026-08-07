@@ -1,0 +1,183 @@
+.eq {
+  display: grid;
+  gap: var(--glacier-space-4);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--glacier-space-3);
+}
+
+.presets {
+  min-width: 14rem;
+}
+
+.curve {
+  border: var(--glacier-hairline) solid var(--glacier-border-subtle);
+  border-radius: var(--glacier-radius-lg);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--glacier-accent-soft) 24%, transparent), transparent 48%),
+    var(--glacier-surface-sunken);
+  padding: var(--glacier-space-2);
+}
+
+/* Holds the chart and the node layer in one box, so the two share a coordinate
+   space: the nodes are placed as percentages of this, which is the same
+   fraction of the viewBox the chart stretches to fill. */
+.stage {
+  position: relative;
+}
+
+.curveSvg {
+  display: block;
+  width: 100%;
+  height: 5rem;
+}
+
+/* The node layer, which is also the drag surface: it covers the chart exactly,
+   so a press anywhere takes the band it lands over and a node can be aimed at
+   by its column rather than by its dot. */
+.nodes {
+  position: absolute;
+  inset: 0;
+  /* the chart is dragged vertically, so the browser must not claim the gesture
+     for a scroll before the first move is delivered */
+  touch-action: none;
+}
+
+.nodes:hover {
+  cursor: grab;
+}
+
+.nodes[data-dragging] {
+  cursor: grabbing;
+}
+
+/* A disabled equalizer is dimmed rather than removed, so the chart stays
+   readable; it just stops answering the pointer. */
+.eq[data-disabled] .nodes {
+  pointer-events: none;
+}
+
+.curveGuide {
+  stroke: color-mix(in srgb, var(--glacier-border-subtle) 66%, transparent);
+  stroke-width: 1;
+}
+
+.curveZero {
+  stroke: var(--glacier-border-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 3 2;
+}
+
+.curveArea {
+  pointer-events: none;
+  opacity: 0.95;
+}
+
+.curveLine {
+  fill: none;
+  stroke: var(--glacier-accent-solid);
+  stroke-width: 2.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 0 color-mix(in srgb, var(--glacier-surface) 60%, transparent));
+}
+
+/* A node is its grip: a disc wide enough to be aimed at, centred on the point
+   it marks, with the drawn dot inside it. Only the dot is painted - the grip is
+   the target, and a target is never drawn. */
+.curveNode {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  /* the point is the node's centre, and left/top place its corner */
+  transform: translate(-50%, -50%);
+}
+
+/* Sized in the page's units rather than the chart's, which is the whole reason
+   this layer exists: the chart is stretched by a different factor on each axis,
+   and a circle drawn inside it comes out an ellipse as wide as the block is
+   wider than it is tall. */
+.curveDot {
+  inline-size: 0.3125rem;
+  block-size: 0.3125rem;
+  border-radius: var(--glacier-radius-full);
+  background: var(--glacier-accent-solid);
+  /* the ring that lifts the dot off the line it sits on; a shadow rather than a
+     border so it scales with the dot instead of thickening it */
+  box-shadow: 0 0 0 1px var(--glacier-surface);
+  transition: transform var(--glacier-duration-fast) var(--glacier-ease-out);
+}
+
+.curveNode[data-active] .curveDot {
+  transform: scale(1.7);
+}
+
+/* Held, the node reads as picked up rather than merely pointed at: it grows
+   again, so it sits above the curve instead of on it. */
+.curveNode[data-held] .curveDot {
+  transform: scale(2.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .curveDot {
+    transition: none;
+  }
+}
+
+.bands {
+  display: grid;
+  grid-template-columns: repeat(var(--eq-band-count, 8), minmax(2.25rem, 1fr));
+  gap: var(--glacier-space-3);
+}
+
+.band {
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  align-content: end;
+  gap: var(--glacier-space-2);
+}
+
+.gain {
+  min-width: 4ch;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.slider {
+  --slider-length: 9rem;
+  --slider-thumb: 1rem;
+  --slider-track: 0.3125rem;
+}
+
+.eq[data-size='sm'] .slider {
+  --slider-length: 7.5rem;
+  --slider-thumb: 0.875rem;
+  --slider-track: 0.25rem;
+}
+
+.eq[data-disabled] {
+  opacity: 0.56;
+}
+
+.freq {
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .bands {
+    gap: var(--glacier-space-2);
+  }
+
+  .presets {
+    min-width: 0;
+  }
+}

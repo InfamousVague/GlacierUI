@@ -1,0 +1,99 @@
+/* What is playing, as one block: the cover on the leading edge and the three
+   text lines beside it. The artwork footprint is the only thing the size step
+   changes - the type scale stays put, because a title is a title whether it
+   sits next to a chip or a cover. */
+.track {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-3);
+  min-width: 0;
+}
+
+.track[data-align='start'] {
+  align-items: flex-start;
+}
+
+/* Square and immovable: the art is the one fixed thing in a row that otherwise
+   gives way, so it never shrinks and never stretches with the text beside it. */
+.artwork {
+  flex: none;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: var(--glacier-radius-md);
+  /* the loading bone fills it, so an empty block is the same square */
+  display: flex;
+}
+
+.artwork > * {
+  width: 100%;
+}
+
+.track[data-size='sm'] {
+  gap: var(--glacier-space-2);
+}
+
+.track[data-size='sm'] .artwork {
+  width: 2rem;
+}
+
+.track[data-size='md'] .artwork {
+  width: 2.5rem;
+}
+
+.track[data-size='lg'] .artwork {
+  width: 4rem;
+}
+
+/* Fill: the art takes the height it is given and derives its width from the
+   square, rather than choosing a size and leaving a gap above and below it.
+   The lines stay centred against it, so a two-line block does not ride the top
+   of a cover twice its height.
+
+   This only works where something above has a height to give. Hand it to a
+   block that sizes itself from its contents and the square has nothing to
+   resolve against, so it falls back to sizing from its own width - which is the
+   width of the row it sits in, and the row grows to match. The strip states its
+   height for exactly this reason. */
+.track[data-size='fill'] {
+  align-items: stretch;
+}
+
+.track[data-size='fill'] .artwork {
+  height: 100%;
+  width: auto;
+}
+
+.track[data-size='fill'] .artwork > * {
+  height: 100%;
+  /* the square is the strip's to decide, so a cover that is not one is cropped
+     to it rather than stretched into it */
+  object-fit: cover;
+}
+
+.track[data-size='fill'] .lines {
+  justify-content: center;
+}
+
+/* No gap between the lines: the type scale already separates them, and a gap on
+   top of the leading would make three lines read as three paragraphs. */
+.lines {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* A long title truncates rather than wrapping, so the block's height never
+   depends on the name of the track. The string itself stays whole in the
+   document, so this costs a screen reader nothing. */
+.line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Holds the real line box while loading, so swapping a bone for its text never
+   shifts the block. */
+.bone {
+  display: flex;
+  align-items: center;
+}

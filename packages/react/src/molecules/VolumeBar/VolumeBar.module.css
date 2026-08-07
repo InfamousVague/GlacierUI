@@ -1,0 +1,93 @@
+/* Mute, fader, readout - one row, in that order, because that is the order the
+   question is asked in: is it on, how loud, how loud exactly. */
+.volume {
+  display: flex;
+  align-items: center;
+  gap: var(--glacier-space-2);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* The rail is the only part that flexes; a fader below about five rem stops
+   being aimable, so it has a floor rather than shrinking with the row. */
+.rail {
+  flex: 1;
+  min-width: 5rem;
+  max-width: 8rem;
+}
+
+.volume[data-size='sm'] .rail {
+  min-width: 4rem;
+  max-width: 6rem;
+  /* The fader is a whole size scale short of the transport around it: the
+     Slider's own thumb and track are tuned for a control that stands alone, and
+     next to a compact strip's thin seek bar the round thumb reads as oversized.
+     One step down brings it into line. */
+  --slider-thumb: 1rem;
+  --slider-track: 0.25rem;
+}
+
+/* Vertical: the rail stands and the mute toggle stays beside it rather than
+   moving on top of it. A standing fader is asked for where height is the axis
+   that is scarce, so spending a third of it on the button would leave too
+   little travel to aim at. The length is the caller's, since only the caller
+   knows how tall the space it is standing in is. */
+.volume[data-orientation='vertical'] .rail {
+  --slider-length: var(--volume-length, 6rem);
+  flex: none;
+  min-width: 0;
+  max-width: none;
+}
+
+/* In a panel the fader is a column: the readout at the top, where the thumb
+   will not cover it, the rail standing, and the speaker at the foot - nearest
+   the button that opened the panel, so the two read as one control. Reversed
+   rather than reordered, because the order the question is asked in has not
+   changed: mute is still the first control Tab reaches. */
+.volume[data-layout='popover'] {
+  flex-direction: column-reverse;
+}
+
+/* Nothing to hold a column against here, and no dragging that could push the
+   rail out from under the pointer - the readout sits above the travel, not
+   beside it. */
+.volume[data-layout='popover'] .readout {
+  width: auto;
+  text-align: center;
+}
+
+/* The travel a panel gives the rail: long enough to aim at, short enough that
+   the panel does not become a column in its own right. Doubled selector to
+   outweigh the popover's own panel class, which is written for panels of prose
+   and holds a twelve-rem floor a fader has no use for: this one is as wide as
+   the thing inside it.
+
+   More room above and below than beside: the ends of the travel are where the
+   thumb is aimed hardest - all the way down, all the way up - and a thumb that
+   ends its run flush against the edge of the panel reads as clipped. */
+.panel.panel {
+  --volume-length: 7rem;
+  min-width: 0;
+  width: max-content;
+  padding-block: var(--glacier-space-4);
+}
+
+/* Fixed width and tabular figures: the readout runs from "0dB" to "-60dB" as
+   the thumb moves, and a column that resized while being dragged would push
+   the rail out from under the pointer. */
+.readout {
+  flex: none;
+  width: 3.5rem;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Muted goes quiet rather than disappearing: the level is still set, it is just
+   not what is coming out, so the rail dims to say so and keeps its position. */
+.volume[data-muted] .rail {
+  opacity: 0.55;
+}
+
+.volume[data-disabled] {
+  opacity: 0.5;
+}
