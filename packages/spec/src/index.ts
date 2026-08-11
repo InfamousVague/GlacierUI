@@ -177,6 +177,7 @@ import { switchSpec } from './components/switch.ts';
 import { tabsSpec } from './components/tabs.ts';
 import { textSpec } from './components/text.ts';
 import { textareaSpec } from './components/textarea.ts';
+import { lyricsSpec } from './components/lyrics.ts';
 import { toastSpec } from './components/toast.ts';
 import { toggleSpec } from './components/toggle.ts';
 import { toolbarSpec } from './components/toolbar.ts';
@@ -297,6 +298,7 @@ export const specs: ComponentSpec[] = [
   colorPickerSpec,
   commandPaletteSpec,
   playerCardSpec,
+  lyricsSpec,
   trackInfoSpec,
   transportControlsSpec,
   volumeBarSpec,

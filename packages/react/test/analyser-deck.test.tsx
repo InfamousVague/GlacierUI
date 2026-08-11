@@ -70,6 +70,18 @@ describe('deck speed glide', () => {
     expect(speedGlideDelay(1, 1, 0.4, 0.02, 0.4)).toBeCloseTo(0.02, 6);
   });
 
+  it('never reads before its own start: a glide from zero lag cannot outgrow elapsed time', () => {
+    // The line's read position is (elapsed - delay); with delay(t) <= t the
+    // deck can only slow what played AFTER the flush, never resurrect what
+    // played before it - the invariant that makes a flush at a seek final.
+    for (const [from, to, span] of [[0.5, 1, 0.38], [1, 0.5, 0.32], [0.05, 1, 0.5]]) {
+      for (let i = 0; i <= 32; i += 1) {
+        const t = (i / 32) * span!;
+        expect(speedGlideDelay(from!, to!, span!, 0, t)).toBeLessThanOrEqual(t + 1e-9);
+      }
+    }
+  });
+
   it('clamps to the ends of the glide rather than extrapolating past them', () => {
     const end = speedGlideDelay(1, 0.5, 0.32, 0, 0.32);
     expect(speedGlideDelay(1, 0.5, 0.32, 0, 5)).toBeCloseTo(end, 6);

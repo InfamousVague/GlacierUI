@@ -44,9 +44,88 @@ export interface AnalyserMixSource {
   fadeLevel(level: number, seconds: number): void;
 }
 
+/**
+ * The scratch surface: a hand on the platter, heard.
+ *
+ * A media element cannot play backwards, and seeking it repeatedly is a
+ * decoder restart, not a scrub - so this is built the way a tape machine is.
+ * A worklet sits in the graph just ahead of the deck and keeps a ring of the
+ * last little while of everything that actually played. `hold` freezes the
+ * tape and hands the output to a read head; `move` tells the head where the
+ * hand is, and the head chases it - through a critically-damped spring, so
+ * sixty pointer events a second read as one continuous motion rather than a
+ * zipper - sounding the ring at whatever velocity the chase requires,
+ * forwards or backwards, silent when the hand rests. `release` hands the
+ * chain back to the live element.
+ *
+ * The capture point is ahead of the deck on purpose: the deck is where brakes
+ * and spin-ups bend the signal, so the tape holds the song at true speed no
+ * matter what the transport was doing to it.
+ *
+ * The caller owns the element: pause it when it calls `hold` (the tape
+ * freezes either way, but a playing element would keep buying audio nobody
+ * hears), and seek-then-play on `release` using the offset it returns.
+ */
+export interface AnalyserScrub {
+  /**
+   * True once the engine is standing: the worklet module loaded and the ring
+   * is recording. False where AudioWorklet is missing, in which case every
+   * other call is a safe no-op and `release` answers 0 - callers keep their
+   * seek-only fallback.
+   */
+  ready(): boolean;
+  /**
+   * Grab the platter: freeze the tape and take over the chain's output.
+   * `atSeconds` is where the song stands - the head's anchor, and what maps
+   * both tapes onto the song's own clock.
+   */
+  hold(atSeconds: number): void;
+  /**
+   * Where the hand is, in seconds of song relative to the grab - negative is
+   * back, positive forward. With the whole song loaded the head roams the
+   * entire track; on the ring alone it can only reach what has played, and
+   * parks at the tape's edge rather than reading fiction.
+   */
+  move(offsetSeconds: number): void;
+  /** Where the head actually is right now, seconds relative to the grab. */
+  offset(): number;
+  /** Loudness of what the scrub is sounding, 0..1-ish - a liveness signal. */
+  level(): number;
+  /** Let go: hand the chain back to the element. Returns the settled offset,
+   *  which is where the caller should land its seek. */
+  release(): number;
+  /**
+   * Forget the ring. Call across every seek - its map onto the song's clock
+   * broke with the jump. The whole-song tape is indexed absolutely and
+   * survives; only `eject` drops it.
+   */
+  clear(): void;
+  /**
+   * Hand the engine the WHOLE song: mono PCM at `rate` covering `duration`
+   * seconds from the top of the track. From then on the head roams the entire
+   * file, both directions, the way a tape machine's does - this is what turns
+   * "scratch what has played" into "scrub the record". The buffer is
+   * transferred, not copied; the caller's copy is gone after this.
+   */
+  load(pcm: Float32Array, rate: number, duration: number): void;
+  /** Whether a whole-song tape is loaded. */
+  loaded(): boolean;
+  /** A new source: drop the song tape AND the ring. */
+  eject(): void;
+  /** Dev: logs the engine's internals to the console, one line. */
+  probe(): void;
+}
+
 export interface AnalyserMeter {
   /** Current loudness, 0..1. Safe to call at any rate. */
   meter: LoudnessMeter;
+  /**
+   * Instantaneous spectrum as `count` log-spaced bands, each 0..1, low to
+   * high. Log-spaced because that is how the ear hears it: an octave per
+   * band-ish, so bass does not eat the whole readout. Safe to call at any
+   * rate; a silent or suspended graph reads all zeros.
+   */
+  spectrum(count: number): number[];
   /**
    * Seats another element at the same mixer - or returns the seat an element
    * already holds, including the one the meter was created on. The newcomer
@@ -118,6 +197,10 @@ export interface AnalyserMeter {
    * line of a fixed length has no speed of its own to hold.
    */
   resetSpeed(speed?: number): void;
+  /** The scratch surface - see `AnalyserScrub`. Always present; where the
+   * platform has no AudioWorklet it reports `ready() === false` and every
+   * call is a safe no-op. */
+  scrub: AnalyserScrub;
   /** The centre frequency (Hz) of each EQ band, low to high, index-aligned with
    * `setEqGains`. */
   eqFrequencies: readonly number[];
@@ -179,6 +262,201 @@ const EQ_FREQUENCIES = [32, 64, 125, 250, 500, 1000, 2000, 4000] as const;
  * is a ceiling on abuse rather than a working figure.
  */
 const MAX_DELAY_SECONDS = 2;
+
+/**
+ * How much tape the scratch ring holds. The disc free-runs at a revolution
+ * per six seconds, so this is seven-plus hard spins of reach - generous for a
+ * scratch, and at 44.1kHz stereo about sixteen megabytes, allocated once and
+ * kept. A figure chosen for the gesture, not the memory: a hand that winds
+ * back further than this hits the tape's edge and holds there.
+ */
+const SCRUB_RING_SECONDS = 45;
+
+/** The fastest the read head may travel, in multiples of real time. The same
+ * order of "hyperspeed" a hard fast-wind gives a tape machine; past it the
+ * output is ultrasonic squeal and aliasing, not scrubbing. */
+const SCRUB_MAX_RATE = 12;
+
+/**
+ * The read head's whole physics, run per sample on the audio thread.
+ *
+ * The head chases the hand through a critically-damped spring (~30ms of
+ * character). That lag is not a compromise, it is the mechanism: pointer
+ * events arrive at 60-120Hz, so the hand's reported position is a staircase,
+ * and a head glued straight to it would sound each step as a click. The
+ * spring rides through the steps, and its velocity - which IS the playback
+ * rate, and so the pitch - stays continuous.
+ *
+ * Kept as a registered-processor source string because a worklet runs off in
+ * its own scope: it may import nothing and close over nothing, so a string
+ * handed to `addModule` via a Blob URL is the honest shape of it.
+ */
+const SCRUB_PROCESSOR = `
+class GlacierScrubDeck extends AudioWorkletProcessor {
+  constructor(options) {
+    super();
+    const seconds = (options && options.processorOptions && options.processorOptions.seconds) || 45;
+    this.n = Math.ceil(sampleRate * seconds);
+    this.ringL = new Float32Array(this.n);
+    this.ringR = new Float32Array(this.n);
+    this.w = 0;       // samples ever written; w % n is the write slot
+    this.filled = 0;  // how much of the ring is real
+    // The whole song, when the app has fetched and decoded it: mono PCM at its
+    // own (usually lower) rate. With it the head roams the entire track; the
+    // ring is the fallback for the first grab of a track, before it lands.
+    this.tape = null;
+    this.tapeRate = 1;
+    this.tapeDur = 0;
+    this.mix = 0;       // 0 = the live chain, 1 = the scrub voice
+    this.mixTarget = 0;
+    // The head runs in SONG SECONDS - one domain for both tapes, whatever
+    // their sample rates. 1x is 1/sampleRate per rendered sample.
+    this.anchor = 0;  // song time of the grab
+    this.pos = 0;
+    this.vel = 0;
+    this.target = 0;
+    this.holdW = 0;   // write head at the grab - the ring sample that IS anchor
+    const maxRate = (options && options.processorOptions && options.processorOptions.maxRate) || 12;
+    this.maxV = maxRate / sampleRate;
+    this.port.onmessage = (e) => {
+      const m = e.data;
+      if (m.t === 'hold') {
+        this.anchor = m.at || 0;
+        this.pos = this.anchor;
+        this.target = this.anchor;
+        this.vel = 0;
+        this.holdW = this.w;
+        this.mixTarget = 1;
+      } else if (m.t === 'move') {
+        const asked = this.anchor + m.offset;
+        const lo = this.tape ? 0 : this.anchor - this.filled / sampleRate;
+        const hi = this.tape ? this.tapeDur : this.anchor;
+        this.target = asked < lo ? lo : asked > hi ? hi : asked;
+      } else if (m.t === 'release') {
+        this.mixTarget = 0;
+      } else if (m.t === 'clear') {
+        // A seek broke the ring's map onto the song; the file tape is indexed
+        // absolutely and survives it.
+        this.filled = 0;
+      } else if (m.t === 'tape') {
+        this.tape = m.pcm;
+        this.tapeRate = m.rate;
+        this.tapeDur = m.duration;
+      } else if (m.t === 'eject') {
+        this.tape = null;
+        this.tapeDur = 0;
+        this.filled = 0;
+      } else if (m.t === 'probe') {
+        this.port.postMessage({
+          t: 'probed',
+          w: this.w,
+          filled: this.filled,
+          mix: this.mix,
+          pos: this.pos - this.anchor,
+          target: this.target - this.anchor,
+          vel: this.vel * sampleRate,
+          tape: this.tape ? this.tapeDur : 0,
+          inRms: this.inRms || 0,
+          inChans: this.inChans === undefined ? -1 : this.inChans,
+          rate: sampleRate,
+        });
+      }
+    };
+  }
+  process(inputs, outputs) {
+    const input = inputs[0];
+    const out = outputs[0];
+    const outL = out[0];
+    const outR = out.length > 1 ? out[1] : out[0];
+    const inL = input && input.length > 0 ? input[0] : null;
+    const inR = input && input.length > 1 ? input[1] : inL;
+    const frames = outL.length;
+    this.inChans = input ? input.length : 0;
+    if (inL) {
+      let ie = 0;
+      for (let i = 0; i < frames; i += 1) ie += inL[i] * inL[i];
+      this.inRms = Math.sqrt(ie / frames);
+    } else {
+      this.inRms = 0;
+    }
+    // Critically damped spring, ~5.5Hz: tight enough to feel glued to the
+    // finger, slow enough to swallow the pointer-event staircase.
+    const w0 = (2 * Math.PI * 5.5) / sampleRate;
+    const k = w0 * w0;
+    const c = 2 * w0;
+    const slew = 1 / (0.005 * sampleRate); // 5ms voice fade - the de-click
+    const dt = 1 / sampleRate;
+    let energy = 0;
+    for (let i = 0; i < frames; i += 1) {
+      const dryL = inL ? inL[i] : 0;
+      const dryR = inR ? inR[i] : dryL;
+      // The ring records only while the scrub voice is quiet: a held platter
+      // is frozen, and writing during the release fade only ever writes the
+      // silence of an element that has not resumed yet.
+      if (this.mix < 0.5) {
+        this.ringL[this.w % this.n] = dryL;
+        this.ringR[this.w % this.n] = dryR;
+        this.w += 1;
+        if (this.filled < this.n) this.filled += 1;
+      }
+      this.vel += (this.target - this.pos) * k - this.vel * c;
+      if (this.vel > this.maxV) this.vel = this.maxV;
+      if (this.vel < -this.maxV) this.vel = -this.maxV;
+      this.pos += this.vel;
+      // The tape's edges: the head parks rather than reading fiction.
+      const lo = this.tape ? 0 : this.anchor - this.filled / sampleRate;
+      const hi = this.tape ? this.tapeDur : this.anchor;
+      if (this.pos > hi) { this.pos = hi; if (this.vel > 0) this.vel = 0; }
+      if (this.pos < lo) { this.pos = lo; if (this.vel < 0) this.vel = 0; }
+      let wetL = 0;
+      let wetR = 0;
+      if (this.tape) {
+        const idx = this.pos * this.tapeRate;
+        const base = Math.floor(idx);
+        if (base >= 0 && base < this.tape.length - 1) {
+          const frac = idx - base;
+          wetL = this.tape[base] * (1 - frac) + this.tape[base + 1] * frac;
+          wetR = wetL;
+        }
+      } else if (this.filled > 1) {
+        // Ring index: the sample written at the grab IS the anchor's moment,
+        // and everything older sits behind it at the context rate.
+        const back = (this.anchor - this.pos) * sampleRate;
+        const abs = this.holdW - back;
+        const base = Math.floor(abs);
+        if (base >= this.holdW - this.filled && base < this.w - 1) {
+          const frac = abs - base;
+          const a = ((base % this.n) + this.n) % this.n;
+          const b = (a + 1) % this.n;
+          wetL = this.ringL[a] * (1 - frac) + this.ringL[b] * frac;
+          wetR = this.ringR[a] * (1 - frac) + this.ringR[b] * frac;
+        }
+      }
+      this.mix += this.mix < this.mixTarget
+        ? Math.min(slew, this.mixTarget - this.mix)
+        : -Math.min(slew, this.mix - this.mixTarget);
+      const m = this.mix;
+      const L = dryL * (1 - m) + wetL * m;
+      const R = dryR * (1 - m) + wetR * m;
+      outL[i] = L;
+      if (outR !== outL) outR[i] = R;
+      energy += L * L;
+    }
+    // The head's whereabouts, every quantum while the scrub voice sounds -
+    // ~3ms of staleness at worst, which is what lets release() answer
+    // synchronously from the main thread's mirror.
+    if (this.mix > 0.001) {
+      this.port.postMessage({
+        t: 'head',
+        offset: this.pos - this.anchor,
+        level: Math.sqrt(energy / frames),
+      });
+    }
+    return true;
+  }
+}
+registerProcessor('glacier-scrub-deck', GlacierScrubDeck);
+`;
 
 /**
  * How many straight segments a glide is scheduled as. Each segment holds one
@@ -350,14 +628,46 @@ export function createAnalyserMeter(element: HTMLMediaElement): AnalyserMeter {
   // The deck. Between the EQ and the gain on purpose: the speed is a property
   // of the signal, so it sits with the rest of the shaping - but the fade has
   // to come after it, or a fade would be heard as late as the lag is long.
-  const deck = context.createDelay(MAX_DELAY_SECONDS);
+  //
+  // `let`, because a flush REPLACES it. A DelayNode remembers the last two
+  // seconds of everything that ever flowed through it, and the API has no way
+  // to make it forget; a glide that grows the delay after a seek would read
+  // that memory - the song from before the jump, played as if it belonged.
+  // A fresh node's memory is silence, which is the only right thing for a
+  // spin-up to find behind a discontinuity.
+  let deck = context.createDelay(MAX_DELAY_SECONDS);
   const tail = filters.reduce<AudioNode>((node, filter) => {
     node.connect(filter);
     return filter;
   }, analyser);
-  tail.connect(deck);
+  // A fixed berth ahead of the deck. The shaping (the EQ tail, or the
+  // leveller's make-up when night mode is routed in) always lands HERE, and
+  // this always feeds whatever comes next - so the scratch engine, which
+  // arrives asynchronously (its worklet module has to load), can slot itself
+  // in behind it without every other reroute needing to know whether it made
+  // it. Unity gain: a berth, not a control.
+  const preDeck = context.createGain();
+  // Whoever feeds the deck right now: the berth, or the scratch engine once
+  // it has moored behind it. Tracked so a deck swap rewires the live path.
+  let deckFeed: AudioNode = preDeck;
+  tail.connect(preDeck);
+  preDeck.connect(deck);
   deck.connect(gain);
   gain.connect(context.destination);
+
+  /** Replaces the deck with a fresh, empty one - the flush that forgets. */
+  const swapDeck = () => {
+    const fresh = context.createDelay(MAX_DELAY_SECONDS);
+    try {
+      deckFeed.disconnect(deck);
+    } catch {
+      // Already detached (mid-reroute); the fresh wiring below still stands.
+    }
+    deck.disconnect();
+    deckFeed.connect(fresh);
+    fresh.connect(gain);
+    deck = fresh;
+  };
 
   // The night-mode leveller, built now and routed in later: a gentle downward
   // squeeze with a touch of make-up so quiet passages come up more than loud
@@ -378,6 +688,71 @@ export function createAnalyserMeter(element: HTMLMediaElement): AnalyserMeter {
   // inaudible and the graph behaves exactly as it did before seats existed.
   seatElement(element);
 
+  // ── The scratch engine ────────────────────────────────────────────────────
+  //
+  // Built in the background: `addModule` is async, so the meter stands up
+  // without it and the engine moors behind the berth when its module lands -
+  // usually within the same gesture that created the meter, well before any
+  // hand reaches the platter. Until then (and forever, where AudioWorklet
+  // does not exist) `scrub.ready()` is false and callers keep their fallback.
+  //
+  // The head's whereabouts are mirrored here off the worklet's per-quantum
+  // reports, which is what lets `offset` and `release` answer synchronously -
+  // at most one render quantum (~3ms) stale, inside any gesture's noise.
+  let scrubNode: AudioWorkletNode | null = null;
+  let scrubReady = false;
+  let scrubLoaded = false;
+  let scrubHead = 0;
+  let scrubLevel = 0;
+  const workletHost = context.audioWorklet;
+  if (
+    workletHost &&
+    typeof AudioWorkletNode !== 'undefined' &&
+    typeof Blob !== 'undefined' &&
+    typeof URL.createObjectURL === 'function'
+  ) {
+    // A Blob URL because a worklet loads as its own module, importing nothing
+    // and closing over nothing - shipping it as a source string keeps the kit
+    // a plain library with no asset pipeline behind it.
+    const moduleUrl = URL.createObjectURL(
+      new Blob([SCRUB_PROCESSOR], { type: 'application/javascript' }),
+    );
+    void workletHost
+      .addModule(moduleUrl)
+      .then(() => {
+        const node = new AudioWorkletNode(context, 'glacier-scrub-deck', {
+          numberOfInputs: 1,
+          numberOfOutputs: 1,
+          outputChannelCount: [2],
+          processorOptions: { seconds: SCRUB_RING_SECONDS, maxRate: SCRUB_MAX_RATE },
+        });
+        node.port.onmessage = (event: MessageEvent) => {
+          const m = event.data as { t?: string; offset?: number; level?: number };
+          if (m?.t === 'head') {
+            scrubHead = m.offset ?? 0;
+            scrubLevel = m.level ?? 0;
+          } else if (m?.t === 'probed') {
+            // Dev probe: one line, everything the engine knows about itself.
+            console.log('[glacier scrub]', JSON.stringify(m));
+          }
+        };
+        // Moor it behind the berth: berth → engine → deck. One rewire, once,
+        // almost always before anything plays; the berth is what spares every
+        // other reroute from caring whether this line ever ran.
+        preDeck.disconnect();
+        preDeck.connect(node);
+        node.connect(deck);
+        deckFeed = node;
+        disposable.push(node);
+        scrubNode = node;
+        scrubReady = true;
+      })
+      .catch(() => {
+        // No module, no scratch; the seek-only fallback stands.
+      })
+      .finally(() => URL.revokeObjectURL(moduleUrl));
+  }
+
   // The glide in flight, as the numbers that describe it. The delay line holds
   // the length; only this holds the speed, which is the length's slope and so
   // is not a thing the graph can be asked for.
@@ -386,10 +761,31 @@ export function createAnalyserMeter(element: HTMLMediaElement): AnalyserMeter {
   let glideStart = context.currentTime;
   let glideSeconds = 0;
 
+  // Scratch space for spectrum reads, sized to the analyser's bin count and
+  // reused across calls - a per-frame reader must not allocate per frame.
+  const spectrumBins = new Uint8Array(analyser.frequencyBinCount);
+
   const created: AnalyserMeter = {
     meter: () => {
       analyser.getFloatTimeDomainData(buffer);
       return rms(buffer);
+    },
+    spectrum: (count: number) => {
+      const bands = Math.max(1, Math.floor(count));
+      analyser.getByteFrequencyData(spectrumBins);
+      // Log-spaced edges across the useful range: the first bin is DC and
+      // skipped, the top of the range is the last bin. Each band averages
+      // the bins under it; a band narrower than one bin reads that bin.
+      const top = spectrumBins.length;
+      const result: number[] = [];
+      for (let i = 0; i < bands; i += 1) {
+        const from = Math.max(1, Math.round(top ** (i / bands)));
+        const to = Math.max(from + 1, Math.round(top ** ((i + 1) / bands)));
+        let sum = 0;
+        for (let bin = from; bin < Math.min(to, top); bin += 1) sum += spectrumBins[bin] ?? 0;
+        result.push(sum / (Math.min(to, top) - from) / 255);
+      }
+      return result;
     },
     // Both writes go through the automation timeline rather than `.value`: a
     // bare value write loses to any ramp still scheduled, so a fader moved
@@ -435,32 +831,74 @@ export function createAnalyserMeter(element: HTMLMediaElement): AnalyserMeter {
       glideSeconds = span;
     },
     resetSpeed: (speed = 1) => {
+      // Not merely delayTime back to zero: the whole node is replaced, so the
+      // line forgets what played before the reset. Zeroing the length still
+      // leaves the ring holding the pre-reset song, and the next glide to
+      // grow the delay would read it back out - a blip of wherever playback
+      // WAS after every seek or pause, instead of silence.
+      swapDeck();
       const now = context.currentTime;
-      deck.delayTime.cancelScheduledValues(now);
-      deck.delayTime.setValueAtTime(0, now);
       glideFrom = speed;
       glideTo = speed;
       glideStart = now;
       glideSeconds = 0;
     },
     addSource: seatElement,
+    scrub: {
+      ready: () => scrubReady,
+      hold: (atSeconds: number) => {
+        // The mirror resets with the grab: a release read before the first
+        // report must answer "you have not moved", not last scratch's landing.
+        scrubHead = 0;
+        scrubLevel = 0;
+        scrubNode?.port.postMessage({ t: 'hold', at: atSeconds });
+      },
+      move: (offsetSeconds: number) => {
+        scrubNode?.port.postMessage({ t: 'move', offset: offsetSeconds });
+      },
+      offset: () => scrubHead,
+      level: () => scrubLevel,
+      release: () => {
+        const settled = scrubHead;
+        scrubNode?.port.postMessage({ t: 'release' });
+        return settled;
+      },
+      clear: () => {
+        scrubNode?.port.postMessage({ t: 'clear' });
+      },
+      load: (pcm: Float32Array, rate: number, duration: number) => {
+        if (!scrubNode) return;
+        scrubLoaded = true;
+        scrubNode.port.postMessage({ t: 'tape', pcm, rate, duration }, [pcm.buffer]);
+      },
+      loaded: () => scrubLoaded,
+      eject: () => {
+        scrubLoaded = false;
+        scrubNode?.port.postMessage({ t: 'eject' });
+      },
+      probe: () => {
+        scrubNode?.port.postMessage({ t: 'probe' });
+      },
+    },
     setDynamics: (on: boolean) => {
       if (on === squeezing) return;
       squeezing = on;
       // Rerouting rather than zeroing: a compressor "set flat" still colours
       // the signal, and absent is the only honest off. The tail's one output
       // is whichever of these it was given, so a bare disconnect is exact.
+      // Both routes land on the berth, so neither needs to know whether the
+      // scratch engine (or a deck swap) has rewired what follows it.
       tail.disconnect();
       if (on) {
         tail.connect(squeeze);
-        makeup.connect(deck);
+        makeup.connect(preDeck);
       } else {
-        // Bare, not disconnect(deck): the deck is make-up's only output, so
-        // the two are the same while the graph is alive - but the targeted
+        // Bare, not disconnect(preDeck): the berth is make-up's only output,
+        // so the two are the same while the graph is alive - but the targeted
         // form throws once dispose has severed it, and a disposed meter is
         // supposed to go quiet, not loud.
         makeup.disconnect();
-        tail.connect(deck);
+        tail.connect(preDeck);
       }
     },
     setMono: (on: boolean) => {
@@ -498,6 +936,11 @@ export function createAnalyserMeter(element: HTMLMediaElement): AnalyserMeter {
       filters.forEach((filter) => filter.disconnect());
       squeeze.disconnect();
       makeup.disconnect();
+      preDeck.disconnect();
+      // The port as well as the node: a worklet with an open port is kept
+      // alive by it, tape and all, after the graph around it has gone.
+      scrubNode?.port.close();
+      scrubReady = false;
       deck.disconnect();
       gain.disconnect();
       void context.close();

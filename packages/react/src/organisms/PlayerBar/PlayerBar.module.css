@@ -108,6 +108,15 @@
   min-width: 0;
 }
 
+/* A toggle that is ON is accent - the same rule TransportControls already
+   follows for shuffle and repeat. The heart lives out here in the rail rather
+   than inside the transport, so it never inherited it: a saved song read as a
+   filled grey heart, which is the shape of "saved" without the colour of it,
+   and at a glance is indistinguishable from an unsaved one. */
+.rail [data-on] {
+  color: var(--glacier-accent-text);
+}
+
 .rail[data-side='trailing'] {
   justify-content: flex-end;
 }

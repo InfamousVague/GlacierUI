@@ -81,6 +81,7 @@ export {
   type PlayerLayout,
   type PlayerDensity,
 } from './molecules/PlayerCard/PlayerCard.tsx';
+export { Lyrics, type LyricsProps, type LyricLine } from './molecules/Lyrics/Lyrics.tsx';
 // The player strip's three parts, each standing on its own so an app that wants
 // a different strip can build one out of the same pieces.
 export {

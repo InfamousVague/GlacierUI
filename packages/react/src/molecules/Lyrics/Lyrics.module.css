@@ -1,0 +1,84 @@
+/* Synced lyrics: a scrolling column of lines where the active one is lit and
+   everything else stands back. The host sizes the box; this owns the scroll,
+   the tones, and the follow's smoothness. */
+.lyrics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--glacier-space-2);
+  block-size: 100%;
+  overflow-y: auto;
+  padding: var(--glacier-space-4);
+  font-family: var(--glacier-font-sans);
+  /* the follow scrolls this programmatically; the bar stays for the user */
+  scrollbar-width: thin;
+}
+
+/* Real room at the tail only, so the last lines can ride up to the centre
+   when followed rather than pinning to the bottom edge. A spacer pseudo-
+   element rather than scroll-padding, which only steers snap and scroll-into-
+   view and adds no scrollable range at all.
+
+   Deliberately nothing at the head: a sheet just opened - or unsynced text,
+   which never follows - must read from its first line, not from a void. The
+   follow's own clamp at zero is what squares this with centring: the opening
+   lines sit top-anchored while they are active, and the centre takes over
+   once the song is far enough in to have something to centre. */
+.lyrics:not(.empty)::after {
+  content: '';
+  flex: none;
+  block-size: 40%;
+}
+
+/* One line. The rest tone is subtle so the active line has somewhere to stand
+   out from; a seekable line (a real button) lifts a step under the pointer as
+   the nudge that lines are targets here. Text properties only - as a button
+   it must shed every button default. */
+.line {
+  display: block;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  text-align: start;
+  inline-size: 100%;
+  color: var(--glacier-text-subtle);
+  font-size: var(--glacier-font-size-md);
+  line-height: var(--glacier-leading-md);
+  font-weight: 600;
+  transition: color var(--glacier-duration-normal) var(--glacier-ease-out);
+  overflow-wrap: anywhere;
+}
+
+button.line {
+  cursor: pointer;
+}
+
+button.line:hover {
+  color: var(--glacier-text-muted);
+}
+
+button.line:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--glacier-radius-sm);
+}
+
+/* The line playback is inside: lit in the accent's text step - the theme's
+   own colour at reading brightness, so the active line is both the loudest
+   line and unmistakably the app's. It outranks hover - the pointer resting
+   on the active line must not dim it. */
+.line[data-active],
+button.line[data-active]:hover {
+  color: var(--glacier-accent-text);
+}
+
+.empty {
+  align-items: center;
+  justify-content: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line {
+    transition: none;
+  }
+}
