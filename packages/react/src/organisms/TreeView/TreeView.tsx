@@ -23,6 +23,15 @@ export interface TreeItem {
   /** Leading glyph, hidden from assistive tech. */
   icon?: ReactNode;
   /** Trailing content such as a CounterBadge or Pill. */
+  /**
+   * Trailing content such as a CounterBadge, Pill - or a button.
+   *
+   * Interactive trailing content is isolated from the row: a click or key
+   * press that lands on a button, link or input inside this slot does not
+   * also activate the row (select it, toggle its children). A plain badge
+   * keeps the old behaviour - tapping it still activates the row, so the
+   * slot does not eat tap target from rows that only wear a count.
+   */
   trailing?: ReactNode;
   /** Skipped by arrow navigation and unselectable. */
   disabled?: boolean;
@@ -71,6 +80,18 @@ function flattenVisible(
     }
   }
   return out;
+}
+
+/**
+ * True when an event landed on interactive trailing content - the case where
+ * the row must NOT also activate. Checked at the event's target rather than
+ * blanket-stopping propagation, so non-interactive trailing (a badge) still
+ * behaves as part of the row.
+ */
+function hitsInteractive(target: EventTarget | null, bound: HTMLElement): boolean {
+  if (!(target instanceof HTMLElement)) return false;
+  const hit = target.closest('button, a, input, select, textarea, [role="button"], [role="menuitem"]');
+  return !!hit && bound.contains(hit);
 }
 
 const chevronGlyph = (
@@ -291,7 +312,21 @@ export function TreeView({
           <span id={labelId} className={styles.label}>
             {item.label}
           </span>
-          {item.trailing && <span className={styles.trailing}>{item.trailing}</span>}
+          {item.trailing && (
+            <span
+              className={styles.trailing}
+              onClick={(event) => {
+                if (hitsInteractive(event.target, event.currentTarget)) event.stopPropagation();
+              }}
+              onKeyDown={(event) => {
+                // The tree's own keyboard handler listens at the root; keys
+                // pressed inside a focused trailing control are that control's.
+                if (hitsInteractive(event.target, event.currentTarget)) event.stopPropagation();
+              }}
+            >
+              {item.trailing}
+            </span>
+          )}
         </span>
         {hasChildren && (
           <AnimatePresence initial={false}>
