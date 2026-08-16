@@ -43,6 +43,12 @@ export interface ToastProps {
   message: ReactNode;
   /** Optional leading glyph. */
   icon?: ReactNode;
+  /**
+   * One verb, offered while the pill stands - "Undo" is the whole reason this
+   * exists. Pressing it runs the handler and dismisses; a toast is not a form,
+   * so one action is the ceiling and anything needing two belongs in a dialog.
+   */
+  action?: { label: string; onPress: () => void };
   /** Whether a trailing close control is shown. */
   dismissible?: boolean;
   /** Called when the pill or its dismiss control is pressed. */
@@ -63,6 +69,7 @@ export function Toast({
   tone = 'neutral',
   message,
   icon,
+  action,
   dismissible = true,
   onDismiss,
   glass = false,
@@ -90,6 +97,20 @@ export function Toast({
     >
       {icon != null && <span className={styles.icon}>{icon}</span>}
       <span className={styles.message}>{message}</span>
+      {action && (
+        <button
+          type="button"
+          className={styles.action}
+          onClick={(e) => {
+            // The pill's own click dismisses; the action must not double as it.
+            e.stopPropagation();
+            action.onPress();
+            onDismiss?.();
+          }}
+        >
+          {action.label}
+        </button>
+      )}
       {dismissible && (
         <button
           type="button"
@@ -111,6 +132,8 @@ export interface ToastOptions {
   tone?: ToastTone;
   message: ReactNode;
   icon?: ReactNode;
+  /** One verb beside the message - see ToastProps.action. */
+  action?: { label: string; onPress: () => void };
   /** Auto-dismiss delay in milliseconds; defaults by tone, 0 disables auto-dismiss. */
   duration?: number;
   /** Whether a trailing close control is shown. */
@@ -185,6 +208,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                   tone={current.tone}
                   message={current.message}
                   icon={current.icon}
+                  action={current.action}
                   dismissible={current.dismissible}
                   glass={current.glass}
                   onDismiss={dismiss}

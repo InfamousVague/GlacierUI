@@ -50,6 +50,31 @@
   overflow-wrap: anywhere;
 }
 
+/* The one verb. It reads as a link inside the pill rather than a second
+   button-shaped thing fighting the pill's own shape: weight and the accent
+   colour carry it, and the hit area pads out invisibly to stay pressable. */
+.action {
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 650;
+  color: var(--glacier-accent-text);
+  padding: var(--glacier-space-1) var(--glacier-space-2);
+  margin-inline-start: var(--glacier-space-1);
+  border-radius: var(--glacier-radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.action:hover {
+  background: color-mix(in oklab, currentColor 12%, transparent);
+}
+
+.action:focus-visible {
+  outline: 2px solid var(--glacier-focus-ring);
+  outline-offset: -1px;
+}
+
 .dismiss {
   flex: none;
   display: flex;
