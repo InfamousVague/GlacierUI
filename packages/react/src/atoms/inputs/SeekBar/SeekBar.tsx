@@ -138,6 +138,12 @@ export function SeekBar({
   // a gradient is referenced by id, so each bar needs its own
   const gradientId = useId();
   const [scrubbing, setScrubbing] = useState(false);
+  // The same flag, readable synchronously. The pointer handlers cannot rely on
+  // `scrubbing` alone: state is read from the render the handler was bound in,
+  // so a move that lands in the same frame as its down still sees false and is
+  // dropped - with capture held, a fast drag could eat its own first inches.
+  // The ref flips at the moment of the event; the state keeps styling honest.
+  const scrubbingRef = useRef(false);
   const [current, setCurrent] = useControlled(value, defaultValue);
   // The beat is a per-frame reshape of the path, not a transition, so there is
   // nothing to shorten under reduced motion - the honest answer is to draw the
@@ -177,17 +183,19 @@ export function SeekBar({
     } catch {
       // jsdom and some synthetic events have no active pointer to capture
     }
+    scrubbingRef.current = true;
     setScrubbing(true);
     commit(timeFromPointer(event));
   };
 
   const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
-    if (disabled || !scrubbing) return;
+    if (disabled || !scrubbingRef.current) return;
     commit(timeFromPointer(event));
   };
 
   const endScrub = (event: PointerEvent<HTMLDivElement>) => {
-    if (!scrubbing) return;
+    if (!scrubbingRef.current) return;
+    scrubbingRef.current = false;
     setScrubbing(false);
     // Commit first, then report: `onSeekEnd?.(commit(...))` would skip the
     // commit entirely whenever no handler is attached, because an optional
