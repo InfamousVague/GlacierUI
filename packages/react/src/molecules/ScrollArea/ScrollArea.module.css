@@ -12,7 +12,17 @@
    attributes, dissolves the content toward whichever edge can still scroll. */
 .viewport {
   overflow: auto;
-  overscroll-behavior: contain;
+  /*
+   * Contain the axis this area SCROLLS, and only that one.
+   *
+   * `overscroll-behavior: contain` sets both axes, and on a single-axis area
+   * the other one does not scroll at all - so containing it does not keep a
+   * fling inside this box, it stops the gesture reaching the page and the
+   * drag simply dies. A horizontal shelf inside a scrolling page is where
+   * that bites: pulling down on one did nothing, whatever touch-action said,
+   * because the cross axis had already been sealed. The per-axis rules are in
+   * the orientation blocks below.
+   */
   /* Overlay scrollbars otherwise paint over the final line of content. Reserve
      their lane so the thumb remains at the viewport edge on every platform. */
   scrollbar-gutter: stable;
@@ -35,6 +45,8 @@
 .vertical .viewport {
   overflow-x: hidden;
   overflow-y: auto;
+  /* Its own axis is held; sideways is nobody's here, so leave it alone. */
+  overscroll-behavior-block: contain;
   /* Overlay scrollbars do not consume the stable gutter on macOS, so keep
      text clear of the thumb with a matching content-side safety lane. */
   padding-inline-end: var(--glacier-space-4);
@@ -43,6 +55,10 @@
 .horizontal .viewport {
   overflow-x: auto;
   overflow-y: hidden;
+  /* Sideways flings stay put; a vertical drag belongs to whatever scrolls
+     behind this - usually the page - and must be allowed to reach it. */
+  overscroll-behavior-inline: contain;
+  overscroll-behavior-block: auto;
 }
 
 /* --- fade masks -------------------------------------------------------------
