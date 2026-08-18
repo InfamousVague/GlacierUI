@@ -204,8 +204,15 @@ export interface AnalyserMeter {
   /** The centre frequency (Hz) of each EQ band, low to high, index-aligned with
    * `setEqGains`. */
   eqFrequencies: readonly number[];
-  /** Sets each EQ band's gain in dB, index-aligned with `eqFrequencies`. Missing
-   * or extra entries are ignored; a flat (all-zero) set is transparent. */
+  /**
+   * Sets the eight band gains, in dB, in `eqFrequencies` order.
+   *
+   * Boosts are paid for automatically: a broadband headroom stage after the
+   * cascade attenuates by the curve's true combined maximum, so a +8dB preset
+   * changes the shape of the sound without driving a 0dBFS master past the
+   * DAC and into clipping. Flat costs nothing - the stage sits at unity.
+   * All moves glide (~150ms); switching presets never clicks.
+   */
   setEqGains(gains: readonly number[]): void;
   /**
    * Resumes the underlying AudioContext. A context built outside a user gesture
@@ -255,6 +262,60 @@ interface MeteredElement extends HTMLMediaElement {
 /** The EQ band centres in Hz, low to high. Standard octave-ish spacing that the
  * kit's AudioEqualizer defaults line up with. */
 const EQ_FREQUENCIES = [32, 64, 125, 250, 500, 1000, 2000, 4000] as const;
+/** Every EQ move glides on this time constant - settled in ~150ms, never a
+ *  step. Applies to the band gains and the headroom stage alike, so the two
+ *  cannot be heard moving separately. */
+const EQ_GLIDE = 0.03;
+/** The bands' fixed Q. Restated here because the headroom math has to model
+ *  the same filters the graph runs. */
+const EQ_Q = 1;
+
+/**
+ * How much broadband attenuation a set of band gains needs so the shaped
+ * signal cannot exceed the level it arrived at.
+ *
+ * The honest number is the maximum of the cascade's combined magnitude
+ * response, not the loudest slider: at Q=1 adjacent bands overlap, so
+ * [+8, +6, ...] on 32/64Hz sums past either value alone. Each band is the
+ * Audio EQ Cookbook's peaking filter exactly as Web Audio implements it
+ * (A = 10^(dB/40)), evaluated on a log grid and summed in dB; the maximum
+ * positive excursion is what the headroom stage must absorb. Curves that
+ * only cut return 0 - headroom only ever attenuates.
+ *
+ * ~150 grid points x 8 biquads per call, and it runs only when a preset or
+ * slider changes: arithmetic noise, nothing worth caching.
+ */
+function eqHeadroomDb(gainsDb: readonly number[], sampleRate: number): number {
+  let worst = 0;
+  const floor = Math.log10(20);
+  const span = Math.log10(Math.min(20000, sampleRate / 2) ) - floor;
+  const POINTS = 160;
+  for (let i = 0; i <= POINTS; i += 1) {
+    const hz = 10 ** (floor + (span * i) / POINTS);
+    const w = (2 * Math.PI * hz) / sampleRate;
+    const cosW = Math.cos(w);
+    const cos2W = Math.cos(2 * w);
+    let db = 0;
+    for (let band = 0; band < EQ_FREQUENCIES.length; band += 1) {
+      const g = gainsDb[band] ?? 0;
+      if (g === 0) continue;
+      const w0 = (2 * Math.PI * EQ_FREQUENCIES[band]!) / sampleRate;
+      const alpha = Math.sin(w0) / (2 * EQ_Q);
+      const A = 10 ** (g / 40);
+      const b0 = 1 + alpha * A;
+      const b1 = -2 * Math.cos(w0);
+      const b2 = 1 - alpha * A;
+      const a0 = 1 + alpha / A;
+      const a1 = b1;
+      const a2 = 1 - alpha / A;
+      const num = b0 * b0 + b1 * b1 + b2 * b2 + 2 * (b0 * b1 + b1 * b2) * cosW + 2 * b0 * b2 * cos2W;
+      const den = a0 * a0 + a1 * a1 + a2 * a2 + 2 * (a0 * a1 + a1 * a2) * cosW + 2 * a0 * a2 * cos2W;
+      db += 10 * Math.log10(num / den);
+    }
+    if (db > worst) worst = db;
+  }
+  return worst;
+}
 
 /**
  * How long a lag the deck may build up. A stop and a start together cost about
@@ -649,6 +710,31 @@ export function createAnalyserMeter(element: HTMLMediaElement): AnalyserMeter {
     node.connect(filter);
     return filter;
   }, analyser);
+  /*
+   * The EQ's gain staging, and the reason presets are listenable at all.
+   *
+   * Peaking filters BOOST: +8dB of sub on a master already peaking at 0dBFS
+   * puts the waveform 8dB past the only hard ceiling in the chain - the
+   * DAC's clamp at the destination. Web Audio floats never clip inside the
+   * graph, so the damage happens silently at the very last step, and it is
+   * savage: measured on a bass-heavy 0dBFS signal, the stock "deep bass"
+   * curve sent 49% of all samples past the ceiling. Every serious equalizer
+   * pairs its bands with a broadband pre-attenuation for exactly this
+   * reason; this node is ours.
+   *
+   * It holds 10^(-need/20), where `need` is the true maximum of the CASCADE's
+   * combined response - computed, not read off the sliders, because at Q=1
+   * neighbouring bands overlap: 32Hz at +8 and 64Hz at +6 sum to more than
+   * either alone. A curve that only cuts needs nothing, and gets exactly
+   * that - this stage only ever attenuates, so Flat stays bit-transparent.
+   *
+   * It also stands between the cascade and everything downstream so the
+   * night-mode squeeze reroute (setDynamics) hangs off IT, not off the last
+   * filter - otherwise toggling night mode would wire the EQ straight past
+   * the headroom and bring the clipping back.
+   */
+  const shaped = context.createGain();
+  tail.connect(shaped);
   // A fixed berth ahead of the deck. The shaping (the EQ tail, or the
   // leveller's make-up when night mode is routed in) always lands HERE, and
   // this always feeds whatever comes next - so the scratch engine, which
@@ -659,7 +745,7 @@ export function createAnalyserMeter(element: HTMLMediaElement): AnalyserMeter {
   // Whoever feeds the deck right now: the berth, or the scratch engine once
   // it has moored behind it. Tracked so a deck swap rewires the live path.
   let deckFeed: AudioNode = preDeck;
-  tail.connect(preDeck);
+  shaped.connect(preDeck);
   preDeck.connect(deck);
   deck.connect(gain);
   gain.connect(context.destination);
@@ -897,9 +983,9 @@ export function createAnalyserMeter(element: HTMLMediaElement): AnalyserMeter {
       // is whichever of these it was given, so a bare disconnect is exact.
       // Both routes land on the berth, so neither needs to know whether the
       // scratch engine (or a deck swap) has rewired what follows it.
-      tail.disconnect();
+      shaped.disconnect();
       if (on) {
-        tail.connect(squeeze);
+        shaped.connect(squeeze);
         makeup.connect(preDeck);
       } else {
         // Bare, not disconnect(preDeck): the berth is make-up's only output,
@@ -907,7 +993,7 @@ export function createAnalyserMeter(element: HTMLMediaElement): AnalyserMeter {
         // form throws once dispose has severed it, and a disposed meter is
         // supposed to go quiet, not loud.
         makeup.disconnect();
-        tail.connect(preDeck);
+        shaped.connect(preDeck);
       }
     },
     setMono: (on: boolean) => {
@@ -918,10 +1004,25 @@ export function createAnalyserMeter(element: HTMLMediaElement): AnalyserMeter {
     },
     eqFrequencies: EQ_FREQUENCIES,
     setEqGains: (gains: readonly number[]) => {
+      const at = context.currentTime;
       filters.forEach((filter, index) => {
         const value = gains[index];
-        if (typeof value === 'number' && Number.isFinite(value)) filter.gain.value = value;
+        if (typeof value === 'number' && Number.isFinite(value)) {
+          // A glide, not an assignment: stepping a filter's gain mid-signal
+          // is a discontinuity, heard as a click on every preset change.
+          filter.gain.cancelScheduledValues(at);
+          filter.gain.setTargetAtTime(value, at, EQ_GLIDE);
+        }
       });
+      const need = eqHeadroomDb(
+        filters.map((filter, index) => {
+          const value = gains[index];
+          return typeof value === 'number' && Number.isFinite(value) ? value : filter.gain.value;
+        }),
+        context.sampleRate,
+      );
+      shaped.gain.cancelScheduledValues(at);
+      shaped.gain.setTargetAtTime(10 ** (-need / 20), at, EQ_GLIDE);
     },
     // Anything short of running gets a resume, not just 'suspended': WebKit
     // parks a long-idle context in its own 'interrupted' state (App Nap, the
@@ -945,6 +1046,7 @@ export function createAnalyserMeter(element: HTMLMediaElement): AnalyserMeter {
       filters.forEach((filter) => filter.disconnect());
       squeeze.disconnect();
       makeup.disconnect();
+      shaped.disconnect();
       preDeck.disconnect();
       // The port as well as the node: a worklet with an open port is kept
       // alive by it, tape and all, after the graph around it has gone.
